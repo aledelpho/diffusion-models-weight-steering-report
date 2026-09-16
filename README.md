@@ -264,11 +264,15 @@ Every set below uses the same 20 seeds, so the comparisons are **paired**, and e
 
 | Condition | Attribute present | 95% CI | vs. paired control | $p$ |
 | --- | --- | --- | --- | --- |
-| Blockshuffle, full prompt | **19 / 20** | $[76\%, 99\%]$ | 18 discordant to 0 | $7.6 \times 10^{-6}$ |
-| Stock model, same prompt | 1 / 20 | $[1\%, 24\%]$ | — | — |
-| Blockshuffle, second prompt | **20 / 20** | $[84\%, 100\%]$ | 13 discordant to 0 | $2.4 \times 10^{-4}$ |
-| **Randsign**, full prompt, identical $D$ | 1 / 20 | $[1\%, 24\%]$ | vs. blockshuffle, 18 to 0 | $7.6 \times 10^{-6}$ |
-| Stock model, second prompt | 7 / 20 | $[18\%, 57\%]$ | — | — |
+| Blockshuffle, full prompt | **19 / 20** | [76%, 99%] | 18 discordant to 0 | $7.6 \times 10^{-6}$ |
+| Stock model, same prompt | 1 / 20 | [1%, 24%] | — | — |
+| Blockshuffle, second prompt | **20 / 20** | [84%, 100%] | 13 discordant to 0 | $2.4 \times 10^{-4}$ |
+| **Randsign**, full prompt, identical $D$ | 1 / 20 | [1%, 24%] | vs. blockshuffle, 18 to 0 | $7.6 \times 10^{-6}$ |
+| Stock model, second prompt | 7 / 20 | [18%, 57%] | — | — |
+
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/effect_A1_vs_A5.webp" alt="Primary Finding: Blockshuffle Permuted Blocks vs Stock Base Model across 20 Seeds" width="100%">
+</p>
 
 Not one seed goes the other way in either comparison. Two controls run in the same batch are what make this mean something.
 
@@ -277,6 +281,10 @@ Not one seed goes the other way in either comparison. Two controls run in the sa
 **The norm-matched control.** Randsign — the sign scramble carrying the *identical* Frobenius displacement $D = 0.0538$, differing from blockshuffle only in the structure of the perturbation and not its size — produces **1 / 20**. That is not "weaker": it is **exactly the stock model's rate**, on the same prompt and the same seeds, and the two are paired at one discordant seed each way. A perturbation of the same magnitude with scrambled signs instead of permuted blocks does *nothing at all*.
 
 This is the control that decides what the finding is. Without it, the result would be vulnerable to the obvious reading — *any push of that size out of the checkpoint shakes a secondary token loose*. With it, that reading is dead: the effect is a property of **which** permutation, not of **how far** it moves.
+
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/matched_control_A1_vs_A7.webp" alt="Frobenius-Matched Control: Blockshuffle vs RANDSIGN at D = 0.0538" width="100%">
+</p>
 
 ### 5.2 The finding is the conjunction, not the perturbation
 
@@ -295,6 +303,10 @@ The attribute does not appear whenever the weights are perturbed. It appears onl
 
 The sharpest number in the whole experiment is the one that looks least impressive. With the ridges phrase removed, the perturbed model scores **1 / 20** — and the stock model on the complete prompt also scores **1 / 20**. Paired, they are **1 discordant seed each way, $p = 1.0$**: without the scaffold, the weight perturbation is statistically indistinguishable from not having applied it at all.
 
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/conjunction_A1_vs_E3.webp" alt="Conjunctive Gate: Full Prompt with Temple Ridges vs Temple Ridges Phrase Removed" width="100%">
+</p>
+
 So the 2×2 is:
 
 | | Scaffold absent | Scaffold present |
@@ -310,10 +322,10 @@ The preset moves the DiT and the text encoder together. Run separately, on the s
 
 | Where the perturbation is applied | Present | 95% CI | Comparison | $p$ |
 | --- | --- | --- | --- | --- |
-| DiT + text encoder | 19 / 20 | $[76\%, 99\%]$ | — | — |
-| **DiT only** (encoder left stock) | **12 / 20** | $[39\%, 78\%]$ | vs. stock, 11 discordant to 0 | $9.8 \times 10^{-4}$ |
-| **Text encoder only** (DiT left stock) | 3 / 20 | $[5\%, 36\%]$ | vs. stock, 3 to 1 | $0.63$ — **not distinguishable** |
-| Stock | 1 / 20 | $[1\%, 24\%]$ | — | — |
+| DiT + text encoder | 19 / 20 | [76%, 99%] | — | — |
+| **DiT only** (encoder left stock) | **12 / 20** | [39%, 78%] | vs. stock, 11 discordant to 0 | $9.8 \times 10^{-4}$ |
+| **Text encoder only** (DiT left stock) | 3 / 20 | [5%, 36%] | vs. stock, 3 to 1 | $0.63$ — **not distinguishable** |
+| Stock | 1 / 20 | [1%, 24%] | — | — |
 
 The text encoder on its own does nothing measurable. The DiT carries most of the effect. Adding the encoder on top of the DiT still gains 6 discordant seeds to 0 ($p = 0.031$), so the two are not redundant — but at 19/20 the combination is against the ceiling and **the size of any synergy cannot be estimated from these data**. Measuring it would require repeating the 2×2 at a strength where nothing saturates.
 
@@ -327,11 +339,19 @@ Applying the same preset at scaled strength (10 seeds per point, complete prompt
 
 \* four renders at 0.50 were judged ambiguous against the scoring rule and are recorded as `ambiguous` in the data rather than forced to 0 or 1.
 
-There is an optimum around $0.75$–$1.00$ and both ends fail. That argues against "any disturbance of the weights helps" — at $2.00$ the displacement is largest and the attribute is gone. But at $n = 10$ the Wilson interval on $6/10$ is $[31\%, 83\%]$: **the extremes are separated, the intermediate points are not ordered by these data.**
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/dose_response_strip.webp" alt="Resonance Curve: Strength Titration on Seed 1337 across 8 Strengths" width="100%">
+</p>
+
+There is an optimum around $0.75$–$1.00$ and both ends fail. That argues against "any disturbance of the weights helps" — at $2.00$ the displacement is largest and the attribute is gone. But at $n = 10$ the Wilson interval on $6/10$ is [31%, 83%]: **the extremes are separated, the intermediate points are not ordered by these data.**
 
 ### 5.5 What emerges is not quite what was asked for
 
 The prompt says `studding one earlobe`. Across every positive render, the clusters sit on the **cheekbone and temple region**, not on or in the ear. The attribute emerges; its spatial binding does not. This is worth stating plainly because it changes what the result is evidence *for*: the perturbation recovers the *presence* of a neglected concept, and leaves its *placement* wrong in the same way the stock model would have.
+
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/placement_crops.webp" alt="Morphological Landing: Barnacle Clusters Form on Cheekbone and Temple (Not on Earlobe)" width="100%">
+</p>
 
 ### 5.6 What this does **not** establish
 
