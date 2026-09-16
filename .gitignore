@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+Thumbs.db
+.DS_Store
+.idea/
+.vscode/
+*.tmp
+releases/
+*.zip
+scratch/

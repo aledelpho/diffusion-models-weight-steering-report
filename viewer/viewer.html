@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weight Steering Visualizer · Diffusion Models</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+
+<div class="viewer-app">
+  <header class="viewer-bar">
+    <div class="brand-section">
+      <a href="../index.html" style="color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--accent);">← Lab Notebook</span>
+        <span class="brand-title">Weight Steering Visualizer</span>
+      </a>
+      <span class="brand-badge">Lab Tool</span>
+    </div>
+
+    <div class="controls-cluster">
+      <!-- Model -->
+      <div class="control-item">
+        <label class="control-label" for="select-model">Model</label>
+        <select id="select-model">
+          <option value="krea2" selected>Krea-2 Turbo DiT (28 blk)</option>
+          <option value="anima" disabled>circlestone-labs/Anima [Cosmos 2B] (In progress...)</option>
+        </select>
+      </div>
+
+      <!-- Prompt -->
+      <div class="control-item">
+        <label class="control-label" for="select-prompt">Prompt</label>
+        <select id="select-prompt"></select>
+      </div>
+
+      <!-- Seed -->
+      <div class="control-item">
+        <label class="control-label" for="select-seed">Seed</label>
+        <select id="select-seed"></select>
+      </div>
+
+      <!-- View Mode -->
+      <div class="control-item">
+        <label class="control-label">View</label>
+        <div class="mode-pills">
+          <button id="btn-mode-side" class="pill-btn active" type="button">Side-by-Side</button>
+          <button id="btn-mode-toggle" class="pill-btn" type="button">Toggle A/B</button>
+          <button id="btn-mode-strip" class="pill-btn" type="button">5-Seed Strip</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="prompt-panel" aria-live="polite">
+    <div class="prompt-head">
+      <span class="prompt-eyebrow">Prompt behind these images</span>
+      <span id="prompt-meta" class="prompt-meta"></span>
+    </div>
+    <p id="prompt-text" class="prompt-text"></p>
+    <p class="prompt-foot">The prompt is identical across every condition and seed shown here — only the
+      weights change. <code>prompt_sha1</code> is the first ten hex characters of its SHA-1 and the folder
+      name under <code>assets/</code>; it is how "the prompt was not touched" is checked rather than asserted.</p>
+  </section>
+
+  <main class="stage-container">
+    <!-- Side-by-side View -->
+    <div id="side-by-side-view" class="side-by-side-grid">
+      <!-- Left Card -->
+      <div class="compare-card">
+        <div class="card-header">
+          <span class="card-title" style="color:var(--pos);">Condition A (Reference)</span>
+          <select id="select-cond-a"></select>
+        </div>
+        <div class="image-wrapper">
+          <img id="img-a" src="" alt="Condition A" loading="lazy">
+        </div>
+        <div class="meta-footer">
+          <span id="meta-path-a"></span>
+          <span>1024×1280 · Euler A · 9 steps · CFG 1.0</span>
+        </div>
+      </div>
+
+      <!-- Right Card -->
+      <div class="compare-card">
+        <div class="card-header">
+          <span class="card-title" style="color:var(--accent);">Condition B (Comparison)</span>
+          <select id="select-cond-b"></select>
+        </div>
+        <div class="image-wrapper">
+          <img id="img-b" src="" alt="Condition B" loading="lazy">
+        </div>
+        <div class="meta-footer">
+          <span id="meta-path-b"></span>
+          <span>1024×1280 · Euler A · 9 steps · CFG 1.0</span>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- 5-Seed Synchronized Strip View -->
+    <div id="strip-view" style="display:none; width:100%; max-width:1400px; flex-direction:column; gap:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); padding:12px 16px; border-radius:6px; flex-wrap:wrap; gap:10px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--accent);">Synchronized 5-Seed Condition:</span>
+        <select id="select-strip-cond" style="min-width:240px;"></select>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; width:100%;">
+        <div class="compare-card">
+          <div class="card-header"><span class="card-title">Seed 4242145</span></div>
+          <div class="image-wrapper"><img id="strip-img-0" src="" alt="Seed 4242145" loading="lazy"></div>
+        </div>
+        <div class="compare-card">
+          <div class="card-header"><span class="card-title">Seed 42</span></div>
+          <div class="image-wrapper"><img id="strip-img-1" src="" alt="Seed 42" loading="lazy"></div>
+        </div>
+        <div class="compare-card">
+          <div class="card-header"><span class="card-title">Seed 1337</span></div>
+          <div class="image-wrapper"><img id="strip-img-2" src="" alt="Seed 1337" loading="lazy"></div>
+        </div>
+        <div class="compare-card">
+          <div class="card-header"><span class="card-title">Seed 777</span></div>
+          <div class="image-wrapper"><img id="strip-img-3" src="" alt="Seed 777" loading="lazy"></div>
+        </div>
+        <div class="compare-card">
+          <div class="card-header"><span class="card-title">Seed 9999</span></div>
+          <div class="image-wrapper"><img id="strip-img-4" src="" alt="Seed 9999" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggle View -->
+    <div id="toggle-view" class="toggle-layout">
+      <div class="toggle-controls-bar">
+        <span id="toggle-status-badge" class="toggle-badge a">Viewing: [A]</span>
+        <button id="btn-toggle-switch" class="toggle-action-btn" type="button">
+          <span>Toggle view [Space or Click]</span>
+        </button>
+      </div>
+      <div class="toggle-viewport">
+        <img id="img-toggle" src="" alt="Toggle View" style="cursor:pointer;">
+      </div>
+      <div class="meta-footer" style="width:100%;">
+        <span id="toggle-meta-path"></span>
+        <span>Press <span class="kbd">Space</span> or click image to instantaneously alternate between A and B</span>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend-box">
+      <div>
+        <strong>Frobenius D-Matching:</strong> <code>D_model = 0.05381584</code>, <code>D_CLIP = 0.02165930</code> strictly identical for <code>preset</code>, <code>randsign</code>, and <code>blockshuffle</code>.
+      </div>
+      <div>
+        <strong>Preset:</strong> targeted manual edit · <strong>Randsign:</strong> random signs (noise) · <strong>Blockshuffle:</strong> permuted blocks (structure scrambled).
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="viewer.js"></script>
+</body>
+</html>

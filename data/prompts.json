@@ -1,0 +1,197 @@
+{
+ "note": "prompt_sha1 is the first 10 hex chars of sha1(prompt_text); it is the folder name under assets/. Prompts are never edited — that hash is how we prove it.",
+ "prompts": [
+  {
+   "sha1": "d235bf5f02",
+   "id": "S7_01",
+   "tag": "sea_woman",
+   "family": "colour-free",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, seductive simmering menace, seen from an extreme tilted low angle with her chin raised, extreme close-up on the head only, tight framing, sharp dutch angle. ageless female sea-touched woman, long dark hair fanning as if suspended in water, thin webbed fin-like ridges tracing along her temple, faintly scaled skin, sharply arched eyebrows, a narrow straight nose, wide eyes with slitted pupils half-lidded in cold allure, full lips curled in a knowing smirk, small barnacle-like clusters studding one earlobe, faint sheen along her jawline. white background, simple background, colored.",
+   "in_assets": false
+  },
+  {
+   "sha1": "4c8aca54b3",
+   "id": "S7_02",
+   "tag": "goblin",
+   "family": "colour-free",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of his face, sly calculating grin, seen from an extreme low tilted angle looking sharply up his chin, extreme close-up on the head only, tight framing, steep dutch angle. middle-aged male goblin, mottled skin, greasy tufts of black hair slicked into a lopsided topknot, one eyebrow arched high in shrewd amusement, small beady eyes darting sideways, a long hooked nose with a slight downward curve, wide crooked grin showing several missing teeth, a small metal loop pierced through one nostril, thin wispy chin-whiskers braided into a point. white background, simple background, colored.",
+   "in_assets": false
+  },
+  {
+   "sha1": "f6dd8180ba",
+   "id": "S7_03",
+   "tag": "dwarf_shout",
+   "family": "colour-free",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, booming commanding shout, seen from an extreme low front angle looking sharply up beneath her jaw, extreme close-up on the head only, tight framing, sharp dutch angle. middle-aged female dwarf, weathered skin, thick hair braided tightly back from a high forehead, strong straight eyebrows drawn low, wide eyes blazing with authority, a broad sturdy nose, mouth open wide mid-shout showing strong square teeth, a small soot smudge dusting one cheekbone, thick leather strap crossing beneath her chin. white background, simple background, colored.",
+   "in_assets": false
+  },
+  {
+   "sha1": "3fd131e896",
+   "id": "S7_04",
+   "tag": "hag",
+   "family": "colour-free",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, wild-eyed manic determination, seen from an extreme low angle shot through an imagined gap between her chin and chest, extreme close-up on the head only, tight framing, sharply canted dutch angle. very old female hag, deeply weathered skin, wild frizzed grey hair sticking straight up as if charged with static, an exaggeratedly long hooked nose nearly touching her upturned chin, small sunken eyes blazing wide with fevered focus, sagging jowls trembling around a muttering open mouth, three long grey chin-hairs twisted into tiny braids, a single large hoop stretching one earlobe low. white background, simple background, colored.",
+   "in_assets": false
+  },
+  {
+   "sha1": "b38ed79f27",
+   "id": "S7_05",
+   "tag": "dwarf_sneeze",
+   "family": "colour-free",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, explosive uncontrollable sneeze, seen from an extreme close angle shot from below her nostrils looking straight up, extreme close-up on the head only, tight framing, wildly canted dutch angle. middle-aged female dwarf, deeply sun-weathered skin, elaborate silver hair twisted into thick coiled loops atop her head, eyebrows scrunched violently together, a broad nose flared wide mid-sneeze, eyes squeezed shut with lashes fanned outward, mouth caught wide open in an explosive \"achoo\", a jeweled hairpin knocked askew, small crumbs of some pastry still clinging to her lower lip. white background, simple background, colored.",
+   "in_assets": false
+  },
+  {
+   "sha1": "480d04f09f",
+   "id": "S7_06",
+   "tag": "tiefling_cold",
+   "family": "colour-free",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of his face, severe icy contempt, seen from an extreme side-profile angle canted at a sharp diagonal, extreme close-up on the head only, tight framing, steep dutch angle. older male tiefling, deep charcoal-grey skin, short curling horns swept flat against cropped silver hair, heavy-lidded eyes narrowed in judgment, a sharply hooked nose, deep-set lines bracketing a thin frowning mouth, one long fang resting over his lower lip, faint smoke curling from one nostril. white background, simple background, colored.",
+   "in_assets": false
+  },
+  {
+   "sha1": "7e8536f9bb",
+   "id": "F1",
+   "tag": "halforc_red",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard red-tinted rim light glowing along the edges of her face, ferocious screaming rage, seen from a steep low angle, extreme close-up on the head only, tight framing, dutch angle, sharp perspective. female half-orc, head thrown back with a wild tangle of black hair across her face, thick furrowed eyebrows pressed low in fury, wide crimson eyes wide with screaming rage, mouth stretched open in a full-throated roar baring a single sharp lower tusk, a thick iron ring pierced through the nose bridge, ferociously screaming expression. white background, simple background.",
+   "in_assets": true
+  },
+  {
+   "sha1": "ecdd49e618",
+   "id": "F2",
+   "tag": "darkelf_teal",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard teal-tinted rim light glowing along the edges of her face, cold simmering fury, seen from a steep low angle, extreme close-up on the head only, tight framing, dutch angle, sharp perspective. female dark elf, head turned sharply with a piercing glare, sleek white hair pulled back tight, sharply angled eyebrows pressed low, long slender nose with a fine slit piercing, narrow cyan eyes glowing faintly at the edges, thin lips pressed into a tight furious line, an intricate tribal pattern tattooed down one temple, small onyx studs lining the upper ear. white background, simple background, teal overall hue, monochromatic teal.",
+   "in_assets": true
+  },
+  {
+   "sha1": "83301f8591",
+   "id": "F3",
+   "tag": "tiefling_orange",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard orange-tinted rim light glowing along the edges of her face, cross-eyed dazed shock, seen from an extreme spiraling angle as if she's spinning, extreme close-up on the head only, tight framing, dizzying tilted dutch angle. young adult female tiefling, deep indigo-blue skin, singed frizzy white hair standing on end, one eyebrow scorched shorter than the other, a small straight nose with a faint wisp of smoke curling from one nostril, eyes crossed and spiraled with dazed shock, mouth hanging open lopsided, one twisted horn slightly blackened at the tip, a cracked pendant hanging crooked from a snapped chain. white background, simple background, orange overall hue, monochromatic orange.",
+   "in_assets": true
+  },
+  {
+   "sha1": "d96b69d21c",
+   "id": "F4",
+   "tag": "elf_blue",
+   "family": "colour-pinned",
+   "text": "realistic western comics style, bold ink outlines, extreme expression, hatched shadows, hard blue-tinted rim light glowing along the edges of her face, screaming in terror, seen from a steep low angle, extreme close-up on the head only, pale skin, tight framing, dutch angle, sharp perspective. female elf, head turning in fear and surprise looking in camera, short blonde hair in a metty bob haircut, slim blonde eyebrows raised, wide teal eyes wide open, mouth stretched open in a full-throated panic scream, a gold necklace is flying around. white background, simple background, blue overall hue, monochromatic blue.",
+   "in_assets": true
+  },
+  {
+   "sha1": "30de058455",
+   "id": "G1",
+   "tag": "seatouched_teal",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard teal-tinted rim light glowing along the edges of her face, seductive simmering menace, seen from an extreme tilted low angle with her chin raised, extreme close-up on the head only, tight framing, sharp dutch angle. ageless female sea-touched woman, long dark hair fanning as if suspended in water, thin webbed fin-like ridges tracing along her temple, cyan skin, sharply arched eyebrows, a narrow straight nose, wide teal eyes with slitted pupils half-lidded in cold allure, full lips curled in a knowing smirk, small barnacle-like clusters studding one earlobe, faint iridescent sheen along her jawline. white background, simple background, teal overall hue, monochromatic teal.",
+   "in_assets": true
+  },
+  {
+   "sha1": "c6a4015aae",
+   "id": "G2",
+   "tag": "goblin_yellow",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard yellow-tinted rim light glowing along the edges of his face, sly calculating grin, seen from an extreme low tilted angle looking sharply up his chin, extreme close-up on the head only, tight framing, steep dutch angle. middle-aged male goblin, mottled olive-green skin, greasy tufts of black hair slicked into a lopsided topknot, one eyebrow arched high in shrewd amusement, small beady yellow eyes darting sideways, a long hooked nose with a slight downward curve, wide crooked grin showing several missing teeth, a small brass loop pierced through one nostril, thin wispy chin-whiskers braided into a point. white background, simple background, yellow overall hue, monochromatic yellow.",
+   "in_assets": true
+  },
+  {
+   "sha1": "4d43750a91",
+   "id": "G3",
+   "tag": "dwarf_teal",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard teal-tinted rim light glowing along the edges of her face, booming commanding shout, seen from an extreme low front angle looking sharply up beneath her jaw, extreme close-up on the head only, tight framing, sharp dutch angle. middle-aged female dwarf, ruddy weathered skin, thick copper-red hair braided tightly back from a high forehead, strong straight eyebrows drawn low, wide teal eyes blazing with authority, a broad sturdy nose, mouth open wide mid-shout showing strong square teeth, a small soot smudge dusting one cheekbone, thick leather strap crossing beneath her chin. white background, simple background, teal overall hue, monochromatic teal.",
+   "in_assets": true
+  },
+  {
+   "sha1": "95acba3b41",
+   "id": "G4",
+   "tag": "hag_chartreuse",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard chartreuse-tinted rim light glowing along the edges of her face, wild-eyed manic determination, seen from an extreme low angle shot through an imagined gap between her chin and chest, extreme close-up on the head only, tight framing, sharply canted dutch angle. very old female hag, deep umber-brown weathered skin, wild frizzed grey hair sticking straight up as if charged with static, an exaggeratedly long hooked nose nearly touching her upturned chin, small sunken eyes blazing wide with fevered focus, sagging jowls trembling around a muttering open mouth, three long grey chin-hairs twisted into tiny braids, a single large hoop stretching one earlobe low. white background, simple background, chartreuse overall hue, monochromatic chartreuse.",
+   "in_assets": true
+  },
+  {
+   "sha1": "5a0d2949e1",
+   "id": "G5",
+   "tag": "dwarf_sneeze_blue",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard blue-tinted rim light glowing along the edges of her face, explosive uncontrollable sneeze, seen from an extreme close angle shot from below her nostrils looking straight up, extreme close-up on the head only, tight framing, wildly canted dutch angle. middle-aged female dwarf, deep rust-orange sun-weathered skin, elaborate silver hair twisted into thick coiled loops atop her head, eyebrows scrunched violently together, a broad nose flared wide mid-sneeze, eyes squeezed shut with lashes fanned outward, mouth caught wide open in an explosive \"achoo\", a jeweled hairpin knocked askew, small crumbs of some pastry still clinging to her lower lip. white background, simple background, blue overall hue, monochromatic blue.",
+   "in_assets": true
+  },
+  {
+   "sha1": "0496d2dadf",
+   "id": "G6",
+   "tag": "tiefling_purple",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard purple-tinted rim light glowing along the edges of his face, severe icy contempt, seen from an extreme side-profile angle canted at a sharp diagonal, extreme close-up on the head only, tight framing, steep dutch angle. older male tiefling, deep charcoal-grey skin, short curling horns swept flat against cropped silver hair, heavy-lidded violet eyes narrowed in judgment, a sharply hooked nose, deep-set lines bracketing a thin frowning mouth, one long fang resting over his lower lip, faint smoke curling from one nostril. white background, simple background, purple overall hue, monochromatic purple.",
+   "in_assets": true
+  },
+  {
+   "sha1": "33c593ba54",
+   "id": "H01",
+   "tag": "orc_magenta",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard magenta-tinted rim light glowing along the edges of his face, defiant curling snarl, seen from an extreme low angle looking sharply up past his jaw, extreme close-up on the head only, tight framing, steep dutch angle. young male orc, mottled grey-green skin, a single sharp upper tusk pushing through his lip, a shaved scalp crossed by four pale scars, small deep-set amber eyes narrowed hard, a flattened broken nose, a heavy brow ridge casting the eyes into shadow. white background, simple background, magenta overall hue, monochromatic magenta.",
+   "in_assets": false
+  },
+  {
+   "sha1": "10c8f5e4cd",
+   "id": "H02",
+   "tag": "elf_amber",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard amber-tinted rim light glowing along the edges of her face, serene unbothered contempt, seen from a slightly high three-quarter angle tilted off vertical, extreme close-up on the head only, tight framing, sharp dutch angle. very old female elf, translucent pale skin stretched thin over high cheekbones, long silver hair parted in a severe centre line, sharply pointed ears pierced with three thin rings each, heavy-lidded grey eyes that do not blink, a mouth set in a flat unimpressed line. white background, simple background, amber overall hue, monochromatic amber.",
+   "in_assets": false
+  },
+  {
+   "sha1": "386df2985c",
+   "id": "H03",
+   "tag": "dwarf_vermilion",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard vermilion-tinted rim light glowing along the edges of his face, a roaring open-mouthed laugh, seen from an extreme low angle from below his beard looking straight up, extreme close-up on the head only, tight framing, wildly canted dutch angle. middle-aged male dwarf, broad ruddy face flushed dark, an enormous forked black beard bound with two iron clasps, bushy eyebrows shot up high, eyes squeezed almost shut with laughter, a bulbous nose veined red, a chipped front tooth showing in the open mouth. white background, simple background, vermilion overall hue, monochromatic vermilion.",
+   "in_assets": false
+  },
+  {
+   "sha1": "bdf615257c",
+   "id": "H04",
+   "tag": "tiefling_mint",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard mint-tinted rim light glowing along the edges of her face, a startled indrawn gasp, seen from an extreme low front angle beneath her chin, extreme close-up on the head only, tight framing, sharp dutch angle. young female tiefling, smooth lilac-grey skin, two slender horns swept straight back from the hairline, a thick black braid falling across one eye, wide solid-white eyes with no visible pupils, a small round mouth caught open mid-gasp, a thin gold chain looping from ear to nostril. white background, simple background, mint overall hue, monochromatic mint.",
+   "in_assets": false
+  },
+  {
+   "sha1": "4343ee8f5d",
+   "id": "H05",
+   "tag": "dryad_olive",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard olive-tinted rim light glowing along the edges of his face, a slow settled sorrow, seen from a low angle tilted hard to one side, extreme close-up on the head only, tight framing, steep dutch angle. ancient male dryad, bark-textured brown skin split by deep vertical furrows, thin green shoots sprouting from his temples, moss gathered in the hollows beneath his eyes, small black eyes like knots in wood, a mouth that is barely a seam in the bark. white background, simple background, olive overall hue, monochromatic olive.",
+   "in_assets": false
+  },
+  {
+   "sha1": "009a59742d",
+   "id": "H06",
+   "tag": "orc_rose",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard rose-tinted rim light glowing along the edges of her face, weary immovable resolve, seen from an extreme low angle looking up beneath her jaw, extreme close-up on the head only, tight framing, sharply canted dutch angle. middle-aged female orc, deep olive skin scarred across one cheek, two blunt lower tusks worn down flat, black hair shaved at the sides and knotted high, tired heavy-lidded orange eyes, a broad flat nose with a bone ring through the septum. white background, simple background, rose overall hue, monochromatic rose.",
+   "in_assets": false
+  },
+  {
+   "sha1": "9861eac6f8",
+   "id": "H07",
+   "tag": "gnome_turquoise",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard turquoise-tinted rim light glowing along the edges of his face, gleeful conspiratorial mischief, seen from an extreme close low angle from just below his nose, extreme close-up on the head only, tight framing, steep dutch angle. young male gnome, ruddy freckled skin, an explosion of ginger curls pushed back by cracked goggles, enormous round eyes bright with delight, a small upturned nose smudged with soot, a wide grin showing a gap between the front teeth. white background, simple background, turquoise overall hue, monochromatic turquoise.",
+   "in_assets": false
+  },
+  {
+   "sha1": "a7cac62587",
+   "id": "H08",
+   "tag": "dwarf_gold",
+   "family": "colour-pinned",
+   "text": "Western comics style, bold ink outlines, hatched shadows, hard gold-tinted rim light glowing along the edges of her face, stern narrow-eyed disapproval, seen from a low front angle canted off vertical, extreme close-up on the head only, tight framing, sharp dutch angle. old female dwarf, weathered tan skin creased deep around the mouth, iron-grey hair coiled into a tight crown braid, thick eyebrows drawn into a single hard line, pale blue eyes narrowed to slits, a heavy square jaw set forward. white background, simple background, gold overall hue, monochromatic gold.",
+   "in_assets": false
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+space,pair,n_prompts,A,S,coh,cos_pm,ci_hi,ci_lo,null_p95,p,ratio
+CLIP (colour-normalised),preset,10,0.221376,0.299242,0.223044,0.288538,,,0.070196,5e-05,0.73979
+CLIP (colour-normalised),blockshuffle,10,0.224287,0.302628,0.161501,0.287341,,,0.061554,0.002,0.741133
+CLIP (colour-normalised),randsign,10,0.220862,0.297453,0.096688,0.293281,,,0.044185,0.0037,0.742512
+CLIP (colour-normalised),preset-randsign,10,,,0.126355,,0.22139,0.043927,,0.0015,
+CLIP (colour-normalised),preset-blockshuffle,10,,,0.061543,,0.178224,-0.047585,,0.1377,
+CLIP (colour-normalised),blockshuffle-randsign,10,,,0.064813,,0.164086,-0.030816,,0.08825,
+MARK (luminance),preset,10,3.261123,3.104568,0.602347,-0.089568,,,0.194558,5e-05,1.050428
+MARK (luminance),blockshuffle,10,2.677717,3.172883,0.353558,0.157605,,,0.119422,0.00175,0.843938
+MARK (luminance),randsign,10,2.740729,3.166518,0.489472,0.123841,,,0.157112,5e-05,0.865534
+MARK (luminance),preset-randsign,10,,,0.112875,,0.330132,-0.082437,,0.1574,
+MARK (luminance),preset-blockshuffle,10,,,0.248789,,0.381822,0.104179,,0.00105,
+MARK (luminance),blockshuffle-randsign,10,,,-0.135913,,0.052883,-0.341877,,0.9239,
+CLIP (colour-normalised),"cos[preset,blockshuffle]",10,,,0.266355,,,,,,
+CLIP (colour-normalised),"cos[preset,randsign]",10,,,0.099311,,,,,,
+CLIP (colour-normalised),"cos[blockshuffle,randsign]",10,,,0.035538,,,,,,
+MARK (luminance),"cos[preset,blockshuffle]",10,,,0.433868,,,,,,
+MARK (luminance),"cos[preset,randsign]",10,,,-0.268103,,,,,,
+MARK (luminance),"cos[blockshuffle,randsign]",10,,,0.036893,,,,,,

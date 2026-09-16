@@ -1,0 +1,100 @@
+type,condition,key,value
+loading,preset,freq_band_8,-0.3675
+loading,preset,edge_hardness,-0.3621
+loading,preset,freq_band_9,-0.3503
+loading,preset,edge_mean_grad,-0.2766
+loading,preset,flat_std_1,-0.2482
+loading,preset,freq_band_7,-0.2252
+loading,preset,flat_std_0,0.2239
+loading,preset,edge_contrast_p99,-0.2164
+block_energy,preset,ink (mark),0.1634
+block_energy,preset,flatness (fill),0.2121
+block_energy,preset,frequency,0.37
+block_energy,preset,edges,0.2545
+loading,blockshuffle,edge_hardness,-0.4577
+loading,blockshuffle,freq_band_8,-0.3774
+loading,blockshuffle,freq_band_9,-0.3677
+loading,blockshuffle,flat_entropy_L,0.2874
+loading,blockshuffle,freq_band_5,0.261
+loading,blockshuffle,flat_std_1,0.2116
+loading,blockshuffle,flat_n_modes,0.1811
+loading,blockshuffle,freq_band_3,0.1805
+block_energy,blockshuffle,ink (mark),0.0658
+block_energy,blockshuffle,flatness (fill),0.2179
+block_energy,blockshuffle,frequency,0.4634
+block_energy,blockshuffle,edges,0.2529
+loading,randsign,freq_band_5,0.4232
+loading,randsign,freq_band_9,0.4172
+loading,randsign,edge_contrast_p99,0.3214
+loading,randsign,freq_band_4,0.316
+loading,randsign,freq_band_8,0.3132
+loading,randsign,freq_band_6,0.3099
+loading,randsign,freq_band_7,0.2614
+loading,randsign,edge_mean_grad,0.2063
+block_energy,randsign,ink (mark),0.0141
+block_energy,randsign,flatness (fill),0.0849
+block_energy,randsign,frequency,0.7494
+block_energy,randsign,edges,0.1516
+reliability,preset,rho,0.9208
+reliability,preset,coh_disattenuated,0.6541
+reliability,blockshuffle,rho,0.8749
+reliability,blockshuffle,coh_disattenuated,0.4041
+reliability,randsign,rho,0.8929
+reliability,randsign,coh_disattenuated,0.5482
+reliability,preset-randsign,diff_disattenuated,0.1059
+reliability,preset-blockshuffle,diff_disattenuated,0.25
+reliability,blockshuffle-randsign,diff_disattenuated,-0.1441
+block_coherence,preset,ink (mark),0.3474
+block_p,preset,ink (mark),0.0108
+block_coherence,blockshuffle,ink (mark),0.038
+block_p,blockshuffle,ink (mark),0.23928
+block_coherence,randsign,ink (mark),0.0601
+block_p,randsign,ink (mark),0.15578
+block_diff,preset-randsign,"ink (mark)|CI[-0.105,+0.714]",0.2873
+block_diff,preset-blockshuffle,"ink (mark)|CI[+0.073,+0.589]",0.3094
+block_diff,blockshuffle-randsign,"ink (mark)|CI[-0.299,+0.227]",-0.0221
+block_coherence,preset,flatness (fill),0.4384
+block_p,preset,flatness (fill),0.0015
+block_coherence,blockshuffle,flatness (fill),0.2946
+block_p,blockshuffle,flatness (fill),0.0073
+block_coherence,randsign,flatness (fill),0.3588
+block_p,randsign,flatness (fill),0.0031
+block_diff,preset-randsign,"flatness (fill)|CI[-0.255,+0.482]",0.0796
+block_diff,preset-blockshuffle,"flatness (fill)|CI[-0.273,+0.540]",0.1437
+block_diff,blockshuffle-randsign,"flatness (fill)|CI[-0.487,+0.368]",-0.0642
+block_coherence,preset,frequency,0.8161
+block_p,preset,frequency,0.0001
+block_coherence,blockshuffle,frequency,0.6001
+block_p,blockshuffle,frequency,0.0001
+block_coherence,randsign,frequency,0.6345
+block_p,randsign,frequency,0.0001
+block_diff,preset-randsign,"frequency|CI[-0.086,+0.464]",0.1816
+block_diff,preset-blockshuffle,"frequency|CI[+0.029,+0.369]",0.216
+block_diff,blockshuffle-randsign,"frequency|CI[-0.313,+0.183]",-0.0344
+block_coherence,preset,edges,0.931
+block_p,preset,edges,0.0001
+block_coherence,blockshuffle,edges,0.8055
+block_p,blockshuffle,edges,0.0001
+block_coherence,randsign,edges,0.6895
+block_p,randsign,edges,0.0015
+block_diff,preset-randsign,"edges|CI[+0.050,+0.468]",0.2415
+block_diff,preset-blockshuffle,"edges|CI[+0.025,+0.225]",0.1255
+block_diff,blockshuffle-randsign,"edges|CI[-0.115,+0.344]",0.116
+block_coherence,preset,without the 3 top bands,0.5147
+block_p,preset,without the 3 top bands,0.0015
+block_coherence,blockshuffle,without the 3 top bands,0.2779
+block_p,blockshuffle,without the 3 top bands,0.0015
+block_coherence,randsign,without the 3 top bands,0.3739
+block_p,randsign,without the 3 top bands,0.0028
+block_diff,preset-randsign,"without the 3 top bands|CI[-0.092,+0.402]",0.1408
+block_diff,preset-blockshuffle,"without the 3 top bands|CI[+0.065,+0.422]",0.2368
+block_diff,blockshuffle-randsign,"without the 3 top bands|CI[-0.345,+0.122]",-0.0959
+block_coherence,preset,all,0.6023
+block_p,preset,all,0.0001
+block_coherence,blockshuffle,all,0.3536
+block_p,blockshuffle,all,0.0015
+block_coherence,randsign,all,0.4895
+block_p,randsign,all,0.0001
+block_diff,preset-randsign,"all|CI[-0.084,+0.332]",0.1129
+block_diff,preset-blockshuffle,"all|CI[+0.103,+0.385]",0.2488
+block_diff,blockshuffle-randsign,"all|CI[-0.339,+0.048]",-0.1359

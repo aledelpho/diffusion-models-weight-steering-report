@@ -1,0 +1,101 @@
+metric,contrast,delta,ci_lo,ci_hi,t,dz,p,p_holm,n_prompts
+PC1,Preset+  -  Block+,-1.95797,-2.49602,-1.41993,-9.355,-3.819,0.04615,0.13846,6
+PC1,Preset+  -  Rand+,-3.81503,-5.67054,-1.95952,-5.285,-2.158,0.04615,0.13846,6
+PC1,Block+   -  Rand+,-1.85705,-4.0291,0.31499,-2.198,-0.897,0.13846,0.13846,6
+PC1,A (odd)   Preset,-2.57236,-3.34103,-1.80369,-8.603,-3.512,0.04615,,6
+PC1,A (odd)   Block,-0.13011,-0.80902,0.5488,-0.493,-0.201,0.72308,,6
+PC1,A (odd)   Rand,1.01612,-0.16001,2.19225,2.221,0.907,0.10769,,6
+PC1,S (even)  Preset,0.08591,-0.38708,0.55889,0.467,0.191,0.63077,,6
+PC2,Preset+  -  Block+,0.75414,-0.11753,1.62581,2.224,0.908,0.13846,0.13846,6
+PC2,Preset+  -  Rand+,-1.92792,-2.65303,-1.20282,-6.835,-2.79,0.04615,0.13846,6
+PC2,Block+   -  Rand+,-2.68207,-3.03027,-2.33386,-19.8,-8.083,0.04615,0.13846,6
+PC2,A (odd)   Preset,0.1489,-0.70688,1.00468,0.447,0.183,0.69231,,6
+PC2,A (odd)   Block,-1.00061,-1.3446,-0.65662,-7.477,-3.053,0.04615,,6
+PC2,A (odd)   Rand,1.36018,0.96444,1.75592,8.835,3.607,0.04615,,6
+PC2,S (even)  Preset,-0.37067,-0.8075,0.06616,-2.181,-0.89,0.10769,,6
+PC3,Preset+  -  Block+,0.09844,-0.53978,0.73667,0.396,0.162,0.72308,1.0,6
+PC3,Preset+  -  Rand+,0.04643,-0.99024,1.0831,0.115,0.047,0.93846,1.0,6
+PC3,Block+   -  Rand+,-0.05201,-0.82014,0.71611,-0.174,-0.071,0.87692,1.0,6
+PC3,A (odd)   Preset,-0.11086,-0.74276,0.52104,-0.451,-0.184,0.75385,,6
+PC3,A (odd)   Block,-0.32272,-0.88799,0.24255,-1.468,-0.599,0.23077,,6
+PC3,A (odd)   Rand,-0.27711,-0.51749,-0.03672,-2.963,-1.21,0.07692,,6
+PC3,S (even)  Preset,-0.07775,-0.787,0.6315,-0.282,-0.115,0.78462,,6
+stroke_width_median_px,Preset+  -  Block+,0.3811,-0.07507,0.83727,2.148,0.877,0.13846,0.41538,6
+stroke_width_median_px,Preset+  -  Rand+,0.796,-0.15015,1.74214,2.163,0.883,0.13846,0.41538,6
+stroke_width_median_px,Block+   -  Rand+,0.41489,-0.27015,1.09993,1.557,0.636,0.23077,0.41538,6
+stroke_width_median_px,A (odd)   Preset,0.73491,0.31059,1.15924,4.452,1.818,0.04615,,6
+stroke_width_median_px,A (odd)   Block,0.26813,-0.13137,0.66762,1.725,0.704,0.2,,6
+stroke_width_median_px,A (odd)   Rand,0.08783,-0.2197,0.39537,0.734,0.3,0.50769,,6
+stroke_width_median_px,S (even)  Preset,0.02782,-0.27322,0.32887,0.238,0.097,0.63077,,6
+contour_mean_length_px,Preset+  -  Block+,0.76003,0.36971,1.15035,5.005,2.043,0.04615,0.13846,6
+contour_mean_length_px,Preset+  -  Rand+,0.88327,-0.06984,1.83638,2.382,0.973,0.13846,0.27692,6
+contour_mean_length_px,Block+   -  Rand+,0.12325,-0.82355,1.07005,0.335,0.137,0.78462,0.78462,6
+contour_mean_length_px,A (odd)   Preset,0.80457,0.5452,1.06395,7.974,3.255,0.04615,,6
+contour_mean_length_px,A (odd)   Block,0.09413,-0.1326,0.32086,1.067,0.436,0.35385,,6
+contour_mean_length_px,A (odd)   Rand,-0.00312,-0.48284,0.4766,-0.017,-0.007,0.96923,,6
+contour_mean_length_px,S (even)  Preset,-0.09886,-0.58505,0.38732,-0.523,-0.213,0.69231,,6
+contour_n_components,Preset+  -  Block+,-0.55955,-0.81815,-0.30094,-5.562,-2.271,0.04615,0.13846,6
+contour_n_components,Preset+  -  Rand+,-1.75412,-3.09339,-0.41484,-3.367,-1.375,0.04615,0.13846,6
+contour_n_components,Block+   -  Rand+,-1.19457,-2.31916,-0.06998,-2.731,-1.115,0.10769,0.13846,6
+contour_n_components,A (odd)   Preset,-0.88945,-1.39745,-0.38145,-4.501,-1.837,0.04615,,6
+contour_n_components,A (odd)   Block,-0.1044,-0.27543,0.06662,-1.569,-0.641,0.26154,,6
+contour_n_components,A (odd)   Rand,0.5978,-0.07654,1.27215,2.279,0.93,0.13846,,6
+contour_n_components,S (even)  Preset,0.21109,0.05086,0.37132,3.386,1.383,0.07692,,6
+crosshatch_entropy_mean,Preset+  -  Block+,-1.28439,-1.58256,-0.98621,-11.073,-4.52,0.04615,0.13846,6
+crosshatch_entropy_mean,Preset+  -  Rand+,-0.73588,-1.27421,-0.19755,-3.514,-1.435,0.07692,0.13846,6
+crosshatch_entropy_mean,Block+   -  Rand+,0.54851,-0.1347,1.23172,2.064,0.843,0.04615,0.13846,6
+crosshatch_entropy_mean,A (odd)   Preset,-1.03036,-1.40619,-0.65453,-7.047,-2.877,0.04615,,6
+crosshatch_entropy_mean,A (odd)   Block,0.49789,0.11929,0.8765,3.38,1.38,0.07692,,6
+crosshatch_entropy_mean,A (odd)   Rand,-0.11249,-0.61568,0.3907,-0.575,-0.235,0.56923,,6
+crosshatch_entropy_mean,S (even)  Preset,0.15922,-0.17661,0.49504,1.219,0.498,0.32308,,6
+fft_radial_slope,Preset+  -  Block+,-0.26839,-0.58763,0.05084,-2.161,-0.882,0.10769,0.13846,6
+fft_radial_slope,Preset+  -  Rand+,-1.93086,-2.48939,-1.37232,-8.887,-3.628,0.04615,0.13846,6
+fft_radial_slope,Block+   -  Rand+,-1.66246,-1.9483,-1.37663,-14.951,-6.104,0.04615,0.13846,6
+fft_radial_slope,A (odd)   Preset,-0.46368,-0.81644,-0.11091,-3.379,-1.379,0.04615,,6
+fft_radial_slope,A (odd)   Block,-0.46763,-0.75294,-0.18231,-4.213,-1.72,0.04615,,6
+fft_radial_slope,A (odd)   Rand,0.95076,0.60325,1.29828,7.033,2.871,0.04615,,6
+fft_radial_slope,S (even)  Preset,-0.17099,-0.43852,0.09654,-1.643,-0.671,0.16923,,6
+color_n_effective,Preset+  -  Block+,-0.22584,-0.61144,0.15976,-1.506,-0.615,0.26154,0.52308,6
+color_n_effective,Preset+  -  Rand+,-0.21118,-0.429,0.00663,-2.492,-1.017,0.10769,0.32308,6
+color_n_effective,Block+   -  Rand+,0.01466,-0.41723,0.44655,0.087,0.036,0.93846,0.93846,6
+color_n_effective,A (odd)   Preset,-0.09586,-0.20022,0.00849,-2.361,-0.964,0.10769,,6
+color_n_effective,A (odd)   Block,0.27141,-0.02832,0.57115,2.328,0.95,0.07692,,6
+color_n_effective,A (odd)   Rand,0.10268,-0.06507,0.27043,1.573,0.642,0.2,,6
+color_n_effective,S (even)  Preset,0.09594,-0.17984,0.37172,0.894,0.365,0.35385,,6
+color_top4_cluster_share,Preset+  -  Block+,0.25907,-0.1441,0.66225,1.652,0.674,0.2,0.4,6
+color_top4_cluster_share,Preset+  -  Rand+,0.24053,0.01389,0.46717,2.728,1.114,0.10769,0.32308,6
+color_top4_cluster_share,Block+   -  Rand+,-0.01855,-0.47356,0.43647,-0.105,-0.043,0.93846,0.93846,6
+color_top4_cluster_share,A (odd)   Preset,0.12432,-0.0196,0.26824,2.221,0.907,0.13846,,6
+color_top4_cluster_share,A (odd)   Block,-0.2721,-0.5811,0.0369,-2.264,-0.924,0.07692,,6
+color_top4_cluster_share,A (odd)   Rand,-0.12428,-0.27857,0.03,-2.071,-0.845,0.13846,,6
+color_top4_cluster_share,S (even)  Preset,-0.11789,-0.41368,0.17791,-1.024,-0.418,0.29231,,6
+PC1,ICC_diff|Preset+,0.5144,,,,,,,6
+PC1,ICC_diff|Block+,0.4002,,,,,,,6
+PC1,ICC_diff|Rand+,0.5739,,,,,,,6
+PC2,ICC_diff|Preset+,0.81,,,,,,,6
+PC2,ICC_diff|Block+,0.4878,,,,,,,6
+PC2,ICC_diff|Rand+,0.3472,,,,,,,6
+PC3,ICC_diff|Preset+,0.5409,,,,,,,6
+PC3,ICC_diff|Block+,0.1902,,,,,,,6
+PC3,ICC_diff|Rand+,0.3796,,,,,,,6
+stroke_width_median_px,ICC_diff|Preset+,0.2883,,,,,,,6
+stroke_width_median_px,ICC_diff|Block+,0.0014,,,,,,,6
+stroke_width_median_px,ICC_diff|Rand+,0.2441,,,,,,,6
+contour_mean_length_px,ICC_diff|Preset+,0.503,,,,,,,6
+contour_mean_length_px,ICC_diff|Block+,0.7124,,,,,,,6
+contour_mean_length_px,ICC_diff|Rand+,0.6659,,,,,,,6
+contour_n_components,ICC_diff|Preset+,0.7399,,,,,,,6
+contour_n_components,ICC_diff|Block+,0.59,,,,,,,6
+contour_n_components,ICC_diff|Rand+,0.7494,,,,,,,6
+crosshatch_entropy_mean,ICC_diff|Preset+,0.773,,,,,,,6
+crosshatch_entropy_mean,ICC_diff|Block+,0.4284,,,,,,,6
+crosshatch_entropy_mean,ICC_diff|Rand+,0.7297,,,,,,,6
+fft_radial_slope,ICC_diff|Preset+,0.1515,,,,,,,6
+fft_radial_slope,ICC_diff|Block+,0.2353,,,,,,,6
+fft_radial_slope,ICC_diff|Rand+,0.3106,,,,,,,6
+color_n_effective,ICC_diff|Preset+,0.6397,,,,,,,6
+color_n_effective,ICC_diff|Block+,0.5638,,,,,,,6
+color_n_effective,ICC_diff|Rand+,0.2779,,,,,,,6
+color_top4_cluster_share,ICC_diff|Preset+,0.5943,,,,,,,6
+color_top4_cluster_share,ICC_diff|Block+,0.5631,,,,,,,6
+color_top4_cluster_share,ICC_diff|Rand+,0.2192,,,,,,,6

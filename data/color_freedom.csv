@@ -1,0 +1,13 @@
+family,condition,n_prompts,displacement,floor,ratio,coherence,null_p95,p
+colour FREE (only 'colored'),preset+,6,1.408,1.075,1.31,-0.1649,0.5669,0.81201
+colour FREE (only 'colored'),preset-,6,1.812,1.075,1.686,-0.0126,0.3766,0.24789
+colour FREE (only 'colored'),block+,6,1.297,1.075,1.207,-0.1373,0.4029,0.75286
+colour FREE (only 'colored'),block-,6,1.823,1.075,1.696,0.9442,0.3338,5e-05
+colour FREE (only 'colored'),rand+,6,1.573,1.075,1.464,0.3954,0.4007,0.065
+colour FREE (only 'colored'),rand-,6,1.528,1.075,1.421,0.3833,0.3833,0.0317
+colour PINNED per element,preset+,18,2.045,1.489,1.373,0.0493,0.1118,0.15619
+colour PINNED per element,preset-,18,3.611,1.489,2.425,0.2486,0.1135,0.0051
+colour PINNED per element,block+,18,2.061,1.489,1.384,-0.0043,0.1125,0.40988
+colour PINNED per element,block-,18,3.699,1.489,2.484,0.0068,0.1141,0.33843
+colour PINNED per element,rand+,18,2.186,1.489,1.468,0.08,0.1114,0.0906
+colour PINNED per element,rand-,18,3.108,1.489,2.087,0.1115,0.1147,0.05295

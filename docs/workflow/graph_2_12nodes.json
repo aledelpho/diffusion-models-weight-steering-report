@@ -1,0 +1,137 @@
+{
+  "198": {
+    "class_type": "ArthemyKrea2ModelVisualizer",
+    "inputs": {
+      "image_height": 480,
+      "image_width": 1024,
+      "model": [
+        "37",
+        0
+      ],
+      "scale": 5.0
+    }
+  },
+  "310": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "benchmark_stage2_family/hud/F1_baseline_seed1337",
+      "images": [
+        "198",
+        1
+      ]
+    }
+  },
+  "36": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "krea2_turbo_bf16.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "37": {
+    "class_type": "ArthemyKrea2ResetPatcher",
+    "inputs": {
+      "clip": [
+        "47",
+        0
+      ],
+      "model": [
+        "36",
+        0
+      ],
+      "reset_clip": true,
+      "reset_model": true
+    }
+  },
+  "40": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "37",
+        1
+      ],
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard red-tinted rim light glowing along the edges of her face, ferocious screaming rage, seen from a steep low angle, extreme close-up on the head only, tight framing, dutch angle, sharp perspective. female half-orc, head thrown back with a wild tangle of black hair across her face, thick furrowed eyebrows pressed low in fury, wide crimson eyes wide with screaming rage, mouth stretched open in a full-throated roar baring a single sharp lower tusk, a thick iron ring pierced through the nose bridge, ferociously screaming expression. white background, simple background."
+    }
+  },
+  "42": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 1.0,
+      "denoise": 1.0,
+      "latent_image": [
+        "45",
+        0
+      ],
+      "model": [
+        "198",
+        0
+      ],
+      "negative": [
+        "43",
+        0
+      ],
+      "positive": [
+        "40",
+        0
+      ],
+      "sampler_name": "euler_ancestral",
+      "scheduler": "simple",
+      "seed": 1337,
+      "steps": 9
+    }
+  },
+  "43": {
+    "class_type": "ConditioningZeroOut",
+    "inputs": {
+      "conditioning": [
+        "40",
+        0
+      ]
+    }
+  },
+  "45": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "batch_size": 1,
+      "height": 1280,
+      "width": 1024
+    }
+  },
+  "46": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "42",
+        0
+      ],
+      "vae": [
+        "48",
+        0
+      ]
+    }
+  },
+  "47": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_4b_bf16.safetensors",
+      "device": "default",
+      "type": "krea2"
+    }
+  },
+  "48": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    }
+  },
+  "61": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "benchmark_stage2_family/renders/F1_baseline_seed1337",
+      "images": [
+        "46",
+        0
+      ]
+    }
+  }
+}

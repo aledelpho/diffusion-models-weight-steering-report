@@ -1,0 +1,391 @@
+set_id,condition,folder,image_file,preset_file,model_strength,clip_strength,prompt_key,prompt_sha1,seed,barnacles,comfy_image_file,comfy_folder
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,1337,1,G1_blockshuf_exact_seed1337_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,42,1,G1_blockshuf_exact_seed42_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,4242145,1,G1_blockshuf_exact_seed4242145_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,777,1,G1_blockshuf_exact_seed777_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,9999,1,G1_blockshuf_exact_seed9999_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,101,1,G1_blockshuf_exact_seed101_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,102,1,G1_blockshuf_exact_seed102_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,103,1,G1_blockshuf_exact_seed103_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,104,1,G1_blockshuf_exact_seed104_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,105,1,G1_blockshuf_exact_seed105_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,106,1,G1_blockshuf_exact_seed106_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,107,1,G1_blockshuf_exact_seed107_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,108,1,G1_blockshuf_exact_seed108_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,109,0,G1_blockshuf_exact_seed109_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,110,1,G1_blockshuf_exact_seed110_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,201,1,G1_blockshuf_exact_seed201_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,202,1,G1_blockshuf_exact_seed202_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,203,1,G1_blockshuf_exact_seed203_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,204,1,G1_blockshuf_exact_seed204_00001_.png,1_exact
+A1,"blockshuffle, full prompt",A1_blockshuffle_full_prompt,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,205,1,G1_blockshuf_exact_seed205_00001_.png,1_exact
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,1337,0,G1_blockshuf_no_barnacles_seed1337_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,42,0,G1_blockshuf_no_barnacles_seed42_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,4242145,0,G1_blockshuf_no_barnacles_seed4242145_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,777,0,G1_blockshuf_no_barnacles_seed777_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,9999,0,G1_blockshuf_no_barnacles_seed9999_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,101,0,G1_blockshuf_no_barnacles_seed101_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,102,1,G1_blockshuf_no_barnacles_seed102_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,103,0,G1_blockshuf_no_barnacles_seed103_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,104,1,G1_blockshuf_no_barnacles_seed104_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,105,0,G1_blockshuf_no_barnacles_seed105_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,106,0,G1_blockshuf_no_barnacles_seed106_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,107,0,G1_blockshuf_no_barnacles_seed107_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,108,0,G1_blockshuf_no_barnacles_seed108_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,109,0,G1_blockshuf_no_barnacles_seed109_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,110,0,G1_blockshuf_no_barnacles_seed110_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,201,0,G1_blockshuf_no_barnacles_seed201_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,202,0,G1_blockshuf_no_barnacles_seed202_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,203,0,G1_blockshuf_no_barnacles_seed203_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,204,0,G1_blockshuf_no_barnacles_seed204_00001_.png,2_no_barnacles
+A2,"blockshuffle, barnacle keyword removed",A2_no_barnacles,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_keyword,8b9be1cef5,205,0,G1_blockshuf_no_barnacles_seed205_00001_.png,2_no_barnacles
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,1337,0,G1_blockshuf_isolated_seed1337_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,42,0,G1_blockshuf_isolated_seed42_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,4242145,0,G1_blockshuf_isolated_seed4242145_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,777,0,G1_blockshuf_isolated_seed777_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,9999,0,G1_blockshuf_isolated_seed9999_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,101,0,G1_blockshuf_isolated_seed101_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,102,0,G1_blockshuf_isolated_seed102_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,103,0,G1_blockshuf_isolated_seed103_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,104,0,G1_blockshuf_isolated_seed104_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,105,0,G1_blockshuf_isolated_seed105_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,106,0,G1_blockshuf_isolated_seed106_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,107,0,G1_blockshuf_isolated_seed107_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,108,0,G1_blockshuf_isolated_seed108_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,109,0,G1_blockshuf_isolated_seed109_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,110,0,G1_blockshuf_isolated_seed110_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,201,0,G1_blockshuf_isolated_seed201_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,202,0,G1_blockshuf_isolated_seed202_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,203,0,G1_blockshuf_isolated_seed203_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,204,0,G1_blockshuf_isolated_seed204_00001_.png,3_isolated
+A3,"blockshuffle, keyword kept, all marine context removed",A3_isolated,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,isolated,441a0ba5cf,205,0,G1_blockshuf_isolated_seed205_00001_.png,3_isolated
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,1337,0,G1_blockshuf_matched_neutral_seed1337_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,42,0,G1_blockshuf_matched_neutral_seed42_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,4242145,0,G1_blockshuf_matched_neutral_seed4242145_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,777,0,G1_blockshuf_matched_neutral_seed777_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,9999,0,G1_blockshuf_matched_neutral_seed9999_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,101,0,G1_blockshuf_matched_neutral_seed101_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,102,0,G1_blockshuf_matched_neutral_seed102_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,103,0,G1_blockshuf_matched_neutral_seed103_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,104,0,G1_blockshuf_matched_neutral_seed104_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,105,0,G1_blockshuf_matched_neutral_seed105_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,106,0,G1_blockshuf_matched_neutral_seed106_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,107,0,G1_blockshuf_matched_neutral_seed107_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,108,0,G1_blockshuf_matched_neutral_seed108_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,109,0,G1_blockshuf_matched_neutral_seed109_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,110,0,G1_blockshuf_matched_neutral_seed110_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,201,0,G1_blockshuf_matched_neutral_seed201_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,202,0,G1_blockshuf_matched_neutral_seed202_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,203,0,G1_blockshuf_matched_neutral_seed203_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,204,0,G1_blockshuf_matched_neutral_seed204_00001_.png,6_matched_neutral
+A4,"blockshuffle, length- and syntax-matched neutral substitutions",A4_matched_neutral,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,matched_neutral,3684e0237c,205,0,G1_blockshuf_matched_neutral_seed205_00001_.png,6_matched_neutral
+A5,"stock model, full prompt",A5_baseline_full_prompt,1337.png,,0.0,0.0,full,30de058455,1337,0,G1_baseline_exact_seed1337_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,42.png,,0.0,0.0,full,30de058455,42,0,G1_baseline_exact_seed42_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,4242145.png,,0.0,0.0,full,30de058455,4242145,0,G1_baseline_exact_seed4242145_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,777.png,,0.0,0.0,full,30de058455,777,0,G1_baseline_exact_seed777_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,9999.png,,0.0,0.0,full,30de058455,9999,0,G1_baseline_exact_seed9999_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,101.png,,0.0,0.0,full,30de058455,101,0,G1_baseline_exact_seed101_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,102.png,,0.0,0.0,full,30de058455,102,0,G1_baseline_exact_seed102_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,103.png,,0.0,0.0,full,30de058455,103,0,G1_baseline_exact_seed103_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,104.png,,0.0,0.0,full,30de058455,104,0,G1_baseline_exact_seed104_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,105.png,,0.0,0.0,full,30de058455,105,1,G1_baseline_exact_seed105_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,106.png,,0.0,0.0,full,30de058455,106,0,G1_baseline_exact_seed106_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,107.png,,0.0,0.0,full,30de058455,107,0,G1_baseline_exact_seed107_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,108.png,,0.0,0.0,full,30de058455,108,0,G1_baseline_exact_seed108_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,109.png,,0.0,0.0,full,30de058455,109,0,G1_baseline_exact_seed109_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,110.png,,0.0,0.0,full,30de058455,110,0,G1_baseline_exact_seed110_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,201.png,,0.0,0.0,full,30de058455,201,0,G1_baseline_exact_seed201_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,202.png,,0.0,0.0,full,30de058455,202,0,G1_baseline_exact_seed202_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,203.png,,0.0,0.0,full,30de058455,203,0,G1_baseline_exact_seed203_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,204.png,,0.0,0.0,full,30de058455,204,0,G1_baseline_exact_seed204_00001_.png,0_baseline_exact
+A5,"stock model, full prompt",A5_baseline_full_prompt,205.png,,0.0,0.0,full,30de058455,205,0,G1_baseline_exact_seed205_00001_.png,0_baseline_exact
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,1337.png,,0.0,0.0,matched_neutral,3684e0237c,1337,0,G1_baseline_matched_neutral_seed1337_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,42.png,,0.0,0.0,matched_neutral,3684e0237c,42,0,G1_baseline_matched_neutral_seed42_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,4242145.png,,0.0,0.0,matched_neutral,3684e0237c,4242145,0,G1_baseline_matched_neutral_seed4242145_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,777.png,,0.0,0.0,matched_neutral,3684e0237c,777,0,G1_baseline_matched_neutral_seed777_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,9999.png,,0.0,0.0,matched_neutral,3684e0237c,9999,0,G1_baseline_matched_neutral_seed9999_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,101.png,,0.0,0.0,matched_neutral,3684e0237c,101,0,G1_baseline_matched_neutral_seed101_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,102.png,,0.0,0.0,matched_neutral,3684e0237c,102,0,G1_baseline_matched_neutral_seed102_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,103.png,,0.0,0.0,matched_neutral,3684e0237c,103,0,G1_baseline_matched_neutral_seed103_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,104.png,,0.0,0.0,matched_neutral,3684e0237c,104,0,G1_baseline_matched_neutral_seed104_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,105.png,,0.0,0.0,matched_neutral,3684e0237c,105,0,G1_baseline_matched_neutral_seed105_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,106.png,,0.0,0.0,matched_neutral,3684e0237c,106,0,G1_baseline_matched_neutral_seed106_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,107.png,,0.0,0.0,matched_neutral,3684e0237c,107,0,G1_baseline_matched_neutral_seed107_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,108.png,,0.0,0.0,matched_neutral,3684e0237c,108,0,G1_baseline_matched_neutral_seed108_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,109.png,,0.0,0.0,matched_neutral,3684e0237c,109,0,G1_baseline_matched_neutral_seed109_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,110.png,,0.0,0.0,matched_neutral,3684e0237c,110,0,G1_baseline_matched_neutral_seed110_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,201.png,,0.0,0.0,matched_neutral,3684e0237c,201,0,G1_baseline_matched_neutral_seed201_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,202.png,,0.0,0.0,matched_neutral,3684e0237c,202,0,G1_baseline_matched_neutral_seed202_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,203.png,,0.0,0.0,matched_neutral,3684e0237c,203,0,G1_baseline_matched_neutral_seed203_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,204.png,,0.0,0.0,matched_neutral,3684e0237c,204,0,G1_baseline_matched_neutral_seed204_00001_.png,0_baseline_matched_neutral
+A6,"stock model, matched-neutral prompt",A6_baseline_matched_neutral,205.png,,0.0,0.0,matched_neutral,3684e0237c,205,0,G1_baseline_matched_neutral_seed205_00001_.png,0_baseline_matched_neutral
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,1337.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,1337,0,G1_randsign_exact_seed1337_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,42.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,42,0,G1_randsign_exact_seed42_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,4242145.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,4242145,0,G1_randsign_exact_seed4242145_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,777.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,777,0,G1_randsign_exact_seed777_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,9999.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,9999,0,G1_randsign_exact_seed9999_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,101.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,101,0,G1_randsign_exact_seed101_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,102.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,102,0,G1_randsign_exact_seed102_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,103.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,103,0,G1_randsign_exact_seed103_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,104.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,104,0,G1_randsign_exact_seed104_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,105.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,105,0,G1_randsign_exact_seed105_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,106.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,106,0,G1_randsign_exact_seed106_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,107.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,107,0,G1_randsign_exact_seed107_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,108.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,108,0,G1_randsign_exact_seed108_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,109.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,109,0,G1_randsign_exact_seed109_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,110.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,110,0,G1_randsign_exact_seed110_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,201.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,201,0,G1_randsign_exact_seed201_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,202.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,202,0,G1_randsign_exact_seed202_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,203.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,203,0,G1_randsign_exact_seed203_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,204.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,204,0,G1_randsign_exact_seed204_00001_.png,22_randsign_exact
+A7,"randsign, full prompt (same Frobenius displacement)",A7_randsign_full_prompt,205.png,Arthemy_Bench_RANDSIGN.json,1.0,1.0,full,30de058455,205,1,G1_randsign_exact_seed205_00001_.png,22_randsign_exact
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,1337,0,G4_blockshuf_base_seed1337_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,42,0,G4_blockshuf_base_seed42_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,4242145,0,G4_blockshuf_base_seed4242145_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,777,0,G4_blockshuf_base_seed777_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,9999,0,G4_blockshuf_base_seed9999_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,101,0,G4_blockshuf_base_seed101_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,102,0,G4_blockshuf_base_seed102_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,103,0,G4_blockshuf_base_seed103_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,104,0,G4_blockshuf_base_seed104_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,105,0,G4_blockshuf_base_seed105_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,106,0,G4_blockshuf_base_seed106_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,107,0,G4_blockshuf_base_seed107_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,108,0,G4_blockshuf_base_seed108_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,109,0,G4_blockshuf_base_seed109_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,110,0,G4_blockshuf_base_seed110_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,201,0,G4_blockshuf_base_seed201_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,202,0,G4_blockshuf_base_seed202_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,203,0,G4_blockshuf_base_seed203_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,204,0,G4_blockshuf_base_seed204_00001_.png,4_hag_base
+B1,"blockshuffle, Ancient Hag, no barnacle keyword",B1_hag_base,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_base,95acba3b41,205,0,G4_blockshuf_base_seed205_00001_.png,4_hag_base
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,1337,0,G4_blockshuf_barnacles_seed1337_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,42,0,G4_blockshuf_barnacles_seed42_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,4242145,0,G4_blockshuf_barnacles_seed4242145_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,777,0,G4_blockshuf_barnacles_seed777_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,9999,0,G4_blockshuf_barnacles_seed9999_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,101,0,G4_blockshuf_barnacles_seed101_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,102,0,G4_blockshuf_barnacles_seed102_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,103,0,G4_blockshuf_barnacles_seed103_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,104,0,G4_blockshuf_barnacles_seed104_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,105,0,G4_blockshuf_barnacles_seed105_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,106,0,G4_blockshuf_barnacles_seed106_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,107,0,G4_blockshuf_barnacles_seed107_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,108,0,G4_blockshuf_barnacles_seed108_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,109,0,G4_blockshuf_barnacles_seed109_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,110,0,G4_blockshuf_barnacles_seed110_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,201,0,G4_blockshuf_barnacles_seed201_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,202,0,G4_blockshuf_barnacles_seed202_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,203,0,G4_blockshuf_barnacles_seed203_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,204,0,G4_blockshuf_barnacles_seed204_00001_.png,5_hag_barnacles
+B2,"blockshuffle, Ancient Hag + barnacle keyword, no marine context",B2_hag_barnacles,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hag_keyword,0face70d22,205,0,G4_blockshuf_barnacles_seed205_00001_.png,5_hag_barnacles
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,1337,0,G4_blockshuf_teal_hag_seed1337_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,42,0,G4_blockshuf_teal_hag_seed42_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,4242145,0,G4_blockshuf_teal_hag_seed4242145_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,777,0,G4_blockshuf_teal_hag_seed777_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,9999,0,G4_blockshuf_teal_hag_seed9999_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,101,0,G4_blockshuf_teal_hag_seed101_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,102,0,G4_blockshuf_teal_hag_seed102_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,103,0,G4_blockshuf_teal_hag_seed103_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,104,0,G4_blockshuf_teal_hag_seed104_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,105,0,G4_blockshuf_teal_hag_seed105_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,106,0,G4_blockshuf_teal_hag_seed106_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,107,0,G4_blockshuf_teal_hag_seed107_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,108,0,G4_blockshuf_teal_hag_seed108_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,109,0,G4_blockshuf_teal_hag_seed109_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,110,0,G4_blockshuf_teal_hag_seed110_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,201,0,G4_blockshuf_teal_hag_seed201_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,202,0,G4_blockshuf_teal_hag_seed202_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,203,0,G4_blockshuf_teal_hag_seed203_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,204,0,G4_blockshuf_teal_hag_seed204_00001_.png,9_teal_sea_hag_side
+B5,"blockshuffle, teal sea hag in profile, no temple ridges",B5_teal_sea_hag_side,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,teal_sea_hag,3acb51f99b,205,0,G4_blockshuf_teal_hag_seed205_00001_.png,9_teal_sea_hag_side
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,1337,1,G1_blockshuf_old_hag_seed1337_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,42,1,G1_blockshuf_old_hag_seed42_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,4242145,1,G1_blockshuf_old_hag_seed4242145_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,777,1,G1_blockshuf_old_hag_seed777_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,9999,1,G1_blockshuf_old_hag_seed9999_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,101,1,G1_blockshuf_old_hag_seed101_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,102,1,G1_blockshuf_old_hag_seed102_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,103,1,G1_blockshuf_old_hag_seed103_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,104,1,G1_blockshuf_old_hag_seed104_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,105,1,G1_blockshuf_old_hag_seed105_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,106,1,G1_blockshuf_old_hag_seed106_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,107,1,G1_blockshuf_old_hag_seed107_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,108,1,G1_blockshuf_old_hag_seed108_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,109,1,G1_blockshuf_old_hag_seed109_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,110,1,G1_blockshuf_old_hag_seed110_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,201,1,G1_blockshuf_old_hag_seed201_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,202,1,G1_blockshuf_old_hag_seed202_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,203,1,G1_blockshuf_old_hag_seed203_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,204,1,G1_blockshuf_old_hag_seed204_00001_.png,10_old_sea_hag_hybrid
+B6,"blockshuffle, siren/hag hybrid (full scaffold)",B6_old_sea_hag_hybrid,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,hybrid,7ea7e0d43f,205,1,G1_blockshuf_old_hag_seed205_00001_.png,10_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,1337.png,,0.0,0.0,hybrid,7ea7e0d43f,1337,0,G1_baseline_old_hag_seed1337_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,42.png,,0.0,0.0,hybrid,7ea7e0d43f,42,0,G1_baseline_old_hag_seed42_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,4242145.png,,0.0,0.0,hybrid,7ea7e0d43f,4242145,1,G1_baseline_old_hag_seed4242145_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,777.png,,0.0,0.0,hybrid,7ea7e0d43f,777,1,G1_baseline_old_hag_seed777_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,9999.png,,0.0,0.0,hybrid,7ea7e0d43f,9999,0,G1_baseline_old_hag_seed9999_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,101.png,,0.0,0.0,hybrid,7ea7e0d43f,101,0,G1_baseline_old_hag_seed101_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,102.png,,0.0,0.0,hybrid,7ea7e0d43f,102,0,G1_baseline_old_hag_seed102_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,103.png,,0.0,0.0,hybrid,7ea7e0d43f,103,1,G1_baseline_old_hag_seed103_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,104.png,,0.0,0.0,hybrid,7ea7e0d43f,104,1,G1_baseline_old_hag_seed104_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,105.png,,0.0,0.0,hybrid,7ea7e0d43f,105,0,G1_baseline_old_hag_seed105_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,106.png,,0.0,0.0,hybrid,7ea7e0d43f,106,0,G1_baseline_old_hag_seed106_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,107.png,,0.0,0.0,hybrid,7ea7e0d43f,107,0,G1_baseline_old_hag_seed107_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,108.png,,0.0,0.0,hybrid,7ea7e0d43f,108,1,G1_baseline_old_hag_seed108_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,109.png,,0.0,0.0,hybrid,7ea7e0d43f,109,0,G1_baseline_old_hag_seed109_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,110.png,,0.0,0.0,hybrid,7ea7e0d43f,110,0,G1_baseline_old_hag_seed110_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,201.png,,0.0,0.0,hybrid,7ea7e0d43f,201,0,G1_baseline_old_hag_seed201_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,202.png,,0.0,0.0,hybrid,7ea7e0d43f,202,1,G1_baseline_old_hag_seed202_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,203.png,,0.0,0.0,hybrid,7ea7e0d43f,203,0,G1_baseline_old_hag_seed203_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,204.png,,0.0,0.0,hybrid,7ea7e0d43f,204,1,G1_baseline_old_hag_seed204_00001_.png,0_baseline_old_sea_hag_hybrid
+B7,"stock model, siren/hag hybrid (full scaffold)",B7_baseline_old_sea_hag_hybrid,205.png,,0.0,0.0,hybrid,7ea7e0d43f,205,0,G1_baseline_old_hag_seed205_00001_.png,0_baseline_old_sea_hag_hybrid
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,1337,0,G1_blockshuf_deplete1_seed1337_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,42,0,G1_blockshuf_deplete1_seed42_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,4242145,0,G1_blockshuf_deplete1_seed4242145_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,777,0,G1_blockshuf_deplete1_seed777_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,9999,0,G1_blockshuf_deplete1_seed9999_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,101,0,G1_blockshuf_deplete1_seed101_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,102,0,G1_blockshuf_deplete1_seed102_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,103,0,G1_blockshuf_deplete1_seed103_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,104,0,G1_blockshuf_deplete1_seed104_00001_.png,11_depletion_1kw
+C1,"blockshuffle, only 'sea-touched' removed",C1_depletion_1kw,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_sea_touched,96346d14c5,105,0,G1_blockshuf_deplete1_seed105_00001_.png,11_depletion_1kw
+D1,strength sweep 0.25,D1_strength_025,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,1337,0,G1_blockshuf_str025_seed1337_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,42,0,G1_blockshuf_str025_seed42_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,4242145,0,G1_blockshuf_str025_seed4242145_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,777,0,G1_blockshuf_str025_seed777_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,9999,0,G1_blockshuf_str025_seed9999_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,101,0,G1_blockshuf_str025_seed101_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,102,0,G1_blockshuf_str025_seed102_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,103,0,G1_blockshuf_str025_seed103_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,104,0,G1_blockshuf_str025_seed104_00001_.png,14_strength_025
+D1,strength sweep 0.25,D1_strength_025,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.25,0.25,full,30de058455,105,1,G1_blockshuf_str025_seed105_00001_.png,14_strength_025
+D2,strength sweep 0.50,D2_strength_050,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,1337,1,G1_blockshuf_str050_seed1337_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,42,0,G1_blockshuf_str050_seed42_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,4242145,ambiguous,G1_blockshuf_str050_seed4242145_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,777,ambiguous,G1_blockshuf_str050_seed777_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,9999,ambiguous,G1_blockshuf_str050_seed9999_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,101,1,G1_blockshuf_str050_seed101_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,102,ambiguous,G1_blockshuf_str050_seed102_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,103,1,G1_blockshuf_str050_seed103_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,104,1,G1_blockshuf_str050_seed104_00001_.png,14_strength_050
+D2,strength sweep 0.50,D2_strength_050,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.5,0.5,full,30de058455,105,1,G1_blockshuf_str050_seed105_00001_.png,14_strength_050
+D3,strength sweep 0.75,D3_strength_075,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,1337,1,G1_blockshuf_str075_seed1337_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,42,1,G1_blockshuf_str075_seed42_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,4242145,1,G1_blockshuf_str075_seed4242145_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,777,1,G1_blockshuf_str075_seed777_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,9999,1,G1_blockshuf_str075_seed9999_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,101,1,G1_blockshuf_str075_seed101_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,102,1,G1_blockshuf_str075_seed102_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,103,1,G1_blockshuf_str075_seed103_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,104,1,G1_blockshuf_str075_seed104_00001_.png,14_strength_075
+D3,strength sweep 0.75,D3_strength_075,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.75,0.75,full,30de058455,105,1,G1_blockshuf_str075_seed105_00001_.png,14_strength_075
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,1337,1,G1_blockshuf_exact_seed1337_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,42,1,G1_blockshuf_exact_seed42_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,4242145,1,G1_blockshuf_exact_seed4242145_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,777,1,G1_blockshuf_exact_seed777_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,9999,1,G1_blockshuf_exact_seed9999_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,101,1,G1_blockshuf_exact_seed101_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,102,1,G1_blockshuf_exact_seed102_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,103,1,G1_blockshuf_exact_seed103_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,104,1,G1_blockshuf_exact_seed104_00001_.png,1_exact
+D0,"strength sweep 1.00 (same renders as A1, first 10 seeds)",D0_strength_100,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,full,30de058455,105,1,G1_blockshuf_exact_seed105_00001_.png,1_exact
+D4,strength sweep 1.25,D4_strength_125,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,1337,1,G1_blockshuf_str125_seed1337_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,42,1,G1_blockshuf_str125_seed42_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,4242145,1,G1_blockshuf_str125_seed4242145_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,777,1,G1_blockshuf_str125_seed777_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,9999,1,G1_blockshuf_str125_seed9999_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,101,0,G1_blockshuf_str125_seed101_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,102,1,G1_blockshuf_str125_seed102_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,103,1,G1_blockshuf_str125_seed103_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,104,1,G1_blockshuf_str125_seed104_00001_.png,14_strength_125
+D4,strength sweep 1.25,D4_strength_125,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.25,1.25,full,30de058455,105,0,G1_blockshuf_str125_seed105_00001_.png,14_strength_125
+D5,strength sweep 1.50,D5_strength_150,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,1337,1,G1_blockshuf_str150_seed1337_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,42,1,G1_blockshuf_str150_seed42_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,4242145,0,G1_blockshuf_str150_seed4242145_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,777,1,G1_blockshuf_str150_seed777_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,9999,0,G1_blockshuf_str150_seed9999_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,101,1,G1_blockshuf_str150_seed101_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,102,0,G1_blockshuf_str150_seed102_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,103,0,G1_blockshuf_str150_seed103_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,104,1,G1_blockshuf_str150_seed104_00001_.png,14_strength_150
+D5,strength sweep 1.50,D5_strength_150,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.5,1.5,full,30de058455,105,1,G1_blockshuf_str150_seed105_00001_.png,14_strength_150
+D6,strength sweep 1.75,D6_strength_175,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,1337,1,G1_blockshuf_str175_seed1337_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,42,0,G1_blockshuf_str175_seed42_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,4242145,0,G1_blockshuf_str175_seed4242145_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,777,0,G1_blockshuf_str175_seed777_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,9999,1,G1_blockshuf_str175_seed9999_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,101,1,G1_blockshuf_str175_seed101_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,102,1,G1_blockshuf_str175_seed102_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,103,0,G1_blockshuf_str175_seed103_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,104,1,G1_blockshuf_str175_seed104_00001_.png,14_strength_175
+D6,strength sweep 1.75,D6_strength_175,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.75,1.75,full,30de058455,105,0,G1_blockshuf_str175_seed105_00001_.png,14_strength_175
+D7,strength sweep 2.00,D7_strength_200,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,1337,0,G1_blockshuf_str200_seed1337_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,42,0,G1_blockshuf_str200_seed42_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,4242145,0,G1_blockshuf_str200_seed4242145_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,777,0,G1_blockshuf_str200_seed777_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,9999,1,G1_blockshuf_str200_seed9999_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,101,0,G1_blockshuf_str200_seed101_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,102,0,G1_blockshuf_str200_seed102_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,103,0,G1_blockshuf_str200_seed103_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,104,0,G1_blockshuf_str200_seed104_00001_.png,14_strength_200
+D7,strength sweep 2.00,D7_strength_200,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,2.0,2.0,full,30de058455,105,0,G1_blockshuf_str200_seed105_00001_.png,14_strength_200
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,1337,1,G1_blockshuf_model_only_seed1337_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,42,0,G1_blockshuf_model_only_seed42_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,4242145,ambiguous,G1_blockshuf_model_only_seed4242145_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,777,1,G1_blockshuf_model_only_seed777_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,9999,0,G1_blockshuf_model_only_seed9999_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,101,1,G1_blockshuf_model_only_seed101_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,102,1,G1_blockshuf_model_only_seed102_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,103,1,G1_blockshuf_model_only_seed103_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,104,1,G1_blockshuf_model_only_seed104_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,105,1,G1_blockshuf_model_only_seed105_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,106,0,G1_blockshuf_model_only_seed106_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,107,1,G1_blockshuf_model_only_seed107_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,108,1,G1_blockshuf_model_only_seed108_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,109,0,G1_blockshuf_model_only_seed109_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,110,0,G1_blockshuf_model_only_seed110_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,201,1,G1_blockshuf_model_only_seed201_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,202,0,G1_blockshuf_model_only_seed202_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,203,1,G1_blockshuf_model_only_seed203_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,204,0,G1_blockshuf_model_only_seed204_00001_.png,19_model_only
+E1,blockshuffle applied to the DiT only (text encoder left stock),E1_model_only,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,0.0,full,30de058455,205,1,G1_blockshuf_model_only_seed205_00001_.png,19_model_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,1337,0,G1_blockshuf_clip_only_seed1337_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,42,0,G1_blockshuf_clip_only_seed42_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,4242145,0,G1_blockshuf_clip_only_seed4242145_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,777,0,G1_blockshuf_clip_only_seed777_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,9999,1,G1_blockshuf_clip_only_seed9999_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,101,0,G1_blockshuf_clip_only_seed101_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,102,1,G1_blockshuf_clip_only_seed102_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,103,1,G1_blockshuf_clip_only_seed103_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,104,0,G1_blockshuf_clip_only_seed104_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,105,0,G1_blockshuf_clip_only_seed105_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,106,0,G1_blockshuf_clip_only_seed106_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,107,0,G1_blockshuf_clip_only_seed107_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,108,0,G1_blockshuf_clip_only_seed108_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,109,0,G1_blockshuf_clip_only_seed109_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,110,0,G1_blockshuf_clip_only_seed110_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,201,0,G1_blockshuf_clip_only_seed201_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,202,0,G1_blockshuf_clip_only_seed202_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,203,0,G1_blockshuf_clip_only_seed203_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,204,0,G1_blockshuf_clip_only_seed204_00001_.png,20_clip_only
+E2,blockshuffle applied to the text encoder only (DiT left stock),E2_clip_only,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,0.0,1.0,full,30de058455,205,0,G1_blockshuf_clip_only_seed205_00001_.png,20_clip_only
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,1337.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,1337,0,G1_blockshuf_no_ridges_seed1337_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,42.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,42,0,G1_blockshuf_no_ridges_seed42_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,4242145.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,4242145,0,G1_blockshuf_no_ridges_seed4242145_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,777.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,777,0,G1_blockshuf_no_ridges_seed777_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,9999.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,9999,0,G1_blockshuf_no_ridges_seed9999_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,101.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,101,0,G1_blockshuf_no_ridges_seed101_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,102.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,102,0,G1_blockshuf_no_ridges_seed102_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,103.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,103,0,G1_blockshuf_no_ridges_seed103_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,104.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,104,0,G1_blockshuf_no_ridges_seed104_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,105.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,105,0,G1_blockshuf_no_ridges_seed105_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,106.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,106,0,G1_blockshuf_no_ridges_seed106_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,107.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,107,0,G1_blockshuf_no_ridges_seed107_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,108.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,108,0,G1_blockshuf_no_ridges_seed108_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,109.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,109,0,G1_blockshuf_no_ridges_seed109_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,110.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,110,0,G1_blockshuf_no_ridges_seed110_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,201.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,201,0,G1_blockshuf_no_ridges_seed201_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,202.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,202,0,G1_blockshuf_no_ridges_seed202_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,203.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,203,0,G1_blockshuf_no_ridges_seed203_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,204.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,204,0,G1_blockshuf_no_ridges_seed204_00001_.png,21_a1_no_temple_ridges
+E3,"blockshuffle, only the temple-ridges phrase removed",E3_no_temple_ridges,205.png,Arthemy_Bench_BLOCKSHUFFLE.json,1.0,1.0,no_ridges,8a6b45b3cd,205,1,G1_blockshuf_no_ridges_seed205_00001_.png,21_a1_no_temple_ridges

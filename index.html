@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight-Space Steering in Krea-2 DiT · Public Lab Notebook</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ground:#f4f5f7; --surface:#ffffff; --surface-2:#eaecf0; --surface-3:#e1e4ea;
+    --ink:#14181f; --dim:#58606e; --faint:#8590a0;
+    --border:#dde1e7; --rule:#c3c9d3;
+    --accent:#35607f; --accent-soft:#e2ecf3;
+    --neg:#8a3333; --neg-soft:#f7e6e6;
+    --pos:#2b6348; --pos-soft:#e3efe8;
+    --open:#8a6212; --open-soft:#f8f0dd;
+    --measure:74ch;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0e1116; --surface:#151920; --surface-2:#1b2029; --surface-3:#222834;
+      --ink:#e3e7ee; --dim:#98a2b2; --faint:#77818f;
+      --border:#262c36; --rule:#333a46;
+      --accent:#72aed0; --accent-soft:#16303f;
+      --neg:#dd8888; --neg-soft:#331919;
+      --pos:#6fc09a; --pos-soft:#112c20;
+      --open:#d7a742; --open-soft:#2f2610;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0e1116; --surface:#151920; --surface-2:#1b2029; --surface-3:#222834;
+    --ink:#e3e7ee; --dim:#98a2b2; --faint:#77818f;
+    --border:#262c36; --rule:#333a46;
+    --accent:#72aed0; --accent-soft:#16303f;
+    --neg:#dd8888; --neg-soft:#331919;
+    --pos:#6fc09a; --pos-soft:#112c20;
+    --open:#d7a742; --open-soft:#2f2610;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:16px; line-height:1.62; margin:0;
+    padding-block:0 64px; padding-inline:20px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1020px; margin:0 auto; display:flex; flex-direction:column; gap:46px;}
+
+  nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; margin-inline:-20px; padding:8px 20px;
+      background:color-mix(in srgb,var(--ground) 90%,transparent); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--border); overflow-x:auto;}
+  nav ol{list-style:none; margin:0 auto; padding:0; max-width:1020px; display:flex; gap:3px; white-space:nowrap;}
+  nav a{display:block; text-decoration:none; color:var(--dim); font-family:"IBM Plex Mono",monospace;
+        font-size:11px; letter-spacing:.04em; padding:4px 8px; border:1px solid transparent;}
+  nav a:hover{color:var(--accent); border-color:var(--border); background:var(--surface);}
+  nav a:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+
+  header.mast{padding-top:40px; padding-bottom:24px; border-bottom:2px solid var(--rule);
+              display:flex; flex-direction:column; gap:14px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+           text-transform:uppercase; color:var(--accent); font-weight:500;}
+  h1{font-size:clamp(1.85rem,4.2vw,2.6rem); line-height:1.1; font-weight:700;
+     letter-spacing:-.022em; margin:0; text-wrap:balance;}
+  .stand{font-size:1.05rem; color:var(--dim); max-width:var(--measure); text-wrap:pretty;}
+
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1px;
+        background:var(--border); border:1px solid var(--border); margin-top:6px;}
+  .meta div{background:var(--surface); padding:10px 14px;}
+  .meta dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;
+           text-transform:uppercase; color:var(--faint); margin:0 0 3px;}
+  .meta dd{margin:0; font-family:"IBM Plex Mono",monospace; font-size:.86rem;
+           font-variant-numeric:tabular-nums; color:var(--ink);}
+
+  section{display:flex; flex-direction:column; gap:15px; scroll-margin-top:56px;}
+  h2{font-size:1.42rem; font-weight:650; letter-spacing:-.012em; margin:0;
+     display:flex; align-items:baseline; gap:12px; text-wrap:balance;}
+  h2 .n{font-family:"IBM Plex Mono",monospace; font-size:.78rem; font-weight:500; flex:none;
+        color:var(--accent); border:1px solid var(--accent); padding:2px 7px;}
+  h3{font-size:1.02rem; font-weight:600; margin:16px 0 0; letter-spacing:-.005em;}
+  h3 .num{font-family:"IBM Plex Mono",monospace; color:var(--faint); font-weight:500; margin-right:6px;}
+  p,li{max-width:var(--measure); text-wrap:pretty;}
+  p{margin:0;}
+  ul,ol.body{margin:0; padding-left:1.15rem; display:flex; flex-direction:column; gap:8px;}
+  code{font-family:"IBM Plex Mono",monospace; font-size:.86em; background:var(--surface-2);
+       padding:1px 5px; border-radius:2px;}
+  strong{font-weight:640;}
+  a{color:var(--accent);}
+  .why{color:var(--dim); font-size:.95rem;}
+
+  .chip{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10px;
+        letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border:1px solid currentColor;
+        font-weight:500; vertical-align:middle;}
+  .chip.pos{color:var(--pos); background:var(--pos-soft);}
+  .chip.neg{color:var(--neg); background:var(--neg-soft);}
+  .chip.open{color:var(--open); background:var(--open-soft);}
+
+  .tw{overflow-x:auto; border:1px solid var(--border); background:var(--surface);}
+  table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:480px;}
+  th,td{text-align:left; padding:9px 13px; border-bottom:1px solid var(--border); vertical-align:top;}
+  thead th{background:var(--surface-2); font-family:"IBM Plex Mono",monospace; font-weight:500;
+           font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--dim); white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.n,th.n{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  tr.hi td{background:var(--pos-soft);}
+  tr.lo td{color:var(--faint);}
+  .mono{font-family:"IBM Plex Mono",monospace; font-size:.85rem;}
+  td .idx{font-family:"IBM Plex Mono",monospace; color:var(--faint); font-size:.8rem;}
+
+  .box{border:1px solid var(--border); background:var(--surface-2); padding:16px 18px;
+       display:flex; flex-direction:column; gap:8px;}
+  .box .lbl{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;
+            text-transform:uppercase; font-weight:500; color:var(--accent);}
+  .box p{font-size:.95rem;}
+  .box.first{border-left:3px solid var(--accent); background:var(--accent-soft);}
+  .box.warn{border-left:3px solid var(--open);} .box.warn .lbl{color:var(--open);}
+  .box.dead{border-left:3px solid var(--neg);} .box.dead .lbl{color:var(--neg);}
+  .box.live{border-left:3px solid var(--pos);} .box.live .lbl{color:var(--pos);}
+
+  blockquote{margin:0; border-left:3px solid var(--rule); padding:4px 0 4px 18px;
+             font-size:1.05rem; color:var(--ink); max-width:var(--measure);}
+
+  pre{background:var(--surface); border:1px solid var(--border); padding:13px 15px; overflow-x:auto;
+      font-family:"IBM Plex Mono",monospace; font-size:.8rem; line-height:1.6; margin:0; max-width:100%;}
+  pre .c{color:var(--faint);}
+
+  figure{margin:0; border:1px solid var(--border); background:var(--surface);}
+  .figscroll{overflow-x:auto;}
+  figure svg{display:block; min-width:640px; width:100%; height:auto;}
+  figcaption{border-top:1px solid var(--border); padding:10px 14px; font-size:.87rem; color:var(--dim);}
+  .ax{fill:var(--faint); font-family:"IBM Plex Mono",monospace; font-size:11px;}
+  .rl{fill:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:12px;}
+  .gl{fill:var(--accent); font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;}
+  .grid{stroke:var(--border); stroke-width:1;}
+  .zero{stroke:var(--rule); stroke-width:1.5; stroke-dasharray:3 3;}
+  .ciS{stroke:var(--pos); stroke-width:2.5;} .dotS{fill:var(--pos);}
+  .ciN{stroke:var(--faint); stroke-width:2.5;} .dotN{fill:var(--faint);}
+
+.sc-prompt-box{border-top:1px solid var(--border); margin-top:14px; padding-top:13px;
+    display:flex; flex-direction:column; gap:7px;}
+  .sc-prompt-head{display:flex; flex-wrap:wrap; gap:10px; align-items:baseline; justify-content:space-between;}
+  .sc-prompt-eyebrow{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.11em;
+    text-transform:uppercase; font-weight:500; color:var(--accent);}
+  .sc-prompt-meta{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--faint);}
+  .sc-prompt-text{margin:0; font-family:"IBM Plex Mono",monospace; font-size:12.5px; line-height:1.62;
+    color:var(--dim); max-width:none; white-space:pre-wrap; word-break:break-word;}
+  .sc-prompt-foot{margin:0; font-size:11.5px; line-height:1.5; color:var(--faint); max-width:none;}
+  footer{border-top:1px solid var(--border); padding-top:20px; color:var(--faint); font-size:.85rem;}
+  @media (max-width:560px){ body{font-size:15px;} h2{align-items:center;} }
+
+  /* 5-Seed Showcase Component */
+  .showcase-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .showcase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+  }
+  .showcase-title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .showcase-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .showcase-badge {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: var(--pos-soft);
+    color: var(--pos);
+    border: 1px solid currentColor;
+    padding: 2px 7px;
+  }
+  .prompt-nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-arrow-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 5px 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    transition: all 0.15s ease;
+  }
+  .nav-arrow-btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .prompt-dropdown {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+  }
+  .prompt-dropdown:focus { border-color: var(--accent); }
+
+  /* 5-Column Seed Grid */
+  .seed-strip-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+  .seed-cell {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .seed-cell:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .seed-cell-header {
+    padding: 6px 8px;
+    background: var(--surface-3);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--dim);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .seed-cell img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    background: #000;
+  }
+
+  /* Preset Selector Row */
+  .preset-selection-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .preset-buttons-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .preset-pill-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .preset-pill-btn:hover {
+    color: var(--ink);
+    border-color: var(--rule);
+  }
+  .preset-pill-btn.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .preset-pill-btn.active.baseline {
+    background: var(--surface-3);
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  /* 53 KB Payload Callout */
+  .payload-callout {
+    background: var(--surface-2);
+    border-left: 4px solid var(--pos);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .payload-badge {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pos);
+    background: var(--pos-soft);
+    border: 1px solid currentColor;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .payload-text {
+    font-size: 0.93rem;
+    color: var(--dim);
+    max-width: 780px;
+    margin: 0;
+  }
+  .payload-text strong {
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .seed-strip-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 580px) {
+    .seed-strip-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<nav aria-label="Table of Contents">
+  <ol>
+    <li><a href="#start">0 · Read First</a></li>
+    <li><a href="#disegno">1 · Experimental Design</a></li>
+    <li><a href="#ris">2 · Findings</a></li>
+    <li><a href="#metodo">3 · Methodology</a></li>
+    <li><a href="#avv">4 · Metric Warning</a></li>
+    <li><a href="#nonstab">5 · Non-Established</a></li>
+    <li><a href="#emergenza">6 · Attribute Emergence</a></li>
+    <li><a href="#errori">8 · 26 Pitfalls</a></li>
+    <li><a href="#ripresa">11 · How to Replicate</a></li>
+    <li style="margin-left:auto;"><a href="viewer/viewer.html" style="color:var(--pos); font-weight:600; border-color:var(--pos);">✦ Interactive A/B Viewer</a></li>
+  </ol>
+</nav>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">Public Lab Notebook · Diffusion Models Weight-Space Steering · Experimental Record</div>
+  <h1>Weight-space steering in Krea-2 DiT</h1>
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:4px;">
+    <a href="https://github.com/aledelpho/comfyui-arthemy-krea2-tuner" target="_blank" style="text-decoration:none;" class="chip">Tool: Arthemy-Krea2-Tuner ↗</a>
+    <a href="viewer/viewer.html" style="text-decoration:none;" class="chip pos">Interactive A/B Viewer ↗</a>
+    <a href="docs/errors_log.md" style="text-decoration:none;" class="chip open">23 Pitfalls Checklist ↗</a>
+    <a href="data/" style="text-decoration:none;" class="chip">Raw Datasets ↗</a>
+  </div>
+  <p class="stand">The previous iteration of this experimental record concluded that nothing was there.
+    That conclusion was correct for what it measured and wrong about <em>what to measure</em>:
+    every readout was passed through a 224×224 CLIP latent space where stroke thickness no
+    longer exists. Once a second measurement space was built specifically on rendering technique,
+    the condition hierarchy inverted and a robust positive finding emerged across four independent instruments.</p>
+  <dl class="meta">
+    <div><dt>Renderer</dt><dd>krea2_turbo_bf16 · DiT 28 blocks</dd></div>
+    <div><dt>Text encoder</dt><dd>qwen3vl_4b_bf16 · 31 text layers</dd></div>
+    <div><dt>Family</dt><dd>24 prompts · 18 colour-pinned + 6 free</dd></div>
+    <div><dt>Matched displacement</dt><dd>D 0.05381584 / 0.02165930</dd></div>
+    <div><dt>Measurement spaces</dt><dd>CLIP · stroke · color</dd></div>
+    <div><dt>Suite fingerprint</dt><dd>ff680ad0a33ee142</dd></div>
+  </dl>
+</header>
+
+
+<div class="showcase-panel" id="showcase">
+  <div class="showcase-header">
+    <div class="showcase-title-wrap">
+      <h2 class="showcase-title">Synchronized 5-Seed Showcase</h2>
+      <span class="showcase-badge">Live Visual Inspection</span>
+    </div>
+    <div class="prompt-nav-bar">
+      <button id="sc-prev-prompt" class="nav-arrow-btn" type="button" title="Previous subject">← Prev</button>
+      <select id="sc-prompt-select" class="prompt-dropdown"></select>
+      <button id="sc-next-prompt" class="nav-arrow-btn" type="button" title="Next subject">Next →</button>
+    </div>
+  </div>
+
+  <!-- 5 Columns for the 5 Core Seeds -->
+  <div class="seed-strip-grid">
+    <div class="seed-cell">
+      <div class="seed-cell-header">Seed 4242145</div>
+      <img id="sc-img-0" src="" alt="Seed 4242145" loading="eager">
+    </div>
+    <div class="seed-cell">
+      <div class="seed-cell-header">Seed 42</div>
+      <img id="sc-img-1" src="" alt="Seed 42" loading="eager">
+    </div>
+    <div class="seed-cell">
+      <div class="seed-cell-header">Seed 1337</div>
+      <img id="sc-img-2" src="" alt="Seed 1337" loading="eager">
+    </div>
+    <div class="seed-cell">
+      <div class="seed-cell-header">Seed 777</div>
+      <img id="sc-img-3" src="" alt="Seed 777" loading="eager">
+    </div>
+    <div class="seed-cell">
+      <div class="seed-cell-header">Seed 9999</div>
+      <img id="sc-img-4" src="" alt="Seed 9999" loading="eager">
+    </div>
+  </div>
+
+  <!-- Preset Selector Row -->
+  <div class="preset-selection-bar">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--faint); font-weight:600;">Select Condition to Apply Across All 5 Seeds:</span>
+      <span id="sc-condition-meta" style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent);"></span>
+    </div>
+    <div class="preset-buttons-wrap" id="sc-preset-buttons">
+      <button class="preset-pill-btn baseline" data-cond="baseline">Baseline (Unmodified Base)</button>
+      <button class="preset-pill-btn active" data-cond="preset">Targeted Preset (+) [Stroke Continuity]</button>
+      <button class="preset-pill-btn" data-cond="preset_neg">Preset (-) [Directional Inverse]</button>
+      <button class="preset-pill-btn" data-cond="blockshuffle">Blockshuffle [Permuted Depth Control]</button>
+      <button class="preset-pill-btn" data-cond="randsign">Randsign [Random Sign Noise Control]</button>
+    </div>
+  </div>
+
+  <!-- Which prompt produced the five frames above -->
+  <div class="sc-prompt-box">
+    <div class="sc-prompt-head">
+      <span class="sc-prompt-eyebrow">Prompt behind these five frames</span>
+      <span id="sc-prompt-meta" class="sc-prompt-meta"></span>
+    </div>
+    <p id="sc-prompt-text" class="sc-prompt-text"></p>
+    <p class="sc-prompt-foot">Identical across every condition and seed above — only the weights change.
+      <code>prompt_sha1</code> is the first ten hex characters of its SHA-1 and the folder name under
+      <code>assets/</code>: it is how &ldquo;the prompt was not touched&rdquo; is checked rather than asserted.</p>
+  </div>
+
+  <!-- The 53 KB Payload Highlight Callout -->
+  <div class="payload-callout">
+    <div class="payload-badge">Payload: 53 KB</div>
+    <p class="payload-text">
+      <strong>A 53 KB configuration steers a 12.8 Billion parameter DiT:</strong>
+      With zero retraining compute, zero multi-megabyte LoRA adapters, and zero prompt text changes, a compact 53 KB file of calibrated block deltas and orthogonal rotations shifts the stroke geometry consistently across every seed.
+    </p>
+  </div>
+</div>
+
+
+<section id="start">
+  <h2><span class="n">0</span> Read this first</h2>
+  <div class="box warn" style="margin-bottom:12px;">
+    <span class="lbl">Project Status & Epistemological Framing</span>
+    <p>This document serves as an <strong>open research notebook subject to falsification</strong>.
+      The findings reported here specifically concern the <strong>Krea-2 DiT (28 blocks)</strong>
+      architecture with the <strong>Qwen3-VL 4B</strong> multimodal encoder, originating from exploration
+      conducted with the ComfyUI node suite <a href="https://github.com/aledelpho/comfyui-arthemy-krea2-tuner">Arthemy-Krea2-Tuner</a>.</p>
+    <p>Formal replication under an identical norm-matched ($D$-Frobenius) protocol is currently
+      active on our second target model (<strong>circlestone-labs/Anima</strong>, built on nvidia/Cosmos-Predict2-2B-Text2Image).</p>
+  </div>
+
+  <div class="box first">
+    <span class="lbl">The claim, in one sentence</span>
+    <p>At Frobenius relative displacement strictly matched across the exact same tensors, a hand-crafted
+      weight perturbation steers <strong>the physical way the image is drawn</strong> — stroke continuity,
+      contour length, line thickness — along a reproducible direction across distinct subjects. Two
+      norm-matched controls fail to do so, and one merely injects broad-band texture. Crucially,
+      this entire effect is <strong>invisible to a CLIP metric</strong> — not because signs invert,
+      but because <strong>which contrast the instrument can resolve inverts</strong> (<a href="#avv">§4</a>).</p>
+  </div>
+  <p>The three key takeaways, in order of durability:</p>
+  <ul>
+    <li><strong>A methodology</strong> — exactly norm-matched controls for weight-space interventions (<a href="#metodo">§3</a>).</li>
+    <li><strong>A metric warning</strong> — empirical conclusions invert between semantic space and rendering-technique space (<a href="#avv">§4</a>).</li>
+    <li><strong>An empirical finding</strong> — only the targeted configuration steers stroke morphology (<a href="#ris">§2</a>).</li>
+    <li><strong>A second, different empirical finding</strong> — a norm-matched perturbation can move a neglected prompt attribute from 5% to 95% presence, but only where the prompt already binds it (<a href="#emergenza">§6</a>).</li>
+  </ul>
+  <p class="why">The most practically valuable section for replication is <a href="#errori">§8</a>:
+    twenty-three real-world measurement pitfalls, <em>none</em> of which produced absurd numbers.
+    All produced plausible values.</p>
+</section>
+
+<section id="disegno">
+  <h2><span class="n">1</span> Experimental Design</h2>
+
+  <h3><span class="num">1.1</span> Three conditions, matched in displacement</h3>
+  <p>All three conditions modify the <strong>exact same 1059 tensors</strong> (430 DiT blocks + 629 text encoder layers)
+    with the exact same relative Frobenius displacement: <code>D_model = 0.05381584</code>,
+    <code>D_CLIP = 0.02165930</code> across 341 language layers.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Condition</th><th>Construction</th><th>Norm Matching</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">preset</td><td>hand-crafted configuration; 5-D disabled, granular bypass removed</td><td>—</td></tr>
+      <tr><td class="mono">RANDSIGN</td><td>each value → <code>|v|</code> with random sign</td><td><strong>exact by construction</strong>: <code>D = sqrt(Σ(δ‖W‖)²)</code> is independent of sign</td></tr>
+      <tr><td class="mono">BLOCKSHUFFLE</td><td>block profiles permuted across layers (derangement, seed 20260914)</td><td><strong>via calibration</strong>: α measured and applied <em>only</em> to the permuted subset</td></tr>
+    </tbody>
+  </table></div>
+  <p>Every condition has its corresponding <strong>NEG</strong> (values multiplied by −1, including rotation angles),
+    enabling the canonical linear decomposition:</p>
+  <pre>d± = emb(±preset) − emb(baseline at IDENTICAL seed)
+
+S  = (d+ + d−)/2    symmetric part, sign-invariant      <span class="c">"magnitude / isotropic effect"</span>
+A  = (d+ − d−)/2    antisymmetric part, sign-inverting  <span class="c">"directional steering"</span></pre>
+  <p>The 4 rotation recipes on Block_3 (±10°, seeds 82/60/59/56) are <strong>identical</strong>
+    between preset and BLOCKSHUFFLE: the two differ solely in scalar block assignments.</p>
+
+  <h3><span class="num">1.2</span> Why BLOCKSHUFFLE exists</h3>
+  <p>RANDSIGN initially appeared to be the ideal control until the internal structure of the preset was audited.
+    Across 1059 values, there are only <strong>78 distinct values</strong> at 1e-4 precision:</p>
+  <pre>CLIP  31 text layers × 11 tensors, dev 0.000000 within each layer, 6 distinct groups
+      288 vision tower tensors, all exactly −0.025
+DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
+      B10..B14   dev 0.000000, alternating −0.025 / +0.0225
+      B00..B04, B15..B19, B20..B23, B24..B27   dev ≤ 0.0004
+      B05..B09   dev 0.077, from −0.045 to +0.110 across the 13 components,
+                 and the EXACT same internal profile replicated across all five</pre>
+  <p>The preset is <strong>piecewise constant per block</strong>. Flipping tensor signs independently does
+    not randomize an assignment: it <strong>destroys block-level coherence</strong>.
+    B05–B09 is the sole locus of sub-block specialization. BLOCKSHUFFLE preserves both intra-block coherence
+    and the multiset of weights, permuting solely <em>which block receives which depth profile</em>.</p>
+
+  <h3><span class="num">1.3</span> The prompt family</h3>
+  <p>Ten prompts, structurally identical word-for-word — style, framing, background, and monochromatic tags
+    held invariant — varying solely in character subject, color tint, and facial expression. Ten distinct hues,
+    ensuring no two prompts share a dominant tone. Five seeds per condition, fifteen baseline samples per prompt,
+    yielding <strong>45 pairwise contrasts</strong>.</p>
+</section>
+
+<section id="ris">
+  <h2><span class="n">2</span> Findings <span class="chip pos">established</span></h2>
+
+  <h3><span class="num">2.1</span> Four readouts, two instruments, a single image set</h3>
+  <div class="box warn">
+    <span class="lbl">Methodological weight and nesting structure</span>
+    <p>The four readouts below <strong>do not carry equal weight and are not mutually independent</strong>:</p>
+    <ul>
+      <li><strong>(b) is nested inside (a)</strong> — identical feature set, same statistic, same images: it is a <em>subspace</em> of (a), not an orthogonal test. It is also the weakest: <code>p = 0.011</code> vs. <code>5e-05</code>, with the 95% CI of <code>preset − blockshuffle</code> bounding at <code>+0.073</code>. It serves as <em>spatial localization</em>, not independent confirmation.</li>
+      <li><strong>(d) is computed on the exact same features as (c)</strong>: it is an internal consistency diagnostic.</li>
+      <li>The genuinely independent feature families are <strong>two</strong>: the luminance-only stroke features constructed here, and the 23 morphological metrics constructed independently. <strong>The underlying image pool is identical across all four</strong>: 340 renders, one model, one prompt family.</li>
+      <li><strong>None of these four readouts were pre-registered.</strong> They emerged sequentially in response to falsification challenges. They should be evaluated as <em>cross-validation consistency checks</em> rather than separate discovery trials.</li>
+    </ul>
+  </div>
+  <p><strong>(a) Stroke Space</strong> — Directional coherence of A across prompts. Luminance-only features
+    (ink morphology via distance transform, region flatness, radial power spectrum, edge sharpness),
+    blind to color by construction.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Condition</th><th class="n">A coherence</th><th class="n">null p95</th><th class="n">p</th><th class="n">|A|/|S|</th><th class="n">cos(+,−)</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">preset</td><td class="n">+0.602</td><td class="n">+0.195</td><td class="n">5e-05</td><td class="n">1.050</td><td class="n">−0.090</td></tr>
+      <tr><td class="mono">blockshuffle</td><td class="n">+0.354</td><td class="n">+0.119</td><td class="n">0.0018</td><td class="n">0.844</td><td class="n">+0.158</td></tr>
+      <tr><td class="mono">randsign</td><td class="n">+0.489</td><td class="n">+0.157</td><td class="n">5e-05</td><td class="n">0.866</td><td class="n">+0.124</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box">
+    <span class="lbl">Why |A|/|S| diverges from √((1−c)/(1+c))</span>
+    <p>For the preset in stroke space: <code>c = −0.090</code> predicts <strong>1.094</strong> via formula,
+      whereas the table reports <strong>1.050</strong> — a <strong>−4.1%</strong> discrepancy. In CLIP space,
+      the two values matched within 0.3%.</p>
+    <p><strong>This is neither a software bug nor Jensen's inequality.</strong> The table reports
+      <code>mean(‖A‖)/mean(‖S‖)</code>, which is <strong>weighted by cell displacement amplitude</strong>,
+      whereas the analytic identity assumes unweighted cosine averages. If cells undergoing larger displacement
+      are also more symmetric, the effective cosine rises and the reported ratio drops. Simulating this
+      mechanism with <code>corr(amplitude, cosine) ≈ 0.3</code> produces <strong>−4.8%</strong>, closely matching
+      the observed −4.1%.</p>
+  </div>
+
+  <p><strong>(b) Isolated Inking Subspace</strong> — 13 pure stroke morphology features evaluated against their own subspace null:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Condition</th><th class="n">coherence</th><th class="n">p</th><th>Outcome</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">preset</td><td class="n">+0.347</td><td class="n">0.011</td><td>above null distribution</td></tr>
+      <tr class="lo"><td class="mono">blockshuffle</td><td class="n">+0.038</td><td class="n">0.239</td><td>indistinguishable from chance</td></tr>
+      <tr class="lo"><td class="mono">randsign</td><td class="n">+0.060</td><td class="n">0.156</td><td>indistinguishable from chance</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mono">preset − blockshuffle = +0.309, 95% CI [+0.073, +0.589]</p>
+
+  <p><strong>(c) S/A Decomposition on Independent Morphological Metrics</strong> — 23 measures built via independent pipeline, paired t-test across 10 prompts:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Metric</th><th class="n">A (antisymmetric) · preset</th><th class="n">A · blockshuffle</th><th class="n">A · randsign</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">stroke_width</td><td class="n">+0.500 [+0.25,+0.75]</td><td class="n">+0.262 [−0.05,+0.57]</td><td class="n">+0.160 [−0.19,+0.51]</td></tr>
+      <tr class="hi"><td class="mono">contour_length</td><td class="n">+0.899 [+0.68,+1.12]</td><td class="n">+0.111 [−0.07,+0.29]</td><td class="n">+0.098 [−0.23,+0.43]</td></tr>
+    </tbody>
+  </table></div>
+  <p>On stroke thickness and contour continuity, <strong>only the targeted preset yields a directional component whose confidence interval strictly excludes zero</strong>.</p>
+
+  <p><strong>(d) The Symmetric Component.</strong> <code>S_preset</code> is indistinguishable from zero across all metrics except spectral slope (−0.412 [−0.60, −0.22]). The preset's effect is <strong>predominantly antisymmetric (directional)</strong>.</p>
+
+  <h3><span class="num">2.2</span> Principal Axis Structure</h3>
+  <p>PCA computed on <strong>paired differences</strong> from baseline (measuring intervention effect, invariant to prompt subject).
+    Three principal components selected by explained variance:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Axis</th><th>Physical Interpretation</th><th>Separation Outcome</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">PC1 · 31.1%<br><span class="idx">stroke continuity</span></td>
+          <td>(+) crosshatch entropy, high component count → short, fractured marks<br>
+              (−) mean contour length, GLCM energy → continuous line work</td>
+          <td><strong>Preset separates from both controls</strong><br>
+              <span class="mono">P−B −2.53 [−3.00,−2.07] dz −2.30 · Holm &lt;0.0001</span><br>
+              <span class="mono">P−R −2.12 [−2.69,−1.54] dz −1.55 · Holm &lt;0.0001</span><br>
+              <span class="mono">B−R +0.42 [−0.37,+1.20] dz +0.22 · n.s.</span></td></tr>
+      <tr><td class="mono">PC2 · 17.9%<br><span class="idx">broad-band noise</span></td>
+          <td>(+) spectral slope, high-frequency ratio, GLCM contrast<br>
+              (−) median stroke width</td>
+          <td><strong>RANDSIGN isolates alone</strong><br>
+              <span class="mono">P−R −2.61 dz −3.02 · B−R −2.85 dz −3.58 · Holm &lt;0.0001</span><br>
+              <span class="mono">P−B +0.24 dz +0.31 · n.s.</span></td></tr>
+      <tr><td class="mono">PC3 · 11.5%<br><span class="idx">quantization</span></td>
+          <td>(+) luminance histogram modes, color cluster entropy<br>
+              (−) crosshatch entropy, stroke width variance</td>
+          <td><strong>RANDSIGN isolates alone</strong><br>
+              <span class="mono">P−B +0.43 dz +0.64 · Holm 0.0046</span><br>
+              <span class="mono">P−R −0.70 dz −1.08 · B−R −1.13 dz −1.67 · Holm &lt;0.0001</span></td></tr>
+    </tbody>
+  </table></div>
+<h3><span class="num">2.6</span> Generalization to a new aesthetic family <span class="chip pos">pre-registered, met</span></h3>
+  <p>Milestone 1 was declared <strong>in advance</strong> with an explicit falsification criterion:
+    <em>if directional coherence does not replicate with a 95% CI excluding zero on the new family,
+    the effect is documented as prompt-family specific.</em> The family was then extended from 10 to
+    <strong>24 prompts</strong> — 18 prompts whose palette is pinned element by element, plus <strong>6 colour-free</strong>
+    prompts where every colour word is removed and only <code>colored</code> remains — with the PCA recomputed independently inside each pool.</p>
+  <div class="tw"><table>
+    <thead><tr><th>PC1 · colour-free family <span class="why">(n = 6)</span></th><th class="n">Δ</th><th class="n">95% CI</th><th class="n">dz</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">preset − blockshuffle</td><td class="n">−1.958</td><td class="n">[−2.50, −1.42]</td><td class="n">−3.82</td></tr>
+      <tr class="hi"><td class="mono">preset − randsign</td><td class="n">−3.815</td><td class="n">[−5.67, −1.96]</td><td class="n">−2.16</td></tr>
+      <tr class="lo"><td class="mono">blockshuffle − randsign</td><td class="n">−1.857</td><td class="n">[−4.03, +0.31]</td><td class="n">−0.90</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>The criterion is met on the axis it named.</strong> Contour geometry replicates alongside
+    it: contour length +0.760 [+0.37, +1.15] and fragment count −0.560 [−0.82, −0.30] against
+    blockshuffle. The effect is not an artifact of tightly colour-pinned prompts.</p>
+  <p><strong>Is it the same axis?</strong> A necessary check, because “PC1” is only a label until the
+    loadings are compared. Cosine between PC1 loading vectors of the separately computed PCAs (a
+    component’s sign is arbitrary, hence |cos|): <span class="mono">pinned vs free 0.837 · pinned vs
+    pooled 0.990 · free vs pooled 0.906</span>. Substantially the same direction everywhere.
+    <strong>PC3 is not</strong> (|cos| = 0.36 between sub-families) and is therefore not claimed
+    across them.</p>
+  <div class="box warn">
+    <span class="lbl">Honest caveat on power, and what does not transfer</span>
+    <p>With n = 6 an exact sign-flip permutation test enumerates 2⁶ = 64 assignments, so its smallest
+      two-sided p is 2/64 = 0.031 — after Holm across three contrasts, <strong>no effect of any size
+      can reach p &lt; 0.05 on this sub-family</strong>. That ceiling is why the criterion was
+      pre-declared on the confidence interval rather than a p-value. The replication rests on
+      interval estimation, not on significance.</p>
+    <p>And the <strong>palette effects do not transfer</strong>. Pooled over 24 prompts the preset
+      lowers effective colour count against both controls (−0.376 and −0.237, both p<sub>Holm</sub> ≈
+      0.001) and concentrates the top-four share (+0.384, +0.234); on the 6 colour prompts every
+      palette contrast contains zero. This is exactly where the author’s stated goal sat — “flatter
+      fills, fewer colours”. <strong>The colour part of that goal is real but family-bound; the stroke
+      part is what generalises.</strong></p>
+  </div>
+</section>
+
+
+  <section id="metodo">
+  <h2><span class="n">3</span> Methodology — The Reusable Protocol</h2>
+  <p>In manual tuning and merging, practitioners routinely compare modifications of <strong>differing Frobenius magnitudes</strong>,
+    making it impossible to determine if an edit is genuinely directional. Three controls in order of methodological strength:</p>
+  <ol class="body">
+    <li><strong>Sign Scramble (RANDSIGN)</strong> — <code>D</code> is mathematically invariant to sign flips; pairing is <strong>exact by construction</strong> without empirical recalibration.</li>
+    <li><strong>Block Derangement (BLOCKSHUFFLE)</strong> — Preserves intra-block multi-set structure; permutes layer assignment. Requires rescaling factor α applied <strong>strictly to the permuted subset</strong>.</li>
+    <li><strong>Amplitude Scaling (ε = 0.25 / 0.5 / 1.0)</strong> — Disentangles first-order antisymmetric steering from second-order isotropic curvature: <code>‖A‖ ∼ ε</code>, <code>‖S‖ ∼ ε²</code>.</li>
+  </ol>
+</section>
+
+<section id="avv">
+  <h2><span class="n">4</span> Metric Warning <span class="chip neg">conclusions invert</span></h2>
+  <figure>
+    <div class="figscroll">
+      <svg viewBox="0 0 720 258" role="img" aria-label="95% confidence intervals across measurement spaces: in CLIP space only preset minus randsign excludes zero; in stroke space only preset minus blockshuffle excludes zero.">
+        <line class="grid" x1="260" y1="32" x2="260" y2="222"/>
+        <line class="grid" x1="370" y1="32" x2="370" y2="222"/>
+        <line class="grid" x1="590" y1="32" x2="590" y2="222"/>
+        <line class="grid" x1="700" y1="32" x2="700" y2="222"/>
+        <line class="zero" x1="480" y1="32" x2="480" y2="222"/>
+
+        <text class="gl" x="12" y="24">CLIP · SEMANTIC SPACE</text>
+        <text class="rl" x="12" y="49">preset − randsign</text>
+        <line class="ciS" x1="504.2" y1="45" x2="602.7" y2="45"/>
+        <line class="ciS" x1="504.2" y1="40" x2="504.2" y2="50"/>
+        <line class="ciS" x1="602.7" y1="40" x2="602.7" y2="50"/>
+        <circle class="dotS" cx="549.3" cy="45" r="4.5"/>
+
+        <text class="rl" x="12" y="73">preset − blockshuffle</text>
+        <line class="ciN" x1="453.6" y1="69" x2="577.9" y2="69"/>
+        <line class="ciN" x1="453.6" y1="64" x2="453.6" y2="74"/>
+        <line class="ciN" x1="577.9" y1="64" x2="577.9" y2="74"/>
+        <circle class="dotN" cx="514.1" cy="69" r="4.5"/>
+
+        <text class="rl" x="12" y="97">block − randsign</text>
+        <line class="ciN" x1="462.9" y1="93" x2="570.2" y2="93"/>
+        <line class="ciN" x1="462.9" y1="88" x2="462.9" y2="98"/>
+        <line class="ciN" x1="570.2" y1="88" x2="570.2" y2="98"/>
+        <circle class="dotN" cx="515.8" cy="93" r="4.5"/>
+
+        <text class="gl" x="12" y="134">STROKE · LUMINANCE SPACE</text>
+        <text class="rl" x="12" y="159">preset − randsign</text>
+        <line class="ciN" x1="433.8" y1="155" x2="662.6" y2="155"/>
+        <line class="ciN" x1="433.8" y1="150" x2="433.8" y2="160"/>
+        <line class="ciN" x1="662.6" y1="150" x2="662.6" y2="160"/>
+        <circle class="dotN" cx="542.2" cy="155" r="4.5"/>
+
+        <text class="rl" x="12" y="183">preset − blockshuffle</text>
+        <line class="ciS" x1="537.2" y1="179" x2="690.1" y2="179"/>
+        <line class="ciS" x1="537.2" y1="174" x2="537.2" y2="184"/>
+        <line class="ciS" x1="690.1" y1="174" x2="690.1" y2="184"/>
+        <circle class="dotS" cx="617.0" cy="179" r="4.5"/>
+
+        <text class="rl" x="12" y="207">block − randsign</text>
+        <line class="ciN" x1="293.6" y1="203" x2="506.4" y2="203"/>
+        <line class="ciN" x1="293.6" y1="198" x2="293.6" y2="208"/>
+        <line class="ciN" x1="506.4" y1="198" x2="506.4" y2="208"/>
+        <circle class="dotN" cx="405.2" cy="203" r="4.5"/>
+
+        <line class="grid" x1="260" y1="222" x2="700" y2="222"/>
+        <text class="ax" x="260" y="240" text-anchor="middle">−0.40</text>
+        <text class="ax" x="370" y="240" text-anchor="middle">−0.20</text>
+        <text class="ax" x="480" y="240" text-anchor="middle">0</text>
+        <text class="ax" x="590" y="240" text-anchor="middle">+0.20</text>
+        <text class="ax" x="700" y="240" text-anchor="middle">+0.40</text>
+        <text class="ax" x="480" y="254" text-anchor="middle">difference in directional coherence A · 95% CI</text>
+      </svg>
+    </div>
+    <figcaption>Identical ten prompts, exact same raw pixel data, two measurement spaces. In green, 95% confidence intervals excluding zero: <strong>exactly one per space, and they are not the same contrast</strong>.</figcaption>
+  </figure>
+  <div class="tw"><table>
+    <thead><tr><th>Contrast</th><th class="n">CLIP · Semantic</th><th class="n">STROKE · Luminance</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">preset − randsign</td>
+          <td class="n"><strong>+0.126</strong> [+0.044, +0.223]<br>P = 0.0011</td>
+          <td class="n">+0.113 [−0.084, +0.332]<br>P = 0.157</td></tr>
+      <tr><td class="mono">preset − blockshuffle</td>
+          <td class="n">+0.062 [−0.048, +0.178]<br>P = 0.151</td>
+          <td class="n"><strong>+0.249</strong> [+0.104, +0.382]<br>P = 0.001</td></tr>
+      <tr><td class="mono">block − randsign</td>
+          <td class="n">+0.065 [−0.031, +0.164]<br>P = 0.089</td>
+          <td class="n">−0.136 [−0.339, +0.048]<br>P = 0.924</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Signs do not invert.</strong> What inverts is <em>which hypothesis contrast the instrument can statistically resolve</em>: in CLIP it is <code>preset − randsign</code>, in stroke space it is <code>preset − blockshuffle</code>. CLIP ViT-L-14 downsamples to 224×224; evaluating line art edits with CLIP measures semantic drift while missing inking morphology entirely.</p>
+</section>
+
+<section id="nonstab">
+  <h2><span class="n">5</span> What is NOT Established <span class="chip open">open</span></h2>
+  <h3><span class="num">5.1</span> Block coherence is not the causal mechanism</h3>
+  <p>The pure test of block coherence in isolation is <code>blockshuffle − randsign</code>, which yields null directional coherence across all spaces. Preserving block coherence without the proper assignment is no more reproducible than random signs.</p>
+  <h3><span class="num">5.2</span> Cross-model generalization</h3>
+  <p>One model, one prompt family. Replication on a second architecture (circlestone-labs/Anima, fine-tuned from Cosmos-Predict2-2B with Qwen3-0.6B) is the critical cross-family test to demonstrate that this is a general property of diffusion weight spaces.</p>
+</section>
+
+<section id="emergenza">
+  <h2><span class="n">6</span> Attribute Emergence <span class="chip pos">established</span> <span class="chip pos">norm-matched control passed</span></h2>
+
+  <p>Everything above measures <strong>how</strong> the model draws. This section measures <strong>what it draws at all</strong>.
+    It began as an observation, not a hypothesis: a detail written in the prompt — <code>small barnacle-like clusters
+    studding one earlobe</code>, a declared attribute of <strong>G1</strong> (<code>prompt_sha1 30de058455</code>) — was
+    present in nearly every render under one weight configuration and in almost none from the stock checkpoint.</p>
+
+  <div class="box">
+    <span class="lbl">Scoring rule, fixed before counting</span>
+    <p><strong>Counts</strong>: any growth on the face at least partially circumscribed by a black contour line.
+      <strong>Does not count</strong>: lighter circles without thickness (confusable with specular highlights), and
+      isolated single circles (confusable with a mole or a water droplet).</p>
+    <p>All sets share the same 20 seeds, so every comparison is <strong>paired</strong> and every <code>p</code> is an
+      exact McNemar test on the discordant seeds alone. Per-seed scores:
+      <a href="data/attribute_emergence.csv"><code>data/attribute_emergence.csv</code></a>. Exact prompt, preset,
+      strengths and seed list per set:
+      <a href="data/attribute_emergence_recipe.json"><code>data/attribute_emergence_recipe.json</code></a>.</p>
+  </div>
+
+  <h3><span class="num">6.1</span> The effect</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Condition</th><th class="n">present</th><th class="n">95% CI</th><th>paired comparison</th><th class="n">p</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">blockshuffle · full prompt</td><td class="n">19 / 20</td><td class="n">[76%, 99%]</td><td>18 discordant to 0</td><td class="n">7.6e−06</td></tr>
+      <tr class="lo"><td class="mono">stock model · same prompt</td><td class="n">1 / 20</td><td class="n">[1%, 24%]</td><td>—</td><td class="n">—</td></tr>
+      <tr class="hi"><td class="mono">blockshuffle · second prompt</td><td class="n">20 / 20</td><td class="n">[84%, 100%]</td><td>13 discordant to 0</td><td class="n">2.4e−04</td></tr>
+      <tr class="lo"><td class="mono">stock model · second prompt</td><td class="n">7 / 20</td><td class="n">[18%, 57%]</td><td>—</td><td class="n">—</td></tr>
+      <tr class="lo"><td class="mono">randsign · full prompt · identical D</td><td class="n">1 / 20</td><td class="n">[1%, 24%]</td><td>vs blockshuffle, 18 to 0</td><td class="n">7.6e−06</td></tr>
+    </tbody>
+  </table></div>
+  <p>No seed goes the other way in either comparison. With the barnacle phrase deleted from the prompt, the same weight
+    configuration yields <strong>2 / 20</strong> — the perturbation is not decorating earlobes on its own.</p>
+  <div class="box warn">
+    <span class="lbl">The control that decides what the finding is</span>
+    <p><strong>Randsign</strong> carries the <em>identical</em> Frobenius displacement <code>D = 0.0538</code>. It differs
+      from blockshuffle in the structure of the perturbation and in nothing else — not in how far it moves the
+      checkpoint. On the same prompt and the same 20 seeds it scores <strong>1 / 20</strong>: not "weaker", but
+      <strong>exactly the stock model's rate</strong>, paired at one discordant seed each way.</p>
+    <p>Without this control the result would be open to the obvious reading — <em>any push of that size shakes a
+      secondary token loose</em>. With it, that reading is dead. The effect is a property of <strong>which</strong>
+      permutation, not of <strong>how far</strong> it moves.</p>
+  </div>
+
+  <h3><span class="num">6.2</span> The finding is the conjunction, not the perturbation</h3>
+  <p>The attribute appears only when the prompt supplies a <strong>two-token local scaffold</strong>: the anchor
+    <code>sea-touched</code> <em>and</em> the neighbouring phrase <code>thin webbed fin-like ridges tracing along her
+    temple</code>. Each single-variable knockout collapses it.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Prompt</th><th class="n">sea-touched</th><th class="n">ridges</th><th class="n">keyword</th><th class="n">result</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>G1 complete</td><td class="n">✓</td><td class="n">✓</td><td class="n">✓</td><td class="n">19 / 20</td></tr>
+      <tr class="hi"><td>siren/hag hybrid</td><td class="n">✓</td><td class="n">✓</td><td class="n">✓</td><td class="n">20 / 20</td></tr>
+      <tr class="lo"><td>only the ridges phrase removed</td><td class="n">✓</td><td class="n">✗</td><td class="n">✓</td><td class="n">1 / 20</td></tr>
+      <tr class="lo"><td>only <code>sea-touched</code> removed</td><td class="n">✗</td><td class="n">✓</td><td class="n">✓</td><td class="n">0 / 10</td></tr>
+      <tr class="lo"><td>keyword, no marine context</td><td class="n">✗</td><td class="n">✗</td><td class="n">✓</td><td class="n">0 / 20</td></tr>
+      <tr class="lo"><td>length- and syntax-matched neutral</td><td class="n">✗</td><td class="n">✗</td><td class="n">✓</td><td class="n">0 / 20</td></tr>
+      <tr class="lo"><td>teal sea hag, no ridges</td><td class="n">✓</td><td class="n">✗</td><td class="n">✓</td><td class="n">0 / 20</td></tr>
+      <tr class="lo"><td>Ancient Hag + keyword, no marine context</td><td class="n">✗</td><td class="n">✗</td><td class="n">✓</td><td class="n">0 / 20</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box warn">
+    <span class="lbl">The decisive number is the one that looks unimpressive</span>
+    <p>With the ridges phrase removed, the perturbed model scores <strong>1 / 20</strong>. The stock model on the
+      <em>complete</em> prompt also scores <strong>1 / 20</strong>. Paired: <strong>1 discordant seed each way,
+      p = 1.0</strong>. Without the scaffold, the weight perturbation is statistically indistinguishable from never
+      having been applied.</p>
+    <p>The perturbation does not add the attribute and does not repair the neglect. It acts as a <strong>gain on a
+      binding the prompt must already have established</strong> — a binding fragile enough that one phrase carries it.</p>
+  </div>
+
+  <h3><span class="num">6.3</span> Which half of the model carries it</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Perturbation applied to</th><th class="n">present</th><th class="n">95% CI</th><th>vs. stock</th><th class="n">p</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">DiT + text encoder</td><td class="n">19 / 20</td><td class="n">[76%, 99%]</td><td>18 to 0</td><td class="n">7.6e−06</td></tr>
+      <tr class="hi"><td class="mono">DiT only</td><td class="n">12 / 20</td><td class="n">[39%, 78%]</td><td>11 to 0</td><td class="n">9.8e−04</td></tr>
+      <tr class="lo"><td class="mono">text encoder only</td><td class="n">3 / 20</td><td class="n">[5%, 36%]</td><td>3 to 1</td><td class="n">0.63</td></tr>
+      <tr class="lo"><td class="mono">neither (stock)</td><td class="n">1 / 20</td><td class="n">[1%, 24%]</td><td>—</td><td class="n">—</td></tr>
+    </tbody>
+  </table></div>
+  <p>The text encoder alone does nothing measurable. The DiT carries most of the effect. Adding the encoder on top of the
+    DiT still gains 6 discordant seeds to 0 (<code>p = 0.031</code>), so the two are not redundant — but at 19/20 the
+    combination is against the ceiling and <strong>the size of any synergy cannot be estimated from these data</strong>.</p>
+
+  <h3><span class="num">6.4</span> Dose–response</h3>
+  <div class="tw"><table>
+    <thead><tr><th>strength</th><th class="n">0.25</th><th class="n">0.50</th><th class="n">0.75</th><th class="n">1.00</th><th class="n">1.25</th><th class="n">1.50</th><th class="n">1.75</th><th class="n">2.00</th></tr></thead>
+    <tbody><tr><td>present</td><td class="n">1/10</td><td class="n">5/10*</td><td class="n">10/10</td><td class="n">19/20</td><td class="n">8/10</td><td class="n">6/10</td><td class="n">5/10</td><td class="n">1/10</td></tr></tbody>
+  </table></div>
+  <p>* four renders at 0.50 were judged ambiguous against the rule and are recorded as <code>ambiguous</code> in the data
+    rather than forced to 0 or 1.</p>
+  <p>An optimum sits around 0.75–1.00 and both ends fail — at 2.00 the displacement is largest and the attribute is gone,
+    which argues against "any disturbance helps". But at <code>n = 10</code> the Wilson interval on 6/10 is [31%, 83%]:
+    <strong>the extremes are separated, the intermediate points are not ordered by these data.</strong></p>
+
+  <h3><span class="num">6.5</span> What emerges is not what was asked for</h3>
+  <p>The prompt says <code>studding one earlobe</code>. Across every positive render the clusters sit on the
+    <strong>cheekbone and temple region</strong>, not on or in the ear. The attribute emerges; its spatial binding does
+    not. The perturbation recovers the <em>presence</em> of a neglected concept and leaves its <em>placement</em> wrong.</p>
+
+  <h3><span class="num">6.6</span> What this does not establish</h3>
+  <div class="box dead">
+    <span class="lbl">Five limits, stated before anyone else states them</span>
+    <ul>
+      <li><strong>Two perturbations, not the space.</strong> Blockshuffle does it, randsign at the identical <code>D</code>
+        does not — which separates <em>structure</em> from <em>magnitude</em>. It does not identify <em>which</em>
+        structural property is operative: "block coherence", "permutation rather than sign flip" and "preserves each
+        block's internal correlations" are not distinguished by two points.</li>
+      <li><strong>The hand-calibrated preset was not tested.</strong> The claim is about a matched control, not about the
+        author's own configuration.</li>
+      <li><strong>One attribute, one prompt template.</strong> G1 and the hybrid share nearly every token.</li>
+      <li><strong>Unblinded scoring</strong>, by the author, condition visible. At 18 discordant to 0 the headline does not
+        flip; the intermediate cells (DiT-only 12/20, strength 0.50) are where a borderline call moves the number.</li>
+      <li><strong>The ridges knockout deletes rather than substitutes.</strong> A residual length or token-position
+        explanation is not formally excluded — though removing the phrase <em>shortens</em> the distance between
+        <code>sea-touched</code> and the keyword, which cuts against a positional account rather than for it.</li>
+    </ul>
+  </div>
+
+  <h3><span class="num">6.7</span> Where this sits</h3>
+  <p>The phenomenon has a name: <strong>catastrophic neglect</strong>, a model failing to render a concept its prompt
+    explicitly contains. The published remedies act at inference time on cross-attention —
+    <a href="https://arxiv.org/abs/2301.13826">Attend-and-Excite</a> and
+    <a href="https://arxiv.org/html/2406.16272v2">attention-guided feature enhancement</a> both re-weight attention maps
+    during sampling. What is reported here is different in kind: a <strong>static, prompt-preserving change in weight
+    space</strong>, found incidentally while running a matched control, moving one neglected attribute from 5% to 95%
+    presence without touching the prompt or the sampler. Whether it generalises beyond this attribute is exactly what
+    6.6 says is untested.</p>
+</section>
+
+<section id="errori">
+  <h2><span class="n">8</span> The Twenty-Six Measurement Pitfalls</h2>
+  <div class="box dead">
+    <span class="lbl">Methodological Caution</span>
+    <p><strong>None of these 26 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
+  </div>
+</section>
+
+<section id="ripresa">
+  <h2><span class="n">11</span> Reproduction & Experiment Scripts</h2>
+  <pre>experiments/
+  derive_blockshuffle.py          BLOCKSHUFFLE generation with alpha restricted to permuted subset
+  derive_epsilon.py / run_epsilon.py   Amplitude scaling sweep (eps = 0.25 / 0.5 / 1.0)
+  analyze_stage5.py               S/A decomposition, coherence, nulls, paired bootstrap in CLIP space
+  analyze_texture.py              S/A decomposition in stroke space across 35 luminance features
+  texture_diagnostics.py          Split-half reliability, feature loadings, robustness
+  analyze_quantization.py         Chroma gradient and posterization analysis
+  global_aggregation_corrected.py Difference-space PCA, Holm corrections, ICC
+  stage5_followup.py              Variance decomposition (seed vs. prompt)
+  vlm_gate.py                     Multimodal VLM evaluator calibration
+  stage6_prompts.py               20 validated extension prompts
+
+data/
+  attribute_emergence.csv         Per-seed scoring of every set in §6 (370 rows)
+  attribute_emergence_recipe.json Exact prompt, sha1, preset, strengths and seeds per set</pre>
+</section>
+
+<footer>
+  Public Lab Notebook · September 15, 2026. 10 prompts · 3 measurement spaces · 23 measurement pitfalls documented · Open for replication.
+</footer>
+
+</div>
+
+<script>
+(function() {
+  const PROMPTS = [
+    { id: '30de058455', label: 'Sea-touched Siren (Teal)' },
+    { id: 'c6a4015aae', label: 'Goblin with Sly Grin (Yellow)' },
+    { id: '7e8536f9bb', label: 'Barbarian Half-Orc in Rage (Red)' },
+    { id: '95acba3b41', label: 'Ancient Hag Manic (Chartreuse)' },
+    { id: '4d43750a91', label: 'Dwarf with Booming Shout (Teal)' },
+    { id: '5a0d2949e1', label: 'Sneezing Dwarf (Blue)' },
+    { id: '0496d2dadf', label: 'Tiefling in Icy Contempt (Purple)' },
+    { id: 'ecdd49e618', label: 'Dark Elf in Simmering Fury (Teal)' },
+    { id: '83301f8591', label: 'Tiefling in Dazed Shock (Orange)' },
+    { id: 'd96b69d21c', label: 'Elf Screaming in Terror (Blue)' }
+  ];
+
+  // Testo dei prompt inlinato da data/prompts.json: la pagina deve restare leggibile
+  // anche aperta da file://, dove un fetch verso data/ fallirebbe in silenzio.
+  const PROMPT_TEXT = {
+    "d235bf5f02": {
+      "id": "S7_01",
+      "tag": "sea_woman",
+      "family": "colour-free",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, seductive simmering menace, seen from an extreme tilted low angle with her chin raised, extreme close-up on the head only, tight framing, sharp dutch angle. ageless female sea-touched woman, long dark hair fanning as if suspended in water, thin webbed fin-like ridges tracing along her temple, faintly scaled skin, sharply arched eyebrows, a narrow straight nose, wide eyes with slitted pupils half-lidded in cold allure, full lips curled in a knowing smirk, small barnacle-like clusters studding one earlobe, faint sheen along her jawline. white background, simple background, colored."
+    },
+    "4c8aca54b3": {
+      "id": "S7_02",
+      "tag": "goblin",
+      "family": "colour-free",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of his face, sly calculating grin, seen from an extreme low tilted angle looking sharply up his chin, extreme close-up on the head only, tight framing, steep dutch angle. middle-aged male goblin, mottled skin, greasy tufts of black hair slicked into a lopsided topknot, one eyebrow arched high in shrewd amusement, small beady eyes darting sideways, a long hooked nose with a slight downward curve, wide crooked grin showing several missing teeth, a small metal loop pierced through one nostril, thin wispy chin-whiskers braided into a point. white background, simple background, colored."
+    },
+    "f6dd8180ba": {
+      "id": "S7_03",
+      "tag": "dwarf_shout",
+      "family": "colour-free",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, booming commanding shout, seen from an extreme low front angle looking sharply up beneath her jaw, extreme close-up on the head only, tight framing, sharp dutch angle. middle-aged female dwarf, weathered skin, thick hair braided tightly back from a high forehead, strong straight eyebrows drawn low, wide eyes blazing with authority, a broad sturdy nose, mouth open wide mid-shout showing strong square teeth, a small soot smudge dusting one cheekbone, thick leather strap crossing beneath her chin. white background, simple background, colored."
+    },
+    "3fd131e896": {
+      "id": "S7_04",
+      "tag": "hag",
+      "family": "colour-free",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, wild-eyed manic determination, seen from an extreme low angle shot through an imagined gap between her chin and chest, extreme close-up on the head only, tight framing, sharply canted dutch angle. very old female hag, deeply weathered skin, wild frizzed grey hair sticking straight up as if charged with static, an exaggeratedly long hooked nose nearly touching her upturned chin, small sunken eyes blazing wide with fevered focus, sagging jowls trembling around a muttering open mouth, three long grey chin-hairs twisted into tiny braids, a single large hoop stretching one earlobe low. white background, simple background, colored."
+    },
+    "b38ed79f27": {
+      "id": "S7_05",
+      "tag": "dwarf_sneeze",
+      "family": "colour-free",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of her face, explosive uncontrollable sneeze, seen from an extreme close angle shot from below her nostrils looking straight up, extreme close-up on the head only, tight framing, wildly canted dutch angle. middle-aged female dwarf, deeply sun-weathered skin, elaborate silver hair twisted into thick coiled loops atop her head, eyebrows scrunched violently together, a broad nose flared wide mid-sneeze, eyes squeezed shut with lashes fanned outward, mouth caught wide open in an explosive \"achoo\", a jeweled hairpin knocked askew, small crumbs of some pastry still clinging to her lower lip. white background, simple background, colored."
+    },
+    "480d04f09f": {
+      "id": "S7_06",
+      "tag": "tiefling_cold",
+      "family": "colour-free",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rim light glowing along the edges of his face, severe icy contempt, seen from an extreme side-profile angle canted at a sharp diagonal, extreme close-up on the head only, tight framing, steep dutch angle. older male tiefling, deep charcoal-grey skin, short curling horns swept flat against cropped silver hair, heavy-lidded eyes narrowed in judgment, a sharply hooked nose, deep-set lines bracketing a thin frowning mouth, one long fang resting over his lower lip, faint smoke curling from one nostril. white background, simple background, colored."
+    },
+    "7e8536f9bb": {
+      "id": "F1",
+      "tag": "halforc_red",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard red-tinted rim light glowing along the edges of her face, ferocious screaming rage, seen from a steep low angle, extreme close-up on the head only, tight framing, dutch angle, sharp perspective. female half-orc, head thrown back with a wild tangle of black hair across her face, thick furrowed eyebrows pressed low in fury, wide crimson eyes wide with screaming rage, mouth stretched open in a full-throated roar baring a single sharp lower tusk, a thick iron ring pierced through the nose bridge, ferociously screaming expression. white background, simple background."
+    },
+    "ecdd49e618": {
+      "id": "F2",
+      "tag": "darkelf_teal",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard teal-tinted rim light glowing along the edges of her face, cold simmering fury, seen from a steep low angle, extreme close-up on the head only, tight framing, dutch angle, sharp perspective. female dark elf, head turned sharply with a piercing glare, sleek white hair pulled back tight, sharply angled eyebrows pressed low, long slender nose with a fine slit piercing, narrow cyan eyes glowing faintly at the edges, thin lips pressed into a tight furious line, an intricate tribal pattern tattooed down one temple, small onyx studs lining the upper ear. white background, simple background, teal overall hue, monochromatic teal."
+    },
+    "83301f8591": {
+      "id": "F3",
+      "tag": "tiefling_orange",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard orange-tinted rim light glowing along the edges of her face, cross-eyed dazed shock, seen from an extreme spiraling angle as if she's spinning, extreme close-up on the head only, tight framing, dizzying tilted dutch angle. young adult female tiefling, deep indigo-blue skin, singed frizzy white hair standing on end, one eyebrow scorched shorter than the other, a small straight nose with a faint wisp of smoke curling from one nostril, eyes crossed and spiraled with dazed shock, mouth hanging open lopsided, one twisted horn slightly blackened at the tip, a cracked pendant hanging crooked from a snapped chain. white background, simple background, orange overall hue, monochromatic orange."
+    },
+    "d96b69d21c": {
+      "id": "F4",
+      "tag": "elf_blue",
+      "family": "colour-pinned",
+      "text": "realistic western comics style, bold ink outlines, extreme expression, hatched shadows, hard blue-tinted rim light glowing along the edges of her face, screaming in terror, seen from a steep low angle, extreme close-up on the head only, pale skin, tight framing, dutch angle, sharp perspective. female elf, head turning in fear and surprise looking in camera, short blonde hair in a metty bob haircut, slim blonde eyebrows raised, wide teal eyes wide open, mouth stretched open in a full-throated panic scream, a gold necklace is flying around. white background, simple background, blue overall hue, monochromatic blue."
+    },
+    "30de058455": {
+      "id": "G1",
+      "tag": "seatouched_teal",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard teal-tinted rim light glowing along the edges of her face, seductive simmering menace, seen from an extreme tilted low angle with her chin raised, extreme close-up on the head only, tight framing, sharp dutch angle. ageless female sea-touched woman, long dark hair fanning as if suspended in water, thin webbed fin-like ridges tracing along her temple, cyan skin, sharply arched eyebrows, a narrow straight nose, wide teal eyes with slitted pupils half-lidded in cold allure, full lips curled in a knowing smirk, small barnacle-like clusters studding one earlobe, faint iridescent sheen along her jawline. white background, simple background, teal overall hue, monochromatic teal."
+    },
+    "c6a4015aae": {
+      "id": "G2",
+      "tag": "goblin_yellow",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard yellow-tinted rim light glowing along the edges of his face, sly calculating grin, seen from an extreme low tilted angle looking sharply up his chin, extreme close-up on the head only, tight framing, steep dutch angle. middle-aged male goblin, mottled olive-green skin, greasy tufts of black hair slicked into a lopsided topknot, one eyebrow arched high in shrewd amusement, small beady yellow eyes darting sideways, a long hooked nose with a slight downward curve, wide crooked grin showing several missing teeth, a small brass loop pierced through one nostril, thin wispy chin-whiskers braided into a point. white background, simple background, yellow overall hue, monochromatic yellow."
+    },
+    "4d43750a91": {
+      "id": "G3",
+      "tag": "dwarf_teal",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard teal-tinted rim light glowing along the edges of her face, booming commanding shout, seen from an extreme low front angle looking sharply up beneath her jaw, extreme close-up on the head only, tight framing, sharp dutch angle. middle-aged female dwarf, ruddy weathered skin, thick copper-red hair braided tightly back from a high forehead, strong straight eyebrows drawn low, wide teal eyes blazing with authority, a broad sturdy nose, mouth open wide mid-shout showing strong square teeth, a small soot smudge dusting one cheekbone, thick leather strap crossing beneath her chin. white background, simple background, teal overall hue, monochromatic teal."
+    },
+    "95acba3b41": {
+      "id": "G4",
+      "tag": "hag_chartreuse",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard chartreuse-tinted rim light glowing along the edges of her face, wild-eyed manic determination, seen from an extreme low angle shot through an imagined gap between her chin and chest, extreme close-up on the head only, tight framing, sharply canted dutch angle. very old female hag, deep umber-brown weathered skin, wild frizzed grey hair sticking straight up as if charged with static, an exaggeratedly long hooked nose nearly touching her upturned chin, small sunken eyes blazing wide with fevered focus, sagging jowls trembling around a muttering open mouth, three long grey chin-hairs twisted into tiny braids, a single large hoop stretching one earlobe low. white background, simple background, chartreuse overall hue, monochromatic chartreuse."
+    },
+    "5a0d2949e1": {
+      "id": "G5",
+      "tag": "dwarf_sneeze_blue",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard blue-tinted rim light glowing along the edges of her face, explosive uncontrollable sneeze, seen from an extreme close angle shot from below her nostrils looking straight up, extreme close-up on the head only, tight framing, wildly canted dutch angle. middle-aged female dwarf, deep rust-orange sun-weathered skin, elaborate silver hair twisted into thick coiled loops atop her head, eyebrows scrunched violently together, a broad nose flared wide mid-sneeze, eyes squeezed shut with lashes fanned outward, mouth caught wide open in an explosive \"achoo\", a jeweled hairpin knocked askew, small crumbs of some pastry still clinging to her lower lip. white background, simple background, blue overall hue, monochromatic blue."
+    },
+    "0496d2dadf": {
+      "id": "G6",
+      "tag": "tiefling_purple",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard purple-tinted rim light glowing along the edges of his face, severe icy contempt, seen from an extreme side-profile angle canted at a sharp diagonal, extreme close-up on the head only, tight framing, steep dutch angle. older male tiefling, deep charcoal-grey skin, short curling horns swept flat against cropped silver hair, heavy-lidded violet eyes narrowed in judgment, a sharply hooked nose, deep-set lines bracketing a thin frowning mouth, one long fang resting over his lower lip, faint smoke curling from one nostril. white background, simple background, purple overall hue, monochromatic purple."
+    },
+    "33c593ba54": {
+      "id": "H01",
+      "tag": "orc_magenta",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard magenta-tinted rim light glowing along the edges of his face, defiant curling snarl, seen from an extreme low angle looking sharply up past his jaw, extreme close-up on the head only, tight framing, steep dutch angle. young male orc, mottled grey-green skin, a single sharp upper tusk pushing through his lip, a shaved scalp crossed by four pale scars, small deep-set amber eyes narrowed hard, a flattened broken nose, a heavy brow ridge casting the eyes into shadow. white background, simple background, magenta overall hue, monochromatic magenta."
+    },
+    "10c8f5e4cd": {
+      "id": "H02",
+      "tag": "elf_amber",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard amber-tinted rim light glowing along the edges of her face, serene unbothered contempt, seen from a slightly high three-quarter angle tilted off vertical, extreme close-up on the head only, tight framing, sharp dutch angle. very old female elf, translucent pale skin stretched thin over high cheekbones, long silver hair parted in a severe centre line, sharply pointed ears pierced with three thin rings each, heavy-lidded grey eyes that do not blink, a mouth set in a flat unimpressed line. white background, simple background, amber overall hue, monochromatic amber."
+    },
+    "386df2985c": {
+      "id": "H03",
+      "tag": "dwarf_vermilion",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard vermilion-tinted rim light glowing along the edges of his face, a roaring open-mouthed laugh, seen from an extreme low angle from below his beard looking straight up, extreme close-up on the head only, tight framing, wildly canted dutch angle. middle-aged male dwarf, broad ruddy face flushed dark, an enormous forked black beard bound with two iron clasps, bushy eyebrows shot up high, eyes squeezed almost shut with laughter, a bulbous nose veined red, a chipped front tooth showing in the open mouth. white background, simple background, vermilion overall hue, monochromatic vermilion."
+    },
+    "bdf615257c": {
+      "id": "H04",
+      "tag": "tiefling_mint",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard mint-tinted rim light glowing along the edges of her face, a startled indrawn gasp, seen from an extreme low front angle beneath her chin, extreme close-up on the head only, tight framing, sharp dutch angle. young female tiefling, smooth lilac-grey skin, two slender horns swept straight back from the hairline, a thick black braid falling across one eye, wide solid-white eyes with no visible pupils, a small round mouth caught open mid-gasp, a thin gold chain looping from ear to nostril. white background, simple background, mint overall hue, monochromatic mint."
+    },
+    "4343ee8f5d": {
+      "id": "H05",
+      "tag": "dryad_olive",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard olive-tinted rim light glowing along the edges of his face, a slow settled sorrow, seen from a low angle tilted hard to one side, extreme close-up on the head only, tight framing, steep dutch angle. ancient male dryad, bark-textured brown skin split by deep vertical furrows, thin green shoots sprouting from his temples, moss gathered in the hollows beneath his eyes, small black eyes like knots in wood, a mouth that is barely a seam in the bark. white background, simple background, olive overall hue, monochromatic olive."
+    },
+    "009a59742d": {
+      "id": "H06",
+      "tag": "orc_rose",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard rose-tinted rim light glowing along the edges of her face, weary immovable resolve, seen from an extreme low angle looking up beneath her jaw, extreme close-up on the head only, tight framing, sharply canted dutch angle. middle-aged female orc, deep olive skin scarred across one cheek, two blunt lower tusks worn down flat, black hair shaved at the sides and knotted high, tired heavy-lidded orange eyes, a broad flat nose with a bone ring through the septum. white background, simple background, rose overall hue, monochromatic rose."
+    },
+    "9861eac6f8": {
+      "id": "H07",
+      "tag": "gnome_turquoise",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard turquoise-tinted rim light glowing along the edges of his face, gleeful conspiratorial mischief, seen from an extreme close low angle from just below his nose, extreme close-up on the head only, tight framing, steep dutch angle. young male gnome, ruddy freckled skin, an explosion of ginger curls pushed back by cracked goggles, enormous round eyes bright with delight, a small upturned nose smudged with soot, a wide grin showing a gap between the front teeth. white background, simple background, turquoise overall hue, monochromatic turquoise."
+    },
+    "a7cac62587": {
+      "id": "H08",
+      "tag": "dwarf_gold",
+      "family": "colour-pinned",
+      "text": "Western comics style, bold ink outlines, hatched shadows, hard gold-tinted rim light glowing along the edges of her face, stern narrow-eyed disapproval, seen from a low front angle canted off vertical, extreme close-up on the head only, tight framing, sharp dutch angle. old female dwarf, weathered tan skin creased deep around the mouth, iron-grey hair coiled into a tight crown braid, thick eyebrows drawn into a single hard line, pale blue eyes narrowed to slits, a heavy square jaw set forward. white background, simple background, gold overall hue, monochromatic gold."
+    }
+  };
+
+  const SEEDS = ['4242145', '42', '1337', '777', '9999'];
+  let currentPromptIdx = 0;
+  let currentCond = 'preset';
+
+  const promptSelect = document.getElementById('sc-prompt-select');
+  const metaLabel = document.getElementById('sc-condition-meta');
+  const btns = document.querySelectorAll('#sc-preset-buttons button');
+
+  PROMPTS.forEach((p, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = p.label;
+    promptSelect.appendChild(opt);
+  });
+
+  function updateShowcase() {
+    const p = PROMPTS[currentPromptIdx];
+    promptSelect.value = currentPromptIdx;
+
+    const pt = PROMPT_TEXT[p.id];
+    const pMeta = document.getElementById('sc-prompt-meta');
+    const pText = document.getElementById('sc-prompt-text');
+    if (pMeta && pText && pt) {
+      pMeta.textContent = pt.id + ' \u00b7 ' + pt.tag + ' \u00b7 prompt_sha1 ' + p.id + ' \u00b7 ' + pt.family;
+      pText.textContent = pt.text;
+    }
+
+    SEEDS.forEach((seed, i) => {
+      const img = document.getElementById('sc-img-' + i);
+      img.src = 'assets/01_steering/' + currentCond + '/' + pt.id + '_' + pt.tag + '_' + p.id + '/' + seed + '.webp';
+    });
+
+    btns.forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-cond') === currentCond);
+    });
+
+    const metaMap = {
+      'baseline': 'Unmodified base checkpoint · D = 0.000 · Weight edit: 0 KB',
+      'preset': 'Frobenius D = 0.0538 · Targeted linework & inking · Weight edit: 53 KB',
+      'preset_neg': 'Frobenius D = 0.0538 · Negative directional vector · Weight edit: 53 KB',
+      'blockshuffle': 'Frobenius D = 0.0538 · Intra-block preserved, depth scrambled · Weight edit: 53 KB',
+      'randsign': 'Frobenius D = 0.0538 · Identical tensors, signs randomized · Weight edit: 53 KB'
+    };
+    metaLabel.textContent = metaMap[currentCond] || '';
+  }
+
+  promptSelect.addEventListener('change', (e) => {
+    currentPromptIdx = parseInt(e.target.value, 10);
+    updateShowcase();
+  });
+
+  document.getElementById('sc-prev-prompt').addEventListener('click', () => {
+    currentPromptIdx = (currentPromptIdx - 1 + PROMPTS.length) % PROMPTS.length;
+    updateShowcase();
+  });
+
+  document.getElementById('sc-next-prompt').addEventListener('click', () => {
+    currentPromptIdx = (currentPromptIdx + 1) % PROMPTS.length;
+    updateShowcase();
+  });
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCond = btn.getAttribute('data-cond');
+      updateShowcase();
+    });
+  });
+
+  updateShowcase();
+})();
+</script>
+
+</body>
+</html>
