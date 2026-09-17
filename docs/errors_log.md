@@ -1,7 +1,7 @@
 ﻿# Measurement Protocol & Error Log: Replication Checklist
 
-> **Purpose of this document**: This log records the 26 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 8 derived methodological rules.  
-> **None of these 26 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
+> **Purpose of this document**: This log records the 28 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 8 derived methodological rules.  
+> **None of these 28 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
 
 ---
 
@@ -58,6 +58,8 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 | **24** | `EXPLAINED_VARIANCE_RATIO` written as a data row inside the PCA loadings table | Its value sits in the `PC1`…`PC4` columns like any feature loading | Any reader — or script — that ingests the file as a loadings matrix silently treats explained variance as a 24th feature, contaminating every cosine computed between axes | Keep metadata out of the matrix: separate file, or a column that marks the row type |
 | **25** | A hand-kept tally disagreeing with its own per-item list | The header of a scoring set read `19 / 20` while all twenty seeds were marked positive; another read `1 / 10` against two positives | The headline number of the experiment, and every paired test built on it, came from the summary line rather than from the data | Never read the total; recompute it from the item list, and make the two disagreeing an error rather than a preference |
 | **26** | Fisher's exact test on paired binary outcomes | The same seeds appear in every condition, so the two columns are repeated measures on one unit, not two independent samples | Fisher returned $p = 3 \times 10^{-10}$ where the correct paired McNemar test returns $7.6 \times 10^{-6}$ — four orders of magnitude of borrowed confidence, in the direction that flatters the result | With shared seeds, use McNemar on the discordant pairs; the binary twin of pitfall 17 |
+| **27** | Assuming a base checkpoint and a ComfyUI-saved copy of it share tensor names | Anima Base v1.0 prefixes every key with `net.`; the same model saved out of ComfyUI uses `model.diffusion_model.` | The two spellings have **zero keys in common**, so an offline script reading the file directly matches nothing — and reports a clean run unless it was written to assert coverage | Resolve prefixes from the file actually being read, and make an integrity gate fail when a single expected tensor is unaccounted for |
+| **28** | One sub-tensor map for blocks that are not shaped alike | In Anima, `blocks.N` has 20 tensors with `self_attn.output_proj` and `mlp.layer1`/`layer2`; `llm_adapter.blocks.N` has 19, with `self_attn.o_proj`, `mlp.0`/`mlp.2`, three extra norms and biases the main blocks do not have | A surgeon built on the main-block map silently touches nothing in the adapter blocks, while the node still reports the patches it attempted | One map per block family, and count the tensors each map actually matched against the tensors that exist |
 
 ---
 

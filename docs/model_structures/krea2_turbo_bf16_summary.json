@@ -1,0 +1,688 @@
+{
+  "file_info": {
+    "filename": "krea2_turbo_bf16.safetensors",
+    "file_size_bytes": 26283332608,
+    "file_size_gb": 24.4783,
+    "last_modified": "2026-07-10 08:49:17"
+  },
+  "header_metadata": {
+    "format": null,
+    "has_quantization_metadata": false,
+    "quantization_metadata": null,
+    "other_metadata_keys": []
+  },
+  "model_architecture_profile": {
+    "inferred_architecture": {
+      "hidden_size": 6144,
+      "transformer_blocks_count": 28,
+      "mlp_expansion_ratio": 2.67,
+      "is_quantized": false,
+      "dominant_datatype": "BF16"
+    },
+    "parameter_role_breakdown": {
+      "total_parameters_count": 12820073036,
+      "attention_parameters": 3699383296,
+      "attention_pct": 28.86,
+      "mlp_parameters": 8495038464,
+      "mlp_pct": 66.26,
+      "text_adapter_parameters": 396910092,
+      "text_adapter_pct": 3.1,
+      "embeddings_parameters": 0,
+      "embeddings_pct": 0.0,
+      "normalization_parameters": 350208,
+      "normalization_pct": 0.0,
+      "bias_parameters": 67648,
+      "bias_pct": 0.0,
+      "scale_parameters": 0,
+      "scale_pct": 0.0,
+      "other_parameters": 228323328,
+      "other_pct": 1.78
+    },
+    "vram_footprint_estimates_gb": {
+      "loaded_as_float32": 47.758,
+      "loaded_as_float16_or_bfloat16": 23.879,
+      "loaded_as_native_fp8": "N/A (model is not quantized)"
+    }
+  },
+  "overall_statistics": {
+    "total_tensors": 430,
+    "total_parameters": 12820073036,
+    "total_parameters_millions": 12820.07,
+    "total_size_bytes": 26283288880,
+    "datatype_distribution": {
+      "F32": 174,
+      "BF16": 256
+    }
+  },
+  "integrity_checks": {
+    "is_valid_krea2_fp8_layout": false,
+    "is_corrupted": false,
+    "missing_metadata": false,
+    "comfy_quant_tensors_found": 0,
+    "missing_scales_count": 0,
+    "missing_scales": [],
+    "corruption_reasons": []
+  },
+  "block_subdivisions_summary": {
+    "blocks.0": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.1": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.10": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.11": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.12": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.13": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.14": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.15": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.16": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.17": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.18": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.19": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.2": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.20": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.21": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.22": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.23": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.24": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.25": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.26": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.27": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.3": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.4": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.5": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.6": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.7": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.8": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "blocks.9": {
+      "tensor_count": 13,
+      "parameter_count": 434159872,
+      "parameter_pct_of_model": 3.39,
+      "total_bytes": 868418560,
+      "total_mb": 828.19,
+      "dtypes": {
+        "F32": 5,
+        "BF16": 8
+      },
+      "roles_distribution": {
+        "attention": 7,
+        "other": 1,
+        "normalization": 2,
+        "mlp": 3
+      }
+    },
+    "first": {
+      "tensor_count": 2,
+      "parameter_count": 399360,
+      "parameter_pct_of_model": 0.0,
+      "total_bytes": 1597440,
+      "total_mb": 1.52,
+      "dtypes": {
+        "F32": 2
+      },
+      "roles_distribution": {
+        "bias": 1,
+        "other": 1
+      }
+    },
+    "last": {
+      "tensor_count": 4,
+      "parameter_count": 411712,
+      "parameter_pct_of_model": 0.0,
+      "total_bytes": 1646848,
+      "total_mb": 1.57,
+      "dtypes": {
+        "F32": 4
+      },
+      "roles_distribution": {
+        "bias": 1,
+        "other": 2,
+        "normalization": 1
+      }
+    },
+    "tmlp": {
+      "tensor_count": 4,
+      "parameter_count": 39333888,
+      "parameter_pct_of_model": 0.31,
+      "total_bytes": 157335552,
+      "total_mb": 150.05,
+      "dtypes": {
+        "F32": 4
+      },
+      "roles_distribution": {
+        "mlp": 4
+      }
+    },
+    "tproj": {
+      "tensor_count": 2,
+      "parameter_count": 226529280,
+      "parameter_pct_of_model": 1.77,
+      "total_bytes": 906117120,
+      "total_mb": 864.14,
+      "dtypes": {
+        "F32": 2
+      },
+      "roles_distribution": {
+        "bias": 1,
+        "other": 1
+      }
+    },
+    "txtfusion.layerwise_blocks": {
+      "tensor_count": 24,
+      "parameter_count": 171715072,
+      "parameter_pct_of_model": 1.34,
+      "total_bytes": 343451648,
+      "total_mb": 327.54,
+      "dtypes": {
+        "F32": 8,
+        "BF16": 16
+      },
+      "roles_distribution": {
+        "attention": 14,
+        "normalization": 4,
+        "mlp": 6
+      }
+    },
+    "txtfusion.projector": {
+      "tensor_count": 1,
+      "parameter_count": 12,
+      "parameter_pct_of_model": 0.0,
+      "total_bytes": 48,
+      "total_mb": 0.0,
+      "dtypes": {
+        "F32": 1
+      },
+      "roles_distribution": {
+        "other": 1
+      }
+    },
+    "txtfusion.refiner_blocks": {
+      "tensor_count": 24,
+      "parameter_count": 171715072,
+      "parameter_pct_of_model": 1.34,
+      "total_bytes": 343451648,
+      "total_mb": 327.54,
+      "dtypes": {
+        "F32": 8,
+        "BF16": 16
+      },
+      "roles_distribution": {
+        "attention": 14,
+        "normalization": 4,
+        "mlp": 6
+      }
+    },
+    "txtmlp.0": {
+      "tensor_count": 1,
+      "parameter_count": 2560,
+      "parameter_pct_of_model": 0.0,
+      "total_bytes": 10240,
+      "total_mb": 0.01,
+      "dtypes": {
+        "F32": 1
+      },
+      "roles_distribution": {
+        "mlp": 1
+      }
+    },
+    "txtmlp.1": {
+      "tensor_count": 2,
+      "parameter_count": 15734784,
+      "parameter_pct_of_model": 0.12,
+      "total_bytes": 62939136,
+      "total_mb": 60.02,
+      "dtypes": {
+        "F32": 2
+      },
+      "roles_distribution": {
+        "mlp": 2
+      }
+    },
+    "txtmlp.3": {
+      "tensor_count": 2,
+      "parameter_count": 37754880,
+      "parameter_pct_of_model": 0.29,
+      "total_bytes": 151019520,
+      "total_mb": 144.02,
+      "dtypes": {
+        "F32": 2
+      },
+      "roles_distribution": {
+        "mlp": 2
+      }
+    }
+  },
+  "analysis_metadata": {
+    "duration_seconds": 0.0018,
+    "timestamp": "2026-07-10 08:56:16"
+  }
+}

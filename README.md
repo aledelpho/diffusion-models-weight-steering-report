@@ -6,7 +6,7 @@
 <p align="center">
   <a href="index.html"><strong> Read Full Lab Notebook</strong></a> •
   <a href="viewer/viewer.html"><strong> Launch Interactive A/B Viewer</strong></a> •
-  <a href="docs/errors_log.md"><strong> 26 Pitfalls Checklist</strong></a> •
+  <a href="docs/errors_log.md"><strong> 28 Pitfalls Checklist</strong></a> •
   <a href="data/"><strong> Raw Datasets</strong></a>
 </p>
 
@@ -507,7 +507,9 @@ The prompt says `studding one earlobe`. Across every positive render, the cluste
 
 ### 2.7 Where this sits
 
-The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-image model to render a concept its prompt explicitly contains. The published remedies operate at inference time on cross-attention — [Attend-and-Excite](https://arxiv.org/abs/2301.13826) and [attention-guided feature enhancement](https://arxiv.org/html/2406.16272v2) both re-weight attention maps during sampling. What is reported here is different in kind: a **static, prompt-preserving change in weight space**, found incidentally while running a matched control, that moves a specific neglected attribute from 5% to 95% presence without touching the prompt or the sampler. Whether it generalises beyond this attribute is exactly what 2.6 says is untested.
+The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-image model to render a concept its prompt explicitly contains. The published remedies operate at inference time on cross-attention — [Attend-and-Excite](https://arxiv.org/abs/2301.13826) and [attention-guided feature enhancement](https://arxiv.org/html/2406.16272v2) both re-weight attention maps during sampling. What is reported here is different in kind: a **static, prompt-preserving change in weight space**, found incidentally while running a matched control, that moves a specific neglected attribute from 5% to 95% presence without touching the prompt or the sampler.
+
+There is a second difference, and it is architectural rather than methodological. **Krea-2 has no cross-attention in its blocks at all.** Text enters once upstream through `txtmlp` → `txtfusion` and reaches each of the 28 blocks as an adaptive modulation signal (`mod.lin`, a `[36864] = 6 × 6144` vector per block). The published remedies all re-weight cross-attention maps during sampling — maps this architecture does not have. So the token-competition behaviour reported here was found in a model where the standard fix has nothing to grab hold of. Structure for both checkpoints is published in [`docs/model_structures/`](docs/model_structures/). Whether it generalises beyond this attribute is exactly what 2.6 says is untested.
 
 ---
 
@@ -528,9 +530,21 @@ The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-im
 * **Pre-declared Criterion**: Extend the colour-free family to at least 16 prompts. If the effective-colour contrast against both controls still contains zero **and** the cross-prompt chroma direction stays below its permutation null, the palette claim is documented as specific to colour-pinned prompts and dropped from the general statement.
 * **Second question on the same run**: whether Blockshuffle $-$ keeps producing a coherent global cast ($+0.944$ here). If it does, "a matched control can win a universality score by tinting" becomes a reportable finding in its own right, not a footnote.
 
-### Experiment 1 · Open — cross-architecture replication on `circlestone-labs/Anima`
+### Both experiments · Open — replication across a different *conditioning mechanism*
 * **Goal**: Apply the exact same $D$-matched protocol (sign scramble + block derangement) to [`circlestone-labs/Anima`](https://huggingface.co/circlestone-labs/Anima).
-* **The True Cross-Family Test**: Anima is not just another DiT checkpoint — it is fine-tuned from `nvidia/Cosmos-Predict2-2B-Text2Image` (Cosmos architecture) and uses a compact `qwen_3_06b_base` (0.6B) text encoder. Testing across Cosmos 2B + Qwen3 0.6B vs. Krea-2 12B + Qwen3-VL 4B will determine whether weight-space steering is an architectural universality or specific to Krea-2.
+* **Why this is more than "another DiT"**: the two models do not condition on text the same way. Krea-2 fuses text once upstream and injects it per block as modulation, with no cross-attention anywhere in the backbone. Anima gives **every one of its 28 blocks its own cross-attention**, taking keys and values from the 1024-dimensional output of a dedicated 6-block `llm_adapter`. They also differ by 6× in per-block capacity (434 M parameters against 69 M) and by 3× in hidden dimension (6144 against 2048). A result that survives that crossing is not a fact about an implementation.
+
+| | Krea-2 Turbo | Anima Base v1.0 |
+| --- | --- | --- |
+| Backbone | 28 blocks × **13 tensors** | 28 blocks × **20 tensors** |
+| Parameters per block | 434.16 M | 69.21 M |
+| Hidden dimension | 6144 | 2048 |
+| Feed-forward | 16384, SwiGLU (×2.67) | 8192 (×4.0) |
+| Attention | GQA, 48 query / 12 kv heads | MHA, 16 / 16 |
+| **How text enters a block** | **adaptive modulation** (`mod.lin`, 6 × 6144) | **cross-attention** (k/v from a 1024-dim adapter) |
+| Text adapter | 4 `txtfusion` blocks | 6 `llm_adapter` blocks |
+
+* **A capability Anima has and Krea-2 does not**: because text influence is localised in `cross_attn.k_proj` and `v_proj` per block, the model-versus-encoder split of §2.3 can become a **three-way** split there — DiT self-attention, DiT cross-attention, text encoder. That decomposition is not available on Krea-2 at all.
 * **Pre-declared Criterion**: PC1 rebuilt independently on the new architecture, with the preset separating from both controls at a 95% CI excluding zero. If it does not, the effect is documented as Krea-2 specific.
 
 *(Additional technical tools — quadratic $\epsilon$-scaling, VLM judge calibration, and 30-prompt CLIP closure — are kept in the [`experiments/`](experiments/) directory and outlined in [§11 of the Lab Notebook](index.html#ripresa).)*
@@ -542,7 +556,7 @@ The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-im
 
 * **Interactive A/B Viewer**: Open [`viewer/viewer.html`](viewer/viewer.html) in your browser to inspect image pairs side-by-side or toggle back-and-forth instantly with the spacebar.
 * **Complete Lab Notebook**: Read [`index.html`](index.html) for all the mathematical formulations, KaTeX derivations, PCA loadings, and vector SVG forest plots.
-* **The 26 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 26 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
+* **The 28 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 28 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
 * **Re-run the Analysis**: `python experiments/global_aggregation_corrected.py` runs from a fresh clone — it resolves its inputs to `data/`, which holds the full feature matrix and the image manifests, and regenerates every aggregation table quoted above. It needs `numpy`, `pandas`, `scipy` and `scikit-learn`.
 * **What you cannot re-run from a clone**: the scripts that read pixels — `analyze_texture.py`, `analyze_quantization.py`, `color_freedom.py`, `run_style_features.py` — need the complete render set (≈1 500 PNGs at 1024×1280), which is not committed here. `assets/` carries a representative subset for visual inspection only. Those scripts still point at local absolute paths and are published as the **record of how the numbers were produced**, not as a turnkey pipeline.
 * **Repository size and original master PNGs**: a full clone is **~44 MB** (all images served as high-quality 480×600 WebP under `assets/01_steering/` and `assets/02_attribute_emergence/`). The uncompressed 1024×1280 master PNG originals are preserved in full and packaged as GitHub Release assets:
@@ -551,6 +565,7 @@ The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-im
   Each PNG contains its embedded ComfyUI generation graph in a `tEXt` chunk. See [`docs/asset_pipeline.md`](docs/asset_pipeline.md) for layout specifications.
 * **The generation graphs**: every committed PNG carries its ComfyUI graph in a `tEXt` chunk, so dragging one onto a ComfyUI canvas reloads exactly the pipeline that made it. The same graphs are also published as plain JSON — [`data/comfy_graphs.json`](data/comfy_graphs.json) for all 370 renders individually, and [`docs/workflow/`](docs/workflow/) for the three distinct topologies, pretty-printed and annotated.
 * **Re-run the attribute-emergence experiment**: [`data/attribute_emergence_recipe.json`](data/attribute_emergence_recipe.json) carries, for each of the 23 sets in §5, the exact prompt text and its `prompt_sha1`, the preset file, the model and CLIP strengths, the seed list and the output folder and filename pattern. Two of the ten prompt variants hash to `30de058455` and `95acba3b41` — the untouched G1 and G4 already published in [`data/prompts.json`](data/prompts.json) — so the hashes verify themselves. [`data/attribute_emergence.csv`](data/attribute_emergence.csv) holds the per-seed score behind every number in §5, including the renders marked `ambiguous` rather than forced to a verdict.
+* **The architecture itself**: [`docs/model_structures/`](docs/model_structures/) carries the full tensor map of every base checkpoint used here — name, dtype, shape, element count — for Krea-2, Anima Base v1.0 and both text encoders, plus two architectural write-ups with block anatomy. They are derived from the safetensors headers alone and contain **no weight values**. Every displacement figure quoted in this notebook is a *relative* Frobenius norm, and recomputing one needs those shapes; without them, "verify it yourself" is a promise a reader cannot keep.
 * **A note on language**: every published table — column names, condition labels, feature names — is in English. The *comments* inside the scripts are in Italian, because that is how they were written while the work was happening and rewriting them afterwards would misrepresent the record. The code itself reads fine without them.
 
 > **On the $p$-values.** Every $p$ in `data/global_aggregation_*.csv` comes from a sign-flip permutation test on the prompt-level means. With $n \le 16$ prompts all $2^n$ sign assignments are enumerated, so the $p$ is exact and its floor is $2/2^n$ — on the 6-prompt colour-free family that floor is $0.031$, which is why **no effect of any size can clear Holm correction there**. Above 16 prompts the test samples $100\,000$ assignments, so its floor is $\approx 10^{-5}$. The estimator reports $(k+1)/(N+1)$, so a $p$ can never print as an exact `0.0` — the smallest value in the 24-prompt tables is `1e-05`, which is the resolution floor and not a measured zero.

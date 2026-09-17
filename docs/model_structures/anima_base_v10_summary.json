@@ -1,0 +1,60 @@
+{
+  "model_name": "anima_baseV10.safetensors",
+  "architecture": "Anima DiT Base (Cosmos-Predict2 / Anima Pencil v10)",
+  "file_size_bytes": 4182218328,
+  "file_size_gb": 3.895,
+  "total_tensors": 685,
+  "total_parameters": 2091068928,
+  "total_parameters_billions": 2.0911,
+  "dtype_distribution": {
+    "BF16": 685
+  },
+  "components": {
+    "backbone_blocks": {
+      "parameters": 1937782784,
+      "percentage": 92.67
+    },
+    "llm_adapter_blocks": {
+      "parameters": 100713984,
+      "percentage": 4.82
+    },
+    "llm_adapter_head": {
+      "parameters": 33949696,
+      "percentage": 1.62
+    },
+    "time_embedder": {
+      "parameters": 16779264,
+      "percentage": 0.8
+    },
+    "input_embedder": {
+      "parameters": 139264,
+      "percentage": 0.01
+    },
+    "final_layer": {
+      "parameters": 1703936,
+      "percentage": 0.08
+    },
+    "noise_sampling": {
+      "parameters": 0,
+      "percentage": 0.0
+    },
+    "other": {
+      "parameters": 0,
+      "percentage": 0.0
+    }
+  },
+  "hyperparameters": {
+    "backbone_blocks": 28,
+    "hidden_dim": 2048,
+    "mlp_dim": 8192,
+    "attention_head_dim": 128,
+    "num_heads": 16,
+    "llm_adapter_blocks": 6,
+    "llm_adapter_hidden_dim": 1024,
+    "llm_adapter_mlp_dim": 4096,
+    "llm_adapter_vocab_size": 32128,
+    "input_channels": 68,
+    "output_latent_channels": 64
+  },
+  "metadata": {}
+}

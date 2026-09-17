@@ -1,0 +1,309 @@
+{
+  "file_info": {
+    "filename": "qwen_3_06b_base.safetensors",
+    "file_size_gb": 1.1103
+  },
+  "architecture_profile": {
+    "vocab_size": 151936,
+    "hidden_size": 1024,
+    "transformer_layers": 28,
+    "mlp_dimension": 3072,
+    "mlp_expansion_ratio": 3.0,
+    "attention_head_dimension": 128,
+    "query_heads_count": 16,
+    "kv_heads_count": 8,
+    "gqa_group_size": 2
+  },
+  "overall_statistics": {
+    "total_tensors": 310,
+    "total_parameters": 596049920,
+    "total_parameters_millions": 596.05,
+    "datatype_distribution": {
+      "BF16": 310
+    }
+  },
+  "parameter_role_breakdown": {
+    "embeddings": 155582464,
+    "attention": 176167936,
+    "mlp": 264241152,
+    "normalization": 58368,
+    "bias": 0,
+    "other": 0
+  },
+  "block_subdivisions_summary": {
+    "model.embed_tokens": {
+      "tensor_count": 1,
+      "parameter_count": 155582464,
+      "parameter_pct": 26.1,
+      "total_mb": 296.75,
+      "dtypes": {
+        "BF16": 1
+      }
+    },
+    "model.layers.0": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.1": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.10": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.11": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.12": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.13": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.14": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.15": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.16": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.17": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.18": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.19": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.2": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.20": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.21": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.22": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.23": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.24": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.25": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.26": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.27": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.3": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.4": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.5": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.6": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.7": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.8": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.layers.9": {
+      "tensor_count": 11,
+      "parameter_count": 15730944,
+      "parameter_pct": 2.64,
+      "total_mb": 30.0,
+      "dtypes": {
+        "BF16": 11
+      }
+    },
+    "model.norm": {
+      "tensor_count": 1,
+      "parameter_count": 1024,
+      "parameter_pct": 0.0,
+      "total_mb": 0.0,
+      "dtypes": {
+        "BF16": 1
+      }
+    }
+  },
+  "analysis_metadata": {
+    "duration_seconds": 0.001,
+    "timestamp": "2026-07-10 10:12:54"
+  }
+}
