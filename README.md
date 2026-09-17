@@ -554,25 +554,28 @@ Western comics style, bold ink outlines, hatched shadows, upper body portrait. A
 
 </details>
 
-And held still, on a brass faceplate — a flat surface with nothing to distract from the marks, the four
-conditions in the same order, the same crop box on all four:
+And held still, on the gloves and sleeve — a broad, densely shaded surface that stays put across all four
+conditions, so what changes between the panels is the marking and not the drawing. Same prompt, same seed,
+same crop box, in the order the measurement puts them:
 
 <p align="center">
-  <img src="assets/01_steering_stage7/_figures/hatching_detail_I24.webp" alt="Parallel versus crossed hatching on a brass faceplate, four conditions" width="100%">
+  <img src="assets/01_steering_stage7/_figures/hatching_detail_I09.webp" alt="Parallel versus crossed hatching on gloves and sleeve, four conditions, one seed" width="100%">
 </p>
 
 <details>
-<summary><code>I24</code> · <code>a_construct_man_with_blank_brass_faceplate</code> · <code>prompt_sha1 66faaa372d</code> · seed 1337 — <strong>show the exact prompt</strong></summary>
+<summary><code>I09</code> · <code>a_dwarf_woman_with_twin_braided_ginger_pigtails</code> · <code>prompt_sha1 0a1c94584d</code> · seed 777 — <strong>show the exact prompt</strong></summary>
 
 ```text
-Western comics style, bold ink outlines, hatched shadows, upper body portrait. A construct man with blank brass faceplate. armor made of solid gold, He wears a bolted iron halo and enormous heavy cube shoulder pads. He's holding a massive flat-headed maul rested on ground, static pose, unfeeling, neutral. tiled temple floor, simple background. orange reflection on the gold.
+Western comics style, bold ink outlines, hatched shadows, upper body portrait. A dwarf woman with twin braided ginger pigtails. armor made of copper, She wears an iron miner cap and thick square shoulder pads. She's holding a heavy pickaxe leaning forward, cheerful pose, grinning, confident. underground crystal mine, simple background. yellow reflection on the copper.
 ```
 
 </details>
 
-*The same comparison on chainmail and cloth ([`hatching_detail_I06.webp`](assets/01_steering_stage7/_figures/hatching_detail_I06.webp))
+*The crop box is published in [`data/figure_crops_stage7.json`](data/figure_crops_stage7.json): choosing where
+to look is a decision, and on a texture claim it is the decision that matters most. The same comparison on
+chainmail and cloth ([`hatching_detail_I06.webp`](assets/01_steering_stage7/_figures/hatching_detail_I06.webp))
 and on skin and background shading ([`hatching_detail_I07.webp`](assets/01_steering_stage7/_figures/hatching_detail_I07.webp)),
-because a texture claim that only works on one material is a claim about that material.*
+because a texture claim that only holds on one material is a claim about that material.*
 
 
 **Result on the 16 new prompts:**

@@ -253,5 +253,23 @@
         240
       ]
     }
+  },
+  "hatching_detail_I09": {
+    "prompt_id": "I09",
+    "prompt_sha1": "0a1c94584d",
+    "seed": 777,
+    "box": [
+      120,
+      760,
+      600,
+      1240
+    ],
+    "conditions": [
+      "preset_pos",
+      "blockshuf_neg",
+      "blockshuf_pos",
+      "preset_neg"
+    ],
+    "note": "gloves and sleeve: densely hatched and stable across conditions"
   }
 }
