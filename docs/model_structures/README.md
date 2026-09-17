@@ -26,9 +26,7 @@ Plus two architectural write-ups with block anatomy and diagrams:
 [`anima_architecture_decomposition.md`](anima_architecture_decomposition.md) and
 [`krea2_architecture_decomposition.md`](krea2_architecture_decomposition.md).
 
-**Only base checkpoints are here.** The author's own fine-tunes are deliberately left out: their
-structure is not what the experiments are about, and including them would invite the reading that
-the findings depend on a private model.
+These are the base checkpoints the experiments run on.
 
 ## Two traps these files expose
 
