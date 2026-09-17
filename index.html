@@ -365,7 +365,7 @@
     <li><a href="#emergenza">6 · Exp 2 · Attribute Emergence</a></li>
     <li><a href="#nonstab">7 · Non-Established</a></li>
     <li><a href="#metodo">8 · Methodology</a></li>
-    <li><a href="#errori">9 · 32 Pitfalls</a></li>
+    <li><a href="#errori">9 · 33 Pitfalls</a></li>
     <li><a href="#ripresa">10 · How to Replicate</a></li>
     <li style="margin-left:auto;"><a href="viewer/viewer.html" style="color:var(--pos); font-weight:600; border-color:var(--pos);">✦ Interactive A/B Viewer</a></li>
   </ol>
@@ -379,7 +379,7 @@
   <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:4px;">
     <a href="https://github.com/aledelpho/comfyui-arthemy-krea2-tuner" target="_blank" style="text-decoration:none;" class="chip">Tool: Arthemy-Krea2-Tuner ↗</a>
     <a href="viewer/viewer.html" style="text-decoration:none;" class="chip pos">Interactive A/B Viewer ↗</a>
-    <a href="docs/errors_log.md" style="text-decoration:none;" class="chip open">32 Pitfalls Checklist ↗</a>
+    <a href="docs/errors_log.md" style="text-decoration:none;" class="chip open">33 Pitfalls Checklist ↗</a>
     <a href="data/" style="text-decoration:none;" class="chip">Raw Datasets ↗</a>
   </div>
   <p class="stand">The previous iteration of this experimental record concluded that nothing was there.
@@ -865,8 +865,17 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
   <div class="why">
     <p><strong>The effects roughly halved on independent renders.</strong> Mean within-condition coherence fell
     from +0.120 to +0.057 and the ranking reshuffled. A power curve built on the exploratory numbers promised
-    ~100% at sixteen prompts; the true effect was about half of it. This is regression from an exploratory
-    estimate, and it is exactly what the confirmation existed to expose.</p>
+    ~100% at sixteen prompts; the true effect was about half of it.</p>
+    <p><strong>And a second explanation for that halving, which this design cannot separate from the first.</strong>
+    All 18 exploratory prompts pin the palette in their text — <code>monochromatic teal</code>,
+    <code>yellow overall hue</code>, a colour-tinted rim light. <strong>None of the 16 confirmation prompts
+    do.</strong> §4 had already found, on a different colour instrument, that the palette effect is present
+    where the prompt names a colour and absent where it does not — and the confirmation was then run entirely
+    on the side where that predicts little to find. The corpus changed on that variable at the same moment it
+    changed from exploratory to confirmatory. The pre-registration froze the statistics, the thresholds and
+    the scripts, and did not control the one prompt property this notebook had already implicated. The test
+    that separates the two readings is cheap and is now registered: the same subject written twice, with and
+    without the colour clause, in one run.</p>
     <p><strong>The corpus failed its own coverage rule, and the reason generalises.</strong> The design required
     four prompts in each of four 90° hue arcs; the selection returned fourteen of sixteen in 0–90° and none at
     all between 180° and 270°. The rule executed correctly — the candidate pool did not contain what it asked
@@ -1151,7 +1160,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="errori">
-  <h2><span class="n">9</span> The Thirty-Two Measurement Pitfalls</h2>
+  <h2><span class="n">9</span> The Thirty-Three Measurement Pitfalls</h2>
   <div class="box dead">
     <span class="lbl">Methodological Caution</span>
     <p><strong>None of these 28 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
@@ -1178,7 +1187,7 @@ data/
 </section>
 
 <footer>
-  Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 + 560 renders · 40 prompts · 3 pre-registrations · 32 measurement pitfalls documented · Open for replication.
+  Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 + 560 renders · 40 prompts · 3 pre-registrations · 33 measurement pitfalls documented · Open for replication.
 </footer>
 
 </div>

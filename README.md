@@ -6,7 +6,7 @@
 <p align="center">
   <a href="index.html"><strong> Read Full Lab Notebook</strong></a> •
   <a href="viewer/viewer.html"><strong> Launch Interactive A/B Viewer</strong></a> •
-  <a href="docs/errors_log.md"><strong> 32 Pitfalls Checklist</strong></a> •
+  <a href="docs/errors_log.md"><strong> 33 Pitfalls Checklist</strong></a> •
   <a href="data/"><strong> Raw Datasets</strong></a>
 </p>
 
@@ -206,10 +206,14 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
 * Which *structural* property of the perturbation is the operative one. Two points — block derangement
   works, sign scramble does not — separate structure from magnitude, but they do not identify what
   about the structure does the work.
-* **That every weight edit carries a chromatic signature of its own.** This was tested properly and came back
-  three of six against a pre-registered bar of four, on a corpus that was biased in *favour* of finding it.
-  Three is ambiguous, it is written as ambiguous, and the difference matters: "every displacement has its own
-  colour" is the claim that failed, "different displacements move colour differently" is the claim that held.
+* **That every weight edit carries a chromatic signature of its own.** Tested with the threshold fixed in
+  advance, it came back three of six against a bar of four. Three is ambiguous, it is written as ambiguous,
+  and the difference matters: "every displacement has its own colour" is the claim that failed, "different
+  displacements move colour differently" is the claim that held. Two biases pulled in opposite directions on
+  that corpus and neither can be quantified after the fact: the prompts clustered into one hue arc, which
+  makes cross-prompt coherence *easier* to detect, while **none of them named a colour**, which §1.4 had
+  already found to be the condition under which the palette effect disappears. Whether the ambiguity is the
+  effect's true size or an artefact of testing it on colour-free prompts is now a registered, unrun question.
 * **That colour and texture are two readings of one signature.** On the same 560 renders they behave
   oppositely — colour effects halve and randsign leads them; texture holds its size and randsign disappears.
   Any single account of what these perturbations do still has to explain both, and none here does.
@@ -440,20 +444,43 @@ before the data did.
 $+0.023$ between conditions, difference $+0.035$, against a label-permutation null whose 95th percentile is
 $+0.007$. $p = 10^{-4}$, the floor of the test. The exploratory run gave $+0.080$ with the same $p$.
 
-**The effects roughly halved on independent renders.** Mean within-condition coherence fell from $+0.120$ to
-$+0.057$, and the ranking reshuffled — Blockshuffle $-$ was fourth and is now first, Randsign $-$ fell from
-first to second at a third of its size. A power curve built on the exploratory numbers promised ~100% at
-sixteen prompts; the true effect was about half that, and sixteen prompts turned out to be a floor rather
-than a margin. This is what regression from an exploratory estimate looks like, and it is the reason the
-confirmation existed.
+**The effects roughly halved on independent renders** — mean within-condition coherence fell from $+0.120$ to
+$+0.057$, and the ranking reshuffled. A power curve built on the exploratory numbers promised ~100% at sixteen
+prompts; the true effect was about half that, and sixteen turned out to be a floor rather than a margin.
+
+**Part of that gap is an artefact of how the two runs were scaled, and it is ours.** Each run standardises its
+24 dimensions by the spread of its *own* difference vectors, which is correct inside a run and wrong between
+two. Rescaled on a single common basis, the two sit at $+0.087$ and $+0.054$ — a factor of 1.6, not 2.1. The
+within-run figures in the table above stand; the *comparison* between them was inflated, and the corrected one
+is what the next design should be sized against.
+
+**And there is a second explanation for that halving, which this design cannot separate from the first.**
+Every one of the 18 exploratory prompts pins the palette in its text — `monochromatic teal`, `yellow overall
+hue`, a colour-tinted rim light. **Not one of the 16 confirmation prompts does.** §1.4, on a completely
+different colour instrument, had already found the palette effect present where the prompt names a colour and
+absent where it does not — and the confirmation was then run entirely on the side where §1.4 predicts little
+to find. The corpus changed on that variable at the same moment it changed from exploratory to confirmatory.
+
+That is our design error, and it is worth being precise about what kind. The pre-registration froze the
+statistics, the thresholds and the scripts; it did not control the one prompt property this repository had
+already implicated. A stratification rule *was* written — but it targeted the **measured** hue of the render,
+not the **stated** colour in the prompt, which is the variable that mattered.
+
+So §1.5 should not be read as "colour signatures are weak". It should be read as: *tested on prompts that do
+not name a colour, three conditions of six carry a coherent chromatic direction, and whether naming a colour
+changes that is now an open, registered question.* The test is cheap and is described in
+[`docs/prereg_chromatic_signatures.md`](docs/prereg_chromatic_signatures.md): the same subject written twice,
+with and without the colour clause, in one run.
 
 **One thing that went wrong in the corpus, and it is worth more than the result.** The registered design
 required four prompts in each of four 90° hue arcs. The selection returned **fourteen of sixteen in
 0–90°, and none at all between 180° and 270°**. The rule ran correctly; the candidate pool did not contain
 what it asked for. The reason is specific and useful: these are close-up character portraits, so the six
 swatches are dominated by skin and paper no matter what the scene describes. **Prompt text is the wrong lever
-for controlling measured hue.** Note the direction of that bias — a corpus of more similar prompts should make
-cross-prompt coherence *easier* to find, not harder — so it does not soften what happened.
+for controlling measured hue.** That bias runs *towards* the result — a corpus of more similar prompts makes
+cross-prompt coherence easier to detect, not harder — while the colour-pinning problem above runs against it.
+They are not commensurable and neither is a defence; both are reasons the next run has to be designed
+differently.
 
 **Where the coherence actually lives.** Splitting the 24 dimensions into lightness and chromaticity separates
 the conditions by kind. Randsign's coherence is largely **tonal**: $+0.502$ on the six $L^*$ steps alone,
@@ -772,6 +799,12 @@ There is a second difference, and it is architectural rather than methodological
 * **The second question got a clean answer.** It asked whether Blockshuffle $-$ would keep producing a coherent cast, having scored $+0.944$ on an entirely different colour instrument in §1.4. On stage 7 it is the **top condition of all six** ($+0.109$, $p_{\text{Holm}} = 0.0022$). Two instruments, two corpora, same condition singled out. That a *matched control* is the most chromatically coherent perturbation in the set is now a finding and not a footnote.
 * **What is still open**: the effective-colour contrast itself was not recomputed on stage 7 — only the direction analysis was. And the corpus failed its own hue-coverage requirement, for a reason that generalises: on close-up portraits the measured swatches are skin and paper whatever the prompt says, so **prompt text cannot be used as the lever for controlling measured hue**. Any future colour corpus has to change the framing, not the wording.
 
+### Experiment 1 · Open — does naming a colour in the prompt govern the chromatic signature?
+* **Goal**: the confirmation round of §1.5 differed from its exploratory set on a variable this notebook had already implicated — every exploratory prompt names a colour, none of the confirmation prompts do — so its ambiguous verdict has two readings the design cannot separate. A between-corpus look on a single common scale is suggestive and not decisive: prompts that name a colour are **1.6× more coherent**, but they also move **less** (amplitude ratio 0.67–0.85), so a stated colour appears to *constrain* the palette rather than to license the effect. Four conditions of six go one way, two the other.
+* **Pre-declared Criterion**: matched pairs — the same subject written twice, identical character for character except the colour clause, rendered in one run under the same conditions and seeds. Two readouts: the paired amplitude, and the **cosine between the two members of a pair**, which separates "the clause constrains how far the palette moves" from "the clause changes where it goes". Those have never been distinguished.
+* **A third arm, and the cheapest of the three**: the **empty prompt**. With no text to interpret, whatever still separates the conditions at a fixed seed is what the perturbation does independently of reading. Note what this is not: Krea-2 passes text through `txtmlp` → `txtfusion` and injects it as per-block modulation, so an empty string still produces an embedding. It is the empty-string prior, not the absence of conditioning.
+* **Status**: a 180-render pilot is specified — four conditions rather than six, four pairs, five seeds — to size the effect before committing a full run. With four subjects the permutation floor is 2/2⁴ = 0.125, so the pilot cannot produce a significant result and will not be reported as one.
+
 ### Experiment 1 · Open — the hatching axis on objects, with an instrument that measures it directly
 * **Goal**: §1.6 establishes the axis on character portraits using `crosshatch_entropy_mean`, which is a proxy: it correlates with how much line is on the page at all ($r = +0.52$, $R^2 = 0.27$), and a second proxy — how many separate pieces the drawing breaks into — disagrees with it about the ordering *across* families. The proxy settles the sign; it cannot settle the ladder.
 * **Pre-declared Criterion**: [`docs/prereg_hatching_order_stage8.md`](docs/prereg_hatching_order_stage8.md), locked before the instrument was built. The instrument is the histogram of edge-gradient orientations — parallel hatching is unimodal, cross-hatching bimodal with two near-orthogonal peaks — and the prediction is a full ordinal ranking of four conditions, one ordering out of twenty-four, stated by eye in advance.
@@ -804,13 +837,18 @@ There is a second difference, and it is architectural rather than methodological
 * **Reproducing the confirmation round**: [`docs/reproduce_stage7.md`](docs/reproduce_stage7.md) has the full recipe for §1.5 and §1.6 — the seven presets, the manifests with every prompt verbatim, the exact commands, and the hash of every published input. All 600 renders are browsable as webp under [`assets/01_steering_stage7/`](assets/01_steering_stage7/); the full-resolution PNGs are a release asset, because colour measurements have to be re-extracted from PNG and not from webp.
 * **Interactive A/B Viewer**: Open [`viewer/viewer.html`](viewer/viewer.html) in your browser to inspect image pairs side-by-side or toggle back-and-forth instantly with the spacebar.
 * **Complete Lab Notebook**: Read [`index.html`](index.html) for all the mathematical formulations, KaTeX derivations, PCA loadings, and vector SVG forest plots.
-* **The 32 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 32 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
+* **The 33 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 33 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
 * **Re-run the Analysis**: `python experiments/global_aggregation_corrected.py` runs from a fresh clone — it resolves its inputs to `data/`, which holds the full feature matrix and the image manifests, and regenerates every aggregation table quoted above. It needs `numpy`, `pandas`, `scipy` and `scikit-learn`.
 * **What you cannot re-run from a clone**: the scripts that read pixels — `analyze_texture.py`, `analyze_quantization.py`, `color_freedom.py`, `run_style_features.py` — need the complete render set (≈1 500 PNGs at 1024×1280), which is not committed here. `assets/` carries a representative subset for visual inspection only. Those scripts still point at local absolute paths and are published as the **record of how the numbers were produced**, not as a turnkey pipeline.
 * **Repository size and original master PNGs**: a full clone is **~44 MB** (all images served as high-quality 480×600 WebP under `assets/01_steering/`, `assets/01_steering_stage7/` and `assets/02_attribute_emergence/`). The uncompressed 1024×1280 master PNG originals are preserved in full and packaged as GitHub Release assets:
-  - [`stage7_renders_png.tar.gz`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation) (1.07 GB · 600 PNGs for Stage 7 confirmation round)
-  - [`krea2_steering_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation) (498 MB · 370 master PNGs for Experiment 1)
-  - [`krea2_attribute_emergence_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation) (642 MB · 392 master PNGs for Experiment 2)
+  - [`stage7_renders_png.tar.gz`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases) (1.07 GB · 600 PNGs for Stage 7 confirmation round)
+  - [`krea2_steering_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases) (498 MB · 370 master PNGs for Experiment 1)
+  - [`krea2_attribute_emergence_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases) (642 MB · 392 master PNGs for Experiment 2)
+  *Upload in progress — GitHub's asset endpoint is currently returning 5xx on multi-hundred-megabyte
+  transfers, so the three archives are going up by hand. Their SHA-256 sums are already published in
+  [`docs/reproduce_stage7.md`](docs/reproduce_stage7.md) and were computed before upload, so they verify
+  whatever eventually lands.*
+
   Each PNG contains its embedded ComfyUI generation graph in a `tEXt` chunk. See [`docs/asset_pipeline.md`](docs/asset_pipeline.md) for layout specifications.
 * **The generation graphs**: every committed PNG carries its ComfyUI graph in a `tEXt` chunk, so dragging one onto a ComfyUI canvas reloads exactly the pipeline that made it. The same graphs are also published as plain JSON — [`data/comfy_graphs.json`](data/comfy_graphs.json) for all 370 renders individually, and [`docs/workflow/`](docs/workflow/) for the three distinct topologies, pretty-printed and annotated.
 * **Re-run the attribute-emergence experiment**: [`data/attribute_emergence_recipe.json`](data/attribute_emergence_recipe.json) carries, for each of the 24 sets of Experiment 2, the exact prompt text and its `prompt_sha1`, the preset file, the model and CLIP strengths, the seed list and the output folder and filename pattern. Two of the ten prompt variants hash to `30de058455` and `95acba3b41` — the untouched G1 and G4 already published in [`data/prompts.json`](data/prompts.json) — so the hashes verify themselves. [`data/attribute_emergence.csv`](data/attribute_emergence.csv) holds the per-seed score behind every number in Experiment 2, including the renders marked `ambiguous` rather than forced to a verdict.

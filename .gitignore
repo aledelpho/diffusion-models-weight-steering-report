@@ -9,3 +9,5 @@ Thumbs.db
 releases/
 *.zip
 scratch/
+# note temporanee di release, create dal brief e non committate
+RELEASE_NOTES.md

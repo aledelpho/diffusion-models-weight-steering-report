@@ -170,7 +170,9 @@ The hatching test of §5.2 is a paired sign-flip permutation on `crosshatch_entr
 | `experiments/stage7_prompts.py` | `72105db08d83` | 12,803 |
 | `experiments/style_from_manifest.py` | `e1b18fa23783` | 4,742 |
 
-**Release archives** (attached to release [`stage7-confirmation`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation))
+**Release archives** — see the [releases page](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases). The three sums below were computed on the local
+files before upload, so they verify the archives whatever the transfer does; at the time of writing the
+upload is still in progress, because GitHub's asset endpoint is returning 5xx on transfers of this size.
 
 | file | sha256 | size |
 | --- | --- | --- |

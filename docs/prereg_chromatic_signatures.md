@@ -279,3 +279,49 @@ one another**. That is the claim the notebook may carry.
 The distinction is not cosmetic. "Every displacement has its own chromatic
 signature" is the claim that failed here. "Different displacements move colour
 differently" is the claim that held.
+
+
+---
+
+## Addendum — 2026-09-17, same evening: the shrinkage is confounded
+
+Written after the result above and after the push was prepared, because it was noticed late and leaving it
+unwritten would have been worse than admitting when it was found.
+
+**The verdict does not change.** Three of six against a registered bar of four is ambiguous, and it stays
+ambiguous. What changes is the *explanation* offered above for why the effects halved.
+
+The explanation given was regression from an inflated exploratory estimate. That is one candidate. Here is the
+other, and it was hiding in this repository's own §1.4 the whole time:
+
+| | colour-pinned prompts | mean within-condition coherence |
+|---|---|---|
+| exploratory, 18 prompts | **18 of 18** | +0.120 |
+| confirmation, 16 prompts | **0 of 16** | +0.057 |
+
+Every prompt in the exploratory set carries `monochromatic <colour>` or `<colour> overall hue` or a
+colour-tinted rim light. **Not one prompt in the confirmation set does.** §1.4 had already established, on a
+completely different colour instrument, that the palette effect is present where the prompt pins the palette
+and vanishes where it does not — and the confirmation was then run entirely on the side where §1.4 predicts
+little to find.
+
+So the confirmation is **consistent with two readings that this design cannot separate**: the exploratory
+estimate was inflated, or colour signatures depend on the prompt naming a colour, exactly as §1.4 said. The
+corpus changed on that variable at the same time as it changed from exploratory to confirmatory, and the two
+cannot be untangled after the fact.
+
+This is a design error and it is ours. The pre-registration fixed the statistics, the thresholds and the
+scripts, and did not fix the one prompt property already known to govern the effect being measured. A
+stratification requirement was written — the hue-coverage rule — but it was aimed at the *measured* hue of the
+render and not at the *stated* colour in the prompt, which is the variable that §1.4 had implicated.
+
+**The test that separates them**, and it is cheap: matched pairs. The same subject written twice, once with the
+colour-pinning clause and once without, rendered in the same run under the same six conditions and the same
+five seeds, and the coherence compared between the two arms. If the pinned arm returns to ~0.12 while the free
+arm stays near ~0.06, prompt-stated colour is the governing variable and the confirmation was run on the wrong
+side of it. If both arms sit near ~0.06, the exploratory estimate was simply inflated and the ambiguous verdict
+stands on its own feet.
+
+Until that runs, §1.5 must not be read as "colour signatures are weak". It should be read as: **tested on
+prompts that do not name a colour, three conditions of six carry a coherent chromatic direction, and whether
+naming a colour changes that is an open and now-registered question.**
