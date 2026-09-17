@@ -1,0 +1,59 @@
+[2026-09-17 22:24:08] ==================================================================
+[2026-09-17 22:24:08]  AVVIO WATCHDOG NOTTURNO STAGE 8 (300 render)
+[2026-09-17 22:24:08]  Directory monitorata: C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage8\renders
+[2026-09-17 22:24:08]  Attesi: 300 file PNG e azzeramento coda ComfyUI
+[2026-09-17 22:24:08] ==================================================================
+[2026-09-17 22:24:08] [Stage 8 Monitor] Render completati: 0/300 (0.0%) | Queue: 1 running, 299 pending
+[2026-09-17 22:24:48] [Stage 8 Monitor] Render completati: 1/300 (0.3%) | Queue: 1 running, 298 pending
+[2026-09-17 22:25:08] [Stage 8 Monitor] Render completati: 2/300 (0.7%) | Queue: 1 running, 297 pending
+[2026-09-17 22:25:48] [Stage 8 Monitor] Render completati: 3/300 (1.0%) | Queue: 1 running, 296 pending
+[2026-09-17 22:26:28] [Stage 8 Monitor] Render completati: 4/300 (1.3%) | Queue: 1 running, 295 pending
+[2026-09-17 22:30:09] [Stage 8 Monitor] Render completati: 10/300 (3.3%) | Queue: 1 running, 289 pending
+[2026-09-17 22:36:49] [Stage 8 Monitor] Render completati: 20/300 (6.7%) | Queue: 1 running, 279 pending
+[2026-09-17 22:42:50] [Stage 8 Monitor] Render completati: 30/300 (10.0%) | Queue: 1 running, 269 pending
+[2026-09-17 22:49:10] [Stage 8 Monitor] Render completati: 40/300 (13.3%) | Queue: 1 running, 259 pending
+[2026-09-17 22:55:10] [Stage 8 Monitor] Render completati: 50/300 (16.7%) | Queue: 1 running, 249 pending
+[2026-09-17 23:01:51] [Stage 8 Monitor] Render completati: 60/300 (20.0%) | Queue: 1 running, 239 pending
+[2026-09-17 23:07:51] [Stage 8 Monitor] Render completati: 70/300 (23.3%) | Queue: 1 running, 229 pending
+[2026-09-17 23:14:12] [Stage 8 Monitor] Render completati: 80/300 (26.7%) | Queue: 1 running, 219 pending
+[2026-09-17 23:20:12] [Stage 8 Monitor] Render completati: 90/300 (30.0%) | Queue: 1 running, 209 pending
+[2026-09-17 23:26:33] [Stage 8 Monitor] Render completati: 100/300 (33.3%) | Queue: 1 running, 199 pending
+[2026-09-17 23:32:33] [Stage 8 Monitor] Render completati: 110/300 (36.7%) | Queue: 1 running, 189 pending
+[2026-09-17 23:39:13] [Stage 8 Monitor] Render completati: 120/300 (40.0%) | Queue: 1 running, 179 pending
+[2026-09-17 23:45:14] [Stage 8 Monitor] Render completati: 130/300 (43.3%) | Queue: 1 running, 169 pending
+[2026-09-17 23:51:34] [Stage 8 Monitor] Render completati: 140/300 (46.7%) | Queue: 1 running, 159 pending
+[2026-09-17 23:57:35] [Stage 8 Monitor] Render completati: 150/300 (50.0%) | Queue: 1 running, 149 pending
+[2026-09-18 00:03:55] [Stage 8 Monitor] Render completati: 160/300 (53.3%) | Queue: 1 running, 139 pending
+[2026-09-18 00:10:15] [Stage 8 Monitor] Render completati: 170/300 (56.7%) | Queue: 1 running, 129 pending
+[2026-09-18 00:16:36] [Stage 8 Monitor] Render completati: 180/300 (60.0%) | Queue: 1 running, 119 pending
+[2026-09-18 00:22:56] [Stage 8 Monitor] Render completati: 190/300 (63.3%) | Queue: 1 running, 109 pending
+[2026-09-18 00:29:16] [Stage 8 Monitor] Render completati: 200/300 (66.7%) | Queue: 1 running, 99 pending
+[2026-09-18 00:35:37] [Stage 8 Monitor] Render completati: 210/300 (70.0%) | Queue: 1 running, 89 pending
+[2026-09-18 00:41:57] [Stage 8 Monitor] Render completati: 220/300 (73.3%) | Queue: 1 running, 79 pending
+[2026-09-18 00:47:57] [Stage 8 Monitor] Render completati: 230/300 (76.7%) | Queue: 1 running, 69 pending
+[2026-09-18 00:54:18] [Stage 8 Monitor] Render completati: 240/300 (80.0%) | Queue: 1 running, 59 pending
+[2026-09-18 01:00:38] [Stage 8 Monitor] Render completati: 250/300 (83.3%) | Queue: 1 running, 49 pending
+[2026-09-18 01:06:58] [Stage 8 Monitor] Render completati: 260/300 (86.7%) | Queue: 1 running, 39 pending
+[2026-09-18 01:13:19] [Stage 8 Monitor] Render completati: 270/300 (90.0%) | Queue: 1 running, 29 pending
+[2026-09-18 01:19:19] [Stage 8 Monitor] Render completati: 280/300 (93.3%) | Queue: 1 running, 19 pending
+[2026-09-18 01:25:40] [Stage 8 Monitor] Render completati: 290/300 (96.7%) | Queue: 1 running, 9 pending
+[2026-09-18 01:32:00] [Stage 8 Monitor] Render completati: 300/300 (100.0%) | Queue: 0 running, 0 pending
+[2026-09-18 01:32:00] ******************************************************************
+[2026-09-18 01:32:00] [LOG FINE CODA REGISTRATO CON SUCCESSO]
+[2026-09-18 01:32:00] Tutti i 300 render di Stage 8 sono completati e la coda ComfyUI e' a zero.
+[2026-09-18 01:32:00] ******************************************************************
+[2026-09-18 01:32:00] >>> Esecuzione palette_from_manifest.py su Stage 8 (300 immagini)...
+[2026-09-18 01:42:48] [Stage 8] Palette estratta in c:\Users\aless\Desktop\comfyui-pilot\palette_features_stage8.csv
+[2026-09-18 01:42:48] >>> Esecuzione style_from_manifest.py su Stage 8 + baseline Stage 7a...
+[2026-09-18 01:53:36] [Stage 8] Style features estratte in c:\Users\aless\Desktop\comfyui-pilot\style_features_stage8.csv
+[2026-09-18 01:53:36] >>> Calcolo metriche Braccio B (fissato vs libero)...
+[2026-09-18 01:53:36] >>> Calcolo cancello di qualita' Braccio C (Chaos Presets)...
+[2026-09-18 01:53:36] [Sync] Copiato in report/data: stage8_images.csv
+[2026-09-18 01:53:36] [Sync] Copiato in report/data: palette_features_stage8.csv
+[2026-09-18 01:53:36] [Sync] Copiato in report/data: style_features_stage8.csv
+[2026-09-18 01:53:36] [Sync] Copiato in report/data: stage8_progress.log
+[2026-09-18 01:53:36] ==================================================================
+[2026-09-18 01:53:36]  STAGE 8 COMPLETATO AL 100%. TUTTI I DATI ESTRATTI E SINCRONIZZATI.
+[2026-09-18 01:53:36]  [SHUTDOWN] Inizio spegnimento forzato del computer entro 60 secondi...
+[2026-09-18 01:53:36] ==================================================================
+[2026-09-18 01:53:36] [SHUTDOWN] Comando shutdown.exe /s /f /t 60 inviato con successo.
