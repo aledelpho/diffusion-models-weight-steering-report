@@ -271,8 +271,10 @@ Every set below uses the same 20 seeds, so the comparisons are **paired**, and e
 | Stock model, second prompt | 7 / 20 | [18%, 57%] | — | — |
 
 <p align="center">
-  <img src="assets/02_attribute_emergence/_figures/effect_A1_vs_A5.webp" alt="Primary Finding: Blockshuffle Permuted Blocks vs Stock Base Model across 20 Seeds" width="100%">
+  <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_A5.webp" alt="Primary Finding: Blockshuffle Permuted Blocks vs Stock Base Model (First 6 Seeds)" width="100%">
 </p>
+
+> *Detail figure: First 6 canonical seeds (1337, 42, 4242145, 777, 9999, 101) cropped tight on the attribute region (all bounding boxes published in [`data/figure_crops.json`](data/figure_crops.json)). For the complete 20-seed contact sheet proving no omission, see the [Full Census Sheet (A1 vs A5)](assets/02_attribute_emergence/_figures/census_A1_vs_A5.webp).*
 
 Not one seed goes the other way in either comparison. Two controls run in the same batch are what make this mean something.
 
@@ -283,8 +285,10 @@ Not one seed goes the other way in either comparison. Two controls run in the sa
 This is the control that decides what the finding is. Without it, the result would be vulnerable to the obvious reading — *any push of that size out of the checkpoint shakes a secondary token loose*. With it, that reading is dead: the effect is a property of **which** permutation, not of **how far** it moves.
 
 <p align="center">
-  <img src="assets/02_attribute_emergence/_figures/matched_control_A1_vs_A7.webp" alt="Frobenius-Matched Control: Blockshuffle vs RANDSIGN at D = 0.0538" width="100%">
+  <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_A7.webp" alt="Frobenius-Matched Control: Blockshuffle vs RANDSIGN at D = 0.0538 (First 6 Seeds)" width="100%">
 </p>
+
+> *Detail figure: First 6 canonical seeds across identical Frobenius displacement $D = 0.0538$ (published boxes in [`data/figure_crops.json`](data/figure_crops.json)). See the [Full Census Sheet (A1 vs A7)](assets/02_attribute_emergence/_figures/census_A1_vs_A7.webp) for all 20 paired seeds.*
 
 ### 5.2 The finding is the conjunction, not the perturbation
 
@@ -304,8 +308,10 @@ The attribute does not appear whenever the weights are perturbed. It appears onl
 The sharpest number in the whole experiment is the one that looks least impressive. With the ridges phrase removed, the perturbed model scores **1 / 20** — and the stock model on the complete prompt also scores **1 / 20**. Paired, they are **1 discordant seed each way, $p = 1.0$**: without the scaffold, the weight perturbation is statistically indistinguishable from not having applied it at all.
 
 <p align="center">
-  <img src="assets/02_attribute_emergence/_figures/conjunction_A1_vs_E3.webp" alt="Conjunctive Gate: Full Prompt with Temple Ridges vs Temple Ridges Phrase Removed" width="100%">
+  <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_E3.webp" alt="Conjunctive Gate: Full Prompt with Temple Ridges vs Temple Ridges Phrase Removed (First 6 Seeds)" width="100%">
 </p>
+
+> *Detail figure: First 6 canonical seeds with vs. without the morphological temple-ridges phrase (published boxes in [`data/figure_crops.json`](data/figure_crops.json)). See the [Full Census Sheet (A1 vs E3)](assets/02_attribute_emergence/_figures/census_A1_vs_E3.webp) for all 20 paired seeds.*
 
 So the 2×2 is:
 
@@ -343,6 +349,8 @@ Applying the same preset at scaled strength (10 seeds per point, complete prompt
   <img src="assets/02_attribute_emergence/_figures/dose_response_strip.webp" alt="Resonance Curve: Strength Titration on Seed 1337 across 8 Strengths" width="100%">
 </p>
 
+> *Resonance curve: Panels show seed 1337 across 8 preset strengths. Scores in parentheses reflect the complete set (10 seeds per point, 20 at 1.00; asterisks denote ambiguous renders).*
+
 There is an optimum around $0.75$–$1.00$ and both ends fail. That argues against "any disturbance of the weights helps" — at $2.00$ the displacement is largest and the attribute is gone. But at $n = 10$ the Wilson interval on $6/10$ is [31%, 83%]: **the extremes are separated, the intermediate points are not ordered by these data.**
 
 ### 5.5 What emerges is not quite what was asked for
@@ -352,6 +360,8 @@ The prompt says `studding one earlobe`. Across every positive render, the cluste
 <p align="center">
   <img src="assets/02_attribute_emergence/_figures/placement_crops.webp" alt="Morphological Landing: Barnacle Clusters Form on Cheekbone and Temple (Not on Earlobe)" width="100%">
 </p>
+
+> *Morphological landing: Individual 240×240 crops across 6 positive renders (published boxes in [`data/figure_crops.json`](data/figure_crops.json)), demonstrating that clusters consistently land on the cheekbone and temple rather than on the prompt-specified earlobe.*
 
 ### 5.6 What this does **not** establish
 
