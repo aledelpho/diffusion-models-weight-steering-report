@@ -28,7 +28,7 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 
 ---
 
-## The 24 Documented Measurement Pitfalls
+## The 29 Documented Measurement Pitfalls
 
 | # | Pitfall Encountered | Failure Mechanism | Silent Consequence | How to Prevent in Replication |
 |---|---|---|---|---|
@@ -60,6 +60,7 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 | **26** | Fisher's exact test on paired binary outcomes | The same seeds appear in every condition, so the two columns are repeated measures on one unit, not two independent samples | Fisher returned $p = 3 \times 10^{-10}$ where the correct paired McNemar test returns $7.6 \times 10^{-6}$ — four orders of magnitude of borrowed confidence, in the direction that flatters the result | With shared seeds, use McNemar on the discordant pairs; the binary twin of pitfall 17 |
 | **27** | Assuming a base checkpoint and a ComfyUI-saved copy of it share tensor names | Anima Base v1.0 prefixes every key with `net.`; the same model saved out of ComfyUI uses `model.diffusion_model.` | The two spellings have **zero keys in common**, so an offline script reading the file directly matches nothing — and reports a clean run unless it was written to assert coverage | Resolve prefixes from the file actually being read, and make an integrity gate fail when a single expected tensor is unaccounted for |
 | **28** | One sub-tensor map for blocks that are not shaped alike | In Anima, `blocks.N` has 20 tensors with `self_attn.output_proj` and `mlp.layer1`/`layer2`; `llm_adapter.blocks.N` has 19, with `self_attn.o_proj`, `mlp.0`/`mlp.2`, three extra norms and biases the main blocks do not have | A surgeon built on the main-block map silently touches nothing in the adapter blocks, while the node still reports the patches it attempted | One map per block family, and count the tensors each map actually matched against the tensors that exist |
+| **29** | Estimating the paper white from a border ring of the frame | The prompts ask for a `white background`, so a ring of pixels at the edge looked like a safe sample of it — but the same prompts also ask for an `extreme close-up on the head only, tight framing`, and the head fills the border | The estimator returned `paper_L` = 65.7 ± 23.5 (bimodal: sometimes paper, sometimes cheek) and a subject fraction of 0.89–0.95, so every paper- and ink-derived feature was measuring skin. Replacing it with extreme-lightness k-means clusters carrying at least 3% of the mass gives `paper_L` = 99.0 ± 0.5 | Read the whole prompt before deciding where a quantity lives in the frame, and treat a bimodal distribution with a σ of 23 units as a failed estimator rather than a noisy one |
 
 ---
 

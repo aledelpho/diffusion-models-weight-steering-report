@@ -552,7 +552,7 @@
 <section id="disegno">
   <h2><span class="n">2</span> Experimental Design &amp; Matched Controls</h2>
 
-  <h3><span class="num">1.1</span> Three conditions, matched in displacement</h3>
+  <h3><span class="num">2.1</span> Three conditions, matched in displacement</h3>
   <p>All three conditions modify the <strong>exact same 1059 tensors</strong> (430 DiT blocks + 629 text encoder layers)
     with the exact same relative Frobenius displacement: <code>D_model = 0.05381584</code>,
     <code>D_CLIP = 0.02165930</code> across 341 language layers.</p>
@@ -573,7 +573,7 @@ A  = (d+ − d−)/2    antisymmetric part, sign-inverting  <span class="c">"dir
   <p>The 4 rotation recipes on Block_3 (±10°, seeds 82/60/59/56) are <strong>identical</strong>
     between preset and BLOCKSHUFFLE: the two differ solely in scalar block assignments.</p>
 
-  <h3><span class="num">1.2</span> Why BLOCKSHUFFLE exists</h3>
+  <h3><span class="num">2.2</span> Why BLOCKSHUFFLE exists</h3>
   <p>RANDSIGN initially appeared to be the ideal control until the internal structure of the preset was audited.
     Across 1059 values, there are only <strong>78 distinct values</strong> at 1e-4 precision:</p>
   <pre>CLIP  31 text layers × 11 tensors, dev 0.000000 within each layer, 6 distinct groups
@@ -588,7 +588,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     B05–B09 is the sole locus of sub-block specialization. BLOCKSHUFFLE preserves both intra-block coherence
     and the multiset of weights, permuting solely <em>which block receives which depth profile</em>.</p>
 
-  <h3><span class="num">1.3</span> The prompt family</h3>
+  <h3><span class="num">2.3</span> The prompt family</h3>
   <p>Ten prompts, structurally identical word-for-word — style, framing, background, and monochromatic tags
     held invariant — varying solely in character subject, color tint, and facial expression. Ten distinct hues,
     ensuring no two prompts share a dominant tone. Five seeds per condition, fifteen baseline samples per prompt,
@@ -618,7 +618,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
   </div>
 
 
-  <h3><span class="num">2.1</span> Four readouts, two instruments, a single image set</h3>
+  <h3><span class="num">3.1</span> Four readouts, two instruments, a single image set</h3>
   <div class="box warn">
     <span class="lbl">Methodological weight and nesting structure</span>
     <p>The four readouts below <strong>do not carry equal weight and are not mutually independent</strong>:</p>
@@ -676,7 +676,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 
   <p><strong>(d) The Symmetric Component.</strong> <code>S_preset</code> is indistinguishable from zero across all metrics except spectral slope (−0.412 [−0.60, −0.22]). The preset's effect is <strong>predominantly antisymmetric (directional)</strong>.</p>
 
-  <h3><span class="num">2.2</span> Principal Axis Structure</h3>
+  <h3><span class="num">3.2</span> Principal Axis Structure</h3>
   <p>PCA computed on <strong>paired differences</strong> from baseline (measuring intervention effect, invariant to prompt subject).
     Three principal components selected by explained variance:</p>
   <div class="tw"><table>
@@ -703,7 +703,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
               <span class="mono">P−R −0.70 dz −1.08 · B−R −1.13 dz −1.67 · Holm &lt;0.0001</span></td></tr>
     </tbody>
   </table></div>
-<h3><span class="num">2.6</span> Generalization to a new aesthetic family <span class="chip pos">pre-registered, met</span></h3>
+<h3><span class="num">3.3</span> Generalization to a new aesthetic family <span class="chip pos">pre-registered, met</span></h3>
   <p>Milestone 1 was declared <strong>in advance</strong> with an explicit falsification criterion:
     <em>if directional coherence does not replicate with a 95% CI excluding zero on the new family,
     the effect is documented as prompt-family specific.</em> The family was then extended from 10 to
@@ -858,7 +858,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       <a href="data/attribute_emergence_recipe.json"><code>data/attribute_emergence_recipe.json</code></a>.</p>
   </div>
 
-  <h3><span class="num">6.1</span> The effect</h3>
+  <h3><span class="num">5.1</span> The effect</h3>
   <div class="tw"><table>
     <thead><tr><th>Condition</th><th class="n">present</th><th class="n">95% CI</th><th>paired comparison</th><th class="n">p</th></tr></thead>
     <tbody>
@@ -887,7 +887,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       permutation, not of <strong>how far</strong> it moves.</p>
   </div>
 
-  <h3><span class="num">6.2</span> The finding is the conjunction, not the perturbation</h3>
+  <h3><span class="num">5.2</span> The finding is the conjunction, not the perturbation</h3>
   <p>The attribute appears only when the prompt supplies a <strong>two-token local scaffold</strong>: the anchor
     <code>sea-touched</code> <em>and</em> the neighbouring phrase <code>thin webbed fin-like ridges tracing along her
     temple</code>. Each single-variable knockout collapses it.</p>
@@ -991,14 +991,14 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 
 <section id="nonstab">
   <h2><span class="n">6</span> What is NOT Established <span class="chip open">open</span></h2>
-  <h3><span class="num">5.1</span> Block coherence is not the causal mechanism</h3>
+  <h3><span class="num">6.1</span> Block coherence is not the causal mechanism</h3>
   <p>The pure test of block coherence in isolation is <code>blockshuffle − randsign</code>, which yields null directional coherence across all spaces. Preserving block coherence without the proper assignment is no more reproducible than random signs.</p>
   <figure>
     <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_A7.webp" alt="Blockshuffle versus randsign at identical Frobenius displacement, first six canonical seeds" style="width:100%;height:auto;border-radius:6px;">
     <figcaption>Blockshuffle (top) against randsign (bottom). The two rows carry the <em>identical</em> Frobenius displacement <code>D = 0.0538</code> and differ only in the structure of the perturbation. <a href="assets/02_attribute_emergence/_figures/census_A1_vs_A7.webp">Complete census sheet</a>.</figcaption>
   </figure>
 
-  <h3><span class="num">5.2</span> Cross-model generalization</h3>
+  <h3><span class="num">6.2</span> Cross-model generalization</h3>
   <p>One model, one prompt family. Replication on a second architecture (circlestone-labs/Anima, fine-tuned from Cosmos-Predict2-2B with Qwen3-0.6B) is the critical cross-family test to demonstrate that this is a general property of diffusion weight spaces.</p>
 </section>
 
@@ -1036,12 +1036,12 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
   stage6_prompts.py               20 validated extension prompts
 
 data/
-  attribute_emergence.csv         Per-seed scoring of every set in §6 (370 rows)
+  attribute_emergence.csv         Per-seed scoring of every set in §5 (370 rows)
   attribute_emergence_recipe.json Exact prompt, sha1, preset, strengths and seeds per set</pre>
 </section>
 
 <footer>
-  Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 renders · 24 prompts · 28 measurement pitfalls documented · Open for replication.
+  Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 renders · 24 prompts · 29 measurement pitfalls documented · Open for replication.
 </footer>
 
 </div>
