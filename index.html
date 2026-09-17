@@ -357,14 +357,15 @@
 <nav aria-label="Table of Contents">
   <ol>
     <li><a href="#start">0 · Read First</a></li>
-    <li><a href="#disegno">1 · Experimental Design</a></li>
-    <li><a href="#ris">2 · Findings</a></li>
-    <li><a href="#metodo">3 · Methodology</a></li>
-    <li><a href="#avv">4 · Metric Warning</a></li>
-    <li><a href="#nonstab">5 · Non-Established</a></li>
-    <li><a href="#emergenza">6 · Attribute Emergence</a></li>
+    <li><a href="#intro">1 · Introduction</a></li>
+    <li><a href="#disegno">2 · Design &amp; Controls</a></li>
+    <li><a href="#ris">3 · Exp 1 · Style Signature</a></li>
+    <li><a href="#avv">4 · Exp 1 · Metric Warning</a></li>
+    <li><a href="#emergenza">5 · Exp 2 · Attribute Emergence</a></li>
+    <li><a href="#nonstab">6 · Non-Established</a></li>
+    <li><a href="#metodo">7 · Methodology</a></li>
     <li><a href="#errori">8 · 26 Pitfalls</a></li>
-    <li><a href="#ripresa">11 · How to Replicate</a></li>
+    <li><a href="#ripresa">9 · How to Replicate</a></li>
     <li style="margin-left:auto;"><a href="viewer/viewer.html" style="color:var(--pos); font-weight:600; border-color:var(--pos);">✦ Interactive A/B Viewer</a></li>
   </ol>
 </nav>
@@ -504,8 +505,52 @@
     All produced plausible values.</p>
 </section>
 
+<section id="intro">
+  <h2><span class="n">1</span> Introduction — how I got here</h2>
+  <p>Two years ago, as Arthemy, my workflow for training models looked like this. Download a model plus a few
+    fine-tunes with aesthetics close to what I wanted, then block-merge them at different strengths per block
+    until I landed near the look I had in mind. Alongside that, train extremely narrow concept LoRAs and distil
+    them hard: activate only specific sections, train five, keep only what they had in common, then inject the
+    result back into the model.</p>
+  <p>At some point I started playing with values that are not supposed to be used. The question was simple:
+    instead of sliding between 0.0 and 1.0, what happens if I force a value below zero, or above one? What came
+    out was an amplification of one model's magnitude — but always <em>relative to a second model</em>, because
+    that is what a merge is.</p>
+  <p>That is when I started wondering whether the same operations could work with <strong>one model alone</strong>:
+    amplify or attenuate some of its own sections mathematically and see how the output changes. My SDXL tool,
+    <a href="https://github.com/aledelpho/Arthemy_Live-Tuner-SDXL-ComfyUI">Arthemy Live-Tuner</a>, is the evidence
+    of that first attempt — a prototype, not much to look at, but the principle was already there. Those
+    experiments convinced me that amplifying or attenuating distinct parts of a model changes its style
+    <em>coherently</em> rather than randomly.</p>
+  <div class="box">
+    <span class="lbl">Why there was no tool to do this</span>
+    <p>Block-weighted merging is well covered —
+      <a href="https://github.com/hako-mikan/sd-webui-supermerger">supermerger</a>, Merge Block Weighted,
+      <a href="https://comfyanonymous.github.io/ComfyUI_examples/model_merging/">ComfyUI's native merge nodes</a> —
+      but every one of them needs at least two checkpoints: the knob mixes model A into model B, block by block.
+      <a href="https://www.runcomfy.com/comfyui-nodes/ComfyUI-LoraBlockWeight">LoRA Block Weight</a> does the same
+      for an adapter's delta, and task arithmetic scales a task vector, which again presupposes a fine-tune to
+      difference against. What none of them does is operate on a <strong>single</strong> checkpoint with nothing
+      to mix it with. The only public tools I could find that do that are ones I wrote myself.</p>
+    <p>The operation is arithmetically trivial — scale a block's weights by α. That is probably <em>why</em> nobody
+      wrote it up. What is not trivial is that the trivial operation produces a coherent stylistic direction
+      instead of degradation.</p>
+  </div>
+  <p>Which is the second thing that sank in: <strong>none of what I was doing had ever been demonstrated
+    properly.</strong> I had observed it on my own screen, repeatedly, and that is not the same as showing it. So I
+    decided to push the intuition until it breaks. At best it becomes a usable way to change a model's style with
+    no fine-tuning and no LoRA, from a configuration file under 100 KB.</p>
+  <div class="box warn">
+    <span class="lbl">Two experiments, thirteen analyses</span>
+    <p>Experiment 1 rests on <strong>1272 renders</strong> across 24 prompts. Every table about stroke morphology,
+      colour, PCA and CLIP is a <em>different measurement of that same corpus</em>, not an independent replication.
+      Experiment 2 rests on a separate corpus of <strong>390 renders</strong>. Anyone counting five experiments from
+      the section headings would be counting measurements.</p>
+  </div>
+</section>
+
 <section id="disegno">
-  <h2><span class="n">1</span> Experimental Design</h2>
+  <h2><span class="n">2</span> Experimental Design &amp; Matched Controls</h2>
 
   <h3><span class="num">1.1</span> Three conditions, matched in displacement</h3>
   <p>All three conditions modify the <strong>exact same 1059 tensors</strong> (430 DiT blocks + 629 text encoder layers)
@@ -551,7 +596,27 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="ris">
-  <h2><span class="n">2</span> Findings <span class="chip pos">established</span></h2>
+  <h2><span class="n">3</span> Experiment 1 · The Style Signature <span class="chip pos">established</span></h2>
+
+  <div class="box">
+    <span class="lbl">The direction I'm chasing · what would kill it · where we are</span>
+    <p><strong>The direction.</strong> That a model's style is not one blob you can only move closer to or further
+      from, but something with <em>directions</em> in it — and that pushing along different ones gives different
+      looks, each consistent across seeds and subjects. If that holds, a preset is a real instrument: calibrate it
+      once and it does the same thing on images it has never seen. That is the premise a tuner needs to make any
+      sense at all.</p>
+    <p><strong>What would kill it.</strong> If a control that moves the weights exactly as far, without the
+      calibrated structure, produced the same signature — same axis, same separation — there would be no direction,
+      only displacement. That test has been run and the controls do not match on mark geometry. The version still
+      open is architectural: if the axis does not rebuild on a different model family, "direction" is a fact about
+      Krea-2 and not about diffusion models.</p>
+    <p><strong>Where we are.</strong> The calibrated preset separates from both matched controls on mark geometry,
+      and the controls are indistinguishable from each other there. The signatures also differ <em>from one
+      another</em> readably — randsign spends its displacement on broad-band grain rather than contours. What has
+      <em>not</em> been shown is that several different hand-calibrated presets share a common coherence: only one
+      has ever been built and tested.</p>
+  </div>
+
 
   <h3><span class="num">2.1</span> Four readouts, two instruments, a single image set</h3>
   <div class="box warn">
@@ -678,19 +743,8 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 
-  <section id="metodo">
-  <h2><span class="n">3</span> Methodology — The Reusable Protocol</h2>
-  <p>In manual tuning and merging, practitioners routinely compare modifications of <strong>differing Frobenius magnitudes</strong>,
-    making it impossible to determine if an edit is genuinely directional. Three controls in order of methodological strength:</p>
-  <ol class="body">
-    <li><strong>Sign Scramble (RANDSIGN)</strong> — <code>D</code> is mathematically invariant to sign flips; pairing is <strong>exact by construction</strong> without empirical recalibration.</li>
-    <li><strong>Block Derangement (BLOCKSHUFFLE)</strong> — Preserves intra-block multi-set structure; permutes layer assignment. Requires rescaling factor α applied <strong>strictly to the permuted subset</strong>.</li>
-    <li><strong>Amplitude Scaling (ε = 0.25 / 0.5 / 1.0)</strong> — Disentangles first-order antisymmetric steering from second-order isotropic curvature: <code>‖A‖ ∼ ε</code>, <code>‖S‖ ∼ ε²</code>.</li>
-  </ol>
-</section>
-
 <section id="avv">
-  <h2><span class="n">4</span> Metric Warning <span class="chip neg">conclusions invert</span></h2>
+  <h2><span class="n">4</span> Experiment 1 · The Ruler That Could Not See <span class="chip neg">conclusions invert</span></h2>
   <figure>
     <div class="figscroll">
       <svg viewBox="0 0 720 258" role="img" aria-label="95% confidence intervals across measurement spaces: in CLIP space only preset minus randsign excludes zero; in stroke space only preset minus blockshuffle excludes zero.">
@@ -766,16 +820,26 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
   <p><strong>Signs do not invert.</strong> What inverts is <em>which hypothesis contrast the instrument can statistically resolve</em>: in CLIP it is <code>preset − randsign</code>, in stroke space it is <code>preset − blockshuffle</code>. CLIP ViT-L-14 downsamples to 224×224; evaluating line art edits with CLIP measures semantic drift while missing inking morphology entirely.</p>
 </section>
 
-<section id="nonstab">
-  <h2><span class="n">5</span> What is NOT Established <span class="chip open">open</span></h2>
-  <h3><span class="num">5.1</span> Block coherence is not the causal mechanism</h3>
-  <p>The pure test of block coherence in isolation is <code>blockshuffle − randsign</code>, which yields null directional coherence across all spaces. Preserving block coherence without the proper assignment is no more reproducible than random signs.</p>
-  <h3><span class="num">5.2</span> Cross-model generalization</h3>
-  <p>One model, one prompt family. Replication on a second architecture (circlestone-labs/Anima, fine-tuned from Cosmos-Predict2-2B with Qwen3-0.6B) is the critical cross-family test to demonstrate that this is a general property of diffusion weight spaces.</p>
-</section>
-
 <section id="emergenza">
-  <h2><span class="n">6</span> Attribute Emergence <span class="chip pos">established</span> <span class="chip pos">norm-matched control passed</span></h2>
+  <h2><span class="n">5</span> Experiment 2 · Attribute Emergence <span class="chip pos">established</span> <span class="chip pos">norm-matched control passed</span></h2>
+
+  <div class="box">
+    <span class="lbl">The direction I'm chasing · what would kill it · where we are</span>
+    <p><strong>The direction.</strong> Everything in Experiment 1 is about <em>how</em> the model draws something it
+      was already going to draw. This asks something else: can a different weight calibration make a detail that is
+      written in the prompt but normally ignored actually show up, consistently, at the same prompt structure? If it
+      can, weight-space tuning is not only a style knob — it touches what the model decides to put in the picture.</p>
+    <p><strong>What would kill it.</strong> If a sign-scrambled control carrying the identical displacement made the
+      detail appear just as often, the effect would be about how hard you push, not how you push. That test has been
+      run: randsign scores 1/20, the stock model's exact rate. The version still open is generality — if a prompt with
+      a completely different structure, carrying the same two anchor phrases, fails to reproduce it, this is a fact
+      about one template and the section gets rewritten to say so.</p>
+    <p><strong>Where we are.</strong> 1/20 to 19/20 on the original prompt, 7/20 to 20/20 on a second one, no seed
+      going the other way in either. But it is a gain on a binding the prompt must establish first, not a repair:
+      remove either of two specific phrases and the effect falls back to the stock model's rate. One attribute, one
+      prompt family, and the perturbation tested is a control rather than the author's own preset.</p>
+  </div>
+
 
   <p>Everything above measures <strong>how</strong> the model draws. This section measures <strong>what it draws at all</strong>.
     It began as an observation, not a hypothesis: a detail written in the prompt — <code>small barnacle-like clusters
@@ -805,6 +869,11 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       <tr class="lo"><td class="mono">randsign · full prompt · identical D</td><td class="n">1 / 20</td><td class="n">[1%, 24%]</td><td>vs blockshuffle, 18 to 0</td><td class="n">7.6e−06</td></tr>
     </tbody>
   </table></div>
+  <figure>
+    <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_A5.webp" alt="Blockshuffle versus the stock base model on the first six canonical seeds, close-up on the attribute-bearing facial region" style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Blockshuffle (top) against the stock checkpoint (bottom), same prompt, same seeds. The six seeds are the <strong>first six of the canonical ordering</strong>, fixed before the figure was built rather than chosen for clarity. Per-image crop boxes are published in <a href="data/figure_crops.json"><code>data/figure_crops.json</code></a>, so anyone can re-cut them or check that the lower row was not framed to hide something. Every seed, uncropped and in order: <a href="assets/02_attribute_emergence/_figures/census_A1_vs_A5.webp">complete census sheet</a>.</figcaption>
+  </figure>
+
   <p>No seed goes the other way in either comparison. With the barnacle phrase deleted from the prompt, the same weight
     configuration yields <strong>2 / 20</strong> — the perturbation is not decorating earlobes on its own.</p>
   <div class="box warn">
@@ -845,7 +914,12 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       binding the prompt must already have established</strong> — a binding fragile enough that one phrase carries it.</p>
   </div>
 
-  <h3><span class="num">6.3</span> Which half of the model carries it</h3>
+  <figure>
+    <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_E3.webp" alt="Full prompt versus the same prompt with only the temple-ridges phrase removed, first six canonical seeds" style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>One phrase of difference between the two rows: <code>thin webbed fin-like ridges tracing along her temple</code> is present above and absent below. Everything else is byte-identical. <a href="assets/02_attribute_emergence/_figures/census_A1_vs_E3.webp">Complete census sheet</a>.</figcaption>
+  </figure>
+
+  <h3><span class="num">5.3</span> Which half of the model carries it</h3>
   <div class="tw"><table>
     <thead><tr><th>Perturbation applied to</th><th class="n">present</th><th class="n">95% CI</th><th>vs. stock</th><th class="n">p</th></tr></thead>
     <tbody>
@@ -859,7 +933,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     DiT still gains 6 discordant seeds to 0 (<code>p = 0.031</code>), so the two are not redundant — but at 19/20 the
     combination is against the ceiling and <strong>the size of any synergy cannot be estimated from these data</strong>.</p>
 
-  <h3><span class="num">6.4</span> Dose–response</h3>
+  <h3><span class="num">5.4</span> Dose–response</h3>
   <div class="tw"><table>
     <thead><tr><th>strength</th><th class="n">0.25</th><th class="n">0.50</th><th class="n">0.75</th><th class="n">1.00</th><th class="n">1.25</th><th class="n">1.50</th><th class="n">1.75</th><th class="n">2.00</th></tr></thead>
     <tbody><tr><td>present</td><td class="n">1/10</td><td class="n">5/10*</td><td class="n">10/10</td><td class="n">19/20</td><td class="n">8/10</td><td class="n">6/10</td><td class="n">5/10</td><td class="n">1/10</td></tr></tbody>
@@ -870,12 +944,22 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     which argues against "any disturbance helps". But at <code>n = 10</code> the Wilson interval on 6/10 is [31%, 83%]:
     <strong>the extremes are separated, the intermediate points are not ordered by these data.</strong></p>
 
-  <h3><span class="num">6.5</span> What emerges is not what was asked for</h3>
+  <figure>
+    <img src="assets/02_attribute_emergence/_figures/dose_response_strip.webp" alt="The same seed rendered at eight preset strengths from 0.25 to 2.00" style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Seed 1337 at each strength. The count under each panel is the <em>set's</em> score at that strength, not this single render's. The attribute peaks between 0.75 and 1.00 and is gone at 2.00, where the displacement is largest.</figcaption>
+  </figure>
+
+  <h3><span class="num">5.5</span> What emerges is not what was asked for</h3>
   <p>The prompt says <code>studding one earlobe</code>. Across every positive render the clusters sit on the
     <strong>cheekbone and temple region</strong>, not on or in the ear. The attribute emerges; its spatial binding does
     not. The perturbation recovers the <em>presence</em> of a neglected concept and leaves its <em>placement</em> wrong.</p>
 
-  <h3><span class="num">6.6</span> What this does not establish</h3>
+  <figure>
+    <img src="assets/02_attribute_emergence/_figures/placement_crops.webp" alt="Close crops showing barnacle clusters on the cheekbone and temple rather than on the earlobe" style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>The prompt says <code>studding one earlobe</code>. The clusters land on the cheekbone and temple instead: the attribute emerges, its spatial binding does not.</figcaption>
+  </figure>
+
+  <h3><span class="num">5.6</span> What this does not establish</h3>
   <div class="box dead">
     <span class="lbl">Five limits, stated before anyone else states them</span>
     <ul>
@@ -894,7 +978,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     </ul>
   </div>
 
-  <h3><span class="num">6.7</span> Where this sits</h3>
+  <h3><span class="num">5.7</span> Where this sits</h3>
   <p>The phenomenon has a name: <strong>catastrophic neglect</strong>, a model failing to render a concept its prompt
     explicitly contains. The published remedies act at inference time on cross-attention —
     <a href="https://arxiv.org/abs/2301.13826">Attend-and-Excite</a> and
@@ -902,7 +986,31 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     during sampling. What is reported here is different in kind: a <strong>static, prompt-preserving change in weight
     space</strong>, found incidentally while running a matched control, moving one neglected attribute from 5% to 95%
     presence without touching the prompt or the sampler. Whether it generalises beyond this attribute is exactly what
-    6.6 says is untested.</p>
+    5.6 says is untested.</p>
+</section>
+
+<section id="nonstab">
+  <h2><span class="n">6</span> What is NOT Established <span class="chip open">open</span></h2>
+  <h3><span class="num">5.1</span> Block coherence is not the causal mechanism</h3>
+  <p>The pure test of block coherence in isolation is <code>blockshuffle − randsign</code>, which yields null directional coherence across all spaces. Preserving block coherence without the proper assignment is no more reproducible than random signs.</p>
+  <figure>
+    <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_A7.webp" alt="Blockshuffle versus randsign at identical Frobenius displacement, first six canonical seeds" style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Blockshuffle (top) against randsign (bottom). The two rows carry the <em>identical</em> Frobenius displacement <code>D = 0.0538</code> and differ only in the structure of the perturbation. <a href="assets/02_attribute_emergence/_figures/census_A1_vs_A7.webp">Complete census sheet</a>.</figcaption>
+  </figure>
+
+  <h3><span class="num">5.2</span> Cross-model generalization</h3>
+  <p>One model, one prompt family. Replication on a second architecture (circlestone-labs/Anima, fine-tuned from Cosmos-Predict2-2B with Qwen3-0.6B) is the critical cross-family test to demonstrate that this is a general property of diffusion weight spaces.</p>
+</section>
+
+<section id="metodo">
+  <h2><span class="n">7</span> Methodology — The Reusable Protocol</h2>
+  <p>In manual tuning and merging, practitioners routinely compare modifications of <strong>differing Frobenius magnitudes</strong>,
+    making it impossible to determine if an edit is genuinely directional. Three controls in order of methodological strength:</p>
+  <ol class="body">
+    <li><strong>Sign Scramble (RANDSIGN)</strong> — <code>D</code> is mathematically invariant to sign flips; pairing is <strong>exact by construction</strong> without empirical recalibration.</li>
+    <li><strong>Block Derangement (BLOCKSHUFFLE)</strong> — Preserves intra-block multi-set structure; permutes layer assignment. Requires rescaling factor α applied <strong>strictly to the permuted subset</strong>.</li>
+    <li><strong>Amplitude Scaling (ε = 0.25 / 0.5 / 1.0)</strong> — Disentangles first-order antisymmetric steering from second-order isotropic curvature: <code>‖A‖ ∼ ε</code>, <code>‖S‖ ∼ ε²</code>.</li>
+  </ol>
 </section>
 
 <section id="errori">
@@ -914,7 +1022,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="ripresa">
-  <h2><span class="n">11</span> Reproduction & Experiment Scripts</h2>
+  <h2><span class="n">9</span> Reproduction &amp; Experiment Scripts</h2>
   <pre>experiments/
   derive_blockshuffle.py          BLOCKSHUFFLE generation with alpha restricted to permuted subset
   derive_epsilon.py / run_epsilon.py   Amplitude scaling sweep (eps = 0.25 / 0.5 / 1.0)

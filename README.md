@@ -92,7 +92,123 @@ Western comics style, bold ink outlines, hatched shadows, hard chartreuse-tinted
 
 ---
 
-## 1. What We Are Testing Here (And What the Images Show)
+## Introduction — how I got here
+
+Two years ago, as Arthemy, my workflow for training models looked like this. Download a model plus
+a few fine-tunes with aesthetics close to what I wanted, then block-merge them at different
+strengths per block until I landed on something near the look I had in mind. Alongside that, train
+extremely narrow concept LoRAs and distil them as hard as I could: activate only specific sections,
+train five of them, keep only what they had in common to squeeze the scope down further, then inject
+the result back into the model.
+
+At some point I started playing with values that are not supposed to be used. The question was
+simple: instead of sliding between 0.0 and 1.0, what happens if I force a value below zero, or above
+one? What came out was an amplification of one model's magnitude — but always *relative to a second
+model*, because that is what a merge is.
+
+That is when I started wondering whether the same block-merge operations could work with **one model
+alone**. Amplify or attenuate some of its own sections mathematically, and see how the output
+changes. My SDXL tool, [Arthemy Live-Tuner](https://github.com/aledelpho/Arthemy_Live-Tuner-SDXL-ComfyUI),
+is the evidence of that first attempt — a prototype, and not much to look at, but the principle was
+already there.
+
+Those experiments convinced me that amplifying or attenuating distinct parts of a model changes its
+style *coherently* rather than randomly: a direct, predictable manipulation of a probabilistic
+system.
+
+Only recently did two things sink in. The first is that the tooling for this does not exist.
+Block-weighted merging is well covered — [supermerger](https://github.com/hako-mikan/sd-webui-supermerger),
+Merge Block Weighted, [ComfyUI's native merge nodes](https://comfyanonymous.github.io/ComfyUI_examples/model_merging/)
+— but every one of them needs at least two checkpoints: the knob mixes model A into model B, block
+by block. [LoRA Block Weight](https://www.runcomfy.com/comfyui-nodes/ComfyUI-LoraBlockWeight) does the
+same for an adapter's delta, and task arithmetic scales a task vector, which again presupposes a
+fine-tune to difference against. What none of them does is operate on a **single** checkpoint with
+nothing to mix it with, amplifying or attenuating a model's own sections against themselves. The
+only public tools I could find that do that are ones I wrote myself.
+
+The operation is arithmetically trivial — scale a block's weights by α. That is probably *why*
+nobody wrote it up. What is not trivial, and what this notebook is about, is that the trivial
+operation produces a coherent stylistic direction instead of degradation.
+
+Which is the second thing that sank in: **none of what I was doing had ever been demonstrated
+properly.** I had observed it on my own screen, repeatedly, and that is not the same as showing it.
+So I decided to push the intuition until it breaks. At best it becomes a usable way to change a
+model's style with no fine-tuning and no LoRA, from a configuration file under 100 KB.
+
+This repository is the diary of that work, kept in the open: real experiments, working hypotheses,
+and the raw data collected so far — including the failed attempts and the predictions that turned
+out wrong, because those are as much a part of the story as the results that held.
+
+---
+
+## What is established, and what is not
+
+**Two experiments, thirteen analyses.** That distinction matters more than it sounds, so it is stated
+here rather than buried. Experiment 1 rests on **1272 renders** across 24 prompts; every table about
+stroke morphology, colour, PCA and CLIP is a *different measurement of that same corpus*, not an
+independent replication. Experiment 2 rests on a separate corpus of **390 renders**. Anyone counting
+"five experiments" from the section headings would be counting measurements.
+
+**Established with reasonable confidence:**
+
+* A tiny weight perturbation — 53 KB, calibrated by hand — shifts the mark style of a 12.8-billion-parameter
+  diffusion model (Krea-2 DiT) coherently and repeatably across different seeds.
+* This is **not** "the further you move from the checkpoint, the more the style changes". Controls at
+  exactly the same Frobenius displacement but without the calibrated structure — block derangement,
+  random sign flips — do not produce the same result. The direction matters, not just the distance.
+* The standard instrument in this field (CLIP at 224×224) is blind to this kind of change, because it
+  downsamples the image before looking at it and the stroke detail does not survive. Measured directly
+  on mark morphology instead, the effect is statistically solid and replicates over 24 prompts.
+* The mark-style effect generalises beyond the prompt it was found on (24 prompts tested, with a
+  generalisation criterion declared in advance and met).
+* The colour effect does **not** generalise: it is present only where the prompt pins the palette in
+  detail, and vanishes when the model is free to choose the palette itself.
+* A norm-matched block permutation moves a neglected prompt attribute from 1/20 to 19/20 — but only
+  where the prompt already binds it, and randsign at the identical displacement does nothing at all.
+
+**Not established, and it is honest to say so here:**
+
+* Whether any of this holds on an architecture family other than Krea-2. The cross-architecture test
+  on Anima / Cosmos-Predict2 is planned, not run.
+* Whether the attribute-emergence effect is a general property or something specific to the prompt
+  template it was found on. The one positive case on a different subject uses an almost identical
+  sentence structure, and the test that would settle it has not been run.
+* Which *structural* property of the perturbation is the operative one. Two points — block derangement
+  works, sign scramble does not — separate structure from magnitude, but they do not identify what
+  about the structure does the work.
+
+---
+<p align="center">
+  <a href="#introduction--how-i-got-here"><strong>Introduction</strong></a> •
+  <a href="#what-is-established-and-what-is-not"><strong>What is established</strong></a> •
+  <a href="#experiment-1--the-style-signature"><strong>Experiment 1 · Style signature</strong></a> •
+  <a href="#experiment-2--attribute-emergence"><strong>Experiment 2 · Attribute emergence</strong></a> •
+  <a href="#roadmap"><strong>Roadmap</strong></a>
+</p>
+
+## Experiment 1 — The style signature
+
+<sub>**1272 renders · 24 prompts · stages 2, 4, 5, 6, 7**</sub>
+
+> **The direction I'm chasing.** That a model's style is not one blob you can only move closer to or
+> further from, but something with *directions* in it — and that if you push along different ones you
+> get different looks, each consistent across seeds and subjects. If that is true, then a preset is a
+> real instrument: you calibrate it once and it does the same thing on images it has never seen. That
+> is the premise a tuner needs to make any sense at all.
+>
+> **What would kill it.** If a control that moves the weights exactly as far as my preset, but without
+> the calibrated structure, produced the same signature — same axis, same separation — then there is no
+> direction, only displacement, and the whole idea collapses. That test has been run and the controls
+> do not match on mark geometry. The version still standing open is architectural: if the axis does not
+> rebuild on a different model family, "direction" is a fact about Krea-2 and not about diffusion models.
+>
+> **Where we are.** The calibrated preset separates from both matched controls on mark geometry, and the
+> two controls are indistinguishable from each other there. The signatures also differ *from one
+> another* in a readable way — randsign spends its displacement on broad-band grain rather than on
+> contours. What has not been shown is that several *different hand-calibrated presets* share a common
+> coherence, for the simple reason that only one has ever been built and tested.
+
+### 1.1 Same displacement, different directions
 
 In traditional model merging and manual tuning, it is very easy to fool yourself: you tweak a few sliders, see a dramatic change, and assume you discovered a "style direction". But if your edit simply pushed the weights twice as far away from the baseline, you didn't discover a direction — you just added more displacement.
 
@@ -116,11 +232,9 @@ That is an aesthetic statement, and it is separate from the measurement. What th
 * On **mark geometry** — stroke width, contour length, contour fragmentation — the hand-calibrated preset separates from *both* matched controls, and the two controls are indistinguishable from each other.
 * On **texture frequency** — cross-hatch entropy, FFT radial slope — it is **Randsign** that stands apart, spending its displacement on broad-band grain rather than on contour geometry.
 
-So the preset is not simply "further away" than the controls: it moves the drawing along a different kind of axis than they do, at identical displacement. Section 4.3 quantifies that separation, and Section 5 shows the same controls doing something none of these metrics would have caught. **"Statistically distinct" is not "artistically superior"** — the measurement says the hand-calibrated edit lands somewhere the controls do not; it says nothing about whether you should want to go there.
+So the preset is not simply "further away" than the controls: it moves the drawing along a different kind of axis than they do, at identical displacement. Section 1.3 quantifies that separation, and Experiment 2 shows the same controls doing something none of these metrics would have caught. **"Statistically distinct" is not "artistically superior"** — the measurement says the hand-calibrated edit lands somewhere the controls do not; it says nothing about whether you should want to go there.
 
 ---
-
-## 2. Linework & Wrinkles in Detail: The Ancient Hag
 
 To see how these weight changes physically alter the drawing style without getting lost in mathematical formulas, look at the facial linework and wrinkles of the **Ancient Hag** (`seed 4242145`). Her wrinkled skin acts as a natural canvas for line morphology:
 
@@ -137,7 +251,7 @@ Western comics style, bold ink outlines, hatched shadows, hard chartreuse-tinted
 
 </details>
 
-### Side-by-Side Detail Comparison
+#### Side-by-Side Detail Comparison
 Look closely at the nose bridge, cheek folds, and brow hatching across the exact same seed:
 
 ![Detail Crop Comparison Across All 5 Conditions](assets/hero/detail_crop_strip.png)
@@ -161,7 +275,7 @@ Look closely at the nose bridge, cheek folds, and brow hatching across the exact
 
 ---
 
-## 3. The Big Surprise: The Metric Inversion
+### 1.2 The ruler that couldn't see
 
 When I first ran standard automated benchmarks on these images using standard **CLIP ViT-L-14 (224×224)** embeddings, the data seemed to show that "nothing was happening". 
 
@@ -177,7 +291,7 @@ Evaluate line art with a 224px semantic model and you will resolve the wrong com
 
 ---
 
-## 4. Milestone 1 — Resolved: The Axis Transfers to a New Aesthetic Family
+### 1.3 Does it hold on other subjects?
 
 Milestone 1 was declared **in advance**, with an explicit falsification criterion:
 
@@ -190,7 +304,7 @@ The family has since been extended from 10 to **24 prompts**, split by **how muc
 
 The two sub-families were analysed separately and then pooled, with the PCA recomputed independently inside each pool.
 
-### 4.1 The criterion is met — on the axis it named
+#### The criterion is met — on the axis it named
 
 On the 6 new full-colour prompts, both preset contrasts on the stroke-continuity axis exclude zero:
 
@@ -214,7 +328,20 @@ PC1 is substantially the same direction in all three pools. **PC3 is not** ($|\c
 
 > **Honest caveat on power.** With $n = 6$ prompts, an exact sign-flip permutation test enumerates $2^6 = 64$ assignments, so its smallest possible two-sided $p$ is $2/64 = 0.031$ — and after Holm correction across three contrasts, **no effect of any size can reach $p < 0.05$ on this sub-family**. That structural ceiling is exactly why the criterion was pre-declared in terms of the confidence interval rather than a $p$-value. The CI is parametric and is doing the work here; the replication rests on interval estimation, not on significance.
 
-### 4.2 What does *not* transfer — and the colour-freedom test
+#### What the pooled 24 prompts add
+
+Stroke width now separates the preset from **both** controls for the first time ($+0.238$, $p_{\text{Holm}} = 0.016$ vs Blockshuffle; $+0.394$, $p_{\text{Holm}} = 0.020$ vs Randsign) — at 10 prompts this comparison was underpowered.
+
+And a clean two-group structure emerges across the ten metrics:
+
+* **Mark geometry and palette** — PC1, stroke width, contour length, effective colour count, top-4 palette share: the preset separates from **both** controls, and the two controls do **not** separate from each other.
+* **Texture frequency** — crosshatch entropy, FFT radial slope, PC2: **Randsign** is the outlier, channelling its displacement into broad-band grain while preset and blockshuffle stay together.
+
+In other words: *on every axis where the preset is distinguishable, the two matched controls are indistinguishable from each other* — and where the controls do differ, it is because one of them is adding noise rather than steering geometry.
+
+---
+
+### 1.4 Does colour follow the same pattern?
 
 The palette effects are **specific to colour-pinned prompts**. Pooled over 24 prompts the preset reduces the effective colour count against both controls ($-0.376$ and $-0.237$, both $p_{\text{Holm}} \approx 0.001$) and concentrates the palette into its top four clusters ($+0.384$, $+0.234$). On the 6 colour-free prompts, none of that survives: every palette contrast contains zero.
 
@@ -236,31 +363,38 @@ The exception is instructive: **Blockshuffle $-$ does impose a coherent cast** (
 
 One systematic asymmetry worth recording: on both sub-families the **negative** direction of every condition moves the palette roughly $1.7\times$ more than its positive counterpart.
 
-### 4.3 What the pooled 24 prompts add
-
-Stroke width now separates the preset from **both** controls for the first time ($+0.238$, $p_{\text{Holm}} = 0.016$ vs Blockshuffle; $+0.394$, $p_{\text{Holm}} = 0.020$ vs Randsign) — at 10 prompts this comparison was underpowered.
-
-And a clean two-group structure emerges across the ten metrics:
-
-* **Mark geometry and palette** — PC1, stroke width, contour length, effective colour count, top-4 palette share: the preset separates from **both** controls, and the two controls do **not** separate from each other.
-* **Texture frequency** — crosshatch entropy, FFT radial slope, PC2: **Randsign** is the outlier, channelling its displacement into broad-band grain while preset and blockshuffle stay together.
-
-In other words: *on every axis where the preset is distinguishable, the two matched controls are indistinguishable from each other* — and where the controls do differ, it is because one of them is adding noise rather than steering geometry.
+> **A note on how to count these.** Sections 1.1 to 1.4 are **four measurements of one corpus**, not
+> four replications. The same 1272 renders are behind all of them, so agreement between them is a
+> consistency check, not independent confirmation. None of the four was pre-registered — they emerged
+> in sequence, in response to challenges. Where a result deserves the weight of a replication, it is
+> because the *renders* are new, and that is said explicitly.
 
 ---
 
-## 5. Attribute Emergence: The Perturbation Is a Gain, Not a Repair
+## Experiment 2 — Attribute emergence
 
-Everything above measures **how** the model draws — stroke width, contour continuity, radial spectrum. This section measures something categorically different: **what the model draws at all**. It started from an observation, not a hypothesis: on one prompt, a small detail written in the text was visible in every image produced under one weight configuration and in almost none produced by the stock checkpoint.
+<sub>**390 renders · 24 sets · a separate corpus from Experiment 1**</sub>
 
-The detail is `small barnacle-like clusters studding one earlobe`, one of the five declared attributes of prompt **G1** (`prompt_sha1 30de058455`). The scoring rule was fixed before counting:
+> **The direction I'm chasing.** Everything in Experiment 1 is about *how* the model draws something it
+> was already going to draw. This one asks something else: can a different weight calibration make a
+> detail that is written in the prompt but normally ignored actually show up — consistently, at the
+> same prompt structure? If it can, then weight-space tuning is not only a style knob, it touches what
+> the model decides to put in the picture.
+>
+> **What would kill it.** If a sign-scrambled control carrying the identical displacement made the
+> detail appear just as often, the effect would be about how hard you push, not about how you push.
+> That test has been run: randsign scores 1/20, which is the stock model's exact rate. The version
+> still open is generality — if a prompt with a completely different structure, but carrying the same
+> two anchor phrases, fails to reproduce it, then this is a fact about one template and the section
+> gets rewritten to say so.
+>
+> **Where we are.** The jump is 1/20 to 19/20 on the original prompt and 7/20 to 20/20 on a second one,
+> with no seed going the other way in either. But it is a gain on a binding the prompt has to establish
+> first, not a repair: remove either of two specific phrases and the effect falls back to the stock
+> model's rate. One attribute, one prompt family, and the perturbation tested is a control rather than
+> my own preset.
 
-> **Counts**: any growth on the face at least partially circumscribed by a black contour line.
-> **Does not count**: lighter circles without thickness (confusable with specular highlights), and isolated single circles (confusable with a mole or a water droplet).
-
-Every set below uses the same 20 seeds, so the comparisons are **paired**, and every $p$ is an exact McNemar test on the discordant seeds only. Treating 20 seeds as 20 independent samples would inflate every statistic here — the same unit-of-analysis error as pitfall 17. All per-seed scores are in [`data/attribute_emergence.csv`](data/attribute_emergence.csv); the exact prompt, preset, strengths and seed list of each set are in [`data/attribute_emergence_recipe.json`](data/attribute_emergence_recipe.json).
-
-### 5.1 The effect
+### 2.1 The effect
 
 | Condition | Attribute present | 95% CI | vs. paired control | $p$ |
 | --- | --- | --- | --- | --- |
@@ -290,7 +424,7 @@ This is the control that decides what the finding is. Without it, the result wou
 
 > *Detail figure: First 6 canonical seeds across identical Frobenius displacement $D = 0.0538$ (published boxes in [`data/figure_crops.json`](data/figure_crops.json)). See the [Full Census Sheet (A1 vs A7)](assets/02_attribute_emergence/_figures/census_A1_vs_A7.webp) for all 20 paired seeds.*
 
-### 5.2 The finding is the conjunction, not the perturbation
+### 2.2 The finding is the conjunction, not the perturbation
 
 The attribute does not appear whenever the weights are perturbed. It appears only when the prompt also supplies a **two-token local scaffold**: the ontological anchor `sea-touched` *and* the neighbouring morphological phrase `thin webbed fin-like ridges tracing along her temple`. Removing either one — a single-variable knockout, everything else byte-identical — collapses the effect:
 
@@ -322,7 +456,7 @@ So the 2×2 is:
 
 The effect lives in exactly one cell. **The perturbation does not add the attribute and does not repair the neglect — it acts as a gain on a binding the prompt must already have established, and that binding is fragile enough that one phrase carries it.**
 
-### 5.3 Which half of the model carries it
+### 2.3 Which half of the model carries it
 
 The preset moves the DiT and the text encoder together. Run separately, on the same 20 seeds and the complete prompt:
 
@@ -335,7 +469,7 @@ The preset moves the DiT and the text encoder together. Run separately, on the s
 
 The text encoder on its own does nothing measurable. The DiT carries most of the effect. Adding the encoder on top of the DiT still gains 6 discordant seeds to 0 ($p = 0.031$), so the two are not redundant — but at 19/20 the combination is against the ceiling and **the size of any synergy cannot be estimated from these data**. Measuring it would require repeating the 2×2 at a strength where nothing saturates.
 
-### 5.4 Dose–response
+### 2.4 Dose–response
 
 Applying the same preset at scaled strength (10 seeds per point, complete prompt):
 
@@ -353,7 +487,7 @@ Applying the same preset at scaled strength (10 seeds per point, complete prompt
 
 There is an optimum around $0.75$–$1.00$ and both ends fail. That argues against "any disturbance of the weights helps" — at $2.00$ the displacement is largest and the attribute is gone. But at $n = 10$ the Wilson interval on $6/10$ is [31%, 83%]: **the extremes are separated, the intermediate points are not ordered by these data.**
 
-### 5.5 What emerges is not quite what was asked for
+### 2.5 What emerges is not quite what was asked for
 
 The prompt says `studding one earlobe`. Across every positive render, the clusters sit on the **cheekbone and temple region**, not on or in the ear. The attribute emerges; its spatial binding does not. This is worth stating plainly because it changes what the result is evidence *for*: the perturbation recovers the *presence* of a neglected concept, and leaves its *placement* wrong in the same way the stock model would have.
 
@@ -363,7 +497,7 @@ The prompt says `studding one earlobe`. Across every positive render, the cluste
 
 > *Morphological landing: Individual 240×240 crops across 6 positive renders (published boxes in [`data/figure_crops.json`](data/figure_crops.json)), demonstrating that clusters consistently land on the cheekbone and temple rather than on the prompt-specified earlobe.*
 
-### 5.6 What this does **not** establish
+### 2.6 What this does **not** establish
 
 * **Two perturbations were tested, not the whole space.** Blockshuffle does it; randsign at the identical $D$ does not. That separates *structure* from *magnitude*, which is the distinction that mattered. It does not tell us which structural property is the operative one — block coherence is the obvious candidate, but "permutation rather than sign flip" and "preserves each block's internal correlations" are not distinguished by two points.
 * **The hand-calibrated preset was not tested either.** The claim here is about a matched control from the main experiment, not about the author's preset.
@@ -371,25 +505,30 @@ The prompt says `studding one earlobe`. Across every positive render, the cluste
 * **The scoring is unblinded**, by the author, with the condition visible. With 18 discordant seeds to 0 the headline will not flip, but the intermediate cells (the DiT-only 12/20, the 0.50 strength point) are exactly where a borderline call moves the number.
 * **The ridges knockout deletes rather than substitutes.** The matched-neutral design used elsewhere in this experiment was not applied to it, so a residual prompt-length or token-position explanation is not formally excluded — though note that removing the phrase *shortens* the distance between `sea-touched` and the barnacle keyword, which cuts against a positional account rather than for it.
 
-### 5.7 Where this sits
+### 2.7 Where this sits
 
-The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-image model to render a concept its prompt explicitly contains. The published remedies operate at inference time on cross-attention — [Attend-and-Excite](https://arxiv.org/abs/2301.13826) and [attention-guided feature enhancement](https://arxiv.org/html/2406.16272v2) both re-weight attention maps during sampling. What is reported here is different in kind: a **static, prompt-preserving change in weight space**, found incidentally while running a matched control, that moves a specific neglected attribute from 5% to 95% presence without touching the prompt or the sampler. Whether it generalises beyond this attribute is exactly what 5.6 says is untested.
+The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-image model to render a concept its prompt explicitly contains. The published remedies operate at inference time on cross-attention — [Attend-and-Excite](https://arxiv.org/abs/2301.13826) and [attention-guided feature enhancement](https://arxiv.org/html/2406.16272v2) both re-weight attention maps during sampling. What is reported here is different in kind: a **static, prompt-preserving change in weight space**, found incidentally while running a matched control, that moves a specific neglected attribute from 5% to 95% presence without touching the prompt or the sampler. Whether it generalises beyond this attribute is exactly what 2.6 says is untested.
 
 ---
 
-## 6. The Roadmap (Where We Go From Here)
+## Roadmap
 
-### Milestone 1c · Resolved — attribute emergence is about structure, not magnitude
+### Experiment 2 · Resolved — emergence is about structure, not magnitude
 * **The question was**: §5 shows a norm-matched block derangement moving a neglected attribute from 1/20 to 19/20. Would randsign, the sign scramble at the identical $D = 0.0538$, do the same?
 * **Answer**: no. Randsign scores **1 / 20** — the stock model's exact rate. The pre-declared criterion said that above 15/20 the word "coherent" would come out of the claim; at or below 2/20 the structure of the perturbation becomes the operative variable. It landed at 1/20.
 * **What is still open on the same axis**: two points do not identify *which* structural property matters, and the hand-calibrated preset has still never been run on this attribute.
 
-### Milestone 1b · Is the palette effect bound to colour-pinned prompts?
+### Experiment 2 · Open — a general mechanism, or a fact about one template?
+* **Goal**: The only positive case on a different subject (the siren/hag hybrid, 20/20) shares almost every token with the original prompt, and every negative case carrying both anchors is structurally close too. So "it generalises" has not been tested — only "it survives a small edit" has.
+* **Pre-declared Criterion**: A prompt with a different camera, a different register and a non-marine character, carrying an analogous pair of anchors — one ontological, one an adjacent local morphology — for a **different** neglected attribute. If the attribute emerges there, the conjunctive gate is a general mechanism. If it does not, Experiment 2 is rewritten as a finding about this prompt family and the word "mechanism" comes out of it.
+* **Second question on the same run**: the hand-calibrated preset on the same 20 seeds, which has never been tested on this attribute at all.
+
+### Experiment 1 · Open — is the palette effect bound to colour-pinned prompts?
 * **Goal**: The colour-count separation holds on the 18 colour-pinned prompts and vanishes on the 6 colour-free ones — but $n = 6$ cannot distinguish "absent" from "underpowered", and the direct chroma measurement above shows the preset shifting palettes only $1.3\times$ a seed change, incoherently.
 * **Pre-declared Criterion**: Extend the colour-free family to at least 16 prompts. If the effective-colour contrast against both controls still contains zero **and** the cross-prompt chroma direction stays below its permutation null, the palette claim is documented as specific to colour-pinned prompts and dropped from the general statement.
 * **Second question on the same run**: whether Blockshuffle $-$ keeps producing a coherent global cast ($+0.944$ here). If it does, "a matched control can win a universality score by tinting" becomes a reportable finding in its own right, not a footnote.
 
-### Milestone 2 · Cross-Architecture Replication on `circlestone-labs/Anima`
+### Experiment 1 · Open — cross-architecture replication on `circlestone-labs/Anima`
 * **Goal**: Apply the exact same $D$-matched protocol (sign scramble + block derangement) to [`circlestone-labs/Anima`](https://huggingface.co/circlestone-labs/Anima).
 * **The True Cross-Family Test**: Anima is not just another DiT checkpoint — it is fine-tuned from `nvidia/Cosmos-Predict2-2B-Text2Image` (Cosmos architecture) and uses a compact `qwen_3_06b_base` (0.6B) text encoder. Testing across Cosmos 2B + Qwen3 0.6B vs. Krea-2 12B + Qwen3-VL 4B will determine whether weight-space steering is an architectural universality or specific to Krea-2.
 * **Pre-declared Criterion**: PC1 rebuilt independently on the new architecture, with the preset separating from both controls at a 95% CI excluding zero. If it does not, the effect is documented as Krea-2 specific.
@@ -399,7 +538,7 @@ The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-im
 
 ---
 
-## 7. How to Explore the Data & Tools
+## How to Explore, and How to Replicate
 
 * **Interactive A/B Viewer**: Open [`viewer/viewer.html`](viewer/viewer.html) in your browser to inspect image pairs side-by-side or toggle back-and-forth instantly with the spacebar.
 * **Complete Lab Notebook**: Read [`index.html`](index.html) for all the mathematical formulations, KaTeX derivations, PCA loadings, and vector SVG forest plots.
@@ -418,7 +557,7 @@ The phenomenon has a name: **catastrophic neglect**, the failure of a text-to-im
 
 ---
 
-## 8. Credits & Context
+## Credits, Licence & Context
 
 * **Authoring & Tuning Tool**: [aledelpho/comfyui-arthemy-krea2-tuner](https://github.com/aledelpho/comfyui-arthemy-krea2-tuner)
 * **License**: [MIT](LICENSE). The code, the data tables and the text are all free to reuse, modify and build on, with attribution.
