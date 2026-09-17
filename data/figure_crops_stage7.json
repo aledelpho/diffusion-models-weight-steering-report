@@ -1,0 +1,257 @@
+{
+  "hatching_detail_I06": {
+    "prompt_id": "I06",
+    "prompt_sha1": "a324a148e4",
+    "seed": 1337,
+    "box": [
+      120,
+      360,
+      480,
+      480
+    ]
+  },
+  "hatching_detail_I24": {
+    "prompt_id": "I24",
+    "prompt_sha1": "66faaa372d",
+    "seed": 1337,
+    "box": [
+      240,
+      320,
+      480,
+      480
+    ]
+  },
+  "hatching_detail_I07": {
+    "prompt_id": "I07",
+    "prompt_sha1": "402376662d",
+    "seed": 1337,
+    "box": [
+      80,
+      320,
+      480,
+      480
+    ]
+  },
+  "hatching_axis_gif": {
+    "prompt_id": "I07",
+    "prompt_sha1": "402376662d",
+    "seed": 1337,
+    "box": [
+      100,
+      280,
+      600,
+      600
+    ]
+  },
+  "hatching_seed_stability": {
+    "prompt_id": "I09",
+    "prompt_sha1": "0a1c94584d",
+    "seeds": [
+      42,
+      777,
+      1337,
+      9999,
+      4242145
+    ],
+    "box": [
+      300,
+      220,
+      300,
+      300
+    ]
+  },
+  "hatching_census_stage7": {
+    "0a1c94584d": {
+      "prompt_id": "I09",
+      "prompt_sha1": "0a1c94584d",
+      "prompt_tag": "a_dwarf_woman_with_twin_braided_ginger_pigtails",
+      "seed": 1337,
+      "box": [
+        380,
+        240,
+        240,
+        240
+      ]
+    },
+    "0aa12a28b0": {
+      "prompt_id": "I02",
+      "prompt_sha1": "0aa12a28b0",
+      "prompt_tag": "an_elf_man_with_long_white_straight_hair",
+      "seed": 1337,
+      "box": [
+        350,
+        120,
+        240,
+        240
+      ]
+    },
+    "0dee1ceb78": {
+      "prompt_id": "I17",
+      "prompt_sha1": "0dee1ceb78",
+      "prompt_tag": "an_undead_human_woman_with_hollow_cheeks_and_ragged_dark_hair",
+      "seed": 1337,
+      "box": [
+        410,
+        210,
+        240,
+        240
+      ]
+    },
+    "2adb8ea1cd": {
+      "prompt_id": "I01",
+      "prompt_sha1": "2adb8ea1cd",
+      "prompt_tag": "a_viking_woman_with_blonde_long_braided_hair",
+      "seed": 1337,
+      "box": [
+        320,
+        630,
+        240,
+        240
+      ]
+    },
+    "2b36c75165": {
+      "prompt_id": "I11",
+      "prompt_sha1": "2b36c75165",
+      "prompt_tag": "a_gnome_woman_with_wild_blue_curls",
+      "seed": 1337,
+      "box": [
+        350,
+        360,
+        240,
+        240
+      ]
+    },
+    "2f3689f658": {
+      "prompt_id": "I21",
+      "prompt_sha1": "2f3689f658",
+      "prompt_tag": "an_elemental_woman_with_fiery_orange_glowing_hair",
+      "seed": 1337,
+      "box": [
+        410,
+        210,
+        240,
+        240
+      ]
+    },
+    "3d8a617173": {
+      "prompt_id": "I18",
+      "prompt_sha1": "3d8a617173",
+      "prompt_tag": "a_celestial_woman_with_glowing_metallic_gold_skin",
+      "seed": 1337,
+      "box": [
+        590,
+        750,
+        240,
+        240
+      ]
+    },
+    "402376662d": {
+      "prompt_id": "I07",
+      "prompt_sha1": "402376662d",
+      "prompt_tag": "a_half_orc_man_with_a_shaved_head_and_facial_scars",
+      "seed": 1337,
+      "box": [
+        80,
+        330,
+        240,
+        240
+      ]
+    },
+    "5421ab290b": {
+      "prompt_id": "I16",
+      "prompt_sha1": "5421ab290b",
+      "prompt_tag": "a_halfling_man_with_curly_blond_sideburns",
+      "seed": 1337,
+      "box": [
+        350,
+        240,
+        240,
+        240
+      ]
+    },
+    "5b67e787c8": {
+      "prompt_id": "I05",
+      "prompt_sha1": "5b67e787c8",
+      "prompt_tag": "a_tiefling_woman_with_curled_ram_horns_and_purple_hair",
+      "seed": 1337,
+      "box": [
+        350,
+        180,
+        240,
+        240
+      ]
+    },
+    "66faaa372d": {
+      "prompt_id": "I24",
+      "prompt_sha1": "66faaa372d",
+      "prompt_tag": "a_construct_man_with_blank_brass_faceplate",
+      "seed": 1337,
+      "box": [
+        320,
+        210,
+        240,
+        240
+      ]
+    },
+    "8c3325ffd9": {
+      "prompt_id": "I12",
+      "prompt_sha1": "8c3325ffd9",
+      "prompt_tag": "a_human_woman_with_short_raven_pixie_cut",
+      "seed": 1337,
+      "box": [
+        170,
+        510,
+        240,
+        240
+      ]
+    },
+    "90ec9bbe8c": {
+      "prompt_id": "I10",
+      "prompt_sha1": "90ec9bbe8c",
+      "prompt_tag": "a_lizardfolk_man_with_spiked_crest_and_yellow_eyes",
+      "seed": 1337,
+      "box": [
+        110,
+        180,
+        240,
+        240
+      ]
+    },
+    "92b7d2e00d": {
+      "prompt_id": "I23",
+      "prompt_sha1": "92b7d2e00d",
+      "prompt_tag": "a_satyr_woman_with_small_curled_horns_and_unruly_chestnut_curls",
+      "seed": 1337,
+      "box": [
+        500,
+        120,
+        240,
+        240
+      ]
+    },
+    "952efcc3c6": {
+      "prompt_id": "I20",
+      "prompt_sha1": "952efcc3c6",
+      "prompt_tag": "a_drow_man_with_swept_back_silver_hair",
+      "seed": 1337,
+      "box": [
+        380,
+        120,
+        240,
+        240
+      ]
+    },
+    "a324a148e4": {
+      "prompt_id": "I06",
+      "prompt_sha1": "a324a148e4",
+      "prompt_tag": "a_human_man_with_cropped_brown_hair_and_stubble",
+      "seed": 1337,
+      "box": [
+        290,
+        510,
+        240,
+        240
+      ]
+    }
+  }
+}

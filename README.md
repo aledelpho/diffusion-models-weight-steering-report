@@ -6,7 +6,7 @@
 <p align="center">
   <a href="index.html"><strong> Read Full Lab Notebook</strong></a> •
   <a href="viewer/viewer.html"><strong> Launch Interactive A/B Viewer</strong></a> •
-  <a href="docs/errors_log.md"><strong> 28 Pitfalls Checklist</strong></a> •
+  <a href="docs/errors_log.md"><strong> 32 Pitfalls Checklist</strong></a> •
   <a href="data/"><strong> Raw Datasets</strong></a>
 </p>
 
@@ -143,11 +143,16 @@ out wrong, because those are as much a part of the story as the results that hel
 
 ## What is established, and what is not
 
-**Two experiments, thirteen analyses.** That distinction matters more than it sounds, so it is stated
-here rather than buried. Experiment 1 rests on **1272 renders** across 24 prompts; every table about
-stroke morphology, colour, PCA and CLIP is a *different measurement of that same corpus*, not an
-independent replication. Experiment 2 rests on a separate corpus of **390 renders**. Anyone counting
-"five experiments" from the section headings would be counting measurements.
+**Two experiments, fifteen analyses, and one confirmation round.** That distinction matters more than it
+sounds, so it is stated here rather than buried. Sections 1.1 to 1.4 rest on **1272 renders** across 24
+prompts; every table there about stroke morphology, colour, PCA and CLIP is a *different measurement of that
+same corpus*, not an independent replication. Experiment 2 rests on a separate corpus of **390 renders**.
+Anyone counting "five experiments" from the section headings would be counting measurements.
+
+Sections 1.5 and 1.6 are the exception, and they are the reason this page changed in September. Their
+thresholds were **written down before the renders existed**, and they were tested on **560 new renders across
+16 prompts sharing nothing with any earlier stage**. One of the two came back weaker than its exploratory
+estimate and is reported as ambiguous; the other came back at full strength. Both outcomes are below.
 
 **Established with reasonable confidence:**
 
@@ -165,17 +170,49 @@ independent replication. Experiment 2 rests on a separate corpus of **390 render
   detail, and vanishes when the model is free to choose the palette itself.
 * A norm-matched block permutation moves a neglected prompt attribute from 1/20 to 19/20 — but only
   where the prompt already binds it, and randsign at the identical displacement does nothing at all.
+* **Different weight edits move colour in directions that differ from one another.** Confirmed twice, on
+  independent corpora, at the floor of the permutation test both times (§1.5). This is the surviving half of
+  a two-part claim; the other half did not survive.
+* **There is a hatching axis, and the sign of a structured displacement moves you along it.** The preset
+  runs strokes parallel where block-shuffle crosses them, predicted by sign in advance and confirmed on
+  16 new prompts at 16/16 and 80/80 image pairs, with the norm-matched random control absent (§1.6). This is
+  the Experiment 1 argument — structure rather than magnitude — reproduced on a second visual property, with
+  a mechanical measurement and no human scoring.
 
 **Not established, and it is honest to say so here:**
 
-* Whether any of this holds on an architecture family other than Krea-2. The cross-architecture test
-  on Anima / Cosmos-Predict2 is planned, not run.
+* **Anything outside Krea-2, and anything outside one narrow corner of image space.** This is the limit that
+  bounds every result on this page, so it is first. All 40 prompts — the 24 of Experiment 1 and the 16 of the
+  confirmation round — are **upper-body or close-up character portraits**, and **all 40 contain the phrases
+  `bold ink outlines` and `hatched shadows`**, with 39 of 40 opening on `Western comics style`. One model, one
+  sampler configuration, one aesthetic register, one framing.
+  * The hatching axis of §1.6 is therefore measured **inside a style that explicitly asks the model to
+    hatch**. That the sign of a structured displacement decides parallel versus crossed marks is solid within
+    that regime; whether the same displacement does anything at all to a style that does not hatch is
+    untested, and the honest reading is that it might do nothing.
+  * The colour work of §1.5 hit the same wall from the other side: on close-up portraits the measured swatches
+    are skin and paper whatever the scene describes, which is why the hue-coverage requirement could not be
+    met. **Prompt text is not a usable lever for controlling measured hue in this corpus.**
+  * The cross-architecture test on Anima / Cosmos-Predict2 is designed and pre-registered, not run. The
+    genre test — the same axis on objects rather than characters — is
+    [`docs/prereg_hatching_order_stage8.md`](docs/prereg_hatching_order_stage8.md), also not run.
+
+  Until those two exist, the accurate one-line summary of this repository is: *in one 12.8 B diffusion model,
+  on comic-style character portraits, small structured weight edits move stroke morphology and hatching
+  orientation in reproducible, direction-specific ways.* Every word in that sentence is doing work.
 * Whether the attribute-emergence effect is a general property or something specific to the prompt
   template it was found on. The one positive case on a different subject uses an almost identical
   sentence structure, and the test that would settle it has not been run.
 * Which *structural* property of the perturbation is the operative one. Two points — block derangement
   works, sign scramble does not — separate structure from magnitude, but they do not identify what
   about the structure does the work.
+* **That every weight edit carries a chromatic signature of its own.** This was tested properly and came back
+  three of six against a pre-registered bar of four, on a corpus that was biased in *favour* of finding it.
+  Three is ambiguous, it is written as ambiguous, and the difference matters: "every displacement has its own
+  colour" is the claim that failed, "different displacements move colour differently" is the claim that held.
+* **That colour and texture are two readings of one signature.** On the same 560 renders they behave
+  oppositely — colour effects halve and randsign leads them; texture holds its size and randsign disappears.
+  Any single account of what these perturbations do still has to explain both, and none here does.
 
 ---
 <p align="center">
@@ -363,11 +400,215 @@ The exception is instructive: **Blockshuffle $-$ does impose a coherent cast** (
 
 One systematic asymmetry worth recording: on both sub-families the **negative** direction of every condition moves the palette roughly $1.7\times$ more than its positive counterpart.
 
+### 1.5 Does every weight edit have its own colour signature?
+
+Here is the thing I actually wanted to know. I never set out to build a preset that changes colours — I was
+working on line and stroke, and colour was just something I noticed moving on the side. So the question was
+never "is mine better". It was: if I nudge the weights one way and you nudge them another way, do we each get
+a colour of our own? Does every edit end up with its own palette, the way every illustrator ends up with one?
+
+I wrote down two separate claims, because they are not the same claim and I wanted to be able to lose one and
+keep the other.
+
+**One — each condition pushes colour in a direction of its own.** For each condition and each prompt, the
+palette is reduced to eight slots (six swatches, plus the paper and the ink), each as $(L^*, a^*, b^*)$, and
+measured as the **difference from the same prompt and the same seed under baseline** — otherwise the numbers
+just tell you which character is in the picture. Then: is the direction the same across *different* prompts?
+
+**Two — the conditions differ from one another.** Because if all six pushed colour the same way, each would be
+"coherent" and none would have a signature.
+
+Both were registered in [`docs/prereg_chromatic_signatures.md`](docs/prereg_chromatic_signatures.md), with the
+thresholds fixed in advance, and then tested on **16 new prompts, 560 new renders** that share no prompt with
+anything measured before.
+
+| condition | 18 prompts, exploratory | 16 new prompts, confirmation | Holm |
+| --- | --- | --- | --- |
+| Blockshuffle $-$ | $+0.087$ | $+0.109$ | $0.0022$ ✓ |
+| Randsign $-$ | $+0.276$ | $+0.093$ | $0.011$ ✓ |
+| Preset $+$ | $+0.119$ | $+0.059$ | $0.021$ ✓ |
+| Randsign $+$ | $+0.196$ | $+0.048$ | $0.0510$ ✗ |
+| Preset $-$ | $+0.025$ | $+0.017$ | $0.35$ ✗ |
+| Blockshuffle $+$ | $+0.018$ | $+0.017$ | $0.35$ ✗ |
+
+**Claim one: ambiguous, and recorded as ambiguous.** The rule written in advance said four or more of six
+confirms it, two or fewer refutes it, and three is ambiguous and must not be rounded up. Three survived.
+Randsign $+$ lands at Holm $= 0.0510$. It is not counted — that is the whole reason the threshold existed
+before the data did.
+
+**Claim two: confirmed, twice, on independent corpora.** Within-condition coherence $+0.057$ against
+$+0.023$ between conditions, difference $+0.035$, against a label-permutation null whose 95th percentile is
+$+0.007$. $p = 10^{-4}$, the floor of the test. The exploratory run gave $+0.080$ with the same $p$.
+
+**The effects roughly halved on independent renders.** Mean within-condition coherence fell from $+0.120$ to
+$+0.057$, and the ranking reshuffled — Blockshuffle $-$ was fourth and is now first, Randsign $-$ fell from
+first to second at a third of its size. A power curve built on the exploratory numbers promised ~100% at
+sixteen prompts; the true effect was about half that, and sixteen prompts turned out to be a floor rather
+than a margin. This is what regression from an exploratory estimate looks like, and it is the reason the
+confirmation existed.
+
+**One thing that went wrong in the corpus, and it is worth more than the result.** The registered design
+required four prompts in each of four 90° hue arcs. The selection returned **fourteen of sixteen in
+0–90°, and none at all between 180° and 270°**. The rule ran correctly; the candidate pool did not contain
+what it asked for. The reason is specific and useful: these are close-up character portraits, so the six
+swatches are dominated by skin and paper no matter what the scene describes. **Prompt text is the wrong lever
+for controlling measured hue.** Note the direction of that bias — a corpus of more similar prompts should make
+cross-prompt coherence *easier* to find, not harder — so it does not soften what happened.
+
+**Where the coherence actually lives.** Splitting the 24 dimensions into lightness and chromaticity separates
+the conditions by kind. Randsign's coherence is largely **tonal**: $+0.502$ on the six $L^*$ steps alone,
+where the preset does not survive correction at all. The preset's is **chromatic**: it survives on
+$a^*, b^*$ and not on $L^*$. They are not two strengths of one effect. Randsign is mostly moving the greyscale.
+
+Worth looking at before reading the numbers again, because it is the honest picture: four subjects with very
+different baseline palettes, all seven conditions, one seed. **The colour does move** — nobody has to squint to
+see it. What the statistics say is that it does not move the *same way* from one subject to the next often
+enough for each condition to own a direction of its own.
+
+<p align="center">
+  <img src="assets/01_steering_stage7/_figures/colour_sampler.webp" alt="Four subjects across all seven conditions at seed 1337" width="100%">
+</p>
+
+<details>
+<summary><code>I20</code> · <code>a_drow_man_with_swept_back_silver_hair</code> · <code>prompt_sha1 952efcc3c6</code> — <strong>show the exact prompt</strong></summary>
+
+```text
+Western comics style, bold ink outlines, hatched shadows, upper body portrait. A drow man with swept-back silver hair. armor made of dark adamantine, He wears a spider-web cowl and sharp chitinous shoulder guards. He's holding dual twin daggers drawn, predatory pose, mocking, sinister. subterranean purple cavern, simple background. magenta reflection on the adamantine.
+```
+
+</details>
+
+And the same thing measured rather than eyeballed — the eight slots of each palette, condition under baseline,
+on a neutral grey ground because a colour is judged against whatever surrounds it:
+
+<p align="center">
+  <img src="assets/01_steering_stage7/_figures/palette_stage7.webp" alt="Mean palettes per condition, baseline above and condition below" width="100%">
+</p>
+
+> Consistency worth noting rather than claiming: §1.4, using a completely different colour instrument, singled
+> out Blockshuffle $-$ as the one condition imposing a coherent cast. This analysis, built the other way round
+> and on other renders, puts Blockshuffle $-$ at the top too.
+
+---
+
+### 1.6 The hatching axis — a prediction made before the renders existed
+
+This one started the way the barnacles did: I was just looking at pictures. In nearly every image I could
+remember, `blockshuffle_neg` shaded with **parallel** strokes and `blockshuffle_pos` shaded with
+**cross-hatching**. I said 95% by eye. The difference from every other thing in this notebook is that I said
+it *before* the next batch was rendered, and that this one needs nobody to score anything — parallel versus
+crossed is a spread of stroke orientations, and `crosshatch_entropy_mean` was already in the feature set from
+the first day.
+
+Measured on the old 18 prompts, my eye came out at **87/90 image pairs, or 96.7%**. But it also showed the
+observation was too narrow, in a way I liked better than being right: **the preset does the same thing, with
+the sign the other way round.** Where `blockshuffle_pos` crosses the strokes, `preset_pos` runs them parallel.
+So it is not a fact about block-shuffling. There is an axis, the sign of the displacement moves you along it,
+and which sign gives which texture depends on the direction you moved in.
+
+That was written up as a directional prediction — the sign, per family, not just "there is an effect" — in
+[`docs/prereg_hatching_axis_stage7.md`](docs/prereg_hatching_axis_stage7.md), before stage 7 rendered, with a
+clause saying that a family reaching significance with the **wrong** sign counts as a failure and not as a
+partial success.
+
+Here is the axis, on one seed, cycling through the four conditions in the order the measurement puts them —
+most parallel to most crossed. Watch the shading on the neck and the shoulder:
+
+<p align="center">
+  <img src="assets/hero/hatching_axis.gif" alt="The hatching axis: preset+, blockshuffle-, blockshuffle+, preset- on one seed" width="450">
+</p>
+
+<details>
+<summary><code>I07</code> · <code>a_half_orc_man_with_a_shaved_head_and_facial_scars</code> · <code>prompt_sha1 402376662d</code> · seed 1337 — <strong>show the exact prompt</strong></summary>
+
+```text
+Western comics style, bold ink outlines, hatched shadows, upper body portrait. A half-orc man with a shaved head and facial scars. armor made of granite, He wears an iron jaw visor and layered stone shoulder pads. He's holding a heavy greataxe pointed down, relaxed pose, solemn, tired. cracked dry earth, simple background. blue reflection on the stone.
+```
+
+</details>
+
+And held still, on a brass faceplate — a flat surface with nothing to distract from the marks, the four
+conditions in the same order, the same crop box on all four:
+
+<p align="center">
+  <img src="assets/01_steering_stage7/_figures/hatching_detail_I24.webp" alt="Parallel versus crossed hatching on a brass faceplate, four conditions" width="100%">
+</p>
+
+<details>
+<summary><code>I24</code> · <code>a_construct_man_with_blank_brass_faceplate</code> · <code>prompt_sha1 66faaa372d</code> · seed 1337 — <strong>show the exact prompt</strong></summary>
+
+```text
+Western comics style, bold ink outlines, hatched shadows, upper body portrait. A construct man with blank brass faceplate. armor made of solid gold, He wears a bolted iron halo and enormous heavy cube shoulder pads. He's holding a massive flat-headed maul rested on ground, static pose, unfeeling, neutral. tiled temple floor, simple background. orange reflection on the gold.
+```
+
+</details>
+
+*The same comparison on chainmail and cloth ([`hatching_detail_I06.webp`](assets/01_steering_stage7/_figures/hatching_detail_I06.webp))
+and on skin and background shading ([`hatching_detail_I07.webp`](assets/01_steering_stage7/_figures/hatching_detail_I07.webp)),
+because a texture claim that only works on one material is a claim about that material.*
+
+
+**Result on the 16 new prompts:**
+
+| family | predicted sign | $\Delta$ observed | $p$ | Holm | prompts | image pairs |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Preset** | negative | $\mathbf{-0.370}$ | $3.05\times10^{-5}$ | $9.2\times10^{-5}$ | $\mathbf{16/16}$ | $\mathbf{80/80}$ |
+| **Blockshuffle** | positive | $\mathbf{+0.288}$ | $3.05\times10^{-5}$ | $9.2\times10^{-5}$ | $\mathbf{16/16}$ | $\mathbf{79/80}$ |
+| Randsign | negative | $+0.020$ | $0.67$ | $0.67$ | $11/16$ | $50/80$ |
+
+$p = 3.05\times10^{-5}$ is the exact permutation floor at $n = 16$: below the resolution of the test, not a
+measured value.
+
+The primary was written as a conjunction across all three families, so strictly **it is not met** — two of
+three. Preset and blockshuffle are confirmed at the floor, with sixteen prompts of sixteen and eighty image
+pairs of eighty, not one exception. Randsign is simply absent: $11/16$ is a coin.
+
+And this is what "80 image pairs out of 80" looks like. Two conditions, five seeds each, one prompt — the
+texture is not a lucky render, it is what that direction does every time:
+
+<p align="center">
+  <img src="assets/01_steering_stage7/_figures/hatching_seed_stability.webp" alt="Block-shuffle negative versus positive across all five seeds" width="100%">
+</p>
+
+<details>
+<summary><code>I09</code> · <code>a_dwarf_woman_with_twin_braided_ginger_pigtails</code> · <code>prompt_sha1 0a1c94584d</code> — <strong>show the exact prompt</strong></summary>
+
+```text
+Western comics style, bold ink outlines, hatched shadows, upper body portrait. A dwarf woman with twin braided ginger pigtails. armor made of copper, She wears an iron miner cap and thick square shoulder pads. She's holding a heavy pickaxe leaning forward, cheerful pose, grinning, confident. underground crystal mine, simple background. yellow reflection on the copper.
+```
+
+</details>
+
+*All 16 prompts side by side are in [`hatching_census_stage7.webp`](assets/01_steering_stage7/_figures/hatching_census_stage7.webp),
+and the crop boxes used are published in [`data/figure_crops_stage7.json`](data/figure_crops_stage7.json) — a
+hand-chosen crop is a decision, so it is recorded rather than described.*
+
+**Failing on randsign is what makes this result mean something.** Had all three held, the hatching axis would
+have been a property of reversing *any* displacement. It is not. It belongs to the two structured directions,
+and the control matched to the identical Frobenius displacement does not produce it — the Experiment 1
+argument, structure rather than magnitude, reproduced on a second visual property, with a mechanical
+measurement and nobody scoring anything by hand.
+
+And the effect sizes **held** across an independent corpus of new subjects: preset $-0.484 \rightarrow -0.370$,
+blockshuffle $+0.274 \rightarrow +0.288$, the latter within 5%.
+
+> **The two results read against each other.** Same 560 renders, same day. Colour saw every effect halve and
+> its strongest condition was randsign. Hatching saw the structured conditions hold their size and randsign
+> vanish. Same displacements, same images, opposite patterns — so these are not two views of one signature.
+> Texture responds to the sign of a *structured* displacement, close to deterministically. Colour responds to
+> displacement more diffusely, and does not tell structure from noise the same way. Whatever these
+> perturbations turn out to be doing, it has to account for both.
+
 > **A note on how to count these.** Sections 1.1 to 1.4 are **four measurements of one corpus**, not
 > four replications. The same 1272 renders are behind all of them, so agreement between them is a
 > consistency check, not independent confirmation. None of the four was pre-registered — they emerged
-> in sequence, in response to challenges. Where a result deserves the weight of a replication, it is
-> because the *renders* are new, and that is said explicitly.
+> in sequence, in response to challenges.
+>
+> Sections 1.5 and 1.6 are different in kind, and that is the point of them. Both were **registered with
+> their thresholds before the renders existed**, and both were tested on **560 renders across 16 prompts
+> that share no prompt with any earlier stage**. Where they agree with the exploratory numbers, that is
+> independent confirmation. Where they disagree — and 1.5 disagrees by a factor of two — the confirmation
+> is what is reported.
 
 ---
 
@@ -525,10 +766,16 @@ There is a second difference, and it is architectural rather than methodological
 * **Pre-declared Criterion**: A prompt with a different camera, a different register and a non-marine character, carrying an analogous pair of anchors — one ontological, one an adjacent local morphology — for a **different** neglected attribute. If the attribute emerges there, the conjunctive gate is a general mechanism. If it does not, Experiment 2 is rewritten as a finding about this prompt family and the word "mechanism" comes out of it.
 * **Second question on the same run**: the hand-calibrated preset on the same 20 seeds, which has never been tested on this attribute at all.
 
-### Experiment 1 · Open — is the palette effect bound to colour-pinned prompts?
-* **Goal**: The colour-count separation holds on the 18 colour-pinned prompts and vanishes on the 6 colour-free ones — but $n = 6$ cannot distinguish "absent" from "underpowered", and the direct chroma measurement above shows the preset shifting palettes only $1.3\times$ a seed change, incoherently.
-* **Pre-declared Criterion**: Extend the colour-free family to at least 16 prompts. If the effective-colour contrast against both controls still contains zero **and** the cross-prompt chroma direction stays below its permutation null, the palette claim is documented as specific to colour-pinned prompts and dropped from the general statement.
-* **Second question on the same run**: whether Blockshuffle $-$ keeps producing a coherent global cast ($+0.944$ here). If it does, "a matched control can win a universality score by tinting" becomes a reportable finding in its own right, not a footnote.
+### Experiment 1 · Partly resolved — the colour-free family was extended, and it did not go the predicted way
+* **The question was**: the colour-count separation holds on 18 colour-pinned prompts and vanishes on 6 colour-free ones, but $n = 6$ cannot tell "absent" from "underpowered". The criterion declared in advance was to extend the colour-free family to at least 16 prompts, and to drop the palette claim if the cross-prompt chroma direction stayed below its permutation null.
+* **What happened**: stage 7 is that extension. **None of its 16 prompts pins the palette** — no `monochromatic`, no `overall hue`, no tinted rim light; they describe materials and reflections and leave the model free. The cross-prompt direction did **not** stay below the null: three of six conditions clear a Holm-corrected permutation test (§1.5). So the trigger to drop the claim did not fire — but the fuller claim it was guarding, that every condition carries its own chromatic direction, came back three of six against a bar of four and is recorded as ambiguous.
+* **The second question got a clean answer.** It asked whether Blockshuffle $-$ would keep producing a coherent cast, having scored $+0.944$ on an entirely different colour instrument in §1.4. On stage 7 it is the **top condition of all six** ($+0.109$, $p_{\text{Holm}} = 0.0022$). Two instruments, two corpora, same condition singled out. That a *matched control* is the most chromatically coherent perturbation in the set is now a finding and not a footnote.
+* **What is still open**: the effective-colour contrast itself was not recomputed on stage 7 — only the direction analysis was. And the corpus failed its own hue-coverage requirement, for a reason that generalises: on close-up portraits the measured swatches are skin and paper whatever the prompt says, so **prompt text cannot be used as the lever for controlling measured hue**. Any future colour corpus has to change the framing, not the wording.
+
+### Experiment 1 · Open — the hatching axis on objects, with an instrument that measures it directly
+* **Goal**: §1.6 establishes the axis on character portraits using `crosshatch_entropy_mean`, which is a proxy: it correlates with how much line is on the page at all ($r = +0.52$, $R^2 = 0.27$), and a second proxy — how many separate pieces the drawing breaks into — disagrees with it about the ordering *across* families. The proxy settles the sign; it cannot settle the ladder.
+* **Pre-declared Criterion**: [`docs/prereg_hatching_order_stage8.md`](docs/prereg_hatching_order_stage8.md), locked before the instrument was built. The instrument is the histogram of edge-gradient orientations — parallel hatching is unimodal, cross-hatching bimodal with two near-orthogonal peaks — and the prediction is a full ordinal ranking of four conditions, one ordering out of twenty-four, stated by eye in advance.
+* **Why objects**: every prompt measured so far is a close-up character. A signature that survives a change of genre is a statement about the model; one that survives only among portraits is a statement about portraits. Stage 8 keeps a minority of subject prompts precisely so the instrument change and the genre change do not become inseparable.
 
 ### Both experiments · Open — replication across a different *conditioning mechanism*
 * **Goal**: Apply the exact same $D$-matched protocol (sign scramble + block derangement) to [`circlestone-labs/Anima`](https://huggingface.co/circlestone-labs/Anima).
@@ -554,14 +801,16 @@ There is a second difference, and it is architectural rather than methodological
 
 ## How to Explore, and How to Replicate
 
+* **Reproducing the confirmation round**: [`docs/reproduce_stage7.md`](docs/reproduce_stage7.md) has the full recipe for §1.5 and §1.6 — the seven presets, the manifests with every prompt verbatim, the exact commands, and the hash of every published input. All 600 renders are browsable as webp under [`assets/01_steering_stage7/`](assets/01_steering_stage7/); the full-resolution PNGs are a release asset, because colour measurements have to be re-extracted from PNG and not from webp.
 * **Interactive A/B Viewer**: Open [`viewer/viewer.html`](viewer/viewer.html) in your browser to inspect image pairs side-by-side or toggle back-and-forth instantly with the spacebar.
 * **Complete Lab Notebook**: Read [`index.html`](index.html) for all the mathematical formulations, KaTeX derivations, PCA loadings, and vector SVG forest plots.
-* **The 28 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 28 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
+* **The 32 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 32 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
 * **Re-run the Analysis**: `python experiments/global_aggregation_corrected.py` runs from a fresh clone — it resolves its inputs to `data/`, which holds the full feature matrix and the image manifests, and regenerates every aggregation table quoted above. It needs `numpy`, `pandas`, `scipy` and `scikit-learn`.
 * **What you cannot re-run from a clone**: the scripts that read pixels — `analyze_texture.py`, `analyze_quantization.py`, `color_freedom.py`, `run_style_features.py` — need the complete render set (≈1 500 PNGs at 1024×1280), which is not committed here. `assets/` carries a representative subset for visual inspection only. Those scripts still point at local absolute paths and are published as the **record of how the numbers were produced**, not as a turnkey pipeline.
-* **Repository size and original master PNGs**: a full clone is **~44 MB** (all images served as high-quality 480×600 WebP under `assets/01_steering/` and `assets/02_attribute_emergence/`). The uncompressed 1024×1280 master PNG originals are preserved in full and packaged as GitHub Release assets:
-  - [`krea2_steering_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/latest) (498 MB · 370 master PNGs for Experiment 1)
-  - [`krea2_attribute_emergence_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/latest) (642 MB · 392 master PNGs for Experiment 2)
+* **Repository size and original master PNGs**: a full clone is **~44 MB** (all images served as high-quality 480×600 WebP under `assets/01_steering/`, `assets/01_steering_stage7/` and `assets/02_attribute_emergence/`). The uncompressed 1024×1280 master PNG originals are preserved in full and packaged as GitHub Release assets:
+  - [`stage7_renders_png.tar.gz`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation) (1.07 GB · 600 PNGs for Stage 7 confirmation round)
+  - [`krea2_steering_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation) (498 MB · 370 master PNGs for Experiment 1)
+  - [`krea2_attribute_emergence_png_originals.zip`](https://github.com/aledelpho/diffusion-models-weight-steering-report/releases/tag/stage7-confirmation) (642 MB · 392 master PNGs for Experiment 2)
   Each PNG contains its embedded ComfyUI generation graph in a `tEXt` chunk. See [`docs/asset_pipeline.md`](docs/asset_pipeline.md) for layout specifications.
 * **The generation graphs**: every committed PNG carries its ComfyUI graph in a `tEXt` chunk, so dragging one onto a ComfyUI canvas reloads exactly the pipeline that made it. The same graphs are also published as plain JSON — [`data/comfy_graphs.json`](data/comfy_graphs.json) for all 370 renders individually, and [`docs/workflow/`](docs/workflow/) for the three distinct topologies, pretty-printed and annotated.
 * **Re-run the attribute-emergence experiment**: [`data/attribute_emergence_recipe.json`](data/attribute_emergence_recipe.json) carries, for each of the 24 sets of Experiment 2, the exact prompt text and its `prompt_sha1`, the preset file, the model and CLIP strengths, the seed list and the output folder and filename pattern. Two of the ten prompt variants hash to `30de058455` and `95acba3b41` — the untouched G1 and G4 already published in [`data/prompts.json`](data/prompts.json) — so the hashes verify themselves. [`data/attribute_emergence.csv`](data/attribute_emergence.csv) holds the per-seed score behind every number in Experiment 2, including the renders marked `ambiguous` rather than forced to a verdict.

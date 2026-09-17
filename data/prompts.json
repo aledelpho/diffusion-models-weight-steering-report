@@ -1,5 +1,5 @@
 {
- "note": "prompt_sha1 is the first 10 hex chars of sha1(prompt_text); it is the folder name under assets/. Prompts are never edited — that hash is how we prove it.",
+ "note": "prompt_sha1 is the first 10 hex chars of sha1(prompt_text); it is the folder name under assets/. Prompts are never edited \u2014 that hash is how we prove it.",
  "prompts": [
   {
    "sha1": "d235bf5f02",
@@ -192,6 +192,134 @@
    "family": "colour-pinned",
    "text": "Western comics style, bold ink outlines, hatched shadows, hard gold-tinted rim light glowing along the edges of her face, stern narrow-eyed disapproval, seen from a low front angle canted off vertical, extreme close-up on the head only, tight framing, sharp dutch angle. old female dwarf, weathered tan skin creased deep around the mouth, iron-grey hair coiled into a tight crown braid, thick eyebrows drawn into a single hard line, pale blue eyes narrowed to slits, a heavy square jaw set forward. white background, simple background, gold overall hue, monochromatic gold.",
    "in_assets": false
+  },
+  {
+   "sha1": "0a1c94584d",
+   "id": "I09",
+   "tag": "a_dwarf_woman_with_twin_braided_ginger_pigtails",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A dwarf woman with twin braided ginger pigtails. armor made of copper, She wears an iron miner cap and thick square shoulder pads. She's holding a heavy pickaxe leaning forward, cheerful pose, grinning, confident. underground crystal mine, simple background. yellow reflection on the copper.",
+   "in_assets": true
+  },
+  {
+   "sha1": "0aa12a28b0",
+   "id": "I02",
+   "tag": "an_elf_man_with_long_white_straight_hair",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. An elf man with long white straight hair. armor made of obsidian, He wears a silver circlet and thin curved shoulder guards. He's holding a rapier upright in one hand, defensive pose, calm, focused. misty autumn forest, simple background. green reflection on the glass.",
+   "in_assets": true
+  },
+  {
+   "sha1": "0dee1ceb78",
+   "id": "I17",
+   "tag": "an_undead_human_woman_with_hollow_cheeks_and_ragged_dark_hair",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. An undead human woman with hollow cheeks and ragged dark hair. armor made of rusted iron, She wears a bent copper coronet and cracked tattered shoulder guards. She's holding a broken straight sword hanging limp, motionless pose, hollow, mournful. foggy burial mound, simple background. violet reflection on the rust.",
+   "in_assets": true
+  },
+  {
+   "sha1": "2adb8ea1cd",
+   "id": "I01",
+   "tag": "a_viking_woman_with_blonde_long_braided_hair",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A viking woman with blonde long braided hair. armor made of ice, She wears an iron crown and large metallic shoulder pads. She's holding a mace with both hands, casual pose, snob, playful. snow covered plains, simple background. blue reflections on the metal.",
+   "in_assets": true
+  },
+  {
+   "sha1": "2b36c75165",
+   "id": "I11",
+   "tag": "a_gnome_woman_with_wild_blue_curls",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A gnome woman with wild blue curls. armor made of carved amber, She wears oversized brass monocles and round gear-shaped shoulder guards. She's holding an alchemical vial in both hands, frantic pose, manic, excited. stone alchemy laboratory, simple background. orange reflection on the glass.",
+   "in_assets": true
+  },
+  {
+   "sha1": "2f3689f658",
+   "id": "I21",
+   "tag": "an_elemental_woman_with_fiery_orange_glowing_hair",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. An elemental woman with fiery orange glowing hair. armor made of cooled magma, She wears a burning cinder crown and charred basalt shoulder pads. She's holding a glowing iron staff in two hands, commanding pose, passionate, fierce. volcanic ash desert, simple background. red reflection on the obsidian.",
+   "in_assets": true
+  },
+  {
+   "sha1": "3d8a617173",
+   "id": "I18",
+   "tag": "a_celestial_woman_with_glowing_metallic_gold_skin",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A celestial woman with glowing metallic gold skin. armor made of white marble, She wears a glowing ring halo and ornate wing-shaped shoulder pads. She's holding a two-handed radiant claymore pointed to sky, righteous pose, fierce, zealous. cloud-covered summit, simple background. yellow reflection on the marble.",
+   "in_assets": true
+  },
+  {
+   "sha1": "402376662d",
+   "id": "I07",
+   "tag": "a_half_orc_man_with_a_shaved_head_and_facial_scars",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A half-orc man with a shaved head and facial scars. armor made of granite, He wears an iron jaw visor and layered stone shoulder pads. He's holding a heavy greataxe pointed down, relaxed pose, solemn, tired. cracked dry earth, simple background. blue reflection on the stone.",
+   "in_assets": true
+  },
+  {
+   "sha1": "5421ab290b",
+   "id": "I16",
+   "tag": "a_halfling_man_with_curly_blond_sideburns",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A halfling man with curly blond sideburns. armor made of layered leather, He wears a wool beret and hardened boiled-leather shoulder pads. He's holding a small iron buckler and sling, nimble pose, cheekily defiant, smirking. rolling green hillside, simple background. white reflection on the leather.",
+   "in_assets": true
+  },
+  {
+   "sha1": "5b67e787c8",
+   "id": "I05",
+   "tag": "a_tiefling_woman_with_curled_ram_horns_and_purple_hair",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A tiefling woman with curled ram horns and purple hair. armor made of chitin, She wears a gold diadem and spiked black shoulder pads. She's holding a curved dagger underhand, dynamic pose, smug, cunning. brimstone volcanic wasteland, simple background. violet reflection on the chitin.",
+   "in_assets": true
+  },
+  {
+   "sha1": "66faaa372d",
+   "id": "I24",
+   "tag": "a_construct_man_with_blank_brass_faceplate",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A construct man with blank brass faceplate. armor made of solid gold, He wears a bolted iron halo and enormous heavy cube shoulder pads. He's holding a massive flat-headed maul rested on ground, static pose, unfeeling, neutral. tiled temple floor, simple background. orange reflection on the gold.",
+   "in_assets": true
+  },
+  {
+   "sha1": "8c3325ffd9",
+   "id": "I12",
+   "tag": "a_human_woman_with_short_raven_pixie_cut",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A human woman with short raven pixie cut. armor made of polished silver, She wears a cloth hood and sleek aerodynamic shoulder guards. She's holding a shortsword crossed over chest, ready pose, cold, calculating. rain-soaked rooftop, simple background. blue reflection on the silver.",
+   "in_assets": true
+  },
+  {
+   "sha1": "90ec9bbe8c",
+   "id": "I10",
+   "tag": "a_lizardfolk_man_with_spiked_crest_and_yellow_eyes",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A lizardfolk man with spiked crest and yellow eyes. armor made of hard scales, He wears a feather headdress and woven rope shoulder pads. He's holding a flint spear ready to strike, predatory pose, wild, alert. murky green swamp, simple background. green reflection on the scales.",
+   "in_assets": true
+  },
+  {
+   "sha1": "92b7d2e00d",
+   "id": "I23",
+   "tag": "a_satyr_woman_with_small_curled_horns_and_unruly_chestnut_curls",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A satyr woman with small curled horns and unruly chestnut curls. armor made of polished wood, She wears a bronze ivy band and knotted root shoulder guards. She's holding a carved wooden flute in one hand, loose casual pose, teasing, joyful. open sunny glade, simple background. green reflection on the bronze.",
+   "in_assets": true
+  },
+  {
+   "sha1": "952efcc3c6",
+   "id": "I20",
+   "tag": "a_drow_man_with_swept_back_silver_hair",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A drow man with swept-back silver hair. armor made of dark adamantine, He wears a spider-web cowl and sharp chitinous shoulder guards. He's holding dual twin daggers drawn, predatory pose, mocking, sinister. subterranean purple cavern, simple background. magenta reflection on the adamantine.",
+   "in_assets": true
+  },
+  {
+   "sha1": "a324a148e4",
+   "id": "I06",
+   "tag": "a_human_man_with_cropped_brown_hair_and_stubble",
+   "family": "stage7_confirmation",
+   "text": "Western comics style, bold ink outlines, hatched shadows, upper body portrait. A human man with cropped brown hair and stubble. armor made of steel, He wears a chainmail coif and round polished shoulder guards. He's holding a tower shield across his chest, guarding pose, weary, resolute. ruined castle courtyard, simple background. white reflection on the metal.",
+   "in_assets": true
   }
  ]
 }

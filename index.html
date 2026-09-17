@@ -361,11 +361,12 @@
     <li><a href="#disegno">2 · Design &amp; Controls</a></li>
     <li><a href="#ris">3 · Exp 1 · Style Signature</a></li>
     <li><a href="#avv">4 · Exp 1 · Metric Warning</a></li>
-    <li><a href="#emergenza">5 · Exp 2 · Attribute Emergence</a></li>
-    <li><a href="#nonstab">6 · Non-Established</a></li>
-    <li><a href="#metodo">7 · Methodology</a></li>
-    <li><a href="#errori">8 · 28 Pitfalls</a></li>
-    <li><a href="#ripresa">9 · How to Replicate</a></li>
+    <li><a href="#conferma">5 · Exp 1 · Confirmation Round</a></li>
+    <li><a href="#emergenza">6 · Exp 2 · Attribute Emergence</a></li>
+    <li><a href="#nonstab">7 · Non-Established</a></li>
+    <li><a href="#metodo">8 · Methodology</a></li>
+    <li><a href="#errori">9 · 32 Pitfalls</a></li>
+    <li><a href="#ripresa">10 · How to Replicate</a></li>
     <li style="margin-left:auto;"><a href="viewer/viewer.html" style="color:var(--pos); font-weight:600; border-color:var(--pos);">✦ Interactive A/B Viewer</a></li>
   </ol>
 </nav>
@@ -378,7 +379,7 @@
   <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:4px;">
     <a href="https://github.com/aledelpho/comfyui-arthemy-krea2-tuner" target="_blank" style="text-decoration:none;" class="chip">Tool: Arthemy-Krea2-Tuner ↗</a>
     <a href="viewer/viewer.html" style="text-decoration:none;" class="chip pos">Interactive A/B Viewer ↗</a>
-    <a href="docs/errors_log.md" style="text-decoration:none;" class="chip open">28 Pitfalls Checklist ↗</a>
+    <a href="docs/errors_log.md" style="text-decoration:none;" class="chip open">32 Pitfalls Checklist ↗</a>
     <a href="data/" style="text-decoration:none;" class="chip">Raw Datasets ↗</a>
   </div>
   <p class="stand">The previous iteration of this experimental record concluded that nothing was there.
@@ -495,12 +496,12 @@
   </div>
   <p>The three key takeaways, in order of durability:</p>
   <ul>
-    <li><strong>A methodology</strong> — exactly norm-matched controls for weight-space interventions (<a href="#metodo">§7</a>).</li>
+    <li><strong>A methodology</strong> — exactly norm-matched controls for weight-space interventions (<a href="#metodo">§8</a>).</li>
     <li><strong>A metric warning</strong> — empirical conclusions invert between semantic space and rendering-technique space (<a href="#avv">§4</a>).</li>
     <li><strong>An empirical finding</strong> — only the targeted configuration steers stroke morphology (<a href="#ris">§3</a>).</li>
-    <li><strong>A second, different empirical finding</strong> — a norm-matched perturbation can move a neglected prompt attribute from 5% to 95% presence, but only where the prompt already binds it (<a href="#emergenza">§5</a>).</li>
+    <li><strong>A second, different empirical finding</strong> — a norm-matched perturbation can move a neglected prompt attribute from 5% to 95% presence, but only where the prompt already binds it (<a href="#emergenza">§6</a>).</li>
   </ul>
-  <p class="why">The most practically valuable section for replication is <a href="#errori">§8</a>:
+  <p class="why">The most practically valuable section for replication is <a href="#errori">§9</a>:
     twenty-eight real-world measurement pitfalls, <em>none</em> of which produced absurd numbers.
     All produced plausible values.</p>
 </section>
@@ -820,8 +821,121 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
   <p><strong>Signs do not invert.</strong> What inverts is <em>which hypothesis contrast the instrument can statistically resolve</em>: in CLIP it is <code>preset − randsign</code>, in stroke space it is <code>preset − blockshuffle</code>. CLIP ViT-L-14 downsamples to 224×224; evaluating line art edits with CLIP measures semantic drift while missing inking morphology entirely.</p>
 </section>
 
+
+<section id="conferma">
+  <h2><span class="n">5</span> Experiment 1 · The Confirmation Round <span class="chip pos">pre-registered</span> <span class="chip open">one claim ambiguous</span></h2>
+
+  <p>Everything in §3 and §4 is a different measurement of one corpus of 1272 renders. This section is not.
+  Two claims were written down with their decision thresholds <strong>before a single render existed</strong>,
+  and then tested on <strong>560 new renders across 16 prompts</strong> that share no prompt with any earlier
+  stage. One came back weaker than its exploratory estimate. The other came back at full strength. Both are
+  reported the way the thresholds said to report them.</p>
+
+  <h3><span class="num">5.1</span> Does every weight edit carry a colour of its own? <span class="chip open">ambiguous — 3 of 6 against a bar of 4</span></h3>
+
+  <p>The question was never whether the author's preset steers colour. It was whether <em>each</em>
+  displacement — the preset, the controls, and each of their negatives — pushes the palette in a direction of
+  its own that survives changing the subject of the picture. Each render's palette is reduced to eight slots
+  (six swatches, the paper and the ink) as \((L^*,a^*,b^*)\), taken as the difference from the same prompt and
+  the same seed under baseline, and the test asks whether that direction repeats across
+  <em>different</em> prompts.</p>
+
+  <table>
+    <thead><tr><th>Condition</th><th>18 prompts · exploratory</th><th>16 new prompts · confirmation</th><th>Holm</th></tr></thead>
+    <tbody>
+      <tr><td>Blockshuffle −</td><td>+0.087</td><td><strong>+0.109</strong></td><td>0.0022 ✓</td></tr>
+      <tr><td>Randsign −</td><td>+0.276</td><td><strong>+0.093</strong></td><td>0.011 ✓</td></tr>
+      <tr><td>Preset +</td><td>+0.119</td><td><strong>+0.059</strong></td><td>0.021 ✓</td></tr>
+      <tr><td>Randsign +</td><td>+0.196</td><td>+0.048</td><td>0.0510 ✗</td></tr>
+      <tr><td>Preset −</td><td>+0.025</td><td>+0.017</td><td>0.35 ✗</td></tr>
+      <tr><td>Blockshuffle +</td><td>+0.018</td><td>+0.017</td><td>0.35 ✗</td></tr>
+    </tbody>
+  </table>
+
+  <p>The registered rule: four or more of six confirms, two or fewer refutes, <strong>three is ambiguous and
+  must not be rounded up</strong>. Three survived. Randsign + sits at Holm = 0.0510 and is not counted — which
+  is the entire reason a threshold is written before the data.</p>
+
+  <p>The <em>second</em> claim held, and held twice. Within-condition coherence +0.057 against +0.023 between
+  conditions, a gap of +0.035 against a label-permutation null whose 95th percentile is +0.007,
+  \(p = 10^{-4}\) — the floor of the test, matching the exploratory run's +0.080 at the same floor.
+  <strong>Different displacements move colour in directions that differ from one another.</strong> That every
+  one of them carries a signature of its own is what failed.</p>
+
+  <div class="why">
+    <p><strong>The effects roughly halved on independent renders.</strong> Mean within-condition coherence fell
+    from +0.120 to +0.057 and the ranking reshuffled. A power curve built on the exploratory numbers promised
+    ~100% at sixteen prompts; the true effect was about half of it. This is regression from an exploratory
+    estimate, and it is exactly what the confirmation existed to expose.</p>
+    <p><strong>The corpus failed its own coverage rule, and the reason generalises.</strong> The design required
+    four prompts in each of four 90° hue arcs; the selection returned fourteen of sixteen in 0–90° and none at
+    all between 180° and 270°. The rule executed correctly — the candidate pool did not contain what it asked
+    for. On close-up character portraits the six swatches are skin and paper whatever the scene describes, so
+    <strong>prompt text is the wrong lever for controlling measured hue</strong>. Note the direction of the
+    bias: more similar prompts make cross-prompt coherence <em>easier</em> to detect, not harder.</p>
+    <p><strong>Where the coherence lives differs by condition.</strong> Split into lightness and chromaticity,
+    randsign's coherence is largely tonal (+0.502 on the six \(L^*\) steps alone, where the preset does not
+    survive correction); the preset's is chromatic, surviving on \(a^*,b^*\) and not on \(L^*\). Randsign is
+    mostly moving the greyscale.</p>
+  </div>
+
+  <h3><span class="num">5.2</span> The hatching axis <span class="chip pos">confirmed, 16/16 prompts</span></h3>
+
+  <p>This one began by looking at pictures rather than at numbers: in nearly every image, block-shuffle in its
+  negative direction shaded with <strong>parallel</strong> strokes and in its positive direction with
+  <strong>cross-hatching</strong>. The estimate by eye was 95%. Two things make it different from the rest of
+  this notebook — it was said before the next batch was rendered, and it needs nobody to score anything, because
+  parallel versus crossed is a spread of stroke orientations and <code>crosshatch_entropy_mean</code> had been
+  in the feature set since the first day.</p>
+
+  <p>Measured on the older 18 prompts, the eye came out at 87 image pairs of 90 — 96.7%. It also showed the
+  observation was too narrow: <strong>the preset does the same thing with the sign reversed.</strong> Where
+  block-shuffle crosses the strokes, the preset runs them parallel. So it is not a fact about block-shuffling.
+  There is an axis, the sign of the displacement moves along it, and which sign gives which texture is a
+  property of the direction moved in. That was registered as a prediction of <em>sign per family</em>, with a
+  clause making a significant result in the wrong direction a failure rather than partial credit.</p>
+
+  <table>
+    <thead><tr><th>Family</th><th>Predicted sign</th><th>Δ observed</th><th><em>p</em></th><th>Holm</th><th>Prompts</th><th>Image pairs</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Preset</strong></td><td>negative</td><td><strong>−0.370</strong></td><td>3.05e−5</td><td>9.2e−5</td><td><strong>16/16</strong></td><td><strong>80/80</strong></td></tr>
+      <tr><td><strong>Blockshuffle</strong></td><td>positive</td><td><strong>+0.288</strong></td><td>3.05e−5</td><td>9.2e−5</td><td><strong>16/16</strong></td><td><strong>79/80</strong></td></tr>
+      <tr><td>Randsign</td><td>negative</td><td>+0.020</td><td>0.67</td><td>0.67</td><td>11/16</td><td>50/80</td></tr>
+    </tbody>
+  </table>
+
+  <p>\(p = 3.05\times10^{-5}\) is the exact permutation floor at \(n=16\): below the resolution of the test,
+  not a measured value. The primary was written as a conjunction over all three families, so strictly
+  <strong>it is not met</strong> — two of three. Preset and block-shuffle are confirmed at the floor with no
+  exceptions worth the name; randsign is absent, 11/16 being a coin.</p>
+
+  <div class="why">
+    <p><strong>Failing on randsign is what gives this result its meaning.</strong> Had all three held, the
+    hatching axis would have been a property of reversing any displacement at all. It is not: it belongs to the
+    two structured directions, and the control matched to the identical Frobenius displacement does not produce
+    it. That is the §3 argument — structure rather than magnitude — reproduced on a second visual property,
+    measured mechanically, with nobody scoring anything by hand. The effect sizes also <em>held</em> across new
+    subjects: preset −0.484 → −0.370, block-shuffle +0.274 → +0.288, the latter within 5%.</p>
+    <p><strong>And the instrument has a known limit, stated before it is used again.</strong>
+    <code>crosshatch_entropy_mean</code> correlates with how much line is on the page at all
+    (\(r=+0.52\), \(R^2=0.27\)), and a second proxy — how many separate pieces the drawing breaks into —
+    disagrees with it about the ordering <em>across</em> families. The proxy settles the sign; it does not
+    settle the ladder. The histogram of edge-gradient orientations does, and it is deliberately left for the
+    next round rather than swapped in between an observation and its confirmation.</p>
+  </div>
+
+  <div class="why">
+    <p><strong>The two results read against each other.</strong> Same 560 renders, same day. Colour saw every
+    effect halve, and its strongest condition was randsign. Hatching saw the structured conditions hold their
+    size and randsign vanish. Same displacements, same images, opposite patterns — so these are not two views
+    of one signature. Texture responds to the sign of a <em>structured</em> displacement, close to
+    deterministically. Colour responds to displacement more diffusely, and does not tell structure from noise
+    the same way. Any account of what these perturbations do has to carry both, and none here does.</p>
+  </div>
+</section>
+
 <section id="emergenza">
-  <h2><span class="n">5</span> Experiment 2 · Attribute Emergence <span class="chip pos">established</span> <span class="chip pos">norm-matched control passed</span></h2>
+  <h2><span class="n">6</span> Experiment 2 · Attribute Emergence <span class="chip pos">established</span> <span class="chip pos">norm-matched control passed</span></h2>
 
   <div class="box">
     <span class="lbl">The direction I'm chasing · what would kill it · where we are</span>
@@ -858,7 +972,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       <a href="data/attribute_emergence_recipe.json"><code>data/attribute_emergence_recipe.json</code></a>.</p>
   </div>
 
-  <h3><span class="num">5.1</span> The effect</h3>
+  <h3><span class="num">6.1</span> The effect</h3>
   <div class="tw"><table>
     <thead><tr><th>Condition</th><th class="n">present</th><th class="n">95% CI</th><th>paired comparison</th><th class="n">p</th></tr></thead>
     <tbody>
@@ -887,7 +1001,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       permutation, not of <strong>how far</strong> it moves.</p>
   </div>
 
-  <h3><span class="num">5.2</span> The finding is the conjunction, not the perturbation</h3>
+  <h3><span class="num">6.2</span> The finding is the conjunction, not the perturbation</h3>
   <p>The attribute appears only when the prompt supplies a <strong>two-token local scaffold</strong>: the anchor
     <code>sea-touched</code> <em>and</em> the neighbouring phrase <code>thin webbed fin-like ridges tracing along her
     temple</code>. Each single-variable knockout collapses it.</p>
@@ -919,7 +1033,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     <figcaption>One phrase of difference between the two rows: <code>thin webbed fin-like ridges tracing along her temple</code> is present above and absent below. Everything else is byte-identical. <a href="assets/02_attribute_emergence/_figures/census_A1_vs_E3.webp">Complete census sheet</a>.</figcaption>
   </figure>
 
-  <h3><span class="num">5.3</span> Which half of the model carries it</h3>
+  <h3><span class="num">6.3</span> Which half of the model carries it</h3>
   <div class="tw"><table>
     <thead><tr><th>Perturbation applied to</th><th class="n">present</th><th class="n">95% CI</th><th>vs. stock</th><th class="n">p</th></tr></thead>
     <tbody>
@@ -933,7 +1047,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     DiT still gains 6 discordant seeds to 0 (<code>p = 0.031</code>), so the two are not redundant — but at 19/20 the
     combination is against the ceiling and <strong>the size of any synergy cannot be estimated from these data</strong>.</p>
 
-  <h3><span class="num">5.4</span> Dose–response</h3>
+  <h3><span class="num">6.4</span> Dose–response</h3>
   <div class="tw"><table>
     <thead><tr><th>strength</th><th class="n">0.25</th><th class="n">0.50</th><th class="n">0.75</th><th class="n">1.00</th><th class="n">1.25</th><th class="n">1.50</th><th class="n">1.75</th><th class="n">2.00</th></tr></thead>
     <tbody><tr><td>present</td><td class="n">1/10</td><td class="n">5/10*</td><td class="n">10/10</td><td class="n">19/20</td><td class="n">8/10</td><td class="n">6/10</td><td class="n">5/10</td><td class="n">1/10</td></tr></tbody>
@@ -949,7 +1063,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     <figcaption>Seed 1337 at each strength. The count under each panel is the <em>set's</em> score at that strength, not this single render's. The attribute peaks between 0.75 and 1.00 and is gone at 2.00, where the displacement is largest.</figcaption>
   </figure>
 
-  <h3><span class="num">5.5</span> What emerges is not what was asked for</h3>
+  <h3><span class="num">6.5</span> What emerges is not what was asked for</h3>
   <p>The prompt says <code>studding one earlobe</code>. Across every positive render the clusters sit on the
     <strong>cheekbone and temple region</strong>, not on or in the ear. The attribute emerges; its spatial binding does
     not. The perturbation recovers the <em>presence</em> of a neglected concept and leaves its <em>placement</em> wrong.</p>
@@ -959,7 +1073,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     <figcaption>The prompt says <code>studding one earlobe</code>. The clusters land on the cheekbone and temple instead: the attribute emerges, its spatial binding does not.</figcaption>
   </figure>
 
-  <h3><span class="num">5.6</span> What this does not establish</h3>
+  <h3><span class="num">6.6</span> What this does not establish</h3>
   <div class="box dead">
     <span class="lbl">Five limits, stated before anyone else states them</span>
     <ul>
@@ -978,7 +1092,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     </ul>
   </div>
 
-  <h3><span class="num">5.7</span> Where this sits</h3>
+  <h3><span class="num">6.7</span> Where this sits</h3>
   <p>The phenomenon has a name: <strong>catastrophic neglect</strong>, a model failing to render a concept its prompt
     explicitly contains. The published remedies act at inference time on cross-attention —
     <a href="https://arxiv.org/abs/2301.13826">Attend-and-Excite</a> and
@@ -990,20 +1104,43 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="nonstab">
-  <h2><span class="n">6</span> What is NOT Established <span class="chip open">open</span></h2>
-  <h3><span class="num">6.1</span> Block coherence is not the causal mechanism</h3>
+  <h2><span class="n">7</span> What is NOT Established <span class="chip open">open</span></h2>
+  <h3><span class="num">7.1</span> Block coherence is not the causal mechanism</h3>
   <p>The pure test of block coherence in isolation is <code>blockshuffle − randsign</code>, which yields null directional coherence across all spaces. Preserving block coherence without the proper assignment is no more reproducible than random signs.</p>
   <figure>
     <img src="assets/02_attribute_emergence/_figures/detail_A1_vs_A7.webp" alt="Blockshuffle versus randsign at identical Frobenius displacement, first six canonical seeds" style="width:100%;height:auto;border-radius:6px;">
     <figcaption>Blockshuffle (top) against randsign (bottom). The two rows carry the <em>identical</em> Frobenius displacement <code>D = 0.0538</code> and differ only in the structure of the perturbation. <a href="assets/02_attribute_emergence/_figures/census_A1_vs_A7.webp">Complete census sheet</a>.</figcaption>
   </figure>
 
-  <h3><span class="num">6.2</span> Cross-model generalization</h3>
+  <h3><span class="num">7.2</span> Cross-model generalization</h3>
   <p>One model, one prompt family. Replication on a second architecture (circlestone-labs/Anima, fine-tuned from Cosmos-Predict2-2B with Qwen3-0.6B) is the critical cross-family test to demonstrate that this is a general property of diffusion weight spaces.</p>
+
+  <h3><span class="num">7.3</span> The corpus is one narrow corner of image space <span class="chip open">bounds everything above</span></h3>
+  <p>This is the limit that bounds every result on this page, including the two confirmed in §5, and it is
+  sharper than "one prompt family" suggests. Across all <strong>40 prompts</strong> — the 24 of Experiment 1
+  and the 16 of the confirmation round — <strong>every single one is an upper-body or close-up character
+  portrait</strong>, and <strong>every single one contains the phrases <code>bold ink outlines</code> and
+  <code>hatched shadows</code></strong>, with 39 of 40 opening on <code>Western comics style</code>. One
+  model, one sampler configuration, one aesthetic register, one framing.</p>
+  <div class="why">
+    <p><strong>The hatching axis of §5.2 is measured inside a style that explicitly asks the model to
+    hatch.</strong> That the sign of a structured displacement decides parallel against crossed marks is solid
+    within that regime — 16 prompts of 16, 80 image pairs of 80. Whether the same displacement does anything
+    at all to a style that does not hatch is untested, and the honest reading is that it might do nothing.</p>
+    <p><strong>The colour work of §5.1 met the same wall from the other side.</strong> On close-up portraits
+    the six measured swatches are skin and paper whatever the scene describes, which is precisely why the
+    registered hue-coverage requirement could not be met: fourteen of sixteen prompts landed in a single 90°
+    arc. Prompt text is not a usable lever for controlling measured hue in this corpus.</p>
+    <p>Two pre-registered tests address this and neither has been run: the cross-architecture replication on
+    Anima, and <a href="docs/prereg_hatching_order_stage8.md">the same hatching axis on objects rather than
+    characters</a>. Until they exist, the accurate summary of this repository is: <em>in one 12.8 B diffusion
+    model, on comic-style character portraits, small structured weight edits move stroke morphology and
+    hatching orientation in reproducible, direction-specific ways.</em> Every word there is load-bearing.</p>
+  </div>
 </section>
 
 <section id="metodo">
-  <h2><span class="n">7</span> Methodology — The Reusable Protocol</h2>
+  <h2><span class="n">8</span> Methodology — The Reusable Protocol</h2>
   <p>In manual tuning and merging, practitioners routinely compare modifications of <strong>differing Frobenius magnitudes</strong>,
     making it impossible to determine if an edit is genuinely directional. Three controls in order of methodological strength:</p>
   <ol class="body">
@@ -1014,7 +1151,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="errori">
-  <h2><span class="n">8</span> The Twenty-Eight Measurement Pitfalls</h2>
+  <h2><span class="n">9</span> The Thirty-Two Measurement Pitfalls</h2>
   <div class="box dead">
     <span class="lbl">Methodological Caution</span>
     <p><strong>None of these 28 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
@@ -1022,7 +1159,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="ripresa">
-  <h2><span class="n">9</span> Reproduction &amp; Experiment Scripts</h2>
+  <h2><span class="n">10</span> Reproduction &amp; Experiment Scripts</h2>
   <pre>experiments/
   derive_blockshuffle.py          BLOCKSHUFFLE generation with alpha restricted to permuted subset
   derive_epsilon.py / run_epsilon.py   Amplitude scaling sweep (eps = 0.25 / 0.5 / 1.0)
@@ -1041,7 +1178,7 @@ data/
 </section>
 
 <footer>
-  Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 renders · 24 prompts · 29 measurement pitfalls documented · Open for replication.
+  Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 + 560 renders · 40 prompts · 3 pre-registrations · 32 measurement pitfalls documented · Open for replication.
 </footer>
 
 </div>
