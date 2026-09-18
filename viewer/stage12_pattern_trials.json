@@ -1,0 +1,462 @@
+[
+  {
+    "trial_id": 1,
+    "style_id": "S01_oil",
+    "style_label": "Stile 01 (S01_oil) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t01_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t01_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t01_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t01_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 2,
+    "style_id": "S01_oil",
+    "style_label": "Stile 01 (S01_oil) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t02_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t02_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t02_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t02_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 3,
+    "style_id": "S02_linocut",
+    "style_label": "Stile 02 (S02_linocut) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t03_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t03_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t03_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t03_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 4,
+    "style_id": "S02_linocut",
+    "style_label": "Stile 02 (S02_linocut) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t04_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t04_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t04_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t04_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 5,
+    "style_id": "S03_cyberpunk",
+    "style_label": "Stile 03 (S03_cyberpunk) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t05_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t05_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t05_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t05_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 6,
+    "style_id": "S03_cyberpunk",
+    "style_label": "Stile 03 (S03_cyberpunk) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t06_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t06_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t06_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t06_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 7,
+    "style_id": "S04_gouache",
+    "style_label": "Stile 04 (S04_gouache) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t07_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t07_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t07_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t07_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 8,
+    "style_id": "S04_gouache",
+    "style_label": "Stile 04 (S04_gouache) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t08_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t08_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t08_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t08_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 9,
+    "style_id": "S05_pencil",
+    "style_label": "Stile 05 (S05_pencil) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t09_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t09_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t09_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t09_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 10,
+    "style_id": "S05_pencil",
+    "style_label": "Stile 05 (S05_pencil) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t10_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t10_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t10_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t10_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 11,
+    "style_id": "S06_pastel",
+    "style_label": "Stile 06 (S06_pastel) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t11_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t11_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t11_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t11_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 12,
+    "style_id": "S06_pastel",
+    "style_label": "Stile 06 (S06_pastel) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t12_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t12_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t12_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t12_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 13,
+    "style_id": "S07_comic",
+    "style_label": "Stile 07 (S07_comic) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t13_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t13_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t13_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t13_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 14,
+    "style_id": "S07_comic",
+    "style_label": "Stile 07 (S07_comic) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t14_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t14_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t14_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t14_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 15,
+    "style_id": "S08_papercraft",
+    "style_label": "Stile 08 (S08_papercraft) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t15_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t15_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t15_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t15_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 16,
+    "style_id": "S08_papercraft",
+    "style_label": "Stile 08 (S08_papercraft) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t16_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t16_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t16_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t16_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 17,
+    "style_id": "S09_fresco",
+    "style_label": "Stile 09 (S09_fresco) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t17_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t17_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t17_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t17_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 18,
+    "style_id": "S09_fresco",
+    "style_label": "Stile 09 (S09_fresco) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t18_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t18_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t18_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t18_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 19,
+    "style_id": "S10_synthwave",
+    "style_label": "Stile 10 (S10_synthwave) - Prova 1/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t19_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t19_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t19_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t19_s4.png"
+      }
+    ]
+  },
+  {
+    "trial_id": 20,
+    "style_id": "S10_synthwave",
+    "style_label": "Stile 10 (S10_synthwave) - Prova 2/2",
+    "slots": [
+      {
+        "slot": 1,
+        "image_url": "blind_stage12_pattern/t20_s1.png"
+      },
+      {
+        "slot": 2,
+        "image_url": "blind_stage12_pattern/t20_s2.png"
+      },
+      {
+        "slot": 3,
+        "image_url": "blind_stage12_pattern/t20_s3.png"
+      },
+      {
+        "slot": 4,
+        "image_url": "blind_stage12_pattern/t20_s4.png"
+      }
+    ]
+  }
+]

@@ -84,10 +84,10 @@ def main():
 
     index = {}
     for r in reader:
-        k = (r["style_id"], r["cond_name"], int(r["seed"]))
+        k = (r["prompt_id"], r["cond_name"], int(r["seed"]))
         index[k] = r
 
-    style_ids = sorted(list({r["style_id"] for r in reader}))
+    style_ids = sorted(list({r["prompt_id"] for r in reader}))
     available_seeds = sorted(list({int(r["seed"]) for r in reader}))
 
     rng = random.Random(SEED_PRNG)
@@ -114,13 +114,13 @@ def main():
                 if not item:
                     raise SystemExit(f"Immagine non trovata per {style_id}, {cond}, {seed_val}")
 
-                raw_path = item.get("path") or item.get("render_path") or item.get("filename")
-                if not raw_path or not os.path.exists(raw_path):
-                    alt = os.path.join(REPORT_ROOT, raw_path) if raw_path else ""
-                    if alt and os.path.exists(alt):
-                        raw_path = alt
-                    else:
-                        raise SystemExit(f"File sorgente non trovato: {raw_path}")
+                root = item["renders_root"]
+                rel = item["image_path"].replace("/", os.sep)
+                raw_path = os.path.join(root, os.path.basename(rel))
+                if not os.path.exists(raw_path):
+                    raw_path = os.path.join(root, rel)
+                if not os.path.exists(raw_path):
+                    raise SystemExit(f"File sorgente non trovato: {raw_path}")
 
                 bgr = cv2.imread(raw_path)
                 if bgr is None:
