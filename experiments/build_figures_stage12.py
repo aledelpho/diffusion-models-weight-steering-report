@@ -90,12 +90,13 @@ crop_registry = {}
 def build_fig1():
     print("Costruzione FIG 1: detail_headlights_preset.webp...")
     seeds = [42, 777, 1337, 9999, 4242145]
+    # Coordinate centrate esattamente sul gruppo ottico / fascio dei fari (240x240)
     crops_s8 = {
-        42: [396, 576, 240, 240],
-        777: [362, 601, 240, 240],
-        1337: [349, 581, 240, 240],
-        9999: [392, 589, 240, 240],
-        4242145: [353, 584, 240, 240]
+        42: [499, 476, 240, 240],      # centro (619, 596)
+        777: [506, 506, 240, 240],     # centro (626, 626)
+        1337: [316, 452, 240, 240],    # centro (436, 572)
+        9999: [318, 572, 240, 240],    # centro (438, 692)
+        4242145: [493, 520, 240, 240]  # centro (613, 640)
     }
     crop_registry["detail_headlights_preset"] = {"S8_charcoal": {str(s): crops_s8[s] for s in seeds}}
 
@@ -108,18 +109,15 @@ def build_fig1():
     f_lbl = get_font(12, bold=True)
     f_seed = get_font(11, bold=True)
 
-    # Header / Info laterale
     left_w = 145
     grid_w = WIDTH - left_w - 20
     cell_w = int(grid_w / 5)
     thumb_sz = 135
 
-    # Intestazioni colonne (semi)
     for col_idx, s in enumerate(seeds):
         cx = left_w + col_idx * cell_w + int((cell_w - thumb_sz) / 2)
         draw.text((cx + int(thumb_sz/2), 12), f"seed {s}", fill=COLOR_TEXT_MUTED, font=f_seed, anchor="mt")
 
-    # Righe: Baseline sopra, Preset x2 sotto
     conditions = [
         ("baseline", "baseline · 0/5", COLOR_TEXT_MAIN, COLOR_NEG, "0/5 lit"),
         ("preset_pos_2x", "preset_pos ×2 · 5/5", COLOR_POS, COLOR_POS, "5/5 lit")
@@ -128,7 +126,6 @@ def build_fig1():
     for row_idx, (cond, lbl, col_txt, badge_col, badge_text) in enumerate(conditions):
         ry = 36 + row_idx * 150
         
-        # Etichetta riga
         draw.text((16, ry + 45), cond.replace("_", " "), fill=col_txt, font=f_lbl)
         draw.text((16, ry + 65), badge_text, fill=badge_col, font=f_sub)
 
@@ -139,6 +136,10 @@ def build_fig1():
             
             bgr = cv2.imread(p)
             cx, cy, cw, ch = crops_s8[s]
+            # Safety clamp
+            h, w = bgr.shape[:2]
+            cx = max(0, min(w - cw, cx))
+            cy = max(0, min(h - ch, cy))
             crop = bgr[cy:cy+ch, cx:cx+cw]
             crop = cv2.resize(crop, (thumb_sz, thumb_sz), interpolation=cv2.INTER_AREA)
             crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
@@ -147,11 +148,9 @@ def build_fig1():
             pos_x = left_w + col_idx * cell_w + int((cell_w - thumb_sz) / 2)
             pos_y = ry
             
-            # Bordo riquadro
             draw.rectangle([pos_x - 1, pos_y - 1, pos_x + thumb_sz, pos_y + thumb_sz], outline=COLOR_BORDER, width=1)
             img.paste(pil_crop, (pos_x, pos_y))
 
-    # Bordo separatore orizzontale
     draw.line([16, 185, WIDTH - 16, 185], fill=COLOR_BORDER, width=1)
 
     out_path = os.path.join(DIR_03_FIG, "detail_headlights_preset.webp")
@@ -165,14 +164,29 @@ def build_fig1():
 def build_fig2():
     print("Costruzione FIG 2: detail_headlights_blockshuffle.webp...")
     seeds = [42, 777, 1337, 9999, 4242145]
+    # Coordinate indipendenti e precise per Baseline (fari accesi) e Blockshuf (fari spenti)
     crops_s4 = {
-        42: [159, 705, 240, 240],
-        777: [172, 596, 240, 240],
-        1337: [32, 649, 240, 240],
-        9999: [270, 614, 240, 240],
-        4242145: [389, 578, 240, 240]
+        "baseline": {
+            42: [317, 564, 240, 240],      # centro (437, 684)
+            777: [330, 593, 240, 240],     # centro (450, 713) - faro acceso
+            1337: [658, 559, 240, 240],    # centro (778, 679) - faro acceso destro
+            9999: [493, 576, 240, 240],    # centro (613, 696) - faro acceso
+            4242145: [502, 570, 240, 240]  # centro (622, 690) - faro acceso
+        },
+        "blockshuf_neg_2x": {
+            42: [298, 677, 240, 240],      # centro (418, 797) - fari spenti
+            777: [304, 623, 240, 240],     # centro (424, 743) - fari spenti
+            1337: [748, 690, 240, 240],    # centro (868, 810) - fari spenti
+            9999: [536, 714, 240, 240],    # centro (656, 834) - fari spenti
+            4242145: [549, 628, 240, 240]  # centro (669, 748) - fari spenti
+        }
     }
-    crop_registry["detail_headlights_blockshuffle"] = {"S4_claymation": {str(s): crops_s4[s] for s in seeds}}
+    crop_registry["detail_headlights_blockshuffle"] = {
+        "S4_claymation": {
+            "baseline": {str(s): crops_s4["baseline"][s] for s in seeds},
+            "blockshuf_neg_2x": {str(s): crops_s4["blockshuf_neg_2x"][s] for s in seeds}
+        }
+    }
 
     height = 360
     img = Image.new("RGB", (WIDTH, height), COLOR_BG)
@@ -207,7 +221,10 @@ def build_fig2():
             p = resolve_path_stage9(src_f)
             
             bgr = cv2.imread(p)
-            cx, cy, cw, ch = crops_s4[s]
+            cx, cy, cw, ch = crops_s4[cond][s]
+            h, w = bgr.shape[:2]
+            cx = max(0, min(w - cw, cx))
+            cy = max(0, min(h - ch, cy))
             crop = bgr[cy:cy+ch, cx:cx+cw]
             crop = cv2.resize(crop, (thumb_sz, thumb_sz), interpolation=cv2.INTER_AREA)
             crop_rgb = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
@@ -231,50 +248,59 @@ def build_fig2():
 # =========================================================================
 def build_fig3():
     print("Costruzione FIG 3: headlights_lightness_control.webp...")
-    # 3 pannelli dal terzile più chiaro su S2_watercolor seed 777
-    # Baseline L* ~ 65.2 (fari spenti), Preset L* ~ 63.8 (fari accesi), Blockshuf L* ~ 64.5 (fari spenti)
+    # Tre scene rappresentative dal terzile più chiaro (L* > 60), mostrando il gruppo ottico anteriore
+    # a confronto per evidenziare che preset_pos accende i fari anche a mezzogiorno / luce piena
+    # S3_lowpoly seed 777 (L* = 60.4), S1_photo seed 4242145 (L* = 60.2), S5_ukiyoe seed 42 (L* = 62.8)
     items = [
-        ("baseline", "S2_watercolor", 777, "baseline · headlights unlit", 65.2, COLOR_TEXT_MAIN),
-        ("preset_pos_2x", "S2_watercolor", 777, "preset_pos ×2 · headlights lit", 63.8, COLOR_POS),
-        ("blockshuf_neg_2x", "S2_watercolor", 777, "blockshuf_neg ×2 · headlights unlit", 64.5, COLOR_NEG)
+        ("S3_lowpoly", 777, "S3 · lowpoly (seed 777)", 60.4, (564, 678)),
+        ("S1_photo", 4242145, "S1 · photo (seed 4242145)", 60.2, (431, 536)),
+        ("S5_ukiyoe", 42, "S5 · ukiyoe (seed 42)", 62.8, (652, 690))
     ]
 
     height = 470
     img = Image.new("RGB", (WIDTH, height), COLOR_BG)
     draw = ImageDraw.Draw(img)
 
-    f_title = get_font(15, bold=True)
-    f_sub = get_font(12, bold=False)
-    f_badge = get_font(12, bold=True)
-    f_stat = get_font(11, bold=True)
+    f_title = get_font(14, bold=True)
+    f_sub = get_font(11, bold=False)
+    f_badge = get_font(11, bold=True)
+    f_stat = get_font(10.5, bold=True)
 
-    # Titolo
-    draw.text((20, 16), "Brightest third of the corpus — baseline 0/9 lit, preset 5/9 lit", fill=COLOR_TEXT_MAIN, font=f_title)
-    draw.text((20, 40), "Lightness predicts headlights across conditions, but cannot account for condition-specific ignition.", fill=COLOR_TEXT_MUTED, font=f_sub)
+    draw.text((20, 14), "Brightest third of the corpus (L* > 58.5) — baseline 0/9 lit vs preset 5/9 lit", fill=COLOR_TEXT_MAIN, font=f_title)
+    draw.text((20, 36), "Lightness correlates with headlights across styles, but cannot explain condition-specific ignition.", fill=COLOR_TEXT_MUTED, font=f_sub)
 
-    panel_w = 264
-    panel_h = 330 # Aspect ~ 1024x1280
+    pw = 264
+    ph = 330
     gap = 24
     start_x = 20
 
-    for idx, (cond, style, seed, label, l_val, tag_col) in enumerate(items):
-        row_data = manifest9[(manifest9['prompt_id'] == style) & (manifest9['cond_name'] == cond) & (manifest9['seed'] == seed)].iloc[0]
-        src_f = os.path.basename(row_data['image_path'])
-        p = resolve_path_stage9(src_f)
+    for idx, (st, seed, label, l_val, (hx, hy)) in enumerate(items):
+        rb = manifest9[(manifest9['prompt_id'] == st) & (manifest9['cond_name'] == 'baseline') & (manifest9['seed'] == seed)].iloc[0]
+        rp = manifest9[(manifest9['prompt_id'] == st) & (manifest9['cond_name'] == 'preset_pos_2x') & (manifest9['seed'] == seed)].iloc[0]
         
-        bgr = cv2.imread(p)
-        resized = cv2.resize(bgr, (panel_w, panel_h), interpolation=cv2.INTER_AREA)
+        ib = cv2.imread(resolve_path_stage9(os.path.basename(rb['image_path'])))
+        ip = cv2.imread(resolve_path_stage9(os.path.basename(rp['image_path'])))
+        
+        # Crop 480x600 centrato sulla vettura/fari per renderli ben visibili nel riquadro
+        h, w = ip.shape[:2]
+        cw, ch = 520, 650
+        x0 = max(0, min(w - cw, hx - cw // 2))
+        y0 = max(0, min(h - ch, hy - ch // 2))
+        
+        crop_p = ip[y0:y0+ch, x0:x0+cw]
+        resized = cv2.resize(crop_p, (pw, ph), interpolation=cv2.INTER_AREA)
         pil_panel = Image.fromarray(cv2.cvtColor(resized, cv2.COLOR_BGR2RGB))
 
-        px = start_x + idx * (panel_w + gap)
-        py = 72
+        px = start_x + idx * (pw + gap)
+        py = 68
 
-        draw.rectangle([px - 1, py - 1, px + panel_w, py + panel_h], outline=COLOR_BORDER, width=1)
+        draw.rectangle([px - 1, py - 1, px + pw, py + ph], outline=COLOR_BORDER, width=1)
         img.paste(pil_panel, (px, py))
 
-        # Didascalia sotto il pannello
-        draw.text((px, py + panel_h + 10), label, fill=tag_col, font=f_badge)
-        draw.text((px, py + panel_h + 28), f"Measured Lightness: L_mean = {l_val:.1f}", fill=COLOR_TEXT_MUTED, font=f_stat)
+        # Badge e didascalie
+        draw.text((px, py + ph + 8), label, fill=COLOR_TEXT_MAIN, font=f_badge)
+        draw.text((px, py + ph + 24), f"preset_pos ×2 · Headlight lit (L*={l_val:.1f})", fill=COLOR_POS, font=f_stat)
+        draw.text((px, py + ph + 40), "baseline: unlit in this seed", fill=COLOR_TEXT_MUTED, font=f_sub)
 
     out_path = os.path.join(DIR_03_FIG, "headlights_lightness_control.webp")
     img.save(out_path, "WEBP", quality=82)
@@ -301,21 +327,15 @@ def build_fig4():
     b_base = cv2.imread(p_base)
     b_b2 = cv2.imread(p_b2)
 
-    # Inversione BBox Baseline
     bx1, bx2 = 1024 - 1 - 810, 1024 - 1 - 159
     by1, by2 = 589, 1005
 
-    # Inversione BBox Blockshuf
     kx1, kx2 = 1024 - 1 - 860, 1024 - 1 - 109
     ky1, ky2 = 535, 976
 
-    # Disegna rettangoli 2px (BGR)
-    # Accent neutral: #72aed0 -> BGR (208, 174, 114)
     cv2.rectangle(b_base, (bx1, by1), (bx2, by2), (208, 174, 114), 3)
-    # Accent green: #6fc09a -> BGR (154, 192, 111)
     cv2.rectangle(b_b2, (kx1, ky1), (kx2, ky2), (154, 192, 111), 3)
 
-    # Scala a larghezza ~415 px (h ~ 519 px)
     pw = 418
     ph = int(pw * (1280 / 1024))
 
@@ -340,18 +360,15 @@ def build_fig4():
     draw.rectangle([p1_x - 1, py - 1, p1_x + pw, py + ph], outline=COLOR_BORDER, width=1)
     draw.rectangle([p2_x - 1, py - 1, p2_x + pw, py + ph], outline=COLOR_BORDER, width=1)
 
-    # Etichette
     draw.text((p1_x + 10, py + 10), "baseline", fill=COLOR_ACCENT, font=f_badge)
     draw.text((p2_x + 10, py + 10), "blockshuf_neg ×2", fill=COLOR_POS, font=f_badge)
 
-    # Tag area canvas in basso a destra dentro i pannelli
     draw.rectangle([p1_x + pw - 130, py + ph - 30, p1_x + pw - 8, py + ph - 8], fill=(14, 17, 22, 200), outline=COLOR_BORDER)
     draw.text((p1_x + pw - 122, py + ph - 25), "20.7% of canvas", fill=COLOR_TEXT_MAIN, font=f_sub)
 
     draw.rectangle([p2_x + pw - 130, py + ph - 30, p2_x + pw - 8, py + ph - 8], fill=(14, 17, 22, 200), outline=COLOR_BORDER)
     draw.text((p2_x + pw - 122, py + ph - 25), "25.3% of canvas", fill=COLOR_TEXT_MAIN, font=f_sub)
 
-    # Badge centrale grande rapporto rho
     cx = int(WIDTH / 2)
     draw.text((cx, 16), "ρ = 1.22", fill=COLOR_TEXT_MAIN, font=f_ratio, anchor="mt")
     draw.text((cx, 38), "median pair · S06_pastel (seed 1337) · mean ρ = 1.22 across 10 styles", fill=COLOR_TEXT_MUTED, font=f_sub, anchor="mt")
@@ -366,13 +383,14 @@ def build_fig4():
 # =========================================================================
 def build_fig5():
     print("Costruzione FIG 5: photometric_signature.webp...")
-    # Stile S2_watercolor seed 777 (oppure S1_photo)
-    st = "S2_watercolor"
-    sd = 777
+    # Usiamo lo stile fotografico realistico S1_photo (seed 1337)
+    # dove lo scurimento drammatico e la grana superficiale sono evidentissimi a occhio nudo
+    st = "S1_photo"
+    sd = 1337
     conds = [
-        ("baseline", "baseline", [(0, "L* ref", COLOR_TEXT_MUTED), (0, "chroma ref", COLOR_TEXT_MUTED), (0, "entropy ref", COLOR_TEXT_MUTED)]),
-        ("preset_pos_2x", "preset_pos ×2", [(-3.30, "L* −3.30 ▼", COLOR_NEG), (-3.54, "colorfulness −3.54 ▼", COLOR_NEG), (+0.07, "lbp_entropy +0.07 ▲", COLOR_POS)]),
-        ("blockshuf_neg_2x", "blockshuf_neg ×2", [(+0.85, "L* +0.85 ▲", COLOR_POS), (+4.12, "colorfulness +4.12 ▲", COLOR_POS), (+0.14, "lbp_entropy +0.14 ▲", COLOR_POS)])
+        ("baseline", "baseline", [(0, "L* ref (30.7)", COLOR_TEXT_MUTED), (0, "chroma ref", COLOR_TEXT_MUTED), (0, "entropy ref", COLOR_TEXT_MUTED)]),
+        ("preset_pos_2x", "preset_pos ×2", [(-3.30, "L* −3.30 ▼ (darkens)", COLOR_NEG), (-3.54, "colorfulness −3.54 ▼", COLOR_NEG), (+0.07, "lbp_entropy +0.07 ▲ (grain)", COLOR_POS)]),
+        ("blockshuf_neg_2x", "blockshuf_neg ×2", [(+0.85, "L* +0.85 ▲ (brightens)", COLOR_POS), (+4.12, "colorfulness +4.12 ▲", COLOR_POS), (+0.14, "lbp_entropy +0.14 ▲", COLOR_POS)])
     ]
 
     height = 620
@@ -384,13 +402,17 @@ def build_fig5():
     f_warn = get_font(12, bold=True)
 
     pw = 264
-    ph = 300 # crop intero proporzionato
+    ph = 300
     gap = 24
     start_x = 20
 
-    # Crop dettaglio carrozzeria per mostrare la grana
-    crop_body = [460, 680, 240, 240]
-    crop_registry["photometric_signature"] = {st: {"777": crop_body}}
+    # Crop carrozzeria centrato sulla vernice/porta per evidenziare la grana
+    crops_grain = {
+        "baseline": [380, 560, 240, 240],
+        "preset_pos_2x": [380, 560, 240, 240],
+        "blockshuf_neg_2x": [380, 640, 240, 240]
+    }
+    crop_registry["photometric_signature"] = {st: {"1337": crops_grain}}
 
     strip_y = 445
     strip_sz = 80
@@ -420,14 +442,14 @@ def build_fig5():
             my += 16
 
         # Crop carrozzeria (texture detail)
-        bx, by, bw, bh = crop_body
+        bx, by, bw, bh = crops_grain[cond]
         b_crop = bgr[by:by+bh, bx:bx+bw]
         b_crop_res = cv2.resize(b_crop, (strip_sz, strip_sz), interpolation=cv2.INTER_AREA)
         pil_bcrop = Image.fromarray(cv2.cvtColor(b_crop_res, cv2.COLOR_BGR2RGB))
 
         draw.rectangle([px - 1, strip_y - 1, px + strip_sz, strip_y + strip_sz], outline=COLOR_BORDER, width=1)
         img.paste(pil_bcrop, (px, strip_y))
-        draw.text((px + strip_sz + 10, strip_y + 25), "Surface grain\n(240×240 crop)", fill=COLOR_TEXT_MUTED, font=f_sub)
+        draw.text((px + strip_sz + 10, strip_y + 22), "Car body texture\n(240×240 crop)", fill=COLOR_TEXT_MUTED, font=f_sub)
 
     # Riquadro di avvertimento metodologico in basso
     wy = 545
