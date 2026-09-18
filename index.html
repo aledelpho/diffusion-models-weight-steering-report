@@ -759,6 +759,10 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     prompts, this is a <strong>sharply defined operator</strong> — darker, greyer, grainier,
     parallel-stroked — and not a vague nudge. And <code>blockshuf_neg</code>, built from the same
     multiset of values at the same displacement, goes the other way on all three.</p>
+  <figure>
+    <img src="assets/01_steering/_figures/photometric_signature.webp" alt="Photometric signature across conditions: mean lightness L*, colorfulness, and local binary pattern texture entropy on jungle rally car corpus, with 240x240 car body detail strip." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Photometric signature across 40 paired scenes (8 styles × 5 seeds) on the jungle rally car corpus. <code>preset_pos_2x</code> consistently darkens (mean ΔL* = −3.30) and adds surface grain (LBP entropy Δ = +0.07 in 40/40 renders), while <code>blockshuf_neg_2x</code> shifts lighter and smoother. As noted below, apparent saturation shifts mechanically track subject bounding area rather than reflecting an isolated chromatic operator.</figcaption>
+  </figure>
   <div class="box warn">
     <span class="lbl">Correction — the colour half of this is subject size, not a chromatic signature</span>
     <p>The saturation column was first written up as a chromatic signature of the two conditions. It
@@ -1168,7 +1172,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       section and the least comfortable.</p>
   </div>
 
-  <h3><span class="num">8.1</span> Headlights — a detail nobody asked for</h3>
+  <h3><span class="num">7.1</span> Headlights — a detail nobody asked for</h3>
   <p>The prompt reads <code>a yellow and blue rally car cruising in a deep jungle</code>. It says
     nothing about lights. Headlights are simply something a car has. All 280 renders were scored blind
     — filenames hashed, order shuffled, key sealed until the last score — on a three-way scale: off,
@@ -1187,6 +1191,14 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     in six styles of eight, two of them starting from zero: watercolour 0/3 → 5/5, charcoal 0/5 → 5/5.
     The two that do not move are not counterexamples — stained glass was already at the ceiling, and
     ukiyo-e is at zero in all seven conditions, a style that never depicts lit headlights.</p>
+  <figure>
+    <img src="assets/03_what_ends_up_in_the_picture/_figures/detail_headlights_preset.webp" alt="Headlights switch on under preset_pos_2x in charcoal style: 0 of 5 lit in baseline versus 5 of 5 lit in preset across the 5 canonical seeds." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Headlights switch on under <code>preset_pos_2x</code> in style <code>S8_charcoal</code> across all five canonical seeds (0/5 lit in baseline → 5/5 lit in preset). Close-up 240×240 px crops centered on the vehicle front assembly. Crop coordinates logged in <a href="data/figure_crops_stage12.json"><code>data/figure_crops_stage12.json</code></a>.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/03_what_ends_up_in_the_picture/_figures/detail_headlights_blockshuffle.webp" alt="Headlights switch off under blockshuf_neg_2x in claymation style: 4 of 5 lit in baseline extinguished to 0 of 5 under blockshuffle." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Headlights extinguish under <code>blockshuf_neg_2x</code> in style <code>S4_claymation</code> across all five canonical seeds (4/5 lit in baseline → 0/5 lit in blockshuffle). Across the entire 280-render corpus, blockshuffle extinguishes headlights in 39 out of 39 scorable scenes.</figcaption>
+  </figure>
   <div class="box warn">
     <span class="lbl">The obvious objection: is it just that the preset darkens the image?</span>
     <p>It is a good objection — <a href="#ris">§3.4</a> shows the preset darkens — and the data already
@@ -1203,6 +1215,10 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       renders, zero lit — and the preset lights them in five of nine. Lightness genuinely predicts
       headlights, and it still is not the explanation.</p>
   </div>
+  <figure>
+    <img src="assets/03_what_ends_up_in_the_picture/_figures/headlights_lightness_control.webp" alt="Luminance tertile control: three paired panels from the brightest third of the corpus showing lit headlights under preset despite high scene luminance." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Luminance control: three representative pairs drawn from the <strong>brightest third</strong> of the corpus (\(L^* &gt; 58.5\)). In this tertile, the baseline checkpoint lights 0 of 9 cars, whereas <code>preset_pos_2x</code> lights 5 of 9 (e.g. S3 seed 777 \(L^*=60.4\), S1 seed 4242145 \(L^*=60.2\), S5 seed 42 \(L^*=62.8\)). Scene darkening correlates with headlights, but does not account for the effect.</figcaption>
+  </figure>
   <p class="why"><strong>On the statistic, which looks weak and is not.</strong> The test returns
     <code>p = 0.0312</code>, which does not clear correction across six conditions. That value is the
     <strong>exact floor</strong>: six of the eight prompts carry information — one sits at the ceiling,
@@ -1210,7 +1226,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     number the test can produce. The same structural ceiling as <a href="#ris">§3.3</a>: neither
     confirmed nor weak, floored.</p>
 
-  <h3><span class="num">8.2</span> How much room the subject takes <span class="chip pos">confirmed on a new corpus</span></h3>
+  <h3><span class="num">7.2</span> How much room the subject takes <span class="chip pos">confirmed on a new corpus</span></h3>
   <p>Second thing noticed by eye: under <code>blockshuf_neg</code> the vehicle seems to grow in frame.
     The first round measured it on the images that produced the observation and returned a ratio of
     <strong>2.14</strong> — 13% to 28% of canvas — but the key had been opened for the headlights
@@ -1227,11 +1243,15 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       <tr><td class="mono">preset_pos ×2</td><td>shrinks</td><td class="n">0.989</td><td class="n">4/10</td></tr>
     </tbody>
   </table></div>
+  <figure>
+    <img src="assets/03_what_ends_up_in_the_picture/_figures/subject_size_boxes.webp" alt="Subject size bounding boxes on median pair S06 pastel seed 1337: baseline 20.7% canvas area versus blockshuf_neg_2x 25.3% canvas area, ratio rho = 1.223." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Median enlargement pair: <code>S06_pastel</code> seed 1337. Ground-truth bounding boxes annotated under blind randomized orientation (here un-mirrored to match canonical renders). The vehicle expands from 20.7% to 25.3% of canvas area, yielding ratio \(\rho = 1.223\) (matching the corpus median \(\rho = 1.22\)). The central badge reports the scale expansion factor.</figcaption>
+  </figure>
   <p>All three signs correct, the ordering correct, and the effect about <strong>a fifth</strong> of
     what the first round claimed. The negative control is the weak part: the preset was predicted to
     visibly shrink the subject and does essentially nothing — right sign, no magnitude.</p>
 
-  <h3><span class="num">8.3</span> What this restricts in Experiment 2</h3>
+  <h3><span class="num">7.3</span> What this restricts in Experiment 2</h3>
   <div class="box dead">
     <span class="lbl">§6.2 was too strong, and this is the correction</span>
     <p>§6.2 concludes that the perturbation <em>“does not add the attribute and does not repair the
@@ -1260,6 +1280,10 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     rotation, saturation and brightness jitter, added noise — and the conditions are still picked out
     of a line-up most of the time. That applies backwards to every human-scored result in this
     notebook, the barnacles included.</p>
+  <figure>
+    <img src="assets/03_what_ends_up_in_the_picture/_figures/blinding_4afc_trial.webp" alt="Two representative 4-AFC blinding verification trials: Trial 01 with perfect identification, Trial 02 with near-foil dose confusion." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>4-AFC blinding verification: real trial screens presented to the annotator with heavy randomized perturbations (geometric flips, hue rotation, saturation jitter, gaussian noise). <strong>Trial 01</strong> (top) shows perfect identification of both target conditions. <strong>Trial 02</strong> (bottom) illustrates the typical failure mode: preset is correctly identified, but <code>blockshuf_neg_2x</code> is confused with its half-dose near-foil <code>blockshuf_neg_1x</code>.</figcaption>
+  </figure>
   <div class="box">
     <span class="lbl">Two reasons it does not explain the results</span>
     <p><strong>An asymmetry.</strong> The condition identified almost perfectly — the preset, at 85% —
