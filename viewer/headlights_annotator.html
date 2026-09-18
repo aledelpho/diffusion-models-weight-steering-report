@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoring Cieco Fari · Stage 10</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card-bg: #161922;
+      --border: #262b3a;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --accent: #3b82f6;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .badge {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .progress-bar-container {
+      width: 200px;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      position: relative;
+    }
+
+    .image-container {
+      position: relative;
+      max-width: 90vw;
+      max-height: 75vh;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container img {
+      display: block;
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+    }
+
+    .meta-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.7);
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    .keypad-bar {
+      margin-top: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .key-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .key-btn:hover {
+      background: #1f2330;
+      border-color: #3b4255;
+      transform: translateY(-1px);
+    }
+
+    .key-btn kbd {
+      background: #090a0f;
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .btn-off:hover kbd { color: var(--red); border-color: var(--red); }
+    .btn-amb:hover kbd { color: var(--amber); border-color: var(--amber); }
+    .btn-on:hover kbd { color: var(--green); border-color: var(--green); }
+
+    .btn-back {
+      color: var(--muted);
+      margin-left: 20px;
+    }
+
+    .complete-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 17, 23, 0.95);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .complete-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 32px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 480px;
+    }
+
+    .complete-card h2 {
+      font-size: 22px;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .complete-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <span class="title">Scoring Cieco Fari</span>
+      <span class="badge">Stage 10 · Lavoro A</span>
+    </div>
+    <div class="progress-wrap">
+      <span id="progress-text" class="progress-text">Caricamento...</span>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="image-container">
+      <img id="main-image" src="" alt="Immagine di test cieca">
+      <div id="meta-tag" class="meta-tag">hash: --------</div>
+    </div>
+
+    <div class="keypad-bar">
+      <button class="key-btn btn-off" onclick="submitScore('0')">
+        <kbd>0</kbd> Fari SPENTI
+      </button>
+      <button class="key-btn btn-amb" onclick="submitScore('1')">
+        <kbd>1</kbd> AMBIGUO / Non chiaro
+      </button>
+      <button class="key-btn btn-on" onclick="submitScore('2')">
+        <kbd>2</kbd> Fari ACCESI
+      </button>
+      <button class="key-btn btn-back" onclick="goBack()">
+        <kbd>← / Backspace</kbd> Indietro
+      </button>
+    </div>
+  </main>
+
+  <div id="complete-modal" class="complete-modal">
+    <div class="complete-card">
+      <h2>✓ Scoring Completato!</h2>
+      <p>Tutti i 280 render sono stati valutati e registrati.<br>
+      I dati grezzi sono stati salvati in <code>data/stage9_headlights_raw.csv</code>.<br>
+      Ora è possibile sbloccare la chiave ed eseguire l'analisi statistica.</p>
+      <button class="key-btn" style="width:100%; justify-content:center;" onclick="downloadCSV()">
+        Scarica backup CSV
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let images = [];
+    let currentIndex = 0;
+    let scores = []; // { hash_id, code, timestamp_ms }
+    const STORAGE_KEY = "arthemy_headlights_scores_stage10";
+
+    async function init() {
+      // Carica elenco cieco
+      const res = await fetch("blind_order.json");
+      images = await res.json();
+
+      // Recupera punteggi preesistenti da localStorage se presenti
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          scores = JSON.parse(saved);
+          currentIndex = scores.length;
+        } catch (e) {
+          scores = [];
+          currentIndex = 0;
+        }
+      }
+
+      if (currentIndex >= images.length) {
+        showComplete();
+      } else {
+        updateUI();
+      }
+    }
+
+    function updateUI() {
+      if (currentIndex >= images.length) {
+        showComplete();
+        return;
+      }
+      const item = images[currentIndex];
+      const imgEl = document.getElementById("main-image");
+      imgEl.src = "blind_headlights/" + item.filename;
+
+      document.getElementById("meta-tag").innerText = `Ordine: ${item.order} / ${images.length} · ID: ${item.hash_id}`;
+      document.getElementById("progress-text").innerText = `${currentIndex + 1} / ${images.length} (${Math.round((currentIndex / images.length) * 100)}%)`;
+      document.getElementById("progress-bar").style.width = `${(currentIndex / images.length) * 100}%`;
+    }
+
+    async function submitScore(code) {
+      if (currentIndex >= images.length) return;
+      const item = images[currentIndex];
+      const ts = Date.now();
+
+      const record = {
+        hash_id: item.hash_id,
+        code: code,
+        timestamp_ms: ts
+      };
+
+      // Se stiamo sovrascrivendo un punteggio precedente (dopo essere tornati indietro)
+      if (currentIndex < scores.length) {
+        scores[currentIndex] = record;
+      } else {
+        scores.push(record);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+
+      // Invio al server locale
+      try {
+        await fetch("/api/score", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(record)
+        });
+      } catch (err) {
+        console.warn("Invio al server fallito, salvato in local storage", err);
+      }
+
+      currentIndex++;
+      updateUI();
+    }
+
+    function goBack() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateUI();
+      }
+    }
+
+    function showComplete() {
+      document.getElementById("complete-modal").style.display = "flex";
+      document.getElementById("progress-text").innerText = `${images.length} / ${images.length} (100%)`;
+      document.getElementById("progress-bar").style.width = `100%`;
+    }
+
+    function downloadCSV() {
+      let csv = "hash_id,code,timestamp_ms\n";
+      for (const s of scores) {
+        csv += `${s.hash_id},${s.code},${s.timestamp_ms}\n`;
+      }
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "stage9_headlights_raw.csv";
+      a.click();
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "0") {
+        submitScore("0");
+      } else if (e.key === "1") {
+        submitScore("1");
+      } else if (e.key === "2") {
+        submitScore("2");
+      } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
+        goBack();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+condition,mean_delta_body_area,p_raw_signflip,p_adj_holm,valid_prompts_n,total_prompts_n,gate1_spearman_colorfulness,gate3_proxy_agreement_rho,verdict
+preset_pos_1x,0.023233,0.0312,0.1562,7,8,0.01,0.0857,NOT_SIGNIFICANT
+preset_pos_2x,0.053607,0.0156,0.0938,7,8,0.01,0.0857,NOT_SIGNIFICANT
+blockshuf_neg_1x,0.002465,0.9062,1.0,7,8,0.01,0.0857,NOT_SIGNIFICANT
+blockshuf_neg_2x,-0.04785,0.1094,0.4375,7,8,0.01,0.0857,NOT_SIGNIFICANT
+rand_pos_1x,0.026525,0.1406,0.4375,7,8,0.01,0.0857,NOT_SIGNIFICANT
+rand_pos_2x,-0.00628,0.5,1.0,7,8,0.01,0.0857,NOT_SIGNIFICANT
