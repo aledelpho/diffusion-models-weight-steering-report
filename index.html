@@ -363,11 +363,12 @@
     <li><a href="#avv">4 · Exp 1 · Metric Warning</a></li>
     <li><a href="#conferma">5 · Exp 1 · Confirmation Round</a></li>
     <li><a href="#emergenza">6 · Exp 2 · Attribute Emergence</a></li>
-    <li><a href="#contenuto">7 · Exp 3 · What Ends Up in the Picture</a></li>
+    <li><a href="#contenuto">7 · Exp 3 · Subject size, and blinding</a></li>
     <li><a href="#nonstab">8 · Non-Established</a></li>
     <li><a href="#metodo">9 · Methodology</a></li>
-    <li><a href="#errori">10 · 38 Pitfalls</a></li>
+    <li><a href="#errori">10 · 40 Pitfalls</a></li>
     <li><a href="#ripresa">11 · How to Replicate</a></li>
+    <li><a href="#domani">12 · What Happens Tomorrow</a></li>
     <li style="margin-left:auto;"><a href="viewer/viewer.html" style="color:var(--pos); font-weight:600; border-color:var(--pos);">✦ Interactive A/B Viewer</a></li>
   </ol>
 </nav>
@@ -542,6 +543,50 @@
     properly.</strong> I had observed it on my own screen, repeatedly, and that is not the same as showing it. So I
     decided to push the intuition until it breaks. At best it becomes a usable way to change a model's style with
     no fine-tuning and no LoRA, from a configuration file under 100 KB.</p>
+
+  <h3>What I think is actually going on</h3>
+  <p>Written a while back, on Reddit, before most of the measurements on this page existed:</p>
+  <blockquote>
+    <p>Think of a model as a mountain range and your prompt as the spot where you pour a bucket of
+      water. Water follows gravity, AI follows probability — similar prompts usually make the water
+      roll into the same valley every time. It's highly probable that the exact look you want already
+      exists somewhere on that mountain. It just never shows up, because the terrain doesn't
+      incentivize the water to reach it. Traditional fine-tuning expands upon the whole range to fix
+      that, but you don't need that most of the time: dig one canal, shift one ridge, and the water
+      finds a new home.</p>
+  </blockquote>
+  <p>I have since said it a second way — that base models are <em>balanced</em>, and that we could
+    <em>unbalance</em> them toward the look we want. Those two sound like one idea and <strong>they are
+    not</strong>, which took a full day of measurements to notice. “Unbalance toward comics” says there
+    is a fixed amount of ability being traded: gain on one thing, lose on another, like a graphic
+    equaliser. To claim that, you have to show the thing that got worse — and <strong>that was never
+    measured.</strong> The mountain says something weaker and therefore easier to earn: the ability is
+    all still there, and the edit changes <em>where the water ends up</em>, not how big the mountain
+    is.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Effect</th><th>Did the stock model already do it?</th><th class="n">After the edit</th></tr></thead>
+    <tbody>
+      <tr><td>lit headlights <span class="idx">§6.8</span></td><td><strong>yes — 10 renders of 35</strong></td><td class="n">31 of 38</td></tr>
+      <tr><td>barnacles <span class="idx">§6.1</span></td><td><strong>yes — 1 of 20</strong></td><td class="n">19 of 20</td></tr>
+      <tr><td>subject's share of frame <span class="idx">§7.1</span></td><td><strong>yes — 13% of canvas</strong></td><td class="n">28%</td></tr>
+      <tr><td>parallel vs crossed hatching <span class="idx">§5.2</span></td><td><strong>yes, both</strong></td><td class="n">which one wins flips with the sign</td></tr>
+      <tr><td>rally car turning into an SUV</td><td><strong>yes, it can draw both</strong></td><td class="n">which one shows up changes</td></tr>
+    </tbody>
+  </table></div>
+  <p>Not one measured effect is a new ability appearing. They are all shifts in <em>how likely</em>
+    something is that the model was already doing, sometimes rarely. Headlights went from 29% to 82%;
+    barnacles from 5% to 95%. Neither was taught — both were made probable. So the claim this notebook
+    is actually testing, stated so it can be checked on any model:</p>
+  <div class="box">
+    <span class="lbl">The portable claim</span>
+    <p><strong>A small structured weight edit redistributes the probability of what comes out toward
+      regions the model already reaches, without adding capability.</strong></p>
+    <p>That sentence is falsifiable in a way “it changes the style” is not: if an edit ever produced
+      something the stock model never produces in any seed, the mountain would be wrong. And it is
+      portable — it can be tested on a model that shares nothing with this one, which is the point of
+      §8.2.</p>
+  </div>
+
   <div class="box warn">
     <span class="lbl">Two experiments, thirteen analyses</span>
     <p>Experiment 1 rests on <strong>1272 renders</strong> across 24 prompts. Every table about stroke morphology,
@@ -770,7 +815,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       image is are mechanically coupled: in the <strong>baseline alone</strong>, where nothing is
       perturbed, they correlate at <code>r = +0.776</code>, with
       <code>colorfulness = 13.4 + 238.1 × area_fraction</code>. Applying that slope to the size changes
-      measured in <a href="#contenuto">§7.2</a>, size accounts for <strong>95–145%</strong> of the
+      measured in <a href="#contenuto">§7.1</a>, size accounts for <strong>95–145%</strong> of the
       colour change. <code>blockshuf_neg</code> does not saturate — it makes the subject bigger, and a
       bigger subject in a green scene is a more colourful image.</p>
     <p><strong>Darkening and grain do not go through size and stand.</strong> And this was checked
@@ -1148,31 +1193,9 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     space</strong>, found incidentally while running a matched control, moving one neglected attribute from 5% to 95%
     presence without touching the prompt or the sampler. Whether it generalises beyond this attribute is exactly what
     5.6 says is untested.</p>
-</section>
 
-<section id="contenuto">
-  <h2><span class="n">7</span> Experiment 3 · What Ends Up in the Picture <span class="chip pos">two traits</span> <span class="chip open">blinding measured</span></h2>
-
-  <div class="box">
-    <span class="lbl">The direction I'm chasing · what would kill it · where we are</span>
-    <p><strong>The direction.</strong> Experiments 1 and 2 are both about a model drawing the thing you
-      asked for — how it draws it, and whether a detail you asked for and got ignored can be brought
-      back. This one asks something I didn't plan and didn't want: <em>does the edit put things in the
-      picture that nobody asked for at all?</em> If a weight edit only restyles, it is a filter with a
-      fancy implementation. If it also decides what counts as part of the object — a car has
-      headlights, so switch them on — it touches the model's idea of the thing, and a tuner is a
-      different instrument than I thought I was building.</p>
-    <p><strong>What would kill it.</strong> If the traits only appear where the prompt already names
-      them, this is Experiment 2 again. If they appear only because the image got darker, or only
-      because the person scoring knew which condition he was looking at, it is the eye and not the
-      model.</p>
-    <p><strong>Where we are.</strong> Both traits survived blind scoring, and the second survived a
-      confirmation on a corpus that did not exist when the prediction was frozen. And the blinding
-      itself was <em>measured</em> rather than assumed — §7.4, which is the most useful part of this
-      section and the least comfortable.</p>
-  </div>
-
-  <h3><span class="num">7.1</span> Headlights — a detail nobody asked for</h3>
+  <h3><span class="num">6.8</span> Headlights — the same effect on something nobody asked for</h3>
+  <p class="why"><strong>A separate corpus:</strong> 280 renders, 8 styles, one blind scoring round, prompt <code>a yellow and blue rally car cruising in a deep jungle</code>. Everything above is about a detail that <em>was</em> asked for and dropped; this is the same instrument with the request removed.</p>
   <p>The prompt reads <code>a yellow and blue rally car cruising in a deep jungle</code>. It says
     nothing about lights. Headlights are simply something a car has. All 280 renders were scored blind
     — filenames hashed, order shuffled, key sealed until the last score — on a three-way scale: off,
@@ -1192,32 +1215,52 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     The two that do not move are not counterexamples — stained glass was already at the ceiling, and
     ukiyo-e is at zero in all seven conditions, a style that never depicts lit headlights.</p>
   <figure>
-    <img src="assets/03_what_ends_up_in_the_picture/_figures/detail_headlights_preset.webp" alt="Headlights switch on under preset_pos_2x in charcoal style: 0 of 5 lit in baseline versus 5 of 5 lit in preset across the 5 canonical seeds." style="width:100%;height:auto;border-radius:6px;">
-    <figcaption>Headlights switch on under <code>preset_pos_2x</code> in style <code>S8_charcoal</code> across all five canonical seeds (0/5 lit in baseline → 5/5 lit in preset). Close-up 240×240 px crops centered on the vehicle front assembly. Crop coordinates logged in <a href="data/figure_crops_stage12.json"><code>data/figure_crops_stage12.json</code></a>.</figcaption>
+    <img src="assets/02_attribute_emergence/_figures/headlights_switch_on.webp" alt="S8 charcoal, five seeds, whole frames: 0 of 5 lit under baseline against 5 of 5 lit under preset_pos x2." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Headlights switch on under <code>preset_pos_2x</code> in style <code>S8_charcoal</code>, all five canonical seeds (0/5 → 5/5). <strong>Whole frames, nothing cropped</strong>, and the word under each panel is that image's own blind score — both are deliberate, and §6.11 says why. Composed by <a href="experiments/build_figures_headlights.py"><code>build_figures_headlights.py</code></a>, which selects the style by rule and refuses to draw a panel whose measured role contradicts its label.</figcaption>
   </figure>
   <figure>
-    <img src="assets/03_what_ends_up_in_the_picture/_figures/detail_headlights_blockshuffle.webp" alt="Headlights switch off under blockshuf_neg_2x in claymation style: 4 of 5 lit in baseline extinguished to 0 of 5 under blockshuffle." style="width:100%;height:auto;border-radius:6px;">
+    <img src="assets/02_attribute_emergence/_figures/headlights_switch_off.webp" alt="Headlights switch off under blockshuf_neg_2x in claymation style: 4 of 5 lit in baseline extinguished to 0 of 5 under blockshuffle." style="width:100%;height:auto;border-radius:6px;">
     <figcaption>Headlights extinguish under <code>blockshuf_neg_2x</code> in style <code>S4_claymation</code> across all five canonical seeds (4/5 lit in baseline → 0/5 lit in blockshuffle). Across the entire 280-render corpus, blockshuffle extinguishes headlights in 39 out of 39 scorable scenes.</figcaption>
   </figure>
-  <div class="box warn">
-    <span class="lbl">The obvious objection: is it just that the preset darkens the image?</span>
-    <p>It is a good objection — <a href="#ris">§3.4</a> shows the preset darkens — and the data already
-      had what it takes to test it. Splitting all 280 renders into thirds by measured lightness:</p>
-    <div class="tw"><table>
-      <thead><tr><th>Condition</th><th class="n">darkest third</th><th class="n">middle</th><th class="n">lightest third</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">baseline</td><td class="n">0.30 <span class="idx">n=10</span></td><td class="n">0.44 <span class="idx">n=16</span></td><td class="n"><strong>0.00</strong> <span class="idx">n=9</span></td></tr>
-        <tr class="hi"><td class="mono">preset_pos ×2</td><td class="n">1.00 <span class="idx">n=20</span></td><td class="n">0.67 <span class="idx">n=9</span></td><td class="n"><strong>0.56</strong> <span class="idx">n=9</span></td></tr>
-        <tr class="lo"><td class="mono">blockshuf_neg ×2</td><td class="n">0.00 <span class="idx">n=9</span></td><td class="n">0.00 <span class="idx">n=8</span></td><td class="n"><strong>0.00</strong> <span class="idx">n=22</span></td></tr>
-      </tbody>
-    </table></div>
-    <p>In the <strong>brightest</strong> third of the corpus the stock model never lights them — nine
-      renders, zero lit — and the preset lights them in five of nine. Lightness genuinely predicts
-      headlights, and it still is not the explanation.</p>
+  <p class="why"><strong>Worth saying out loud, because the figure shows it.</strong>
+    <code>blockshuf_neg ×2</code> does not only put the lights out — it changes the whole scene:
+    brighter sky, closer subject, different composition. That is §7.1's enlargement visible by eye, and
+    it means the comparison in the lower row is not “the same picture with the lights off”. The
+    <code>preset_pos</code> figure above is the cleaner of the two on that count, and the 39-of-39
+    number depends on neither.</p>
+  <h3><span class="num">6.9</span> The obvious objection: is it just that the picture got darker?</h3>
+  <p><a href="#ris">§3.4</a> shows the preset darkens the image, and lit headlights are more plausible
+    in a dark scene. It is the right objection, the data already had what it takes to answer it — and
+    the first version of the answer was wrong in a way worth writing down.</p>
+  <div class="box dead">
+    <span class="lbl">Corrected on 2026-09-18 — stratifying on a covariate the treatment moves</span>
+    <p>The first control split all 280 renders into thirds by the lightness <em>of each image as
+      rendered</em>. But lightness is itself an effect of the edit: <code>preset_pos ×2</code> moves
+      mean \(L^*\) by \(-3.3\). Conditioning on a post-treatment quantity does not hold the
+      confounder still, it reconstructs it — a treated render and its own baseline land in different
+      strata. It showed in the sample: that brightest third held <strong>two styles</strong>, and all
+      five of its lit preset renders were watercolour. Recorded as pitfall 39.</p>
   </div>
+  <p>The fix is to stratify on something the edit cannot have moved: the lightness of the
+    <strong>unmodified</strong> render of the same scene — same prompt, same seed, fixed before a
+    single weight is touched.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Condition</th><th class="n">darkest third</th><th class="n">middle</th><th class="n">lightest third</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">baseline</td><td class="n">0.27 <span class="idx">n=11</span></td><td class="n">0.46 <span class="idx">n=13</span></td><td class="n"><strong>0.09</strong> <span class="idx">n=11</span></td></tr>
+      <tr class="hi"><td class="mono">preset_pos ×2</td><td class="n">1.00 <span class="idx">n=14</span></td><td class="n">0.91 <span class="idx">n=11</span></td><td class="n"><strong>0.54</strong> <span class="idx">n=13</span></td></tr>
+      <tr class="lo"><td class="mono">blockshuf_neg ×2</td><td class="n">0.00 <span class="idx">n=14</span></td><td class="n">0.00 <span class="idx">n=12</span></td><td class="n"><strong>0.00</strong> <span class="idx">n=13</span></td></tr>
+    </tbody>
+  </table></div>
   <figure>
-    <img src="assets/03_what_ends_up_in_the_picture/_figures/headlights_lightness_control.webp" alt="Luminance tertile control: three paired panels from the brightest third of the corpus showing lit headlights under preset despite high scene luminance." style="width:100%;height:auto;border-radius:6px;">
-    <figcaption>Luminance control: three representative pairs drawn from the <strong>brightest third</strong> of the corpus (\(L^* &gt; 58.5\)). In this tertile, the baseline checkpoint lights 0 of 9 cars, whereas <code>preset_pos_2x</code> lights 5 of 9 (e.g. S3 seed 777 \(L^*=60.4\), S1 seed 4242145 \(L^*=60.2\), S5 seed 42 \(L^*=62.8\)). Scene darkening correlates with headlights, but does not account for the effect.</figcaption>
+    <img src="assets/02_attribute_emergence/_figures/headlights_lightness_control.webp" alt="Paired baseline and preset renders from the brightest third by pre-treatment lightness, with the full stratified table." style="width:100%;height:auto;border-radius:6px;">
+    <figcaption>Paired renders from the brightest third by <strong>pre-treatment</strong> lightness —
+      same prompt, same seed, baseline above and <code>preset_pos ×2</code> below. In that stratum the
+      stock model lights one car in eleven, the preset lights seven in thirteen, and the
+      displacement-matched control stays at zero. Brightness genuinely predicts headlights, the effect
+      is smaller where the scene is bright, and it does not go away — now across <strong>five styles
+      instead of two</strong>. Regenerated into
+      <a href="data/stage9_headlights_pretreatment_strata.csv"><code>stage9_headlights_pretreatment_strata.csv</code></a>.</figcaption>
   </figure>
   <p class="why"><strong>On the statistic, which looks weak and is not.</strong> The test returns
     <code>p = 0.0312</code>, which does not clear correction across six conditions. That value is the
@@ -1226,7 +1269,62 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     number the test can produce. The same structural ceiling as <a href="#ris">§3.3</a>: neither
     confirmed nor weak, floored.</p>
 
-  <h3><span class="num">7.2</span> How much room the subject takes <span class="chip pos">confirmed on a new corpus</span></h3>
+  <h3><span class="num">6.10</span> What the headlights restrict in this same experiment</h3>
+  <div class="box dead">
+    <span class="lbl">§6.2 was too strong, and this is the correction</span>
+    <p>§6.2 concludes that the perturbation <em>“does not add the attribute and does not repair the
+      neglect — it acts as a gain on a binding the prompt must already have established.”</em></p>
+    <p>Headlights are never in the prompt. Yet the preset takes them from 0/3 to 5/5 on watercolour,
+      and block-shuffle removes them from a baseline that had them 4 times in 5. <strong>Neither is a
+      gain on a prompt-established binding.</strong> The claim holds for the barnacle case, where the
+      trait was in the text and was being ignored; it does not extend to traits that come from the
+      model's idea of the object.</p>
+  </div>
+
+  <h3><span class="num">6.11</span> What the headlights do not establish</h3>
+  <ul class="body">
+    <li><strong>Quantification, not confirmation.</strong> The observation was born looking at these
+      renders and is measured on the same renders. A confirmation needs the prediction frozen first and
+      a corpus that does not exist yet.</li>
+    <li><strong>One object, one prompt.</strong> A car has headlights the way a face has eyes. Whether
+      the effect is “the edit completes objects” or “the edit likes bright spots on cars” is not
+      decided by cars alone.</li>
+    <li><strong>The scorer was the author</strong>, and §7.2 measures how blind he actually was. Short
+      version: not very. The argument that this does not sink the result rests on an asymmetry, not on
+      a denial.</li>
+    <li><strong>The figures used to say something the data denied.</strong> The first lightness figure
+      carried a panel labelled <em>ukiyo-e · preset_pos ×2 · headlight lit</em> for a cell scored
+      <strong>off</strong> in all five seeds of all seven conditions, with \(L^*\) values matching no
+      measurement in this repository; five crop rectangles of twenty did not contain the headlights
+      they were captioned as showing. The numbers in the text were right the whole time — only the
+      pictures lied. The figures here are now composed from the scoring file by a script that derives
+      every caption from the score of the image it is drawing and raises rather than compose a
+      contradiction, and shows whole frames because a crop is itself a claim. Pitfall 40, rule 10.</li>
+  </ul>
+</section>
+
+<section id="contenuto">
+  <h2><span class="n">7</span> Experiment 3 · Subject Size, and How Blind the Scoring Was <span class="chip pos">confirmed on a new corpus</span> <span class="chip neg">blinding failed</span></h2>
+
+  <div class="box">
+    <span class="lbl">The direction I'm chasing · what would kill it · where we are</span>
+    <p><strong>The direction.</strong> Experiment 2 ends with a trait appearing and disappearing in the
+      picture. This section is about a different kind of change — not <em>what</em> is in the frame but
+      <em>how much of it the subject occupies</em> — and about the thing that decides whether any of it
+      can be believed: <strong>the author is the measuring instrument, and nobody had ever measured the
+      instrument.</strong></p>
+    <p><strong>What would kill it.</strong> If the size effect exists only on the images that produced
+      the observation, it is a story told after the fact. If it survives a fresh corpus but only
+      because the scorer could tell which condition he was looking at, it is the hand and not the
+      model.</p>
+    <p><strong>Where we are.</strong> The size effect was frozen in writing, then measured on a corpus
+      that did not exist when the prediction was written, and it survived — at <strong>a fifth of the
+      size the first round claimed</strong>. The blinding was <em>measured</em> rather than assumed,
+      and it <strong>failed</strong> — §7.2, which is the most useful part of this notebook and the
+      least comfortable.</p>
+  </div>
+
+  <h3><span class="num">7.1</span> How much room the subject takes <span class="chip pos">confirmed on a new corpus</span></h3>
   <p>Second thing noticed by eye: under <code>blockshuf_neg</code> the vehicle seems to grow in frame.
     The first round measured it on the images that produced the observation and returned a ratio of
     <strong>2.14</strong> — 13% to 28% of canvas — but the key had been opened for the headlights
@@ -1251,19 +1349,7 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     what the first round claimed. The negative control is the weak part: the preset was predicted to
     visibly shrink the subject and does essentially nothing — right sign, no magnitude.</p>
 
-  <h3><span class="num">7.3</span> What this restricts in Experiment 2</h3>
-  <div class="box dead">
-    <span class="lbl">§6.2 was too strong, and this is the correction</span>
-    <p>§6.2 concludes that the perturbation <em>“does not add the attribute and does not repair the
-      neglect — it acts as a gain on a binding the prompt must already have established.”</em></p>
-    <p>Headlights are never in the prompt. Yet the preset takes them from 0/3 to 5/5 on watercolour,
-      and block-shuffle removes them from a baseline that had them 4 times in 5. <strong>Neither is a
-      gain on a prompt-established binding.</strong> The claim holds for the barnacle case, where the
-      trait was in the text and was being ignored; it does not extend to traits that come from the
-      model's idea of the object.</p>
-  </div>
-
-  <h3><span class="num">7.4</span> How blind was the scoring, actually <span class="chip neg">blinding failed</span></h3>
+  <h3><span class="num">7.2</span> How blind was the scoring, actually <span class="chip neg">blinding failed</span></h3>
   <p>Everything above rests on one person looking at pictures and writing numbers while knowing what
     the experiment is about. That is the weakest joint in this notebook, and until now it had only ever
     been argued about. So it was measured: twenty trials, four images side by side — baseline,
@@ -1301,14 +1387,12 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
       <code>r = +0.995</code>. The measured effect is about twenty times that noise.</p>
   </div>
 
-  <h3><span class="num">7.5</span> What this does not establish</h3>
+  <h3><span class="num">7.3</span> What this does not establish</h3>
   <ul class="body">
     <li><strong>Structure versus magnitude, for the enlargement.</strong> The confirmation compared two
       <em>structured</em> edits and a baseline. The sign-scrambled control at identical displacement —
       the one carrying that argument everywhere else here — was not in the design.</li>
-    <li><strong>The headlights are quantified, not confirmed.</strong> The observation was made on the
-      renders that measured it. The confirmation needs new objects with a trait implied but never named.</li>
-    <li><strong>One subject, one object class.</strong> Both traits were measured on vehicles.</li>
+    <li><strong>One subject, one object class.</strong> The size effect was measured on vehicles only.</li>
   </ul>
 </section>
 
@@ -1364,13 +1448,13 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     §5 is attenuated by roughly half, and that more seeds per cell buy as much power as more prompts.</p>
 
   <h3><span class="num">8.5</span> How blind the human scoring was <span class="chip neg">measured, and it failed</span></h3>
-  <p>Stated here rather than only in <a href="#contenuto">§7.4</a>, because it bounds every
+  <p>Stated here rather than only in <a href="#contenuto">§7.2</a>, because it bounds every
     human-scored result on this page, the barnacles of §6 included. In a four-way forced choice against
     a 25% chance level, the author identified <code>preset_pos</code> ×2 in 17 trials of 20 and
     <code>blockshuf_neg</code> ×2 in 12 of 20 — <em>with</em> the images mirrored, flipped, hue-rotated,
     re-saturated, re-brightened and noised.</p>
   <p><strong>Hidden filenames do not blind an expert to a condition with a visible signature.</strong>
-    Two independent arguments say this did not produce the §7.2 result — the condition recognised best
+    Two independent arguments say this did not produce the §7.1 result — the condition recognised best
     shows no effect, and the effect survives in the styles where recognition was at chance — but no
     scoring round in this notebook that lacks a discrimination test should be read as blind.</p>
 </section>
@@ -1423,17 +1507,17 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 
   <h3><span class="num">9.4</span> Name the statistic, not just the test</h3>
   <p>“Sign-flip permutation on ρ” is not a specification. Ratio, ratio minus one, log-ratio and raw
-    difference are four legitimate readings of the same comparison, and on the confirmation in §7.2
+    difference are four legitimate readings of the same comparison, and on the confirmation in §7.1
     three of them clear the corrected threshold and one does not. Where a between-group quantity is
     standardised, whether it is centred is part of the statistic too — §8.4 is what happens when it is
     left unsaid.</p>
 </section>
 
 <section id="errori">
-  <h2><span class="n">10</span> The Thirty-Eight Measurement Pitfalls</h2>
+  <h2><span class="n">10</span> The Forty Measurement Pitfalls</h2>
   <div class="box dead">
     <span class="lbl">Methodological Caution</span>
-    <p><strong>None of these 38 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
+    <p><strong>None of these 40 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. The two added on 2026-09-18 are of a kind not seen before: <strong>39</strong> stratified a control on a covariate the treatment itself moves, and <strong>40</strong> is the first error that lived entirely in a <em>figure</em> — captions and crop rectangles typed by hand next to numbers that were correct. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
   </div>
 </section>
 
@@ -1455,6 +1539,39 @@ data/
   attribute_emergence.csv         Per-seed scoring of every set in §5 (370 rows)
   attribute_emergence_recipe.json Exact prompt, sha1, preset, strengths and seeds per set</pre>
 </section>
+
+<section id="domani">
+  <h2><span class="n">12</span> What Happens Tomorrow</h2>
+  <p>Section 8 is the long list of what is not established. This is the short one — four things, all
+    already specified, none requiring a new idea.</p>
+  <ol class="body">
+    <li><strong>Re-run the figures from the data, not from memory.</strong>
+      <a href="experiments/build_figures_headlights.py"><code>build_figures_headlights.py</code></a>
+      reads the blind scores, picks which style to show by rule, derives every caption from the score
+      of the image underneath it, and raises rather than compose a panel whose measured role
+      contradicts its label. It needs the original stage-9 PNGs, so it runs on the machine that holds
+      them. Every figure in this notebook that was assembled by hand gets the same treatment
+      afterwards.</li>
+    <li><strong>The 216 rotations that were already on disk.</strong> Before any of this started, the
+      pilot benchmarks swept <strong>six blocks × four rotation angles × nine prompts</strong>, and the
+      reports are still there. Blocks 1 and 6 respond three to four times more than blocks 2–5 — the
+      first hint anywhere in this project that the displacement has a <em>location</em> and not only a
+      direction. It is also confounded three ways: the rotations were never norm-matched, the metric is
+      the CLIP distance §4 showed to be blind to the effects that matter here, and the evaluation
+      checkboxes were never filled. The brief says exactly what can and cannot be recovered, and the
+      answer may well be “nothing, but now we know why”.</li>
+    <li><strong>The control Experiment 3 never had.</strong> Every size measurement so far compares two
+      <em>structured</em> edits with each other. Until a sign-scrambled perturbation at the same
+      displacement is in the design, §7.1 says nothing about structure versus magnitude — the one thing
+      Experiment 2 established and Experiment 3 quietly assumed.</li>
+    <li><strong>A headlight detector that is not a person.</strong> §7.2 measured the blinding and it
+      failed. The cheapest honest fix is not a better disguise but a measurement with no eyes: a fixed
+      lamp-region brightness statistic, calibrated on baseline renders only, then applied blind to
+      everything. If it reproduces the 0.29 → 0.82 → 0.00 pattern, the headlights stop depending on one
+      pair of eyes. If it does not, that is worth knowing before anything else is built on §6.8.</li>
+  </ol>
+</section>
+
 
 <footer>
   Public Lab Notebook · September 17, 2026. Two experiments · 1272 + 390 + 560 renders · 40 prompts · 3 pre-registrations · 33 measurement pitfalls documented · Open for replication.

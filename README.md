@@ -141,6 +141,55 @@ out wrong, because those are as much a part of the story as the results that hel
 
 ---
 
+## What I think is actually going on
+
+I wrote this a while back, on Reddit, before most of the measurements on this page existed:
+
+> Think of a model as a mountain range and your prompt as the spot where you pour a bucket of water.
+> Water follows gravity, AI follows probability — similar prompts usually make the water roll into the
+> same valley every time. It's highly probable that the exact look you want already exists somewhere on
+> that mountain. It just never shows up, because the terrain doesn't incentivize the water to reach it.
+> Traditional fine-tuning expands upon the whole range to fix that, but you don't need that most of the
+> time: dig one canal, shift one ridge, and the water finds a new home.
+
+I've since said it a second way — that base models are *balanced*, and that we could *unbalance* them
+toward the look we want. Those two sound like the same idea and **they are not**, which took a full day
+of measurements to notice.
+
+"Unbalance toward comics" says there is a fixed amount of ability being traded: gain on one thing, lose
+on another, like a graphic equaliser. To claim that, you have to show the thing that got worse. **I
+never measured that.**
+
+The mountain says something different and weaker, and therefore easier to earn: the ability is all
+still there, and the edit changes **where the water ends up**, not how big the mountain is. Diverting a
+river doesn't lower the peaks.
+
+**Everything measured so far fits the mountain, and nothing yet requires the equaliser:**
+
+| | did the stock model already do it? | after the edit |
+| --- | --- | --- |
+| lit headlights (§2.8) | **yes — 10 renders of 35** | 31 of 38 |
+| barnacles (§2.1) | **yes — 1 of 20** | 19 of 20 |
+| subject's share of frame (§3.1) | **yes — 13% of canvas** | 28% |
+| parallel vs crossed hatching (§1.6) | **yes, both** | which one wins flips with the sign |
+| rally car turning into an SUV | **yes, it can draw both** | which one shows up changes |
+
+Not one measured effect is a new ability appearing. They are all shifts in *how likely* something is
+that the model was already doing, sometimes rarely. Headlights went from 29% to 82%. Barnacles went
+from 5% to 95%. Neither was taught — both were made probable.
+
+So the claim this notebook is actually testing, stated so it can be checked on any model:
+
+> **A small structured weight edit redistributes the probability of what comes out toward regions the
+> model already reaches, without adding capability.**
+
+That sentence is falsifiable in a way "it changes the style" is not: if an edit ever produced something
+the stock model never produces in any seed, the mountain would be wrong. And it is portable — you can
+test it on a model that shares nothing with this one, which is the whole point of §10.
+
+
+---
+
 ## What is established, and what is not
 
 **Two experiments, fifteen analyses, and one confirmation round.** That distinction matters more than it
@@ -177,13 +226,13 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   Headlights are never named in the rally-car prompt. `preset_pos` takes them from 5% to 82% presence,
   `blockshuf_neg` extinguishes them in 39 renders of 39, and neither is explained by the image getting
   darker — in the *brightest* third of the corpus the stock model never lights them and the preset
-  lights them in 5 of 9 (§3.1). This is the finding that restricts §2.2.
+  lights them in 7 of 13 (§2.9). This is the finding that restricts §2.2.
 * **`blockshuf_neg` makes the subject occupy more of the frame.** Ratio 1.22 on 9 prompts of 10,
   confirmed on a corpus of ten new styles, a different vehicle colour and a different setting, against
-  a prediction frozen before the renders existed (§3.2).
+  a prediction frozen before the renders existed (§3.1).
 * **The hand-calibrated preset is a sharply defined operator, not a vague nudge.** Darker (7/8 prompts),
   greyer (7/8), grainier (8/8 prompts and 40/40 images), parallel-stroked (16/16 prompts, 80/80 pairs),
-  headlights on. Five effects, one direction, measured on two unrelated corpora (§1.7, §1.6, §3.1).
+  headlights on. Five effects, one direction, measured on two unrelated corpora (§1.7, §1.6, §2.8).
 
 * **There is a hatching axis, and the sign of a structured displacement moves you along it.** The preset
   runs strokes parallel where block-shuffle crosses them, predicted by sign in advance and confirmed on
@@ -215,7 +264,7 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
 * **How blind the scoring rounds in this notebook actually were — now measured, and the answer is
   "not very".** In a four-way forced choice against a 25% chance level, the author identified
   `preset_pos` ×2 in 17 trials of 20 and `blockshuf_neg` ×2 in 12 of 20, *with* the images mirrored,
-  flipped, hue-rotated, re-saturated, re-brightened and noised (§3.4). Hidden filenames do not blind an
+  flipped, hue-rotated, re-saturated, re-brightened and noised (§3.2). Hidden filenames do not blind an
   expert to a condition with a visible signature. This applies backwards to every human-scored result
   here, including the barnacles. Two independent arguments say it does not explain the size result —
   the condition recognised best shows no effect, and the effect survives in the styles where
@@ -224,7 +273,7 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
 * **Whether the enlargement is about structure or about magnitude.** The confirmation round compared
   `blockshuf_neg` against `preset_pos` and the baseline, and left out the one control that matters for
   that question: a sign-scrambled perturbation at the same displacement. Until `rand_pos` is in the
-  design, §3.2 separates two *structured* edits from each other and says nothing about structure versus
+  design, §3.1 separates two *structured* edits from each other and says nothing about structure versus
   magnitude.
 * **That the direction of steering depends on the style the prompt declares.** Tested with the
   thresholds frozen in advance and **not supported**: nothing significant at the usable amplitude, an
@@ -233,7 +282,7 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   pre-registration never named. Recorded in [`docs/stage9_verdict.md`](docs/stage9_verdict.md).
 * **That an exploratory effect size in this notebook means anything.** Three consecutive confirmation
   rounds have come back between a third and a half of the exploratory estimate — the colour coherence
-  of §1.5, the headlights, the enlargement of §3.2. Treat any number here that has not survived a
+  of §1.5, the headlights, the enlargement of §3.1. Treat any number here that has not survived a
   frozen prediction as an upper bound.
 * Whether the attribute-emergence effect is a general property or something specific to the prompt
   template it was found on. The one positive case on a different subject uses an almost identical
@@ -256,10 +305,12 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
 ---
 <p align="center">
   <a href="#introduction--how-i-got-here"><strong>Introduction</strong></a> •
+  <a href="#what-i-think-is-actually-going-on"><strong>What I think is going on</strong></a> •
   <a href="#what-is-established-and-what-is-not"><strong>What is established</strong></a> •
   <a href="#experiment-1--the-style-signature"><strong>Experiment 1 · Style signature</strong></a> •
   <a href="#experiment-2--attribute-emergence"><strong>Experiment 2 · Attribute emergence</strong></a> •
-  <a href="#experiment-3--what-ends-up-in-the-picture"><strong>Experiment 3 · What ends up in the picture</strong></a> •
+  <a href="#experiment-3--how-much-room-the-subject-takes-and-how-blind-i-actually-was"><strong>Experiment 3 · Subject size, and blinding</strong></a> •
+  <a href="#what-happens-tomorrow"><strong>Tomorrow</strong></a> •
   <a href="#roadmap"><strong>Roadmap</strong></a>
 </p>
 
@@ -705,7 +756,7 @@ the cleanest demonstration so far that two edits built from the *same multiset o
 > is not. In these jungle scenes, how much car is in the frame and how colourful the image is are
 > mechanically coupled: in the **baseline alone**, where nothing is perturbed, the two correlate at
 > $r = +0.776$, with `colorfulness = 13.4 + 238.1 × area_fraction`. Apply that slope to the size
-> changes measured in §3.2 and the size change accounts for **95–145%** of the colour change. So
+> changes measured in §3.1 and the size change accounts for **95–145%** of the colour change. So
 > `blockshuf_neg` doesn't saturate: it makes the car bigger, and a bigger car in a green scene is a
 > more colourful image.
 >
@@ -720,7 +771,7 @@ the cleanest demonstration so far that two edits built from the *same multiset o
 
 ## Experiment 2 — Attribute emergence
 
-<sub>**390 renders · 24 sets · a separate corpus from Experiment 1**</sub>
+<sub>**390 renders · 24 sets · plus a 280-render rally-car corpus for §2.8–§2.11 · separate from Experiment 1**</sub>
 
 > **The direction I'm chasing.** Everything in Experiment 1 is about *how* the model draws something it
 > was already going to draw. This one asks something else: can a different weight calibration make a
@@ -803,7 +854,7 @@ So the 2×2 is:
 
 The effect lives in exactly one cell. **Within this prompt family, the perturbation does not add the attribute and does not repair the neglect — it acts as a gain on a binding the prompt must already have established, and that binding is fragile enough that one phrase carries it.**
 
-> **Restricted on 2026-09-18.** That sentence was written without the qualifier, and it was too strong. [§3.1](#31-headlights--a-detail-nobody-asked-for) shows the same family of perturbations adding a trait the prompt **never mentions** — headlights, from 0/3 to 5/5 on one style — and removing one the stock model was already drawing, in 39 renders of 39. Neither is a gain on a prompt-established binding. The claim above holds for the barnacle case, where the trait was in the text and was being ignored; it does not extend to traits that come from the model's idea of the object.
+> **Restricted on 2026-09-18.** That sentence was written without the qualifier, and it was too strong. [§2.8](#28-headlights--the-same-effect-on-something-nobody-asked-for) shows the same family of perturbations adding a trait the prompt **never mentions** — headlights, from 0/3 to 5/5 on one style — and removing one the stock model was already drawing, in 39 renders of 39. Neither is a gain on a prompt-established binding. The claim above holds for the barnacle case, where the trait was in the text and was being ignored; it does not extend to traits that come from the model's idea of the object.
 
 ### 2.3 Which half of the model carries it
 
@@ -862,38 +913,17 @@ There is a second difference, and it is architectural rather than methodological
 
 ---
 
-## Experiment 3 — What ends up in the picture
+### 2.8 Headlights — the same effect on something nobody asked for
 
-<sub>**770 renders · 18 styles · two blind scoring rounds · a separate corpus from Experiments 1 and 2**</sub>
+<sub>**A separate corpus: 280 renders, 8 styles, one blind scoring round. Prompt: `a yellow and blue rally car cruising in a deep jungle`.**</sub>
 
-> **The direction I'm chasing.** Experiments 1 and 2 are both about a model drawing the thing you
-> asked for. Experiment 1 asks *how* it draws it; Experiment 2 asks whether a detail you asked for
-> and got ignored can be brought back. This one asks a question I didn't plan and didn't want:
-> **does the edit put things in the picture that nobody asked for at all?**
->
-> That matters because it changes what a preset *is*. If a weight edit only restyles, it's a filter
-> with a very fancy implementation. If it also decides what the model considers part of the object —
-> a car has headlights, so let's switch them on — then it's touching something closer to the model's
-> idea of the thing, and a tuner is a different kind of instrument than I thought I was building.
->
-> **What would kill it.** If the traits only show up where the prompt already mentions them, this is
-> Experiment 2 again and nothing new. If they show up but only because the image got darker, or only
-> because I was the one scoring and I knew which condition I was looking at, then it's my eyes and
-> not the model.
->
-> **Where we are.** Both the traits below survived a blind scoring round, and the second one survived
-> a full confirmation on a corpus that didn't exist when the prediction was written. The honest part:
-> I also **measured** how blind I actually was, and the answer was *not very*. The measurement is in
-> §3.4 and it is the most useful thing in this section.
+Everything above is about a detail I *did* ask for and didn't get. This is the same phenomenon with the
+request removed. The prompt says nothing about lights. Headlights are just something a car has.
 
-### 3.1 Headlights — a detail nobody asked for
-
-The prompt says `a yellow and blue rally car cruising in a deep jungle`. It does not say anything
-about lights. Headlights are just something a car has.
-
-I noticed while flipping through renders that `preset_pos` seemed to switch them on. So I scored all
-280 images blind — the files renamed to hashes, the order shuffled, the key sealed in a file I didn't
-open until the last score was in — on a three-way scale: off, on, can't tell.
+I noticed while flipping through renders that `preset_pos` seemed to switch them on. So I scored all 280
+images blind — files renamed to hashes, order shuffled, the key sealed in a file I didn't open until the
+last score was in — on a three-way scale: off, on, can't tell. "Can't tell" leaves the numerator *and*
+the denominator, which is why the denominators below aren't all the same.
 
 | | lit / scorable | rate |
 | --- | --- | --- |
@@ -901,9 +931,26 @@ open until the last score was in — on a three-way scale: off, on, can't tell.
 | **`preset_pos` ×2** | **31 / 38** | **0.816** |
 | **`blockshuf_neg` ×2** | **0 / 39** | **0.000** |
 
-I had only noticed half of it. `preset_pos` switches the lights on — but **`blockshuf_neg` switches
-them off, in thirty-nine images out of thirty-nine**, including the ones where the unmodified model
-had them lit 4 times in 5.
+I had only noticed half of it. `preset_pos` switches the lights on — but **`blockshuf_neg` switches them
+off, in thirty-nine images out of thirty-nine**, including the ones where the unmodified model had them
+lit four times in five.
+
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/headlights_switch_on.webp" alt="S8 charcoal, five seeds, baseline 0 of 5 lit against preset_pos x2 5 of 5 lit, whole frames" width="100%">
+</p>
+
+> *Whole frames, nothing cropped, and every caption under every panel is the blind score for that image —
+> both are deliberate, and §2.11 says why.*
+
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/headlights_switch_off.webp" alt="S4 claymation, five seeds, baseline 4 of 5 lit against blockshuf_neg x2 0 of 5 lit, whole frames" width="100%">
+</p>
+
+> *Worth saying out loud, because the figure shows it: `blockshuf_neg` ×2 does not only put the lights
+> out — it changes the whole scene. Brighter sky, closer subject, different composition. That is §3.1's
+> enlargement visible by eye, and it means the headlight comparison in this row is not "the same picture
+> with the lights off". The `preset_pos` figure above is the cleaner of the two on that count, and the
+> 39-of-39 number does not depend on either.*
 
 Per style, `preset_pos` ×2 reaches 5/5 in six styles of eight, and two of those started from zero:
 
@@ -916,32 +963,115 @@ Per style, `preset_pos` ×2 reaches 5/5 in six styles of eight, and two of those
 | ukiyo-e | 0 / 5 | 0 / 5 |
 | pixel art | 0 / 5 | 1 / 3 |
 
-A monochrome charcoal sketch lighting its headlights in all five seeds. The two that don't move
-aren't counterexamples — stained glass was already at the ceiling, and ukiyo-e is at zero in *all
-seven* conditions, which is a style that never depicts lit headlights rather than a failure to respond.
+A monochrome charcoal sketch lighting its headlights in all five seeds. The two that don't move aren't
+counterexamples — stained glass was already at the ceiling, and ukiyo-e sits at zero in *all seven*
+conditions, which is a style that never depicts lit headlights rather than a failure to respond.
 
-**The obvious objection, and it's a good one.** §1.7 says `preset_pos` darkens the image, and lit
-headlights are more plausible in a dark scene. So is this just brightness? No — and the data already
-had what it takes to check. Splitting all 280 images into thirds by measured lightness:
+**Why this belongs in Experiment 2 and not in a section of its own.** Barnacles are an attribute the
+prompt asks for and the model drops; headlights are an attribute the prompt never mentions and the model
+supplies anyway. Same instrument — is the trait in the picture, scored blind — and the same direction of
+result, in one case from 5% to 95% and in the other from 29% to 82%. The interesting part is that the
+*matched control* has a sign of its own: `blockshuf_neg` doesn't merely fail to light them, it puts them
+out everywhere. An edit that only added noise would scatter, not suppress.
 
-| | darkest third | middle | **lightest third** |
+> **On the statistics, because the number looks weak and isn't.** The test gives $p = 0.0312$, which after
+> correcting for six conditions doesn't clear the bar. That $p$ is the **exact floor**: six of the eight
+> prompts carry information (one is at the ceiling, one never lights up at all), all six move the same
+> way, and $2/2^6 = 0.0312$ is the smallest value the test can return. No effect of any size could have
+> done better here. It is the same structural ceiling documented in §1.3 — neither confirmed nor weak,
+> just floored.
+
+### 2.9 The obvious objection: is it just that the picture got darker?
+
+§1.7 says `preset_pos` darkens the image, and lit headlights are more plausible in a dark scene. This is
+the right objection and the data already had what it takes to check it — but the first version of the
+check was wrong, in a way worth writing down.
+
+**What I did first, and why it doesn't hold.** I split all 280 images into thirds by the lightness *of
+each image as rendered*, and compared conditions within each third. The problem is that lightness is
+itself an effect of the edit: `preset_pos` ×2 moves mean $L^*$ by $-3.3$. Conditioning on a quantity the
+treatment moves doesn't hold the confounder still, it re-creates it — the treated images get reshuffled
+into different thirds than their own baselines. It showed up in the sample, too: the brightest third under
+that split contained two styles, and all five of its lit preset renders were watercolour.
+
+**The fix is to stratify on something the edit cannot have moved:** the lightness of the *unmodified*
+render of the same scene, same prompt, same seed. That number is fixed before any weight is touched, so a
+scene stays in its stratum whatever the edit does to it.
+
+| rate of lit headlights | darkest third | middle | **lightest third** |
 | --- | --- | --- | --- |
-| baseline | 0.30 (n=10) | 0.44 (n=16) | **0.00 (n=9)** |
-| `preset_pos` ×2 | 1.00 (n=20) | 0.67 (n=9) | **0.56 (n=9)** |
-| `blockshuf_neg` ×2 | 0.00 (n=9) | 0.00 (n=8) | **0.00 (n=22)** |
+| baseline | 0.27 (n=11) | 0.46 (n=13) | **0.09 (n=11)** |
+| `preset_pos` ×2 | 1.00 (n=14) | 0.91 (n=11) | **0.54 (n=13)** |
+| `blockshuf_neg` ×2 | 0.00 (n=14) | 0.00 (n=12) | **0.00 (n=13)** |
 
-In the **brightest** third of the whole corpus, the unmodified model never lights them — nine images,
-zero lit — and the preset lights them in five of nine. Brightness genuinely predicts headlights
-overall, and it still isn't the explanation.
+<p align="center">
+  <img src="assets/02_attribute_emergence/_figures/headlights_lightness_control.webp" alt="Paired baseline and preset renders from the brightest third by pre-treatment lightness, with the full stratified table" width="100%">
+</p>
 
-> **On the statistics, because the number looks weak and isn't.** The test gives $p = 0.0312$, which
-> after correcting for six conditions doesn't clear the bar. That $p$ is the **exact floor**: six of
-> the eight prompts carry information (one is at the ceiling, one never lights up at all), all six
-> move the same way, and $2/2^6 = 0.0312$ is the smallest value the test can return. No effect of any
-> size could have done better here. It is the same structural ceiling documented in §1.3 — neither
-> confirmed nor weak, just floored.
+In the brightest scenes — the ones where "it got dark so the lights make sense" has nothing to work with —
+the unmodified model lights one car in eleven and the preset lights seven in thirteen, while the
+displacement-matched control stays at zero. Brightness genuinely predicts headlights overall, the effect
+is smaller where the scene is bright, and it does not go away. The corrected version is on **five styles
+instead of two**, which is the part that makes it worth having.
 
-### 3.2 How much room the subject takes
+*(Table regenerated by `experiments/build_figures_headlights.py`, written to
+`data/stage9_headlights_pretreatment_strata.csv`. The superseded post-treatment split is kept in
+`data/stage9_headlights_results.csv` and the reason it was replaced is pitfall 39 in
+[`docs/errors_log.md`](docs/errors_log.md).)*
+
+### 2.10 What the headlights restrict in this same experiment
+
+§2.2 concludes that the perturbation *"does not add the attribute and does not repair the neglect —
+it acts as a gain on a binding the prompt must already have established."*
+
+Headlights are never in the prompt. Yet `preset_pos` takes them from 0/3 to 5/5 on watercolour, and
+`blockshuf_neg` removes them from a baseline that had them 4 times in 5. **Neither of those is a gain
+on a binding the prompt established.**
+
+So that sentence is too strong as written. It is true of the barnacle case, where the trait was in the
+text and was being ignored, and it does not extend to traits that come from the model's idea of the
+object. The claim now reads: *within the barnacle prompt family, the perturbation acts as a gain on a
+prompt-established binding; separately, it can also add and remove traits the prompt never mentions.*
+
+### 2.11 What the headlights do **not** establish
+
+* **This is quantification, not confirmation.** The observation was born by looking at these renders and
+  is measured on the same renders. A confirmation needs the prediction written down first and a corpus
+  that doesn't exist yet — that is Priority 3.
+* **One object, one prompt.** A car has headlights the way a face has eyes. Whether the effect is
+  "the edit completes objects" or "the edit likes bright spots on cars" is not decided by cars alone.
+* **The scorer was me, and §3.2 measures how blind I actually was.** Short version: not very. The
+  argument that this doesn't sink the result is in §3.2 and it rests on an asymmetry, not on a denial.
+* **The figures used to say something the data denied.** The first version of the lightness figure
+  carried a panel labelled *ukiyo-e · preset_pos ×2 · headlight lit* for a cell that is scored **off** in
+  all five seeds of all seven conditions, with $L^*$ values that match no measurement in the repository.
+  The figures on this page are now composed by a script that reads the blind scores, derives every caption
+  from them, and raises an exception rather than draw a panel whose measured role contradicts its label —
+  and shows whole frames, because a crop is a claim about where to look and five of twenty crops had that
+  claim wrong. Rule 10 in [`docs/errors_log.md`](docs/errors_log.md).
+
+---
+
+## Experiment 3 — How much room the subject takes, and how blind I actually was
+
+<sub>**490 renders · 10 new styles · one frozen prediction and one discrimination test · a corpus that did not exist when the prediction was written**</sub>
+
+> **The direction I'm chasing.** Experiment 2 ends with a trait appearing and disappearing in the
+> picture. This section is about a different kind of change — not *what* is in the frame but *how much
+> of it the subject occupies* — and about the thing that decides whether any of it can be believed:
+> **I am the measuring instrument, and nobody had ever measured the instrument.**
+>
+> **What would kill it.** If the size effect only exists on the images that produced the observation,
+> it's a story I told myself. If it survives a fresh corpus but only because I could tell which
+> condition I was looking at, it's my hand and not the model.
+>
+> **Where we are.** The size effect was predicted in writing, then measured on a corpus that didn't
+> exist when the prediction was written, and it survived — at **a fifth of the size the first round
+> claimed**. And I measured my own blinding, which **failed**: I can pick the conditions out of a
+> line-up well above chance. That measurement is in §3.2, it applies backwards to every scoring round
+> on this page including the barnacles, and it is the most useful thing in this notebook.
+
+### 3.1 How much room the subject takes
 
 Second thing I noticed by eye: under `blockshuf_neg` the car seems to get *bigger* in the frame.
 
@@ -963,26 +1093,12 @@ re-brightened and noised — with the parameters recorded, so they could be used
 | `preset_pos` ×2 | shrinks | $\rho = 0.989$ | 4/10 |
 
 **All three signs correct, the ordering correct, and the effect about a fifth of what the first round
-claimed.** That shrinkage is the story of this whole notebook in miniature, and §3.4 explains why.
+claimed.** That shrinkage is the story of this whole notebook in miniature, and §3.2 explains why.
 
 The negative control is the weak part: `preset_pos` was supposed to visibly shrink the subject and
 instead does essentially nothing. The sign is right, the magnitude isn't there.
 
-### 3.3 What this restricts in Experiment 2
-
-§2.2 concludes that the perturbation *"does not add the attribute and does not repair the neglect —
-it acts as a gain on a binding the prompt must already have established."*
-
-Headlights are never in the prompt. Yet `preset_pos` takes them from 0/3 to 5/5 on watercolour, and
-`blockshuf_neg` removes them from a baseline that had them 4 times in 5. **Neither of those is a gain
-on a binding the prompt established.**
-
-So that sentence is too strong as written. It is true of the barnacle case, where the trait was in the
-text and was being ignored, and it does not extend to traits that come from the model's idea of the
-object. The claim now reads: *within the barnacle prompt family, the perturbation acts as a gain on a
-prompt-established binding; separately, it can also add and remove traits the prompt never mentions.*
-
-### 3.4 How blind was I, actually — and why this is the best thing in the section
+### 3.2 How blind was I, actually — and why this is the best thing in the section
 
 Everything above rests on me looking at pictures and writing down numbers, while knowing what the
 experiment was about. That's the weakest joint in the whole notebook, and until today I'd only ever
@@ -1027,6 +1143,41 @@ Two more things came out of the same round and both are firsts for this project:
 
 ---
 
+## What happens tomorrow
+
+The roadmap below is the long list. This is the short one — four things, all of them already specified,
+none of them requiring a new idea.
+
+**1 · Re-run the figures from the data, not from memory.** `experiments/build_figures_headlights.py`
+reads the blind scores, picks which style to show by rule, derives every caption from the score of the
+image underneath it, and raises an exception rather than compose a panel whose measured role
+contradicts its label. It needs the original stage-9 PNGs, so it runs on the machine that has them.
+Every figure on this page that was assembled by hand gets the same treatment afterwards.
+
+**2 · The 216 rotations that were already on disk.** Before any of this started, the pilot benchmarks
+swept **six blocks × four rotation angles × nine prompts** and the reports are still sitting in
+`comfyui-pilot/`. Blocks 1 and 6 respond three to four times more than blocks 2–5, which is the first
+hint anywhere in this project that the displacement has a *location* and not only a direction. It is
+also confounded three ways — the rotations were never norm-matched, the metric is the CLIP distance
+that §1.2 showed is blind to the effects we care about, and the evaluation checkboxes were never
+filled. The brief in `comfyui-pilot/BRIEF_rotations_reanalysis.md` says exactly what can and cannot be
+recovered from them, and the answer may well be "nothing, but now we know why".
+
+**3 · The control Experiment 3 never had.** Every size measurement so far compares two *structured*
+edits with each other. Until a sign-scrambled perturbation at the same displacement is in the design,
+§3.1 says nothing about structure versus magnitude — which is the one thing Experiment 2 established
+and Experiment 3 quietly assumed.
+
+**4 · A headlight detector that isn't me.** §3.2 measured the blinding and it failed. The cheapest
+honest fix is not a better disguise, it is a measurement that has no eyes: a fixed lamp-region
+brightness statistic, calibrated on the baseline renders only, then applied blind to everything. If it
+reproduces the 0.29 → 0.82 → 0.00 pattern, the headlights stop depending on me. If it doesn't, that is
+worth knowing before anything else in §2.8 is built on.
+
+Everything else stays where it is on the roadmap.
+
+---
+
 ## Roadmap
 
 Reordered on 2026-09-18, after a day that closed one question, opened two, and — more usefully than
@@ -1034,7 +1185,7 @@ either — measured how much to trust the person doing the scoring.
 
 ### Priority 1 · Get the human out of the measuring loop
 
-* **Why it moved to the top.** §3.4 measured the blinding and it failed: hashed filenames do not hide
+* **Why it moved to the top.** §3.2 measured the blinding and it failed: hashed filenames do not hide
   a condition with a visible signature from someone who knows the project. Every workaround — randomised
   mirroring, hue rotation, saturation and brightness jitter, added noise — was tried in the same round
   and was not enough.
@@ -1049,16 +1200,16 @@ either — measured how much to trust the person doing the scoring.
 
 ### Priority 2 · The control that Experiment 3 is missing
 
-* **The gap.** §3.2 compares `blockshuf_neg` against `preset_pos` and the baseline. Both are structured
+* **The gap.** §3.1 compares `blockshuf_neg` against `preset_pos` and the baseline. Both are structured
   edits. The sign-scrambled control at the identical displacement — the one that carries the whole
   "structure, not magnitude" argument everywhere else in this notebook — **was not in the design**.
 * **Criterion.** `rand_pos` at both amplitudes, same corpus, same protocol. If it enlarges too, the
-  finding is about displacement and not about structure, and §3.2 gets rewritten.
+  finding is about displacement and not about structure, and §3.1 gets rewritten.
 * Cheap: the corpus and the tooling already exist.
 
 ### Priority 3 · Confirm the headlights on something that isn't a car
 
-* **Goal.** §3.1 is a quantification, not a confirmation: the observation was made on the renders that
+* **Goal.** §2.8 is a quantification, not a confirmation: the observation was made on the renders that
   measured it. The claim it restricts — §2.2 — deserves a proper test.
 * **Criterion.** New objects, each with a trait that is *implied by the object but never named in the
   prompt*, scored blind with a discrimination test attached. If the traits appear under `preset_pos`

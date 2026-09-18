@@ -568,9 +568,18 @@ def main():
     print(" GENERAZIONE FIGURE COMPENDIO ESPERIMENTO 3 (TEMA SCURO)")
     print("==================================================================")
 
-    build_fig1()
-    build_fig2()
-    build_fig3()
+    # FIG 1, 2 e 3 sono state RITIRATE da questo script il 2026-09-18.
+    # Avevano coordinate di ritaglio ed etichette scritte a mano: cinque ritagli su
+    # venti non inquadravano i fari, e un pannello dichiarava "S5 ukiyoe preset_pos
+    # x2 - Headlight lit" per una cella che nello scoring cieco e' SPENTA in tutti e
+    # cinque i seed di tutte e sette le condizioni. Vedi pitfall 40 e regola 10.
+    # Le sostituisce experiments/build_figures_headlights.py, che sceglie i pannelli
+    # interrogando stage9_headlights_raw.csv, deriva ogni didascalia dal punteggio
+    # dell'immagine che sta disegnando, mostra i fotogrammi interi e solleva
+    # un'eccezione invece di comporre un pannello che i dati smentiscono.
+    # build_fig1()  -> headlights_switch_on.webp
+    # build_fig2()  -> headlights_switch_off.webp
+    # build_fig3()  -> headlights_lightness_control.webp
     build_fig4()
     build_fig5()
     build_fig6()

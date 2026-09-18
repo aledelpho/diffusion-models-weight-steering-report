@@ -1,11 +1,11 @@
 ﻿# Measurement Protocol & Error Log: Replication Checklist
 
-> **Purpose of this document**: This log records the 38 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 8 derived methodological rules.  
-> **None of these 38 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
+> **Purpose of this document**: This log records the 40 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 10 derived methodological rules.  
+> **None of these 40 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
 
 ---
 
-## The 9 Non-Negotiable Methodological Rules
+## The 10 Non-Negotiable Methodological Rules
 
 Before analyzing data or drawing conclusions on any diffusion architecture:
 
@@ -31,10 +31,17 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
    condition looks like. Every round of human scoring carries a forced-choice discrimination test
    against chance, run on the same images, and publishes the result — whichever way it comes out.
 
+10. **A figure is a claim, and it is checked like one.**
+   A caption written by hand next to an image chosen by hand can assert something the data denies,
+   and nothing in the pipeline will catch it. Every figure that carries a measured quantity is
+   composed by a script that reads the measurement, derives the caption from it, and refuses to
+   compose a panel whose measured role contradicts its label. A crop is itself a claim — that the
+   thing to look at is inside the box — so where that claim is not verified, the whole frame is shown.
+
 
 ---
 
-## The 38 Documented Measurement Pitfalls
+## The 40 Documented Measurement Pitfalls
 
 | # | Pitfall Encountered | Failure Mechanism | Silent Consequence | How to Prevent in Replication |
 |---|---|---|---|---|
@@ -76,6 +83,8 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 | **36** | Ranking conditions by a coherence that each condition can measure with different precision | Cross-prompt coherence is attenuated by measurement error, and the conditions do not share an error level | The §1.5 ranking of "which edit carries a chromatic direction" correlates with each condition's own split-half reliability at **r = +0.877, p = 0.022**. The order survives disattenuation, so the verdict stands, but the published ranking is partly a ranking of what was measured best | Publish the split-half reliability per condition and report the disattenuated effect alongside the raw one. Where reliability is ~0.5, more seeds per cell buy as much power as more prompts |
 | **37** | Two coherence statistics computed under different centering conventions | `analyze_palette_coherence.py` divides by σ without centering; the stage 9 script subtracts the joint mean. Subtracting a common vector that is *not* a group's own mean leaves a shared −μ component in every one of its vectors and aligns them artificially, most in the group furthest from μ | With 8 style prompts against 18 subject prompts, and one arm at double amplitude, the sign of the between-group comparison **flipped in 11 cells of 18** depending on the convention. Three reasonable implementations returned −0.104, +0.001 and −0.187 for the same cell | Name the convention in the pre-registration, and report every between-group coherence under both. A conclusion that survives only one convention is not a conclusion |
 | **38** | A carefully built metric validated against nothing | A hue-based mask for the vehicle's body was reasoned out from the prompt's stated colours, with per-image chroma normalisation to avoid a saturation bias | It correlates with hand-drawn ground truth at **ρ = −0.0020** — it measures nothing at all — and it would have been used had the acceptance gate not demanded a ground truth first. Heavy hatching and excluded black tyres and shadow defeated it | Before a new metric supports any claim, qualify it against a ground truth on a subset where no hypothesis is at stake, and publish the agreement per stratum |
+| **39** | Stratifying on a covariate the treatment itself moves | The lightness control for the headlights split all 280 renders into thirds by the lightness *of each image as rendered*. `preset_pos` ×2 shifts mean $L^*$ by $-3.3$, so a treated render and its own baseline land in different strata: conditioning on a post-treatment quantity does not hold the confounder still, it reconstructs it | The brightest third under that split contained **two styles**, and all five of its lit `preset_pos` renders were watercolour — a control that looked like it spanned the corpus and rested on one style. Re-stratifying on the *baseline's* lightness for the same (prompt, seed) gives 0.09 / 0.54 / 0.00 in the lightest third across **five styles**: same conclusion, honestly earned | Stratify only on quantities fixed before the intervention. When the natural covariate is itself an outcome, use its pre-treatment value on the paired unit |
+| **40** | A figure whose caption and crop were typed by hand | Panel choice, crop rectangles and verdict labels were literals in the figure script, written from memory rather than read from the scoring file | A panel read *ukiyo-e · `preset_pos` ×2 · headlight lit* for a cell scored **off** in all five seeds of all seven conditions, with $L^*$ values matching no measurement in the repository; five crop rectangles of twenty did not contain the headlights they were captioned as showing. The numbers in the text were right the whole time — only the pictures lied | Compose figures from the measurement file: select panels by rule, derive captions from the score of the image being drawn, and raise rather than draw a panel whose measured role contradicts its label. Show whole frames wherever the crop is not itself verified |
 
 
 ---

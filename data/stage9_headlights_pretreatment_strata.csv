@@ -1,0 +1,8 @@
+condition,rate_dark,n_dark,rate_mid,n_mid,rate_light,n_light
+baseline,0.273,11,0.462,13,0.091,11
+preset_pos_1x,0.615,13,0.538,13,0.1,10
+preset_pos_2x,1.0,14,0.909,11,0.538,13
+blockshuf_neg_1x,0.071,14,0.333,12,0.083,12
+blockshuf_neg_2x,0.0,14,0.0,12,0.0,13
+rand_pos_1x,0.286,14,0.25,12,0.0,13
+rand_pos_2x,0.077,13,0.083,12,0.0,11
