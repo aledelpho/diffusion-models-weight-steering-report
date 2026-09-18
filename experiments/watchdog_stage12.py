@@ -92,7 +92,7 @@ def main():
 
         time.sleep(20)
 
-    # 1. Preparazione del set cieco a 220 immagini con disturbi e 20 duplicati
+    # 1. Preparazione del set cieco a 220 immagini con disturbi e 20 duplicati (BBox Ingrandimento)
     log(">>> Esecuzione prepare_stage12_blind.py (3 livelli di cecità)...")
     cmd_prep = [
         PYTHON_EXE, "-u", os.path.join(REPORT_ROOT, "experiments", "prepare_stage12_blind.py")
@@ -102,6 +102,17 @@ def main():
         log(f"[ERRORE] prepare_stage12_blind.py fallito con codice {res_prep.returncode}")
     else:
         log("[Stage 12] Set cieco a 220 immagini e chiave preparati con successo.")
+
+    # 1-bis. Preparazione set cieco 4-AFC (Esperimento 12-B Pattern Discrimination)
+    log(">>> Esecuzione prepare_stage12_pattern.py (20 trial 4-AFC con seed distinti e distrattore 1x)...")
+    cmd_prep_pat = [
+        PYTHON_EXE, "-u", os.path.join(REPORT_ROOT, "experiments", "prepare_stage12_pattern.py")
+    ]
+    res_prep_pat = subprocess.run(cmd_prep_pat)
+    if res_prep_pat.returncode != 0:
+        log(f"[ERRORE] prepare_stage12_pattern.py fallito con codice {res_prep_pat.returncode}")
+    else:
+        log("[Stage 12-B] Set cieco 4-AFC a 20 trial e chiave sigillata preparati con successo.")
 
     # 2. Estrazione palette
     log(">>> Esecuzione palette_from_manifest.py su Stage 12 (250 immagini)...")

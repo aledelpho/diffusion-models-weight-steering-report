@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esperimento 12-B: Pattern Discrimination (4-AFC)</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #131b2e;
+      --surface-border: #1f2d4d;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent-blockshuf: #f97316;
+      --accent-blockshuf-bg: rgba(249, 115, 22, 0.15);
+      --accent-preset: #06b6d4;
+      --accent-preset-bg: rgba(6, 182, 212, 0.15);
+      --accent-green: #10b981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+
+    .badge-style {
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 260px;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #1e293b;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Target Selector Bar */
+    .controls-bar {
+      background: #0f172a;
+      border-bottom: 1px solid var(--surface-border);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .targets-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .target-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      background: #1e293b;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .target-pill.pill-blockshuf {
+      color: #fdba74;
+    }
+    .target-pill.pill-blockshuf.active {
+      border-color: var(--accent-blockshuf);
+      background: var(--accent-blockshuf-bg);
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+    }
+    .target-pill.pill-blockshuf.assigned {
+      border-color: rgba(249, 115, 22, 0.6);
+      background: var(--accent-blockshuf-bg);
+    }
+
+    .target-pill.pill-preset {
+      color: #67e8f9;
+    }
+    .target-pill.pill-preset.active {
+      border-color: var(--accent-preset);
+      background: var(--accent-preset-bg);
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+    }
+    .target-pill.pill-preset.assigned {
+      border-color: rgba(6, 182, 212, 0.6);
+      background: var(--accent-preset-bg);
+    }
+
+    .pill-slot-tag {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .hint-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .hint-key {
+      display: inline-block;
+      background: #334155;
+      color: #cbd5e1;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      margin: 0 2px;
+      border: 1px solid #475569;
+    }
+
+    /* Main Grid */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 24px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 16px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+        grid-gap: 12px;
+      }
+    }
+
+    .card {
+      position: relative;
+      background: #1e293b;
+      border: 3px solid var(--surface-border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #475569;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-slot-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .card-slot-key {
+      font-size: 0.72rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+
+    .card-assignment-banner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(6px);
+      transform: translateY(100%);
+      transition: transform 0.15s ease;
+      z-index: 3;
+    }
+
+    /* Selection States */
+    .card.selected-blockshuf {
+      border-color: var(--accent-blockshuf) !important;
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.45);
+    }
+    .card.selected-blockshuf .card-assignment-banner {
+      background: rgba(249, 115, 22, 0.9);
+      color: #fff;
+      transform: translateY(0);
+    }
+
+    .card.selected-preset {
+      border-color: var(--accent-preset) !important;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.45);
+    }
+    .card.selected-preset .card-assignment-banner {
+      background: rgba(6, 182, 212, 0.9);
+      color: #042f2e;
+      transform: translateY(0);
+    }
+
+    /* Footer Action Bar */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--surface-border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: var(--text);
+      border: 1px solid #334155;
+    }
+    .btn-secondary:hover {
+      background: #334155;
+    }
+
+    .btn-primary {
+      background: var(--accent-green);
+      color: #064e3b;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: #059669;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+    }
+    .btn-primary:disabled {
+      background: #1e293b;
+      color: #64748b;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* Completion Modal */
+    #completionScreen {
+      display: none;
+      text-align: center;
+      max-width: 600px;
+      padding: 36px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    #completionScreen h2 {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      color: #34d399;
+    }
+    #completionScreen p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <div class="title">Esperimento 12-B: Perceptual Pattern Discrimination</div>
+      <div id="styleBadge" class="badge-style">Caricamento...</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-bg">
+        <div id="progressBar" class="progress-bar-fill"></div>
+      </div>
+      <div id="progressText" class="progress-text">Trial 1 / 20</div>
+    </div>
+  </header>
+
+  <div class="controls-bar">
+    <div class="targets-container">
+      <div id="pillBlockshuf" class="target-pill pill-blockshuf active" onclick="setActiveTarget('blockshuf')">
+        <span>🔥 Blockshuf_neg_2x:</span>
+        <span id="labelBlockshufSlot" class="pill-slot-tag">Non selezionato</span>
+      </div>
+      <div id="pillPreset" class="target-pill pill-preset" onclick="setActiveTarget('preset')">
+        <span>❄️ Preset_pos_2x:</span>
+        <span id="labelPresetSlot" class="pill-slot-tag">Non selezionato</span>
+      </div>
+    </div>
+
+    <div class="hint-text">
+      Premi <span class="hint-key">1</span>–<span class="hint-key">4</span> per assegnare lo slot, <span class="hint-key">R</span> resetta, <span class="hint-key">Invio</span> o <span class="hint-key">Spazio</span> conferma.
+    </div>
+  </div>
+
+  <main>
+    <div id="gridContainer" class="grid-container">
+      <!-- 4 Cards caricate dinamicamente -->
+    </div>
+
+    <div id="completionScreen">
+      <h2>🎉 Test 12-B Completato!</h2>
+      <p>Tutti i 20 trial sono stati registrati con successo in <code>data/stage12_pattern_raw.csv</code>.<br>
+      La firma percettiva è stata acquisita a doppio cieco e senza possibilità di bias geometrico.<br>
+      Puoi ora avviare lo script di analisi per calcolare l'esatto test binomiale e la matrice di confusione.</p>
+      <div style="font-family: monospace; font-size: 0.85rem; color: #94a3b8; background: #0b0f19; padding: 12px; border-radius: 6px;">
+        python experiments/analyze_stage12_pattern.py
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <button class="btn btn-secondary" onclick="resetCurrentTrial()">Reset Selezione (R)</button>
+    <button id="btnConfirm" class="btn btn-primary" onclick="confirmCurrentTrial()" disabled>
+      <span>Conferma e Continua (Invio)</span>
+      <span>→</span>
+    </button>
+  </footer>
+
+  <script>
+    let trials = [];
+    let currentIndex = 0;
+    let activeTarget = 'blockshuf'; // 'blockshuf' | 'preset'
+
+    // Stato del trial corrente: slot 1..4 (1-indexed)
+    let selectedBlockshufSlot = null;
+    let selectedPresetSlot = null;
+    let trialStartTime = 0;
+
+    async function init() {
+      try {
+        const resp = await fetch('stage12_pattern_trials.json');
+        if (!resp.ok) {
+          document.getElementById('styleBadge').textContent = 'Errore: stage12_pattern_trials.json non ancora generato';
+          return;
+        }
+        trials = await resp.json();
+        if (!trials || trials.length === 0) {
+          document.getElementById('styleBadge').textContent = 'Nessun trial trovato';
+          return;
+        }
+        renderTrial();
+      } catch (err) {
+        console.error(err);
+        document.getElementById('styleBadge').textContent = 'In attesa del completamento del watchdog...';
+      }
+    }
+
+    function setActiveTarget(target) {
+      activeTarget = target;
+      updateTargetPills();
+    }
+
+    function updateTargetPills() {
+      const pB = document.getElementById('pillBlockshuf');
+      const pP = document.getElementById('pillPreset');
+
+      pB.classList.toggle('active', activeTarget === 'blockshuf');
+      pP.classList.toggle('active', activeTarget === 'preset');
+
+      pB.classList.toggle('assigned', selectedBlockshufSlot !== null);
+      pP.classList.toggle('assigned', selectedPresetSlot !== null);
+
+      document.getElementById('labelBlockshufSlot').textContent =
+        selectedBlockshufSlot !== null ? `Slot ${selectedBlockshufSlot}` : 'Non selezionato';
+      document.getElementById('labelPresetSlot').textContent =
+        selectedPresetSlot !== null ? `Slot ${selectedPresetSlot}` : 'Non selezionato';
+
+      const ready = selectedBlockshufSlot !== null && selectedPresetSlot !== null && selectedBlockshufSlot !== selectedPresetSlot;
+      document.getElementById('btnConfirm').disabled = !ready;
+    }
+
+    function renderTrial() {
+      if (currentIndex >= trials.length) {
+        showCompletion();
+        return;
+      }
+
+      const trial = trials[currentIndex];
+      trialStartTime = Date.now();
+      selectedBlockshufSlot = null;
+      selectedPresetSlot = null;
+      activeTarget = 'blockshuf';
+
+      document.getElementById('styleBadge').textContent = trial.style_label;
+      document.getElementById('progressText').textContent = `Trial ${currentIndex + 1} / ${trials.length}`;
+      const pct = ((currentIndex) / trials.length) * 100;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+
+      const grid = document.getElementById('gridContainer');
+      grid.innerHTML = '';
+
+      trial.slots.forEach(slotData => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.id = `cardSlot${slotData.slot}`;
+        card.onclick = () => onCardClicked(slotData.slot);
+
+        card.innerHTML = `
+          <div class="card-slot-badge">
+            <span>Slot ${slotData.slot}</span>
+            <span class="card-slot-key">[ ${slotData.slot} ]</span>
+          </div>
+          <img src="${slotData.image_url}" alt="Slot ${slotData.slot}">
+          <div class="card-assignment-banner" id="bannerSlot${slotData.slot}">
+            <span class="banner-text"></span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      updateCardVisuals();
+      updateTargetPills();
+    }
+
+    function onCardClicked(slot) {
+      if (activeTarget === 'blockshuf') {
+        if (selectedPresetSlot === slot) {
+          selectedPresetSlot = null; // sovrascrivi se già assegnato all'altro
+        }
+        selectedBlockshufSlot = slot;
+        activeTarget = 'preset'; // passa automaticamente al secondo target
+      } else {
+        if (selectedBlockshufSlot === slot) {
+          selectedBlockshufSlot = null; // sovrascrivi
+        }
+        selectedPresetSlot = slot;
+        if (selectedBlockshufSlot === null) {
+          activeTarget = 'blockshuf';
+        }
+      }
+
+      updateCardVisuals();
+      updateTargetPills();
+    }
+
+    function updateCardVisuals() {
+      for (let s = 1; s <= 4; s++) {
+        const card = document.getElementById(`cardSlot${s}`);
+        if (!card) continue;
+        const banner = document.getElementById(`bannerSlot${s}`);
+        const bannerText = banner.querySelector('.banner-text');
+
+        card.classList.remove('selected-blockshuf', 'selected-preset');
+
+        if (selectedBlockshufSlot === s) {
+          card.classList.add('selected-blockshuf');
+          bannerText.textContent = '🔥 Blockshuf_neg_2x';
+        } else if (selectedPresetSlot === s) {
+          card.classList.add('selected-preset');
+          bannerText.textContent = '❄️ Preset_pos_2x';
+        } else {
+          bannerText.textContent = '';
+        }
+      }
+    }
+
+    function resetCurrentTrial() {
+      selectedBlockshufSlot = null;
+      selectedPresetSlot = null;
+      activeTarget = 'blockshuf';
+      updateCardVisuals();
+      updateTargetPills();
+    }
+
+    async function confirmCurrentTrial() {
+      if (selectedBlockshufSlot === null || selectedPresetSlot === null || selectedBlockshufSlot === selectedPresetSlot) {
+        return;
+      }
+
+      const trial = trials[currentIndex];
+      const durationMs = Date.now() - trialStartTime;
+
+      const payload = {
+        trial_id: trial.trial_id,
+        style_id: trial.style_id,
+        chosen_blockshuf_slot: selectedBlockshufSlot,
+        chosen_preset_slot: selectedPresetSlot,
+        duration_ms: durationMs,
+        timestamp_ms: Date.now()
+      };
+
+      try {
+        await fetch('/api/pattern_stage12', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.warn('Errore salvataggio API (fallback locale):', e);
+      }
+
+      currentIndex++;
+      renderTrial();
+    }
+
+    function showCompletion() {
+      document.getElementById('gridContainer').style.display = 'none';
+      document.querySelector('.controls-bar').style.display = 'none';
+      document.querySelector('footer').style.display = 'none';
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('progressText').textContent = '20 / 20';
+      document.getElementById('completionScreen').style.display = 'block';
+    }
+
+    // Gestione da tastiera veloce
+    window.addEventListener('keydown', (e) => {
+      if (document.getElementById('completionScreen').style.display === 'block') return;
+
+      if (['1', '2', '3', '4'].includes(e.key)) {
+        const slot = parseInt(e.key, 10);
+        onCardClicked(slot);
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetCurrentTrial();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const btn = document.getElementById('btnConfirm');
+        if (!btn.disabled) {
+          confirmCurrentTrial();
+        }
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

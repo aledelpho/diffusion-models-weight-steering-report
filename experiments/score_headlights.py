@@ -38,6 +38,7 @@ KEY_CSV = os.path.join(DATA_DIR, "stage9_headlights_key.csv")
 RAW_CSV = os.path.join(DATA_DIR, "stage9_headlights_raw.csv")
 BBOX_RAW_CSV = os.path.join(DATA_DIR, "stage9_bbox_raw.csv")
 BBOX_STAGE12_RAW_CSV = os.path.join(DATA_DIR, "stage12_bbox_raw.csv")
+PATTERN_STAGE12_RAW_CSV = os.path.join(DATA_DIR, "stage12_pattern_raw.csv")
 
 SHUFFLE_SEED = 20260918
 SALT = "arthemy_stage10_blind_headlights_salt_v1"
@@ -228,6 +229,35 @@ class BlindScoringHandler(SimpleHTTPRequestHandler):
                 writer.writerow([
                     hash_id, x_min, x_max, y_min, y_max,
                     w, h, area_frac, ts
+                ])
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(b'{"status": "ok"}')
+        elif self.path == "/api/pattern_stage12":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            data = json.loads(body)
+
+            trial_id = data.get("trial_id")
+            style_id = data.get("style_id")
+            chosen_blockshuf = data.get("chosen_blockshuf_slot")
+            chosen_preset = data.get("chosen_preset_slot")
+            duration_ms = data.get("duration_ms", 0)
+            ts = data.get("timestamp_ms")
+
+            file_exists = os.path.exists(PATTERN_STAGE12_RAW_CSV)
+            with open(PATTERN_STAGE12_RAW_CSV, "a", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                if not file_exists:
+                    writer.writerow([
+                        "trial_id", "style_id", "chosen_blockshuf_2x_slot",
+                        "chosen_preset_pos_2x_slot", "duration_ms", "timestamp_ms"
+                    ])
+                writer.writerow([
+                    trial_id, style_id, chosen_blockshuf, chosen_preset, duration_ms, ts
                 ])
 
             self.send_response(200)

@@ -13,4 +13,5 @@ scratch/
 RELEASE_NOTES.md
 viewer/blind_headlights/
 viewer/blind_stage12/
+viewer/blind_stage12_pattern/
 *.log
