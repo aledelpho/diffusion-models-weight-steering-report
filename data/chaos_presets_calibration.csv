@@ -1,0 +1,7 @@
+preset,description,model_alpha,clip_alpha,d_model_measured,d_clip_measured,status
+Arthemy_Bench_CHAOS_EDGES,Solo blocco 0 e blocco 27 del DiT e primo/ultimo del CLIP,6.00443163553681,2.8474826891679963,267.37214626833537,55.27659756535683,PASS
+Arthemy_Bench_CHAOS_MID,Blocchi 12-14 del DiT (sweet spot centrale),5.33491031269494,6.7730681961081425,267.3721462683354,55.27659756535684,PASS
+Arthemy_Bench_CHAOS_ATTN,"Solo blocchi di attenzione (attn.wq, wk, wv, wo)",1.320097133691912,2.3019383189913363,267.37214626833526,55.27659756535684,PASS
+Arthemy_Bench_CHAOS_MLP,"Solo blocchi feed-forward (mlp.gate, up, down)",1.5377001902290088,1.3803783127006568,267.37214626833537,55.276597565356816,PASS
+Arthemy_Bench_CHAOS_RAMP,Profilo ad ampiezza crescente da blocco 0 a blocco 27,2.3116741617457195,1.1177026803791255,267.3721462683353,55.27659756535681,PASS
+Arthemy_Bench_CHAOS_RAND2,Secondo seed di segni casuali (20260918),1.0,1.0,267.3721462683355,55.2765975653568,PASS

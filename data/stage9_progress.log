@@ -1,0 +1,6 @@
+[2026-09-18 08:57:28] ==================================================================
+[2026-09-18 08:57:28]  AVVIO WATCHDOG STAGE 9 (300 render)
+[2026-09-18 08:57:28]  Directory monitorata: C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders
+[2026-09-18 08:57:28]  Attesi: 300 file PNG e azzeramento coda ComfyUI
+[2026-09-18 08:57:28] ==================================================================
+[2026-09-18 08:57:28] [Stage 9 Monitor] Render completati: 1/300 (0.3%) | Queue: 1 running, 298 pending
