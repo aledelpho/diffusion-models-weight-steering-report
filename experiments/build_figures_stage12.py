@@ -90,15 +90,29 @@ crop_registry = {}
 def build_fig1():
     print("Costruzione FIG 1: detail_headlights_preset.webp...")
     seeds = [42, 777, 1337, 9999, 4242145]
-    # Coordinate centrate esattamente sul gruppo ottico / fascio dei fari (240x240)
+    # Coordinate centrate esattamente sui fari anteriori (distinte tra baseline e preset)
     crops_s8 = {
-        42: [499, 476, 240, 240],      # centro (619, 596)
-        777: [506, 506, 240, 240],     # centro (626, 626)
-        1337: [316, 452, 240, 240],    # centro (436, 572)
-        9999: [318, 572, 240, 240],    # centro (438, 692)
-        4242145: [493, 520, 240, 240]  # centro (613, 640)
+        "baseline": {
+            42: [380, 600, 240, 240],      # abbassato sulla calandra anteriore
+            777: [400, 630, 240, 240],     # abbassato sulla calandra
+            1337: [320, 610, 240, 240],    # abbassato sul frontale
+            9999: [280, 660, 240, 240],    # abbassato e a sinistra sulla calandra
+            4242145: [380, 640, 240, 240]  # abbassato sul frontale
+        },
+        "preset_pos_2x": {
+            42: [470, 560, 240, 240],      # fari accesi centrati
+            777: [470, 600, 240, 240],     # fari accesi centrati
+            1337: [400, 550, 240, 240],    # spostato a destra per centrare il faro
+            9999: [310, 610, 240, 240],    # centrato sulla calandra
+            4242145: [400, 590, 240, 240]  # spostato a sinistra per inquadrare entrambi i fari
+        }
     }
-    crop_registry["detail_headlights_preset"] = {"S8_charcoal": {str(s): crops_s8[s] for s in seeds}}
+    crop_registry["detail_headlights_preset"] = {
+        "S8_charcoal": {
+            "baseline": {str(s): crops_s8["baseline"][s] for s in seeds},
+            "preset_pos_2x": {str(s): crops_s8["preset_pos_2x"][s] for s in seeds}
+        }
+    }
 
     height = 360
     img = Image.new("RGB", (WIDTH, height), COLOR_BG)
@@ -135,8 +149,7 @@ def build_fig1():
             p = resolve_path_stage9(src_f)
             
             bgr = cv2.imread(p)
-            cx, cy, cw, ch = crops_s8[s]
-            # Safety clamp
+            cx, cy, cw, ch = crops_s8[cond][s]
             h, w = bgr.shape[:2]
             cx = max(0, min(w - cw, cx))
             cy = max(0, min(h - ch, cy))
@@ -164,21 +177,20 @@ def build_fig1():
 def build_fig2():
     print("Costruzione FIG 2: detail_headlights_blockshuffle.webp...")
     seeds = [42, 777, 1337, 9999, 4242145]
-    # Coordinate indipendenti e precise per Baseline (fari accesi) e Blockshuf (fari spenti)
     crops_s4 = {
         "baseline": {
-            42: [317, 564, 240, 240],      # centro (437, 684)
-            777: [330, 593, 240, 240],     # centro (450, 713) - faro acceso
-            1337: [658, 559, 240, 240],    # centro (778, 679) - faro acceso destro
-            9999: [493, 576, 240, 240],    # centro (613, 696) - faro acceso
-            4242145: [502, 570, 240, 240]  # centro (622, 690) - faro acceso
+            42: [270, 570, 240, 240],      # fari anteriori (spostato a sinistra per non tagliarlo)
+            777: [350, 590, 240, 240],     # fari accesi centrati (spostato a destra)
+            1337: [500, 570, 240, 240],    # muso anteriore centrato
+            9999: [240, 590, 240, 240],    # SPOSTATO A SINISTRA (via dal numero 19 della porta!)
+            4242145: [350, 560, 240, 240]  # fari accesi centrati
         },
         "blockshuf_neg_2x": {
-            42: [298, 677, 240, 240],      # centro (418, 797) - fari spenti
-            777: [304, 623, 240, 240],     # centro (424, 743) - fari spenti
-            1337: [748, 690, 240, 240],    # centro (868, 810) - fari spenti
-            9999: [536, 714, 240, 240],    # centro (656, 834) - fari spenti
-            4242145: [549, 628, 240, 240]  # centro (669, 748) - fari spenti
+            42: [240, 670, 240, 240],      # calandra anteriore spenta centrata
+            777: [320, 620, 240, 240],     # calandra spenta centrata
+            1337: [530, 690, 240, 240],    # muso centrato
+            9999: [270, 690, 240, 240],    # calandra spenta centrata
+            4242145: [370, 630, 240, 240]  # calandra spenta centrata
         }
     }
     crop_registry["detail_headlights_blockshuffle"] = {
@@ -248,13 +260,14 @@ def build_fig2():
 # =========================================================================
 def build_fig3():
     print("Costruzione FIG 3: headlights_lightness_control.webp...")
-    # Tre scene rappresentative dal terzile più chiaro (L* > 60), mostrando il gruppo ottico anteriore
-    # a confronto per evidenziare che preset_pos accende i fari anche a mezzogiorno / luce piena
-    # S3_lowpoly seed 777 (L* = 60.4), S1_photo seed 4242145 (L* = 60.2), S5_ukiyoe seed 42 (L* = 62.8)
+    # Tre scene rappresentative dal terzile più chiaro (L* > 60), con crop centrati sui fari:
+    # S3_lowpoly seed 777 (L* = 60.4)
+    # S1_photo seed 4242145 (L* = 60.2): spostato a destra per includere il faro destro
+    # S5_ukiyoe seed 42 (L* = 62.8): spostato a sinistra per centrare la vettura
     items = [
         ("S3_lowpoly", 777, "S3 · lowpoly (seed 777)", 60.4, (564, 678)),
-        ("S1_photo", 4242145, "S1 · photo (seed 4242145)", 60.2, (431, 536)),
-        ("S5_ukiyoe", 42, "S5 · ukiyoe (seed 42)", 62.8, (652, 690))
+        ("S1_photo", 4242145, "S1 · photo (seed 4242145)", 60.2, (520, 536)),
+        ("S5_ukiyoe", 42, "S5 · ukiyoe (seed 42)", 62.8, (550, 690))
     ]
 
     height = 470
