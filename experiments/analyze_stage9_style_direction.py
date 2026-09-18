@@ -201,7 +201,7 @@ def run_permutation_disattenuated(U_style, U_subj, r_prompts_style, r_prompts_su
         "c_subj_disatt": disatt_subj_obs,
         "disatt_diff": disatt_diff_obs,
         "p_disatt": p_disatt,
-        "decision": "CONFIRMED" if (p_disatt < 0.05) else ("ATTENUATION_ARTEFACT" if (p_raw < 0.05) else "NOT_SIGNIFICANT")
+        "decision": "SEE docs/stage9_verdict.md — per-cell rule superseded by restored criteria 1-3 (amendment 6); " + ("p_disatt<0.05" if (p_disatt < 0.05) else ("p_raw<0.05 only" if (p_raw < 0.05) else "neither"))
     }
 
 

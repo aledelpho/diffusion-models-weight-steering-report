@@ -115,3 +115,78 @@ L'ampiezza 2.0x corrisponde a uno spostamento $D \approx 0.108$, situato oltre i
 - Viene applicato a priori lo stesso gate dello Stage 8 Arm C: scostamento della media di condizione dalla media baseline su `edge_density` e `lbp_entropy` superiore a $3 \times \sigma_{\text{baseline}}$.
 - Le celle che violano la soglia $3\sigma$ vengono censite e marcate come **"Fuori range di displacement utilizzabile (Degradate)"** prima di esaminare i coseni.
 - Tali celle non vengono scartate a posteriori: il conteggio delle celle degradate a 2.0x costituisce di per sé una misura di stabilità geometrica del modello ad ampiezze sovra-sature.
+
+---
+
+## 9. Emendamento 6 — ripristino dei criteri di accettazione e correzione della regola di disattenuazione
+
+**Scritto il 2026-09-18 alle 14:10, a risultati già noti.** Questo emendamento non è una
+pre-registrazione e non va letto come tale. È dichiarato *post-hoc* e la sua direzione è quella
+che conta per giudicarlo: **rende il verdetto più negativo, non più positivo**. Un cambio di regola
+fatto a risultati noti che riduce le proprie affermazioni sta in una posizione epistemica diversa
+da uno che le aumenta, ed è l'unica ragione per cui è ammissibile.
+
+### 9.1 I criteri cancellati per errore, ripristinati verbatim
+
+Gli emendamenti 1-5 (commit `bd784ca`) hanno riscritto la sezione 4 e nel farlo hanno **cancellato**
+i criteri di accettazione originari, depositati alle 08:55 e visibili in `35de7d8`. Non era
+intenzionale: l'emendamento era stato concepito come aggiunta di cinque punti, non come sostituzione
+della regola di decisione. I criteri originari tornano in vigore, nel testo esatto in cui furono
+depositati:
+
+> 1. **Conferma Piena**: $\bar{C}_{\text{stile}} < \bar{C}_{\text{soggetto}}$ con $p < 0.05$ **sia**
+>    nello Spazio 1 (24-D) **sia** nello Spazio 4 (Tessitura).
+> 2. **Artefatto da Vincolo Cromatico**: $p < 0.05$ nello Spazio 3 ($a^*b^*$) ma $p \ge 0.05$ nello
+>    Spazio 4 (Tessitura).
+> 3. **Analisi Dose-Risposta (Verifica Ampiezza 1.0 vs 2.0)**: se la divergenza esiste a 1.0 e si
+>    preserva a 2.0, l'effetto è strutturale. Se compare esclusivamente ad ampiezza 2.0 (dove
+>    $D \approx 0.108$ supera la saturazione del modello), l'effetto è un manufatto dell'over-steering.
+
+La regola piatta per cella introdotta dall'emendamento 2 (`CONFIRMED` se $p_{\text{disatt}} < 0.05$)
+**non sostituisce** questi criteri: si applica dentro di essi, cella per cella, come requisito
+aggiuntivo. Non aveva né controllo di molteplicità su 24 celle né clausola di over-steering, e
+usata da sola produce conferme che i criteri 1 e 3 escludono.
+
+### 9.2 La disattenuazione va richiesta in concordanza, non come sostituzione
+
+La regola dell'emendamento 2 diceva: confermato **solo se** sopravvive alla statistica disattenuata.
+Era formulata assumendo che il corpus di stile fosse il più rumoroso, e quindi che la disattenuazione
+funzionasse da ostacolo. **L'assunzione era sbagliata e i dati la smentiscono**: $r_5$ del corpus di
+stile è sistematicamente *maggiore* di quello del corpus di soggetto (0.47–0.69 contro 0.23–0.50),
+perché gli otto prompt di stile condividono la stessa scena e i loro seed producono immagini simili.
+
+Con il corpus di **confronto** più rumoroso, dividere $\bar{C}_{\text{soggetto}}$ per un $r$ piccolo
+**gonfia** la statistica e la disattenuazione diventa anti-conservativa. Effetto misurato su
+`preset_pos`, Spazio 1, ampiezza 2.0x: $p_{\text{grezzo}} = 0.4290 \rightarrow
+p_{\text{disatt}} = 0.0279$. Il dato grezzo non contiene nulla.
+
+**Regola corretta**: si riportano entrambe le statistiche e si richiede che **concordino** in segno
+e in significatività. Una discordanza fra grezza e disattenuata è un segnale diagnostico — indica
+che i due corpora differiscono in affidabilità in modo rilevante — e non costituisce conferma in
+nessuna delle due direzioni.
+
+### 9.3 La convenzione di centratura va dichiarata e verificata in entrambi i versi
+
+Scoperto dopo l'analisi, e registrato qui perché cambia la lettura. `analyze_stage9_style_direction.py`
+standardizza con $(v - \mu_{\text{congiunta}}) / \sigma_{\text{congiunta}}$;
+`analyze_palette_coherence.py`, che ha prodotto i numeri di §1.5, divide solo per $\sigma$ senza
+centrare. **Le due grandezze non sono sulla stessa scala** e i coseni di stage 9 non sono
+confrontabili con il +0.057 / +0.120 di §1.5. È la famiglia della pitfall 33 in una variante nuova:
+non due scale separate, due convenzioni di centratura diverse.
+
+C'è di peggio, ed è specifico di un confronto fra gruppi. Sottrarre un vettore comune che **non** è
+la media del singolo gruppo inietta una componente condivisa in ogni vettore del gruppo la cui media
+se ne discosta di più, e ne gonfia la coerenza. Con gruppi di dimensione diversa (8 contro 18) e
+ampiezza diversa (2.0x contro 1.0x) l'asimmetria è strutturale. Ricalcolate senza centratura, tutte
+e cinque le celle marcate `CONFIRMED` **cambiano segno** (vedi
+[`stage9_verdict.md`](stage9_verdict.md) e `data/stage9_centering_sensitivity.csv`).
+
+**Regola**: ogni confronto di coerenza fra due gruppi va riportato sotto entrambe le convenzioni, e
+una conclusione che sopravvive a una sola delle due non è una conclusione.
+
+### 9.4 Cosa resta valido dell'emendamento precedente
+
+Gli emendamenti 1 (affidabilità split-half come misura pubblicata), 3 (pavimento di permutazione
+corretto a $\binom{26}{8}$), 4 (limiti di scambiabilità) e 5 (gate di qualità a 2.0x) restano in
+vigore invariati. L'implementazione della permutazione è corretta e verificata: $r_5$ è ricalcolato
+endogenamente dentro ogni iterazione, quindi la distribuzione nulla è valida.
