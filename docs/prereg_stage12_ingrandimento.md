@@ -179,3 +179,53 @@ Soggetto comune a tutti i 10 prompt:
 
 *Nota metodologica a verbale:*  
 Registrata formalmente prima dell'inizio della sessione di scoring cieco a 220 immagini (disturbi visivi su 3 livelli + 20 duplicati nascosti). La previsione soggettiva sul gradimento del compito non inficia la validità della procedura a doppio cieco, ma certifica in modo trasparente e indelebile il gravoso costo cognitivo imposto dal rigore metodologico pre-registrato.
+
+---
+
+## Esperimento 12-B: Perceptual Pattern Discrimination (4-AFC Dual Task)
+
+**Pre-registrato prima della conclusione della batch e prima di qualsiasi scoring.**
+
+### 1. Obiettivo Scientifico
+Testare la discriminabilità percettiva diretta delle due condizioni di steering estreme (`blockshuf_neg_2x` e `preset_pos_2x`) da parte dell'osservatore umano in una condizione a scelta forzata quadrupla (4-Alternative Forced Choice), isolando la firma dei pesi sia dallo stile sia dal seed, e sotto degradazioni di cecità complete.
+
+Per rendere il compito massimamente selettivo ed evitare risposte basate su una generica "deformazione", ciascuna quaterna include sia un controllo non perturbato (`baseline`), sia il distrattore difficile (**near-foil: `blockshuf_neg_1x`**) che possiede la stessa direzione di perturbazione di `blockshuf_neg_2x` ma intensità dimezzata.
+
+### 2. Struttura del Trial (Quaterna di Stimoli)
+Ogni trial presenta all'osservatore **4 immagini** disposte su una griglia interattiva:
+* **Stile identico**: tutte e 4 le immagini appartengono allo stesso stile artistico $S_i$ (fra i 10 di Stage 12).
+* **Quattro seed rigorosamente distinti**: $s_1 \ne s_2 \ne s_3 \ne s_4$ estratti dai 5 seed disponibili (`42, 777, 1337, 9999, 4242145`). Nessun elemento compositivo o geometrico può essere abbinato fra immagini.
+* **Composizione fissa delle condizioni per trial**:
+  1. Target A: `blockshuf_neg_2x` (seed $s_a$)
+  2. Target B: `preset_pos_2x` (seed $s_b$)
+  3. Distrattore Difficile (Near-Foil): `blockshuf_neg_1x` (seed $s_c$)
+  4. Distrattore Neutro (Neutral Foil): `baseline` (seed $s_d$)
+* **Assegnazione casuale delle posizioni**: L'ordine dei 4 slot [1, 2, 3, 4] è rimescolato pseudocasualmente a ogni trial (`seed=20260918`).
+* **Disturbi di cecità (Livello 3)**: A tutte le 4 immagini vengono applicate le stesse degradazioni del test principale (specchiatura/flip, hue rotation casuale, jitter saturazione/luminosità, rumore gaussiano).
+
+### 3. Numero di Trial e Budget
+* **20 trial totali**: 2 trial indipendenti per ciascuno dei 10 stili, con combinazioni e permutazioni disgiunte di seed.
+* Durata prevista dell'annotazione: **~5-7 minuti**.
+* Esecuzione: **strettamente successiva** al completamento dell'annotazione dei bounding box di Stage 12 (Esperimento 12-A), così da non interferire con il giudizio quantitativo primario.
+
+### 4. Compito dell'Operatore e Usabilità
+Nell'interfaccia interattiva (`viewer/pattern_stage12.html`):
+1. **Assegna Blockshuf_neg_2x**: Clicca sull'immagine (oppure premi tasto numerico `1`-`4`) $\to$ bordo arancione con badge `[1] Blockshuf_neg_2x`.
+2. **Assegna Preset_pos_2x**: Clicca su una seconda immagine (oppure premi tasto numerico `1`-`4`) $\to$ bordo azzurro con badge `[2] Preset_pos_2x`.
+3. Premi `Invio` / `Spazio` per confermare e avanzare al trial successivo.
+4. Tasti rapidi: `R` per resettare la selezione del trial corrente.
+
+### 5. Formulazione Statistica e Regola di Decisione
+* **Ipotesi Nulla ($H_0$)**: L'osservatore non è in grado di discriminare le due condizioni estreme rispetto ai distrattori; le assegnazioni avvengono a livello di chance casuale.
+* **Probabilità di successo congiunto casuale per singolo trial**:
+  $$P(\text{Entrambe corrette}) = \frac{1}{4} \times \frac{1}{3} = \frac{1}{12} \approx 0.08333$$
+* **Valore atteso sotto $H_0$ su 20 trial**: $\mu = 20 \times \frac{1}{12} = 1.67$ successi doppi.
+* **Test Statistico Primario**: Test Binomiale Esatto ad una coda su $k_{\text{both}} \sim B(20, 1/12)$.
+  - $k_{\text{both}} \ge 5 / 20$: $p = 0.0232$ ($p < 0.05$, significativo)
+  - $k_{\text{both}} \ge 6 / 20$: $p = 0.0055$ ($p < 0.01$)
+  - $k_{\text{both}} \ge 8 / 20$: $p = 0.00007$ ($p < 0.0001$)
+* **Soglia di Rifiuto di $H_0$**: $k_{\text{both}} \ge 5$ con $\alpha = 0.05$.
+* **Analisi Secondarie**:
+  - Accuratezza marginale `blockshuf_neg_2x` ($H_0: p = 0.25$, soglia $\ge 9/20$ per $p < 0.05$).
+  - Accuratezza marginale `preset_pos_2x` ($H_0: p = 0.25$, soglia $\ge 9/20$ per $p < 0.05$).
+  - Matrice di confusione: tasso di scambio tra `blockshuf_neg_2x` e `blockshuf_neg_1x` (misura del gradiente di dose-risposta).
