@@ -169,3 +169,13 @@ Soggetto comune a tutti i 10 prompt:
 | `S08_papercraft` | `17e466c859` | layered cut paper craft, 3D paper collage, visible paper edges, cast shadows, tactile depth |
 | `S09_fresco` | `9e81add78f` | ancient Renaissance fresco mural, weathered plaster texture, distressed pigment, crackled wall surface |
 | `S10_synthwave` | `25147e923b` | retro 80s synthwave vector art, wireframe grid, duotone gradient, airbrush aesthetic, retrowave styling |
+
+---
+
+## Dichiarazione a verbale dell'operatore umano (2026-09-18 16:36:09)
+
+> *«Metti agli atti che ho odiato fare la prima versione di questo esperimento e la mia previsione è che lo odierò ancora di più questa volta.»*  
+> — **Alessandro** (Human Operator / Lead Annotator)
+
+*Nota metodologica a verbale:*  
+Registrata formalmente prima dell'inizio della sessione di scoring cieco a 220 immagini (disturbi visivi su 3 livelli + 20 duplicati nascosti). La previsione soggettiva sul gradimento del compito non inficia la validità della procedura a doppio cieco, ma certifica in modo trasparente e indelebile il gravoso costo cognitivo imposto dal rigore metodologico pre-registrato.
