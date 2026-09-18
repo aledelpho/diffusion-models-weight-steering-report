@@ -1,0 +1,7 @@
+condition,mean_delta_bbox_pct,p_raw_signflip,p_adj_holm,verdict
+preset_pos_1x,-0.864,0.0391,0.1172,NOT_SIGNIFICANT
+preset_pos_2x,-1.669,0.0469,0.1172,NOT_SIGNIFICANT
+blockshuf_neg_1x,4.058,0.0078,0.0469,QUANTIFICATO (INGRANDITO)
+blockshuf_neg_2x,15.055,0.0078,0.0469,QUANTIFICATO (INGRANDITO)
+rand_pos_1x,-0.224,0.4062,0.4062,NOT_SIGNIFICANT
+rand_pos_2x,2.437,0.0234,0.0938,NOT_SIGNIFICANT
