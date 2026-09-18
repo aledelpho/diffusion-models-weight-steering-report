@@ -263,7 +263,11 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   than rotating blocks 5–9, and changes the image **3.7× more** — in all seven prompts, in two
   unrelated perturbation families, at about fifteen times the seed noise (§4). Among the four middle
   block groups, by contrast, displacement explains the ordering *completely* ($\rho = +1.000$). This
-  is the first evidence in the project that position carries anything at all.
+  is the first evidence in the project that position carries anything at all. Measured with signed
+  features instead of an unsigned distance, the two best-measured block groups also push in
+  **different directions** (cosine +0.146 against a reliability ceiling of +0.766, unanimous on seven
+  prompts) — large, but on an undeclared family of comparisons that the design cannot carry, so §4.5
+  files it as a hypothesis rather than a finding.
 * **`blockshuf_neg` makes the subject occupy more of the frame.** Ratio 1.22 on 9 prompts of 10,
   confirmed on a corpus of ten new styles, a different vehicle colour and a different setting, against
   a prediction frozen before the renders existed (§3.1).
@@ -1265,21 +1269,73 @@ you push is not interchangeable, and the difference is not how far you pushed. A
 times the seed noise** measured in the one prompt that has more than one seed, the size of it isn't in
 question either.
 
-It does not mean position carries *meaning*. `CLIP-Dist` is an unsigned distance from the baseline: it
-can say the image moved, never in which direction. Everything here is consistent with `Block_6` simply
-being the **most sensitive** place to push — and with the most boring reason for that, which is that
-it is the last four blocks of twenty-eight and a perturbation there has almost nothing downstream left
-to absorb it. First and last block groups behave unlike the middle in nearly every transformer. The
-profile is at least not a simple depth ramp — blocks 2→5 *decrease* with depth, and that decrease is
-exactly the displacement ordering — but "the two ends are special" is a known regularity, not a
-discovery about this model.
+It does not, on its own, mean position carries *meaning*. `CLIP-Dist` is an unsigned distance from
+the baseline: it can say the image moved, never in which direction. And the most boring explanation is
+still standing — `Block_6` is the last four blocks of twenty-eight, so a perturbation there has almost
+nothing downstream left to absorb it, and first and last block groups behave unlike the middle in
+nearly every transformer. The profile is at least not a simple depth ramp: blocks 2→5 *decrease* with
+depth, and that decrease is exactly the displacement ordering. But "the two ends are special" is a
+known regularity, not a discovery about this model.
 
 Every $p$ above is exactly $2/2^7 = 0.0156$, which is the smallest number these seven prompts can
 produce. With all seven agreeing, the test has one bit of resolution and cannot tell an enormous
 effect from a barely consistent one. The seed-noise ratio is doing the work that the $p$ cannot.
 
-Full numbers, the pre-registered brief, the original verdict and the dated amendment that corrects its
-reading: [`docs/pilot_rotations_verdict.md`](docs/pilot_rotations_verdict.md),
+### 4.5 So I measured the direction, and it is the most interesting thing here
+
+The 216 rotations were re-measured with the project's own stroke and palette features
+(`style_features.py`, `analyze_palette.py`). Those have a **sign**, which `CLIP-Dist` does not, so for
+the first time the Experiment 1 decomposition applies to this sweep:
+
+$$S = \frac{\Delta(+\theta) + \Delta(-\theta)}{2} \quad \text{(how much)}, \qquad
+A = \frac{\Delta(+\theta) - \Delta(-\theta)}{2} \quad \text{(which way)}$$
+
+**Half of what `Block_6` does is antisymmetric** — $\|A\| = 6.12$ against $\|S\| = 5.65$ — so the two
+rotation directions push it in genuinely opposite ways. For the middle blocks the antisymmetric share
+is 0.23–0.33: mostly, they just move. There is also a methodological gift in this: $A$ is **invariant
+to the centering convention**, because subtracting any constant from every delta cancels in
+$(\Delta^+ - \Delta^-)/2$. That is the convention that sank the stage 9 test, where the sign flipped in
+11 cells of 18. The one statistic here that is convention-proof is also the one carrying the result.
+
+**The trap, and I nearly fell in it.** Within-block coherence — do different prompts move the same way
+under the same block — reads `Block_6` +0.90, `Block_1` +0.65, `Block_5` +0.44, and the middle blocks
+**zero**. That looks like the answer. It is half an artefact: coherence and amplitude are ranked almost
+identically ($\rho = +0.94$ on $A$, $+1.00$ on $S$). A block that moves ten times as far is measured ten
+times as well, so of course its direction looks more consistent. Same shape as §1.5's reliability
+problem.
+
+**The test that gets around it** compares only the blocks measured well enough to be compared — and
+finds they point in *different* directions:
+
+| | own coherence | cosine with the other | reliability ceiling |
+| --- | --- | --- | --- |
+| `Block_6` vs `Block_1` | 0.90 / 0.65 | **+0.146** | +0.766 |
+| `Block_6` vs `Block_5` | 0.90 / 0.44 | +0.466 | +0.628 |
+| `Block_1` vs `Block_5` | 0.65 / 0.44 | +0.329 | +0.534 |
+
+Paired per prompt, the same-block advantage is **+0.689 for `Block_1` vs `Block_6`, unanimous across
+all seven prompts**. Two places in the model, both measured well, pushing almost at right angles to
+each other. Amplitude cannot explain that.
+
+**And it still isn't a result.** With seven prompts the permutation floor is $2/2^7 = 0.0156$, and that
+arithmetic has a consequence worth stating once: **Holm can carry at most three tests in a family**,
+because $0.0156 \times 3 = 0.0469$ passes and $\times 4 = 0.0625$ does not. There are three comparisons
+in the texture space and one in palette. Treat texture and palette as separate families — which is how
+the stage 9 pre-registration defines them — and the three pass at exactly 0.0469, on the wire. Treat
+them as one and nothing passes. **The family was never declared**, so the finding sits precisely on the
+boundary that the declaration would have decided.
+
+So: a well-specified hypothesis, not a citable result. What makes it worth the page is that the next
+experiment is now fully written — one primary test, `Block_1` versus `Block_6` on the antisymmetric
+component in texture space, with ten prompts (floor $0.00195$, room for 25 tests), three seeds a cell,
+displacement matched by construction, nine sampling steps, and a sign-scrambled control at the same
+$D$. If it passes, "where you push decides *what* you get" has data under it and the canal stops being
+a figure of speech. If it fails, `Block_6` is where the model is most fragile and nothing more — which
+is still worth knowing.
+
+Full numbers, the pre-registered brief, the original verdict and the two dated amendments that correct
+its reading: [`docs/pilot_rotations_verdict.md`](docs/pilot_rotations_verdict.md),
+[`experiments/analyze_pilot_rotation_directions.py`](experiments/analyze_pilot_rotation_directions.py),
 [`experiments/analyze_pilot_rotations_followup.py`](experiments/analyze_pilot_rotations_followup.py),
 [`data/pilot_rotations.csv`](data/pilot_rotations.csv).
 
@@ -1296,14 +1352,14 @@ image underneath it, and raises an exception rather than compose a panel whose m
 contradicts its label. It needs the original stage-9 PNGs, so it runs on the machine that has them.
 Every figure on this page that was assembled by hand gets the same treatment afterwards.
 
-**2 · Ask the rotations *what* changed, not *how much*.** The 216 rotations were re-analysed the same
-evening and the result is §4: there is a position effect, it is `Block_6`, and it is the opposite of an
-amplitude artefact. But the only metric available there is `CLIP-Dist`, which is an unsigned distance —
-it can say the image moved, never in which direction. The renders still exist. Re-measuring those 216
-cells with `style_features.py` and `analyze_palette.py` costs nothing and answers the question that
-matters: **does the direction of the change differ by block, or only the size?** If the direction
-differs, position carries information. If only the size does, `Block_6` is where the model is most
-fragile — useful engineering, not interpretability.
+**2 · Pre-register the one rotation test that is left.** Both rotation questions were answered the same
+day: there is a position effect, it is `Block_6` (§4.3), and the direction does appear to differ
+between the blocks that can be measured at all (§4.5) — but on seven prompts, post-hoc, with an
+undeclared family, which the permutation floor cannot carry. Nothing more should be squeezed out of
+this corpus. The next step is a single frozen primary — `Block_1` versus `Block_6`, antisymmetric
+component, texture space — on **ten prompts and three seeds a cell**, with displacement matched by
+construction, nine sampling steps, and a sign-scrambled control at the same $D$. Ten prompts put the
+floor at $0.00195$, which buys room for twenty-five tests instead of three.
 
 **3 · The control Experiment 3 never had.** Every size measurement so far compares two *structured*
 edits with each other. Until a sign-scrambled perturbation at the same displacement is in the design,

@@ -1,0 +1,93 @@
+space,centering,angle,test,block,value_S,value_A,stat,p,floor
+TESSITURA,nessuna (grezza),15.0,norme_S_A,Block_1,1.4926,0.5903,0.2834,,
+TESSITURA,nessuna (grezza),15.0,norme_S_A,Block_2,1.1444,0.4559,0.2849,,
+TESSITURA,nessuna (grezza),15.0,norme_S_A,Block_3,1.1488,0.3982,0.2574,,
+TESSITURA,nessuna (grezza),15.0,norme_S_A,Block_4,1.0182,0.3603,0.2613,,
+TESSITURA,nessuna (grezza),15.0,norme_S_A,Block_5,0.8056,0.7204,0.4721,,
+TESSITURA,nessuna (grezza),15.0,norme_S_A,Block_6,5.2744,6.2053,0.5405,,
+TESSITURA,nessuna (grezza),15.0,coerenza_A,,0.2138,-0.0533,-0.4698,,
+TESSITURA,nessuna (grezza),15.0,stesso_meno_altri_A,,,,0.2894,0.0312,0.0156
+TESSITURA,nessuna (grezza),15.0,coerenza_S,,0.3156,0.5099,1.8928,,
+TESSITURA,nessuna (grezza),15.0,stesso_meno_altri_S,,,,0.2081,0.0156,0.0156
+TESSITURA,nessuna (grezza),30.0,norme_S_A,Block_1,3.8621,1.9082,0.3307,,
+TESSITURA,nessuna (grezza),30.0,norme_S_A,Block_2,1.1217,0.5116,0.3132,,
+TESSITURA,nessuna (grezza),30.0,norme_S_A,Block_3,1.4953,0.4528,0.2324,,
+TESSITURA,nessuna (grezza),30.0,norme_S_A,Block_4,1.1962,0.6016,0.3346,,
+TESSITURA,nessuna (grezza),30.0,norme_S_A,Block_5,1.351,1.7736,0.5676,,
+TESSITURA,nessuna (grezza),30.0,norme_S_A,Block_6,5.6471,6.1243,0.5203,,
+TESSITURA,nessuna (grezza),30.0,coerenza_A,,0.3517,0.0962,0.1142,,
+TESSITURA,nessuna (grezza),30.0,stesso_meno_altri_A,,,,0.355,0.0156,0.0156
+TESSITURA,nessuna (grezza),30.0,coerenza_S,,0.3071,0.3187,2.1938,,
+TESSITURA,nessuna (grezza),30.0,stesso_meno_altri_S,,,,0.3041,0.0156,0.0156
+TESSITURA,,15.0,spearman_ampiezza_coerenza_A,,,,0.6571,,
+TESSITURA,,30.0,spearman_ampiezza_coerenza_A,,,,0.9429,,
+TESSITURA,,15.0,spearman_ampiezza_coerenza_S,,,,0.7143,,
+TESSITURA,,30.0,spearman_ampiezza_coerenza_S,,,,1.0,,
+TESSITURA,,30.0,appaiato_Block_1_vs_Block_5,,,,0.545,0.0156,0.0156
+TESSITURA,,30.0,appaiato_Block_1_vs_Block_6,,,,0.6885,0.0156,0.0156
+TESSITURA,,30.0,appaiato_Block_5_vs_Block_6,,,,0.2321,0.0469,0.0156
+TESSITURA,media generale sottratta,15.0,norme_S_A,Block_1,1.5645,0.5903,0.2739,,
+TESSITURA,media generale sottratta,15.0,norme_S_A,Block_2,0.9747,0.4559,0.3187,,
+TESSITURA,media generale sottratta,15.0,norme_S_A,Block_3,0.9931,0.3982,0.2862,,
+TESSITURA,media generale sottratta,15.0,norme_S_A,Block_4,0.9611,0.3603,0.2726,,
+TESSITURA,media generale sottratta,15.0,norme_S_A,Block_5,1.3335,0.7204,0.3507,,
+TESSITURA,media generale sottratta,15.0,norme_S_A,Block_6,4.2877,6.2053,0.5914,,
+TESSITURA,media generale sottratta,15.0,coerenza_A,,0.2138,-0.0533,-0.4698,,
+TESSITURA,media generale sottratta,15.0,stesso_meno_altri_A,,,,0.2894,0.0312,0.0156
+TESSITURA,media generale sottratta,15.0,coerenza_S,,0.3125,0.2533,1.3891,,
+TESSITURA,media generale sottratta,15.0,stesso_meno_altri_S,,,,0.3929,0.0156,0.0156
+TESSITURA,media generale sottratta,30.0,norme_S_A,Block_1,3.6247,1.9082,0.3449,,
+TESSITURA,media generale sottratta,30.0,norme_S_A,Block_2,1.0911,0.5116,0.3192,,
+TESSITURA,media generale sottratta,30.0,norme_S_A,Block_3,0.9308,0.4528,0.3273,,
+TESSITURA,media generale sottratta,30.0,norme_S_A,Block_4,0.958,0.6016,0.3858,,
+TESSITURA,media generale sottratta,30.0,norme_S_A,Block_5,1.9572,1.7736,0.4754,,
+TESSITURA,media generale sottratta,30.0,norme_S_A,Block_6,4.5671,6.1243,0.5728,,
+TESSITURA,media generale sottratta,30.0,coerenza_A,,0.3517,0.0962,0.1142,,
+TESSITURA,media generale sottratta,30.0,stesso_meno_altri_A,,,,0.355,0.0156,0.0156
+TESSITURA,media generale sottratta,30.0,coerenza_S,,0.2858,0.0417,2.4651,,
+TESSITURA,media generale sottratta,30.0,stesso_meno_altri_S,,,,0.4656,0.0156,0.0156
+PALETTE,nessuna (grezza),15.0,norme_S_A,Block_1,2.6631,1.3263,0.3325,,
+PALETTE,nessuna (grezza),15.0,norme_S_A,Block_2,2.3569,1.2877,0.3533,,
+PALETTE,nessuna (grezza),15.0,norme_S_A,Block_3,1.5052,1.2689,0.4574,,
+PALETTE,nessuna (grezza),15.0,norme_S_A,Block_4,2.2376,1.0407,0.3175,,
+PALETTE,nessuna (grezza),15.0,norme_S_A,Block_5,1.9161,1.1887,0.3829,,
+PALETTE,nessuna (grezza),15.0,norme_S_A,Block_6,3.2819,4.7046,0.5891,,
+PALETTE,nessuna (grezza),15.0,coerenza_A,,0.1064,0.1378,2.0239,,
+PALETTE,nessuna (grezza),15.0,stesso_meno_altri_A,,,,0.1001,0.0625,0.0156
+PALETTE,nessuna (grezza),15.0,coerenza_S,,0.0456,0.6658,12.9328,,
+PALETTE,nessuna (grezza),15.0,stesso_meno_altri_S,,,,0.0514,0.0469,0.0156
+PALETTE,nessuna (grezza),30.0,norme_S_A,Block_1,3.604,2.8936,0.4453,,
+PALETTE,nessuna (grezza),30.0,norme_S_A,Block_2,2.1213,1.3032,0.3805,,
+PALETTE,nessuna (grezza),30.0,norme_S_A,Block_3,1.8984,1.3661,0.4185,,
+PALETTE,nessuna (grezza),30.0,norme_S_A,Block_4,1.7654,1.5261,0.4636,,
+PALETTE,nessuna (grezza),30.0,norme_S_A,Block_5,2.5277,1.4181,0.3594,,
+PALETTE,nessuna (grezza),30.0,norme_S_A,Block_6,6.7568,4.8223,0.4165,,
+PALETTE,nessuna (grezza),30.0,coerenza_A,,0.2532,0.224,2.1652,,
+PALETTE,nessuna (grezza),30.0,stesso_meno_altri_A,,,,0.2169,0.0156,0.0156
+PALETTE,nessuna (grezza),30.0,coerenza_S,,0.1101,0.5532,3.2231,,
+PALETTE,nessuna (grezza),30.0,stesso_meno_altri_S,,,,0.1118,0.0156,0.0156
+PALETTE,,15.0,spearman_ampiezza_coerenza_A,,,,0.6,,
+PALETTE,,30.0,spearman_ampiezza_coerenza_A,,,,0.9429,,
+PALETTE,,15.0,spearman_ampiezza_coerenza_S,,,,0.4857,,
+PALETTE,,30.0,spearman_ampiezza_coerenza_S,,,,0.9429,,
+PALETTE,,30.0,appaiato_Block_1_vs_Block_6,,,,0.3371,0.0156,0.0156
+PALETTE,media generale sottratta,15.0,norme_S_A,Block_1,1.6024,1.3263,0.4529,,
+PALETTE,media generale sottratta,15.0,norme_S_A,Block_2,1.4616,1.2877,0.4684,,
+PALETTE,media generale sottratta,15.0,norme_S_A,Block_3,1.2689,1.2689,0.5,,
+PALETTE,media generale sottratta,15.0,norme_S_A,Block_4,1.3836,1.0407,0.4293,,
+PALETTE,media generale sottratta,15.0,norme_S_A,Block_5,1.3611,1.1887,0.4662,,
+PALETTE,media generale sottratta,15.0,norme_S_A,Block_6,2.6634,4.7046,0.6385,,
+PALETTE,media generale sottratta,15.0,coerenza_A,,0.1064,0.1378,2.0239,,
+PALETTE,media generale sottratta,15.0,stesso_meno_altri_A,,,,0.1001,0.0625,0.0156
+PALETTE,media generale sottratta,15.0,coerenza_S,,-0.0357,0.2817,,,
+PALETTE,media generale sottratta,15.0,stesso_meno_altri_S,,,,0.0827,0.0469,0.0156
+PALETTE,media generale sottratta,30.0,norme_S_A,Block_1,2.7227,2.8936,0.5152,,
+PALETTE,media generale sottratta,30.0,norme_S_A,Block_2,1.1091,1.3032,0.5402,,
+PALETTE,media generale sottratta,30.0,norme_S_A,Block_3,1.0524,1.3661,0.5649,,
+PALETTE,media generale sottratta,30.0,norme_S_A,Block_4,1.4921,1.5261,0.5056,,
+PALETTE,media generale sottratta,30.0,norme_S_A,Block_5,1.9106,1.4181,0.426,,
+PALETTE,media generale sottratta,30.0,norme_S_A,Block_6,5.5576,4.8223,0.4646,,
+PALETTE,media generale sottratta,30.0,coerenza_A,,0.2532,0.224,2.1652,,
+PALETTE,media generale sottratta,30.0,stesso_meno_altri_A,,,,0.2169,0.0156,0.0156
+PALETTE,media generale sottratta,30.0,coerenza_S,,0.0307,0.0191,-1.1291,,
+PALETTE,media generale sottratta,30.0,stesso_meno_altri_S,,,,0.208,0.0156,0.0156

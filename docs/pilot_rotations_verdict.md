@@ -16,7 +16,10 @@
 > aggiunto. **Leggere l'emendamento in fondo prima di citare qualsiasi cosa da qui.** In breve: non è
 > un profilo a U ma un effetto `Block_6`; `Block_1` non replica sullo sweep di ampiezza; i test di
 > antisimmetria per blocco non sopravvivono a Holm; e la correzione per $D$ non era un ostacolo
-> superato perché non poteva fallire.
+> superato perché non poteva fallire. **E il 2026-09-18 a notte è stato aggiunto un secondo
+> emendamento**, dopo che le 216 immagini sono state rimisurate con le feature di tratto e
+> palette: la direzione del cambiamento **sembra** dipendere dal blocco e non solo l'ampiezza,
+> ma l'affermazione non è sostenibile con sette prompt. Il verdetto operativo è l'ultimo.
 
 ---
 
@@ -308,3 +311,161 @@ Nulla di questo entra in Esperimento 1, 2 o 3. Lo sweep precede ogni pre-registr
 campionamento a 6 passi invece di 9, ha un solo seed per cella tranne un prompt, e la sua unica
 metrica è dichiarata cieca al §4 del notebook. Nel README e in `index.html` compare come sezione
 esplicitamente esplorativa e senza numero di esperimento.
+
+
+---
+
+# Secondo emendamento — 2026-09-18, notte: la direzione
+
+**Il test che il primo emendamento indicava come "economico e decisivo" è stato fatto.** Le 216
+rotazioni e le 9 baseline sono state rimisurate con `style_features.py` e `analyze_palette.py`
+(`data/pilot_rotations_style_features.csv`, `data/pilot_rotations_palette_features.csv`, 225 righe
+ciascuno). Questa sezione riporta l'analisi indipendente di quei dati
+(`experiments/analyze_pilot_rotation_directions.py`), che arriva a una conclusione diversa da
+`data/pilot_rotations_directions.csv`.
+
+## A. La decomposizione che prima era impossibile, e che qui cambia tutto
+
+`CLIP-Dist` è una distanza senza segno: poteva dire *quanto* l'immagine si era mossa e mai *verso
+dove*. Le feature di tratto e palette hanno un segno, quindi per la prima volta su questo sweep si
+applica la decomposizione dell'Esperimento 1:
+
+$$S = \frac{\Delta(+\theta) + \Delta(-\theta)}{2}, \qquad A = \frac{\Delta(+\theta) - \Delta(-\theta)}{2}$$
+
+$S$ è la parte comune ai due versi di rotazione — "quanto". $A$ è la parte che cambia segno con il
+verso — "dove".
+
+**`measure_pilot_rotation_directions.py` non fa questa separazione.** Alla riga 226 raggruppa per
+`["prompt_id", "block"]` e media sui quattro angoli, fondendo $-30$, $-15$, $+15$, $+30$ in un unico
+vettore. Se la risposta è antisimmetrica, quella media **la cancella**. E lo è, in modo sostanziale:
+
+| blocco | $\|S\|$ | $\|A\|$ | quota antisimmetrica |
+| --- | --- | --- | --- |
+| `Block_1` | 3.862 | 1.908 | 0.33 |
+| `Block_2` | 1.122 | 0.512 | 0.31 |
+| `Block_3` | 1.495 | 0.453 | 0.23 |
+| `Block_4` | 1.196 | 0.602 | 0.33 |
+| `Block_5` | 1.351 | 1.774 | **0.57** |
+| **`Block_6`** | 5.647 | **6.124** | **0.52** |
+
+*(spazio tessitura, 30°, unità = prompt, standardizzazione unica sulle 225 righe)*
+
+Per `Block_6` la componente antisimmetrica è **la metà più grande delle due**. Mediando sui versi si
+è buttata via la parte maggiore del suo segnale, ed è per questo che la matrice dei coseni in
+`pilot_rotations_directions.csv` mostra `Block_6` a 0.37–0.66 dagli altri: stava confrontando dei
+residui.
+
+Nota che vale per tutto il resto del progetto: **$A$ è invariante alla convenzione di centratura.**
+Sottrarre una costante a tutti i delta si cancella in $(\Delta^+ - \Delta^-)/2$. È esattamente la
+convenzione che ha affondato lo stage 9 (pitfall 37, segno ribaltato in 11 celle su 18). La sola
+statistica a prova di convenzione in tutta quest'area è anche quella che porta il risultato.
+
+## B. I blocchi centrali non hanno una direzione. Ma la ragione potrebbe essere banale
+
+Coerenza fra prompt diversi dentro lo stesso blocco (componente $A$, tessitura, 30°):
+
+| blocco | coerenza interna | ampiezza $\|A\|$ |
+| --- | --- | --- |
+| `Block_6` | **+0.901** | 6.124 |
+| `Block_1` | **+0.650** | 1.908 |
+| `Block_5` | +0.438 | 1.774 |
+| `Block_4` | +0.155 | 0.602 |
+| `Block_2` | −0.024 | 0.512 |
+| `Block_3` | −0.010 | 0.453 |
+
+Sembra il risultato: due blocchi hanno una direzione riproducibile, i centrali non ne hanno nessuna.
+**E invece è, per metà, una frase sul rapporto segnale/rumore.** Le due colonne sono ordinate quasi
+identicamente:
+
+$$\rho(\text{ampiezza}, \text{coerenza}) = +0.943 \ (A), \qquad +1.000 \ (S)$$
+
+Se ogni blocco si muove in una direzione con un rumore di misura simile, quello che si muove dieci
+volte tanto avrà automaticamente un coseno molto migliore. "`Block_6` ha una direzione e i centrali
+no" è compatibile con "`Block_6` è l'unico che supera il pavimento di rumore". È il **pitfall 36** di
+questo progetto — una graduatoria di coerenze misurate con precisioni diverse — sotto un'altra forma.
+
+## C. Il test che aggira il problema, e che dà una risposta
+
+Se il confronto fra un blocco ben misurato e uno mal misurato non è un confronto, allora si
+confrontano **solo i blocchi ben misurati fra loro**. Tre superano una coerenza di 0.25 nello spazio
+tessitura a 30°: `Block_1`, `Block_5`, `Block_6`.
+
+Test appaiato, unità = prompt: *il vettore di un prompt sotto il blocco X somiglia agli altri prompt
+sotto X più di quanto somigli agli altri prompt sotto Y?* Nessuno dei due blocchi è svantaggiato dal
+rumore, perché entrambi sono misurati bene.
+
+| confronto | vantaggio stesso-blocco | $p$ | prompt concordi |
+| --- | --- | --- | --- |
+| `Block_1` vs `Block_6` | **+0.689** | 0.0156 | **7/7** |
+| `Block_1` vs `Block_5` | **+0.545** | 0.0156 | **7/7** |
+| `Block_5` vs `Block_6` | +0.232 | 0.0469 | 6/7 |
+
+E i coseni grezzi contro il tetto di affidabilità di ciascuna coppia:
+
+| coppia | coseno osservato | tetto $\sqrt{c_1 c_2}$ |
+| --- | --- | --- |
+| `Block_6` – `Block_1` | +0.146 | +0.766 |
+| `Block_6` – `Block_5` | +0.466 | +0.628 |
+| `Block_1` – `Block_5` | +0.329 | +0.534 |
+
+**`Block_1` e `Block_6` hanno entrambi una direzione riproducibile e concordano fra loro a 0.146
+contro un tetto di 0.766.** Due posti del modello, misurati bene tutti e due, che spingono in
+direzioni quasi ortogonali. Questo non è spiegabile con l'ampiezza.
+
+Lo spazio palette dice la stessa cosa più debolmente (`Block_1` vs `Block_6`: $+0.337$, 7/7,
+$p = 0.0156$; coseno $+0.403$ contro un tetto di $+0.603$), coerentemente con il fatto — già noto in
+questo progetto — che i prompt vincolano il colore e lasciano meno gradi di libertà.
+
+## D. Perché questo resta un'ipotesi e non un risultato
+
+Con $n = 7$ il pavimento della permutazione esatta è $2/2^7 = 0.0156$. Ne segue una cosa aritmetica
+che vale la pena scrivere una volta per tutte: **Holm può reggere al massimo tre test nella stessa
+famiglia**, perché $0.0156 \times 3 = 0.0469 < 0.05$ ma $0.0156 \times 4 = 0.0625 > 0.05$.
+
+Qui i confronti sono tre nello spazio tessitura e uno nella palette.
+
+- Se tessitura e palette sono **due famiglie separate** — come le dichiara la pre-registrazione dello
+  stage 9, che definisce quattro spazi di misura distinti — i tre confronti di tessitura passano Holm
+  a esattamente $0.0469$. Sul filo.
+- Se sono **una famiglia sola**, sono quattro e non passa niente.
+
+**La famiglia non è mai stata dichiarata.** Il risultato sta esattamente sul confine che quella
+dichiarazione avrebbe deciso, e la dichiarazione non c'è. Aggiungici che tutto questo è post-hoc, su
+un corpus con un solo seed per cella, a 6 passi di campionamento invece di 9, senza controllo casuale
+appaiato in $D$, e la conclusione corretta è: **un'ipotesi ben definita, non un risultato citabile.**
+
+## Verdetto rivisto, secondo giro
+
+**La direzione sembra dipendere dal blocco, non solo l'ampiezza — e il disegno non può sostenere
+l'affermazione.**
+
+Quello che è cambiato rispetto al primo emendamento: non è più vero che questo sweep può stabilire
+solo una *sensibilità*. La decomposizione antisimmetrica, che nessuno aveva fatto, mostra che i
+blocchi ben misurati spingono in direzioni diverse fra loro, e lo fa con effetti grandi e unanimi sui
+sette prompt. Ma la moltiplicità e l'assenza di una famiglia dichiarata lo lasciano sul confine.
+
+Resta non stabilito, come nel primo emendamento, se la specialità dei due capi sia una
+specializzazione funzionale o la loro vicinanza all'ingresso e all'uscita.
+
+## L'esperimento successivo, adesso completamente specificato
+
+Non serve più esplorare: serve **un** test, dichiarato prima.
+
+> **Primaria, unica.** Nello spazio tessitura, sulla componente antisimmetrica
+> $A = (\Delta(+\theta) - \Delta(-\theta))/2$, il vantaggio stesso-blocco fra `Block_1` e `Block_6`
+> è positivo. Permutazione esatta a scambio di segno sui prompt, $\alpha = 0.05$.
+
+Con le condizioni che questo corpus non aveva:
+
+- **almeno 10 prompt**, così il pavimento scende a $2/2^{10} = 0.00195$ e la famiglia può ospitare 25
+  test invece di 3;
+- **almeno 3 seed per cella**, perché qui ce n'è uno e il rumore di seed è stimabile su un solo prompt;
+- **displacement appaiato per costruzione** fra i due blocchi, invece di misurato a posteriori;
+- **campionamento a 9 passi**, lo stesso del resto del progetto, così il risultato è confrontabile;
+- **un controllo casuale allo stesso $D$**, che qui non esiste da nessuna parte;
+- la famiglia di test **dichiarata per intero** prima di guardare, e i quattro spazi di misura tenuti
+  separati come nella pre-registrazione dello stage 9.
+
+Se quel test passa, "dove spingi decide *cosa* ottieni" diventa una frase con dei dati dietro, e la
+metafora del canale smette di essere una figura retorica. Se non passa, `Block_6` è il punto in cui
+il modello è più fragile e nient'altro — che è comunque un fatto utile e va scritto.

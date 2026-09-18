@@ -1,11 +1,11 @@
 ﻿# Measurement Protocol & Error Log: Replication Checklist
 
-> **Purpose of this document**: This log records the 42 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 10 derived methodological rules.  
-> **None of these 42 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
+> **Purpose of this document**: This log records the 43 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 11 derived methodological rules.  
+> **None of these 43 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
 
 ---
 
-## The 10 Non-Negotiable Methodological Rules
+## The 11 Non-Negotiable Methodological Rules
 
 Before analyzing data or drawing conclusions on any diffusion architecture:
 
@@ -38,10 +38,18 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
    compose a panel whose measured role contradicts its label. A crop is itself a claim — that the
    thing to look at is inside the box — so where that claim is not verified, the whole frame is shown.
 
+11. **The resolution floor sets how many tests the family can hold — count them before running them.**
+   With $n$ units the exact sign-flip floor is $2/2^n$, so the largest family Holm can carry at
+   $\alpha$ is $\lfloor \alpha \, 2^n / 2 \rfloor$ tests. At $n = 7$ that is **three**:
+   $0.0156 \times 3 = 0.0469$ passes and $\times 4 = 0.0625$ does not. At $n = 10$ it is twenty-five.
+   The number of comparisons a design can support is therefore fixed by the corpus size before a
+   single image is rendered, and declaring the family afterwards means the verdict is decided by that
+   declaration rather than by the data.
+
 
 ---
 
-## The 42 Documented Measurement Pitfalls
+## The 43 Documented Measurement Pitfalls
 
 | # | Pitfall Encountered | Failure Mechanism | Silent Consequence | How to Prevent in Replication |
 |---|---|---|---|---|
@@ -88,6 +96,8 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 
 | **41** | Residualising on a covariate that orders the groups *backwards* | The block profile was defended by regressing `CLIP-Dist` on the measured Frobenius displacement $D$ and showing the per-block residuals kept their pattern. But the fitted slope is positive ($+3.16$) while `Block_6` has the **smallest** $D$ of the six groups, so the regression predicts its lowest value and any observed excess lands in the residual **amplified** rather than attenuated | The test was presented as a hurdle cleared when it was a hurdle that could not be hit: for `Block_6` it could not have returned "no". The raw fact is both simpler and stronger — that block moves the model 28% less than `Block_2` and changes the image 3.7x more — and the residual framing buried the genuinely informative part, which is that among the four *middle* groups $D$ explains the ordering completely ($\rho = +1.000$) | Before residualising, check the sign of the covariate-to-group relation. When the covariate anti-orders the groups, conditioning on it can only inflate the contrast: report the raw comparison and say which strata the covariate does and does not explain |
 | **42** | A pre-registered contrast that fuses two conditions assumed to be alike | The frozen contrast was "extremes (`Block_1`, `Block_6`) versus middle (`Block_2`–`Block_5`)", written when the only thing known about the two extremes was that both had a high mean. The design had no way to notice that they might be two different phenomena | The contrast passes at the floor ($p = 0.0156$, 7/7 prompts) and the headline became a symmetric "U-shaped profile". A second perturbation family — amplitude scaling, 216 cells **already extracted into the same CSV and never analysed** — separates them: `Block_6` replicates ($+0.1011$, 7/7), `Block_1` does not ($+0.0291$, 5/7, $p = 0.094$). One of the two "extremes" was a passenger | Pre-register the contrast *and* the per-condition decomposition that would reveal a fused category, flagged as secondary. And before drawing a conclusion, analyse every arm already present in the extracted data: an unused arm is not a spare, it is an unexamined control |
+
+| **43** | Averaging over both signs of a perturbation before computing its direction | The rotation sweep was summarised by `groupby(["prompt_id","block"]).mean()` across $-30$, $-15$, $+15$, $+30$. If the response is antisymmetric — if rotating one way moves the features opposite to rotating the other — that average **cancels it** | For `Block_6` the antisymmetric part is the *larger* half ($\|A\| = 6.12$ against $\|S\| = 5.65$), so pooling threw away most of the signal and left residue. The published cosine matrix then showed `Block_6` at 0.37–0.66 from the other blocks, which was a comparison between leftovers. Separating the two signs turns the same data into a within-block coherence of $+0.90$ | Wherever a perturbation exists at $\pm$, decompose before summarising: $S = (\Delta^+ + \Delta^-)/2$, $A = (\Delta^+ - \Delta^-)/2$. As a bonus $A$ is invariant to the centering convention of pitfall 37, since subtracting any constant from every delta cancels in the difference |
 
 
 ---
