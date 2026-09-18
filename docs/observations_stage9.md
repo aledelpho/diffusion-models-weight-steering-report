@@ -248,3 +248,35 @@ prodotta guardando.
 appaiare sulla luminanza: si scorano i fari alla cieca e si verifica se l'effetto sopravvive a parità
 di L\* misurato, oppure se scompare una volta tenuta ferma la luminosità. I due sono separabili con i
 dati che ci sono più una passata di scoring.
+
+---
+
+## Correzione — 2026-09-18, dopo la misura dei bounding box
+
+**La sezione "Quantificate e sostenute" qui sopra va letta con questa correzione.**
+
+Era scritto che `blockshuf_neg` "satura fortemente" (`colorfulness_hs` +27.69 a 8/8 prompt e 40/40
+immagini) e che `preset_pos` "desatura" (−3.54), presentandole come firme cromatiche delle due
+condizioni, quasi opposte fra loro.
+
+La misura dei bounding box a verità umana mostra che **in larga parte non sono firme cromatiche**.
+Nelle scene di stage 9, area del soggetto e colorfulness sono accoppiate meccanicamente: nel **solo
+baseline**, dove non c'è nessuna perturbazione, correlano a r = +0.776, con pendenza
+`colorfulness = 13.4 + 238.1 × frazione_area`. Un'auto più grande mette più pixel saturi in una scena
+con sfondo verde.
+
+Applicando quella pendenza alle variazioni di dimensione misurate, il cambiamento di area **spiega
+interamente** quello di saturazione per quattro condizioni su sei, e per blockshuffle lo sovrastima
+(129% a 2×, 145% a 1×): a parità di ingrandimento la perturbazione *riduce* la saturazione rispetto
+all'atteso.
+
+**Quindi**: `blockshuf_neg` ingrandisce il soggetto, e la saturazione segue. `preset_pos` lo
+rimpicciolisce leggermente, e la desaturazione segue. Restano valide e non toccate da questa
+correzione le altre due metriche, che non passano dalla dimensione in questo modo: lo scurimento
+(L\* medio) e la grana (`lbp_entropy`, 8/8 prompt e 40/40 immagini).
+
+Il controllo sul corpus dei ritratti di stage 7 è negativo, e va detto: là `subject_frac` si muove al
+livello del caso sotto perturbazione e correla con la croma solo a r = +0.263, quindi **§1.4 e §1.5
+non sono toccate**. Il mediatore è specifico dei corpus a scena intera.
+
+Dettagli e verifica in [`stage10_bbox_verification.md`](stage10_bbox_verification.md).
