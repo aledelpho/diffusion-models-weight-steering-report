@@ -56,6 +56,7 @@ baseline stanno in stage2_images.csv e non in stage5. Dieci prompt invece di sei
 
 import os
 import csv
+import argparse
 import itertools
 import numpy as np
 import pandas as pd
@@ -75,9 +76,32 @@ def _first(*cand):
 ROOT = _first(os.path.join(_HERE, os.pardir, "data"),
               r"c:\Users\aless\Desktop\comfyui-pilot")
 FEAT = os.path.join(ROOT, "style_features.csv")
-CSV_COND = [os.path.join(ROOT, f) for f in ("stage4_images.csv", "stage5_images.csv", "stage6_images.csv", "stage7_images.csv")]
-CSV_BASE = [os.path.join(ROOT, f) for f in ("stage2_images.csv", "stage5_images.csv", "stage6_images.csv", "stage7_images.csv")]
+
+# I manifest che compongono il corpus dell'Esperimento 1.
+#
+# CORREZIONE. Le due liste citavano "stage7_images.csv", che in questo
+# repository NON esiste: quel nome e' stato ritirato con la pitfall 30 (due
+# esperimenti che scrivevano nella stessa cartella con manifest omonimi) e
+# sostituito da stage7a_images.csv / stage7b_images.csv, che pero' contengono
+# il corpus di CONFERMA (prompt I01..I24, sezioni 1.5-1.6) e non i 6 prompt
+# colour-free. I 6 colour-free (S7_01..S7_06) stanno in
+# stage6b_pilot_images.csv e non erano caricati da nessuna delle due liste.
+#
+# Conseguenza del bug: il blocco 2 trovava 0 prompt completi e usciva con un
+# warning, e il "pool completo a 24 prompt" era in realta' il solo
+# sottoinsieme colour-pinned a 18, con un titolo che dichiarava 24.
+MANIFEST_COND = ("stage4_images.csv", "stage5_images.csv",
+                 "stage6_images.csv", "stage6b_pilot_images.csv")
+MANIFEST_BASE = ("stage2_images.csv", "stage5_images.csv",
+                 "stage6_images.csv", "stage6b_pilot_images.csv")
+CSV_COND = [os.path.join(ROOT, f) for f in MANIFEST_COND]
+CSV_BASE = [os.path.join(ROOT, f) for f in MANIFEST_BASE]
 OUT = os.path.join(ROOT, "global_aggregation_corrected.csv")
+
+# Sotto questa soglia un blocco non e' calcolabile. Di default e' un errore
+# bloccante e non un warning: regola 5 dell'errors_log, un cancello che conta
+# le assenze e prosegue e' un cancello muto.
+MIN_PROMPTS = 4
 
 COND_MAP = {
     "Arthemy_Bench_Base.json": "Preset+", "Arthemy_Bench_NEG.json": "Preset-",
@@ -95,6 +119,26 @@ CONTRASTI = [
     ("A (odd)   Rand", lambda d: (d["Rand+"] - d["Rand-"]) / 2),
     ("S (even)  Preset", lambda d: (d["Preset+"] + d["Preset-"]) / 2),
 ]
+
+
+def audit_manifests(strict=True):
+    """Rende visibile quali manifest sono stati effettivamente letti.
+
+    load() salta i file inesistenti con os.path.exists e prosegue: un manifest
+    rinominato sparisce dal corpus senza che nulla lo dica. Qui l'assenza si
+    vede, e di default ferma l'esecuzione."""
+    tutti = sorted(set(CSV_COND) | set(CSV_BASE))
+    presenti = [os.path.basename(p) for p in tutti if os.path.exists(p)]
+    mancanti = [os.path.basename(p) for p in tutti if not os.path.exists(p)]
+    print(f"  Manifest letti ({len(presenti)}): {', '.join(presenti)}")
+    if mancanti:
+        msg = (f"manifest mancanti ({len(mancanti)}): {', '.join(mancanti)} — "
+               f"cercati in {os.path.abspath(ROOT)}")
+        if strict:
+            raise FileNotFoundError(
+                msg + ". Il corpus sarebbe incompleto senza dirlo. "
+                      "Usa --allow-incomplete solo per un clone parziale.")
+        print(f"  [WARNING] {msg}")
 
 
 def load():
@@ -119,7 +163,8 @@ def load():
     return F, cols, base, cond
 
 
-def run_analysis(F, cols, base, cond, prompt_list, out_csv, loadings_csv, title):
+def run_analysis(F, cols, base, cond, prompt_list, out_csv, loadings_csv, title,
+                 strict=True):
     have = set(F.index)
     seeds = {}
     ok = []
@@ -135,10 +180,21 @@ def run_analysis(F, cols, base, cond, prompt_list, out_csv, loadings_csv, title)
     print("\n" + "=" * 96)
     print(f"  {title.upper()}")
     print("=" * 96)
+    print(f"  Prompts requested: {len(prompt_list)}  "
+          f"({', '.join(sorted(prompt_list)) if prompt_list else '-'})")
     print(f"  Prompts complete across all 6 conditions: {len(ok)}  ({', '.join(ok)})")
     print(f"  Seeds per prompt: " + ", ".join(f"{p}:{len(seeds[p])}" for p in ok))
-    if len(ok) < 4:
-        print(f"  [WARNING] Too few complete prompts ({len(ok)}); skipping this block.")
+    n_celle = sum(len(seeds[p]) for p in ok)
+    print(f"  Images used: {n_celle * (len(CONDS) + 1)}  "
+          f"({n_celle} cells x {len(CONDS)} conditions + paired baseline)")
+    if len(ok) < MIN_PROMPTS:
+        msg = (f"'{title}': {len(ok)} complete prompts out of "
+               f"{len(prompt_list)} requested, minimum is {MIN_PROMPTS}. "
+               f"This block is not computable and its published CSV is NOT "
+               f"being regenerated.")
+        if strict:
+            raise RuntimeError(msg)
+        print(f"  [WARNING] {msg} Skipping.")
         return
 
     # z-score globale, poi differenza dalla baseline APPAIATA
@@ -322,34 +378,52 @@ def run_analysis(F, cols, base, cond, prompt_list, out_csv, loadings_csv, title)
 
 
 def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--allow-incomplete", action="store_true",
+                    help="degrada a warning i manifest mancanti e i blocchi "
+                         "senza abbastanza prompt. Solo per cloni parziali: "
+                         "i numeri che ne escono non sono quelli pubblicati.")
+    args = ap.parse_args()
+    strict = not args.allow_incomplete
+
+    print("=" * 96)
+    print("  CORPUS AUDIT")
+    print("=" * 96)
+    audit_manifests(strict=strict)
+
     F, cols, base, cond = load()
     prompts_all = sorted({p for p, _s, _g in cond})
 
     prompts_mono = [p for p in prompts_all if not p.startswith("S7")]
     prompts_color = [p for p in prompts_all if p.startswith("S7")]
+    print(f"  Prompt ids in corpus: {len(prompts_all)} "
+          f"({len(prompts_mono)} colour-pinned + {len(prompts_color)} colour-free)")
 
-    # 1. Colour-pinned (18 prompt: F1..F4, G1..G6, H01..H08)
+    # 1. Colour-pinned (F1..F4, G1..G6, H01..H08)
     run_analysis(
         F, cols, base, cond, prompts_mono,
         os.path.join(ROOT, "global_aggregation_colour_pinned_18p.csv"),
         os.path.join(ROOT, "pca_loadings_colour_pinned_18p.csv"),
-        "1. Colour-pinned subset (18 prompts: F1..F4 + G1..G6 + H01..H08)"
+        "1. Colour-pinned subset (F1..F4 + G1..G6 + H01..H08)",
+        strict=strict
     )
 
-    # 2. Color Freedom (6 prompt: S7_01..S7_06)
+    # 2. Color Freedom (S7_01..S7_06, manifest stage6b_pilot_images.csv)
     run_analysis(
         F, cols, base, cond, prompts_color,
         os.path.join(ROOT, "global_aggregation_colour_free_6p.csv"),
         os.path.join(ROOT, "pca_loadings_colour_free_6p.csv"),
-        "2. Colour-free subset (6 prompts: S7_01..S7_06)"
+        "2. Colour-free subset (S7_01..S7_06)",
+        strict=strict
     )
 
-    # 3. Globale completo (24 prompt)
+    # 3. Globale completo (colour-pinned + colour-free)
     run_analysis(
         F, cols, base, cond, prompts_all,
         os.path.join(ROOT, "global_aggregation_corrected.csv"),
         os.path.join(ROOT, "pca_difference_loadings.csv"),
-        "3. Full pool (all 24 prompts: 120 seeds/condition, 840 images)"
+        "3. Full pool (colour-pinned + colour-free)",
+        strict=strict
     )
 
 

@@ -105,3 +105,23 @@ had, and sixteen prompts at five seeds cannot be re-cut to provide it. If the
 primary test fires, the natural follow-up is exactly that: the units that moved
 most, re-rendered at twenty seeds, pre-registered separately — and chosen by a
 rule written down before their rates are read.
+
+---
+
+## Nota di stato — 2026-09-18: non eseguita
+
+La tabella degli attributi del paragrafo "L'attribute table" e' **rimasta vuota**: le righe I01, …,
+I24 non sono mai state compilate, e per la regola scritta qui sopra ("una volta che esiste il primo
+render di stage A, la tabella e' chiusa") non possono esserlo adesso.
+
+Quindi nessuno dei due attributi per prompt e' stato nominato prima dei render, nessuno scoring alla
+cieca e' stato fatto, e **il test primario non e' stato eseguito**. Non c'e' sezione di risultato
+perche' non c'e' risultato.
+
+Cio' che questo documento afferma resta vero e non prescritto: la previsione di Alessandro sugli
+attributi emergenti e' registrata, e il disegno — nomi degli attributi fissati prima, scoring cieco,
+unita' di analisi `(prompt, attributo)` — e' riutilizzabile su un corpus futuro. Per usarlo servira'
+un nuovo documento su render che non esistono ancora, non il riempimento di questa tabella.
+
+Nel frattempo la posizione a verbale resta quella di §2.6 del README: il caso barnacle e' un
+risultato su un prompt e una sua variante, non un fenomeno generale.

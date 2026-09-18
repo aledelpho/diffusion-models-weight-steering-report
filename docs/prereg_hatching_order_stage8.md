@@ -59,3 +59,32 @@ An ordering that is not the predicted one, on the object subset, with the subjec
 subset reproducing stage 7. That would mean the ladder is a property of how the
 model hatches faces and cloth, not a property of the displacement — which is a
 result worth having and would be written as such.
+
+---
+
+## Nota di stato — 2026-09-18: il nome "stage 8" e' stato usato per altro
+
+Registrata perche' il documento non corrisponde piu' a cio' che nel repository si chiama stage 8, e
+un lettore che incrocia i due lo scopre solo leggendo i dati.
+
+**La scala di hatching descritta sopra non e' stata eseguita.** Non esistono render suoi, e le soglie
+che questo stub rimandava a "quando stage 7 chiude" non sono state scritte.
+
+Quello che nel repository si chiama stage 8 (`data/stage8_*.csv`, 300 render, completati il
+2026-09-18 alle 01:32) e' un insieme diverso di piloti, tutti sul colore e sulla calibrazione:
+
+| arm | contenuto | prompt |
+| --- | --- | --- |
+| A | prompt vuoto, per vedere cosa fa la perturbazione senza testo da leggere | `P0_empty` |
+| B | coppie appaiate con e senza clausola di colore | 4 soggetti x 2 |
+| C | gate di qualita' sui sei preset CHAOS | I06, I07, I20, I24 |
+
+Sono i punti aperti della roadmap sul **colore**, non la scala di hatching. La collisione e' la
+pitfall 30 un livello piu' in alto: non due file omonimi, due esperimenti che condividono un numero
+di stage.
+
+**Conseguenze, e cosa NON lo e'.** Le soglie della scala possono ancora essere fissate in modo
+pulito, perche' i render della scala non esistono: non c'e' nessun dato da cui contaminarsi. Quello
+che va fatto e' dare alla scala un numero di stage libero e non riusato, e trattare i tre arm qui
+sopra come piloti esplorativi — che e' come l'arm B era gia' stato progettato ("il pilota non puo'
+produrre un risultato significativo e non sara' riportato come tale").
