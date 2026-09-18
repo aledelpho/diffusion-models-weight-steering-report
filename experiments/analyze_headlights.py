@@ -1,224 +1,124 @@
 # -*- coding: utf-8 -*-
 """
-experiments/analyze_headlights.py
+experiments/analyze_headlights.py  —  lavoro A del BRIEF_stage10_strumenti
 
-Analisi statistica dello scoring cieco dei fari (Stage 10 · Lavoro A):
-1. Verifica che data/stage9_headlights_raw.csv contenga tutti i 280 punteggi unici.
-2. Solo a quel punto unisce i punteggi alla chiave data/stage9_headlights_key.csv.
-3. Separa le variabili:
-   - lit: 1 se code==2, 0 se code==0, None se code==1 (ambiguo)
-   - ambiguous: 1 se code==1, 0 altrimenti (conteggiato ed escluso dal calcolo del tasso)
-4. Unita' di analisi: il prompt (8 prompt di stile).
-   - Calcolo del tasso k/n di lit=1 per (prompt, condizione).
-   - Delta = condizione - baseline sullo stesso prompt.
-   - Test di permutazione esatta sign-flip (2^8 = 256 combinazioni, pavimento 2/256 = 0.0078).
-   - Correzione di Holm sulle 6 condizioni.
-5. Gestione del confound di luminanza (L_mean da palette_features_stage9.csv):
-   - Regressione logistica: lit ~ condizione + L_mean (con cluster/effetti prompt).
-   - Stratificazione in terzili di L_mean con test intrastrato e riporto numerosita'.
-6. Salva data/stage9_headlights_results.csv.
+Unisce i punteggi ciechi dei fari alla chiave e produce:
+  data/stage9_headlights_results.csv
+
+Regole fissate nel brief PRIMA dello scoring:
+  - il codice 1 ("non chiaro") non e' un valore intermedio: esce da numeratore e
+    denominatore, e il conteggio degli ambigui si riporta per condizione;
+  - unita' di analisi = il prompt, i seed si mediano prima (pitfall 17);
+  - test di permutazione esatta sign-flip sugli 8 prompt, Holm sulle 6 condizioni;
+  - l'osservazione vale solo se sopravvive a luminanza tenuta ferma.
+
+NON E' UNA CONFERMA: l'osservazione dei fari e' nata guardando questi render e qui
+viene misurata sugli stessi. La conferma richiede render nuovi.
 """
-
-import os
-import sys
-import csv
-import math
-import itertools
+import os, csv, itertools
 import numpy as np
 import pandas as pd
-from scipy import stats
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-REPORT_ROOT = os.path.abspath(os.path.join(_HERE, ".."))
-DATA_DIR = os.path.join(REPORT_ROOT, "data")
+def _first(*c):
+    for x in c:
+        if os.path.isdir(x): return x
+    return c[-1]
+ROOT = _first(os.path.join(_HERE, os.pardir, "data"), r"c:\Users\aless\Desktop\comfyui-pilot")
+CONDS = ["preset_pos_1x","preset_pos_2x","blockshuf_neg_1x","blockshuf_neg_2x","rand_pos_1x","rand_pos_2x"]
+SW = [f"sw{i}" for i in range(1,7)]
 
-RAW_CSV = os.path.join(DATA_DIR, "stage9_headlights_raw.csv")
-KEY_CSV = os.path.join(DATA_DIR, "stage9_headlights_key.csv")
-PALETTE_CSV = os.path.join(DATA_DIR, "palette_features_stage9.csv")
-RESULTS_CSV = os.path.join(DATA_DIR, "stage9_headlights_results.csv")
+def exact_signflip(x):
+    x = np.asarray(x, float); x = x[~np.isnan(x)]
+    n = len(x); obs = x.mean()
+    S = np.array(list(itertools.product([1,-1], repeat=n)))
+    null = (S * x).mean(1)
+    informative = int((np.abs(x) > 1e-12).sum())
+    return obs, float((np.abs(null) >= abs(obs) - 1e-12).mean()), n, informative
 
-CONDS = [
-    "preset_pos_1x", "preset_pos_2x",
-    "blockshuf_neg_1x", "blockshuf_neg_2x",
-    "rand_pos_1x", "rand_pos_2x"
-]
-ALL_CONDS = ["baseline"] + CONDS
-SW = [f"sw{i}" for i in range(1, 7)]
-
-
-def exact_sign_flip_test(deltas):
-    """Test di permutazione sign-flip esatto su 8 prompt (2^8 = 256)."""
-    deltas = np.array(deltas, dtype=float)
-    n = len(deltas)
-    obs_mean = np.mean(deltas)
-    if obs_mean == 0:
-        return 1.0
-
-    all_means = []
-    for signs in itertools.product([-1, 1], repeat=n):
-        all_means.append(np.mean(deltas * np.array(signs)))
-
-    all_means = np.array(all_means)
-    # Test a due code
-    p_val = np.mean(np.abs(all_means) >= np.abs(obs_mean) - 1e-12)
-    return max(p_val, 2.0 / (2 ** n))
-
-
-def holm_bonferroni(p_values):
-    """Applica la correzione sequenziale di Holm a una lista di p-value."""
-    m = len(p_values)
-    indexed = sorted(enumerate(p_values), key=lambda x: x[1])
-    adjusted = [0.0] * m
-    running_max = 0.0
-    for rank, (orig_idx, p) in enumerate(indexed):
-        adj_p = p * (m - rank)
-        running_max = max(running_max, adj_p)
-        adjusted[orig_idx] = min(running_max, 1.0)
-    return adjusted
-
+def holm(ps):
+    order = np.argsort(ps); out = [0.0]*len(ps)
+    for rank, i in enumerate(order):
+        out[i] = min(1.0, max(ps[order[j]]*(len(ps)-j) for j in range(rank+1)))
+    return out
 
 def main():
-    print("=== ANALISI SCORING CIECO DEI FARI (STAGE 10 · LAVORO A) ===")
+    raw = pd.read_csv(os.path.join(ROOT, "stage9_headlights_raw.csv"))
+    key = pd.read_csv(os.path.join(ROOT, "stage9_headlights_key.csv"))
 
-    if not os.path.exists(RAW_CSV):
-        raise SystemExit(f"File grezzo non trovato: {RAW_CSV}\nCompleta prima lo scoring nel visualizzatore!")
+    # Il viewer APPENDE una riga nuova quando si torna indietro e si ricorregge,
+    # invece di sostituire quella vecchia. Senza questo, le immagini ricorrette
+    # entrano due volte e i conteggi si gonfiano in silenzio: 284 righe per 280
+    # immagini, con il punteggio vecchio e quello nuovo entrambi contati.
+    # Vale l'ULTIMO punteggio dato.
+    n_before = len(raw)
+    raw = raw.sort_values("timestamp_ms").drop_duplicates("hash_id", keep="last")
+    if n_before != len(raw):
+        print(f"  ri-punteggiature risolte tenendo l'ultima: {n_before} righe -> {len(raw)}")
 
-    raw_df = pd.read_csv(RAW_CSV)
-    # Rimuove duplicati mantenendo l'ultima annotazione se si e' tornati indietro
-    raw_df = raw_df.drop_duplicates(subset=["hash_id"], keep="last")
+    d = key.merge(raw, on="hash_id", how="left")
+    # Cancello che deve fallire rumorosamente (regola 5 dell'errors_log)
+    if len(d) != len(key):
+        raise RuntimeError(f"merge ha cambiato il numero di righe: {len(key)} -> {len(d)}")
+    if d.code.isna().any():
+        raise RuntimeError(f"{int(d.code.isna().sum())} immagini senza punteggio")
+    d["prompt"] = d.prompt_id
+    d["lit"] = d.code.map({0:0.0, 2:1.0, 1:np.nan})
+    d["amb"] = (d.code == 1).astype(int)
 
-    if len(raw_df) < 280:
-        raise SystemExit(f"Scoring incompleto: {len(raw_df)}/280 immagini annotate. Completa prima l'intero set!")
+    seq = d.sort_values("order").cond_name.values
+    adj = int((seq[1:] == seq[:-1]).sum())
+    print(f"cecita: condizioni adiacenti uguali {adj}/{len(seq)-1} (atteso ~{(len(seq)-1)/7:.0f})")
 
-    print(f"[OK] Rilevati tutti i 280 punteggi univoci in {RAW_CSV}")
-    print("[OK] Sblocco e unione con la chiave segreta...")
+    pal = pd.read_csv(os.path.join(ROOT, "palette_features_stage9.csv"))
+    pal = pal[pal.prompt_dir.astype(str).str.startswith("S")].copy()
+    w = pal[[f"{s}_share" for s in SW]].values.astype(float)
+    w = w / np.clip(w.sum(1, keepdims=True), 1e-9, None)
+    pal["L_mean"] = (pal[[f"{s}_L" for s in SW]].values * w).sum(1)
+    pal["prompt_short"] = pal.prompt_dir
+    d["prompt_short"] = d.prompt.str.split("_").str[0]
+    d = d.merge(pal[["prompt_short","condition","seed","L_mean"]],
+                left_on=["prompt_short","cond_name","seed"],
+                right_on=["prompt_short","condition","seed"], how="left")
 
-    if not os.path.exists(KEY_CSV):
-        raise SystemExit(f"File chiave non trovato: {KEY_CSV}")
-
-    key_df = pd.read_csv(KEY_CSV)
-    merged = pd.merge(raw_df, key_df, on="hash_id")
-    if len(merged) != 280:
-        raise SystemExit(f"Anomalia nel merge: {len(merged)} record uniti invece di 280")
-
-    # Separazione lit / ambiguous
-    merged["code"] = merged["code"].astype(int)
-    merged["ambiguous"] = (merged["code"] == 1).astype(int)
-    merged["lit"] = merged["code"].map({2: 1.0, 0: 0.0, 1: np.nan})
-
-    # Carica L_mean da palette_features_stage9.csv per il controllo del confound
-    if os.path.exists(PALETTE_CSV):
-        pal = pd.read_csv(PALETTE_CSV)
-        pal = pal[pal["prompt_dir"].astype(str).str.startswith("S")].copy()
-        w = pal[[f"{s}_share" for s in SW]].values.astype(float)
-        w = w / np.clip(w.sum(1, keepdims=True), 1e-9, None)
-        pal["L_mean"] = (pal[[f"{s}_L" for s in SW]].values * w).sum(1)
-        pal["seed"] = pal["seed"].astype(int)
-        merged["seed"] = merged["seed"].astype(int)
-
-        merged = pd.merge(merged, pal[["prompt_sha1", "condition", "seed", "L_mean"]],
-                          left_on=["prompt_sha1", "cond_name", "seed"],
-                          right_on=["prompt_sha1", "condition", "seed"],
-                          how="left")
-    else:
-        print("[WARN] palette_features_stage9.csv non trovato, controllo L_mean disabilitato")
-        merged["L_mean"] = np.nan
-
-    # 1. Tassi per prompt e condizione
-    print("\n--- 1. CONTEGGIO AMBIGUI PER CONDIZIONE ---")
-    amb_by_cond = merged.groupby("cond_name")["ambiguous"].sum()
-    for c in ALL_CONDS:
-        print(f"  {c:18s}: {amb_by_cond.get(c, 0)} ambigui su 40 immagini")
-
-    # Calcolo tassi per prompt escludendo gli ambigui
-    prompt_rates = {}
-    for (p_id, c_name), grp in merged.groupby(["prompt_id", "cond_name"]):
-        valid = grp["lit"].dropna()
-        n_valid = len(valid)
-        k_lit = int(valid.sum()) if n_valid > 0 else 0
-        rate = k_lit / n_valid if n_valid > 0 else 0.0
-        prompt_rates.setdefault(c_name, {})[p_id] = {
-            "rate": rate,
-            "k": k_lit,
-            "n": n_valid,
-            "amb": int(grp["ambiguous"].sum())
-        }
-
-    # 2. Test appaiato contro baseline per le 6 condizioni
-    prompts = sorted(list(prompt_rates["baseline"].keys()))
-    results = []
-
-    print("\n--- 2. EFFETTO GREZZO DEI FARI (PROMPT-LEVEL PAIRED DELTA) ---")
-    print("Condizione         | Delta Medio | p grezzo (sign-flip) | Holm     | Verdetto")
-    print("-------------------|-------------|----------------------|----------|-----------------")
-
-    raw_p_values = []
-    temp_rows = []
+    rows, ps = [], []
+    rate = lambda s: (s.lit.sum()/s.lit.notna().sum()) if s.lit.notna().sum() else np.nan
     for c in CONDS:
-        deltas = []
-        for p in prompts:
-            r_cond = prompt_rates[c][p]["rate"]
-            r_base = prompt_rates["baseline"][p]["rate"]
-            deltas.append(r_cond - r_base)
+        dl = []
+        for p in sorted(d.prompt.unique()):
+            b = rate(d[(d.prompt==p)&(d.cond_name=="baseline")])
+            q = rate(d[(d.prompt==p)&(d.cond_name==c)])
+            dl.append(q-b if not (np.isnan(b) or np.isnan(q)) else np.nan)
+        m, p_, n, info = exact_signflip(dl)
+        ps.append(p_)
+        s = d[d.cond_name==c]
+        rows.append(dict(condition=c, rate=round(rate(s),4),
+                         lit=int(s.lit.sum()), n_valid=int(s.lit.notna().sum()),
+                         ambiguous=int(s.amb.sum()),
+                         delta_vs_baseline=round(m,4), prompts_n=n,
+                         prompts_informative=info, p_exact=round(p_,4)))
+    for r, h in zip(rows, holm(ps)):
+        r["p_holm"] = round(h, 4)
 
-        mean_delta = float(np.mean(deltas))
-        p_raw = exact_sign_flip_test(deltas)
-        raw_p_values.append(p_raw)
-        temp_rows.append((c, mean_delta, p_raw, deltas))
+    b = d[d.cond_name=="baseline"]
+    rows.insert(0, dict(condition="baseline", rate=round(rate(b),4), lit=int(b.lit.sum()),
+                        n_valid=int(b.lit.notna().sum()), ambiguous=int(b.amb.sum()),
+                        delta_vs_baseline="", prompts_n="", prompts_informative="",
+                        p_exact="", p_holm=""))
 
-    adj_p_values = holm_bonferroni(raw_p_values)
+    v = d.dropna(subset=["lit","L_mean"]).copy()
+    v["tert"] = pd.qcut(v.L_mean, 3, labels=["dark","mid","light"])
+    for r in rows:
+        for t in ["dark","mid","light"]:
+            s = v[(v.cond_name==r["condition"]) & (v.tert==t)]
+            r[f"rate_{t}"] = round(s.lit.mean(),3) if len(s) else ""
+            r[f"n_{t}"] = len(s)
 
-    for (c, mean_delta, p_raw, deltas), p_adj in zip(temp_rows, adj_p_values):
-        verdict = "QUANTIFICATO" if p_adj < 0.05 else "NOT_SIGNIFICANT"
-        print(f"{c:18s} | {mean_delta:+11.4f} | {p_raw:20.4f} | {p_adj:8.4f} | {verdict}")
-
-        results.append({
-            "condition": c,
-            "mean_delta_raw": round(mean_delta, 4),
-            "p_raw_signflip": round(p_raw, 4),
-            "p_adj_holm": round(p_adj, 4),
-            "ambiguous_count": int(amb_by_cond.get(c, 0)),
-            "baseline_ambiguous_count": int(amb_by_cond.get("baseline", 0)),
-            "verdict_raw": verdict
-        })
-
-    # 3. Controllo del confound di luminanza
-    if not merged["L_mean"].isna().all():
-        print("\n--- 3. CONFOUND DI LUMINANZA (STRATIFICAZIONE IN TERZILI) ---")
-        # Divisione in terzili globali di L_mean
-        merged["tertile"] = pd.qcut(merged["L_mean"], q=3, labels=["T1_Scuro", "T2_Medio", "T3_Chiaro"])
-
-        tertile_results = []
-        for t in ["T1_Scuro", "T2_Medio", "T3_Chiaro"]:
-            sub = merged[merged["tertile"] == t]
-            print(f"\n[Terzile {t}] L_mean range: [{sub['L_mean'].min():.1f} - {sub['L_mean'].max():.1f}]")
-            for c in CONDS:
-                c_sub = sub[sub["cond_name"] == c]["lit"].dropna()
-                b_sub = sub[sub["cond_name"] == "baseline"]["lit"].dropna()
-                r_c = c_sub.mean() if len(c_sub) > 0 else np.nan
-                r_b = b_sub.mean() if len(b_sub) > 0 else np.nan
-                diff = r_c - r_b if (not np.isnan(r_c) and not np.isnan(r_b)) else np.nan
-                print(f"  {c:18s}: Tasso = {r_c:.3f} (n={len(c_sub)}) vs Base = {r_b:.3f} (n={len(b_sub)}) | Diff = {diff:+.3f}")
-
-        # Regressione logistica di lit su cond_name + L_mean
-        try:
-            import statsmodels.api as sm
-            import statsmodels.formula.api as smf
-            reg_data = merged.dropna(subset=["lit", "L_mean"]).copy()
-            reg_data["is_preset_pos_1x"] = (reg_data["cond_name"] == "preset_pos_1x").astype(int)
-            reg_data["is_preset_pos_2x"] = (reg_data["cond_name"] == "preset_pos_2x").astype(int)
-
-            model = smf.logit("lit ~ is_preset_pos_1x + is_preset_pos_2x + L_mean", data=reg_data).fit(disp=False)
-            print("\n--- 4. REGRESSIONE LOGISTICA (lit ~ preset_pos + L_mean) ---")
-            print(model.summary().tables[1])
-        except Exception as e:
-            print(f"[NOTE] Regressione logistica statsmodels non disponibile: {e}")
-
-    # Salva risultati
-    out_df = pd.DataFrame(results)
-    out_df.to_csv(RESULTS_CSV, index=False)
-    print(f"\n[OK] Risultati completi salvati in {RESULTS_CSV}")
-
+    out = os.path.join(ROOT, "stage9_headlights_results.csv")
+    with open(out, "w", newline="", encoding="utf-8") as f:
+        w2 = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w2.writeheader(); w2.writerows(rows)
+    print(pd.DataFrame(rows).to_string(index=False))
+    print(f"\n-> {os.path.basename(out)}")
 
 if __name__ == "__main__":
     main()
