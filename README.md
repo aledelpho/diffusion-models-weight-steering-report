@@ -180,12 +180,43 @@ from 5% to 95%. Neither was taught — both were made probable.
 
 So the claim this notebook is actually testing, stated so it can be checked on any model:
 
-> **A small structured weight edit redistributes the probability of what comes out toward regions the
-> model already reaches, without adding capability.**
+> **A structured weight edit redistributes the probability of what comes out toward regions the model
+> already reaches, without adding capability.**
 
 That sentence is falsifiable in a way "it changes the style" is not: if an edit ever produced something
 the stock model never produces in any seed, the mountain would be wrong. And it is portable — you can
 test it on a model that shares nothing with this one, which is the whole point of §10.
+
+**Three things in that sentence are doing less work than they look like they are, and it's worth
+saying which.**
+
+*"Small."* I removed the word, and here is why. In Frobenius terms the edit is 5.4% — small. But
+"dig one canal, shift one ridge" says something else: that it is **local**. The presets touch
+**1059 tensors**, 430 DiT blocks plus 629 text-encoder layers, all at once. That is not a canal, it
+is regrading the whole range by a few percent everywhere. Until today nothing in this project had
+ever *varied* where the edit lands, so the most picturesque part of the metaphor was the part with
+zero measurements behind it. §4 below is the first measurement, and it is a beginning, not an answer.
+
+*"Already reaches."* Every effect measured starts from a non-zero base rate — but that base rate is
+pooled across styles. Inside charcoal the observed baseline for headlights is **0/5**, inside
+watercolour **0/3**, and the preset takes both to 5/5. With five seeds per cell, a true rate of 1%
+reads as zero. So "made probable" versus "created" is **not decidable at this sample size**; the
+mountain survives only if the right reference class is "a car with lit headlights" and not "a charcoal
+car with lit headlights". That choice is mine, not the data's — and the one test that would have settled
+which reference class is right ([`docs/stage9_verdict.md`](docs/stage9_verdict.md)) came back **not
+supported**.
+
+*"Without adding capability."* The equaliser version of the story — you gain here and lose there —
+requires showing the thing that got worse. **It was never measured.** The mountain didn't beat the
+equaliser; the test that separates them was never run, and the mountain won by walkover. The one
+measurement that bears on it, the amplitude-2× quality gate, was uninterpretable and I withdrew it.
+
+There is also a third story that fits everything here and is weaker than both: **the edit may not have
+changed the mountain at all — it may have changed where you pour.** Krea-2 has no cross-attention;
+text enters as a per-block modulation signal, and editing those weights is arithmetically close to
+rewriting the prompt inside the model. Nothing measured so far distinguishes "the terrain moved" from
+"you poured somewhere else". It is testable — find the prompt edit that best reproduces the weight
+edit and measure what's left over — and nobody has tested it.
 
 
 ---
@@ -227,6 +258,12 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   `blockshuf_neg` extinguishes them in 39 renders of 39, and neither is explained by the image getting
   darker — in the *brightest* third of the corpus the stock model never lights them and the preset
   lights them in 7 of 13 (§2.9). This is the finding that restricts §2.2.
+* **Where the edit lands changes how much the picture moves, and it is not a matter of how far the
+  weights moved.** Rotating the last four DiT blocks moves the model **28% less** in Frobenius terms
+  than rotating blocks 5–9, and changes the image **3.7× more** — in all seven prompts, in two
+  unrelated perturbation families, at about fifteen times the seed noise (§4). Among the four middle
+  block groups, by contrast, displacement explains the ordering *completely* ($\rho = +1.000$). This
+  is the first evidence in the project that position carries anything at all.
 * **`blockshuf_neg` makes the subject occupy more of the frame.** Ratio 1.22 on 9 prompts of 10,
   confirmed on a corpus of ten new styles, a different vehicle colour and a different setting, against
   a prediction frozen before the renders existed (§3.1).
@@ -280,6 +317,16 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   effect only at double amplitude where the pre-registration's own clause calls it over-steering, and a
   statistic whose sign flips in 11 cells of 18 depending on a standardisation convention the
   pre-registration never named. Recorded in [`docs/stage9_verdict.md`](docs/stage9_verdict.md).
+* **That the position effect is about *function* rather than about *proximity to the output*.**
+  `Block_6` is the last four blocks of twenty-eight. A perturbation there has fewer layers downstream
+  to absorb it, and first and last block groups behave unlike the middle in nearly every transformer.
+  `CLIP-Dist` measures *how much* the image moved, never *what* moved, so this sweep cannot tell a
+  sensitivity from a specialisation. The measurement that would is cheap and the images still exist
+  (§4).
+* **That `Block_1` shares the phenomenon.** It looks like it does under rotation and it does **not**
+  replicate under amplitude scaling. Its signature is a different one — normal at small dose, ×3.14
+  at large dose, and the highest seed-to-seed variance of any block. Read as instability, not
+  position, until something says otherwise.
 * **That an exploratory effect size in this notebook means anything.** Three consecutive confirmation
   rounds have come back between a third and a half of the exploratory estimate — the colour coherence
   of §1.5, the headlights, the enlargement of §3.1. Treat any number here that has not survived a
@@ -310,6 +357,7 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   <a href="#experiment-1--the-style-signature"><strong>Experiment 1 · Style signature</strong></a> •
   <a href="#experiment-2--attribute-emergence"><strong>Experiment 2 · Attribute emergence</strong></a> •
   <a href="#experiment-3--how-much-room-the-subject-takes-and-how-blind-i-actually-was"><strong>Experiment 3 · Subject size, and blinding</strong></a> •
+  <a href="#4--where-in-the-model--a-first-look-and-why-it-has-no-experiment-number"><strong>Where in the model</strong></a> •
   <a href="#what-happens-tomorrow"><strong>Tomorrow</strong></a> •
   <a href="#roadmap"><strong>Roadmap</strong></a>
 </p>
@@ -1143,6 +1191,100 @@ Two more things came out of the same round and both are firsts for this project:
 
 ---
 
+## 4 · Where in the model — a first look, and why it has no experiment number
+
+<sub>**216 rotations + 216 amplitude cells · 6 block groups · 7 prompts · found on disk, not designed**</sub>
+
+> **Why this is not Experiment 4.** Everything below predates the first pre-registration in this
+> project. One seed per cell, six sampling steps instead of nine, no displacement-matched random
+> control, and the only metric is the CLIP distance that §1.2 showed inverts conclusions about the
+> properties I actually care about. It sits here because the question is the most important open one
+> — *does it matter **where** you edit?* — and because the data were already on disk, unlooked at,
+> while I wrote a metaphor about digging one canal.
+
+### 4.1 What was on disk
+
+Nine benchmark reports from before the project had rules, each sweeping six block groups of the
+28-block DiT: `Block_1` = blocks 0–4, through `Block_6` = blocks 24–27. Each group was rotated by
+±15° and ±30° (216 cells) and separately scaled by ±1 and ±2 (216 more). The nine reports are
+**seven** prompts — `tiefling` appears three times at different seeds — so the unit of analysis is
+seven, and the exact sign-flip permutation floor is $2/2^7 = 0.0156$.
+
+### 4.2 The null hypothesis, and how badly it lost
+
+The obvious explanation for a block responding more is that rotating it moves the model more. So the
+displacement was measured offline from the checkpoint, tensor by tensor, for every block and angle.
+
+| block | mean `CLIP-Dist` | $D_{\text{model}}$ at 30° | relative Frobenius rank |
+| --- | --- | --- | --- |
+| `Block_1` (0–4) | 0.3179 | 0.05674 | 2nd largest |
+| `Block_2` (5–9) | 0.1234 | **0.05844** | **largest** |
+| `Block_3` (10–14) | 0.1171 | 0.05331 | 3rd |
+| `Block_4` (15–19) | 0.1163 | 0.05080 | 4th |
+| `Block_5` (20–23) | 0.1038 | 0.04337 | 5th |
+| **`Block_6` (24–27)** | **0.4623** | **0.04199** | **smallest** |
+
+**`Block_6` moves the model less than any other group and changes the picture more than any other
+group** — 28% less displacement, 3.7× the image change, against `Block_2`. The amplitude hypothesis
+isn't merely rejected, it's rejected backwards.
+
+And the part I find more interesting than the headline: among the four **middle** groups, displacement
+explains the ordering *completely*. Spearman between mean `CLIP-Dist` and $D_{\text{model}}$ across
+blocks 2–5 is $\rho = +1.000$. In the middle of the model, how much you move the weights is the whole
+story. It's the two ends that leave the line.
+
+### 4.3 The two ends are not the same thing, and the amplitude sweep is what says so
+
+The pre-registered contrast was *extremes (1 and 6) versus middle (2–5)*. It passes: $+0.2750$, all
+seven prompts, $p = 0.0156$. That is reported as frozen, and then immediately taken apart, because
+the contrast was written when the only thing known was a column of averages.
+
+The second sweep — amplitude scaling, a completely different operation from rotation — was sitting in
+the same files and settles it:
+
+| family | dose | `Block_1` vs middle | `Block_6` vs middle |
+| --- | --- | --- | --- |
+| rotation | 15° | $+0.0606$ · 7/7 | $+0.2424$ · 7/7 |
+| rotation | 30° | $+0.3450$ · 7/7 | $+0.4520$ · 7/7 |
+| amplitude | ×1 | $+0.0033$ · *n.s.* | $+0.0132$ · *n.s.* |
+| amplitude | ×2 | $+0.0291$ · *n.s.* | $\mathbf{+0.1011}$ · **7/7** |
+
+**`Block_6` replicates in both families. `Block_1` does not.** Under amplitude scaling `Block_1` is
+indistinguishable from the middle at both doses. Its rotation signature is a different animal —
+nearly normal at 15° and ×3.14 by 30°, against ×1.36–1.45 for the middle groups — and in the one
+prompt with three seeds it has the highest seed-to-seed variance of any block. That reads as
+**breakage at large angle**, not as position.
+
+So the honest headline is not a U-shaped profile. It is **a `Block_6` effect**, with `Block_1` as a
+separate anomaly of a different kind.
+
+### 4.4 What it does and doesn't mean
+
+It means the "dig one canal" half of the metaphor has, for the first time, something under it: where
+you push is not interchangeable, and the difference is not how far you pushed. At roughly **fifteen
+times the seed noise** measured in the one prompt that has more than one seed, the size of it isn't in
+question either.
+
+It does not mean position carries *meaning*. `CLIP-Dist` is an unsigned distance from the baseline: it
+can say the image moved, never in which direction. Everything here is consistent with `Block_6` simply
+being the **most sensitive** place to push — and with the most boring reason for that, which is that
+it is the last four blocks of twenty-eight and a perturbation there has almost nothing downstream left
+to absorb it. First and last block groups behave unlike the middle in nearly every transformer. The
+profile is at least not a simple depth ramp — blocks 2→5 *decrease* with depth, and that decrease is
+exactly the displacement ordering — but "the two ends are special" is a known regularity, not a
+discovery about this model.
+
+Every $p$ above is exactly $2/2^7 = 0.0156$, which is the smallest number these seven prompts can
+produce. With all seven agreeing, the test has one bit of resolution and cannot tell an enormous
+effect from a barely consistent one. The seed-noise ratio is doing the work that the $p$ cannot.
+
+Full numbers, the pre-registered brief, the original verdict and the dated amendment that corrects its
+reading: [`docs/pilot_rotations_verdict.md`](docs/pilot_rotations_verdict.md),
+[`experiments/analyze_pilot_rotations_followup.py`](experiments/analyze_pilot_rotations_followup.py),
+[`data/pilot_rotations.csv`](data/pilot_rotations.csv).
+
+---
+
 ## What happens tomorrow
 
 The roadmap below is the long list. This is the short one — four things, all of them already specified,
@@ -1154,14 +1296,14 @@ image underneath it, and raises an exception rather than compose a panel whose m
 contradicts its label. It needs the original stage-9 PNGs, so it runs on the machine that has them.
 Every figure on this page that was assembled by hand gets the same treatment afterwards.
 
-**2 · The 216 rotations that were already on disk.** Before any of this started, the pilot benchmarks
-swept **six blocks × four rotation angles × nine prompts** and the reports are still sitting in
-`comfyui-pilot/`. Blocks 1 and 6 respond three to four times more than blocks 2–5, which is the first
-hint anywhere in this project that the displacement has a *location* and not only a direction. It is
-also confounded three ways — the rotations were never norm-matched, the metric is the CLIP distance
-that §1.2 showed is blind to the effects we care about, and the evaluation checkboxes were never
-filled. The brief in `comfyui-pilot/BRIEF_rotations_reanalysis.md` says exactly what can and cannot be
-recovered from them, and the answer may well be "nothing, but now we know why".
+**2 · Ask the rotations *what* changed, not *how much*.** The 216 rotations were re-analysed the same
+evening and the result is §4: there is a position effect, it is `Block_6`, and it is the opposite of an
+amplitude artefact. But the only metric available there is `CLIP-Dist`, which is an unsigned distance —
+it can say the image moved, never in which direction. The renders still exist. Re-measuring those 216
+cells with `style_features.py` and `analyze_palette.py` costs nothing and answers the question that
+matters: **does the direction of the change differ by block, or only the size?** If the direction
+differs, position carries information. If only the size does, `Block_6` is where the model is most
+fragile — useful engineering, not interpretability.
 
 **3 · The control Experiment 3 never had.** Every size measurement so far compares two *structured*
 edits with each other. Until a sign-scrambled perturbation at the same displacement is in the design,

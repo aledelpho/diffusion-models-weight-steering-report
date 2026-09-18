@@ -10,6 +10,16 @@
 
 ---
 
+> ⚠️ **Questo verdetto è stato rivisto la sera del 2026-09-18.** Le sezioni 1–5 restano come
+> scritte, perché i loro conti sono corretti e sono stati riprodotti in modo indipendente. La loro
+> **lettura** però è cambiata su tre punti, e un quarto risultato che i dati contenevano già è stato
+> aggiunto. **Leggere l'emendamento in fondo prima di citare qualsiasi cosa da qui.** In breve: non è
+> un profilo a U ma un effetto `Block_6`; `Block_1` non replica sullo sweep di ampiezza; i test di
+> antisimmetria per blocco non sopravvivono a Holm; e la correzione per $D$ non era un ostacolo
+> superato perché non poteva fallire.
+
+---
+
 ## 1. Il verdetto in sintesi
 
 ### **Esito: Effetto di Posizione (Esito 1, confermato su CLIP-Dist), condizionato a riserva metrica (Esito 3)**
@@ -130,3 +140,171 @@ Se in futuro si vorrà convalidare l'effetto di posizione topografica dei blocch
 3. Introdurre il braccio di controllo matched random per ciascun blocco;
 4. Misurare gli output con gli estrattori di tratto (`style_features.py`) e colore (`analyze_palette.py`) anziché affidarsi alla sola CLIP-Dist;
 5. Eseguire la valutazione cieca umana secondo il protocollo di discriminazione a due alternative forzate (2AFC).
+
+
+---
+
+# Emendamento — 2026-09-18, sera
+
+**Aggiunto dopo un controllo indipendente** (`experiments/analyze_pilot_rotations_followup.py`,
+output in `data/pilot_rotations_followup.csv`). L'aritmetica della sezione sopra è stata riprodotta e
+**torna in ogni cifra**: residui $+0.0777$ e $+0.2047$, contrasto $+0.2118$ sui residui e $+0.2750$ sui
+valori grezzi, $p = 0.0156$ con sette segni concordi. Niente di quanto segue corregge un conto.
+
+Quello che segue corregge una **lettura**, su tre punti, e ne aggiunge uno che i dati contenevano
+già.
+
+## A. Non è un profilo a U. È un effetto Block_6
+
+Il contrasto pre-registrato fonde `Block_1` e `Block_6` in un'unica categoria "estremi". Quella
+categoria è stata scritta quando l'unica cosa nota era la media di `CLIP-Dist`. Scomposta, i due
+blocchi hanno firme **diverse**, e la differenza è visibile in tre modi indipendenti.
+
+**1. Lo sweep di ampiezza li separa.** `extract_pilot_benchmarks.py` ha estratto 216 celle di
+ampiezza (`Block_N ±1.0/±2.0`) sugli stessi 7 prompt, e l'analisi non le ha usate. Sono una
+perturbazione di tipo completamente diverso — un riscalamento, non una rotazione. Se il profilo per
+blocco è una proprietà della **posizione**, deve ricomparire lì.
+
+| famiglia | dose | bersaglio | Δ vs centrali | $p$ | prompt concordi |
+| --- | --- | --- | --- | --- | --- |
+| rotazione | 15° | `Block_1` | $+0.0606$ | **0.0156** | 7/7 |
+| rotazione | 15° | `Block_6` | $+0.2424$ | **0.0156** | 7/7 |
+| rotazione | 30° | `Block_1` | $+0.3450$ | **0.0156** | 7/7 |
+| rotazione | 30° | `Block_6` | $+0.4520$ | **0.0156** | 7/7 |
+| ampiezza | ×1 | `Block_1` | $+0.0033$ | 0.2188 | 6/7 |
+| ampiezza | ×1 | `Block_6` | $+0.0132$ | 0.2500 | 5/7 |
+| ampiezza | ×2 | `Block_1` | $+0.0291$ | 0.0938 | 5/7 |
+| ampiezza | ×2 | **`Block_6`** | $\boldsymbol{+0.1011}$ | **0.0156** | **7/7** |
+
+`Block_6` replica. `Block_1` **non replica**: nello sweep di ampiezza è indistinguibile dai blocchi
+centrali, a entrambe le dosi.
+
+**2. La forma della dose-risposta li separa.**
+
+| blocco | rotazione 15°→30° | ampiezza ×1→×2 |
+| --- | --- | --- |
+| `Block_1` | **×3.14** | ×1.72 |
+| `Block_2` | ×1.45 | ×1.27 |
+| `Block_3` | ×1.36 | ×1.34 |
+| `Block_4` | ×1.37 | ×1.32 |
+| `Block_5` | ×1.79 | ×1.73 |
+| `Block_6` | ×1.76 | ×2.37 |
+
+`Block_6` cresce come gli altri, partendo da un livello più alto: è un **guadagno**. `Block_1` cresce
+più del doppio degli altri partendo da un livello quasi normale: è una **non-linearità a grande
+angolo**.
+
+**3. La variabilità fra seed li separa.** Nell'unico prompt che ha più di un seed (`tiefling`, 3
+seed), `Block_1` ha la deviazione standard fra seed più alta di tutti i blocchi ($0.0467$, contro una
+mediana di $0.0224$). Oltre a essere alto a 30°, è anche il più instabile — coerente con una rottura,
+non con una risposta stabile.
+
+**Conclusione di questa sezione.** Il risultato pre-registrato resta come scritto: era congelato,
+passa, e si riporta. Ma la scomposizione post-hoc dice che passa **sulle spalle di `Block_6`**, e che
+`Block_1` in quel contrasto è un passeggero. La formulazione corretta è **effetto `Block_6`**, con
+`Block_1` come anomalia separata e di natura diversa, da verificare a parte.
+
+## B. Il residuo su $D$ non era un ostacolo superato: era un ostacolo assente
+
+La sezione sopra presenta "il profilo sopravvive alla correzione per displacement" come la prova che
+respinge l'ipotesi di ampiezza. La direzione dei dati rende quel test incapace di fallire per
+`Block_6`:
+
+- la pendenza della regressione è **positiva** ($+3.16$ su $d_{\text{modello}}$);
+- `Block_6` ha il $d_{\text{modello}}$ **più basso dei sei** ($0.04199$ contro $0.05844$ di
+  `Block_2`);
+- quindi la regressione gli predice il valore più basso, e ogni eccesso osservato finisce nel residuo
+  **amplificato**, non attenuato.
+
+Il fatto grezzo è più forte del residuo e non ha bisogno di regressioni: **`Block_6` muove il modello
+il 28% in meno di `Block_2` e cambia l'immagine 3.7 volte di più.** Va riportato così.
+
+C'è anche un'osservazione che la regressione nasconde e che conta: **fra i soli blocchi centrali
+(2–5), l'ordinamento di `CLIP-Dist` è spiegato per intero dal displacement** — Spearman
+$\rho = +1.000$. Il displacement non è un confondente da rimuovere ovunque: nel centro del modello è
+*la* variabile. Sono i due estremi a uscire dalla relazione. Questo è un risultato più informativo di
+"i residui restano positivi", ed è quello che va pubblicato.
+
+*(Registrato come pitfall 41: residualizzare su una covariata che ordina i gruppi al contrario.)*
+
+## C. L'antisimmetria: esplorativa, e non è la decomposizione dell'Esperimento 1
+
+Due correzioni.
+
+**Confronti multipli.** I sei test di antisimmetria per blocco **non erano nel brief**. Con Holm sulla
+famiglia di sei, nessuno sopravvive:
+
+| blocco | $A$ | $p$ grezzo | $p$ Holm(6) |
+| --- | --- | --- | --- |
+| `Block_6` | $-0.1038$ | 0.0156 | 0.0938 |
+| `Block_1` | $-0.0773$ | 0.0312 | 0.1562 |
+| `Block_2`…`Block_5` | $[-0.010, +0.011]$ | 0.34 – 0.89 | 1.0000 |
+
+Vanno riportati come **descrittivi**. L'antisimmetria globale era invece pre-registrata e resta a
+$p = 0.0156$ — ma è concentrata nei due blocchi anomali e vicina a zero negli altri quattro, quindi
+non è una proprietà generale delle rotazioni: è un'altra faccia della stessa anomalia.
+
+**Categoria sbagliata.** `CLIP-Dist` è una **distanza senza segno** dal baseline.
+$A = d(+\theta) - d(-\theta)$ dice "un verso sposta più dell'altro", non "i due versi vanno in
+direzioni opposte". La decomposizione $S$/$A$ dell'Esperimento 1 opera su **proiezioni con segno**, ed
+esiste proprio perché una distanza senza segno non può osservare un compromesso — è il **pitfall 2** di
+questo stesso progetto. Chiamarle la stessa decomposizione è un errore di categoria.
+
+## D. Il pavimento, detto come lo dice il resto del notebook
+
+Ogni test riportato sopra restituisce $p = 0.0156$, che è **esattamente** $2/2^7$. Con sette prompt
+tutti concordi il test non può restituire altro. Non è un valore forte né debole: è **saturo**. Il
+disegno ha un bit di risoluzione per test — "tutti e sette dalla stessa parte" oppure no — e non
+distingue un effetto enorme da uno appena consistente. È la stessa situazione strutturale di §1.3 e
+§2.8 del notebook, e va scritta accanto a ogni $p$.
+
+Una cosa che invece dà la scala, e che il disegno permette: nell'unico prompt con tre seed, la
+deviazione standard fra seed è $0.0224$, mentre lo scarto `Block_6` − centrali è $0.3472$. **Circa
+quindici volte il rumore di seed.** Questo sì che separa "enorme" da "appena consistente", e non
+dipende dal pavimento.
+
+## E. L'alternativa che nessuno ha escluso: prossimità all'uscita
+
+`Block_6` sono i blocchi DiT **24–27**, gli ultimi quattro dei ventotto. `Block_1` sono i blocchi
+**0–4**, i primi cinque. Una perturbazione applicata vicino all'uscita attraversa meno strati a valle
+che possano assorbirla, e i gruppi adiacenti all'ingresso e all'uscita si comportano diversamente dal
+centro in quasi ogni transformer. Questo produrrebbe esattamente il profilo osservato **senza alcuna
+specializzazione funzionale**.
+
+I dati non separano le due spiegazioni, e non possono, perché `CLIP-Dist` misura **quanto** l'immagine
+è cambiata e non **che cosa** è cambiato. Tutto questo sweep può stabilire che alcune posizioni sono
+più sensibili. Non può stabilire che posizioni diverse steerino verso cose diverse — che è l'unica
+versione della claim che avrebbe conseguenze per il progetto.
+
+Il fatto che il profilo **non** sia monotono nella profondità (i centrali 2→5 *scendono*: $0.1234$,
+$0.1171$, $0.1163$, $0.1038$, e quella discesa segue il displacement con $\rho = +1.000$) esclude la
+versione più banale — "più sei in fondo, più sposti" — ma non esclude "i due capi sono speciali", che
+è una regolarità nota e non una scoperta su questo modello.
+
+## Verdetto rivisto
+
+**Esito 1 limitato a `Block_6`, con riserva metrica (Esito 3) e meccanismo indeterminato.**
+
+Esiste una posizione, `Block_6`, in cui lo stesso tipo di perturbazione produce un cambiamento
+d'immagine sproporzionato rispetto allo spostamento che induce nei pesi, e lo fa in due famiglie di
+perturbazione indipendenti, in tutti e sette i prompt, con un'ampiezza di circa quindici volte il
+rumore di seed. Questo **non** è un artefatto di ampiezza: è l'opposto, perché `Block_6` è il blocco
+che sposta meno.
+
+Non è invece stabilito: che `Block_1` condivida il fenomeno (non replica); che la sensibilità di
+`Block_6` rifletta una specializzazione funzionale anziché la sua posizione vicino all'uscita (non
+distinguibile con una distanza senza segno); che qualcosa di tutto ciò valga fuori da
+`CLIP-Dist`, da 6 passi di campionamento e da un solo seed per cella.
+
+**Il prossimo test è economico e decisivo**: le immagini esistono ancora. Rimisurare quelle 216 celle
+con `style_features.py` e `analyze_palette.py` — le metriche di tratto e palette del progetto — e
+chiedere non "quanto è cambiato" ma "**in che direzione**". Se la direzione differisce per blocco, la
+posizione porta informazione. Se cambia solo l'ampiezza, `Block_6` è semplicemente il punto in cui il
+modello è più fragile, che è un fatto utile di ingegneria e non una scoperta di interpretabilità.
+
+## Cosa resta fuori dal notebook
+
+Nulla di questo entra in Esperimento 1, 2 o 3. Lo sweep precede ogni pre-registrazione, usa un
+campionamento a 6 passi invece di 9, ha un solo seed per cella tranne un prompt, e la sua unica
+metrica è dichiarata cieca al §4 del notebook. Nel README e in `index.html` compare come sezione
+esplicitamente esplorativa e senza numero di esperimento.

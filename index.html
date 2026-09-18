@@ -366,9 +366,10 @@
     <li><a href="#contenuto">7 · Exp 3 · Subject size, and blinding</a></li>
     <li><a href="#nonstab">8 · Non-Established</a></li>
     <li><a href="#metodo">9 · Methodology</a></li>
-    <li><a href="#errori">10 · 40 Pitfalls</a></li>
+    <li><a href="#errori">10 · 42 Pitfalls</a></li>
     <li><a href="#ripresa">11 · How to Replicate</a></li>
-    <li><a href="#domani">12 · What Happens Tomorrow</a></li>
+    <li><a href="#dove">12 · Where in the Model</a></li>
+    <li><a href="#domani">13 · What Happens Tomorrow</a></li>
     <li style="margin-left:auto;"><a href="viewer/viewer.html" style="color:var(--pos); font-weight:600; border-color:var(--pos);">✦ Interactive A/B Viewer</a></li>
   </ol>
 </nav>
@@ -579,13 +580,38 @@
     is actually testing, stated so it can be checked on any model:</p>
   <div class="box">
     <span class="lbl">The portable claim</span>
-    <p><strong>A small structured weight edit redistributes the probability of what comes out toward
+    <p><strong>A structured weight edit redistributes the probability of what comes out toward
       regions the model already reaches, without adding capability.</strong></p>
     <p>That sentence is falsifiable in a way “it changes the style” is not: if an edit ever produced
       something the stock model never produces in any seed, the mountain would be wrong. And it is
       portable — it can be tested on a model that shares nothing with this one, which is the point of
       §8.2.</p>
   </div>
+
+  <p class="why"><strong>Three words in that sentence do less work than they appear to.</strong></p>
+  <ul class="body">
+    <li><strong>“Small” — removed, deliberately.</strong> In Frobenius terms the edit is 5.4%, which
+      is small. But <em>dig one canal, shift one ridge</em> claims something else: that it is
+      <strong>local</strong>. The presets touch <strong>1059 tensors</strong> — 430 DiT blocks plus 629
+      text-encoder layers — all at once. That is regrading the whole range by a few percent, not
+      digging a canal. Until §12 nothing in this project had ever varied <em>where</em> the edit lands,
+      so the most picturesque part of the metaphor carried zero measurements.</li>
+    <li><strong>“Already reaches” — true of a pooled rate, undecidable per style.</strong> Inside
+      charcoal the observed baseline for headlights is <strong>0/5</strong>, inside watercolour
+      <strong>0/3</strong>, and the preset takes both to 5/5. At five seeds a true rate of 1% reads as
+      zero, so “made probable” versus “created” is not decidable at this sample size. The mountain
+      survives only under the wide reference class — and §8.4, the test that would have said which
+      class is right, came back <strong>not supported</strong>.</li>
+    <li><strong>“Without adding capability” — never measured.</strong> The equaliser story (gain here,
+      lose there) requires showing what got worse. Nobody did. The mountain did not defeat the
+      equaliser; the test separating them was never run.</li>
+  </ul>
+  <p>There is also a third account, weaker than both and untested: <strong>the edit may not have moved
+    the mountain, only where you pour.</strong> Krea-2 has no cross-attention — text enters as a
+    per-block modulation signal, so editing those weights is arithmetically close to rewriting the
+    prompt inside the model. Nothing measured here separates “the terrain moved” from “you poured
+    somewhere else”. It is testable: find the prompt edit that best reproduces the weight edit, and
+    measure the residue.</p>
 
   <div class="box warn">
     <span class="lbl">Two experiments, thirteen analyses</span>
@@ -1447,7 +1473,20 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
     exploratory corpus and <code>0.500</code> on the confirmation one — which means every coherence in
     §5 is attenuated by roughly half, and that more seeds per cell buy as much power as more prompts.</p>
 
-  <h3><span class="num">8.5</span> How blind the human scoring was <span class="chip neg">measured, and it failed</span></h3>
+  <h3><span class="num">8.5</span> Whether the position effect is function or proximity to the output <span class="chip open">undecidable with this metric</span></h3>
+  <p><code>Block_6</code> is the last four blocks of twenty-eight. A perturbation there has fewer
+    layers downstream to absorb it, and first and last block groups behave unlike the middle in nearly
+    every transformer. <code>CLIP-Dist</code> measures <em>how much</em> the image moved, never
+    <em>what</em> moved, so §12 cannot separate a sensitivity from a specialisation. The profile is at
+    least not a plain depth ramp — blocks 2→5 <em>decrease</em>, and that decrease is exactly the
+    displacement ordering — but “the two ends are special” is a known regularity, not a discovery
+    about this model. The measurement that would decide is cheap and the renders still exist.</p>
+  <p>Separately: <strong><code>Block_1</code> is not established as sharing the phenomenon.</strong> It
+    looks like it does under rotation and does <strong>not</strong> replicate under amplitude scaling;
+    its signature is normal at small dose, ×3.14 at large dose, with the highest seed-to-seed variance
+    of any block. Read as instability until something says otherwise.</p>
+
+  <h3><span class="num">8.6</span> How blind the human scoring was <span class="chip neg">measured, and it failed</span></h3>
   <p>Stated here rather than only in <a href="#contenuto">§7.2</a>, because it bounds every
     human-scored result on this page, the barnacles of §6 included. In a four-way forced choice against
     a 25% chance level, the author identified <code>preset_pos</code> ×2 in 17 trials of 20 and
@@ -1514,10 +1553,10 @@ DiT   28 blocks × 13 tensors, identical tensor suffixes across blocks
 </section>
 
 <section id="errori">
-  <h2><span class="n">10</span> The Forty Measurement Pitfalls</h2>
+  <h2><span class="n">10</span> The Forty-Two Measurement Pitfalls</h2>
   <div class="box dead">
     <span class="lbl">Methodological Caution</span>
-    <p><strong>None of these 40 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. The two added on 2026-09-18 are of a kind not seen before: <strong>39</strong> stratified a control on a covariate the treatment itself moves, and <strong>40</strong> is the first error that lived entirely in a <em>figure</em> — captions and crop rectangles typed by hand next to numbers that were correct. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
+    <p><strong>None of these 42 pitfalls produced absurd values or obvious errors.</strong> All produced plausible numbers, quietly corrupting scientific conclusions. The four added on 2026-09-18 are of kinds not seen before: <strong>39</strong> stratified a control on a covariate the treatment itself moves; <strong>40</strong> is the first error that lived entirely in a <em>figure</em> — captions and crop rectangles typed by hand next to numbers that were correct; <strong>41</strong> residualised on a covariate that orders the groups backwards, turning a hurdle that could not be hit into a hurdle cleared; and <strong>42</strong> is a pre-registered contrast that fused two conditions later shown to be different phenomena, with the arm that separates them already extracted and never analysed. See the full log and replication checklist in <a href="docs/errors_log.md"><code>docs/errors_log.md</code></a>.</p>
   </div>
 </section>
 
@@ -1540,8 +1579,97 @@ data/
   attribute_emergence_recipe.json Exact prompt, sha1, preset, strengths and seeds per set</pre>
 </section>
 
+<section id="dove">
+  <h2><span class="n">12</span> Where in the Model — A First Look <span class="chip pos">Block_6 replicates</span> <span class="chip open">exploratory, pre-dates every pre-registration</span></h2>
+
+  <div class="box warn">
+    <span class="lbl">Why this has no experiment number</span>
+    <p>Everything here predates the first pre-registration in this project. One seed per cell, six
+      sampling steps instead of nine, no displacement-matched random control, and the only metric is
+      the <code>CLIP-Dist</code> that §4 showed inverts conclusions about the properties that matter.
+      It is here because the question is the most important open one — <em>does it matter
+      <strong>where</strong> you edit?</em> — and because the data sat unlooked at while §1 was
+      claiming a canal.</p>
+  </div>
+
+  <h3><span class="num">12.1</span> The null hypothesis, and how badly it lost</h3>
+  <p>Nine pilot reports swept six block groups of the 28-block DiT (<code>Block_1</code> = blocks 0–4
+    … <code>Block_6</code> = blocks 24–27), each rotated ±15° and ±30° (216 cells) and separately
+    scaled ±1 and ±2 (216 more). The nine reports are <strong>seven</strong> prompts
+    (<code>tiefling</code> appears three times at different seeds), so the exact sign-flip floor is
+    \(2/2^7 = 0.0156\). The obvious explanation for a block responding more is that rotating it moves
+    the model more, so the displacement was measured offline from the checkpoint, tensor by tensor.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Block group</th><th class="n">mean CLIP-Dist</th><th class="n">\(D_{\text{model}}\) at 30°</th><th>Frobenius rank</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td class="mono">Block_1 (0–4)</td><td class="n">0.3179</td><td class="n">0.05674</td><td>2nd largest</td></tr>
+      <tr><td class="mono">Block_2 (5–9)</td><td class="n">0.1234</td><td class="n"><strong>0.05844</strong></td><td><strong>largest</strong></td></tr>
+      <tr><td class="mono">Block_3 (10–14)</td><td class="n">0.1171</td><td class="n">0.05331</td><td>3rd</td></tr>
+      <tr><td class="mono">Block_4 (15–19)</td><td class="n">0.1163</td><td class="n">0.05080</td><td>4th</td></tr>
+      <tr><td class="mono">Block_5 (20–23)</td><td class="n">0.1038</td><td class="n">0.04337</td><td>5th</td></tr>
+      <tr class="hi"><td class="mono">Block_6 (24–27)</td><td class="n"><strong>0.4623</strong></td><td class="n"><strong>0.04199</strong></td><td><strong>smallest</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p><strong><code>Block_6</code> moves the model less than any other group and changes the picture
+    more than any other group</strong> — 28% less displacement, 3.7× the image change, against
+    <code>Block_2</code>. The amplitude hypothesis is not merely rejected, it is rejected backwards.
+    And among the four <em>middle</em> groups displacement explains the ordering completely: Spearman
+    between mean <code>CLIP-Dist</code> and \(D_{\text{model}}\) across blocks 2–5 is
+    \(\rho = +1.000\). In the middle of the model, how far you move the weights is the whole story.
+    It is the two ends that leave the line.</p>
+
+  <h3><span class="num">12.2</span> The two ends are not the same thing</h3>
+  <p>The pre-registered contrast was <em>extremes (1 and 6) versus middle (2–5)</em>. It passes:
+    \(+0.2750\), all seven prompts, \(p = 0.0156\). Reported as frozen — and then taken apart, because
+    it was written when the only thing known was a column of averages. The second sweep, amplitude
+    scaling, is a completely different operation and was sitting in the same files:</p>
+  <div class="tw"><table>
+    <thead><tr><th>family</th><th>dose</th><th class="n">Block_1 vs middle</th><th class="n">Block_6 vs middle</th></tr></thead>
+    <tbody>
+      <tr><td>rotation</td><td>15°</td><td class="n">+0.0606 · 7/7</td><td class="n">+0.2424 · 7/7</td></tr>
+      <tr><td>rotation</td><td>30°</td><td class="n">+0.3450 · 7/7</td><td class="n">+0.4520 · 7/7</td></tr>
+      <tr><td>amplitude</td><td>×1</td><td class="n">+0.0033 <span class="idx">n.s.</span></td><td class="n">+0.0132 <span class="idx">n.s.</span></td></tr>
+      <tr class="hi"><td>amplitude</td><td>×2</td><td class="n">+0.0291 <span class="idx">n.s.</span></td><td class="n"><strong>+0.1011 · 7/7</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p><strong><code>Block_6</code> replicates in both families. <code>Block_1</code> does not.</strong>
+    Under amplitude scaling <code>Block_1</code> is indistinguishable from the middle at both doses.
+    Its rotation signature is a different animal — nearly normal at 15° and ×3.14 by 30°, against
+    ×1.36–1.45 for the middle groups — and in the one prompt with three seeds it carries the highest
+    seed-to-seed variance of any block. That reads as <strong>breakage at large angle</strong>, not as
+    position. The honest headline is not a U-shaped profile: it is a <code>Block_6</code> effect, with
+    <code>Block_1</code> as a separate anomaly of a different kind.</p>
+
+  <h3><span class="num">12.3</span> What it does and does not mean</h3>
+  <p>It means the “dig one canal” half of §1 finally has something under it: where you push is not
+    interchangeable, and the difference is not how far you pushed. At roughly <strong>fifteen times the
+    seed noise</strong> measured in the one prompt with more than one seed, the size is not in question
+    either.</p>
+  <p>It does not mean position carries <em>meaning</em> — see §8.5. And every \(p\) above is exactly
+    \(2/2^7 = 0.0156\), the smallest number seven prompts can produce: with all seven agreeing, the
+    test has one bit of resolution and cannot tell an enormous effect from a barely consistent one. The
+    seed-noise ratio is doing the work the \(p\) cannot.</p>
+  <div class="box dead">
+    <span class="lbl">Two corrections to the first pass at this analysis</span>
+    <p><strong>The residual on \(D\) was never a hurdle.</strong> The regression slope is positive and
+      <code>Block_6</code> has the <em>lowest</em> \(D_{\text{model}}\), so conditioning on \(D\) can
+      only inflate its apparent excess — the test could not have failed. The raw fact is stronger and
+      needs no regression. Recorded as pitfall 41.</p>
+    <p><strong>The antisymmetry is descriptive.</strong> Six per-block tests were run that the brief
+      never declared; under Holm none survives (<code>Block_6</code> → 0.0938, <code>Block_1</code> →
+      0.1562). And <code>CLIP-Dist</code> is an unsigned distance, so \(d(+\theta) - d(-\theta)\) says
+      one direction moves further — not that the two directions oppose each other. Calling it the
+      \(S\)/\(A\) decomposition of Experiment 1, which works on signed projections, is the category
+      error that <strong>pitfall 2</strong> exists to prevent.</p>
+  </div>
+  <p class="why">Full numbers, the frozen brief, the original verdict and the dated amendment that
+    corrects its reading:
+    <a href="docs/pilot_rotations_verdict.md"><code>docs/pilot_rotations_verdict.md</code></a>,
+    <a href="experiments/analyze_pilot_rotations_followup.py"><code>analyze_pilot_rotations_followup.py</code></a>.</p>
+</section>
+
 <section id="domani">
-  <h2><span class="n">12</span> What Happens Tomorrow</h2>
+  <h2><span class="n">13</span> What Happens Tomorrow</h2>
   <p>Section 8 is the long list of what is not established. This is the short one — four things, all
     already specified, none requiring a new idea.</p>
   <ol class="body">
@@ -1552,14 +1680,16 @@ data/
       contradicts its label. It needs the original stage-9 PNGs, so it runs on the machine that holds
       them. Every figure in this notebook that was assembled by hand gets the same treatment
       afterwards.</li>
-    <li><strong>The 216 rotations that were already on disk.</strong> Before any of this started, the
-      pilot benchmarks swept <strong>six blocks × four rotation angles × nine prompts</strong>, and the
-      reports are still there. Blocks 1 and 6 respond three to four times more than blocks 2–5 — the
-      first hint anywhere in this project that the displacement has a <em>location</em> and not only a
-      direction. It is also confounded three ways: the rotations were never norm-matched, the metric is
-      the CLIP distance §4 showed to be blind to the effects that matter here, and the evaluation
-      checkboxes were never filled. The brief says exactly what can and cannot be recovered, and the
-      answer may well be “nothing, but now we know why”.</li>
+    <li><strong>Ask the rotations <em>what</em> changed, not <em>how much</em>.</strong> The 216
+      rotations were re-analysed the same evening and the result is §12: there is a position effect, it
+      is <code>Block_6</code>, and it is the opposite of an amplitude artefact. But the only metric
+      available there is <code>CLIP-Dist</code>, an unsigned distance — it can say the image moved,
+      never in which direction. The renders still exist. Re-measuring those 216 cells with
+      <code>style_features.py</code> and <code>analyze_palette.py</code> costs nothing and answers the
+      question that matters: <strong>does the direction of the change differ by block, or only the
+      size?</strong> If the direction differs, position carries information. If only the size does,
+      <code>Block_6</code> is where the model is most fragile — useful engineering, not
+      interpretability.</li>
     <li><strong>The control Experiment 3 never had.</strong> Every size measurement so far compares two
       <em>structured</em> edits with each other. Until a sign-scrambled perturbation at the same
       displacement is in the design, §7.1 says nothing about structure versus magnitude — the one thing
