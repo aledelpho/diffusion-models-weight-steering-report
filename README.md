@@ -173,6 +173,18 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
 * **Different weight edits move colour in directions that differ from one another.** Confirmed twice, on
   independent corpora, at the floor of the permutation test both times (§1.5). This is the surviving half of
   a two-part claim; the other half did not survive.
+* **The edit puts things in the picture that the prompt never mentions, and takes them away again.**
+  Headlights are never named in the rally-car prompt. `preset_pos` takes them from 5% to 82% presence,
+  `blockshuf_neg` extinguishes them in 39 renders of 39, and neither is explained by the image getting
+  darker — in the *brightest* third of the corpus the stock model never lights them and the preset
+  lights them in 5 of 9 (§3.1). This is the finding that restricts §2.2.
+* **`blockshuf_neg` makes the subject occupy more of the frame.** Ratio 1.22 on 9 prompts of 10,
+  confirmed on a corpus of ten new styles, a different vehicle colour and a different setting, against
+  a prediction frozen before the renders existed (§3.2).
+* **The hand-calibrated preset is a sharply defined operator, not a vague nudge.** Darker (7/8 prompts),
+  greyer (7/8), grainier (8/8 prompts and 40/40 images), parallel-stroked (16/16 prompts, 80/80 pairs),
+  headlights on. Five effects, one direction, measured on two unrelated corpora (§1.7, §1.6, §3.1).
+
 * **There is a hatching axis, and the sign of a structured displacement moves you along it.** The preset
   runs strokes parallel where block-shuffle crosses them, predicted by sign in advance and confirmed on
   16 new prompts at 16/16 and 80/80 image pairs, with the norm-matched random control absent (§1.6). This is
@@ -200,6 +212,29 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   Until those two exist, the accurate one-line summary of this repository is: *in one 12.8 B diffusion model,
   on comic-style character portraits, small structured weight edits move stroke morphology and hatching
   orientation in reproducible, direction-specific ways.* Every word in that sentence is doing work.
+* **How blind the scoring rounds in this notebook actually were — now measured, and the answer is
+  "not very".** In a four-way forced choice against a 25% chance level, the author identified
+  `preset_pos` ×2 in 17 trials of 20 and `blockshuf_neg` ×2 in 12 of 20, *with* the images mirrored,
+  flipped, hue-rotated, re-saturated, re-brightened and noised (§3.4). Hidden filenames do not blind an
+  expert to a condition with a visible signature. This applies backwards to every human-scored result
+  here, including the barnacles. Two independent arguments say it does not explain the size result —
+  the condition recognised best shows no effect, and the effect survives in the styles where
+  recognition was at chance — but no scoring round in this project should be read as blind unless a
+  discrimination test was run alongside it.
+* **Whether the enlargement is about structure or about magnitude.** The confirmation round compared
+  `blockshuf_neg` against `preset_pos` and the baseline, and left out the one control that matters for
+  that question: a sign-scrambled perturbation at the same displacement. Until `rand_pos` is in the
+  design, §3.2 separates two *structured* edits from each other and says nothing about structure versus
+  magnitude.
+* **That the direction of steering depends on the style the prompt declares.** Tested with the
+  thresholds frozen in advance and **not supported**: nothing significant at the usable amplitude, an
+  effect only at double amplitude where the pre-registration's own clause calls it over-steering, and a
+  statistic whose sign flips in 11 cells of 18 depending on a standardisation convention the
+  pre-registration never named. Recorded in [`docs/stage9_verdict.md`](docs/stage9_verdict.md).
+* **That an exploratory effect size in this notebook means anything.** Three consecutive confirmation
+  rounds have come back between a third and a half of the exploratory estimate — the colour coherence
+  of §1.5, the headlights, the enlargement of §3.2. Treat any number here that has not survived a
+  frozen prediction as an upper bound.
 * Whether the attribute-emergence effect is a general property or something specific to the prompt
   template it was found on. The one positive case on a different subject uses an almost identical
   sentence structure, and the test that would settle it has not been run.
@@ -224,6 +259,7 @@ estimate and is reported as ambiguous; the other came back at full strength. Bot
   <a href="#what-is-established-and-what-is-not"><strong>What is established</strong></a> •
   <a href="#experiment-1--the-style-signature"><strong>Experiment 1 · Style signature</strong></a> •
   <a href="#experiment-2--attribute-emergence"><strong>Experiment 2 · Attribute emergence</strong></a> •
+  <a href="#experiment-3--what-ends-up-in-the-picture"><strong>Experiment 3 · What ends up in the picture</strong></a> •
   <a href="#roadmap"><strong>Roadmap</strong></a>
 </p>
 
@@ -640,6 +676,46 @@ blockshuffle $+0.274 \rightarrow +0.288$, the latter within 5%.
 > independent confirmation. Where they disagree — and 1.5 disagrees by a factor of two — the confirmation
 > is what is reported.
 
+
+### 1.7 What the edit does to light, colour and grain
+
+I had been staring at line work for months, so it took an experiment on a completely different
+subject — a rally car in a jungle, of all things — before I noticed the obvious. The preset doesn't
+only change *how the lines are drawn*. It changes the light.
+
+Measured on 8 styles × 5 seeds, paired against the same prompt and the same seed:
+
+| | `preset_pos` ×2 | concordance |
+| --- | --- | --- |
+| darkens (mean $L^*$) | $-3.30$ | 7/8 prompts · 32/40 images |
+| desaturates (`colorfulness_hs`) | $-3.54$ | 7/8 · 32/40 |
+| adds grain (`lbp_entropy`) | $+0.07$ | **8/8 · 40/40** |
+
+Three effects, all in the same direction, and the grain one does not have a single exception in forty
+images. Put next to §1.6, where the same preset runs strokes parallel at 16/16 prompts, the picture
+is of a **very** well-defined operator: darker, greyer, grainier, parallel-stroked. That is an
+etching. It is not a vague nudge.
+
+And `blockshuf_neg` does the opposite on all three — lighter, smoother, far more saturated — which is
+the cleanest demonstration so far that two edits built from the *same multiset of values* at the
+*same* displacement land in genuinely opposite places.
+
+> **A correction I have to make in the same breath, because I got it wrong first.** I originally
+> wrote the saturation half of this up as a *chromatic signature* of the two conditions. It mostly
+> is not. In these jungle scenes, how much car is in the frame and how colourful the image is are
+> mechanically coupled: in the **baseline alone**, where nothing is perturbed, the two correlate at
+> $r = +0.776$, with `colorfulness = 13.4 + 238.1 × area_fraction`. Apply that slope to the size
+> changes measured in §3.2 and the size change accounts for **95–145%** of the colour change. So
+> `blockshuf_neg` doesn't saturate: it makes the car bigger, and a bigger car in a green scene is a
+> more colourful image.
+>
+> Darkening and grain do not go through size, and stand. And I checked whether this contaminates the
+> colour work in §1.4 and §1.5 rather than assuming: on the portrait corpus, subject size moves at
+> chance under perturbation and couples to chroma at only $r = +0.263$. **§1.4 and §1.5 are not
+> affected.** The mediator is specific to whole-scene corpora, and any future corpus of that kind has
+> to declare it.
+
+
 ---
 
 ## Experiment 2 — Attribute emergence
@@ -725,7 +801,9 @@ So the 2×2 is:
 | **Stock model** | 0 / 20 | 1 / 20 |
 | **Blockshuffle** | 0/20, 0/20, 0/20, 0/10, **1/20** (five independent cells) | **19 / 20**, **20 / 20** |
 
-The effect lives in exactly one cell. **The perturbation does not add the attribute and does not repair the neglect — it acts as a gain on a binding the prompt must already have established, and that binding is fragile enough that one phrase carries it.**
+The effect lives in exactly one cell. **Within this prompt family, the perturbation does not add the attribute and does not repair the neglect — it acts as a gain on a binding the prompt must already have established, and that binding is fragile enough that one phrase carries it.**
+
+> **Restricted on 2026-09-18.** That sentence was written without the qualifier, and it was too strong. [§3.1](#31-headlights--a-detail-nobody-asked-for) shows the same family of perturbations adding a trait the prompt **never mentions** — headlights, from 0/3 to 5/5 on one style — and removing one the stock model was already drawing, in 39 renders of 39. Neither is a gain on a prompt-established binding. The claim above holds for the barnacle case, where the trait was in the text and was being ignored; it does not extend to traits that come from the model's idea of the object.
 
 ### 2.3 Which half of the model carries it
 
@@ -784,38 +862,264 @@ There is a second difference, and it is architectural rather than methodological
 
 ---
 
+## Experiment 3 — What ends up in the picture
+
+<sub>**770 renders · 18 styles · two blind scoring rounds · a separate corpus from Experiments 1 and 2**</sub>
+
+> **The direction I'm chasing.** Experiments 1 and 2 are both about a model drawing the thing you
+> asked for. Experiment 1 asks *how* it draws it; Experiment 2 asks whether a detail you asked for
+> and got ignored can be brought back. This one asks a question I didn't plan and didn't want:
+> **does the edit put things in the picture that nobody asked for at all?**
+>
+> That matters because it changes what a preset *is*. If a weight edit only restyles, it's a filter
+> with a very fancy implementation. If it also decides what the model considers part of the object —
+> a car has headlights, so let's switch them on — then it's touching something closer to the model's
+> idea of the thing, and a tuner is a different kind of instrument than I thought I was building.
+>
+> **What would kill it.** If the traits only show up where the prompt already mentions them, this is
+> Experiment 2 again and nothing new. If they show up but only because the image got darker, or only
+> because I was the one scoring and I knew which condition I was looking at, then it's my eyes and
+> not the model.
+>
+> **Where we are.** Both the traits below survived a blind scoring round, and the second one survived
+> a full confirmation on a corpus that didn't exist when the prediction was written. The honest part:
+> I also **measured** how blind I actually was, and the answer was *not very*. The measurement is in
+> §3.4 and it is the most useful thing in this section.
+
+### 3.1 Headlights — a detail nobody asked for
+
+The prompt says `a yellow and blue rally car cruising in a deep jungle`. It does not say anything
+about lights. Headlights are just something a car has.
+
+I noticed while flipping through renders that `preset_pos` seemed to switch them on. So I scored all
+280 images blind — the files renamed to hashes, the order shuffled, the key sealed in a file I didn't
+open until the last score was in — on a three-way scale: off, on, can't tell.
+
+| | lit / scorable | rate |
+| --- | --- | --- |
+| baseline | 10 / 35 | 0.286 |
+| **`preset_pos` ×2** | **31 / 38** | **0.816** |
+| **`blockshuf_neg` ×2** | **0 / 39** | **0.000** |
+
+I had only noticed half of it. `preset_pos` switches the lights on — but **`blockshuf_neg` switches
+them off, in thirty-nine images out of thirty-nine**, including the ones where the unmodified model
+had them lit 4 times in 5.
+
+Per style, `preset_pos` ×2 reaches 5/5 in six styles of eight, and two of those started from zero:
+
+| | baseline | `preset_pos` ×2 |
+| --- | --- | --- |
+| watercolour | 0 / 3 | **5 / 5** |
+| charcoal | 0 / 5 | **5 / 5** |
+| photography | 3 / 5 | 5 / 5 |
+| claymation | 4 / 5 | 5 / 5 |
+| ukiyo-e | 0 / 5 | 0 / 5 |
+| pixel art | 0 / 5 | 1 / 3 |
+
+A monochrome charcoal sketch lighting its headlights in all five seeds. The two that don't move
+aren't counterexamples — stained glass was already at the ceiling, and ukiyo-e is at zero in *all
+seven* conditions, which is a style that never depicts lit headlights rather than a failure to respond.
+
+**The obvious objection, and it's a good one.** §1.7 says `preset_pos` darkens the image, and lit
+headlights are more plausible in a dark scene. So is this just brightness? No — and the data already
+had what it takes to check. Splitting all 280 images into thirds by measured lightness:
+
+| | darkest third | middle | **lightest third** |
+| --- | --- | --- | --- |
+| baseline | 0.30 (n=10) | 0.44 (n=16) | **0.00 (n=9)** |
+| `preset_pos` ×2 | 1.00 (n=20) | 0.67 (n=9) | **0.56 (n=9)** |
+| `blockshuf_neg` ×2 | 0.00 (n=9) | 0.00 (n=8) | **0.00 (n=22)** |
+
+In the **brightest** third of the whole corpus, the unmodified model never lights them — nine images,
+zero lit — and the preset lights them in five of nine. Brightness genuinely predicts headlights
+overall, and it still isn't the explanation.
+
+> **On the statistics, because the number looks weak and isn't.** The test gives $p = 0.0312$, which
+> after correcting for six conditions doesn't clear the bar. That $p$ is the **exact floor**: six of
+> the eight prompts carry information (one is at the ceiling, one never lights up at all), all six
+> move the same way, and $2/2^6 = 0.0312$ is the smallest value the test can return. No effect of any
+> size could have done better here. It is the same structural ceiling documented in §1.3 — neither
+> confirmed nor weak, just floored.
+
+### 3.2 How much room the subject takes
+
+Second thing I noticed by eye: under `blockshuf_neg` the car seems to get *bigger* in the frame.
+
+This one I got to test properly, because I ran it twice. The first round measured it on the same
+images that produced the observation, with a hand-drawn box around the vehicle, and gave a ratio of
+**2.14** — the car going from 13% to 28% of the canvas. That round had a defect I only found
+afterwards: the key had already been opened for the headlights scoring eight minutes earlier, so the
+annotation was much less blind than it looked.
+
+So I wrote a prediction down, froze it before rendering, and built a new corpus: **ten new styles**, a
+vehicle of a different colour, a different setting, first time I'd ever seen the images being inside
+the annotation tool. Every image was also randomly mirrored, flipped, hue-rotated, re-saturated,
+re-brightened and noised — with the parameters recorded, so they could be used as evidence later.
+
+| | prediction | measured | prompts |
+| --- | --- | --- | --- |
+| `blockshuf_neg` ×1 | grows | $\rho = 1.058$ | 8/10 |
+| **`blockshuf_neg` ×2** | **grows more** | $\boldsymbol{\rho = 1.22}$ | **9/10** |
+| `preset_pos` ×2 | shrinks | $\rho = 0.989$ | 4/10 |
+
+**All three signs correct, the ordering correct, and the effect about a fifth of what the first round
+claimed.** That shrinkage is the story of this whole notebook in miniature, and §3.4 explains why.
+
+The negative control is the weak part: `preset_pos` was supposed to visibly shrink the subject and
+instead does essentially nothing. The sign is right, the magnitude isn't there.
+
+### 3.3 What this restricts in Experiment 2
+
+§2.2 concludes that the perturbation *"does not add the attribute and does not repair the neglect —
+it acts as a gain on a binding the prompt must already have established."*
+
+Headlights are never in the prompt. Yet `preset_pos` takes them from 0/3 to 5/5 on watercolour, and
+`blockshuf_neg` removes them from a baseline that had them 4 times in 5. **Neither of those is a gain
+on a binding the prompt established.**
+
+So that sentence is too strong as written. It is true of the barnacle case, where the trait was in the
+text and was being ignored, and it does not extend to traits that come from the model's idea of the
+object. The claim now reads: *within the barnacle prompt family, the perturbation acts as a gain on a
+prompt-established binding; separately, it can also add and remove traits the prompt never mentions.*
+
+### 3.4 How blind was I, actually — and why this is the best thing in the section
+
+Everything above rests on me looking at pictures and writing down numbers, while knowing what the
+experiment was about. That's the weakest joint in the whole notebook, and until today I'd only ever
+argued about it. So I measured it.
+
+Twenty trials, four images side by side — baseline, `blockshuf_neg` ×1, `blockshuf_neg` ×2,
+`preset_pos` ×2, in a random order I couldn't see — and I had to point at which was which. Guessing
+gets you 25%.
+
+| | I got it right | chance | $p$ |
+| --- | --- | --- | --- |
+| `preset_pos` ×2 | **17 / 20** (85%) | 25% | $3\times10^{-8}$ |
+| `blockshuf_neg` ×2 | **12 / 20** (60%) | 25% | $9\times10^{-4}$ |
+
+**The blinding failed.** Hashed filenames, shuffled order, mirroring, flipping, hue rotation,
+saturation and brightness jitter and added noise — and I can still pick the conditions out of a
+line-up most of the time.
+
+That is not a comfortable thing to publish and it is the most useful measurement here, because it
+applies backwards to every scoring round in this notebook, including the barnacles.
+
+**But it does not explain the results, for two reasons that are worth following.**
+
+The first is an asymmetry. The condition I identify almost perfectly — `preset_pos` ×2, at 85% — is
+the one where I drew **no size effect at all**, despite a registered prediction that it shrinks. The
+condition I only get 60% of the time is where the effect is. If recognising the condition were driving
+my hand, that would be the wrong way round.
+
+The second is per style. In the three styles where I was at chance at identifying `blockshuf_neg` ×2,
+the car still grows by 11% ($\rho = 1.110$, against 1.320 where I did recognise it). There **is** a
+gradient, and it says some of the effect may be inflated where I could tell. But the effect doesn't
+vanish where the blinding held.
+
+Two more things came out of the same round and both are firsts for this project:
+
+* **The saturation worry is dead, by measurement.** The saturation factor *we* applied at random does
+  not predict how big I drew the box ($r = -0.096$, $p = 0.51$).
+* **My hand is precise.** Twenty images were secretly shown twice, mirrored differently the second
+  time. Mean disagreement between my two annotations of the same image: **1.0%**, test–retest
+  $r = +0.995$. The effect being measured is about twenty times that noise.
+
+
+---
+
 ## Roadmap
 
-### Experiment 2 · Resolved — emergence is about structure, not magnitude
-* **The question was**: Experiment 2 shows a norm-matched block derangement moving a neglected attribute from 1/20 to 19/20. Would randsign, the sign scramble at the identical $D = 0.0538$, do the same?
-* **Answer**: no. Randsign scores **1 / 20** — the stock model's exact rate. The pre-declared criterion said that above 15/20 the word "coherent" would come out of the claim; at or below 2/20 the structure of the perturbation becomes the operative variable. It landed at 1/20.
-* **What is still open on the same axis**: two points do not identify *which* structural property matters, and the hand-calibrated preset has still never been run on this attribute.
+Reordered on 2026-09-18, after a day that closed one question, opened two, and — more usefully than
+either — measured how much to trust the person doing the scoring.
 
-### Experiment 2 · Open — a general mechanism, or a fact about one template?
-* **Goal**: The only positive case on a different subject (the siren/hag hybrid, 20/20) shares almost every token with the original prompt, and every negative case carrying both anchors is structurally close too. So "it generalises" has not been tested — only "it survives a small edit" has.
-* **Pre-declared Criterion**: A prompt with a different camera, a different register and a non-marine character, carrying an analogous pair of anchors — one ontological, one an adjacent local morphology — for a **different** neglected attribute. If the attribute emerges there, the conjunctive gate is a general mechanism. If it does not, Experiment 2 is rewritten as a finding about this prompt family and the word "mechanism" comes out of it.
-* **Second question on the same run**: the hand-calibrated preset on the same 20 seeds, which has never been tested on this attribute at all.
+### Priority 1 · Get the human out of the measuring loop
 
-### Experiment 1 · Partly resolved — the colour-free family was extended, and it did not go the predicted way
-* **The question was**: the colour-count separation holds on 18 colour-pinned prompts and vanishes on 6 colour-free ones, but $n = 6$ cannot tell "absent" from "underpowered". The criterion declared in advance was to extend the colour-free family to at least 16 prompts, and to drop the palette claim if the cross-prompt chroma direction stayed below its permutation null.
-* **What happened**: stage 7 is that extension. **None of its 16 prompts pins the palette** — no `monochromatic`, no `overall hue`, no tinted rim light; they describe materials and reflections and leave the model free. The cross-prompt direction did **not** stay below the null: three of six conditions clear a Holm-corrected permutation test (§1.5). So the trigger to drop the claim did not fire — but the fuller claim it was guarding, that every condition carries its own chromatic direction, came back three of six against a bar of four and is recorded as ambiguous.
-* **The second question got a clean answer.** It asked whether Blockshuffle $-$ would keep producing a coherent cast, having scored $+0.944$ on an entirely different colour instrument in §1.4. On stage 7 it is the **top condition of all six** ($+0.109$, $p_{\text{Holm}} = 0.0022$). Two instruments, two corpora, same condition singled out. That a *matched control* is the most chromatically coherent perturbation in the set is now a finding and not a footnote.
-* **What is still open**: the effective-colour contrast itself was not recomputed on stage 7 — only the direction analysis was. And the corpus failed its own hue-coverage requirement, for a reason that generalises: on close-up portraits the measured swatches are skin and paper whatever the prompt says, so **prompt text cannot be used as the lever for controlling measured hue**. Any future colour corpus has to change the framing, not the wording.
+* **Why it moved to the top.** §3.4 measured the blinding and it failed: hashed filenames do not hide
+  a condition with a visible signature from someone who knows the project. Every workaround — randomised
+  mirroring, hue rotation, saturation and brightness jitter, added noise — was tried in the same round
+  and was not enough.
+* **What makes this newly cheap.** The two annotation rounds produced **480 hand-drawn bounding boxes
+  with known conditions**. That is a validation set that did not exist before. An automatic detector can
+  be qualified against it — and qualified **on the baseline images alone**, where no hypothesis is at
+  stake — and then run on everything with nobody in the loop.
+* **Acceptance criterion.** Agreement with the human boxes on baselines, reported per style, before the
+  detector is used for any claim. The styles where it fails are declared, not dropped. The precedent is
+  the hue mask that correlated with the ground truth at $\rho = -0.002$ and was caught only because a
+  ground truth existed.
 
-### Experiment 1 · Open — does naming a colour in the prompt govern the chromatic signature?
-* **Goal**: the confirmation round of §1.5 differed from its exploratory set on a variable this notebook had already implicated — every exploratory prompt names a colour, none of the confirmation prompts do — so its ambiguous verdict has two readings the design cannot separate. A between-corpus look on a single common scale is suggestive and not decisive: prompts that name a colour are **1.6× more coherent**, but they also move **less** (amplitude ratio 0.67–0.85), so a stated colour appears to *constrain* the palette rather than to license the effect. Four conditions of six go one way, two the other.
-* **Pre-declared Criterion**: matched pairs — the same subject written twice, identical character for character except the colour clause, rendered in one run under the same conditions and seeds. Two readouts: the paired amplitude, and the **cosine between the two members of a pair**, which separates "the clause constrains how far the palette moves" from "the clause changes where it goes". Those have never been distinguished.
-* **A third arm, and the cheapest of the three**: the **empty prompt**. With no text to interpret, whatever still separates the conditions at a fixed seed is what the perturbation does independently of reading. Note what this is not: Krea-2 passes text through `txtmlp` → `txtfusion` and injects it as per-block modulation, so an empty string still produces an embedding. It is the empty-string prior, not the absence of conditioning.
-* **Status**: a 180-render pilot is specified — four conditions rather than six, four pairs, five seeds — to size the effect before committing a full run. With four subjects the permutation floor is 2/2⁴ = 0.125, so the pilot cannot produce a significant result and will not be reported as one.
+### Priority 2 · The control that Experiment 3 is missing
 
-### Experiment 1 · Open — the hatching axis on objects, with an instrument that measures it directly
-* **Goal**: §1.6 establishes the axis on character portraits using `crosshatch_entropy_mean`, which is a proxy: it correlates with how much line is on the page at all ($r = +0.52$, $R^2 = 0.27$), and a second proxy — how many separate pieces the drawing breaks into — disagrees with it about the ordering *across* families. The proxy settles the sign; it cannot settle the ladder.
-* **Pre-declared Criterion**: [`docs/prereg_hatching_order_stage8.md`](docs/prereg_hatching_order_stage8.md), locked before the instrument was built. The instrument is the histogram of edge-gradient orientations — parallel hatching is unimodal, cross-hatching bimodal with two near-orthogonal peaks — and the prediction is a full ordinal ranking of four conditions, one ordering out of twenty-four, stated by eye in advance.
-* **Why objects**: every prompt measured so far is a close-up character. A signature that survives a change of genre is a statement about the model; one that survives only among portraits is a statement about portraits. Stage 8 keeps a minority of subject prompts precisely so the instrument change and the genre change do not become inseparable.
+* **The gap.** §3.2 compares `blockshuf_neg` against `preset_pos` and the baseline. Both are structured
+  edits. The sign-scrambled control at the identical displacement — the one that carries the whole
+  "structure, not magnitude" argument everywhere else in this notebook — **was not in the design**.
+* **Criterion.** `rand_pos` at both amplitudes, same corpus, same protocol. If it enlarges too, the
+  finding is about displacement and not about structure, and §3.2 gets rewritten.
+* Cheap: the corpus and the tooling already exist.
 
-### Both experiments · Open — replication across a different *conditioning mechanism*
-* **Goal**: Apply the exact same $D$-matched protocol (sign scramble + block derangement) to [`circlestone-labs/Anima`](https://huggingface.co/circlestone-labs/Anima).
-* **Why this is more than "another DiT"**: the two models do not condition on text the same way. Krea-2 fuses text once upstream and injects it per block as modulation, with no cross-attention anywhere in the backbone. Anima gives **every one of its 28 blocks its own cross-attention**, taking keys and values from the 1024-dimensional output of a dedicated 6-block `llm_adapter`. They also differ by 6× in per-block capacity (434 M parameters against 69 M) and by 3× in hidden dimension (6144 against 2048). A result that survives that crossing is not a fact about an implementation.
+### Priority 3 · Confirm the headlights on something that isn't a car
+
+* **Goal.** §3.1 is a quantification, not a confirmation: the observation was made on the renders that
+  measured it. The claim it restricts — §2.2 — deserves a proper test.
+* **Criterion.** New objects, each with a trait that is *implied by the object but never named in the
+  prompt*, scored blind with a discrimination test attached. If the traits appear under `preset_pos`
+  and vanish under `blockshuf_neg` there too, "the edit acts on the model's idea of the object" is a
+  finding rather than a phrase.
+* Roughly 250 renders, and the design is already written.
+
+### Priority 4 · The sampling regime, which has never been varied
+
+* **The hole.** Every render in this notebook is 9 steps, CFG 1.0, `euler_ancestral`. That is a heavily
+  distilled few-step regime. Whether any of this survives ordinary multi-step sampling with CFG above 1
+  is **completely untested**, and it is a plausible alternative explanation for all of it.
+* **Criterion.** The barnacle assay is the cheapest probe, because it is binary and its baseline and
+  ceiling are known. Sweep step count and CFG separately, with the baseline re-rendered at every point.
+* **One trap, worth stating.** `euler_ancestral` injects fresh noise at every step, so the same seed at
+  9 and at 20 steps is a *different image*, not a matched pair. The step sweep needs a deterministic
+  sampler or it loses the pairing.
+
+### Priority 5 · Does `rand_pos` change what the object *is*?
+
+* **The observation.** At double amplitude, `rand_pos` turned the rally car into a rounded city SUV in
+  most renders. Recorded in [`docs/observations_stage9.md`](docs/observations_stage9.md), never tested.
+* **The duller explanation, which has to be excluded first.** Sign-scrambling may simply weaken the
+  text conditioning, letting the model fall back on its prior — and the prior for "vehicle in rough
+  terrain" is plausibly an SUV. Stage 8's empty-prompt arm already points that way: with no text at
+  all, `rand_pos` moves the palette furthest of the three conditions.
+* **Criterion.** Blind categorical scoring of the vehicle type *and* of two other named attributes.
+  Diffuse drift across all of them is loss of conditioning; drift in the vehicle alone is something
+  more interesting.
+
+### Priority 6 · The map of the thirteen presets
+
+* **What exists.** Thirteen presets at the *identical* displacement $D = 0.05381584$, six of them
+  structurally localised by construction: blocks 0 and 27, blocks 12–14, attention only, feed-forward
+  only, a graded ramp, a second sign seed.
+* **What was missing until today.** Readouts that actually separate conditions. The 24-dimensional
+  palette direction gave an ambiguous 3-of-6; five one-dimensional scalars — lightness, chroma,
+  colourfulness, LBP entropy, edge density — separate them at 8/8 prompts and 40/40 images. *The colour
+  analysis was over-engineered.*
+* **Shape.** A preset × readout matrix on a small fixed prompt set, at nominal amplitude only. It is
+  **descriptive**, so it does not carry a pre-registration burden — it produces a map, and the
+  interesting cells get confirmed afterwards, one at a time.
+
+### Priority 7 · A second hand-calibrated preset
+
+Every claim about calibration rests on **one** preset. `blockshuf_neg` is that same preset with the
+block assignments shuffled, and it keeps winning on the readouts that were never the calibration
+target — barnacles, style adherence, chromatic coherence, and now subject size. §1.6 shows the
+assignment does something *specific*; nothing shows it was chosen *well*. A second preset aimed at a
+different visual target is the only way to tell those apart.
+
+### Priority 8 · Replication across a different conditioning mechanism
+
+Unchanged in substance and moved down deliberately: with the sampling regime untested, the structure
+control missing and the preset count at one, a negative result on a second architecture today would be
+uninterpretable — three confounds would explain it equally well.
+
+* **Goal.** The same $D$-matched protocol on [`circlestone-labs/Anima`](https://huggingface.co/circlestone-labs/Anima).
+* **Why it is more than "another DiT".** Krea-2 fuses text once upstream and injects it per block as
+  modulation, with no cross-attention anywhere in the backbone. Anima gives every one of its 28 blocks
+  its own cross-attention. A result that survives that crossing is not a fact about an implementation.
 
 | | Krea-2 Turbo | Anima Base v1.0 |
 | --- | --- | --- |
@@ -827,20 +1131,28 @@ There is a second difference, and it is architectural rather than methodological
 | **How text enters a block** | **adaptive modulation** (`mod.lin`, 6 × 6144) | **cross-attention** (k/v from a 1024-dim adapter) |
 | Text adapter | 4 `txtfusion` blocks | 6 `llm_adapter` blocks |
 
-* **A capability Anima has and Krea-2 does not**: because text influence is localised in `cross_attn.k_proj` and `v_proj` per block, the model-versus-encoder split of §2.3 can become a **three-way** split there — DiT self-attention, DiT cross-attention, text encoder. That decomposition is not available on Krea-2 at all.
-* **Pre-declared Criterion**: PC1 rebuilt independently on the new architecture, with the preset separating from both controls at a 95% CI excluding zero. If it does not, the effect is documented as Krea-2 specific.
+* **Pre-declared criterion.** PC1 rebuilt independently on the new architecture, with the preset
+  separating from both controls at a 95% CI excluding zero. If it does not, the effect is documented as
+  Krea-2 specific.
 
-*(Additional technical tools — quadratic $\epsilon$-scaling, VLM judge calibration, and 30-prompt CLIP closure — are kept in the [`experiments/`](experiments/) directory and outlined in [§9 of the Lab Notebook](index.html#ripresa).)*
+### Closed
 
+* **Experiment 2 · structure, not magnitude** — resolved. `randsign` at the identical displacement
+  scores 1/20, the stock model's exact rate.
+* **Experiment 1 · does the declared style govern the steering direction?** — **not supported**, and
+  the statistic that measured it is not robust to a standardisation convention the pre-registration
+  never specified. Full record in [`docs/stage9_verdict.md`](docs/stage9_verdict.md).
 
----
+*(Additional technical tools — quadratic $\epsilon$-scaling, VLM judge calibration, and 30-prompt CLIP
+closure — are kept in the [`experiments/`](experiments/) directory.)*
+
 
 ## How to Explore, and How to Replicate
 
 * **Reproducing the confirmation round**: [`docs/reproduce_stage7.md`](docs/reproduce_stage7.md) has the full recipe for §1.5 and §1.6 — the seven presets, the manifests with every prompt verbatim, the exact commands, and the hash of every published input. All 600 renders are browsable as webp under [`assets/01_steering_stage7/`](assets/01_steering_stage7/); the full-resolution PNGs are a release asset, because colour measurements have to be re-extracted from PNG and not from webp.
 * **Interactive A/B Viewer**: Open [`viewer/viewer.html`](viewer/viewer.html) in your browser to inspect image pairs side-by-side or toggle back-and-forth instantly with the spacebar.
 * **Complete Lab Notebook**: Read [`index.html`](index.html) for all the mathematical formulations, KaTeX derivations, PCA loadings, and vector SVG forest plots.
-* **The 33 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 33 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
+* **The 38 Pitfalls Checklist**: Before trying this on another model, check [`docs/errors_log.md`](docs/errors_log.md) — it documents 38 real measurement mistakes made during this work that gave plausible-looking numbers but were totally wrong.
 * **Re-run the Analysis**: `python experiments/global_aggregation_corrected.py` runs from a fresh clone — it resolves its inputs to `data/`, which holds the full feature matrix and the image manifests, and regenerates every aggregation table quoted above. It needs `numpy`, `pandas`, `scipy` and `scikit-learn`.
 * **What you cannot re-run from a clone**: the scripts that read pixels — `analyze_texture.py`, `analyze_quantization.py`, `color_freedom.py`, `run_style_features.py` — need the complete render set (≈1 500 PNGs at 1024×1280), which is not committed here. `assets/` carries a representative subset for visual inspection only. Those scripts still point at local absolute paths and are published as the **record of how the numbers were produced**, not as a turnkey pipeline.
 * **Repository size and original master PNGs**: a full clone is **~44 MB** (all images served as high-quality 480×600 WebP under `assets/01_steering/`, `assets/01_steering_stage7/` and `assets/02_attribute_emergence/`). The uncompressed 1024×1280 master PNG originals are preserved in full and packaged as GitHub Release assets:

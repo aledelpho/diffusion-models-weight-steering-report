@@ -1,11 +1,11 @@
 ﻿# Measurement Protocol & Error Log: Replication Checklist
 
-> **Purpose of this document**: This log records the 28 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 8 derived methodological rules.  
-> **None of these 28 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
+> **Purpose of this document**: This log records the 38 real-world measurement pitfalls encountered during benchmark development on Krea-2 DiT and the 8 derived methodological rules.  
+> **None of these 38 errors produced absurd values or obvious runtime exceptions**: all produced seemingly plausible numbers, quietly distorting the scientific conclusions. This document serves as a **mandatory pre-flight checklist** before launching any new benchmark run (including testing on circlestone-labs/Anima (Cosmos-Predict2-2B + Qwen3 0.6B) or future diffusion architectures).
 
 ---
 
-## The 8 Non-Negotiable Methodological Rules
+## The 9 Non-Negotiable Methodological Rules
 
 Before analyzing data or drawing conclusions on any diffusion architecture:
 
@@ -26,9 +26,15 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 8. **Always report the test resolution floor ($P_{\min}$).**  
    With $n$ prompts, the minimum achievable two-tailed $p$-value for an exact sign-permutation test is $2 / 2^n$. With $n = 6$ prompts, $P_{\min} = 0.03125$: no effect can achieve statistical significance after multiplicity correction (Holm/FDR), regardless of effect magnitude. With $n = 10$, $P_{\min} = 0.00195$, restoring statistical resolving power.
 
+9. **Blinding is a measurement, not a procedure.**
+   Hiding a condition's label does not hide its appearance from an observer who knows what that
+   condition looks like. Every round of human scoring carries a forced-choice discrimination test
+   against chance, run on the same images, and publishes the result — whichever way it comes out.
+
+
 ---
 
-## The 33 Documented Measurement Pitfalls
+## The 38 Documented Measurement Pitfalls
 
 | # | Pitfall Encountered | Failure Mechanism | Silent Consequence | How to Prevent in Replication |
 |---|---|---|---|---|
@@ -65,6 +71,12 @@ Before analyzing data or drawing conclusions on any diffusion architecture:
 | **31** | A pre-registered stratification criterion that can only be checked after rendering | The design required four prompts in each of four 90° hue arcs, but hue is a property of the render, not of the prompt text | Either the criterion is unenforceable, or it is enforced by looking at images and then choosing — an unspecified selection step inside a pre-registered design. Worse, the lever did not work: the brief asked for cool subjects and got 14 of 16 prompts in a single arc, because on close-up portraits the measured swatches are skin and paper whatever the scene says | Split the corpus into a baseline-only stage and a deterministic selection rule that reads only baselines; and check that the quantity you intend to stratify on is actually controllable by the thing you are varying |
 | **32** | Editing a script after freezing it by hash in a pre-registration | A reporting bug was fixed in the frozen analysis script — it printed the exact permutation floor while running Monte Carlo — hours after the document naming its hash was written | The published hash no longer matched the file that would run the confirmation, which by the document's own terms voids it. The edit happened to be inert (at *n* = 16 the exact branch runs and the patch touched only the Monte Carlo branch), but that was luck, established afterwards rather than guaranteed | Freeze by hash *and* by copy: keep the exact bytes alongside the pre-registration. If an edit is unavoidable, invert it to reconstruct the frozen file, verify the hash, run **that**, and publish both outputs |
 | **33** | Comparing two statistics that were each standardised on their own data | Cross-prompt coherence is computed after scaling the 24 palette dimensions by the spread of that run's own difference vectors — correct within a run, and not a common yardstick between two | The exploratory and confirmation runs read $+0.120$ against $+0.057$, a factor of 2.1 that was partly the two scalings disagreeing. Pooled and scaled once, the same quantities are $+0.087$ and $+0.054$, a factor of 1.6. The direction of the conclusion survived; the size, and any power calculation built on it, did not | Standardise once on the pooled data whenever two runs will be compared, and state which basis a reported effect size is expressed in |
+| **34** | Treating an expert observer as blinded because the filenames were hashed | Hiding the label does not hide the picture. A condition with a visible signature — smoother micro-texture, no lit headlights, a different palette — is recognisable to the person who characterised it | In a four-way forced choice at a 25% chance level, the author identified `preset_pos` ×2 in **17 trials of 20** and `blockshuf_neg` ×2 in **12 of 20**, *with* the images randomly mirrored, flipped, hue-rotated, re-saturated, re-brightened and noised. Every scoring round in this notebook before that one had assumed a blinding it never tested | Run a forced-choice discrimination test alongside every human scoring round and publish it. Blinding is a measured quantity, not a procedure you either followed or didn't |
+| **35** | A scoring viewer that appends a row when the scorer goes back to correct | The correction is written as a new row instead of replacing the old one, and both survive into the file | 284 rows for 280 images: four re-scores, two with a changed verdict, both counted. `preset_pos` ×2 read 32/39 instead of 31/38 — plausible numbers, unchanged conclusion, wrong figures | Key on the item id and keep the last entry; assert that the merged row count equals the manifest row count and raise when it does not |
+| **36** | Ranking conditions by a coherence that each condition can measure with different precision | Cross-prompt coherence is attenuated by measurement error, and the conditions do not share an error level | The §1.5 ranking of "which edit carries a chromatic direction" correlates with each condition's own split-half reliability at **r = +0.877, p = 0.022**. The order survives disattenuation, so the verdict stands, but the published ranking is partly a ranking of what was measured best | Publish the split-half reliability per condition and report the disattenuated effect alongside the raw one. Where reliability is ~0.5, more seeds per cell buy as much power as more prompts |
+| **37** | Two coherence statistics computed under different centering conventions | `analyze_palette_coherence.py` divides by σ without centering; the stage 9 script subtracts the joint mean. Subtracting a common vector that is *not* a group's own mean leaves a shared −μ component in every one of its vectors and aligns them artificially, most in the group furthest from μ | With 8 style prompts against 18 subject prompts, and one arm at double amplitude, the sign of the between-group comparison **flipped in 11 cells of 18** depending on the convention. Three reasonable implementations returned −0.104, +0.001 and −0.187 for the same cell | Name the convention in the pre-registration, and report every between-group coherence under both. A conclusion that survives only one convention is not a conclusion |
+| **38** | A carefully built metric validated against nothing | A hue-based mask for the vehicle's body was reasoned out from the prompt's stated colours, with per-image chroma normalisation to avoid a saturation bias | It correlates with hand-drawn ground truth at **ρ = −0.0020** — it measures nothing at all — and it would have been used had the acceptance gate not demanded a ground truth first. Heavy hatching and excluded black tyres and shadow defeated it | Before a new metric supports any claim, qualify it against a ground truth on a subset where no hypothesis is at stake, and publish the agreement per stratum |
+
 
 ---
 
