@@ -1,7 +1,8 @@
 # Pre-registrazione — Stage 9: Dipendenza della Direzione di Steering dallo Stile Dichiarato
 
-**Data di deposito**: 2026-09-18  
-**Stato**: Congelato prima dell'esecuzione dei render e dell'analisi  
+**Data di deposito originario**: 2026-09-18 (ore 08:55)  
+**Data emendamento metodologico (Affidabilità & Disattenuazione)**: 2026-09-18 (ore 11:25, congelato mentre la coda ComfyUI è in corso: 220/300 render completati, prima di qualsiasi estrazione o analisi dei dati)  
+**Stato**: Formalmente congelato  
 **Corpus target**: Stage 9 (8 varianti di stile, stesso soggetto) vs Stage 5/6 (18 varianti di soggetto, stesso stile)  
 
 ---
@@ -55,23 +56,62 @@ Per evitare l'errore sistematico derivante da prompt che impongono vincoli croma
 
 ---
 
-## 4. Test Statistico e Regola di Decisione
+## 4. Correzione della Risoluzione della Permutazione (Emendamento 3)
 
-### Statistica Test:
-$$\Delta \bar{C} = \bar{C}_{\text{soggetto}} - \bar{C}_{\text{stile}}$$
-dove $\bar{C}$ indica il coseno medio calcolato su tutte le coppie distinte di prompt ($i \neq j$):
-$$\bar{C} = \frac{2}{N(N-1)} \sum_{i < j} \frac{\Delta_i \cdot \Delta_j}{\|\Delta_i\|_2 \|\Delta_j\|_2}$$
+Nella versione preliminare era stato erroneamente indicato un pavimento di $2/2^8 = 0.0078$, corrispondente a un test di sign-flip appaiato.
+In questo disegno sperimentale a due gruppi, si permutano le **etichette di corpus** fra gli $8$ prompt di stile e i $18$ prompt di soggetto ($N_{tot} = 26$ prompt).
+- Numero esatto di partizioni distinte:
+  $$\binom{26}{8} = 1\,562\,275$$
+- Risoluzione statistica con 20.000 estrazioni Monte Carlo:
+  $$\text{risoluzione} \approx \frac{1}{20\,001} \approx 5 \times 10^{-5}$$
+Il pavimento reale della significatività è due ordini di grandezza più profondo. La soglia decisionale resta fissata rigidamente ad $\alpha = 0.05$.
 
-### Distribuzione Nulla e Significatività:
-- Il test è di permutazione unidirezionale esatta / Monte Carlo (20.000 iterazioni) scambiando le etichette di corpus (*stile* vs *soggetto*) tra i prompt.
-- Pavimento teorico della permutazione su 8 prompt: $2 / 2^8 = 0.0078$.
-- Soglia di significatività fissata a:
-  $$\alpha = 0.05$$
+---
 
-### Criteri di Accettazione e Validità:
-1. **Conferma Piena**: $\bar{C}_{\text{stile}} < \bar{C}_{\text{soggetto}}$ con $p < 0.05$ **sia** nello Spazio 1 (24-D) **sia** nello Spazio 4 (Tessitura).
-2. **Artefatto da Vincolo Cromatico**: $p < 0.05$ nello Spazio 3 ($a^*b^*$) ma $p \ge 0.05$ nello Spazio 4 (Tessitura).
-3. **Analisi Dose-Risposta (Verifica Ampiezza 1.0 vs 2.0)**:
-   - Il test viene condotto separatamente per l'ampiezza 1.0 e 2.0.
-   - Se la divergenza tra stili esiste a 1.0 e si preserva a 2.0, l'effetto è strutturale.
-   - Se compare esclusivamente ad ampiezza 2.0 (dove $D \approx 0.108$ supera la saturazione del modello), l'effetto è un manufatto dell'over-steering.
+## 5. Affidabilità di Misura Split-Half (Emendamento 1)
+
+Un coseno tra risposte è matematicamente attenuato dall'errore di misura. Se il corpus delle varianti di stile (eterogeneo: foto, pixel art, carboncino) presenta una varianza inter-seed maggiore rispetto al corpus dei soggetti (omogeneo: ritratti comic), esso risulterà meccanicamente più attenuato, producendo una coerenza apparente inferiore per puro artefatto psicometrico.
+
+Per quantificare e isolare questo fattore:
+- Per ciascun corpus, per ciascuna condizione e per ciascuno dei 4 spazi, viene calcolata l'**affidabilità split-half**:
+  1. I 5 seed vengono partizionati in 2 contro 3 su tutti i $\binom{5}{2} = 10$ split possibili.
+  2. Per ogni split si calcolano i due vettori di differenza dalla baseline indipendenti.
+  3. Si calcola il coseno direzionale tra le due metà e si media su tutti i 10 split e su tutti i prompt del corpus: $r_{2v3}$.
+  4. Si stima l'affidabilità a 5 seed tramite formula di Spearman-Brown:
+     $$r_5 = \frac{2 r_{2v3}}{1 + r_{2v3}}$$
+- Le metriche di affidabilità vengono tabulate e pubblicate come misura primaria di validità dello strumento.
+
+---
+
+## 6. Statistica Decisionale Disattenuata (Emendamento 2)
+
+La statistica di decisione primaria dell'esperimento viene corretta per l'affidabilità di ciascun corpus:
+
+$$\Delta \bar{C}_{\text{corretto}} = \frac{\bar{C}_{\text{soggetto}}}{r_{\text{soggetto}}} - \frac{\bar{C}_{\text{stile}}}{r_{\text{stile}}}$$
+
+dove $r_{\text{soggetto}}$ e $r_{\text{stile}}$ sono le affidabilità a 5 seed ($r_5$) ricalcolate dinamicamente **all'interno di ciascuna iterazione di permutazione**.
+Poiché sotto permutazione i 5 seed di un prompt viaggiano unitamente al prompt stesso, l'affidabilità del raggruppamento permutato è endogena e non dipende da costanti arbitrarie esterne.
+
+### Criterio di Decisione:
+- Vengono riportate sia la differenza grezza $\Delta \bar{C}$ sia la differenza corretta $\Delta \bar{C}_{\text{corretto}}$.
+- **Regola di Conferma**: L'ipotesi $\bar{C}_{\text{stile}} < \bar{C}_{\text{soggetto}}$ è considerata confermata **solo se sopravvive con $p < 0.05$ sulla statistica disattenuata $\Delta \bar{C}_{\text{corretto}}$**.
+- Se l'effetto è significativo solo sulla statistica grezza ma svanisce su quella disattenuata, il verdetto scientifico formale sarà: *"La minore coerenza fra stili è un artefatto di attenuazione dovuto alla maggiore varianza di misura dei prompt eterogenei"*.
+
+---
+
+## 7. Limiti Noti di Scambiabilità (Emendamento 4)
+
+Si dichiara a priori che i due corpora non differiscono esclusivamente per la dimensione "stile vs soggetto". Essi differiscono anche per:
+- Soggetto iconografico (un'auto da rally nella giungla per lo stile, ritratti singoli a mezzo busto per i soggetti).
+- Data di render e stage sperimentale.
+
+Il test di permutazione respinge l'ipotesi che l'etichetta di corpus sia priva di informazione; l'attribuzione causale allo stile poggia sulla coerenza del pattern attraverso i diversi spazi (specialmente lo Spazio 4 di tessitura) e sulla dose-risposta.
+
+---
+
+## 8. Gate di Qualità sull'Ampiezza 2.0x (Emendamento 5)
+
+L'ampiezza 2.0x corrisponde a uno spostamento $D \approx 0.108$, situato oltre il picco nominale di saturazione della dose-risposta ($0.75 - 1.00$).
+- Viene applicato a priori lo stesso gate dello Stage 8 Arm C: scostamento della media di condizione dalla media baseline su `edge_density` e `lbp_entropy` superiore a $3 \times \sigma_{\text{baseline}}$.
+- Le celle che violano la soglia $3\sigma$ vengono censite e marcate come **"Fuori range di displacement utilizzabile (Degradate)"** prima di esaminare i coseni.
+- Tali celle non vengono scartate a posteriori: il conteggio delle celle degradate a 2.0x costituisce di per sé una misura di stabilità geometrica del modello ad ampiezze sovra-sature.
