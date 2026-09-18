@@ -36,6 +36,7 @@ BLIND_DIR = os.path.join(VIEWER_DIR, "blind_headlights")
 MANIFEST_CSV = os.path.join(DATA_DIR, "stage9_images.csv")
 KEY_CSV = os.path.join(DATA_DIR, "stage9_headlights_key.csv")
 RAW_CSV = os.path.join(DATA_DIR, "stage9_headlights_raw.csv")
+BBOX_RAW_CSV = os.path.join(DATA_DIR, "stage9_bbox_raw.csv")
 
 SHUFFLE_SEED = 20260918
 SALT = "arthemy_stage10_blind_headlights_salt_v1"
@@ -159,6 +160,41 @@ class BlindScoringHandler(SimpleHTTPRequestHandler):
                 if not file_exists:
                     writer.writerow(["hash_id", "code", "timestamp_ms"])
                 writer.writerow([hash_id, code, ts])
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(b'{"status": "ok"}')
+        elif self.path == "/api/bbox":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            data = json.loads(body)
+
+            hash_id = data.get("hash_id")
+            top = data.get("top", [0, 0])
+            bottom = data.get("bottom", [0, 0])
+            left = data.get("left", [0, 0])
+            right = data.get("right", [0, 0])
+            w = data.get("bbox_width", 0)
+            h = data.get("bbox_height", 0)
+            area_frac = data.get("bbox_area_frac", 0.0)
+            ts = data.get("timestamp_ms")
+
+            file_exists = os.path.exists(BBOX_RAW_CSV)
+            with open(BBOX_RAW_CSV, "a", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                if not file_exists:
+                    writer.writerow([
+                        "hash_id", "top_x", "top_y", "bottom_x", "bottom_y",
+                        "left_x", "left_y", "right_x", "right_y",
+                        "bbox_width", "bbox_height", "bbox_area_frac", "timestamp_ms"
+                    ])
+                writer.writerow([
+                    hash_id, top[0], top[1], bottom[0], bottom[1],
+                    left[0], left[1], right[0], right[1],
+                    w, h, area_frac, ts
+                ])
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annotatore 4 Punti Carrozzeria · Stage 10</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #0d0f17;
+      --card-bg: #151824;
+      --border: #262b3d;
+      --text: #e2e8f0;
+      --muted: #8a94a6;
+      --accent: #3b82f6;
+      --top-col: #38bdf8;
+      --bottom-col: #4ade80;
+      --left-col: #fb923c;
+      --right-col: #c084fc;
+      --box-border: #f43f5e;
+      --box-fill: rgba(244, 63, 94, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .badge {
+      background: rgba(192, 132, 252, 0.15);
+      color: var(--right-col);
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(192, 132, 252, 0.3);
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .progress-bar-container {
+      width: 180px;
+      height: 7px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    /* Guida interattiva */
+    .instruction-bar {
+      background: #111420;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .current-step-msg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .step-pill {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .metrics-preview {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 16px;
+    }
+
+    .metrics-preview span b {
+      color: var(--text);
+    }
+
+    /* Workspace centrale */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      position: relative;
+    }
+
+    .viewport-card {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+      border: 1px solid var(--border);
+      background: #000;
+      display: inline-block;
+      cursor: crosshair;
+    }
+
+    #stage-canvas {
+      display: block;
+      max-height: 75vh;
+      max-width: 88vw;
+    }
+
+    .control-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #1e2232;
+      border-color: #3e4660;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: var(--border);
+    }
+
+    kbd {
+      background: #090a0f;
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+
+    .complete-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(13, 15, 23, 0.95);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .complete-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 32px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 480px;
+    }
+
+    .complete-card h2 {
+      font-size: 22px;
+      color: var(--bottom-col);
+      margin-bottom: 12px;
+    }
+
+    .complete-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <span class="title">Annotatore 4 Punti Dimensioni Veicolo</span>
+      <span class="badge">Ground Truth Cieca</span>
+    </div>
+    <div class="progress-wrap">
+      <span id="progress-text" class="progress-text">Caricamento...</span>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="instruction-bar">
+    <div id="step-msg" class="current-step-msg">
+      <span id="step-pill" class="step-pill" style="background: rgba(56, 189, 248, 0.2); color: var(--top-col);">PUNTO 1/4</span>
+      <span id="step-desc">Clicca il punto più in <b>ALTO</b> della macchina (tetto / alettone / antenna)</span>
+    </div>
+
+    <div class="metrics-preview">
+      <span>W: <b id="stat-w">-</b> px</span>
+      <span>H: <b id="stat-h">-</b> px</span>
+      <span>Area BBox: <b id="stat-area">-</b> %</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="viewport-card">
+      <canvas id="stage-canvas"></canvas>
+    </div>
+
+    <div class="control-actions">
+      <button id="btn-confirm" class="btn btn-primary" onclick="confirmCurrent()" disabled>
+        <kbd>Spazio / Invio</kbd> Conferma e Avanti
+      </button>
+      <button class="btn" onclick="resetPoints()">
+        <kbd>R</kbd> Resetta 4 Punti
+      </button>
+      <button class="btn" onclick="goBack()">
+        <kbd>← / Backspace</kbd> Indietro
+      </button>
+    </div>
+  </main>
+
+  <div id="complete-modal" class="complete-modal">
+    <div class="complete-card">
+      <h2>✓ Annotazione 4 Punti Completata!</h2>
+      <p>Tutti i 280 bounding box sono stati registrati con precisione sub-pixel.<br>
+      I dati grezzi sono stati salvati in <code>data/stage9_bbox_raw.csv</code>.<br>
+      Le coordinate saranno pubblicate su GitHub per piena verificabilità.</p>
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="downloadCSV()">
+        Scarica backup CSV
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let images = [];
+    let currentIndex = 0;
+    let records = []; // { hash_id, top, bottom, left, right, bbox_width, bbox_height, bbox_area_frac, timestamp_ms }
+    const STORAGE_KEY = "arthemy_bbox_annotations_stage10";
+
+    const canvas = document.getElementById("stage-canvas");
+    const ctx = canvas.getContext("2d");
+    let currentImageObj = new Image();
+
+    // 4 punti nello spazio coordinate naturali dell'immagine (1024 x 1280)
+    // punti: [ {x, y, type: 'top'}, {x, y, type: 'bottom'}, {x, y, type: 'left'}, {x, y, type: 'right'} ]
+    let currentPoints = [];
+
+    const POINT_STEPS = [
+      { name: "PUNTO 1/4: ALTO", desc: "Clicca il punto più in <b>ALTO</b> della macchina (tetto / alettone / antenna)", color: "#38bdf8" },
+      { name: "PUNTO 2/4: BASSO", desc: "Clicca il punto più in <b>BASSO</b> della macchina (gomme / contatto terra)", color: "#4ade80" },
+      { name: "PUNTO 3/4: SINISTRA", desc: "Clicca l'estremità più a <b>SINISTRA</b> della carrozzeria / ruota", color: "#fb923c" },
+      { name: "PUNTO 4/4: DESTRA", desc: "Clicca l'estremità più a <b>DESTRA</b> della carrozzeria / alettone", color: "#c084fc" }
+    ];
+
+    async function init() {
+      const res = await fetch("blind_order.json");
+      images = await res.json();
+
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          records = JSON.parse(saved);
+          currentIndex = records.length;
+        } catch(e) {
+          records = [];
+          currentIndex = 0;
+        }
+      }
+
+      if (currentIndex >= images.length) {
+        showComplete();
+      } else {
+        loadImage();
+      }
+    }
+
+    function loadImage() {
+      if (currentIndex >= images.length) {
+        showComplete();
+        return;
+      }
+      const item = images[currentIndex];
+      currentImageObj = new Image();
+      currentImageObj.onload = () => {
+        // Scala canvas mantenendo aspect ratio originale (1024x1280)
+        canvas.width = currentImageObj.naturalWidth || 1024;
+        canvas.height = currentImageObj.naturalHeight || 1280;
+
+        // Se avevamo gia' registrato punti per questo index (in caso di ritorno indietro)
+        if (currentIndex < records.length) {
+          const r = records[currentIndex];
+          currentPoints = [
+            { x: r.top[0], y: r.top[1], type: 'top' },
+            { x: r.bottom[0], y: r.bottom[1], type: 'bottom' },
+            { x: r.left[0], y: r.left[1], type: 'left' },
+            { x: r.right[0], y: r.right[1], type: 'right' }
+          ];
+        } else {
+          currentPoints = [];
+        }
+
+        renderCanvas();
+        updateUI();
+      };
+      currentImageObj.src = "blind_headlights/" + item.filename;
+    }
+
+    function updateUI() {
+      const item = images[currentIndex];
+      document.getElementById("progress-text").innerText = `${currentIndex + 1} / ${images.length} (${Math.round((currentIndex / images.length) * 100)}%)`;
+      document.getElementById("progress-bar").style.width = `${(currentIndex / images.length) * 100}%`;
+
+      const stepIdx = Math.min(currentPoints.length, 3);
+      const stepInfo = POINT_STEPS[stepIdx];
+      const stepPill = document.getElementById("step-pill");
+      const stepDesc = document.getElementById("step-desc");
+      const btnConfirm = document.getElementById("btn-confirm");
+
+      if (currentPoints.length < 4) {
+        stepPill.innerText = stepInfo.name;
+        stepPill.style.color = stepInfo.color;
+        stepPill.style.background = stepInfo.color + "22";
+        stepDesc.innerHTML = stepInfo.desc;
+        btnConfirm.disabled = true;
+      } else {
+        stepPill.innerText = "✓ 4 PUNTI POSIZIONATI";
+        stepPill.style.color = "#f43f5e";
+        stepPill.style.background = "#f43f5e22";
+        stepDesc.innerHTML = "<b>Inviluppo calcolato.</b> Premi <kbd>Spazio / Invio</kbd> per salvare e andare avanti.";
+        btnConfirm.disabled = false;
+      }
+
+      // Calcola metriche se abbiamo almeno 4 punti
+      if (currentPoints.length === 4) {
+        const topY = currentPoints[0].y;
+        const botY = currentPoints[1].y;
+        const leftX = currentPoints[2].x;
+        const rightX = currentPoints[3].x;
+
+        const w = Math.round(Math.abs(rightX - leftX));
+        const h = Math.round(Math.abs(botY - topY));
+        const areaFrac = ((w * h) / (canvas.width * canvas.height)) * 100;
+
+        document.getElementById("stat-w").innerText = w;
+        document.getElementById("stat-h").innerText = h;
+        document.getElementById("stat-area").innerText = areaFrac.toFixed(2);
+      } else {
+        document.getElementById("stat-w").innerText = "-";
+        document.getElementById("stat-h").innerText = "-";
+        document.getElementById("stat-area").innerText = "-";
+      }
+    }
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(currentImageObj, 0, 0, canvas.width, canvas.height);
+
+      // Disegna Bounding Box se abbiamo tutti e 4 i punti
+      if (currentPoints.length === 4) {
+        const topY = Math.min(currentPoints[0].y, currentPoints[1].y);
+        const botY = Math.max(currentPoints[0].y, currentPoints[1].y);
+        const leftX = Math.min(currentPoints[2].x, currentPoints[3].x);
+        const rightX = Math.max(currentPoints[2].x, currentPoints[3].x);
+        const w = rightX - leftX;
+        const h = botY - topY;
+
+        // Riempimento e bordo bounding box
+        ctx.fillStyle = "rgba(244, 63, 94, 0.15)";
+        ctx.fillRect(leftX, topY, w, h);
+        ctx.strokeStyle = "#f43f5e";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 6]);
+        ctx.strokeRect(leftX, topY, w, h);
+        ctx.setLineDash([]);
+      }
+
+      // Disegna i punti posizionati finora
+      currentPoints.forEach((pt, i) => {
+        const info = POINT_STEPS[i];
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 8, 0, Math.PI * 2);
+        ctx.fillStyle = info.color;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+
+        // Label del punto
+        ctx.font = "bold 18px 'IBM Plex Mono', monospace";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 4;
+        ctx.fillText(info.name.split(":")[1].trim(), pt.x + 12, pt.y + 6);
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    // Gestione click su canvas per acquisire punto in coordinate reali (1024x1280)
+    canvas.addEventListener("click", (e) => {
+      if (currentPoints.length >= 4) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const realX = Math.round((e.clientX - rect.left) * scaleX);
+      const realY = Math.round((e.clientY - rect.top) * scaleY);
+
+      currentPoints.push({ x: realX, y: realY });
+      renderCanvas();
+      updateUI();
+    });
+
+    async function confirmCurrent() {
+      if (currentPoints.length < 4) return;
+      const item = images[currentIndex];
+      const ts = Date.now();
+
+      const topY = Math.min(currentPoints[0].y, currentPoints[1].y);
+      const botY = Math.max(currentPoints[0].y, currentPoints[1].y);
+      const leftX = Math.min(currentPoints[2].x, currentPoints[3].x);
+      const rightX = Math.max(currentPoints[2].x, currentPoints[3].x);
+      const w = rightX - leftX;
+      const h = botY - topY;
+      const areaFrac = (w * h) / (canvas.width * canvas.height);
+
+      const payload = {
+        hash_id: item.hash_id,
+        top: [currentPoints[0].x, currentPoints[0].y],
+        bottom: [currentPoints[1].x, currentPoints[1].y],
+        left: [currentPoints[2].x, currentPoints[2].y],
+        right: [currentPoints[3].x, currentPoints[3].y],
+        bbox_width: w,
+        bbox_height: h,
+        bbox_area_frac: areaFrac,
+        timestamp_ms: ts
+      };
+
+      if (currentIndex < records.length) {
+        records[currentIndex] = payload;
+      } else {
+        records.push(payload);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+
+      try {
+        await fetch("/api/bbox", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn("Errore salvataggio server, salvato in local storage", err);
+      }
+
+      currentIndex++;
+      loadImage();
+    }
+
+    function resetPoints() {
+      currentPoints = [];
+      renderCanvas();
+      updateUI();
+    }
+
+    function goBack() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        loadImage();
+      }
+    }
+
+    function showComplete() {
+      document.getElementById("complete-modal").style.display = "flex";
+      document.getElementById("progress-text").innerText = `${images.length} / ${images.length} (100%)`;
+      document.getElementById("progress-bar").style.width = `100%`;
+    }
+
+    function downloadCSV() {
+      let csv = "hash_id,top_x,top_y,bottom_x,bottom_y,left_x,left_y,right_x,right_y,bbox_width,bbox_height,bbox_area_frac,timestamp_ms\n";
+      for (const r of records) {
+        csv += `${r.hash_id},${r.top[0]},${r.top[1]},${r.bottom[0]},${r.bottom[1]},${r.left[0]},${r.left[1]},${r.right[0]},${r.right[1]},${r.bbox_width},${r.bbox_height},${r.bbox_area_frac},${r.timestamp_ms}\n`;
+      }
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "stage9_bbox_raw.csv";
+      a.click();
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        if (currentPoints.length === 4) {
+          e.preventDefault();
+          confirmCurrent();
+        }
+      } else if (e.key === "r" || e.key === "R") {
+        resetPoints();
+      } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
+        goBack();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
