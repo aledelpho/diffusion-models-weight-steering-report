@@ -1,0 +1,62 @@
+[
+  {
+    "prompt_id": "S01_oil",
+    "prompt_sha1": "6de4189f5e",
+    "style": "classic oil painting on textured canvas, visible impasto brushwork, rich blending, fine art realism",
+    "text": "Style: classic oil painting on textured canvas, visible impasto brushwork, rich blending, fine art realism. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S02_linocut",
+    "prompt_sha1": "e20e86ac75",
+    "style": "bold linocut print, sharp relief carving, graphic ink lines, paper texture, stark contrasts",
+    "text": "Style: bold linocut print, sharp relief carving, graphic ink lines, paper texture, stark contrasts. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S03_cyberpunk",
+    "prompt_sha1": "6ab02b69aa",
+    "style": "neon cyberpunk digital art, glowing vibrant neon lights, glossy surfaces, chromatic aberration, high-tech aesthetic",
+    "text": "Style: neon cyberpunk digital art, glowing vibrant neon lights, glossy surfaces, chromatic aberration, high-tech aesthetic. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S04_gouache",
+    "prompt_sha1": "6335032007",
+    "style": "opaque gouache illustration, matte finish, layered flat brushstrokes, vibrant poster art",
+    "text": "Style: opaque gouache illustration, matte finish, layered flat brushstrokes, vibrant poster art. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S05_pencil",
+    "prompt_sha1": "9a68323a39",
+    "style": "detailed graphite pencil drawing, fine cross-hatching, smooth shading, tonal gradients, sketchbook paper",
+    "text": "Style: detailed graphite pencil drawing, fine cross-hatching, smooth shading, tonal gradients, sketchbook paper. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S06_pastel",
+    "prompt_sha1": "61861c7677",
+    "style": "soft chalk pastel drawing, powdery texture, smudged colors, velvety highlights, tinted paper",
+    "text": "Style: soft chalk pastel drawing, powdery texture, smudged colors, velvety highlights, tinted paper. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S07_comic",
+    "prompt_sha1": "69f4e68eba",
+    "style": "classic western comic book art, dynamic ink inking, halftones, benday dots, cel shading",
+    "text": "Style: classic western comic book art, dynamic ink inking, halftones, benday dots, cel shading. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S08_papercraft",
+    "prompt_sha1": "17e466c859",
+    "style": "layered cut paper craft, 3D paper collage, visible paper edges, cast shadows, tactile depth",
+    "text": "Style: layered cut paper craft, 3D paper collage, visible paper edges, cast shadows, tactile depth. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S09_fresco",
+    "prompt_sha1": "9e81add78f",
+    "style": "ancient Renaissance fresco mural, weathered plaster texture, distressed pigment, crackled wall surface",
+    "text": "Style: ancient Renaissance fresco mural, weathered plaster texture, distressed pigment, crackled wall surface. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  },
+  {
+    "prompt_id": "S10_synthwave",
+    "prompt_sha1": "25147e923b",
+    "style": "retro 80s synthwave vector art, wireframe grid, duotone gradient, airbrush aesthetic, retrowave styling",
+    "text": "Style: retro 80s synthwave vector art, wireframe grid, duotone gradient, airbrush aesthetic, retrowave styling. Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky."
+  }
+]

@@ -138,3 +138,34 @@ spegne, con la stessa clausola sul segno sbagliato.
 * Non si guardano le diagnostiche 1–3 prima che l'annotazione sia chiusa.
 * Non si modificano i prompt dopo l'hash.
 * Non si scarta nessuna cella per degradazione.
+
+---
+
+## Registrazione Formale del Corpus e Scelta del Budget (2026-09-18)
+
+In accordo con le decisioni operative approvate prima del lancio dei render:
+
+### 1. Budget Scelto: 250 Render (Ingrandimento BBox + Conferma Fari)
+- **5 Condizioni**: `baseline`, `blockshuf_neg_1x`, `blockshuf_neg_2x`, `preset_pos_1x`, `preset_pos_2x`
+- **5 Seed standard**: `42`, `777`, `1337`, `9999`, `4242145`
+- **Totale**: 10 stili × 5 condizioni × 5 seed = **250 render**
+- **Doppia ipotesi confermativa**:
+  1. *Ingrandimento BBox*: $\rho > 1$ su `blockshuf_neg_1x` e `blockshuf_neg_2x`, con $2\text{x} > 1\text{x}$; $\rho < 1$ su `preset_pos_2x`.
+  2. *Accensione Fari*: tasso fari accesi $\text{Rate}(\text{preset\_pos}) > \text{Rate}(\text{baseline})$ e $\text{Rate}(\text{blockshuf\_neg}) < \text{Rate}(\text{baseline})$.
+
+### 2. Manifest dei 10 Prompt e Hash Congelati
+Soggetto comune a tutti i 10 prompt:
+`Subject: a red and white vintage sports car cruising along a scenic coastal cliff road, ocean waves, rocky shoreline, golden hour, clear sky.`
+
+| Prompt ID | SHA-1 (10 hex) | Stile Dichiarato |
+| :--- | :---: | :--- |
+| `S01_oil` | `6de4189f5e` | classic oil painting on textured canvas, visible impasto brushwork, rich blending, fine art realism |
+| `S02_linocut` | `e20e86ac75` | bold linocut print, sharp relief carving, graphic ink lines, paper texture, stark contrasts |
+| `S03_cyberpunk` | `6ab02b69aa` | neon cyberpunk digital art, glowing vibrant neon lights, glossy surfaces, chromatic aberration, high-tech aesthetic |
+| `S04_gouache` | `6335032007` | opaque gouache illustration, matte finish, layered flat brushstrokes, vibrant poster art |
+| `S05_pencil` | `9a68323a39` | detailed graphite pencil drawing, fine cross-hatching, smooth shading, tonal gradients, sketchbook paper |
+| `S06_pastel` | `61861c7677` | soft chalk pastel drawing, powdery texture, smudged colors, velvety highlights, tinted paper |
+| `S07_comic` | `69f4e68eba` | classic western comic book art, dynamic ink inking, halftones, benday dots, cel shading |
+| `S08_papercraft` | `17e466c859` | layered cut paper craft, 3D paper collage, visible paper edges, cast shadows, tactile depth |
+| `S09_fresco` | `9e81add78f` | ancient Renaissance fresco mural, weathered plaster texture, distressed pigment, crackled wall surface |
+| `S10_synthwave` | `25147e923b` | retro 80s synthwave vector art, wireframe grid, duotone gradient, airbrush aesthetic, retrowave styling |
