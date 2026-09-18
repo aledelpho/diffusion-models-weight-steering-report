@@ -1,0 +1,85 @@
+{
+  "n_trials": 20,
+  "n_answered": 20,
+  "k_both": 12,
+  "p_both_h0": 0.08333333333333333,
+  "pval_both": 7.456040259969822e-09,
+  "k_blockshuf_2x": 12,
+  "pval_blockshuf_2x": 0.000935391579332645,
+  "k_preset_pos_2x": 17,
+  "pval_preset_pos_2x": 2.9604962037410587e-08,
+  "confusion_blockshuf_2x": {
+    "blockshuf_neg_2x": 12,
+    "blockshuf_neg_1x": 5,
+    "preset_pos_2x": 2,
+    "baseline": 1
+  },
+  "confusion_preset_pos_2x": {
+    "preset_pos_2x": 17,
+    "blockshuf_neg_2x": 2,
+    "baseline": 1,
+    "blockshuf_neg_1x": 0
+  },
+  "style_breakdown": {
+    "S01_oil": {
+      "total": 2,
+      "both_correct": 1,
+      "b2_correct": 1,
+      "p2_correct": 2
+    },
+    "S02_linocut": {
+      "total": 2,
+      "both_correct": 1,
+      "b2_correct": 1,
+      "p2_correct": 1
+    },
+    "S03_cyberpunk": {
+      "total": 2,
+      "both_correct": 0,
+      "b2_correct": 0,
+      "p2_correct": 0
+    },
+    "S04_gouache": {
+      "total": 2,
+      "both_correct": 2,
+      "b2_correct": 2,
+      "p2_correct": 2
+    },
+    "S05_pencil": {
+      "total": 2,
+      "both_correct": 2,
+      "b2_correct": 2,
+      "p2_correct": 2
+    },
+    "S06_pastel": {
+      "total": 2,
+      "both_correct": 0,
+      "b2_correct": 0,
+      "p2_correct": 2
+    },
+    "S07_comic": {
+      "total": 2,
+      "both_correct": 2,
+      "b2_correct": 2,
+      "p2_correct": 2
+    },
+    "S08_papercraft": {
+      "total": 2,
+      "both_correct": 2,
+      "b2_correct": 2,
+      "p2_correct": 2
+    },
+    "S09_fresco": {
+      "total": 2,
+      "both_correct": 2,
+      "b2_correct": 2,
+      "p2_correct": 2
+    },
+    "S10_synthwave": {
+      "total": 2,
+      "both_correct": 0,
+      "b2_correct": 0,
+      "p2_correct": 2
+    }
+  }
+}

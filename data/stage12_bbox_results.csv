@@ -1,0 +1,4 @@
+condition,rho_mean,rho_geometric,delta_area_pct,p_raw_signflip,p_adj_holm,verdict
+blockshuf_neg_1x,1.0638,1.0608,1.251,0.0449,0.0898,NOT_SIGNIFICANT
+blockshuf_neg_2x,1.2518,1.2342,5.097,0.0117,0.0352,CONFERMATO
+preset_pos_2x,0.9918,0.9895,-0.224,0.6543,0.6543,NOT_SIGNIFICANT

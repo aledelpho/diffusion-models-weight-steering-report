@@ -26,8 +26,6 @@ import itertools
 import numpy as np
 import pandas as pd
 from scipy import stats
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 REPORT_ROOT = os.path.abspath(os.path.join(_HERE, ".."))
@@ -115,15 +113,34 @@ def main():
     # =========================================================================
     print("\n--- DIAGNOSTICA 2: REGRESSIONE DEI DISTURBI SULL'AREA ---")
     try:
-        reg_model = smf.ols("area_frac ~ sat_factor + lum_factor + noise_sigma + C(prompt_id)", data=primaries).fit()
-        print(reg_model.summary().tables[1])
-        sat_p = reg_model.pvalues.get("sat_factor", np.nan)
+        covars = ["sat_factor", "lum_factor", "noise_sigma"]
+        prompt_dummies = pd.get_dummies(primaries["prompt_id"], drop_first=True, dtype=float)
+        X_df = primaries[covars].astype(float).join(prompt_dummies)
+        X_df.insert(0, "const", 1.0)
+        X = X_df.values
+        y = primaries["area_frac"].astype(float).values
+        n_obs, n_params = X.shape
+        params, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
+        resid = y - X @ params
+        df_e = n_obs - n_params
+        sigma2 = np.sum(resid ** 2) / df_e
+        cov_params = sigma2 * np.linalg.inv(X.T @ X)
+        se = np.sqrt(np.diagonal(cov_params))
+        t_stats = params / se
+        p_vals = 2.0 * (1.0 - stats.t.cdf(np.abs(t_stats), df=df_e))
+
+        print(f"  {'Param':<15} | {'Coef':<10} | {'StdErr':<10} | {'t':<8} | {'p-value':<10}")
+        print("  " + "-" * 60)
+        for name, coef_val, s_err, t_stat, p_v in zip(X_df.columns[:4], params[:4], se[:4], t_stats[:4], p_vals[:4]):
+            print(f"  {name:<15} | {coef_val:+10.5f} | {s_err:10.5f} | {t_stat:+8.3f} | {p_v:10.4e}")
+
+        sat_p = p_vals[1]
         if sat_p > 0.05:
             print(f"  >> ESITO BIAS SATURAZIONE: ESCLUSO PER MISURA (p = {sat_p:.4f} > 0.05)")
         else:
             print(f"  >> ATTENZIONE: Effetto residuo della saturazione presente (p = {sat_p:.4f})")
     except Exception as e:
-        print(f"  Regressione non disponibile: {e}")
+        print(f"  Regressione non riuscita: {e}")
 
     # =========================================================================
     # DIAGNOSTICA 3: ACCOPPIAMENTO DIMENSIONE - COLORE (BASELINE NUOVO CORPUS)
