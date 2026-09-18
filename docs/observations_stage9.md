@@ -162,3 +162,89 @@ spostamento:
 Se regge, è la distinzione struttura/magnitudine del progetto riformulata su un asse nuovo: non
 *quanto* si muove l'immagine, ma *quale livello* della generazione viene toccato — resa contro
 contenuto. È l'ipotesi più interessante emersa da stage 9, e non è stata testata da niente.
+
+---
+
+## Osservazioni 3-6 — registrate 2026-09-18, con quantificazione sugli stessi render
+
+Alessandro, chiudendo il giro:
+
+> `preset_pos` x2 sembra desaturare, sfocare e sgranare leggermente le immagini.
+> `rand_pos` x2 sembra solo aggiungere una leggera grana all'immagine.
+> `preset_pos` e la sua versione x2 sembrano entrambi tendere verso un'accensione dei fari — che può
+> essere un tratto "incluso" nella definizione di macchina, ma tale specifica non era stata espressa
+> dal prompt. Un tratto emergente con maggiore probabilità rispetto agli altri preset.
+> `preset_pos` tende anche a scurire le immagini.
+> `blockshuffle_neg` inoltre ingrandisce generalmente il soggetto all'interno della scena.
+
+`experiments/stage9_observation_quantification.py` mette un numero su quelle misurabili con colonne
+già estratte. **Non è conferma**: è il passaggio "l'occhio diceva 95%, la misura dice 96.7%" del
+prereg dell'asse di hatching. Sono gli stessi render che hanno generato l'osservazione.
+
+### Quantificate e sostenute
+
+| osservazione | metrica | `preset_pos` 1x | `preset_pos` 2x | concordanza a 2x |
+| --- | --- | --- | --- | --- |
+| scurisce | L\* medio pesato | −1.76 | −3.30 | 7/8 prompt · 32/40 immagini |
+| desatura | croma media pesata | −1.22 | −1.38 | 6/8 · 26/40 |
+| desatura | `colorfulness_hs` | −2.17 | −3.54 | 7/8 · 32/40 |
+| sgrana | `lbp_entropy` | +0.04 | +0.07 | **8/8 · 40/40** |
+
+E sono **specifiche della condizione**, il che è il punto: sulle stesse metriche `blockshuf_neg` va
+nella direzione opposta, con concordanza altrettanto netta.
+
+| metrica | `preset_pos` 2x | `blockshuf_neg` 2x |
+| --- | --- | --- |
+| `colorfulness_hs` | **−3.54** (7/8 in negativo) | **+27.69** (8/8 · 40/40 in positivo) |
+| `lbp_entropy` | **+0.07** (8/8 · 40/40) | **−0.32** (8/8 · 37/40 in negativo) |
+| L\* medio | −3.30 | +0.87 |
+
+Due operatori quasi opposti su tre assi misurabili. `preset_pos` scurisce, desatura e sgrana;
+`blockshuf_neg` schiarisce, satura fortemente e leviga.
+
+### Non sostenuta dai numeri
+
+**`rand_pos` x2 "aggiunge solo una leggera grana"** non regge sull'entropia LBP: +0.004 a 1x e
+−0.037 a 2x, con 4/8 prompt. Quello che `rand_pos` 2x fa in modo netto è invece **saturare**
+(`colorfulness_hs` +9.13, 8/8 prompt, 38/40 immagini), che l'osservazione non menziona. Due letture
+possibili e non separate: o l'impressione di grana era sbagliata, o `lbp_entropy` non misura ciò che
+in italiano si chiama grana (è diversità di pattern binari locali, non rumore ad alta frequenza) e
+serve un proxy diverso, per esempio la quota di energia nelle bande alte della FFT.
+
+### Non misurabile con gli strumenti attuali
+
+**`blockshuf_neg` ingrandisce il soggetto.** La colonna `subject_frac` dà il segno opposto (−0.008 a
+1x, −0.029 a 2x), ma **quella colonna non misura questo**: è definita come complemento della "carta"
+stimata dai cluster a luminanza estrema, ed è tarata su ritratti in primo piano con `white
+background`. Su una scena di giungla non c'è nessuna carta, quindi il numero non riguarda la
+dimensione dell'auto. L'osservazione **non è testata**, né a favore né contro.
+
+La metrica giusta è quella che Alessandro ha proposto da sé: **frazione di area occupata dal
+giallo-blu dell'auto**. Va costruita — segmentazione per colore della carrozzeria e area relativa — e
+non esiste ancora.
+
+**Accensione dei fari.** Non misurabile automaticamente, richiede scoring binario cieco alla
+condizione. Va trattata con l'impianto dell'Esperimento 2, che è il pezzo di metodologia più solido
+del progetto.
+
+## L'osservazione dei fari è la più importante, e potrebbe falsificare una conclusione a verbale
+
+I fari non sono nominati nel prompt. Sono un tratto **implicato dall'oggetto** — una macchina ha i
+fari — che emerge preferenzialmente sotto una condizione. Confrontato con l'Esperimento 2:
+
+| | barnacoli (Esp. 2) | fari (osservazione) |
+| --- | --- | --- |
+| il tratto è nel prompt? | **sì**, e veniva ignorato | **no**, non è mai nominato |
+| cosa fa la perturbazione | *recupera* un legame già stabilito dal testo | *aggiunge* un tratto dal prior dell'oggetto |
+
+§2.2 conclude: *"la perturbazione non aggiunge l'attributo e non ripara la negligenza — agisce come
+guadagno su un legame che il prompt deve già avere stabilito"*. Se i fari reggono, **quella frase è
+troppo forte** e va ristretta: la perturbazione può anche alzare la salienza di tratti che vengono
+dal prior dell'oggetto e non dal testo. È una potenziale falsificazione di una conclusione pubblicata,
+prodotta guardando.
+
+**Confound da escludere per primo, ed è ora quantificato.** `preset_pos` è la condizione che scurisce
+(7/8 prompt, 32/40 immagini). Fari accesi sono più probabili in una scena scura. Quindi il test deve
+appaiare sulla luminanza: si scorano i fari alla cieca e si verifica se l'effetto sopravvive a parità
+di L\* misurato, oppure se scompare una volta tenuta ferma la luminosità. I due sono separabili con i
+dati che ci sono più una passata di scoring.

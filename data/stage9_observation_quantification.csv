@@ -1,0 +1,37 @@
+observation,metric,source,condition,delta,prompts_pos,prompts_n,images_pos,images_n
+oss.6 preset_pos scurisce,L_mean,palette,preset_pos_1x,-1.7579864826250229,2,8,11,40
+oss.6 preset_pos scurisce,L_mean,palette,preset_pos_2x,-3.3032888549672776,1,8,8,40
+oss.6 preset_pos scurisce,L_mean,palette,blockshuf_neg_1x,2.1983594273600335,5,8,28,40
+oss.6 preset_pos scurisce,L_mean,palette,blockshuf_neg_2x,0.8660228604889996,5,8,20,40
+oss.6 preset_pos scurisce,L_mean,palette,rand_pos_1x,1.1710887879678755,5,8,29,40
+oss.6 preset_pos scurisce,L_mean,palette,rand_pos_2x,0.6692863332890719,5,8,22,40
+oss.3 preset_pos desatura,C_mean,palette,preset_pos_1x,-1.2240226247551194,1,8,9,40
+oss.3 preset_pos desatura,C_mean,palette,preset_pos_2x,-1.3781891696210513,2,8,14,40
+oss.3 preset_pos desatura,C_mean,palette,blockshuf_neg_1x,2.1335744292552348,6,8,25,40
+oss.3 preset_pos desatura,C_mean,palette,blockshuf_neg_2x,6.129951265637902,8,8,37,40
+oss.3 preset_pos desatura,C_mean,palette,rand_pos_1x,0.7425951092872289,5,8,26,40
+oss.3 preset_pos desatura,C_mean,palette,rand_pos_2x,2.656591468315942,6,8,27,40
+oss.8 blockshuf_neg ingrandisce,subject_frac,palette,preset_pos_1x,0.00826500000000001,6,8,26,40
+oss.8 blockshuf_neg ingrandisce,subject_frac,palette,preset_pos_2x,0.0070449999999999974,6,8,28,40
+oss.8 blockshuf_neg ingrandisce,subject_frac,palette,blockshuf_neg_1x,-0.007767499999999995,4,8,15,40
+oss.8 blockshuf_neg ingrandisce,subject_frac,palette,blockshuf_neg_2x,-0.028764999999999995,4,8,16,40
+oss.8 blockshuf_neg ingrandisce,subject_frac,palette,rand_pos_1x,0.013725000000000005,6,8,22,40
+oss.8 blockshuf_neg ingrandisce,subject_frac,palette,rand_pos_2x,0.006702499999999999,5,8,19,40
+oss.3 desaturazione (colorfulness),colorfulness_hs,style,preset_pos_1x,-2.1700815677642824,1,8,9,40
+oss.3 desaturazione (colorfulness),colorfulness_hs,style,preset_pos_2x,-3.540725588798523,1,8,8,40
+oss.3 desaturazione (colorfulness),colorfulness_hs,style,blockshuf_neg_1x,6.684322929382326,8,8,39,40
+oss.3 desaturazione (colorfulness),colorfulness_hs,style,blockshuf_neg_2x,27.68734006881714,8,8,40,40
+oss.3 desaturazione (colorfulness),colorfulness_hs,style,rand_pos_1x,1.4362867355346676,5,8,20,40
+oss.3 desaturazione (colorfulness),colorfulness_hs,style,rand_pos_2x,9.127470588684082,8,8,38,40
+oss.3/4 grana,lbp_entropy,style,preset_pos_1x,0.03663644410563025,8,8,39,40
+oss.3/4 grana,lbp_entropy,style,preset_pos_2x,0.0698421542264084,8,8,40,40
+oss.3/4 grana,lbp_entropy,style,blockshuf_neg_1x,-0.05937529895439089,2,8,10,40
+oss.3/4 grana,lbp_entropy,style,blockshuf_neg_2x,-0.32228658539779687,0,8,3,40
+oss.3/4 grana,lbp_entropy,style,rand_pos_1x,0.003686726075320945,6,8,26,40
+oss.3/4 grana,lbp_entropy,style,rand_pos_2x,-0.036620696188181326,4,8,18,40
+oss.3 sfocatura,edge_density,style,preset_pos_1x,-0.0008572959899902305,3,8,15,40
+oss.3 sfocatura,edge_density,style,preset_pos_2x,0.0009074783325195308,3,8,17,40
+oss.3 sfocatura,edge_density,style,blockshuf_neg_1x,-0.01665536880493164,1,8,5,40
+oss.3 sfocatura,edge_density,style,blockshuf_neg_2x,-0.043493747711181634,1,8,2,40
+oss.3 sfocatura,edge_density,style,rand_pos_1x,0.006313877105712888,5,8,23,40
+oss.3 sfocatura,edge_density,style,rand_pos_2x,-0.012188396453857431,1,8,9,40
