@@ -1,0 +1,25 @@
+prompt,treatment,z_edge_density,z_lbp_entropy,status
+S1,preset_pos_2x,6.704,2.464,DEGRADED (OUT_OF_RANGE)
+S1,blockshuf_neg_2x,22.418,11.018,DEGRADED (OUT_OF_RANGE)
+S1,rand_pos_2x,1.687,0.505,PASS
+S2,preset_pos_2x,2.448,2.876,PASS
+S2,blockshuf_neg_2x,0.359,0.088,PASS
+S2,rand_pos_2x,5.972,3.177,DEGRADED (OUT_OF_RANGE)
+S3,preset_pos_2x,0.203,3.395,DEGRADED (OUT_OF_RANGE)
+S3,blockshuf_neg_2x,6.622,17.834,DEGRADED (OUT_OF_RANGE)
+S3,rand_pos_2x,2.125,5.755,DEGRADED (OUT_OF_RANGE)
+S4,preset_pos_2x,5.345,1.786,DEGRADED (OUT_OF_RANGE)
+S4,blockshuf_neg_2x,6.136,2.645,DEGRADED (OUT_OF_RANGE)
+S4,rand_pos_2x,5.088,0.601,DEGRADED (OUT_OF_RANGE)
+S5,preset_pos_2x,5.183,9.030,DEGRADED (OUT_OF_RANGE)
+S5,blockshuf_neg_2x,7.470,13.398,DEGRADED (OUT_OF_RANGE)
+S5,rand_pos_2x,4.615,4.102,DEGRADED (OUT_OF_RANGE)
+S6,preset_pos_2x,4.872,5.166,DEGRADED (OUT_OF_RANGE)
+S6,blockshuf_neg_2x,8.229,15.224,DEGRADED (OUT_OF_RANGE)
+S6,rand_pos_2x,4.450,0.033,DEGRADED (OUT_OF_RANGE)
+S7,preset_pos_2x,0.745,2.039,PASS
+S7,blockshuf_neg_2x,2.128,1.518,PASS
+S7,rand_pos_2x,2.518,3.047,DEGRADED (OUT_OF_RANGE)
+S8,preset_pos_2x,5.269,4.189,DEGRADED (OUT_OF_RANGE)
+S8,blockshuf_neg_2x,12.747,131.715,DEGRADED (OUT_OF_RANGE)
+S8,rand_pos_2x,0.360,2.913,PASS

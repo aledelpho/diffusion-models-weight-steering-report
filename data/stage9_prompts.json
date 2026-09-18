@@ -1,0 +1,50 @@
+[
+  {
+    "prompt_id": "S1_photo",
+    "prompt_sha1": "3dd4956c29",
+    "style": "realistic photography, stock photo, realism, photographic detail",
+    "text": "Style: realistic photography, stock photo, realism, photographic detail. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S2_watercolor",
+    "prompt_sha1": "aded1ad92b",
+    "style": "watercolor painting, soft colors, wet-on-wet washes, visible paper grain",
+    "text": "Style: watercolor painting, soft colors, wet-on-wet washes, visible paper grain. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S3_lowpoly",
+    "prompt_sha1": "eb2c25425b",
+    "style": "lowpoly 3D, retro videogame artstyle, flat shaded polygons, faceted geometry",
+    "text": "Style: lowpoly 3D, retro videogame artstyle, flat shaded polygons, faceted geometry. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S4_claymation",
+    "prompt_sha1": "47e50abd86",
+    "style": "claymation, stop-motion animation, plasticine textures, tactile studio lighting",
+    "text": "Style: claymation, stop-motion animation, plasticine textures, tactile studio lighting. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S5_ukiyoe",
+    "prompt_sha1": "831f2d868c",
+    "style": "traditional Japanese woodblock print, ukiyo-e, flat ink colors, intricate line work, vintage paper texture",
+    "text": "Style: traditional Japanese woodblock print, ukiyo-e, flat ink colors, intricate line work, vintage paper texture. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S6_pixel",
+    "prompt_sha1": "b369f4266a",
+    "style": "8-bit pixel art, retro arcade graphics, crisp blocky edges, limited color palette",
+    "text": "Style: 8-bit pixel art, retro arcade graphics, crisp blocky edges, limited color palette. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S7_glass",
+    "prompt_sha1": "80cb4b3354",
+    "style": "stained glass window mosaic, vibrant translucent glass pieces, thick dark lead outlines, back-illuminated",
+    "text": "Style: stained glass window mosaic, vibrant translucent glass pieces, thick dark lead outlines, back-illuminated. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  },
+  {
+    "prompt_id": "S8_charcoal",
+    "prompt_sha1": "eda77bf9e8",
+    "style": "rough charcoal sketch, monochromatic, aggressive smudged strokes, high contrast black and white",
+    "text": "Style: rough charcoal sketch, monochromatic, aggressive smudged strokes, high contrast black and white. Subject: a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."
+  }
+]

@@ -1,0 +1,25 @@
+amplitude,space,condition_style,condition_subject,c_style_raw,c_subject_raw,delta_c_raw,p_value_raw,r5_style,r5_subject,c_style_disatt,c_subject_disatt,delta_c_disatt,p_value_disatt,decision
+Ampiezza 1.0x,"1. 24-D Completo (L*, a*, b*)",preset_pos_1x,preset_pos,0.1284,0.0244,-0.1040,0.9914,0.4660,0.3284,0.2755,0.0743,-0.2012,0.9672,NOT_SIGNIFICANT
+Ampiezza 1.0x,"1. 24-D Completo (L*, a*, b*)",blockshuf_neg_1x,blockshuf_neg,-0.0034,0.0111,0.0145,0.4069,0.5698,0.4700,-0.0060,0.0236,0.0296,0.3999,NOT_SIGNIFICANT
+Ampiezza 1.0x,"1. 24-D Completo (L*, a*, b*)",rand_pos_1x,rand_pos,-0.0423,-0.0093,0.0330,0.1772,0.5489,0.2697,-0.0771,-0.0344,0.0427,0.3293,NOT_SIGNIFICANT
+Ampiezza 1.0x,2. 8-D Solo Luminanza (L*),preset_pos_1x,preset_pos,0.3538,0.0936,-0.2602,0.9978,0.3942,0.5006,0.8974,0.1870,-0.7104,0.9988,NOT_SIGNIFICANT
+Ampiezza 1.0x,2. 8-D Solo Luminanza (L*),blockshuf_neg_1x,blockshuf_neg,-0.0007,-0.0355,-0.0348,0.7625,0.5688,0.3390,-0.0013,-0.1048,-0.1035,0.7904,NOT_SIGNIFICANT
+Ampiezza 1.0x,2. 8-D Solo Luminanza (L*),rand_pos_1x,rand_pos,-0.0304,-0.0303,0.0001,0.5816,0.4874,0.2489,-0.0625,-0.1218,-0.0594,0.6416,NOT_SIGNIFICANT
+Ampiezza 1.0x,"3. 16-D Solo Cromatico (a*, b*)",preset_pos_1x,preset_pos,0.0223,-0.0028,-0.0251,0.7929,0.5075,0.2290,0.0440,-0.0122,-0.0562,0.6899,NOT_SIGNIFICANT
+Ampiezza 1.0x,"3. 16-D Solo Cromatico (a*, b*)",blockshuf_neg_1x,blockshuf_neg,0.0170,0.0345,0.0175,0.4173,0.5542,0.5144,0.0307,0.0671,0.0364,0.4030,NOT_SIGNIFICANT
+Ampiezza 1.0x,"3. 16-D Solo Cromatico (a*, b*)",rand_pos_1x,rand_pos,-0.0503,0.0045,0.0548,0.1503,0.5345,0.2872,-0.0941,0.0157,0.1098,0.2161,NOT_SIGNIFICANT
+Ampiezza 1.0x,4. 5-D Asse Tessitura,preset_pos_1x,preset_pos,0.4770,0.1497,-0.3273,0.9848,0.9005,0.7677,0.5297,0.1950,-0.3347,0.9599,NOT_SIGNIFICANT
+Ampiezza 1.0x,4. 5-D Asse Tessitura,blockshuf_neg_1x,blockshuf_neg,0.3857,0.2844,-0.1013,0.7887,0.9630,0.7462,0.4005,0.3811,-0.0194,0.6134,NOT_SIGNIFICANT
+Ampiezza 1.0x,4. 5-D Asse Tessitura,rand_pos_1x,rand_pos,-0.0837,-0.0425,0.0411,0.4072,0.8567,0.7553,-0.0977,-0.0563,0.0413,0.4456,NOT_SIGNIFICANT
+Ampiezza 2.0x,"1. 24-D Completo (L*, a*, b*)",preset_pos_2x,preset_pos,0.0705,0.0898,0.0193,0.4290,0.6836,0.3249,0.1032,0.2765,0.1734,0.0279,CONFIRMED
+Ampiezza 2.0x,"1. 24-D Completo (L*, a*, b*)",blockshuf_neg_2x,blockshuf_neg,0.0595,0.1171,0.0577,0.2271,0.6296,0.4957,0.0944,0.2363,0.1419,0.1135,NOT_SIGNIFICANT
+Ampiezza 2.0x,"1. 24-D Completo (L*, a*, b*)",rand_pos_2x,rand_pos,-0.0010,0.0417,0.0427,0.1486,0.6930,0.3316,-0.0014,0.1257,0.1271,0.0215,CONFIRMED
+Ampiezza 2.0x,2. 8-D Solo Luminanza (L*),preset_pos_2x,preset_pos,0.1177,0.1060,-0.0117,0.6623,0.6977,0.4871,0.1687,0.2176,0.0489,0.4749,NOT_SIGNIFICANT
+Ampiezza 2.0x,2. 8-D Solo Luminanza (L*),blockshuf_neg_2x,blockshuf_neg,-0.0687,0.0920,0.1607,0.0337,0.7249,0.3511,-0.0947,0.2621,0.3568,0.0328,CONFIRMED
+Ampiezza 2.0x,2. 8-D Solo Luminanza (L*),rand_pos_2x,rand_pos,0.0298,-0.0076,-0.0374,0.8048,0.6038,0.3008,0.0494,-0.0252,-0.0746,0.7646,NOT_SIGNIFICANT
+Ampiezza 2.0x,"3. 16-D Solo Cromatico (a*, b*)",preset_pos_2x,preset_pos,0.0350,0.1022,0.0672,0.1712,0.6480,0.2524,0.0540,0.4049,0.3508,0.0167,CONFIRMED
+Ampiezza 2.0x,"3. 16-D Solo Cromatico (a*, b*)",blockshuf_neg_2x,blockshuf_neg,0.1568,0.1395,-0.0173,0.6454,0.4786,0.5612,0.3276,0.2486,-0.0790,0.7489,NOT_SIGNIFICANT
+Ampiezza 2.0x,"3. 16-D Solo Cromatico (a*, b*)",rand_pos_2x,rand_pos,-0.0119,0.0775,0.0894,0.0318,0.7330,0.3597,-0.0163,0.2155,0.2317,0.0004,CONFIRMED
+Ampiezza 2.0x,4. 5-D Asse Tessitura,preset_pos_2x,preset_pos,0.3880,0.4014,0.0133,0.5092,0.9648,0.8616,0.4022,0.4658,0.0637,0.4023,NOT_SIGNIFICANT
+Ampiezza 2.0x,4. 5-D Asse Tessitura,blockshuf_neg_2x,blockshuf_neg,0.3027,0.5357,0.2330,0.1438,0.9787,0.8946,0.3093,0.5988,0.2895,0.0851,NOT_SIGNIFICANT
+Ampiezza 2.0x,4. 5-D Asse Tessitura,rand_pos_2x,rand_pos,0.1627,0.1933,0.0306,0.4950,0.9079,0.8322,0.1793,0.2323,0.0531,0.4487,NOT_SIGNIFICANT
