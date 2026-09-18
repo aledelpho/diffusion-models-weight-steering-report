@@ -37,6 +37,7 @@ MANIFEST_CSV = os.path.join(DATA_DIR, "stage9_images.csv")
 KEY_CSV = os.path.join(DATA_DIR, "stage9_headlights_key.csv")
 RAW_CSV = os.path.join(DATA_DIR, "stage9_headlights_raw.csv")
 BBOX_RAW_CSV = os.path.join(DATA_DIR, "stage9_bbox_raw.csv")
+BBOX_STAGE12_RAW_CSV = os.path.join(DATA_DIR, "stage12_bbox_raw.csv")
 
 SHUFFLE_SEED = 20260918
 SALT = "arthemy_stage10_blind_headlights_salt_v1"
@@ -193,6 +194,39 @@ class BlindScoringHandler(SimpleHTTPRequestHandler):
                 writer.writerow([
                     hash_id, top[0], top[1], bottom[0], bottom[1],
                     left[0], left[1], right[0], right[1],
+                    w, h, area_frac, ts
+                ])
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(b'{"status": "ok"}')
+        elif self.path == "/api/bbox_stage12":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            data = json.loads(body)
+
+            hash_id = data.get("hash_id")
+            w = data.get("bbox_width", 0)
+            h = data.get("bbox_height", 0)
+            area_frac = data.get("bbox_area_frac", 0.0)
+            x_min = data.get("x_min", 0)
+            x_max = data.get("x_max", 0)
+            y_min = data.get("y_min", 0)
+            y_max = data.get("y_max", 0)
+            ts = data.get("timestamp_ms")
+
+            file_exists = os.path.exists(BBOX_STAGE12_RAW_CSV)
+            with open(BBOX_STAGE12_RAW_CSV, "a", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                if not file_exists:
+                    writer.writerow([
+                        "hash_id", "x_min", "x_max", "y_min", "y_max",
+                        "bbox_width", "bbox_height", "bbox_area_frac", "timestamp_ms"
+                    ])
+                writer.writerow([
+                    hash_id, x_min, x_max, y_min, y_max,
                     w, h, area_frac, ts
                 ])
 

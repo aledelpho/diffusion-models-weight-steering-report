@@ -12,3 +12,5 @@ scratch/
 # note temporanee di release, create dal brief e non committate
 RELEASE_NOTES.md
 viewer/blind_headlights/
+viewer/blind_stage12/
+*.log

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annotatore 4 Punti · Stage 12 (Corpus Nuovo)</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #0b0d14;
+      --card-bg: #131622;
+      --border: #23283b;
+      --text: #e2e8f0;
+      --muted: #8892b0;
+      --accent: #3b82f6;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --box-border: #f43f5e;
+      --box-fill: rgba(244, 63, 94, 0.14);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    .badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green);
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .progress-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .progress-bar-container {
+      width: 180px;
+      height: 7px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    /* Guida interattiva */
+    .instruction-bar {
+      background: #0f121d;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .current-step-msg {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+    }
+
+    .step-pill {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--accent);
+    }
+
+    .metrics-preview {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 16px;
+    }
+
+    .metrics-preview span b {
+      color: var(--text);
+    }
+
+    /* Canvas centrale */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      position: relative;
+    }
+
+    .viewport-card {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+      border: 1px solid var(--border);
+      background: #000;
+      display: inline-block;
+      cursor: crosshair;
+    }
+
+    #stage-canvas {
+      display: block;
+      max-height: 75vh;
+      max-width: 88vw;
+    }
+
+    .control-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #1c2030;
+      border-color: #3b435d;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: var(--border);
+    }
+
+    kbd {
+      background: #07090e;
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+    }
+
+    .complete-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 13, 20, 0.96);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .complete-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 32px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .complete-card h2 {
+      font-size: 22px;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .complete-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <span class="title">BBox Annotator (4 Punti in Ordine Libero)</span>
+      <span class="badge">Stage 12 · Corpus Nuovo</span>
+    </div>
+    <div class="progress-wrap">
+      <span id="progress-text" class="progress-text">Caricamento...</span>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="instruction-bar">
+    <div id="step-msg" class="current-step-msg">
+      <span id="step-pill" class="step-pill">0 / 4 PUNTI</span>
+      <span id="step-desc">Clicca i 4 estremi della macchina in <b>qualunque ordine</b> (alto, basso, sinistra, destra)</span>
+    </div>
+
+    <div class="metrics-preview">
+      <span>W: <b id="stat-w">-</b> px</span>
+      <span>H: <b id="stat-h">-</b> px</span>
+      <span>Area: <b id="stat-area">-</b> %</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="viewport-card">
+      <canvas id="stage-canvas"></canvas>
+    </div>
+
+    <div class="control-actions">
+      <button id="btn-confirm" class="btn btn-primary" onclick="confirmCurrent()" disabled>
+        <kbd>Spazio / Invio</kbd> Conferma e Avanti
+      </button>
+      <button class="btn" onclick="resetPoints()">
+        <kbd>R</kbd> Resetta Punti
+      </button>
+      <button class="btn" onclick="goBack()">
+        <kbd>← / Backspace</kbd> Indietro
+      </button>
+    </div>
+  </main>
+
+  <div id="complete-modal" class="complete-modal">
+    <div class="complete-card">
+      <h2>✓ Sessione Stage 12 Completata!</h2>
+      <p>Tutte le 220 immagini (200 primarie + 20 duplicati nascosti) sono state annotate.<br>
+      I dati grezzi sono stati salvati in <code>data/stage12_bbox_raw.csv</code>.<br>
+      Ora puoi lanciare l'analisi statistica per calcolare il rapporto &rho; e verificare le diagnostiche.</p>
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="downloadCSV()">
+        Scarica backup CSV
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let images = [];
+    let currentIndex = 0;
+    let records = []; // { hash_id, x_min, x_max, y_min, y_max, bbox_width, bbox_height, bbox_area_frac, timestamp_ms }
+    const STORAGE_KEY = "arthemy_stage12_bbox_records";
+
+    const canvas = document.getElementById("stage-canvas");
+    const ctx = canvas.getContext("2d");
+    let currentImageObj = new Image();
+
+    // 4 punti in coordinate naturali (1024x1280)
+    let currentPoints = [];
+
+    const POINT_COLORS = ["#38bdf8", "#4ade80", "#fb923c", "#c084fc"];
+
+    async function init() {
+      const res = await fetch("blind_order_stage12.json");
+      images = await res.json();
+
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          records = JSON.parse(saved);
+          currentIndex = records.length;
+        } catch(e) {
+          records = [];
+          currentIndex = 0;
+        }
+      }
+
+      if (currentIndex >= images.length) {
+        showComplete();
+      } else {
+        loadImage();
+      }
+    }
+
+    function loadImage() {
+      if (currentIndex >= images.length) {
+        showComplete();
+        return;
+      }
+      const item = images[currentIndex];
+      currentImageObj = new Image();
+      currentImageObj.onload = () => {
+        canvas.width = currentImageObj.naturalWidth || 1024;
+        canvas.height = currentImageObj.naturalHeight || 1280;
+
+        if (currentIndex < records.length) {
+          const r = records[currentIndex];
+          // Ricostruisci 4 punti estremi dal record
+          currentPoints = [
+            { x: (r.x_min + r.x_max) / 2, y: r.y_min },
+            { x: (r.x_min + r.x_max) / 2, y: r.y_max },
+            { x: r.x_min, y: (r.y_min + r.y_max) / 2 },
+            { x: r.x_max, y: (r.y_min + r.y_max) / 2 }
+          ];
+        } else {
+          currentPoints = [];
+        }
+
+        renderCanvas();
+        updateUI();
+      };
+      currentImageObj.src = "blind_stage12/" + item.filename;
+    }
+
+    function updateUI() {
+      const item = images[currentIndex];
+      document.getElementById("progress-text").innerText = `${currentIndex + 1} / ${images.length} (${Math.round((currentIndex / images.length) * 100)}%)`;
+      document.getElementById("progress-bar").style.width = `${(currentIndex / images.length) * 100}%`;
+
+      const stepPill = document.getElementById("step-pill");
+      const stepDesc = document.getElementById("step-desc");
+      const btnConfirm = document.getElementById("btn-confirm");
+
+      if (currentPoints.length < 4) {
+        stepPill.innerText = `${currentPoints.length} / 4 PUNTI`;
+        stepPill.style.color = "var(--accent)";
+        stepPill.style.background = "rgba(59, 130, 246, 0.2)";
+        stepDesc.innerHTML = `Clicca i 4 estremi della macchina in <b>ordine libero</b> (${4 - currentPoints.length} rimanenti)`;
+        btnConfirm.disabled = true;
+      } else {
+        stepPill.innerText = "✓ 4 PUNTI INSERITI";
+        stepPill.style.color = "#f43f5e";
+        stepPill.style.background = "rgba(244, 63, 94, 0.2)";
+        stepDesc.innerHTML = "<b>Inviluppo calcolato.</b> Premi <kbd>Spazio / Invio</kbd> per salvare e procedere.";
+        btnConfirm.disabled = false;
+      }
+
+      if (currentPoints.length === 4) {
+        const xs = currentPoints.map(p => p.x);
+        const ys = currentPoints.map(p => p.y);
+        const xMin = Math.min(...xs);
+        const xMax = Math.max(...xs);
+        const yMin = Math.min(...ys);
+        const yMax = Math.max(...ys);
+
+        const w = Math.round(xMax - xMin);
+        const h = Math.round(yMax - yMin);
+        const areaFrac = ((w * h) / (canvas.width * canvas.height)) * 100;
+
+        document.getElementById("stat-w").innerText = w;
+        document.getElementById("stat-h").innerText = h;
+        document.getElementById("stat-area").innerText = areaFrac.toFixed(2);
+      } else {
+        document.getElementById("stat-w").innerText = "-";
+        document.getElementById("stat-h").innerText = "-";
+        document.getElementById("stat-area").innerText = "-";
+      }
+    }
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(currentImageObj, 0, 0, canvas.width, canvas.height);
+
+      // Disegna Bounding Box se abbiamo 4 punti
+      if (currentPoints.length === 4) {
+        const xs = currentPoints.map(p => p.x);
+        const ys = currentPoints.map(p => p.y);
+        const xMin = Math.min(...xs);
+        const xMax = Math.max(...xs);
+        const yMin = Math.min(...ys);
+        const yMax = Math.max(...ys);
+        const w = xMax - xMin;
+        const h = yMax - yMin;
+
+        ctx.fillStyle = "rgba(244, 63, 94, 0.15)";
+        ctx.fillRect(xMin, yMin, w, h);
+        ctx.strokeStyle = "#f43f5e";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 6]);
+        ctx.strokeRect(xMin, yMin, w, h);
+        ctx.setLineDash([]);
+      }
+
+      // Disegna i punti cliccati
+      currentPoints.forEach((pt, i) => {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 8, 0, Math.PI * 2);
+        ctx.fillStyle = POINT_COLORS[i % POINT_COLORS.length];
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+
+        ctx.font = "bold 16px 'IBM Plex Mono', monospace";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 4;
+        ctx.fillText(`P${i+1}`, pt.x + 12, pt.y + 6);
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    canvas.addEventListener("click", (e) => {
+      if (currentPoints.length >= 4) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      const realX = Math.round((e.clientX - rect.left) * scaleX);
+      const realY = Math.round((e.clientY - rect.top) * scaleY);
+
+      currentPoints.push({ x: realX, y: realY });
+      renderCanvas();
+      updateUI();
+    });
+
+    async function confirmCurrent() {
+      if (currentPoints.length < 4) return;
+      const item = images[currentIndex];
+      const ts = Date.now();
+
+      const xs = currentPoints.map(p => p.x);
+      const ys = currentPoints.map(p => p.y);
+      const xMin = Math.min(...xs);
+      const xMax = Math.max(...xs);
+      const yMin = Math.min(...ys);
+      const yMax = Math.max(...ys);
+      const w = xMax - xMin;
+      const h = yMax - yMin;
+      const areaFrac = (w * h) / (canvas.width * canvas.height);
+
+      const payload = {
+        hash_id: item.hash_id,
+        x_min: xMin,
+        x_max: xMax,
+        y_min: yMin,
+        y_max: yMax,
+        bbox_width: w,
+        bbox_height: h,
+        bbox_area_frac: areaFrac,
+        timestamp_ms: ts
+      };
+
+      if (currentIndex < records.length) {
+        records[currentIndex] = payload;
+      } else {
+        records.push(payload);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+
+      try {
+        await fetch("/api/bbox_stage12", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn("Invio al server fallito, salvato in local storage", err);
+      }
+
+      currentIndex++;
+      loadImage();
+    }
+
+    function resetPoints() {
+      currentPoints = [];
+      renderCanvas();
+      updateUI();
+    }
+
+    function goBack() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        loadImage();
+      }
+    }
+
+    function showComplete() {
+      document.getElementById("complete-modal").style.display = "flex";
+      document.getElementById("progress-text").innerText = `${images.length} / ${images.length} (100%)`;
+      document.getElementById("progress-bar").style.width = `100%`;
+    }
+
+    function downloadCSV() {
+      let csv = "hash_id,x_min,x_max,y_min,y_max,bbox_width,bbox_height,bbox_area_frac,timestamp_ms\n";
+      for (const r of records) {
+        csv += `${r.hash_id},${r.x_min},${r.x_max},${r.y_min},${r.y_max},${r.bbox_width},${r.bbox_height},${r.bbox_area_frac},${r.timestamp_ms}\n`;
+      }
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "stage12_bbox_raw.csv";
+      a.click();
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        if (currentPoints.length === 4) {
+          e.preventDefault();
+          confirmCurrent();
+        }
+      } else if (e.key === "r" || e.key === "R") {
+        resetPoints();
+      } else if (e.key === "Backspace" || e.key === "ArrowLeft") {
+        goBack();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
