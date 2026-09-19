@@ -1,0 +1,75 @@
+{
+ "note": "Corpus in formato nativo Anima (grappoli di attributi, bassa densita' relazionale). prompt_sha1 = primi 10 hex di sha1(text), stessa convenzione di data/prompts.json. I prompt non vanno mai modificati.",
+ "prompts": [
+  {
+   "id": "A01",
+   "tag": "elf_brawler",
+   "sha1": "a265bac2d3",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from below with a low angle, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective deformation.\nFemale elf brawler, short messy lime to teal green bob haircut, long side bangs, small antlers, pointed ears. Black eyepatch, green eye, cross scar, smug angry smile.\nBlack leather uniform, white fur collar, wooden shoulder pauldron. giant metal gauntlet, open hand, electricity crackling.\nwhite background, simple background."
+  },
+  {
+   "id": "A02",
+   "tag": "tiefling_vanguard",
+   "sha1": "419d4c635f",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows,  extreme close-up detail shot from an angle, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nFemale tiefling vanguard, short spiky obsidian to neon violet undercut, asymmetric side swept bangs, light purple to light blue gradient skin, ram horns, sharp fangs. blue eyes, jagged burn scar across the cheek, defiant feral snarl. Dark plate armor. short yellow cape, Mid-air leap, axe raised, body coiled to strike downward with maximum force.\nwhite background, simple background."
+  },
+  {
+   "id": "A03",
+   "tag": "orc_wizard",
+   "sha1": "7cc00093d3",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from above with a high angle close-up, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nmale orc wizard, long white hair dreadlocks, very long white eyebrows, small reading glasses, light green to cold green skin gradient, two fangs from lower lips, old, long nails, white beard, wrinkles, yellow eyes. squared jaw, fat, annoyed expression. blue wizard robe, very long blue flame behind him, gold very long earrings. holding a wooden staff bored expression.\n white background, simple background."
+  },
+  {
+   "id": "A04",
+   "tag": "stag_wolf_bear",
+   "sha1": "24b3c321e7",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from below with a low angle, dynamic pose, dramatic angle, strong perspective.\nStag + Wolf + Bear monster, shaggy coarse dark brown to pale tan gradient fur, massive moss-covered stag antlers, long wolf-like snout with exposed black gums, old, heavily weathered hide, thick dull claws. Golden torc ring pierced through the upper cartilage of the left ear, pale yellow eyes, blunt scarred muzzle, wild bared-teeth expression. Immense top-heavy bear build with a massive shoulder hump. Faded tattered plaid wool cloak pinned across its broad back with a heavy bronze penannular brooch. Rearing up on its hind legs, front paws clawing the air, chest exposed, body balanced in a towering dominant stance.\nwhite background, simple background."
+  },
+  {
+   "id": "A05",
+   "tag": "alligator_prep",
+   "sha1": "225877b527",
+   "family": "anima_native",
+   "text": "western cartoon style, gradients, hatched shadows,  extreme close-up detail shot from an angle, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nMale alligator prep, short razor-cut preppy side-part, olive green to pale yellow underbelly scale gradient, heavy ridge scales along the spine, blunt dark talons. Gold rimless monocle over one eye, solid amber reptilian eyes, long heavy jaw, smug condescending smile. Tall broad-shouldered build. Navy blue cable-knit sweater vest worn over a crisp white collared shirt, tailored beige trousers. Adjusting a silk navy blue necktie with one hand, body turned in a rigid three-quarter stance.\n white background, simple background."
+  },
+  {
+   "id": "A06",
+   "tag": "orc_captain",
+   "sha1": "2eecad5513",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows,  extreme close-up detail shot from an angle, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nMale orc captain, bald polished head, elongated pointed ears, protruding lower tusks. Iron brow-ring, piercing yellow eyes, split lip scar, calm focused expression. Loose wrap vest with a deep amber to crimson gradient, flowing linen trousers. Low-centered martial arts stance, one hand extended in a open-palm guard, tensed, dust kicking up around his feet.\n white background, simple background."
+  },
+  {
+   "id": "A07",
+   "tag": "tiefling_noble",
+   "sha1": "e9791a2675",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from below with a low angle, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nFemale tiefling noble, long straight stark white to dark gray hair, sharp center-parted bangs, light purple to light blue skin gradient, sleek swept-back ram horns. Solid black eyes, sharp pointed jaw, tall slender build, cold analytical expression. Fitted velvet waist-cincher featuring a deep red to black color gradient, long sheer fabric sashes draping from her upper arms. Rigid stationary pose, body turned three-quarters away, head turned back over her shoulder with a sharp profile view.\nwhite background, simple background."
+  },
+  {
+   "id": "A08",
+   "tag": "elf_judge",
+   "sha1": "af9c2e4588",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from above with a high angle close-up, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nattractive Female elf judge, long straight hair with a gradient from black ro red, striped pattern on robes, pale skin, wide nose. giant deco artstyle necklace, dark red eyes, round softened jaw, serene expression, laughing. sun themed decorations, belt made of thorns with large leaves. Leaning forward waving to the camera, relaxed and chill.\nwhite background, simple background."
+  },
+  {
+   "id": "A09",
+   "tag": "goblin_mariner",
+   "sha1": "1e89e4fa37",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from above with a high angle close-up, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nFemale goblin mariner, short spiky dark yellow to light yellow pixie cut, messy asymmetric bangs, dark green skin, wide bat-like ears, sharp needle teeth. Dark orange eyes, small round jaw, short lean build, manic cheerful smile. Wide leather utility belt with brass buckles, a frayed linen sash with a dark blue to light blue color gradient tied around her waist. Kinetic mid-stride stance, one foot planted high on an invisible ledge, torso twisted forward as if ready to spring off.\nwhite background, simple background."
+  },
+  {
+   "id": "A10",
+   "tag": "firbolg_botanist",
+   "sha1": "5629e958a4",
+   "family": "anima_native",
+   "text": "realistic comic style, gradients, hatched shadows, seen from above with a high angle close-up, upper body portrait, dutch angle, dynamic pose, dramatic angle, strong perspective.\nFemale firbolg botanist, long fluffy chocolate brown to pastel pink hair tied in a loose messy bun, thick soft eyebrows, floppy cow-like ears, soft lilac to pale cream gradient skin, small pink nose, young, round gentle face. Round wire-rimmed reading glasses, wide warm hazel eyes, soft rounded jawline, shy endearing smile. Plump soft build, slouching posture. Oversized thick-knit cream sweater with a pattern of embroidered acorns. Holding a wooden teacup close to her face, body slightly turned inward in a comfortable sitting posture.\nwhite background, simple background."
+  }
+ ]
+}
