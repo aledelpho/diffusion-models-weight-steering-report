@@ -77,3 +77,68 @@ La matrice dei coseni del §3 della mappa completa diventa lo strumento di proge
 tarato a mano smette di essere l'unico modo.
 
 Se invece cade, la taratura a mano resta l'unica via, e va detto.
+
+---
+
+# ESITO — aggiunto il 2026-09-20, ore 00:05, dopo la generazione
+
+Le previsioni del §2 **non sono state modificate**. 12 immagini in `benchmark_previsione02`,
+feature ri-estratte dalle immagini, stesso spazio a 23 feature e stessa standardizzazione sui
+sei baseline usati per formulare la regola.
+
+## Risultato: SMENTITA (1 banda su 2)
+
+| coppia | cos(A,B) | ‖osservato‖ | ‖previsto‖ | ρ | banda | esito |
+|---|--:|--:|--:|--:|---|---|
+| **B2 + B6** | −0.43 | 40.37 | 39.83 | **1.013** | > 0.85 | **rispettata** |
+| **B3 + B6** | +0.80 | 36.93 | 50.02 | **0.738** | < 0.70 | **violata** |
+
+Il criterio dichiarato era che **entrambe** le bande reggessero. Una sola ha retto.
+
+**La violazione non è rumore.** Calcolando ρ cella per cella: `B3B6` dà 0.740 ± 0.021 di errore
+standard, con la soglia 0.70 a **1.95 errori standard** e **una sola cella su sei** sotto la
+soglia (0.83, 0.71, 0.69, 0.75, 0.71, 0.75). La previsione era sbagliata, non sfortunata.
+
+## Cosa è sopravvissuto e cosa no
+
+**Il verso della relazione ha retto su entrambe le coppie nuove.** Tutti e quattro i punti
+disponibili, ordinati per angolo:
+
+| coppia | cos | ρ (media ± DS su 6 celle) |
+|---|--:|--:|
+| B2 + B6 | −0.43 | 1.007 ± 0.047 |
+| B5 + B1 | −0.34 | 0.929 ± 0.135 |
+| B5 + B4 | +0.77 | 0.687 ± 0.164 |
+| B3 + B6 | +0.80 | 0.740 ± 0.051 |
+
+L'ordinamento è monotono decrescente, r = −0.974. **Ma con n = 4 il test esatto sulle
+permutazioni dà p = 0.125, contro un pavimento di 0.083: nemmeno un ordinamento perfetto
+sarebbe significativo a questa numerosità.** La monotonia resta un'impressione, non un
+risultato.
+
+**La pendenza era sbagliata.** Tarata su due punti dava −0.351; sui quattro punti è **−0.282**,
+e la retta diventa ρ ≈ 0.892 − 0.282·cos. La banda «< 0.70» derivava dalla pendenza troppo
+ripida. Estrapolare una pendenza da due punti e poi usarla per fissare una soglia è il modo in
+cui questa previsione ha fallito, e la forma a bande — pensata per evitare una precisione finta
+— non è bastata perché le bande erano centrate sulla retta sbagliata.
+
+## Enunciato che regge, e cosa serve per stabilirlo
+
+Descrittivo, non dimostrato:
+
+> Con angolo negativo fra le direzioni di spostamento, la composizione è **additiva entro il
+> rumore** (ρ = 0.93 e 1.01). Con angolo sopra +0.75, si perde **circa il 30%** (ρ = 0.69 e 0.74).
+
+Per trasformarlo in un risultato servono **almeno 8 coppie** che coprano l'intervallo del
+coseno, compreso il vuoto fra −0.3 e +0.7 dove non esiste nessun punto — ed è proprio lì che si
+deciderebbe se la relazione è una retta, una soglia o una curva. Le quattro coppie attuali
+stanno tutte agli estremi e non possono distinguere fra le tre forme.
+
+## Conseguenza operativa
+
+Lo strumento di progetto del §4 sopravvive in forma qualitativa: **combinare blocchi con
+direzioni poco allineate resta preferibile**, perché è dove i contributi si sommano. Ma non
+esiste un fattore di correzione affidabile da applicare: chi volesse prevedere l'intensità di un
+preset composto non può ancora farlo con questi numeri.
+
+Il corpus sigillato `data/prompts_sealed_krea2.json` **resta chiuso**.
