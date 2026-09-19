@@ -86,3 +86,105 @@ previsione più stretta del set ed è rispettata.
 
 Le due tabelle del §3 sono definitive. Qualunque modifica successiva a questo documento va
 fatta in aggiunta, con la data, senza riscrivere le previsioni.
+
+---
+
+# ESITO — aggiunto il 2026-09-19, ore 23:30, dopo la generazione
+
+Le previsioni del §3 **non sono state modificate**. Quanto segue è aggiunto in coda.
+
+12 immagini in `benchmark_composizione`, impostazioni identiche alla mappa, baseline e
+condizioni singole riusati da `benchmark_mappa`.
+
+## Risultato
+
+| combinazione | grandezze entro 1 DS | esito |
+|---|:--:|---|
+| **B5 + B1** (opposti) | **4/4** | **CONFERMATA** |
+| **B5 + B4** (concordi) | **0/4** | **SMENTITA** |
+
+### B5 + B1 — confermata
+
+| grandezza | previsto | osservato | scarto in DS |
+|---|--:|--:|--:|
+| alte luci | −2.67 ± 7.42 | −5.33 | −0.36 |
+| ombre | +1.17 ± 2.69 | +0.50 | −0.25 |
+| **contrasto** | **−3.23 ± 1.85** | **−3.02** | **+0.11** |
+| saturazione | +8.79 ± 6.48 | +14.17 | +0.83 |
+
+Il numero dichiarato come discriminante — il contrasto, previsto −3.23, con lo zero a 1.75 DS —
+è uscito **−3.02**, e negativo in **tutte e sei le celle** (−1.85, −2.26, −2.90, −3.11, −3.21,
+−4.81). Lo zero è escluso. Per questa coppia gli effetti si sommano.
+
+### B5 + B4 — smentita, e non per saturazione
+
+| grandezza | previsto | osservato | B5 solo | B4 solo | baseline |
+|---|--:|--:|--:|--:|--:|
+| alte luci | +12.17 | **−0.17** | +7.33 | +4.83 | 198.50 |
+| contrasto | +7.09 | **−0.51** | +3.47 | +3.61 | 61.77 |
+| saturazione | +29.26 | **+11.63** | +17.13 | +12.14 | 69.27 |
+
+La combinazione non sta fra la somma e il singolo: sulle alte luci e sul contrasto è **sotto
+entrambi i singoli**, e torna al baseline. Due modifiche che separatamente alzano le alte luci,
+insieme non le alzano affatto.
+
+Confronto appaiato sulle sei celle, test dei segni esatto:
+
+| | differenza | p |
+|---|--:|--:|
+| B5B4 − B5, alte luci | −7.50 | **0.031** |
+| B5B4 − B4, alte luci | −5.00 | **0.031** |
+| B5B4 − B4, contrasto | −4.12 | **0.031** |
+| B5B4 − B5, contrasto | −3.98 | 0.156 |
+| B5B4 − B5, saturazione | −5.50 | 0.188 |
+
+## Spiegazioni alternative, esaminate ed escluse
+
+**Tetto della metrica.** `fari` ha baseline 198.50 su un massimo di 255: la previsione +12.17
+richiedeva 210.67, con 56 punti di margine. Nessun tetto. Idem per contrasto e saturazione.
+
+**Errore di disegno riconosciuto**: la previsione su `ombre` era **fisicamente irrealizzabile**.
+Baseline 4.83, previsione −6.17, cioè −1.34 su una grandezza che non può scendere sotto 0; `B4`
+da solo era già a 0.83. Quella grandezza andava esclusa *a priori* e non è stata controllata
+prima di committare la previsione. Vedi pitfall 56. La conclusione non cambia: le altre tre
+hanno margine abbondante e sono smentite tutte e tre.
+
+**Normalizzazione del nodo fra slot attivi.** Se accendere due slot dimezzasse ciascuno,
+anche `B5B1` sarebbe stato dimezzato e il contrasto sarebbe uscito ≈ −1.6 invece di −3.23.
+È uscito −3.02. Esclusa.
+
+**Riorganizzazione della scena.** Se la doppia modifica avesse spostato l'immagine altrove, le
+statistiche globali confronterebbero scene diverse. È vero **il contrario**: `B5B4` ha la
+coerenza di traiettoria **più alta** di tutte le condizioni misurate (0.098 contro 0.072 di
+`B5` e 0.060 di `B4`), con p = 0.031 su entrambi i confronti appaiati. E le immagini sono
+visibilmente la stessa scena, stessa posa, stessa composizione. Esclusa.
+
+## La dissociazione
+
+| coppia | effetti tonali | coerenza di traiettoria |
+|---|---|---|
+| **B5 + B1** (tonalmente opposti) | si **sommano** come previsto | **0.039** — la più bassa misurata, p = 0.031 vs `B5` |
+| **B5 + B4** (tonalmente concordi) | si **annullano** | **0.098** — la più alta misurata, p = 0.031 vs entrambi |
+
+La coppia che si somma nel tono è quella che disturba di più la traiettoria; la coppia che si
+annulla nel tono è quella che la conserva di più. La relazione è inversa in entrambe le
+direzioni e su tutti e quattro i confronti appaiati.
+
+**Non c'è un meccanismo proposto per questo, e non se ne inventa uno adesso.** Il fatto è
+registrato come tale.
+
+## Cosa cambia nella linea di ricerca
+
+L'ipotesi che i preset siano **progettabili** — si sceglie l'effetto, si risolve per i guadagni
+— sopravvive solo in forma condizionata: vale per modifiche che si oppongono sull'asse tonale,
+non per modifiche che concordano. Una procedura di progetto che assumesse additività generale
+produrrebbe preset sistematicamente più deboli del previsto, e nel caso peggiore nulli.
+
+Questo è il motivo per cui il test valeva dodici immagini. Costruire sopra l'additività senza
+averla misurata avrebbe prodotto mesi di taratura a mano per compensare un effetto che non
+c'era.
+
+**Il corpus sigillato `data/prompts_sealed_krea2.json` resta chiuso.** La condizione per
+aprirlo era che questa previsione passasse; è passata a metà, e metà non basta. Serve prima
+capire la regola che distingue le coppie che si sommano da quelle che si annullano — e quella
+va cercata sull'esplorativo, non sul sigillato.
