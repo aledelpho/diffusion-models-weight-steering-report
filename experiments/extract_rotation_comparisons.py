@@ -194,8 +194,8 @@ def step2_contact_sheets(rows, out_dir: Path):
                     sheet.paste(thumb, (x, y))
             y += thumb_h_ref + LABEL_H + PAD
 
-        out_path = out_dir / f"qc_{prompt_id}.png"
-        sheet.save(out_path)
+        out_path = out_dir / f"qc_{prompt_id}.webp"
+        sheet.save(out_path, "WEBP", quality=88)
         print(f"  scritto {out_path}")
     print()
 
@@ -261,8 +261,8 @@ def step3_highlights(rows, prompt_scores_path: Path, out_dir: Path):
             draw.text((x, 60 + thumb_h + 4), cond, fill=TEXT, font=font_small)
             x += HIGHLIGHT_W + PAD
 
-        out_path = out_dir / f"highlight_{tag}_{prompt_id}.png"
-        strip.save(out_path)
+        out_path = out_dir / f"highlight_{tag}_{prompt_id}.webp"
+        strip.save(out_path, "WEBP", quality=88)
         print(f"  scritto {out_path}  (V(p)={v_p:+.4f})")
     print()
 

@@ -1,4 +1,4 @@
-﻿# Risultati Sperimentali — Rotazioni: Block_1 vs Block_6 nello Spazio Tessitura
+# Risultati Sperimentali — Rotazioni: Block_1 vs Block_6 nello Spazio Tessitura
 
 **Data di esecuzione**: 2026-09-18 / 2026-09-19  
 **Stato**: Eseguito e verificato a fronte di [`docs/prereg_rotations_block1_vs_block6.md`](prereg_rotations_block1_vs_block6.md)  
@@ -6,6 +6,8 @@
 **Matrice generazioni**: 10 stili $\times$ 3 seed $\times$ 7 condizioni = **210 immagini**  
 **File di calibrazione**: [`data/matched_rotation_calibration.json`](../data/matched_rotation_calibration.json)  
 **Dataset dei risultati**: [`data/rotations_block1_vs_block6_results.csv`](../data/rotations_block1_vs_block6_results.csv), [`data/rotations_block1_vs_block6_prompt_scores.csv`](../data/rotations_block1_vs_block6_prompt_scores.csv)  
+**Contact Sheet QC (WebP)**: [`qc_output/rotations_block1_vs_block6/`](../qc_output/rotations_block1_vs_block6/)  
+**Ricette di Riproducibilità**: [`qc_output/rotations_block1_vs_block6/RECIPES.md`](../qc_output/rotations_block1_vs_block6/RECIPES.md)  
 
 ---
 
