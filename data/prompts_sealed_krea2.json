@@ -1,0 +1,90 @@
+{
+ "note": "CORPUS SIGILLATO. Generato meccanicamente il 2026-09-19 con seme 20260919. Riservato ai test CONFERMATIVI: non va usato in nessuna analisi esplorativa, e nessuna statistica va calcolata su queste scene prima che l'ipotesi da testare sia scritta e datata.",
+ "rng_seed": 20260919,
+ "prompts": [
+  {
+   "id": "S01",
+   "sha1": "82e9c2ffbe",
+   "temperatura": "calda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. An elderly clockmaker with close shorn hair and a broad flat nose stands on a railed iron walkway, facing the viewer, wearing a quilted jacket and a linen scarf. A coiled leather strap, a tin cup and three split river stones rest on the surface in front. A brazier burns low on the left, throwing a deep amber to dull red gradient across the scene."
+  },
+  {
+   "id": "S02",
+   "sha1": "b107241563",
+   "temperatura": "calda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A glassblower man with thin blond hair and sharp cheekbones stands inside a timber-framed attic, facing the viewer, wearing a felted overcoat with horn buttons. A chipped enamel basin, a bundle of waxed twine and two iron wedges sit on the bench before them. An oil lamp on the near table casts a narrow warm pool that falls off sharply into darkness."
+  },
+  {
+   "id": "S03",
+   "sha1": "2dc507b3e3",
+   "temperatura": "calda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. An elderly clockmaker with loose red curls and pale freckled skin stands in a narrow tiled workshop, facing the viewer, wearing a waxed canvas coat over a ribbed sweater. A chipped enamel basin, a bundle of waxed twine and two iron wedges sit on the bench before them. Late sun enters from a single high window in a hard orange shaft, leaving the corners black."
+  },
+  {
+   "id": "S04",
+   "sha1": "386ae56f56",
+   "temperatura": "fredda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A mountain surveyor with a heavy beard and weathered brown skin stands in a low vaulted cellar, facing the viewer, wearing a padded gambeson and a cotton undershirt. A folded tarpaulin, a bone-handled knife and a glass float are arranged across the foreground. Flat blue daylight comes from an opening on the right, with no direct sun and soft shadows."
+  },
+  {
+   "id": "S05",
+   "sha1": "f8f00384a4",
+   "temperatura": "fredda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A stonemason woman with cropped grey hair and deep-set eyes stands on a railed iron walkway, facing the viewer, wearing a padded gambeson and a cotton undershirt. A folded tarpaulin, a bone-handled knife and a glass float are arranged across the foreground. A gas lantern overhead gives a pale green-white light that flattens every surface evenly."
+  },
+  {
+   "id": "S06",
+   "sha1": "1138cd39e9",
+   "temperatura": "fredda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A harbour pilot with a heavy beard and weathered brown skin stands inside a timber-framed attic, facing the viewer, wearing a waxed canvas coat over a ribbed sweater. A brass caliper, a stack of pressed paper and a cracked ceramic jar lie within reach. Overcast light from above renders the whole scene in close, low-contrast greys."
+  },
+  {
+   "id": "S07",
+   "sha1": "f9888681f6",
+   "temperatura": "calda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A young falconer with close shorn hair and a broad flat nose stands in a low vaulted cellar, facing the viewer, wearing an oilskin cape and knitted fingerless gloves. A chipped enamel basin, a bundle of waxed twine and two iron wedges sit on the bench before them. A brazier burns low on the left, throwing a deep amber to dull red gradient across the scene."
+  },
+  {
+   "id": "S08",
+   "sha1": "0885fedf48",
+   "temperatura": "calda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. An elderly clockmaker with cropped grey hair and deep-set eyes stands on a windswept stone pier, facing the viewer, wearing a waxed canvas coat over a ribbed sweater. A coiled leather strap, a tin cup and three split river stones rest on the surface in front. An oil lamp on the near table casts a narrow warm pool that falls off sharply into darkness."
+  },
+  {
+   "id": "S09",
+   "sha1": "418e24ca32",
+   "temperatura": "calda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A young falconer with cropped grey hair and deep-set eyes stands at the mouth of a slate quarry, facing the viewer, wearing a padded gambeson and a cotton undershirt. A coiled leather strap, a tin cup and three split river stones rest on the surface in front. Late sun enters from a single high window in a hard orange shaft, leaving the corners black."
+  },
+  {
+   "id": "S10",
+   "sha1": "b0ebb8d99b",
+   "temperatura": "fredda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A travelling bookbinder with cropped grey hair and deep-set eyes stands at the mouth of a slate quarry, facing the viewer, wearing a padded gambeson and a cotton undershirt. A folded tarpaulin, a bone-handled knife and a glass float are arranged across the foreground. Flat blue daylight comes from an opening on the right, with no direct sun and soft shadows."
+  },
+  {
+   "id": "S11",
+   "sha1": "b7200bfeed",
+   "temperatura": "fredda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A harbour pilot with cropped grey hair and deep-set eyes stands in a narrow tiled workshop, facing the viewer, wearing a waxed canvas coat over a ribbed sweater. A chipped enamel basin, a bundle of waxed twine and two iron wedges sit on the bench before them. A gas lantern overhead gives a pale green-white light that flattens every surface evenly."
+  },
+  {
+   "id": "S12",
+   "sha1": "3b7762d46f",
+   "temperatura": "fredda",
+   "family": "sealed_confirmatory",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A harbour pilot with a long dark braid and a scarred cheek stands at the mouth of a slate quarry, facing the viewer, wearing a waxed canvas coat over a ribbed sweater. A brass caliper, a stack of pressed paper and a cracked ceramic jar lie within reach. Overcast light from above renders the whole scene in close, low-contrast greys."
+  }
+ ]
+}
