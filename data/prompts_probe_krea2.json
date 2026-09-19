@@ -1,0 +1,50 @@
+{
+ "note": "Prompt sonda multi-contenuto per la mappa esplorativa dei blocchi. NON fanno parte di nessun corpus di test: sono descrittivi e non entrano in nessuna statistica. Registro nativo Krea-2. Composizione specificata per tenere basso il rumore di seed.",
+ "materials_present": {
+  "P01": [
+   "pelle",
+   "capelli",
+   "acciaio lucido",
+   "rame martellato",
+   "legno di quercia",
+   "cuoio",
+   "lino grezzo",
+   "corda",
+   "granito",
+   "fuoco e gradiente caldo",
+   "fumo",
+   "pietra piatta di fondo"
+  ],
+  "P02": [
+   "pelle",
+   "capelli",
+   "lana lavorata a maglia",
+   "cotone",
+   "vetro trasparente",
+   "acqua",
+   "terracotta",
+   "ottone",
+   "foglie larghe e cerose",
+   "felci fini",
+   "terriccio scuro",
+   "gradiente di cielo",
+   "condensa"
+  ]
+ },
+ "prompts": [
+  {
+   "id": "P01",
+   "tag": "forge_bench",
+   "sha1": "52e5b19ca6",
+   "family": "probe_multicontent",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A blacksmith woman stands behind a heavy oak workbench, facing the viewer, both hands resting flat on the wood. She has coarse dark curls tied back, weathered brown skin, a leather apron over a coarse linen shirt, and a polished steel gauntlet on her left forearm. On the bench lie a hammered copper bowl, a coil of frayed rope, and three rough granite offcuts. Behind her on the left a forge fire glows with a warm orange to deep red gradient, and thin smoke rises against a flat dark stone wall on the right. Cold blue window light falls from the upper left across the steel."
+  },
+  {
+   "id": "P02",
+   "tag": "greenhouse",
+   "sha1": "7919c95fcf",
+   "family": "probe_multicontent",
+   "text": "Western comics style, bold ink outlines, hatched shadows, medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A botanist man stands among potting benches, facing the viewer, one hand on a terracotta pot. He has straight pale hair, freckled fair skin, a knitted wool cardigan over a cotton shirt, and small round glasses. Broad waxy monstera leaves crowd the left of the frame and fine ferns the right. A glass carafe half full of water sits on the bench in front of him, beside damp dark soil and a brass watering can. Behind him the greenhouse panes show a pale cyan to warm cream sky gradient, with condensation beading on the glass."
+  }
+ ]
+}

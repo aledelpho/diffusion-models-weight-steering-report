@@ -106,10 +106,24 @@ n = 7, pavimento 2/2⁷ = 0.0156.
 | preset 20 vs `blockshuf_neg` 20 | 2.76σ | 1.85σ | +0.91 | **0.078** |
 | preset 15 vs `randsign` 15 | 2.24σ | 1.70σ | +0.54 | 0.406 |
 
-La significatività era raggiungibile e non è raggiunta. **Sul corpus nativo di Anima, alle dosi
-che non distruggono l'immagine, il preset strutturato non è distinguibile da una permutazione
-a norma appaiata nello spazio texture a cinque feature.** È il contrario di quanto misurato su
-Krea-2, e con n = 7 e un solo seed non è ancora un'assenza dimostrata: è un'assenza di prova.
+**Correzione (2026-09-19, dopo il calcolo di potenza).** La prima stesura diceva «la
+significatività era raggiungibile e non è raggiunta». È formalmente vero e sostanzialmente
+fuorviante. Con l'effetto e la dispersione misurati a dose 20 (differenza media +0.909, DS 1.262
+fra prompt, $d$ di Cohen 0.72), la potenza del test dei segni esatto a $n = 7$ e $\alpha = 0.05$
+è **0.34**. La non-significatività era l'esito più probabile *anche se l'effetto è reale della
+dimensione osservata*. Il pilota non ha fallito: non era dimensionato per decidere.
+
+Quel che resta dicibile: **sul corpus nativo di Anima, alle dosi che non distruggono l'immagine,
+non c'è prova che il preset strutturato si distingua da una permutazione a norma appaiata.** È
+un'assenza di prova, non una prova di assenza, e il disegno del pilota non consentiva altro.
+
+Potenza attesa per lo stage 2, stesso effetto, test dei segni esatto:
+
+| n prompt | 1 seed/prompt | 5 seed/prompt |
+|---:|--:|--:|
+| 7 | 0.34 | — |
+| 10 | 0.51 | 0.65 |
+| 12 | 0.62 | 0.75 |
 
 ## 5. Conseguenze per la pre-registrazione
 

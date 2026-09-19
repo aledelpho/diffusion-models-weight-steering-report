@@ -1,4 +1,13 @@
-# Mappa esplorativa dei blocchi su Krea-2 — primo esito: la mappa spaziale è vuota
+# Mappa esplorativa dei blocchi su Krea-2 — primo esito
+
+> **RITRATTATO il 2026-09-19, stessa giornata.** Il titolo originale era «la mappa spaziale è
+> vuota» e la conclusione era sbagliata. Il pavimento di rumore usato qui — le differenze fra
+> baseline a **seed diversi** — è concettualmente errato per un confronto a seed fisso, dove il
+> null è esattamente zero. Rifatta per seed invece che mediando sui seed, la mappa **contiene un
+> segnale riproducibile**: correlazione stesso blocco 0.40–0.47 contro blocchi diversi 0.26–0.30,
+> separazione positiva in tutte e sei le celle prompt × seed (p = 0.031). Vedi
+> `docs/coerenza_traiettoria.md` §2 e pitfall 55. **Il §2 qui sotto è conservato come errore
+> documentato, non come risultato.** Il §3 e il §4 restano validi.
 
 **Data**: 2026-09-19 · **Materiale**: 328 render in `benchmark_mappa/renders`, di cui 271 sui
 prompt sonda `P01`/`P02` e 45 su `A01` (vedi §4) · **Stato**: generazione ancora in corso.
