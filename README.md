@@ -1341,6 +1341,164 @@ its reading: [`docs/pilot_rotations_verdict.md`](docs/pilot_rotations_verdict.md
 
 ---
 
+## 5 · One long night — what each of these tests was actually asking
+
+Everything above is about *whether* the thing works. This part is about *where* and *how*, and it
+was all done in a single night, so it is rawer than the rest. I am writing it in plain language
+on purpose: the measurements underneath are documented to death in [`docs/`](docs/), and nobody
+should have to read those to understand what I was after.
+
+### First: is my own tool lying to me?
+
+A boring test I should have run months ago.
+
+My tuner reads all 1059 tensors in the model, multiplies each one by a number, and writes it
+back. Set every number to zero and it should do nothing at all. But "should" is not "does": the
+weights are stored in bf16, my code converts to fp32 to do the maths, then converts back. If
+anything is lost in that round trip, every measurement in this notebook sits on a small invisible
+error — and the nasty part is that the error would be *identical* in the treatment and in the
+controls, so it would never show up in any comparison. It would just quietly inflate every effect
+size I have ever reported.
+
+So: one image with the tuner absent, one with the tuner present and every knob at zero, same seed.
+
+**Identical. Not similar — identical.** Maximum difference across 1280 × 1024 × 3 values: zero.
+
+Least exciting result on this page. Probably the most important one.
+
+### Where does each part of the model actually act?
+
+I split the 28 blocks into six groups and pushed one group at a time, at six increasing strengths,
+in both directions, on two scenes packed with as many different materials as I could fit — skin,
+polished steel, hammered copper, oak, rope, granite, fire, smoke. 519 images.
+
+<p align="center">
+  <img src="assets/motion/six_blocks_ramp.gif" alt="Six block groups, same scene, same seed, gain ramping from negative to positive" width="100%">
+</p>
+
+Same scene, same seed, the six groups side by side. The only thing changing is which part of the
+model I am pushing and how hard.
+
+Here is the thing I did not expect, and which I only saw because I stopped looking at the
+*content* and started looking at the *movement*: **each group moves the image in its own way.**
+Not "more" or "less" — differently. Block 5 works on the smoke. Block 1 works on the objects on
+the bench. Block 6 does almost nothing until you push it hard, and then it goes straight for the
+fire.
+
+Strip the content away entirely and it gets obvious. Below, the same ramp, but showing only
+*where* pixels are changing — bright means moving, dark means still:
+
+<p align="center">
+  <img src="assets/motion/six_blocks_motion.gif" alt="Difference maps: where each block group moves the image" width="100%">
+</p>
+
+And the full grid, six groups down, six strengths across:
+
+<p align="center">
+  <img src="assets/motion/block_map_P01.jpg" alt="Block map: rows are block groups, columns are increasing gain" width="100%">
+</p>
+
+I almost threw this whole experiment away. My first pass concluded the maps were empty noise,
+because I had compared each block's effect against *how much two different seeds differ from each
+other* — and a different seed is not noise, it is a completely different starting point. Of course
+nothing cleared that bar. Once I compared the maps against each other instead of against that, the
+signatures were sitting right there, and they reproduce: the same block at different strengths
+gives the same map (r = 0.44), two different blocks do not (r = 0.28).
+
+### The watermark that does not move
+
+This one came out of just *looking* at the images. With `euler_ancestral` I kept seeing the exact
+same pattern of grain in every image made with the same seed, no matter what I did to the weights.
+
+There is a clean reason. Ancestral samplers add fresh noise at every step, and that noise is drawn
+from a generator seeded by your seed — so the *sequence* of noise is fixed. Change the weights and
+the image goes somewhere else, but the grain sprinkled on top is literally the same grain. Same
+seed, same watermark.
+
+Measured: in flat areas, the fine grain of two different edits at the same seed correlates between
+0.07 and 0.39. Between two seeds it correlates **0.004**. It is the same watermark, and it is only
+the same within a seed.
+
+This turned out to matter more than a curiosity, because it gives me a number I did not have
+before: **how much of the original image survives an edit.** That is exactly what I care about
+when I use this tool to fix a render I already like, without touching seed or steps or CFG. And on
+that number the blocks are not equal at all — push Block 6 hard and 16% of the original trajectory
+is still there; push Block 1 the same amount and you are down to 5%.
+
+Funny consequence: this only works *because* I was using an ancestral sampler. I had been about to
+recommend switching to a deterministic one.
+
+### Does the direction even matter?
+
+Until this night I had only ever measured *positive* gains. Generating the negative side too let me
+split every effect into two parts:
+
+- the part that **flips** when you flip the sign — that is a knob;
+- the part that happens **either way** — that is just a cost.
+
+The result was humbling. At the pixel level, **less than half** of what a block does reverses with
+the sign. And I had written, a few hours earlier that same night, that "Block 3 and Block 4
+saturate the image strongly." They do not. With a *negative* gain Block 4 saturates by +12.89,
+against +12.11 positive — basically the same. Block 4 does not saturate the image; *any* edit to
+Block 4 saturates it, whichever way you turn it.
+
+A knob goes into a preset. A cost gets budgeted against. Measuring one direction only cannot tell
+them apart, and I had been doing exactly that.
+
+The one block that genuinely steers saturation is Block 1, downward, and it is the only one.
+
+### Two knobs at once — and the first prediction I wrote down *before* looking
+
+Everything so far is exploration: I look, I notice, I write it down. That is fine, but it proves
+nothing, because I picked what to look at *after* seeing where something interesting was.
+
+So for the first time in this project I did it the other way round. I had noticed that Block 5 and
+Block 1 look like opposite ends of the same dial, while Block 5 and Block 4 seem to push the same
+way. If the effects simply add up, I can predict what happens when I turn two at once — so I wrote
+the numbers down, committed them to this repository with a timestamp, and only then generated the
+images.
+
+<p align="center">
+  <img src="assets/motion/composition_P01.jpg" alt="Baseline, B5, B4, B5+B4, B1, B5+B1" width="100%">
+</p>
+
+**Block 5 + Block 1: confirmed, 4 measurements out of 4.** The number I had picked in advance as
+the decisive one — contrast — was predicted at −3.23 and came out at **−3.02**, negative in all six
+image pairs. That felt good.
+
+**Block 5 + Block 4: refuted, 0 out of 4.** And refuted in a way I had not even listed as a
+possibility. Block 5 alone raises the highlights. Block 4 alone raises the highlights. Both
+together: **nothing.** Straight back to baseline. Two knobs pushing the same way, turned together,
+push not at all.
+
+I spent the rest of the night trying to prove that was a bug. It is not the metric hitting a
+ceiling (plenty of headroom). It is not the node halving the gains when you set two (the other pair
+would have halved too, and it did not). It is not the image falling apart into a different scene —
+the opposite, actually: the combined image stays *closer* to the original than either single edit,
+and you can see in the strip above that it is plainly the same picture.
+
+The explanation turned up when I stopped using four numbers and started treating each edit as a
+direction in a 23-dimensional space of style measurements. **Two edits pointing in different
+directions add up almost perfectly. Two edits pointing the same way saturate and you lose about
+40%.** Block 1 and Block 5 point apart (cosine −0.34, sum accurate to 99%). Block 4 and Block 5
+point nearly the same way (cosine +0.77, sum accurate to 60%).
+
+So I wrote a second prediction from that rule, again before generating, on two pairs I had never
+combined — and **it failed.** One band held perfectly, the other missed by more than noise. The
+direction of the rule survived on both new pairs; the steepness I had fitted from two points was
+just wrong. Four pairs is still not enough to say anything: the exact test gives p = 0.125 against
+a floor of 0.083, which means even a perfect result would not have counted at that sample size.
+
+I am leaving both of them in, the hit and the miss, with the predictions still visible exactly as I
+wrote them. A prediction you can only pass is not a prediction, and I would rather this notebook
+show the ones that broke than quietly keep the ones that held.
+
+Next: eight pairs instead of four, covering the middle of the range where I currently have no data
+at all — which is precisely where it would be decided whether this is a straight line, a threshold,
+or a curve. I will let you know if it ends up being actual trash or not.
+
+---
+
 ## What happens tomorrow
 
 The roadmap below is the long list. This is the short one — four things, all of them already specified,
