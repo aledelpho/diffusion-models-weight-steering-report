@@ -106,3 +106,43 @@ parità di spostamento del contenuto, B6 lascia 3.5× più identità residua di 
 distinzione invisibile nello spazio delle feature di stile e leggibile solo nella filigrana —
 che esiste perché il campionatore è `euler_ancestral`. Un campionatore non ancestrale
 probabilmente non renderebbe disponibile questa misura.
+
+---
+
+## 7. Due fenomeni distinti: condizionato al seed e invariante al seed
+
+Osservazione dell'utente: alcune correzioni ottenute con il tuner **persistono al cambio di
+seed** — l'accensione delle alte luci, certi cambi di tratto. Se fosse tutto deviazione di
+traiettoria, non dovrebbero.
+
+Verificata misurando proprietà **globali** invece che per pixel, e chiedendo se la variazione
+rispetto al baseline ha lo stesso segno in tutte e sei le celle (2 prompt × 3 seed). Dose 0.200:
+
+| blocco | alte luci (97° pct) | ombre (3° pct) | contrasto | saturazione |
+|---|--:|--:|--:|--:|
+| **B1** | **−10.00** 6/6 | **+3.33** 6/6 | **−6.70** 6/6 | **−8.34** 6/6 |
+| B2 | +1.17 4/6 | +0.67 3/6 | −0.43 4/6 | +2.25 4/6 |
+| B3 | −0.83 4/6 | **−3.33** 6/6 | +1.72 3/6 | **+14.14** 6/6 |
+| B4 | **+4.83** 6/6 | **−4.00** 6/6 | +3.61 3/6 | **+12.14** 6/6 |
+| **B5** | **+7.33** 6/6 | **−2.17** 6/6 | **+3.47** 6/6 | **+17.13** 6/6 |
+| B6 | −4.50 3/6 | +0.17 3/6 | **−5.88** 6/6 | **+4.09** 6/6 |
+
+**B5 espande la gamma dinamica e satura** — alte luci su, ombre giù, contrasto su, saturazione
+su: quattro misure indipendenti che raccontano la stessa storia, concordi in 6/6 celle e già
+presenti a dose 0.050 (+3.00, −1.33, +1.96, +5.22, tutte 6/6). **B1 fa l'opposto**: schiaccia la
+gamma e desatura. Sono due manopole contrapposte sullo stesso asse tonale.
+
+**Cautela sui confronti multipli**: 6 blocchi × 6 metriche × 2 dosi = 72 test; a p = 0.031 se ne
+attenderebbero ~2.2 per caso e se ne osservano ~20, quindi il quadro complessivo è ben oltre il
+caso. La singola casella a 6/6 non va però letta isolatamente, e le metriche di luminanza sono
+correlate fra loro. B5 regge perché quattro metriche diverse convergono su una descrizione sola.
+
+### La separazione che ne segue
+
+| | cos'è | dipende dal seed? | come si misura |
+|---|---|---|---|
+| **firma spaziale** | *dove* si spostano i pixel | **sì** — mediare sui seed la cancella | mappe di differenza, per seed |
+| **effetto sistematico** | *quale proprietà globale* si sposta | **no** — sopravvive al cambio di seed | statistiche globali, test dei segni fra celle |
+
+Le correzioni che l'utente osserva persistere sono del secondo tipo. I due fenomeni erano
+mescolati in ogni analisi precedente e vanno misurati separatamente.
