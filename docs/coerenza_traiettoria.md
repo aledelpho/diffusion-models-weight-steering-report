@@ -127,6 +127,13 @@ rispetto al baseline ha lo stesso segno in tutte e sei le celle (2 prompt × 3 s
 | **B5** | **+7.33** 6/6 | **−2.17** 6/6 | **+3.47** 6/6 | **+17.13** 6/6 |
 | B6 | −4.50 3/6 | +0.17 3/6 | **−5.88** 6/6 | **+4.09** 6/6 |
 
+> **CORRETTO il 2026-09-19 a tarda sera, dopo il braccio negativo.** La riga sulla
+> saturazione di B3 e B4 attribuiva una direzione a un effetto che non ce l'ha: con
+> guadagno **negativo** B4 satura di +12.89 contro +12.14 del positivo, frazione di sterzo
+> **0.03**. Non è B4 che satura, è qualunque modifica a B4 che satura. Vedi
+> `docs/mappa_completa_sterzo_e_deriva.md` §2 e pitfall 57. Gli effetti di B1 e B5 sulle
+> alte luci e sul contrasto sono invece sterzi veri e sopravvivono alla verifica.
+
 **B5 espande la gamma dinamica e satura** — alte luci su, ombre giù, contrasto su, saturazione
 su: quattro misure indipendenti che raccontano la stessa storia, concordi in 6/6 celle e già
 presenti a dose 0.050 (+3.00, −1.33, +1.96, +5.22, tutte 6/6). **B1 fa l'opposto**: schiaccia la
