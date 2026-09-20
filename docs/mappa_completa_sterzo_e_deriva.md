@@ -16,7 +16,26 @@ Con positivo e negativo appaiati si separa, per ogni grandezza:
 Frazione di sterzo = |A|/(|A|+|S|). Vale 1 se la modifica è perfettamente reversibile, 0 se il
 blocco fa la stessa cosa qualunque segno gli si dia.
 
-### Al livello dei pixel: domina la deriva
+### Al livello dei pixel: la misura non dice niente — RITRATTATO
+
+> **RITRATTATO il 2026-09-20.** La tabella qui sotto è stata riportata come «meno della metà di ciò
+> che un blocco fa ai pixel si inverte col segno». **È una lettura sbagliata: 0.40 è il pavimento
+> aritmetico della statistica, non un risultato.** Confrontando due condizioni fra cui *non può*
+> esserci sterzo — blocchi diversi con lo stesso segno, oppure il positivo di un blocco contro il
+> negativo di un altro — la stessa frazione dà **0.394** e **0.390**, contro lo **0.409** delle
+> coppie appaiate per segno. La differenza è 0.015: la frazione ai pixel misura l'aritmetica del
+> confronto fra due perturbazioni, non la reversibilità.
+>
+> **Unica eccezione: `B6` a 0.459**, sopra l'intero intervallo del null (0.354–0.419) — ed è
+> l'unico blocco per cui il latente ha poi mostrato una manopola vera (1.404× / 0.695×).
+>
+> **Cosa NON è toccato da questa ritrattazione**: la decomposizione al livello del **tono** (§
+> seguente) è una misura diversa e regge — lì le grandezze sono scalari con segno il cui null è
+> «nessun cambiamento», e l'osservazione che `B4` satura di +12.14 col positivo e +12.89 col
+> negativo è diretta, non un rapporto. Reggono anche il pitfall 57 e tutto ciò che si basa sul
+> latente. Vedi pitfall 63.
+
+### La tabella ritrattata
 
 | blocco | 0.020 | 0.050 | 0.120 | 0.200 | media |
 |---|--:|--:|--:|--:|--:|
