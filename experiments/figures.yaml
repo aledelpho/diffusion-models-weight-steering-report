@@ -1,0 +1,176 @@
+# Figure registry.
+#
+# Every figure referenced from a page under notebook/ has an entry here, and nothing is built
+# that is not listed. See notebook/AUTHORING.md §4.
+#
+#   kind         scatter | strip | toggle | contact_sheet | ramp | diffmap | paired_bars | schema
+#   builder      a function in experiments/notebook_figures.py (renders) or notebook_charts.py (charts)
+#   source       the measurement file every number comes from; null only for kind: schema
+#   caption_from source  -> the builder derives the caption from the row it is drawing
+#                static  -> allowed for kind: schema only, which carries no measured number
+#   crop         whole | locator:<name>     never a pixel rectangle
+#   alt          the CLAIM the figure makes, not a description of its appearance
+#   control      for kind: toggle — the companion toggle between two baselines at different
+#                seeds, so the reader can see how far the image moves when nothing was touched
+
+figures:
+
+  # ---------------------------------------------------------------- 05-knob-or-cost
+
+  - id: F05.1
+    page: 05-knob-or-cost
+    kind: scatter
+    builder: knob_vs_cost_scatter
+    source: data/punto7_blocks.csv
+    caption_from: source
+    crop: whole
+    color: sequential_by_block_index      # depth is ordered: one hue light->dark, not categorical
+    direct_labels: [blk00, blk14, blk26, blk27]
+    alt: >
+      Twenty-eight blocks placed by how much they steer against how much they cost. The first
+      block and the last few sit at opposite ends of the steering axis; the whole tail sits
+      low on the cost axis.
+
+  - id: F05.2
+    page: 05-knob-or-cost
+    kind: scatter
+    builder: depth_profile
+    source: data/punto7_blocks.csv
+    caption_from: source
+    crop: whole
+    color: sequential_by_block_index
+    alt: >
+      The common mode against block index for all 28 blocks, with the fitted line. The cost
+      deepens steadily from the middle of the network toward the output.
+
+  - id: F05.3
+    page: 05-knob-or-cost
+    kind: paired_bars
+    builder: rectification_bars
+    source: data/punto7_blocks.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Per-block amplitude at plus 0.200 against minus 0.200, paired. Block 26 moves 12.4
+      times further in the positive direction; block 27 is the only one that reverses this.
+
+  # Built and looked at: the difference reads clearly at whole-frame size, so no crop.
+  # The control is the same baseline twice, NOT two seeds — see AUTHORING §4.3.
+  - id: F05.4
+    page: 05-knob-or-cost
+    kind: toggle
+    builder: toggle_animation
+    source: data/punto7_blocks.csv
+    caption_from: source
+    crop: whole
+    control: same_baseline_twice
+    alt: >
+      Block 0 and block 27, both pushed the same way, each alternating against its own
+      baseline at the same seed. Block 0 comes out smoother and block 27 comes out etched
+      all over; the control panel beside them, the same baseline twice, does not move.
+
+  - id: F05.5
+    page: 05-knob-or-cost
+    kind: schema
+    builder: null
+    source: null
+    caption_from: static
+    crop: whole
+    alt: >
+      Schematic of the two components: averaging the two directions gives the common mode,
+      the cost; dividing them gives the swing, the steering. A ratio alone discards the first.
+
+  # ---------------------------------------------------------------- 00-the-bench
+
+  - id: F00.1
+    page: 00-the-bench
+    kind: toggle
+    builder: toggle_animation
+    source: data/bench_checks.csv
+    caption_from: source
+    crop: whole
+    control: same_baseline_twice
+    alt: >
+      An edit and its exact inverse, alternating against the untouched baseline at the same
+      seed. The weights are back at a displacement of zero and the image has not come back;
+      the control panel beside it, the same baseline twice, does not move.
+
+  - id: F00.2
+    page: 00-the-bench
+    kind: schema
+    builder: null
+    source: null
+    caption_from: static
+    crop: whole
+    alt: >
+      A patch passes from the interface through a name map and a patch applier before it
+      reaches the weights, and can be dropped silently at either step while the run still
+      finishes and reports success.
+
+  - id: F00.3
+    page: 00-the-bench
+    kind: paired_bars
+    builder: noise_floor_history
+    source: data/bench_checks.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The seed-to-seed noise floor as it was estimated three times: 1.15 percent on three
+      seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.84 percent
+      measured on eighteen seeds each.
+
+  # ---------------------------------------------------------------- 01-mark-style
+
+  - id: F01.1
+    page: 01-mark-style
+    kind: strip
+    builder: scale_comparison
+    source: data/stage7_manifest.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The same baseline and preset pair shown at full resolution and again at 224 by 224, the
+      size CLIP actually looks at. The stroke detail that separates them does not survive the
+      downsample.
+
+  - id: F01.2
+    page: 01-mark-style
+    kind: toggle
+    builder: toggle_gif
+    source: data/stage7_manifest.csv
+    caption_from: source
+    crop: whole
+    control: baseline_pair_seed42_seed777
+    alt: >
+      Baseline, preset and the norm-matched random control alternating on one prompt and one
+      seed. The preset changes how the marks are drawn; the control at the same displacement
+      does not.
+
+  # ---------------------------------------------------------------- 02-attribute-emergence
+  #
+  # The headlight panels are the reason the crop rule exists (pitfall 40): five crop
+  # rectangles of twenty did not contain the headlights they were captioned as showing.
+  # Until a qualified locator exists, these are whole frames.
+
+  - id: F02.1
+    page: 02-attribute-emergence
+    kind: contact_sheet
+    builder: contact_sheet
+    source: data/stage9_headlights_raw.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Five seeds across seven conditions, whole frames, each captioned with the blind score of
+      the image it shows. The preset lights the headlights the prompt never mentions.
+
+  # A locator must be qualified before it may be used here. Declare it, measure its hit rate
+  # across the corpus, publish the rate next to the figure, and fall back to the whole frame
+  # below the threshold.
+  #
+  # - id: F02.2
+  #   kind: strip
+  #   crop: locator:headlight_box
+  #   locator:
+  #     criterion: "the scored headlight region falls inside the box"
+  #     threshold: 0.95
+  #     evaluated_per: [prompt, condition, seed]
