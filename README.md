@@ -12,6 +12,27 @@
 
 ---
 
+## What counts as a result here
+
+One thing to say before anything else, because it decides what goes in this notebook and what
+does not: **I am after control over the output, not an explanation of the model.**
+
+That sounds obvious and it isn't, because it changes what a finding is. If I learn something true
+about how the model works and it gives me no new handle on the image, it is interesting and it is
+not a result — not here. And the reverse holds: a handle that works is a result even when I cannot
+say why, as long as the measurement that shows it works is honest.
+
+It also decides what counts as *failure*. An effect that lives inside the model but gets absorbed
+by the decoder before it reaches the pixels is, for my purposes, **absent** — no matter how real
+it is upstream. A knob that moves the image but destroys it on the way is a cost, not a control.
+And "the style changed" is worth less to me than "the image stayed itself while the one thing I
+wanted to fix changed", which is why the measure this notebook ended up leaning on is how much of
+the original render survives an edit, rather than how far the style travelled.
+
+The water-on-a-mountain picture further down says the same thing from the other side: I am not
+trying to map the mountain. I am trying to move where the water goes, and keep it recognisably
+the same stream.
+
 ## ✦ Live Visual Demonstration: Synchronized 5-Seed Steering
 
 While experimenting with [**Arthemy-Krea2-Tuner**](https://github.com/aledelpho/comfyui-arthemy-krea2-tuner), I wanted to see if manipulating internal weights directly could predictably guide how a model draws — without retraining, without LoRAs, and without touching the prompt.
@@ -1496,6 +1517,59 @@ show the ones that broke than quietly keep the ones that held.
 Next: eight pairs instead of four, covering the middle of the range where I currently have no data
 at all — which is precisely where it would be decided whether this is a straight line, a threshold,
 or a curve. I will let you know if it ends up being actual trash or not.
+
+### The last blocks are a focus knob — and the VAE throws half of it away
+
+This one starts with something I noticed by eye. Pushing the last block group up gave a strong,
+bright, oddly *even* grain, as if the seed's watermark were burning in. Pushing it down blurred
+and darkened, as if every pixel had been multiplied into its neighbours.
+
+Measured on the pixels, half of that held and half did not. Down: high-frequency energy 0.79×,
+luminance −9.0 out of 255, the strongest darkening in the whole experiment. Up: high-frequency
+energy **1.00×** — no change at all. And since the effect did not reverse when I flipped the
+sign, I wrote it up as *not* a focus control.
+
+That was wrong, and the only way to see it was to look before the decoder. Saving the **latent**
+— one extra node, no extra generation — gives:
+
+| | high-frequency energy in the latent |
+|---|--:|
+| gain **+0.200** | **1.404×** |
+| gain **−0.200** | **0.695×** |
+
+Near-exact reciprocals, both at p = 0.031 over six prompt × seed cells. **In the space where the
+model actually works, those blocks are a clean two-way detail knob.** The decoder passes the
+subtraction through and **absorbs the addition**: the extra detail written into the latent never
+becomes extra detail in the image.
+
+So the ceiling is not in the weights. It is downstream, in the VAE. If you want to *remove*
+detail this way it works; if you want to add it, no amount of gain will get you past the decoder.
+
+Two honest limits. First, I only saved latents for that one group, so what is shown is that those
+blocks **are a** detail knob, not that they are **the** detail knob — the controls are queued.
+Second, "the last block group" is my own bundle of blocks 24–27, and the grouping is arbitrary
+(see above), so the claim is about those four blocks taken together, not about a module of the
+model.
+
+### Why I am glad this part was not new
+
+Late blocks handling detail is already known. It is folklore in the UNet block-merging community,
+it has a published basis for UNets in FreeU, and for diffusion transformers specifically
+[Δ-DiT](https://arxiv.org/html/2406.01125v1) states it outright: front blocks are associated with
+the outline, rear blocks with the details. They got there to make sampling faster — caching rear
+blocks early and front blocks late — which is a completely different technique aimed at a
+completely different problem.
+
+I could be annoyed that I rediscovered someone else's result. I think the opposite. **A method
+that independently recovers a known result is a method you can point at something unknown.** Two
+tools, two purposes, one answer: that is the closest thing to a calibration this project has had.
+Everything else measured here — what the decoder keeps, how much of the original render survives
+an edit, which part of a block is a knob and which part is just a cost — comes out of the same
+instrument, and this is the one case where I can check the instrument against somebody else's
+reading.
+
+The part I have not found reported anywhere is the ceiling itself: that the decoder transmits the
+subtraction and swallows the addition. That one seems to be ours.
 
 ---
 
