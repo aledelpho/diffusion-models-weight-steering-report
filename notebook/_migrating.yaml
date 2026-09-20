@@ -1,0 +1,192 @@
+# _migrating.yaml -- the claims ledger of the migration.
+#
+# The old monolithic README carried its results as a prose bullet list under
+# "What is established, and what is not" (git show c843d61:README.md, lines 245-389):
+# twelve bullets asserted and eleven withheld, twenty-three in total. That list is the
+# population this migration has to move, one claim at a time, into notebook/*.md.
+#
+# This file did not exist until 2026-09-21. The migration ran for two pages without it,
+# which means nothing was checking that a claim had not been published twice, or dropped.
+#
+# THE RULE: when a claim is published on a page, delete its entry from `pending` and add a
+# line to `migrated`. A claim must never be in both places.
+#
+# NOT YET ENFORCED. validate_notebook.py does not read this file. The check to add is:
+# every id under `pending` must be absent from every page's claims[], and every id under
+# `migrated` must resolve to a claim id that exists on the page it names. Until that check
+# exists, this ledger is a promise rather than a control -- see AUTHORING.md, opening note.
+#
+# `source` is the section of the old README that carries the text and the evidence.
+
+migrated:
+  - id: permutation-adds-a-neglected-attribute
+    page: 02-attribute-emergence
+    date: 2026-09-21
+    source: "README@c843d61 §2.1-§2.6"
+  - id: edit-adds-and-removes-unasked-traits
+    page: 02-attribute-emergence
+    date: 2026-09-21
+    source: "README@c843d61 §2.8-§2.10"
+  - id: attribute-emergence-generality-untested
+    page: 02-attribute-emergence
+    date: 2026-09-21
+    source: "README@c843d61 §2.6, §2.11"
+
+pending:
+
+  # ---- asserted in the old ledger -------------------------------------------------
+
+  - id: tiny-payload-shifts-mark-style
+    claim: >
+      A 53 KB hand-calibrated weight perturbation shifts the mark style of a 12.8-billion
+      parameter diffusion model coherently and repeatably across seeds.
+    source: "README@c843d61 §1.1"
+    page: 01-mark-style
+
+  - id: direction-not-distance
+    claim: >
+      This is not "the further from the checkpoint, the more the style changes". Controls at
+      the same Frobenius displacement without the calibrated structure do not reproduce it.
+    source: "README@c843d61 §1.1"
+    page: 01-mark-style
+
+  - id: clip-224-is-blind-to-it
+    claim: >
+      CLIP at 224x224 cannot see this change, because it downsamples before looking and the
+      stroke detail does not survive. Measured on mark morphology the effect is solid.
+    source: "README@c843d61 §1.2"
+    page: 01-mark-style
+
+  - id: mark-style-generalises
+    claim: >
+      The mark-style effect generalises beyond the prompt it was found on, on 24 prompts,
+      against a generalisation criterion declared in advance.
+    source: "README@c843d61 §1.3"
+    page: 01-mark-style
+
+  - id: colour-does-not-generalise
+    claim: >
+      The colour effect does not generalise: it is present only where the prompt pins the
+      palette in detail, and vanishes when the model chooses the palette itself.
+    source: "README@c843d61 §1.4"
+    page: 01-mark-style
+
+  - id: edits-move-colour-in-different-directions
+    claim: >
+      Different weight edits move colour in directions that differ from one another.
+      Confirmed twice on independent corpora, at the floor of the permutation test both times.
+    source: "README@c843d61 §1.5"
+    page: 07-chromatic-signatures
+
+  - id: position-beats-displacement
+    claim: >
+      Where the edit lands changes how much the picture moves, and it is not a matter of how
+      far the weights moved. The last four blocks move 28% less in Frobenius terms than blocks
+      5-9 and change the image 3.7 times more.
+    source: "README@c843d61 §4.1-§4.4"
+    page: 04-where-in-the-model
+
+  - id: blockshuf-neg-enlarges-the-subject
+    claim: >
+      A block-derangement edit makes the subject occupy more of the frame. Ratio 1.22 on 9
+      prompts of 10, on a new corpus, against a prediction frozen before the renders existed.
+    source: "README@c843d61 §3.1"
+    page: 03-what-ends-up-in-the-picture
+
+  - id: preset-is-a-sharp-operator
+    claim: >
+      The hand-calibrated preset is a sharply defined operator, not a vague nudge: darker,
+      greyer, grainier, parallel-stroked, headlights on. Five effects, one direction, two
+      unrelated corpora.
+    source: "README@c843d61 §1.6, §1.7, §2.8"
+    page: 01-mark-style
+
+  - id: hatching-axis-exists
+    claim: >
+      There is a hatching axis, and the sign of a structured displacement moves you along it.
+      Predicted by sign in advance, confirmed on 16 new prompts at 16/16 and 80/80 pairs, with
+      the norm-matched random control absent.
+    source: "README@c843d61 §1.6"
+    page: 06-the-hatching-axis
+
+  # ---- withheld in the old ledger, and the withholding is itself the claim ---------
+
+  - id: bounded-to-one-model-one-corner
+    claim: >
+      Nothing here reaches outside Krea-2 or outside one narrow corner of image space. All 40
+      prompts are upper-body or close-up character portraits and all 40 contain the phrases
+      "bold ink outlines" and "hatched shadows".
+    source: "README@c843d61, ledger"
+    page: README / scope.md
+    note: >
+      This is the limit that bounds every result in the notebook. It belongs on the front
+      page, not on one experiment page.
+
+  - id: scoring-rounds-were-not-blind
+    claim: >
+      Hidden filenames do not blind an expert to a condition with a visible signature. In a
+      four-way forced choice against a 25% chance level the author identified two conditions
+      at 17/20 and 12/20 with the images mirrored, flipped, hue-rotated and noised.
+    source: "README@c843d61 §3.2"
+    page: 03-what-ends-up-in-the-picture
+
+  - id: enlargement-structure-or-magnitude
+    claim: >
+      Whether the enlargement is about structure or about magnitude is undecided: the
+      confirmation round left out the sign-scrambled control at the same displacement.
+    source: "README@c843d61 §3.1"
+    page: 03-what-ends-up-in-the-picture
+
+  - id: style-does-not-steer-direction
+    claim: >
+      That the direction of steering depends on the style the prompt declares. Tested with
+      frozen thresholds and not supported.
+    source: "README@c843d61, ledger; docs/stage9_verdict.md"
+    page: 09-style-direction
+    note: "Migrates as status overturned, typeset exactly like a page that holds."
+
+  - id: position-function-or-proximity
+    claim: >
+      That the position effect is about function rather than about proximity to the output.
+      CLIP-Dist measures how much the image moved, never what moved.
+    source: "README@c843d61 §4.4"
+    page: 04-where-in-the-model
+
+  - id: block1-does-not-replicate
+    claim: >
+      That Block_1 shares the phenomenon. It looks like it does under rotation and does not
+      replicate under amplitude scaling. Read as instability, not position.
+    source: "README@c843d61 §4.3; docs/rotations_block1_vs_block6_results.md"
+    page: 08-block1-vs-block6
+
+  - id: exploratory-sizes-are-upper-bounds
+    claim: >
+      That an exploratory effect size in this notebook means anything. Three consecutive
+      confirmation rounds came back between a third and a half of the exploratory estimate.
+    source: "README@c843d61, ledger"
+    page: README / scope.md
+
+  - id: operative-structural-property-unknown
+    claim: >
+      Which structural property of the perturbation is the operative one. Two points separate
+      structure from magnitude; they do not identify what about the structure does the work.
+    source: "README@c843d61, ledger"
+    page: 02-attribute-emergence or 01-mark-style
+    note: >
+      Stated on 02 inside "The controls" as a limitation, but not carried as a claim. Decide
+      which page owns it before publishing it anywhere.
+
+  - id: chromatic-signature-per-edit-is-ambiguous
+    claim: >
+      That every weight edit carries a chromatic signature of its own. Tested with the
+      threshold fixed in advance, it came back three of six against a bar of four. Ambiguous,
+      and written as ambiguous.
+    source: "README@c843d61 §1.5"
+    page: 07-chromatic-signatures
+
+  - id: colour-and-texture-are-not-one-signature
+    claim: >
+      That colour and texture are two readings of one signature. On the same 560 renders they
+      behave oppositely, and no account here explains both.
+    source: "README@c843d61, ledger"
+    page: 07-chromatic-signatures

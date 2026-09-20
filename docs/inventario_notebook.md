@@ -250,12 +250,11 @@ trial, the photometric signature — are Experiment 3 and §1.7 of the old READM
 | 1731–1757 | How to explore, and how to replicate | README |
 | 1758–1762 | Credits, licence, context | README |
 
-The claims ledger at lines 245–389 is a prose bullet list, not a table: **13 bullets under
-"Established with reasonable confidence" and 11 under "Not established"**, 24 in total. Several
-bullets carry more than one testable statement, and the two already migrated pages between them
-absorb parts of three. That is the population the missing `_migrating.yaml` was supposed to
-track, and until it exists there is no mechanical check that a claim has not been published
-twice.
+The claims ledger at lines 245–389 is a prose bullet list, not a table: **12 bullets under
+"Established with reasonable confidence" and 11 under "Not established"**, 23 in total. Several
+bullets carry more than one testable statement. That is the population `notebook/_migrating.yaml`
+now tracks (written 2026-09-21, see §8); until a validator check reads it, there is still no
+mechanical guarantee that a claim has not been published twice.
 
 The "One long night" section is the one that does not map onto a single page: its six
 subsections are six different experiments, and three of them (the watermark, the two-knob
@@ -333,3 +332,42 @@ In dependency order. Items 1–3 block every remaining page; items 4–6 block a
 
 Separately, and not blocking: merge `docs/_pitfalls_64_67_da_inserire.md` into
 `errors_log.md`, and remove the two staging files whose contents are already merged.
+
+
+---
+
+## 8. What changed on the night of 2026-09-21
+
+Three commits on `main`, no push.
+
+| commit | what |
+|---|---|
+| `4d066c6` | this inventory |
+| `ed709c3` | F05.3's alt text published the retracted 12.4× rectification ratio; corrected to 9.1× against `data/punto7_blocks.csv` (13.621680 / 1.495314 = 9.11), in `figures.yaml`, on the page, and in the two `AUTHORING.md` examples that were teaching the wrong number |
+| `aadf9fa` | page `02-attribute-emergence`, `experiments/notebook_figures.py` with its first real builder, `experiments/headlights_by_style.py` → `data/stage9_headlights_by_style.csv`, five registered figures under `assets/02-attribute-emergence/` |
+
+Then `notebook/_migrating.yaml`: 23 claims, 3 migrated, 20 pending.
+
+Three items from §0 are therefore closed: item 1 (the ledger exists), item 10 (the alt text),
+and part of item 3 (`notebook_figures.py` exists and holds one working builder;
+`notebook_charts.py` and the other eight builders do not).
+
+**The order in §6 was inverted deliberately.** The plan was 01 then 02. Page 01 cannot be
+written to the contract: its evidence figures in `assets/01_steering/_figures` and
+`assets/01_steering_stage7/_figures` sample at RGB (154, 149, 139) — a light theme — and
+`AUTHORING.md` §4.4 requires that those be regenerated rather than recoloured, by a generator
+that does not exist. `validate_notebook.py` would reject every one of them. Page 02's figures
+are already dark and already built from their measurement files, so 02 went first.
+
+**Left for the author, not decided here:**
+
+1. Page 02 is filed `status: ambiguous`, `stage: exploratory`. The contract forbids `holds` on
+   an exploratory page, no threshold was frozen before either arm, the barnacle round was
+   scored unblinded, and the pre-registered confirmation was never run. That reasoning is
+   written into the page. It is still a judgement, and it is the one to overturn first if it
+   reads as too severe.
+2. Restoring `docs/prereg_punto7_simmetria_segno.md` (§7, item 2).
+3. Merging `docs/_pitfalls_64_67_da_inserire.md` into `errors_log.md`, and removing the two
+   staging files whose contents are already merged.
+4. `.git/_stale_locks/` holds git lock files and temporary objects this session could not
+   unlink — the connected folder denies deletion. The directory is inert and safe to delete.
