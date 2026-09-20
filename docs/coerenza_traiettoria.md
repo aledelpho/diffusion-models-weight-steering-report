@@ -94,6 +94,13 @@ A dose bassa la coerenza cresce con la profondità (B1 0.185 → B6 0.260). Un b
 altera la previsione e l'errore si propaga attraverso i venti e più blocchi successivi, spostando
 la traiettoria; un blocco finale agisce vicino all'uscita e sposta i valori senza retroazione.
 
+> **ESITO 2026-09-20: SMENTITA.** Misurata su tutti e 28 i blocchi singoli (168 render),
+> la coerenza **non cresce** attraverso i primi venti blocchi (r = −0.331, p = 0.154): è
+> piatta e leggermente decrescente. Tutto l'effetto è un **gradino al blocco 23**, e un
+> modello a gradino descrive i dati 2.8× meglio di una retta. Il meccanismo come formulato
+> è morto; resta che gli ultimi cinque blocchi fanno qualcosa di specifico. Vedi
+> `docs/monotonia_profondita_esito.md`.
+
 **Previsione**: la coerenza deve crescere monotonamente con l'indice del blocco. Gli slot sono
 sei gruppi da quattro-cinque blocchi; il test richiede di rifare la misura **per blocco singolo**
 invece che per gruppo, e i render necessari sarebbero nuovi. Con i dati attuali la monotonia è
