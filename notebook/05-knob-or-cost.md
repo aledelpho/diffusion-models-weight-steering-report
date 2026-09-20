@@ -255,7 +255,7 @@ barely moves. The single exception is block 27, the last one, which is more viol
 and is also the only tail block with a strong positive swing (1.393, the highest of the 28).
 Block 27 is an outlier on every axis here and deserves an experiment of its own.
 
-![Per-block amplitude at plus 0.200 against minus 0.200, paired. Block 26 moves 12.4 times further in the positive direction; block 27 is the only one that reverses this.](../assets/05-knob-or-cost/F05.3_rectification.webp)
+![Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive direction; block 27 is the only one that reverses this.](../assets/05-knob-or-cost/F05.3_rectification.webp)
 
 #### What I got wrong
 

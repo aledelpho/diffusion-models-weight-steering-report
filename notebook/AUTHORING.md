@@ -173,7 +173,7 @@ No figure is referenced from a page unless it has an entry in `experiments/figur
   caption_from: source           # source | static (static allowed only for schema)
   crop: whole                    # whole | locator:<name>
   alt: >
-    Paired bars of per-block amplitude at +0.200 against -0.200. Block 26 moves 12.4 times
+    Paired bars of per-block amplitude at +0.200 against -0.200. Block 26 moves 9.1 times
     further in the positive direction than in the negative.
 ```
 
@@ -240,7 +240,7 @@ Further:
 ### 4.5 Alt text
 
 Required on every figure, and written as **the claim the figure makes**, not as a description
-of its appearance. "Paired bars of amplitude by block" is a description. "Block 26 moves 12.4
+of its appearance. "Paired bars of amplitude by block" is a description. "Block 26 moves 9.1
 times further in the positive direction than in the negative" is the claim.
 
 This serves screen readers, it serves a model reading the page, and it serves the author: a

@@ -51,8 +51,9 @@ figures:
     caption_from: source
     crop: whole
     alt: >
-      Per-block amplitude at plus 0.200 against minus 0.200, paired. Block 26 moves 12.4
-      times further in the positive direction; block 27 is the only one that reverses this.
+      Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised
+      on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive
+      direction; block 27 is the only one that reverses this.
 
   # Built and looked at: the difference reads clearly at whole-frame size, so no crop.
   # The control is the same baseline twice, NOT two seeds — see AUTHORING §4.3.
@@ -155,13 +156,65 @@ figures:
   - id: F02.1
     page: 02-attribute-emergence
     kind: contact_sheet
-    builder: contact_sheet
+    builder: build_figures_headlights.grid
     source: data/stage9_headlights_raw.csv
     caption_from: source
     crop: whole
     alt: >
-      Five seeds across seven conditions, whole frames, each captioned with the blind score of
-      the image it shows. The preset lights the headlights the prompt never mentions.
+      Five seeds of one style, whole frames, the untouched model above and the edit below,
+      each panel carrying its blind score. The untouched model lights no headlights in any of
+      the five seeds; the edit lights them in all five.
+
+  - id: F02.2
+    page: 02-attribute-emergence
+    kind: contact_sheet
+    builder: build_figures_headlights.grid
+    source: data/stage9_headlights_raw.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Five seeds of one style, whole frames, the untouched model above and the negative
+      permutation below. The untouched model lights four of five; the edit lights none, and
+      changes the whole scene while doing it.
+
+  - id: F02.3
+    page: 02-attribute-emergence
+    kind: contact_sheet
+    builder: build_figures_headlights.lightness_control
+    source: data/stage9_headlights_pretreatment_strata.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Four scenes from the brightest third by the lightness of the untouched render, baseline
+      above and the edit below, with the full stratified table. In the scenes where a
+      dark-image explanation has nothing to work with, the untouched model lights one car in
+      eleven and the edit lights seven in thirteen.
+
+  # F02.4 and F02.5 are the first figures in the notebook built by the module the contract
+  # names. Whole frames, twenty seeds, every caption read out of the scored manifest.
+  - id: F02.4
+    page: 02-attribute-emergence
+    kind: contact_sheet
+    builder: notebook_figures.barnacle_census
+    source: data/attribute_emergence.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Twenty seeds, whole frames, block permutation above and the stock model below, each
+      panel captioned with its recorded score. The permutation draws the requested attribute
+      in nineteen seeds of twenty; the stock model draws it in one.
+
+  - id: F02.5
+    page: 02-attribute-emergence
+    kind: contact_sheet
+    builder: notebook_figures.barnacle_census
+    source: data/attribute_emergence.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Twenty seeds, whole frames, block permutation above and the norm-matched sign scramble
+      below, each panel captioned with its recorded score. At the identical displacement the
+      scramble draws the attribute once in twenty, the same rate as the untouched model.
 
   # A locator must be qualified before it may be used here. Declare it, measure its hit rate
   # across the corpus, publish the rate next to the figure, and fall back to the whole frame
