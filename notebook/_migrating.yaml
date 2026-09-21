@@ -106,6 +106,23 @@ migrated:
     source: "docs/rotations_block1_vs_block6_results.md"
     split_from: block1-does-not-replicate
 
+  - id: style-does-not-steer-direction
+    page: 09-style-direction
+    date: 2026-09-21
+    source: "README@c843d61, ledger; docs/stage9_verdict.md"
+    note: >
+      Published as overturned. Two further claims came out of the same bullet and carry
+      split_from.
+  - id: double-dose-arm-is-degraded
+    page: 09-style-direction
+    date: 2026-09-21
+    split_from: style-does-not-steer-direction
+    source: "docs/prereg_stage9_style_direction.md amendment 5"
+  - id: shared-scene-is-not-separated-from-style
+    page: 09-style-direction
+    date: 2026-09-21
+    split_from: style-does-not-steer-direction
+    source: "docs/stage9_verdict.md, closing section"
 pending:
 
   # ---- asserted in the old ledger -------------------------------------------------
@@ -163,14 +180,6 @@ pending:
     note: >
       This is the limit that bounds every result in the notebook. It belongs on the front
       page, not on one experiment page.
-
-  - id: style-does-not-steer-direction
-    claim: >
-      That the direction of steering depends on the style the prompt declares. Tested with
-      frozen thresholds and not supported.
-    source: "README@c843d61, ledger; docs/stage9_verdict.md"
-    page: 09-style-direction
-    note: "Migrates as status overturned, typeset exactly like a page that holds."
 
   - id: exploratory-sizes-are-upper-bounds
     claim: >

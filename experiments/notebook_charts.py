@@ -648,6 +648,147 @@ def b1b6_advantage_by_space(out: Path) -> Path:
                  "source data/b1b6_paired_by_space.csv")
 
 
+
+def _stage9_cell_label(r: dict) -> str:
+    space = r["space"].split(".", 1)[-1].strip()
+    space = (space.replace("24-D Completo (L*, a*, b*)", "24-D complete")
+                  .replace("8-D Solo Luminanza (L*)", "8-D luminance")
+                  .replace("16-D Solo Cromatico (a*, b*)", "16-D chroma")
+                  .replace("5-D Asse Tessitura", "5-D texture"))
+    cond = (r.get("condition_style") or r.get("condition", "")).replace("_1x", "").replace("_2x", "")
+    cond = (cond.replace("preset_pos", "calibrated preset +")
+                .replace("blockshuf_neg", "block derangement −")
+                .replace("rand_pos", "sign scramble +"))
+    return f"{space} · {cond}"
+
+
+def stage9_centering_flip(out: Path) -> Path:
+    """The same statistic under the two standardisation conventions."""
+    src = DATA / "stage9_centering_sensitivity.csv"
+    rows = list(csv.DictReader(src.open(encoding="utf-8-sig", newline="")))
+    rows.sort(key=lambda r: float(r["delta_c_centered"]))
+    flipped = [r for r in rows if r["sign_agrees"] == "NO"]
+
+    fig, ax = _canvas(8.0, 5.2)
+    ax.axvline(0.0, color=DIM, lw=1.2, ls="--", zorder=2)
+    for i, r in enumerate(rows):
+        a, b = float(r["delta_c_centered"]), float(r["delta_c_uncentered"])
+        flips = r["sign_agrees"] == "NO"
+        colour = CAT[1] if flips else DIM
+        ax.plot([a, b], [i, i], color=colour, lw=1.8 if flips else 1.0, zorder=3)
+        ax.scatter([a], [i], s=40, color=colour, edgecolor=SURFACE, linewidth=0.7, zorder=4)
+        ax.scatter([b], [i], s=40, facecolor=SURFACE, edgecolor=colour, linewidth=1.4, zorder=4)
+    ax.scatter([], [], s=40, color=DIM, label="centred (filled) \u2192 uncentred (hollow)")
+    ax.plot([], [], color=CAT[1], lw=1.8, label=f"the sign changes  ({len(flipped)} cells)")
+    ax.plot([], [], color=DIM, lw=1.0,
+            label=f"the sign holds  ({len(rows) - len(flipped)} cells)")
+
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([f"{r['amplitude'].replace('Ampiezza ', '')}  {_stage9_cell_label(r)}"
+                        for r in rows], color=DIM, fontsize=7.5)
+    ax.set_xlabel("coherence between subjects minus coherence between styles\n"
+                  "(the registered prediction asked for positive)",
+                  color=DIM, fontsize=9)
+    ax.set_title(f"The sign of the result depends on a convention nobody registered\n"
+                 f"{len(flipped)} cells of {len(rows)} change sign when the joint mean is not "
+                 f"subtracted",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="upper left", fontsize=7.5, frameon=False, labelcolor=DIM,
+              handletextpad=0.8, borderpad=0.2)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(x=0.10, y=0.03)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out,
+                 f"{len(rows)} cells, 2 amplitudes x 3 spaces x 3 conditions "
+                 f"(the texture space is not in this file)  ·  "
+                 f"source data/stage9_centering_sensitivity.csv")
+
+
+def stage9_direction_at_usable_dose(out: Path) -> Path:
+    """What the registered prediction asked for, and which way the cells went."""
+    src = DATA / "stage9_coherence_results.csv"
+    rows = [r for r in csv.DictReader(src.open(encoding="utf-8-sig", newline=""))
+            if "1.0x" in r["amplitude"]]
+    rows.sort(key=lambda r: float(r["delta_c_raw"]))
+
+    fig, ax = _canvas(8.0, 4.6)
+    ax.axvline(0.0, color=DIM, lw=1.2, zorder=2)
+    for i, r in enumerate(rows):
+        d = float(r["delta_c_raw"])
+        ax.barh(i, d, height=0.62, color=CAT[1] if d < 0 else CAT[2],
+                edgecolor=SURFACE, linewidth=0.6, zorder=3)
+        ax.annotate(f"p = {float(r['p_value_raw']):.2f}",
+                    (d, i), textcoords="offset points",
+                    xytext=(-6 if d < 0 else 6, 0), ha="right" if d < 0 else "left",
+                    va="center", color=DIM, fontsize=7.5)
+    wrong = sum(1 for r in rows if float(r["delta_c_raw"]) < 0)
+    sig = sum(1 for r in rows if r["decision"] != "NOT_SIGNIFICANT")
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([_stage9_cell_label(r) for r in rows], color=DIM, fontsize=8)
+    ax.set_xlabel("coherence between subjects minus coherence between styles\n"
+                  "(the registered prediction asked for positive)",
+                  color=DIM, fontsize=9)
+    ax.set_title(f"At the usable dose not one cell of {len(rows)} is significant\n"
+                 f"{wrong} point the wrong way, and all four calibrated-preset cells do",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(x=0.22)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 f"{len(rows)} cells at amplitude 1.0x, {sig} significant  ·  "
+                 f"source data/stage9_coherence_results.csv")
+
+
+def _stage9_treat(r: dict) -> str:
+    """`S8` + `blockshuf_neg_2x` -> the vocabulary the rest of the notebook uses."""
+    cond = r["treatment"].replace("_1x", "").replace("_2x", "")
+    cond = (cond.replace("preset_pos", "calibrated preset +")
+                .replace("blockshuf_neg", "block derangement −")
+                .replace("rand_pos", "sign scramble +"))
+    return f"{r['prompt']} · {cond}"
+
+
+def stage9_quality_gate(out: Path) -> Path:
+    """How far outside its own range the double-dose arm sits."""
+    src = DATA / "stage9_amplitude2x_quality_gate.csv"
+    rows = list(csv.DictReader(src.open(encoding="utf-8-sig", newline="")))
+    for r in rows:
+        r["_z"] = max(abs(float(r["z_edge_density"])), abs(float(r["z_lbp_entropy"])))
+    rows.sort(key=lambda r: r["_z"])
+    degraded = [r for r in rows if "DEGRADED" in r["status"]]
+
+    fig, ax = _canvas(8.0, 4.4)
+    ax.axvline(3.0, color=CAT[2], lw=1.3, ls="--", zorder=2)
+    ax.annotate("the gate, 3 sigma", (3.0, len(rows) - 0.4), color=CAT[2], fontsize=8,
+                textcoords="offset points", xytext=(6, 0))
+    for i, r in enumerate(rows):
+        bad = "DEGRADED" in r["status"]
+        ax.plot([0.3, r["_z"]], [i, i], color=GRID, lw=0.9, zorder=1)
+        ax.scatter([r["_z"]], [i], s=42, color=CAT[1] if bad else DIM,
+                   edgecolor=SURFACE, linewidth=0.7, zorder=3)
+    worst = rows[-1]
+    ax.annotate(f"{_stage9_treat(worst)}  z = {worst['_z']:.0f}",
+                (worst["_z"], len(rows) - 1), textcoords="offset points", xytext=(-8, 9),
+                ha="right", color=INK, fontsize=8)
+    ax.set_xscale("log")
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([_stage9_treat(r) for r in rows], color=DIM, fontsize=7.5)
+    ax.set_xlabel("distance from the baseline range, in sigma, worst of two texture features",
+                  color=DIM, fontsize=9)
+    ax.set_title(f"The only arm that produced a result fails its own quality gate in "
+                 f"{len(degraded)} cells of {len(rows)}\nthe worst sits at "
+                 f"{worst['_z']:.0f} sigma, and the gate was written before the renders",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 f"{len(rows)} cells at amplitude 2.0x  ·  "
+                 f"source data/stage9_amplitude2x_quality_gate.csv")
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
@@ -672,6 +813,11 @@ def main() -> int:
                                  / "F08.1_advantage_by_prompt.webp"),
         b1b6_advantage_by_space(ASSETS / "08-block1-vs-block6"
                                 / "F08.2_advantage_by_space.webp"),
+        stage9_centering_flip(ASSETS / "09-style-direction"
+                              / "F09.1_centering_flip.webp"),
+        stage9_direction_at_usable_dose(ASSETS / "09-style-direction"
+                                        / "F09.2_direction_at_usable_dose.webp"),
+        stage9_quality_gate(ASSETS / "09-style-direction" / "F09.3_quality_gate.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")

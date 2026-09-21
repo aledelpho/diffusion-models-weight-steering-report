@@ -383,6 +383,42 @@ figures:
       below, each panel captioned with its recorded score. At the identical displacement the
       scramble draws the attribute once in twenty, the same rate as the untouched model.
 
+  - id: F09.1
+    page: 09-style-direction
+    kind: strip
+    builder: notebook_charts.stage9_centering_flip
+    source: data/stage9_centering_sensitivity.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The same eighteen cells under both standardisation conventions, centred against
+      uncentred. Eleven change sign when the joint mean is not subtracted, and every cell the
+      analysis marked confirmed is among them.
+
+  - id: F09.2
+    page: 09-style-direction
+    kind: strip
+    builder: notebook_charts.stage9_direction_at_usable_dose
+    source: data/stage9_coherence_results.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Every cell at the usable amplitude, ordered by the registered statistic. Six of twelve
+      fall on the side the prediction ruled out, all four calibrated-preset cells among them,
+      and no cell reaches significance.
+
+  - id: F09.3
+    page: 09-style-direction
+    kind: strip
+    builder: notebook_charts.stage9_quality_gate
+    source: data/stage9_amplitude2x_quality_gate.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Each cell at double amplitude, its distance from the baseline range in sigma against the
+      3-sigma gate declared before the analysis. Eighteen of twenty-four sit outside it, the
+      worst by two orders of magnitude.
+
   # A locator must be qualified before it may be used here. Declare it, measure its hit rate
   # across the corpus, publish the rate next to the figure, and fall back to the whole frame
   # below the threshold.
