@@ -9,7 +9,8 @@ supersedes: []
 pitfalls: [2, 33, 43, 57, 60, 61, 62]
 
 corpus:
-  renders: 386
+  renders: 368      # 168 + 168 + 32, itemised in Provenance. Read 386 until 2026-09-21,
+                    # a number no file and no other line of this page supports.
   prompts: 2
   seeds: [42, 777, 1337]
   blocks: 28
@@ -359,16 +360,24 @@ conditions:
     measured_D: not recorded per block; the dose is a gain, not a calibrated displacement
 outputs:
   folder: benchmark_profondita_neg/renders
-  manifest: data/punto7_manifest.csv
+  manifest: no per-render manifest exists for this bench -- data/punto7_blocks.csv holds
+    the 28 per-block results, and data/direzioni_blocchi_singoli.jsonl the features of the
+    positive arm (168 treatments, 6 baselines) with their dimensions. This field named
+    data/punto7_manifest.csv until 2026-09-21; that file has never been in the repository.
 analysis:
   script: experiments/verifica_punto7.py
   sha256: d9c9c818c3f50fe67feacdb1efbf14f6f21ae049dcda8887293cdd0717cc2cd1
   produces: data/punto7_blocks.csv
   related: data/bench_checks.csv — the ceiling and the usable-regime margin
   note: >
-    every value above was read back out of the renders themselves by
-    experiments/extract_repro.py, which also asserts that all 336 renders of this
-    page share one sampler configuration. They do.
+    UNTIL 2026-09-21 this field claimed that every value above had been read back out of the
+    renders by experiments/extract_repro.py, and that the script asserted one sampler
+    configuration across all 336 renders. That script did not exist, so neither did the
+    verification. The block was typed by hand. What is now provable from the repository is
+    printed by experiments/extract_repro.py, which exists as of 2026-09-21 and reads data/
+    rather than the renders: resolution 1024x1280 from 174 rows of
+    data/direzioni_blocchi_singoli.jsonl. The sampler, the steps and the cfg of this bench
+    are recorded nowhere in the repository and remain unverified.
 ```
 
 ## Provenance

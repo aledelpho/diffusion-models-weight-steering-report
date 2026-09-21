@@ -293,7 +293,9 @@ sampling:
   steps: 6            # six, not the nine every later bench uses
   cfg: 1.0
   scheduler: simple
-  resolution: not recorded in the source reports
+  resolution: 1024x1760      # recorded after all: 225 rows of
+    # pilot_rotations_style_features.csv and of ..._palette_features.csv.
+    # This field said 'not recorded in the source reports' until 2026-09-21.
 tuner:
   node: rotation and amplitude sweep over block groups, pre-dating the preset loader
   version: not recorded
@@ -305,12 +307,18 @@ prompts:
   note: nine reports, seven prompts -- tiefling appears three times at different seeds
 seeds: [42, 777, 4242145]
 conditions:
+  # There is no single D per angle, and that is the point of the page: the same rotation
+  # moves each group by a different amount. The two numbers published here until 2026-09-21
+  # (0.02862 and 0.05674) were Block_1's rows, printed as if they were the bench's.
   - name: rotX_15
     family: rotation
-    measured_D: 0.02862      # Block_1; per group and angle in pilot_rotation_displacement.csv
+    measured_D: 0.02118 to 0.02947 across the six groups   # data/pilot_rotation_displacement.csv, 12 rows
   - name: rotX_30
     family: rotation
-    measured_D: 0.05674      # Block_1 at 30 degrees; measured offline, tensor by tensor
+    measured_D: 0.04199 to 0.05844 across the six groups   # same file, 12 rows
+  - name: rotX_20
+    family: rotation
+    measured_D: 0.03079 to 0.03577 across the six groups   # same file, 6 rows
   - name: amplitude_1x
     family: amplitude
     measured_D: not measured -- the offline sweep covers rotation only

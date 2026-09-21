@@ -427,15 +427,19 @@ conditions:
     measured_D: not applicable — a text-encoder gain, not a backbone displacement
 outputs:
   folder: benchmark_stage1_gate, benchmark_determinismo, benchmark_testo_pilota, benchmark_pavimento_rumore
-  manifest: data/bench_checks.csv
+  manifest: none -- data/bench_checks.csv is a ledger of checks (11 rows, one per check),
+    not a per-render manifest. No file in the repository lists these 423 renders.
 analysis:
   script: experiments/measure_bench.py
   sha256: bd53f6a7f85784bafd4a8741d2d166cdc5dbc604951cc324571a4d9fd145be11
   produces: data/bench_checks.csv
   note: &gt;
-    every value above was read back out of the renders themselves by
-    experiments/extract_repro.py, which also asserts that all four benches on this
-    page share one sampler configuration. They do.
+    UNTIL 2026-09-21 this field claimed that every value above had been read back out of the
+    renders by experiments/extract_repro.py, and that the script asserted one sampler
+    configuration across the four benches. That script did not exist, so neither did the
+    verification. The block was typed by hand. experiments/extract_repro.py exists as of
+    2026-09-21 and reads data/, not the renders; for this page it can prove nothing, because
+    no file here records these benches image by image. Every field above is unverified.
 </code></pre>
 <h2 id="p-00-the-bench--provenance">Provenance</h2>
 <ul>
@@ -1769,7 +1773,9 @@ sampling:
   steps: 6            # six, not the nine every later bench uses
   cfg: 1.0
   scheduler: simple
-  resolution: not recorded in the source reports
+  resolution: 1024x1760      # recorded after all: 225 rows of
+    # pilot_rotations_style_features.csv and of ..._palette_features.csv.
+    # This field said 'not recorded in the source reports' until 2026-09-21.
 tuner:
   node: rotation and amplitude sweep over block groups, pre-dating the preset loader
   version: not recorded
@@ -1781,12 +1787,18 @@ prompts:
   note: nine reports, seven prompts -- tiefling appears three times at different seeds
 seeds: [42, 777, 4242145]
 conditions:
+  # There is no single D per angle, and that is the point of the page: the same rotation
+  # moves each group by a different amount. The two numbers published here until 2026-09-21
+  # (0.02862 and 0.05674) were Block_1's rows, printed as if they were the bench's.
   - name: rotX_15
     family: rotation
-    measured_D: 0.02862      # Block_1; per group and angle in pilot_rotation_displacement.csv
+    measured_D: 0.02118 to 0.02947 across the six groups   # data/pilot_rotation_displacement.csv, 12 rows
   - name: rotX_30
     family: rotation
-    measured_D: 0.05674      # Block_1 at 30 degrees; measured offline, tensor by tensor
+    measured_D: 0.04199 to 0.05844 across the six groups   # same file, 12 rows
+  - name: rotX_20
+    family: rotation
+    measured_D: 0.03079 to 0.03577 across the six groups   # same file, 6 rows
   - name: amplitude_1x
     family: amplitude
     measured_D: not measured -- the offline sweep covers rotation only
@@ -1843,7 +1855,7 @@ registry's own example).</p>
 bit of resolution and room for exactly three tests under Holm.</p>
 </section>
 <section id="p-05-knob-or-cost">
-<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">386 renders · 2 prompts · 3 seeds · pre-registered · 2026-09-20</span></p>
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">368 renders · 2 prompts · 3 seeds · pre-registered · 2026-09-20</span></p>
 <h1 id="p-05-knob-or-cost--what-an-edit-steers-and-what-it-costs">What an edit steers, and what it costs</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> Every knob on a machine does two things: the thing you turned
@@ -2180,16 +2192,24 @@ conditions:
     measured_D: not recorded per block; the dose is a gain, not a calibrated displacement
 outputs:
   folder: benchmark_profondita_neg/renders
-  manifest: data/punto7_manifest.csv
+  manifest: no per-render manifest exists for this bench -- data/punto7_blocks.csv holds
+    the 28 per-block results, and data/direzioni_blocchi_singoli.jsonl the features of the
+    positive arm (168 treatments, 6 baselines) with their dimensions. This field named
+    data/punto7_manifest.csv until 2026-09-21; that file has never been in the repository.
 analysis:
   script: experiments/verifica_punto7.py
   sha256: d9c9c818c3f50fe67feacdb1efbf14f6f21ae049dcda8887293cdd0717cc2cd1
   produces: data/punto7_blocks.csv
   related: data/bench_checks.csv — the ceiling and the usable-regime margin
   note: &gt;
-    every value above was read back out of the renders themselves by
-    experiments/extract_repro.py, which also asserts that all 336 renders of this
-    page share one sampler configuration. They do.
+    UNTIL 2026-09-21 this field claimed that every value above had been read back out of the
+    renders by experiments/extract_repro.py, and that the script asserted one sampler
+    configuration across all 336 renders. That script did not exist, so neither did the
+    verification. The block was typed by hand. What is now provable from the repository is
+    printed by experiments/extract_repro.py, which exists as of 2026-09-21 and reads data/
+    rather than the renders: resolution 1024x1280 from 174 rows of
+    data/direzioni_blocchi_singoli.jsonl. The sampler, the steps and the cfg of this bench
+    are recorded nowhere in the repository and remain unverified.
 </code></pre>
 <h2 id="p-05-knob-or-cost--provenance">Provenance</h2>
 <ul>
@@ -3110,7 +3130,9 @@ sampling:
   cfg: 1.0
   denoise: 1.0
   scheduler: simple
-  resolution: 1024x1280
+  resolution: 1024x1760      # read from the 210 rows of
+    # rotations_block1_vs_block6_style_features.csv; the pre-registration says the same.
+    # This field read 1024x1280 until 2026-09-21 -- typed by hand, wrong, and published.
 tuner:
   node: per-block rotation of the DiT weights, angles solved offline
   version: not recorded

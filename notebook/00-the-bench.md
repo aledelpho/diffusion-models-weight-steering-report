@@ -321,15 +321,19 @@ conditions:
     measured_D: not applicable — a text-encoder gain, not a backbone displacement
 outputs:
   folder: benchmark_stage1_gate, benchmark_determinismo, benchmark_testo_pilota, benchmark_pavimento_rumore
-  manifest: data/bench_checks.csv
+  manifest: none -- data/bench_checks.csv is a ledger of checks (11 rows, one per check),
+    not a per-render manifest. No file in the repository lists these 423 renders.
 analysis:
   script: experiments/measure_bench.py
   sha256: bd53f6a7f85784bafd4a8741d2d166cdc5dbc604951cc324571a4d9fd145be11
   produces: data/bench_checks.csv
   note: >
-    every value above was read back out of the renders themselves by
-    experiments/extract_repro.py, which also asserts that all four benches on this
-    page share one sampler configuration. They do.
+    UNTIL 2026-09-21 this field claimed that every value above had been read back out of the
+    renders by experiments/extract_repro.py, and that the script asserted one sampler
+    configuration across the four benches. That script did not exist, so neither did the
+    verification. The block was typed by hand. experiments/extract_repro.py exists as of
+    2026-09-21 and reads data/, not the renders; for this page it can prove nothing, because
+    no file here records these benches image by image. Every field above is unverified.
 ```
 
 ## Provenance

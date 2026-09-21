@@ -103,6 +103,19 @@ CASES = [
      lambda t: patch(t, PAGE, "**What would kill it.**", "**What might go wrong.**"),
      "is missing '**What would kill it.**'"),
 
+    ("the reproducibility block contradicts the bench's own feature file",
+     lambda t: patch(t, PAGE, "  resolution: 1024x1280", "  resolution: 1024x1760"),
+     "the bench's own files record"),
+
+    ("the reproducibility block names a manifest that is not in the repository",
+     lambda t: patch(t, PAGE, "  manifest: no per-render manifest exists",
+                     "  manifest: data/a_manifest_that_was_never_committed.csv\n  unused: no"),
+     "is not in the repository"),
+
+    ("corpus.renders disagrees with the benches the page itemises",
+     lambda t: patch(t, PAGE, "  renders: 368", "  renders: 999"),
+     "itemises"),
+
     ("a required section is gone",
      lambda t: patch(t, PAGE, "## Why I might be wrong", "## Some other heading"),
      "missing required section '## Why I might be wrong'"),

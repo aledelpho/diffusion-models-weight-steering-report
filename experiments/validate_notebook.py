@@ -31,6 +31,7 @@ except ImportError:
     sys.exit("validate_notebook.py needs PyYAML:  pip install pyyaml")
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))   # so extract_repro imports
 NOTEBOOK = ROOT / "notebook"
 FIGURES_YAML = ROOT / "experiments" / "figures.yaml"
 ASSETS = ROOT / "assets"
@@ -207,6 +208,51 @@ def check_opening_block(body: str, path: Path, rep: Report) -> None:
                                  f"(expected {OPENING_LEAD_INS})")
             return
         at = i
+
+
+def check_repro_against_data(fm: dict, body: str, path: Path, rep: Report) -> None:
+    """Every field of the reproducibility block that a file in `data/` can prove.
+
+    AUTHORING.md section 5 required this from the first day and named the script that would
+    do it; the script did not exist, and an audit on 2026-09-21 found four hand-typed fields
+    wrong across four pages -- a resolution, a displacement printed as a single number where
+    the file holds six, a manifest that was never committed, and a note asserting a
+    verification that had never run. The check is now here so that class of error cannot
+    reach a reader again.
+    """
+    try:
+        import extract_repro
+    except Exception as exc:                                  # pragma: no cover
+        rep.note(f"extract_repro could not be imported ({exc}); "
+                 f"the reproducibility block was not checked against data/")
+        return
+    m = re.search(r"###\s+Reproducing this\s*\n+```ya?ml\n(.*?)```", body, re.S)
+    if not m:
+        return
+    try:
+        block = yaml.safe_load(m.group(1))
+    except yaml.YAMLError:
+        return                                                # check_reproducibility reports it
+    for bad in extract_repro.mismatches(str(fm.get("id")), block):
+        rep.error(path.name, f"reproducibility block: {bad}")
+
+
+def check_render_count(fm: dict, body: str, rep: Report, path: Path) -> None:
+    """`corpus.renders` against the bench sizes the page itemises in Provenance.
+
+    Where a page lists its benches with a count each, the front matter's total is arithmetic
+    and can be checked. Page 05 read 386 against its own itemised 368 for a day.
+    """
+    m = re.search(r"^\*\s*Renders:(.+)$", body, re.M)
+    if not m:
+        return
+    parts = [int(n) for n in re.findall(r"\((\d+)[,)]", m.group(1))]
+    if not parts:
+        return
+    declared = (fm.get("corpus") or {}).get("renders")
+    if isinstance(declared, int) and sum(parts) != declared:
+        rep.error(path.name, f"corpus.renders is {declared}, but the Provenance line itemises "
+                             f"{' + '.join(str(p) for p in parts)} = {sum(parts)}")
 
 
 def check_sections(body: str, path: Path, rep: Report) -> None:
@@ -484,6 +530,8 @@ def main() -> int:
             all_claims.append((path.stem, c))
         check_sections(body, path, rep)
         check_opening_block(body, path, rep)
+        check_repro_against_data(fm, body, path, rep)
+        check_render_count(fm, body, rep, path)
         check_reproducibility(body, path, rep)
         check_duplicate_columns(body, path, rep)
         check_language(body, path, rep)

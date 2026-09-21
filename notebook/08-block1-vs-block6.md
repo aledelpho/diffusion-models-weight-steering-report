@@ -239,7 +239,9 @@ sampling:
   cfg: 1.0
   denoise: 1.0
   scheduler: simple
-  resolution: 1024x1280
+  resolution: 1024x1760      # read from the 210 rows of
+    # rotations_block1_vs_block6_style_features.csv; the pre-registration says the same.
+    # This field read 1024x1280 until 2026-09-21 -- typed by hand, wrong, and published.
 tuner:
   node: per-block rotation of the DiT weights, angles solved offline
   version: not recorded

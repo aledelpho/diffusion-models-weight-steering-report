@@ -325,11 +325,22 @@ analysis:
 ```
 ````
 
-**Do not type this block from memory — read it out of the renders.** Every PNG carries the
-graph that made it in a text chunk, so `experiments/extract_repro.py` can print this block for
-any bench. The first draft of the two pages here was typed from memory and got the checkpoint
-name, the tuner mode and the resolution all wrong, in the one block whose entire purpose is to
-be right.
+**Do not type this block from memory.** Run `python experiments/extract_repro.py <page-id>`
+and copy what it prints. It reads the manifests and feature tables in `data/`, which record
+per image the sampler configuration and the pixel dimensions the render actually had, and it
+prints only what a file proves. What no file records it declares unrecorded — and the honest
+thing in the block is then a `not recorded` marker naming what *would* record it, never a
+plausible value.
+
+It cannot read a PNG's embedded graph, because the renders live outside the repository. That
+is the version that would close the gap completely, and it is not written.
+
+This paragraph used to promise something stronger, and the script did not exist at all. Every
+block in the notebook was therefore typed by hand, and the audit of 2026-09-21 found four
+fields wrong: a resolution off by 480 pixels on a page that had been live for a day, a
+displacement printed as one number where the file holds six, a manifest that had never been
+committed, and a provenance note asserting a verification that had never run. All four are now
+checked by `validate_notebook.py`.
 
 Two of these fields exist because of specific past failures. `measured_D` is measured and not
 nominal, because a bisection once returned its best candidate instead of failing (pitfall 13).
@@ -406,6 +417,8 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 | ✓ | The five sections present, in order | error |
 | ✓ | **The opening block's three lead-ins present, in order, above `## In two minutes`** | error |
 | ✓ | Reproducibility block present, valid YAML, all required keys, `measured_D` on every condition | error |
+| ✓ | **Every field of the block that a file in `data/` can prove — resolution, sampler, steps, cfg, a preset's `measured_D`, and that a named manifest exists** | error |
+| ✓ | **`corpus.renders` against the bench sizes the page itemises in its Provenance line** | error |
 | ✓ | Every figure referenced by a page is registered in `figures.yaml`, and registered *to that page* | error |
 | ✓ | **The figure file actually exists on disk** | error |
 | ✓ | **A link to a sibling page resolves to a page that exists** | error |
@@ -418,16 +431,18 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 | ✓ | `TODO` placeholders left in a reproducibility block | warn |
 | ✓ | Figure cadence — more than four consecutive paragraphs without one | warn |
 | ✓ | A registered figure that its page never references | warn |
-| ✗ | `corpus.renders` against a manifest — **not implemented**: there is no per-page manifest file to count against. Until there is, that number is the one field on a page that nothing verifies |
+| ~ | `corpus.renders` against a **manifest** — still not implemented: a manifest counts one bench's rows, and a page's corpus is often several benches plus baselines the manifest omits. Where a page itemises its benches in Provenance the total is now checked (2 pages of 9); on the other 7 that number stays the one field nothing verifies |
 | ✗ | Locator hit rates — needs the renders, so it runs on the machine that holds them |
 | ✗ | `builder` resolving to a callable — **not implemented**, but close: 20 of the 28 builders named in `figures.yaml` now import and resolve. The 8 that do not are all on pages 00 and 05, and all of them are bare names with no module. The check turns green the day those two pages get their figures |
 
-And one check that does **not** exist. Section 5 above tells an author to print the
-reproducibility block with `experiments/extract_repro.py` rather than type it from memory.
-**That script is not in the repository.** Until it is, every reproducibility block here is
-typed by hand from a manifest, which is the failure mode section 5 was written to prevent — and
-the block on `09-style-direction.md` already carries the mark of it: the checkpoint is
-attributed through a shared `suite_git_sha`, because that bench's manifest never recorded one.
-The check it should run: every render in a bench shares one sampler configuration. A bench
-whose images were made at different step counts is not a bench, and nothing else here would
-notice.
+And the limit of the check above, stated plainly. `experiments/extract_repro.py` proves a
+field only where `data/` records it, and the coverage is uneven: resolution is provable on 8
+pages of 9, the sampler triple on 5, and the checkpoint, the VAE and the text encoder on
+**none** — no manifest in this repository records them. Those fields are carried on trust, or
+attributed sideways: `09-style-direction.md` names its checkpoint through a `suite_git_sha`
+shared with another bench, and says so in the block.
+
+The check that would close it needs the renders: every PNG carries the graph that made it, so
+a script run on the machine that holds them could read the checkpoint, the VAE and the encoder
+back, and assert that one bench shares one sampler configuration. A bench whose images were
+made at different step counts is not a bench, and nothing here would notice.
