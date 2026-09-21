@@ -205,12 +205,18 @@ def mismatches(page: str, block: dict | None = None) -> list[str]:
 
     known = displacements()
     for cond in block.get("conditions") or []:
-        preset = str(cond.get("preset") or "").replace(".json", "")
         d = cond.get("measured_D")
-        if preset and preset in known and isinstance(d, (int, float)):
-            if abs(float(d) - known[preset]) > 1e-8:
-                bad.append(f"condition '{cond.get('name')}' says D = {d}, "
-                           f"preset_displacements.csv records {known[preset]}")
+        if not isinstance(d, (int, float)):
+            continue                         # a declared 'not measured' marker, left alone
+        # A preset names its own row; a rotation condition is Block_1_pos / scramble_A,
+        # whose displacement is calibrated once for the pair.
+        key = str(cond.get("preset") or "").replace(".json", "") or None
+        if key not in known:
+            stem = re.sub(r"_(pos|neg)$", "", str(cond.get("name") or ""))
+            key = stem if stem in known else None
+        if key and abs(float(d) - known[key]) > 1e-6:
+            bad.append(f"condition '{cond.get('name')}' says D = {d}, "
+                       f"the displacement file records {known[key]} for '{key}'")
     return bad
 
 
