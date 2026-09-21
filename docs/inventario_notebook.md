@@ -277,7 +277,7 @@ registered in `experiments/figures.yaml`, and `assets/03_what_ends_up_in_the_pic
 | **01** | `01-mark-style` — The style signature | confirmatory (§1.1–1.4 exploratory, §1.3 pre-registered) | old README 390–566, 804–844; `assets/01_steering`, `01_steering_stage7`; F01.1/F01.2 registered | `data/stage7_manifest.csv` **absent**; no figure builder |
 | **02** | `02-attribute-emergence` — What the edit puts in the picture | exploratory | **live** (2026-09-21) | filed `ambiguous`; the stage-12 headlight arm would confirm it |
 | **03** | `03-what-ends-up-in-the-picture` — Subject size, and how blind I was | confirmatory | **live** (2026-09-21) | the missing sign-scramble control is a declared gap; the two hand-captioned figures in `_figures` stay unpublished (pitfall 40) |
-| **04** | `04-where-in-the-model` — Position, displacement, and direction | exploratory | old README 1219–1364; `pilot_rotations_verdict.md`, `mappa_krea2_primo_esito.md`; `data/pilot_*` (8 files, all script-backed) | the §4.5 direction result is filed as hypothesis, not finding — keep that framing |
+| **04** | `04-where-in-the-model` — Position, displacement, and direction | exploratory | **live** (2026-09-21) | the brief that froze its contrast is not in the repository |
 | **05** | `05-knob-or-cost` — What an edit steers, and what it costs | confirmatory | **live** | its pre-registration file is missing (§0 item 5) |
 | **06** | `06-the-hatching-axis` | confirmatory | **live** (2026-09-21) | the pre-registered visual check on the preset family has no recorded outcome |
 | **07** | `07-chromatic-signatures` | confirmatory, **ambiguous** | **live** (2026-09-21) | the matched-pair test that separates regression from the colour-pinning confound is registered and unrun |
@@ -358,8 +358,10 @@ Three commits on `main`, no push.
 | `59392f7` | page `06-the-hatching-axis`, `experiments/stage7_hatching_axis.py` → two derived tables, two registered charts |
 | `8121930` | inventory and report updated |
 | `379dff6` | page `07-chromatic-signatures`, `experiments/stage7_chromatic_coherence.py` (which verifies itself against the frozen run's matrix), two registered charts |
+| `5089488` | inventory and report updated |
+| `06ce65b` | page `04-where-in-the-model`, `experiments/pilot_rotations_position.py`, two registered charts; the 54 rows of another experiment hiding in one block group, and the antisymmetric-share figure corrected |
 
-`notebook/_migrating.yaml`: 23 original bullets, **12 claims migrated, 13 pending**.
+`notebook/_migrating.yaml`: 23 original bullets, **15 claims migrated, 11 pending**.
 
 Items closed from §0: item 1 (the ledger exists), item 10 (the alt text), and most of item 3 —
 **both** `notebook_figures.py` and `notebook_charts.py` now exist, with four working builders

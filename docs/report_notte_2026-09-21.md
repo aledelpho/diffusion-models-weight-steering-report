@@ -13,8 +13,8 @@ ed709c3  fix(figure): l'alt di F05.3 pubblicava il 12,4x ritrattato
 4d066c6  docs: inventario misurato del notebook prima della migrazione
 ```
 
-Six of the fifteen pages are live: 00, 02, 03, 05, 06, 07. The claims ledger stands at 12
-migrated and 13 pending, all 23 original bullets accounted for.
+Seven of the fifteen pages are live: 00, 02, 03, 04, 05, 06, 07. The claims ledger stands at
+15 migrated and 11 pending, all 23 original bullets accounted for.
 
 ---
 
@@ -360,3 +360,52 @@ from the two scripts are not comparable).
 4. **The eight missing builders** for the figures of pages 00 and 05, then the validator check
    that a `builder` resolves to a callable.
 5. Page 01 stays blocked on its light-theme figures.
+
+
+---
+
+## 8. Fifth pass — page 04, where in the model
+
+The oldest material in the notebook and the only page whose data were found rather than
+designed: nine benchmark reports from before the project had rules. Filed `ambiguous` /
+`exploratory`, which is what it is.
+
+**Every number in the old table reproduces — but only with the right filter, and finding it is
+the useful part.** `data/pilot_rotations.csv` holds **270 rows, not 216**. Fifty-four of them
+belong to a *different* perturbation family (`structural_rot_y`, `tensor_rot_x`,
+`tensor_rot_y`), and every one of those fifty-four sits on the **third block group**. A plain
+per-block average therefore folds another experiment into one group and moves it from 0.1171 to
+0.1064 without saying so — two experiments sharing one measurement file, which is pitfall 30 in
+a new shape. With the family filtered and the nine reports collapsed to their seven prompts
+first, the table comes out at 0.3179 / 0.1234 / 0.1171 / 0.1163 / 0.1038 / 0.4623, which is the
+old README to the digit. The derivation script now filters and raises if the count is not 216.
+
+**One published number is wrong.** The old text gives the middle groups' antisymmetric share as
+0.23–0.33. That holds for groups 2, 3 and 4. The **fifth group's share is 0.57 — higher than the
+sixth's 0.52**. What distinguishes the last group is not the share of its response that reverses
+with the sign but the size of it: ‖A‖ = 6.12 against 1.77 for the next largest. The sentence
+"half of what the last group does is antisymmetric, the middle groups mostly just move" is true
+of three middle groups out of four. The page says so and F04.2 shows it.
+
+**A second frozen document is missing from the repository.** The extremes-against-middle
+contrast is reported as pre-registered and the brief that froze it was never committed — the
+same failure as page 05's pre-registration, which was found and restored. The page is filed
+exploratory for that reason among others. It is also the registry's own example of pitfall 42,
+a frozen contrast that fuses two conditions assumed to be alike: it treats the first and last
+groups as one "extremes" category, and the amplitude sweep in the same files shows they are not
+alike.
+
+**Verified against the frozen run.** `experiments/pilot_rotations_position.py` imports the
+analysis module's own functions and refuses to write unless all twelve recomputed norms match
+`data/pilot_rotation_direction_tests.csv`. The invariance claim was checked directly too:
+recomputing the antisymmetric component with the joint mean subtracted returns 6.1243 for the
+last group, to the digit, while the symmetric component moves from 5.65 to 4.57.
+
+### 8.1 One loose end
+
+Page 04 wants to link forward to `08-block1-vs-block6`, the pre-registered follow-up it
+specified. That page does not exist yet, and the validator correctly refused the link, so the
+references are written out in prose instead. They should become links when page 08 is written —
+which is the obvious next one: `docs/prereg_rotations_block1_vs_block6.md` is a real
+pre-registration that was executed, `docs/rotations_block1_vs_block6_results.md` is its written
+verdict, and six measurement files back it.
