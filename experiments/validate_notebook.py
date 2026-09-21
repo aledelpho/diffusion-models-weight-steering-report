@@ -224,6 +224,42 @@ def check_reproducibility(body: str, path: Path, rep: Report) -> None:
         rep.warn(where, f"reproducibility block still has {todos} TODO placeholder(s)")
 
 
+def check_duplicate_columns(body: str, path: Path, rep: Report) -> None:
+    """Two columns with different names and identical content read as two measurements.
+
+    Pitfall 69: a missing control was filled with the nearest available one, and the duplicate
+    was invisible in every reading of the report -- the strongest number on that page rested on
+    it. Any CSV a page names is checked here, cheaply: same values on every row, different name.
+    """
+    import csv as _csv
+    for rel in sorted(set(re.findall(r"`(data/[A-Za-z0-9_./-]+\.csv)`", body))):
+        f = ROOT / rel
+        if not f.exists():
+            continue
+        try:
+            rows = list(_csv.DictReader(f.open(encoding="utf-8-sig", newline="")))
+        except Exception:
+            continue
+        if len(rows) < 2:
+            continue
+        cols = [c for c in (rows[0] or {}) if c]
+        numeric = {}
+        for c in cols:
+            try:
+                numeric[c] = [float(r[c]) for r in rows]
+            except (TypeError, ValueError):
+                continue
+        names = sorted(numeric)
+        for i, a in enumerate(names):
+            for b in names[i + 1:]:
+                if all(abs(x - y) < 1e-12 for x, y in zip(numeric[a], numeric[b])):
+                    rep.error(path.name,
+                              f"{rel}: columns '{a}' and '{b}' are identical on all "
+                              f"{len(rows)} rows -- two names for one measurement read as two "
+                              f"(pitfall 69). Leave a missing control empty, never fill it "
+                              f"with the nearest one")
+
+
 def check_language(body: str, path: Path, rep: Report) -> None:
     prose = re.sub(r"```.*?```", " ", body, flags=re.S)        # drop code fences
     prose = re.sub(r"`[^`]*`", " ", prose)                     # drop inline code
@@ -419,6 +455,7 @@ def main() -> int:
             all_claims.append((path.stem, c))
         check_sections(body, path, rep)
         check_reproducibility(body, path, rep)
+        check_duplicate_columns(body, path, rep)
         check_language(body, path, rep)
         check_cadence(body, path, rep)
         used_figures |= check_page_figures(body, fm, reg, path, rep)

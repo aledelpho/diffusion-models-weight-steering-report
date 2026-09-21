@@ -128,3 +128,32 @@ Eseguita su `krea2_turbo_bf16.safetensors` tramite [`experiments/calibrate_block
 7. [ ] **Calcolo di $\Delta \bar{V}_{1,3}$ e $\Delta \bar{V}_{3,6}$** con pavimento teorico $p = 0.00195$.
 8. [ ] **Applicazione letterale dell'albero decisionale a 4 vie** del §2.
 9. [ ] **Integrazione del report in `docs/rotations_triangolo_block1_block3_block6_results.md`** prima di qualsiasi modifica al README.
+
+
+---
+
+## Nota di stato — 2026-09-21: congelata CON DEVIAZIONI
+
+Il documento e' stato rispettato nel disegno — opzione (a), scramble cross-anchored, margine di
+equivalenza dichiarato, displacement appaiato a $D = 0.04500$ — e ha **tre buchi di specifica**
+che sono emersi solo in fase di lettura. Sono registrati qui perche' la prossima versione li
+chiuda prima di renderizzare, non dopo.
+
+1. **Non dice quale coppia cross sia «il pavimento».** Le quattro coppie `A`-`C`, `A`-`D`,
+   `B`-`C`, `B`-`D` sono nulli scambiabili per costruzione, e la scelta fra loro decideva il
+   verdetto da sola: la coppia usata vale −0.0396 e la media delle quattro +0.5630. La regola
+   di aggregazione dei nulli va fissata qui, insieme alla statistica. Pitfall 68.
+
+2. **Non prevede nessuno scramble ancorato su `Block_6`.** `A` e `B` stanno su `Block_1`, `C` e
+   `D` su `Block_3`, quindi il lato `Block_3`-vs-`Block_6` non ha un nullo proprio e non e'
+   misurabile con questo corpus. Servono `scramble_E`/`scramble_F` su `Block_6`, 60 immagini.
+   Pitfall 69.
+
+3. **Il margine di equivalenza $\Delta_{\text{equiv}} = 0.25$ non era calibrato.** E' stato
+   fissato in conversazione senza derivarlo dalla dispersione dei dieci stili del banco
+   `Block_1` vs `Block_6`, che era gia' disponibile. La diramazione che ne dipendeva e' stata
+   decisa da 0.2737 contro 0.25 — un margine di 0.0237 su una differenza con p = 0.0586.
+   Pitfall 61.
+
+Esito dopo la revisione: `docs/rotations_triangolo_block1_block3_block6_results.md` §1-bis.
+Il verdetto e' **non determinato**, non «4. Asimmetria di Propagazione».

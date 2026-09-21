@@ -20,7 +20,12 @@ import pandas as pd
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 PILOT_ROOT = os.path.abspath(os.path.join(_HERE, os.pardir))
-REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
+# Su Windows questa e' la stessa cartella di PILOT_ROOT e lo script scriveva i CSV due volte.
+# Fuori da Windows il percorso non esiste e os.path.join lo trattava come un nome di cartella
+# relativo, creando dentro al repo una directory letterale "C:\Users\...". Se non e' una
+# cartella vera, si ricade sulla radice del repository.
+_REPORT_ROOT_WIN = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
+REPORT_ROOT = _REPORT_ROOT_WIN if os.path.isdir(_REPORT_ROOT_WIN) else PILOT_ROOT
 
 DATA_DIR_REPORT = os.path.join(REPORT_ROOT, "data")
 DATA_DIR_PILOT = os.path.join(PILOT_ROOT, "data")
@@ -183,7 +188,17 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
 
     # Cross-anchored (nullo formale per i contrasti con Block_3):
     V_scr_1_3 = calc_loo_v(A_scrA, A_scrC, prompts)  # scramble_A vs scramble_C
-    V_scr_3_6 = calc_loo_v(A_scrC, A_scrA, prompts)  # scramble_C vs scramble_A
+    # RIPARAZIONE 2026-09-21. La riga qui sotto diceva
+    #     V_scr_3_6 = calc_loo_v(A_scrC, A_scrA, prompts)
+    # cioe' la STESSA coppia con gli argomenti scambiati. calc_loo_v e' simmetrica
+    # nei suoi due argomenti per costruzione -- scambiarli scambia i due termini
+    # della somma 0.5*((cos_A_same - cos_A_diff) + (cos_B_same - cos_B_diff)) --
+    # quindi V_scr_3_6 era identica a V_scr_1_3 su tutti i prompt, non per errore
+    # di copia ma per algebra. Non esiste nessuno scramble ancorato su Block_6:
+    # A e B stanno su Block_1, C e D su Block_3. Il pavimento del lato 3-6 NON
+    # esiste, e viene lasciato vuoto invece che riempito con il piu' vicino.
+    # Serve scramble_E/F ancorati su Block_6 (60 render). Pitfall 69.
+    V_scr_1_3_borrowed = V_scr_1_3  # conservata solo per tracciare la vecchia lettura
 
     # Media delle 4 combinazioni cross (A-C, A-D, B-C, B-D) per robustezza
     V_cross_AC = V_scr_1_3
@@ -199,14 +214,26 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
 
     # 6. Contrasti Appaiati Primari rispetto al Nullo Scramble Cross-Anchored
     # Delta V(p) = V(p) - V_scr(p)
-    Delta_V_1_3 = [V_1_3[p]["v_p"] - V_scr_1_3[p]["v_p"] for p in prompts]
-    Delta_V_3_6 = [V_3_6[p]["v_p"] - V_scr_3_6[p]["v_p"] for p in prompts]
+    # RIPARAZIONE 2026-09-21, dichiarata DOPO aver visto i dati e percio' non
+    # pre-registrata. Le quattro coppie cross (A-C, A-D, B-C, B-D) sono nulli
+    # SCAMBIABILI per costruzione: niente nel disegno distingue A da B ne' C da D.
+    # Sceglierne una come "il pavimento" e' un grado di liberta' che qui separava
+    # due CONFERMATO da due Delta negativi. La media di tutti i nulli scambiabili
+    # e' l'unica aggregazione non post hoc. Pitfall 68.
+    Delta_V_1_3 = [V_1_3[p]["v_p"] - V_scr_cross_mean[p] for p in prompts]
+    Delta_V_3_6 = [V_3_6[p]["v_p"] - V_scr_cross_mean[p] for p in prompts]
     Delta_V_1_6 = [V_1_6[p]["v_p"] - V_scr_1_1[p]["v_p"] for p in prompts]
+
+    # La lettura precedente, conservata perche' il cambio sia verificabile.
+    Delta_V_1_3_acfloor = [V_1_3[p]["v_p"] - V_scr_1_3[p]["v_p"] for p in prompts]
+    Delta_V_3_6_acfloor = [V_3_6[p]["v_p"] - V_scr_1_3[p]["v_p"] for p in prompts]
 
     # Test di permutazione esatta
     mean_Delta_1_3, p_Delta_1_3, floor_p, _ = sign_flip_test(Delta_V_1_3)
     mean_Delta_3_6, p_Delta_3_6, _, _ = sign_flip_test(Delta_V_3_6)
     mean_Delta_1_6, p_Delta_1_6, _, _ = sign_flip_test(Delta_V_1_6)
+    mean_D13_acfloor, p_D13_acfloor, _, _ = sign_flip_test(Delta_V_1_3_acfloor)
+    mean_D36_acfloor, p_D36_acfloor, _, _ = sign_flip_test(Delta_V_3_6_acfloor)
 
     # Medie grezze e relativi test
     vals_1_3 = [V_1_3[p]["v_p"] for p in prompts]
@@ -235,8 +262,12 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
     }
 
     # 7. Applicazione dell'Albero Decisionale a 4 Vie (con margine Delta_equiv = 0.25)
+    # Il lato 3-6 non ha un pavimento proprio: nessuno scramble e' ancorato su
+    # Block_6. Il suo Delta si calcola contro la media cross come gli altri, ma
+    # non e' un contrasto contro il proprio nullo e non vale come test.
+    sig_3_6 = "NA"
     pass_1_3 = (mean_Delta_1_3 > 0) and holm_results["Delta_1_3"]
-    pass_3_6 = (mean_Delta_3_6 > 0) and holm_results["Delta_3_6"]
+    pass_3_6 = False   # non misurato, non "fallito"
 
     diff_13_36 = abs(mean_V_1_3 - mean_V_3_6)
     max_13_36 = max(mean_V_1_3, mean_V_3_6)
@@ -244,12 +275,27 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
     regime = "Indeterminato"
     regime_desc = ""
 
-    if not pass_1_3 or not pass_3_6:
-        regime = "1. Centro Piatto / Prossimita ai Confini"
+    # ATTENZIONE, e la revisione del 2026-09-21 non lo diceva: il ramo 1 e' il
+    # ramo di FALLIMENTO dell'albero, quello su cui si atterra quando almeno un
+    # contrasto non supera il proprio nullo. Contare gli spazi che ci atterrano
+    # come voti concordi per "l'effetto sta ai confini" scambia una mancata
+    # reiezione per un risultato. Da qui in poi il ramo si chiama per quello che
+    # e', e il caso in cui un primario NON E' MISURATO ha un nome suo.
+    if sig_3_6 == "NA":
+        regime = "0. Non determinato -- un primario non e' misurato"
+        regime_desc = (
+            f"Il lato Block_3-Block_6 non ha un nullo ancorato su Block_6, quindi il suo "
+            f"contrasto non e' un test (Delta_3_6={mean_Delta_3_6:+.4f} contro la media cross, "
+            f"riportato ma non valutato). Il lato Block_1-Block_3 da' "
+            f"Delta_1_3={mean_Delta_1_3:+.4f}, p={p_Delta_1_3:.5f}. L'albero non si puo' "
+            f"percorrere finche' mancano scramble_E/F su Block_6."
+        )
+    elif not pass_1_3 or not pass_3_6:
+        regime = "1. Nessuna separazione dal nullo (ramo di fallimento)"
         regime_desc = (
             f"Almeno uno dei due contrasti contro lo scramble non e' significativo "
             f"(Delta_1_3={mean_Delta_1_3:+.4f}, p={p_Delta_1_3:.5f}; Delta_3_6={mean_Delta_3_6:+.4f}, p={p_Delta_3_6:.5f}). "
-            f"L'effetto e' limitato ai confini (ingresso e uscita) del modello."
+            f"E' una mancata reiezione, non un'osservazione a favore dei confini."
         )
     elif diff_13_36 <= DELTA_EQUIV and (mean_V_1_6 - max_13_36 > DELTA_EQUIV):
         regime = "2. Gradiente Continuo di Profondita"
@@ -327,7 +373,7 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
         "sig_Delta_1_3": holm_results["Delta_1_3"],
         "mean_Delta_3_6": mean_Delta_3_6,
         "p_Delta_3_6": p_Delta_3_6,
-        "sig_Delta_3_6": holm_results["Delta_3_6"],
+        "sig_Delta_3_6": sig_3_6,
         "mean_Delta_1_6": mean_Delta_1_6,
         "p_Delta_1_6": p_Delta_1_6,
         "mean_V_1_3": mean_V_1_3,
@@ -344,6 +390,10 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
         "p_scr_1_3": p_scr_1_3,
         "mean_scr_cross": mean_scr_cross,
         "p_scr_cross": p_scr_cross,
+        "mean_Delta_1_3_acfloor": mean_D13_acfloor,
+        "p_Delta_1_3_acfloor": p_D13_acfloor,
+        "mean_Delta_3_6_acfloor": mean_D36_acfloor,
+        "p_Delta_3_6_acfloor": p_D36_acfloor,
         "regime": regime,
         "regime_desc": regime_desc,
         "coh_b1": coh_b1,
@@ -366,9 +416,13 @@ def run_analysis_for_space(st_df, pa_df, space_name, feature_cols):
         "V_3_6_per_prompt": V_3_6,
         "V_1_6_per_prompt": V_1_6,
         "V_scr_1_3_per_prompt": V_scr_1_3,
-        "V_scr_3_6_per_prompt": V_scr_3_6,
         "V_scr_1_1_per_prompt": V_scr_1_1,
         "V_scr_3_3_per_prompt": V_scr_3_3,
+        "V_cross_AC_per_prompt": V_cross_AC,
+        "V_cross_AD_per_prompt": V_cross_AD,
+        "V_cross_BC_per_prompt": V_cross_BC,
+        "V_cross_BD_per_prompt": V_cross_BD,
+        "V_scr_cross_mean_per_prompt": V_scr_cross_mean,
     }
 
 def main():
@@ -411,9 +465,10 @@ def main():
     print(f"  Nullo Cross-Anchored (scrA vs scrC):  V_scr(1,3) = {tex_res['mean_scr_1_3']:+.4f} (p = {tex_res['p_scr_1_3']:.5f})")
     print(f"  Nullo Cross Medio (4 combinazioni):   V_scr_cross= {tex_res['mean_scr_cross']:+.4f} (p = {tex_res['p_scr_cross']:.5f})")
     print("-" * 80)
-    print("IPOTESI PRIMARIE (Contrasti Appaiati vs Nullo Cross-Anchored):")
-    print(f"  Delta V_1,3 = V_1,3 - V_scr(1,3): {tex_res['mean_Delta_1_3']:+.4f} | p = {tex_res['p_Delta_1_3']:.5f} | Sig (Holm): {tex_res['sig_Delta_1_3']}")
-    print(f"  Delta V_3,6 = V_3,6 - V_scr(3,6): {tex_res['mean_Delta_3_6']:+.4f} | p = {tex_res['p_Delta_3_6']:.5f} | Sig (Holm): {tex_res['sig_Delta_3_6']}")
+    print("IPOTESI PRIMARIE (Contrasti Appaiati vs Nullo Cross MEDIO -- riparazione 2026-09-21):")
+    print(f"  Delta V_1,3 = V_1,3 - V_scr_cross: {tex_res['mean_Delta_1_3']:+.4f} | p = {tex_res['p_Delta_1_3']:.5f} | Sig (Holm): {tex_res['sig_Delta_1_3']}")
+    print(f"  Delta V_3,6 = V_3,6 - V_scr_cross: {tex_res['mean_Delta_3_6']:+.4f} | p = {tex_res['p_Delta_3_6']:.5f} | Sig (Holm): {tex_res['sig_Delta_3_6']}  <- NON MISURATO, manca il pavimento su Block_6")
+    print(f"  [vecchia lettura, pavimento A-vs-C] D_1,3 = {tex_res['mean_Delta_1_3_acfloor']:+.4f} | D_3,6 = {tex_res['mean_Delta_3_6_acfloor']:+.4f}")
     print(f"  Delta V_1,6 = V_1,6 - V_scr(1,1): {tex_res['mean_Delta_1_6']:+.4f} | p = {tex_res['p_Delta_1_6']:.5f}")
     print("-" * 80)
     print(f"ALBERO DECISIONALE A 4 VIE (Margine di Equivalenza Delta_equiv = {DELTA_EQUIV}):")
@@ -441,6 +496,10 @@ def main():
             "p_scr_1_3": r["p_scr_1_3"],
             "mean_scr_cross": r["mean_scr_cross"],
             "p_scr_cross": r["p_scr_cross"],
+            "mean_Delta_1_3_acfloor": r["mean_Delta_1_3_acfloor"],
+            "p_Delta_1_3_acfloor": r["p_Delta_1_3_acfloor"],
+            "mean_Delta_3_6_acfloor": r["mean_Delta_3_6_acfloor"],
+            "p_Delta_3_6_acfloor": r["p_Delta_3_6_acfloor"],
             "mean_Delta_1_3": r["mean_Delta_1_3"],
             "p_Delta_1_3": r["p_Delta_1_3"],
             "sig_Delta_1_3": r["sig_Delta_1_3"],
@@ -486,13 +545,27 @@ def main():
             "V_1_3": tex_res["V_1_3_per_prompt"][p]["v_p"],
             "V_3_6": tex_res["V_3_6_per_prompt"][p]["v_p"],
             "V_1_6": tex_res["V_1_6_per_prompt"][p]["v_p"],
-            "V_scr_1_3": tex_res["V_scr_1_3_per_prompt"][p]["v_p"],
-            "V_scr_3_6": tex_res["V_scr_3_6_per_prompt"][p]["v_p"],
+            "V_scr_AC": tex_res["V_cross_AC_per_prompt"][p]["v_p"],
+            "V_scr_AD": tex_res["V_cross_AD_per_prompt"][p]["v_p"],
+            "V_scr_BC": tex_res["V_cross_BC_per_prompt"][p]["v_p"],
+            "V_scr_BD": tex_res["V_cross_BD_per_prompt"][p]["v_p"],
+            "V_scr_cross_mean": tex_res["V_scr_cross_mean_per_prompt"][p],
             "V_scr_1_1": tex_res["V_scr_1_1_per_prompt"][p]["v_p"],
             "V_scr_3_3": tex_res["V_scr_3_3_per_prompt"][p]["v_p"],
-            "Delta_1_3": tex_res["V_1_3_per_prompt"][p]["v_p"] - tex_res["V_scr_1_3_per_prompt"][p]["v_p"],
-            "Delta_3_6": tex_res["V_3_6_per_prompt"][p]["v_p"] - tex_res["V_scr_3_6_per_prompt"][p]["v_p"],
+            "Delta_1_3": tex_res["V_1_3_per_prompt"][p]["v_p"] - tex_res["V_scr_cross_mean_per_prompt"][p],
+            "Delta_3_6_unfloored": tex_res["V_3_6_per_prompt"][p]["v_p"] - tex_res["V_scr_cross_mean_per_prompt"][p],
+            "Delta_1_3_acfloor": tex_res["V_1_3_per_prompt"][p]["v_p"] - tex_res["V_scr_1_3_per_prompt"][p]["v_p"],
         })
+
+    # Pitfall 69: due colonne con nomi diversi e contenuto identico si leggono
+    # come due misure. Non se ne scrive piu' nessuna senza accorgersene.
+    cols = [c for c in scores_rows[0] if c != "prompt_id"]
+    for i, a in enumerate(cols):
+        for b in cols[i + 1:]:
+            if all(abs(r[a] - r[b]) < 1e-12 for r in scores_rows):
+                raise RuntimeError(
+                    f"le colonne '{a}' e '{b}' sono identiche su tutti i {len(scores_rows)} "
+                    f"prompt: due nomi per una misura sola, non si scrive")
 
     for out_p in [SCORES_CSV_PILOT, SCORES_CSV_REPORT]:
         with open(out_p, "w", newline="", encoding="utf-8") as f:

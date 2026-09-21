@@ -43,6 +43,16 @@
 
 ## 2. Riserve Metodologiche e Limiti Epistemici
 
+> **Aggiornamento 2026-09-21.** La domanda di questa sezione — se la separazione direzionale sia
+> specializzazione funzionale o pura prossimita' ai confini della rete — era stata affidata
+> all'esperimento del triangolo `Block_1`/`Block_3`/`Block_6`. Quell'esperimento **non la
+> chiude**: il lato `Block_3`-vs-`Block_6`, che e' il lato che avrebbe deciso, non ha un nullo
+> ancorato su `Block_6` e non e' misurato; il lato `Block_1`-vs-`Block_3` non si separa dal
+> nullo sotto la regola di aggregazione dichiarata. Vedi
+> [`rotations_triangolo_block1_block3_block6_results.md`](rotations_triangolo_block1_block3_block6_results.md)
+> §1-bis. **La domanda resta aperta.**
+
+
 Nonostante la significatività statistica al pavimento teorico ($p = 0.00195$), i risultati **non consentono di affermare una specializzazione funzionale dell'architettura**, per tre ragioni strutturali:
 
 1. **Confondimento tra Specializzazione Funzionale e Prossimità all'Uscita**:

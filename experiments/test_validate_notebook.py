@@ -50,6 +50,21 @@ def patch_re(tree: Path, rel: str, pattern: str, new: str) -> None:
     f.write_text(t[:m.start()] + new + t[m.end():], encoding="utf-8")
 
 
+def _duplicate_a_column(tree: Path, rel: str) -> None:
+    """Copy one numeric column under a second name -- pitfall 69 in miniature."""
+    import csv
+    f = tree / rel
+    rows = list(csv.DictReader(f.open(encoding="utf-8-sig", newline="")))
+    assert rows, f"{rel} is empty"
+    src = [c for c in rows[0] if c][1]
+    for r in rows:
+        r[src + "_copy"] = r[src]
+    with f.open("w", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+
+
 # (name, mutation, substring that must appear in the output)
 CASES = [
     ("id does not match filename",
@@ -70,6 +85,10 @@ CASES = [
      lambda t: patch(t, PAGE, "preregistration: docs/prereg_punto7_simmetria_segno.md",
                      "preregistration: docs/prereg_that_was_never_committed.md"),
      "does not exist in the repository"),
+
+    ("a results CSV the page cites has two columns with identical content",
+     lambda t: _duplicate_a_column(t, "data/punto7_blocks.csv"),
+     "identical on all"),
 
     ("a claim points at a heading that does not exist",
      lambda t: patch(t, PAGE, 'anchor: "#the-tail-is-rectified"',
