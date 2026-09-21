@@ -255,10 +255,21 @@ live outside the repository. The charts above carry the same claims from the mea
 
 The batch was 250 renders across five conditions. The bounding-box round annotated four of them:
 baseline, the derangement at both doses, and the preset at double dose. **The fifty renders of
-the preset at single dose were never scored**, and neither was the second confirmatory
-hypothesis this corpus was built to carry — the pre-registration §"Un secondo esito" registered a
-headlight confirmation on these same images, with its own frozen directional prediction, and no
-scoring file for it exists in `data/`. An arm that was rendered and not examined is not a spare.
+the preset at single dose have still never been scored.**
+
+The second confirmatory hypothesis this corpus was built to carry — the pre-registration's
+§"Un secondo esito", a headlight confirmation on these same images with its own frozen
+directional prediction — was scored blind on 2026-09-21, on the four annotated conditions. It
+returned nothing usable, and not because the effect was absent: **nine of the ten styles never
+light a headlight in any condition, the untouched model included**, so the test had one
+informative prompt and a floor of 2/2¹ = 1.0. The subject sentence pins `golden hour, clear
+sky`, and a bright daylight scene is one where the trait cannot move. That was decidable from
+the prompt before rendering, and the pre-registration treated the second hypothesis as
+travelling with the corpus for free. The round is written up on
+[what the edit puts in the picture](02-attribute-emergence.md#the-confirmation-that-was-run-and-could-not-answer).
+
+An arm that was rendered and not examined is not a spare, and a hypothesis attached to a corpus
+that cannot express it is not a test.
 
 More importantly for the claim itself: no sign-scrambled edit at the identical displacement was
 rendered. The round therefore separates **two structured edits from each other and from doing

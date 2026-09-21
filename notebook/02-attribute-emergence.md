@@ -9,8 +9,8 @@ supersedes: []
 pitfalls: [26, 34, 35, 39, 40, 50]
 
 corpus:
-  renders: 670
-  prompts: 18
+  renders: 870
+  prompts: 28
   seeds: [42, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
           201, 202, 203, 204, 205, 777, 1337, 9999, 4242145]
 
@@ -33,7 +33,9 @@ claims:
     evidence: >
       Blind-scored, but measured on the renders that produced the observation. Lit
       headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact
-      test is at its own floor, p = 0.0312, Holm 0.1875.
+      test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a
+      second corpus was run and could not resolve anything: 9 of its 10 prompts never light
+      a headlight in any condition.
     anchor: "#the-attribute-nobody-asked-for"
   - id: attribute-emergence-generality-untested
     status: open
@@ -249,6 +251,52 @@ table. The two styles that do not move are not counterexamples: stained glass wa
 the ceiling, and ukiyo-e sits at zero in **all seven** conditions, which is a style that never
 depicts lit headlights rather than a failure to respond.
 
+### The confirmation that was run, and could not answer
+
+The pre-registration of the next experiment registered a second hypothesis on its own corpus:
+the same headlight prediction, with its own frozen directional clause, on 250 renders of a
+vintage sports car on a coastal road. Those renders exist and the round was scored blind on
+2026-09-21 against a criterion frozen first, in `docs/stage12_headlights_criterion.md`. Every
+score re-joins to the sealed key of that round without a single disagreement.
+
+It returned nothing, and the reason is visible before any effect size.
+
+![Per-style rate of lit headlights for the four conditions on the second corpus. Nine styles of ten never light one in any condition, so the registered confirmation had a single informative prompt and could not resolve anything.](../assets/02-attribute-emergence/F02.6_headlight_floor_by_style.webp)
+
+| condition | lit / scorable | rate |
+|---|---|---|
+| untouched | 5 / 49 | 0.102 |
+| calibrated preset ×2 | 5 / 50 | 0.100 |
+| block derangement ×1 | 3 / 50 | 0.060 |
+| block derangement ×2 | 1 / 50 | 0.020 |
+
+**Nine styles of ten never light a headlight in any condition, the untouched model included.**
+All sixteen lit renders in the round belong to one style. With one informative prompt the exact
+sign-flip test's floor is 2/2¹ = 1.0: no effect of any magnitude could have reached
+significance, which is rule 11 of the fifteen, and it was decidable before a single image was
+rendered. The subject sentence pins `golden hour, clear sky` — a bright daylight scene, where
+headlights off is what the object looks like.
+
+Inside the one informative style the two arms behave as predicted and cannot be tested. The
+untouched model lights 5 of 5, so the positive prediction has no room to move; the derangement
+takes it to 3 of 5 at single dose and 1 of 5 at double, which is the extinguishing direction of
+the first corpus with a dose gradient, on five renders.
+
+So the claim does not gain a confirmation and does not lose one. What it gains is a boundary:
+on a bright daylight corpus the trait has no variance to steer, and the round that would settle
+the question needs a corpus where headlights are **marginal** — dusk, night, or styles that
+depict them — chosen on that criterion before rendering. The pre-registration offered this
+second outcome as something that travelled with the corpus for free. It did not: a hypothesis
+about a trait needs a corpus in which the trait can move, and that is a design requirement, not
+a bonus.
+
+Two things the round did establish about itself. The scorer was not the pre-registered one and
+knew the hypothesis, which is declared in the criterion document along with three other
+deviations. And the criterion was tightened after 27 tiles, before the key was opened; repeating
+the whole table on the 175 tiles scored afterwards moves the rates to 0.114, 0.087, 0.073 and
+0.023 and changes nothing. Of the twenty tiles shown twice, nineteen scored identically and the
+disagreement was uncertain against unlit, never lit against unlit.
+
 ### The controls
 
 The control that decides what this finding is, in both arms, is the norm-matched scramble. It
@@ -366,13 +414,20 @@ designs the confirmation and records, in its own closing note, that it was never
 `data/stage9_headlights_results.csv` and `data/stage9_headlights_pretreatment_strata.csv`
 (condition rates and the corrected stratification),
 `data/stage9_headlights_by_style.csv` (derived here, 2026-09-21).
+The second corpus: `data/stage12_headlights_raw.csv` (the blind round),
+`data/stage12_images.csv` (its manifest), `data/stage12_bbox_key.csv` (the sealed key the
+scores were joined to), `data/stage12_headlights_results.csv` (the round's own summary) and
+`data/stage12_headlights_by_style.csv` (derived here).
 
 **Scripts.** `experiments/notebook_figures.py` (F02.4, F02.5),
+`experiments/notebook_charts.py` (F02.6), `experiments/stage12_headlights.py`,
 `experiments/build_figures_headlights.py` (F02.1 to F02.3),
 `experiments/headlights_by_style.py`, `experiments/score_headlights.py`,
 `experiments/analyze_headlights.py`.
 
-**Written up in.** `docs/stage10_headlights_results.md`, `docs/figure_brief.md`.
+**Written up in.** `docs/stage10_headlights_results.md`, `docs/figure_brief.md`,
+`docs/stage12_headlights_criterion.md` (the second corpus's frozen criterion and its four
+declared deviations).
 
 **Pitfalls that apply.** 26 (Fisher's exact on paired binary outcomes, where McNemar on the
 discordant pairs is the right test and is what the tables above use), 34 (an expert observer is

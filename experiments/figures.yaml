@@ -120,6 +120,19 @@ figures:
       seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.84 percent
       measured on eighteen seeds each.
 
+  - id: F02.6
+    page: 02-attribute-emergence
+    kind: strip
+    builder: notebook_charts.headlight_floor_by_style
+    source: data/stage12_headlights_by_style.csv
+    caption_from: source
+    crop: whole
+    direct_labels: [S03_cyberpunk]
+    alt: >
+      Per-style rate of lit headlights for the four conditions on the second corpus. Nine
+      styles of ten never light one in any condition, so the registered confirmation had a
+      single informative prompt and could not resolve anything.
+
   # ---------------------------------------------------------------- 03-what-ends-up-in-the-picture
   #
   # All three are charts built by notebook_charts.py from the derived tables, not from the

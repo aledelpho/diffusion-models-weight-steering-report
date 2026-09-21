@@ -114,7 +114,7 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-first-block-runs-backwards">The first block is a knob that runs the opposite way to the tail: pushed positive it smooths, pushed negative it etches.</a></td><td class="ev">Pre-registered as P3. r+ = 0.841, r- = 1.100, swing 0.764.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-tail-is-rectified">On the last blocks the negative direction is the safe side: positive pushes wreck the image, negative pushes barely move it.</a></td><td class="ev">Amplitude ratio 9.1x on block 26, both arms on one scale. All six blocks from 22 onward asymmetric.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
-<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">A bidirectional, mirror-image response is the exception rather than the rule.</a></td><td class="ev">Falsified. 17 of 28 blocks are mirror-symmetric within 3σ. The prediction expected fewer than 10.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">Blocks at either end of the network respond violently in both directions.</a></td><td class="ev">Falsified. Predicted for the first block and at least three of five tail blocks; found in one of the five.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
@@ -414,7 +414,7 @@ analysis:
 </ul>
 </section>
 <section id="p-02-attribute-emergence">
-<p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">670 renders · 18 prompts · 20 seeds · 2026-09-21</span></p>
+<p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">870 renders · 28 prompts · 20 seeds · 2026-09-21</span></p>
 <h1 id="p-02-attribute-emergence--what-the-edit-puts-in-the-picture-and-what-it-takes-out">What the edit puts in the picture, and what it takes out</h1>
 <h2 id="p-02-attribute-emergence--in-two-minutes">In two minutes</h2>
 <p>A prompt asked for <code>small barnacle-like clusters studding one earlobe</code>. The stock model drew
@@ -808,6 +808,68 @@ drawing lighting its headlights in all five seeds is the single most surprising 
 table. The two styles that do not move are not counterexamples: stained glass was already at
 the ceiling, and ukiyo-e sits at zero in <strong>all seven</strong> conditions, which is a style that never
 depicts lit headlights rather than a failure to respond.</p>
+<h3 id="p-02-attribute-emergence--the-confirmation-that-was-run-and-could-not-answer">The confirmation that was run, and could not answer</h3>
+<p>The pre-registration of the next experiment registered a second hypothesis on its own corpus:
+the same headlight prediction, with its own frozen directional clause, on 250 renders of a
+vintage sports car on a coastal road. Those renders exist and the round was scored blind on
+2026-09-21 against a criterion frozen first, in <code>docs/stage12_headlights_criterion.md</code>. Every
+score re-joins to the sealed key of that round without a single disagreement.</p>
+<p>It returned nothing, and the reason is visible before any effect size.</p>
+<p><img alt="Per-style rate of lit headlights for the four conditions on the second corpus. Nine styles of ten never light one in any condition, so the registered confirmation had a single informative prompt and could not resolve anything." src="assets/02-attribute-emergence/F02.6_headlight_floor_by_style.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>condition</th>
+<th>lit / scorable</th>
+<th>rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>untouched</td>
+<td>5 / 49</td>
+<td>0.102</td>
+</tr>
+<tr>
+<td>calibrated preset ×2</td>
+<td>5 / 50</td>
+<td>0.100</td>
+</tr>
+<tr>
+<td>block derangement ×1</td>
+<td>3 / 50</td>
+<td>0.060</td>
+</tr>
+<tr>
+<td>block derangement ×2</td>
+<td>1 / 50</td>
+<td>0.020</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Nine styles of ten never light a headlight in any condition, the untouched model included.</strong>
+All sixteen lit renders in the round belong to one style. With one informative prompt the exact
+sign-flip test's floor is 2/2¹ = 1.0: no effect of any magnitude could have reached
+significance, which is rule 11 of the fifteen, and it was decidable before a single image was
+rendered. The subject sentence pins <code>golden hour, clear sky</code> — a bright daylight scene, where
+headlights off is what the object looks like.</p>
+<p>Inside the one informative style the two arms behave as predicted and cannot be tested. The
+untouched model lights 5 of 5, so the positive prediction has no room to move; the derangement
+takes it to 3 of 5 at single dose and 1 of 5 at double, which is the extinguishing direction of
+the first corpus with a dose gradient, on five renders.</p>
+<p>So the claim does not gain a confirmation and does not lose one. What it gains is a boundary:
+on a bright daylight corpus the trait has no variance to steer, and the round that would settle
+the question needs a corpus where headlights are <strong>marginal</strong> — dusk, night, or styles that
+depict them — chosen on that criterion before rendering. The pre-registration offered this
+second outcome as something that travelled with the corpus for free. It did not: a hypothesis
+about a trait needs a corpus in which the trait can move, and that is a design requirement, not
+a bonus.</p>
+<p>Two things the round did establish about itself. The scorer was not the pre-registered one and
+knew the hypothesis, which is declared in the criterion document along with three other
+deviations. And the criterion was tightened after 27 tiles, before the key was opened; repeating
+the whole table on the 175 tiles scored afterwards moves the rates to 0.114, 0.087, 0.073 and
+0.023 and changes nothing. Of the twenty tiles shown twice, nineteen scored identically and the
+disagreement was uncertain against unlit, never lit against unlit.</p>
 <h3 id="p-02-attribute-emergence--the-controls">The controls</h3>
 <p>The control that decides what this finding is, in both arms, is the norm-matched scramble. It
 carries the identical Frobenius displacement — 0.0538 relative on the DiT, 0.0256 on the text
@@ -910,12 +972,19 @@ designs the confirmation and records, in its own closing note, that it was never
 <code>data/stage9_headlights_raw.csv</code> and <code>data/stage9_headlights_key.csv</code> (the sealed blind round),
 <code>data/stage9_headlights_results.csv</code> and <code>data/stage9_headlights_pretreatment_strata.csv</code>
 (condition rates and the corrected stratification),
-<code>data/stage9_headlights_by_style.csv</code> (derived here, 2026-09-21).</p>
+<code>data/stage9_headlights_by_style.csv</code> (derived here, 2026-09-21).
+The second corpus: <code>data/stage12_headlights_raw.csv</code> (the blind round),
+<code>data/stage12_images.csv</code> (its manifest), <code>data/stage12_bbox_key.csv</code> (the sealed key the
+scores were joined to), <code>data/stage12_headlights_results.csv</code> (the round's own summary) and
+<code>data/stage12_headlights_by_style.csv</code> (derived here).</p>
 <p><strong>Scripts.</strong> <code>experiments/notebook_figures.py</code> (F02.4, F02.5),
+<code>experiments/notebook_charts.py</code> (F02.6), <code>experiments/stage12_headlights.py</code>,
 <code>experiments/build_figures_headlights.py</code> (F02.1 to F02.3),
 <code>experiments/headlights_by_style.py</code>, <code>experiments/score_headlights.py</code>,
 <code>experiments/analyze_headlights.py</code>.</p>
-<p><strong>Written up in.</strong> <code>docs/stage10_headlights_results.md</code>, <code>docs/figure_brief.md</code>.</p>
+<p><strong>Written up in.</strong> <code>docs/stage10_headlights_results.md</code>, <code>docs/figure_brief.md</code>,
+<code>docs/stage12_headlights_criterion.md</code> (the second corpus's frozen criterion and its four
+declared deviations).</p>
 <p><strong>Pitfalls that apply.</strong> 26 (Fisher's exact on paired binary outcomes, where McNemar on the
 discordant pairs is the right test and is what the tables above use), 34 (an expert observer is
 not blinded by hashed filenames), 35 (a scoring viewer that appends a row when the scorer goes
@@ -1197,10 +1266,19 @@ live outside the repository. The charts above carry the same claims from the mea
 <h3 id="p-03-what-ends-up-in-the-picture--what-this-cannot-separate">What this cannot separate</h3>
 <p>The batch was 250 renders across five conditions. The bounding-box round annotated four of them:
 baseline, the derangement at both doses, and the preset at double dose. <strong>The fifty renders of
-the preset at single dose were never scored</strong>, and neither was the second confirmatory
-hypothesis this corpus was built to carry — the pre-registration §"Un secondo esito" registered a
-headlight confirmation on these same images, with its own frozen directional prediction, and no
-scoring file for it exists in <code>data/</code>. An arm that was rendered and not examined is not a spare.</p>
+the preset at single dose have still never been scored.</strong></p>
+<p>The second confirmatory hypothesis this corpus was built to carry — the pre-registration's
+§"Un secondo esito", a headlight confirmation on these same images with its own frozen
+directional prediction — was scored blind on 2026-09-21, on the four annotated conditions. It
+returned nothing usable, and not because the effect was absent: <strong>nine of the ten styles never
+light a headlight in any condition, the untouched model included</strong>, so the test had one
+informative prompt and a floor of 2/2¹ = 1.0. The subject sentence pins <code>golden hour, clear
+sky</code>, and a bright daylight scene is one where the trait cannot move. That was decidable from
+the prompt before rendering, and the pre-registration treated the second hypothesis as
+travelling with the corpus for free. The round is written up on
+<a href="#p-03-what-ends-up-in-the-picture--p-02-attribute-emergence#the-confirmation-that-was-run-and-could-not-answer">what the edit puts in the picture</a>.</p>
+<p>An arm that was rendered and not examined is not a spare, and a hypothesis attached to a corpus
+that cannot express it is not a test.</p>
 <p>More importantly for the claim itself: no sign-scrambled edit at the identical displacement was
 rendered. The round therefore separates <strong>two structured edits from each other and from doing
 nothing</strong>, and says nothing about structure against magnitude. That control exists elsewhere in
@@ -1385,7 +1463,9 @@ r⁺ = HF₊/HF_base and r⁻ = HF₋/HF_base, the response splits into two orth
 log space:</p>
 <ul>
 <li><strong>common mode</strong> <code>c = √(r⁺ r⁻)</code> — what the edit does regardless of direction;</li>
-<li><strong>swing</strong> <code>s = r⁺/r⁻</code> — what the <em>sign</em> of the edit does.</li>
+<li><strong>swing</strong> <code>s = r⁺/r⁻</code> — what the <em>sign</em> of the edit does;</li>
+<li><strong>specularity</strong> <code>m = r⁺ r⁻</code> — 1 exactly when <code>r⁻ = 1/r⁺</code>, that is when the two directions
+  are mirror images of each other.</li>
 </ul>
 <p><img alt="Schematic of the two components: averaging the two directions gives the common mode, the cost; dividing them gives the swing, the steering. A ratio alone discards the first." src="assets/05-knob-or-cost/F05.5_decomposition_schema.svg" /></p>
 <p>The ratio used in earlier work is <code>s</code> alone. It discards <code>c</code> by construction, which is why the
@@ -1413,8 +1493,8 @@ completed, implementing the frozen §1 literally.</p>
 </tr>
 <tr>
 <td>P2</td>
-<td>mean |log <code>s</code>| &gt; 0.03; fewer than 10 blocks within [0.97, 1.03]</td>
-<td><strong>falsified</strong> — mean fine, but 17/28 inside</td>
+<td>mean |log <code>m</code>| &gt; 0.03; fewer than 10 blocks within [0.97, 1.03]</td>
+<td><strong>falsified</strong> — mean 0.048 as predicted, but 17/28 inside</td>
 </tr>
 <tr>
 <td>P3</td>
@@ -1588,6 +1668,13 @@ render would not survive.</p>
 <p>An earlier write-up put the ceiling at 0.514 and the single-block figure at 0.660. Both come
 out fractionally different when measured on this corpus with every pair counted, and the
 notebook now quotes one number for one quantity, from <code>data/bench_checks.csv</code>.</p>
+<p>The P2 row of the table above used to name the swing <code>s</code> where the pre-registration names the
+specularity <code>m</code>. The verdict was always the specularity one — 17 of 28 blocks mirror-symmetric
+within 3σ — and under <code>s</code> the same window holds only 8 blocks, which would not have falsified
+anything. The pre-registration file was missing from the repository until 2026-09-21, so for a
+day this table could not be checked against the document it reports on. All eight rows have now
+been recomputed from <code>data/punto7_blocks.csv</code> against the restored §3, and P2 was the only one
+that needed correcting.</p>
 <h3 id="p-05-knob-or-cost--reproducing-this">Reproducing this</h3>
 <pre><code class="language-yaml">model:
   checkpoint: krea2_turbo_bf16.safetensors

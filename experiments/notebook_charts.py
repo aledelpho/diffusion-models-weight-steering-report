@@ -225,12 +225,74 @@ def discriminability_vs_effect(out: Path) -> Path:
                  f"data/stage12_enlargement_by_prompt.csv, data/stage12_pattern_results.json")
 
 
+
+def headlight_floor_by_style(out: Path) -> Path:
+    """Why the stage-12 headlight confirmation could not return an answer.
+
+    Reads data/stage12_headlights_by_style.csv, the table
+    experiments/stage12_headlights.py derives from the blind round, and draws the per-style
+    rate for the four conditions. The claim is the shape, not a level: nine of the ten styles
+    never light a headlight under any condition, so the exact sign-flip test has one
+    informative unit and a floor of 2/2 = 1.0.
+    """
+    src = DATA / "stage12_headlights_by_style.csv"
+    if not src.exists():
+        raise FileNotFoundError(f"{src} is missing -- run experiments/stage12_headlights.py")
+    rows = [r for r in csv.DictReader(src.open(encoding="utf-8", newline=""))
+            if r["scope"] == "all_tiles"]
+    conds = ["baseline", "preset_pos_2x", "blockshuf_neg_1x", "blockshuf_neg_2x"]
+    names = {"baseline": "untouched", "preset_pos_2x": "calibrated preset x2",
+             "blockshuf_neg_1x": "block derangement x1",
+             "blockshuf_neg_2x": "block derangement x2"}
+    styles = sorted({r["prompt_id"] for r in rows})
+    informative = sorted({r["prompt_id"] for r in rows if r["prompt_is_informative"] == "yes"})
+    order = [s for s in styles if s not in informative] + informative
+    y = {s: i for i, s in enumerate(order)}
+
+    # Every series is offset inside its own row. All four sit on top of each other at zero in
+    # nine styles of ten, and a single overplotted dot would hide exactly the fact the figure
+    # exists to show.
+    fig, ax = _canvas(8.0, 4.6)
+    palette = [DIM] + CAT
+    offsets = [0.24, 0.08, -0.08, -0.24]
+    for i, cond in enumerate(conds):
+        sel = [r for r in rows if r["condition"] == cond]
+        ax.scatter([float(r["rate"]) for r in sel],
+                   [y[r["prompt_id"]] + offsets[i] for r in sel],
+                   s=34, color=palette[i], edgecolor=SURFACE, linewidth=0.7,
+                   label=names[cond], zorder=3)
+    for s in informative:
+        ax.annotate("the only prompt where anything moves",
+                    (1.0, y[s] + 0.24), textcoords="offset points", xytext=(-6, 9),
+                    color=INK, fontsize=8, ha="right")
+
+    ax.set_yticks(range(len(order)))
+    ax.set_yticklabels([s.split("_", 1)[1] for s in order], color=DIM, fontsize=8.5)
+    ax.set_xlim(-0.05, 1.15)
+    ax.set_ylim(-0.7, len(order) - 0.15)
+    ax.set_xlabel("renders scored as having a lit headlight", color=DIM, fontsize=9)
+    ax.set_title(f"{len(styles) - len(informative)} styles of {len(styles)} never light a "
+                 f"headlight, in any condition\nthe registered confirmation had one "
+                 f"informative prompt, so it could not resolve anything",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="center right", fontsize=7.5, frameon=False, labelcolor=DIM,
+              handletextpad=0.4, borderaxespad=1.2)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 f"10 styles x 5 seeds x 4 conditions  ·  n = 199 scorable tiles  ·  "
+                 f"source data/stage12_headlights_by_style.csv")
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
         enlargement_by_prompt(out / "F03.1_enlargement_by_prompt.webp"),
         discrimination_rates(out / "F03.2_discrimination_rates.webp"),
         discriminability_vs_effect(out / "F03.3_discriminability_vs_effect.webp"),
+        headlight_floor_by_style(ASSETS / "02-attribute-emergence"
+                                 / "F02.6_headlight_floor_by_style.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")
