@@ -678,3 +678,43 @@ should be:
 2. **`docs/`.** The frozen documents are the source the pages quote. `stage9_verdict.md` was
    verified row by row against the CSVs during this pass and holds; the other verdict and
    results documents have not been.
+
+---
+
+## 12. The prose sweep — three pages that contradicted themselves
+
+Commit `08197a2`. The second surface §11.5 left open. Every number in every page's prose was
+compared against the numbers present in the files that page cites. The triage is noisy by
+construction — a derived value does not appear literally in its source — but it was noisy in a
+useful way: about six unmatched numbers per page, nearly all of them legitimately derived, and
+one class of exception that was not.
+
+**The render count in the status line disagreed with `corpus.renders` on three pages of nine.**
+
+| page | status line | front matter | supported by the page itself |
+| --- | ---: | ---: | --- |
+| `00-the-bench` | 421 | 423 | **423** — Provenance itemises 360 + 1 + 30 + 32 |
+| `05-knob-or-cost` | 168 | 368 | **368** — Provenance itemises 168 + 168 + 32; the body says 336 for the two arms |
+| `02-attribute-emergence` | 670, "2 corpora" | 870 | **920** — the page's own "The data" section names three corpora at 390, 280 and 250 |
+
+On `02-attribute-emergence` neither published number is supported by anything. 670 is the two
+corpora the header names; 870 matches nothing at all; 920 is the sum of the three counts the
+page states in its own prose. It now reads 920 and "3 corpora", with the itemisation written
+into Provenance so the check can see it. This is a changed published number and it rests on
+the page's own arithmetic, not on a new measurement.
+
+A fourth check followed: the status line's count must equal `corpus.renders`. A number written
+twice on one page drifts. Self-test 24/24 → **25/25**.
+
+**Two triage hits were checked and are fine**: `data/stage7_hatching_pairs.csv` really does
+hold 240 rows, and page 04's 0.05080 for `Block_4` is 0.05080311 rounded. The rest of the
+unmatched numbers are quantities computed in the prose from values that *are* in the files —
+Holm thresholds, permutation floors, rates like 5/49 = 0.102 — which is what a derived number
+looks like and not a defect.
+
+**What the two sweeps together say.** The reproducibility blocks had four wrong fields out of
+49 checkable. The prose had three wrong render counts out of nine pages. Both classes were
+invisible because nothing compared a typed number to anything. Five validator checks now do,
+and the notebook has gone from 20 self-tests to 25 in two passes. The residue is the part no
+check can reach: 437 block fields that no file in this repository records, and the numbers in
+`docs/`, which is where the pages get their quotations and which has not been swept.
