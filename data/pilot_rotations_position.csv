@@ -1,0 +1,7 @@
+block,clip_dist_mean_rotation,d_model_at_30deg,displacement_rank,norm_S_texture_30deg,norm_A_texture_30deg,antisymmetric_share,within_block_coherence_A,n_prompts
+Block_1,0.3179,0.05674,2,3.8621,1.9082,0.3307,0.6504,7
+Block_2,0.1234,0.05844,1,1.1217,0.5116,0.3132,-0.0242,7
+Block_3,0.1171,0.05331,3,1.4953,0.4528,0.2324,-0.0105,7
+Block_4,0.1163,0.0508,4,1.1962,0.6016,0.3346,0.1554,7
+Block_5,0.1038,0.04337,5,1.351,1.7736,0.5676,0.4378,7
+Block_6,0.4623,0.04199,6,5.6471,6.1243,0.5203,0.9013,7

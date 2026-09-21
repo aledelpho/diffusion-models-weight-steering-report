@@ -233,6 +233,34 @@ figures:
       Exploratory against confirmation for each condition. Four of six fell and two rose, the
       mean went from +0.120 to +0.057, and the ranking reshuffled.
 
+  # ---------------------------------------------------------------- 04-where-in-the-model
+
+  - id: F04.1
+    page: 04-where-in-the-model
+    kind: scatter
+    builder: notebook_charts.position_against_displacement
+    source: data/pilot_rotations_position.csv
+    caption_from: source
+    crop: whole
+    color: sequential_by_block_index      # depth is ordered: one hue light->dark
+    direct_labels: [Block_1, Block_2, Block_6]
+    alt: >
+      Mean image movement against checkpoint displacement for the six block groups. The last
+      group moves the weights 28% less than the largest and the picture 3.7 times more, while
+      the four middle groups lie in displacement order.
+
+  - id: F04.2
+    page: 04-where-in-the-model
+    kind: paired_bars
+    builder: notebook_charts.antisymmetry_by_block
+    source: data/pilot_rotations_position.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Symmetric and antisymmetric norms per block group at 30 degrees, with the antisymmetric
+      share above each pair. The largest share belongs to the fifth group and the largest
+      antisymmetric movement to the sixth.
+
   # ---------------------------------------------------------------- 01-mark-style
 
   - id: F01.1

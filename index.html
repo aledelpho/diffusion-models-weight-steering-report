@@ -84,6 +84,7 @@
 <li><a href="#p-00-the-bench"><span class="dot" style="background:#0ca30c"></span>Is the instrument lying to me?</a></li>
 <li><a href="#p-02-attribute-emergence"><span class="dot" style="background:#fab219"></span>What the edit puts in the picture, and what it takes out</a></li>
 <li><a href="#p-03-what-ends-up-in-the-picture"><span class="dot" style="background:#0ca30c"></span>How much room the subject takes, and how blind I actually was</a></li>
+<li><a href="#p-04-where-in-the-model"><span class="dot" style="background:#fab219"></span>Does it matter where you edit?</a></li>
 <li><a href="#p-05-knob-or-cost"><span class="dot" style="background:#0ca30c"></span>What an edit steers, and what it costs</a></li>
 <li><a href="#p-06-the-hatching-axis"><span class="dot" style="background:#0ca30c"></span>The hatching axis, and the sign that decides it</a></li>
 <li><a href="#p-07-chromatic-signatures"><span class="dot" style="background:#fab219"></span>What the edit does to colour, and what it does not</a></li>
@@ -119,6 +120,7 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-07-chromatic-signatures--the-directions-differ-and-that-is-the-claim-that-holds">Different weight edits move the palette in directions that differ from one another, so the colour response is a property of which edit was applied and not a single shared drift.</a></td><td class="ev">Pre-registered. Within-condition coherence +0.057 against +0.023 between conditions, a difference of +0.035 against a label-permutation null with mean -0.003 and a 95th percentile of +0.007. p = 1e-4, the Monte Carlo floor, and the second time this statistic has landed on its floor on an independent corpus.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-04-where-in-the-model--the-null-hypothesis-and-how-badly-it-lost">Where an edit lands changes how much the picture moves, and it is not a matter of how far the weights moved. The last block group moves the checkpoint least and the image most.</a></td><td class="ev">Exploratory, one seed per cell, one unsigned metric. The last group displaces 28% less than the largest and moves the image 3.7 times more, at about 15 times the seed noise, 7 of 7 prompts, p at the 2/2^7 floor. Among the four middle groups displacement explains the ordering completely.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-06-the-hatching-axis--the-check-that-was-registered-and-not-recorded">The calibrated preset moves the same measured axis with the opposite sign, so the axis is not a property of block derangement. Whether the measure tracks hatching orientation in this family was never checked.</a></td><td class="ev">Delta -0.370, Holm p 9.2e-5, 16 of 16 prompts and 80 of 80 pairs. But the pre-registration made the preset row conditional on a visual check of one pair, to be recorded before the analysis, and no outcome for that check exists.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-07-chromatic-signatures--three-of-six-and-the-bar-was-four">Whether each individual edit imprints a chromatic direction that survives a change of subject is undecided. Three of six conditions cleared the registered threshold and the threshold was four.</a></td><td class="ev">Pre-registered bar of four of six surviving Holm at 0.05, with three declared ambiguous in advance and not to be rounded up. Observed three: Holm 2.2e-3, 1.1e-2, 2.1e-2, and the fourth at 5.10e-2.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">A bidirectional, mirror-image response is the exception rather than the rule.</a></td><td class="ev">Falsified. 17 of 28 blocks are mirror-symmetric within 3σ. The prediction expected fewer than 10.</td></tr>
@@ -127,6 +129,8 @@
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--one-attribute-one-prompt-family">Whether attribute emergence is a general property of structured weight edits or a fact about one prompt template is untested, and the design written to test it was never run.</a></td><td class="ev">The pre-registered stage-7 attribute table was never filled, so the primary test does not exist. Both positive prompts share nearly every token.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">Whether the enlargement comes from the structure of the edit or merely from its magnitude is undecided, because the design left out the one control that separates them.</a></td><td class="ev">The round compared two structured edits against a baseline. A sign-scrambled edit at the identical displacement was not rendered, so no point on the magnitude axis exists.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-04-where-in-the-model--the-direction-and-why-it-is-not-a-result">Two well-measured block groups appear to push the image in different directions, not merely by different amounts. It is a hypothesis, not a result.</a></td><td class="ev">Same-block advantage +0.689 for the first group against the last, unanimous on 7 prompts, p at the floor. The family of comparisons was never declared, and at seven prompts Holm can carry exactly three: the result sits on the boundary that the declaration would have decided.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-04-where-in-the-model--what-it-does-not-mean">Whether the position effect is about what a block does or merely about how little of the network remains downstream of it is untested, and the second explanation is the ordinary one.</a></td><td class="ev">The last group is the last four blocks of twenty-eight. An unsigned distance says the image moved, never what moved, so this design cannot separate a sensitivity from a specialisation.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-07-chromatic-signatures--colour-and-texture-are-not-one-signature">Colour and stroke texture do not respond to these displacements in the same way, and no account here explains both.</a></td><td class="ev">On the same 560 renders, colour effects roughly halved and the sign scramble was among the strongest conditions, while texture held its size and the sign scramble vanished. Not tested against any alternative account.</td></tr>
       </tbody>
     </table>
@@ -1386,6 +1390,399 @@ own source), 40 (a figure whose caption and crop were typed by hand, which is wh
 from this round stay unpublished).</p>
 <p>Rules 9 and 11 of the fifteen were both written out of this round: blinding is a measurement,
 and the resolution floor decides how many tests a family can hold before anything is rendered.</p>
+</section>
+<section id="p-04-where-in-the-model">
+<p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">432 renders · 7 prompts · 3 seeds · 2026-09-21</span></p>
+<h1 id="p-04-where-in-the-model--does-it-matter-where-you-edit">Does it matter where you edit?</h1>
+<h2 id="p-04-where-in-the-model--in-two-minutes">In two minutes</h2>
+<p>The most important open question in the project is whether it matters <em>where</em> in the model you
+push. The data that speak to it were already sitting on disk, unlooked at, from before the
+project had rules: nine old benchmark reports sweeping six groups of the 28-block backbone,
+each rotated by ±15° and ±30°, and separately scaled by ±1 and ±2.</p>
+<p>The obvious explanation for a group responding more is that pushing it moves the model more. So
+the displacement was measured offline from the checkpoint, tensor by tensor, and set against
+how far the image travelled.</p>
+<p><img alt="Mean image movement against checkpoint displacement for the six block groups. The last group moves the weights 28% less than the largest and the picture 3.7 times more, while the four middle groups lie in displacement order." src="assets/04-where-in-the-model/F04.1_position_against_displacement.webp" /></p>
+<p>The amplitude account is not merely rejected, it is rejected backwards: the group that moves the
+weights <em>least</em> moves the picture <em>most</em>. And the part that is more interesting than the
+headline — among the four middle groups displacement explains the ordering <strong>completely</strong>,
+Spearman +1.000. In the middle of the model, how far you push is the whole story. It is the two
+ends that leave the line.</p>
+<p>Then the two ends turn out not to be the same thing, and the second sweep sitting in the same
+files is what says so. Under amplitude scaling the last group repeats and the first does not.</p>
+<p>So the honest headline is not a U-shaped profile. It is <strong>a last-group effect</strong>, with the first
+group as a separate anomaly of a different kind — and even that has an ordinary explanation
+still standing, which the last section is about.</p>
+<h2 id="p-04-where-in-the-model--the-verdict">The verdict</h2>
+<p>Where you push is not interchangeable, and the difference is not how far you pushed. At roughly
+fifteen times the seed noise, on seven prompts of seven, the size of it is not in question
+either.</p>
+<p>What it is <em>not</em> is a result about the model. Everything here predates the first
+pre-registration in the project: one seed per cell, six sampling steps instead of nine, no
+displacement-matched random control, and the only metric is the CLIP distance that this
+notebook has already shown inverts conclusions about the properties it actually cares about. An
+unsigned distance says the image moved, never what moved. And the most ordinary explanation is
+untouched: the last group is the last four blocks of twenty-eight, so a perturbation there has
+almost nothing downstream left to absorb it, and first and last groups behave unlike the middle
+in nearly every transformer.</p>
+<p>The page earns its place by what it set up rather than by what it settled. The follow-up is
+fully specified because of it, and it has since been run: the first group against the last, at
+ten prompts with a matched control, is the pre-registered version of the question this page
+could only pose. It is <code>docs/prereg_rotations_block1_vs_block6.md</code> and it has not been migrated
+into the notebook yet.</p>
+<h2 id="p-04-where-in-the-model--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>This is not a confirmatory page, and one contrast on it was frozen anyway.</strong> The
+extremes-against-middle contrast was fixed before the per-block numbers were looked at, and it
+passes. But the brief that froze it <strong>is not in the repository</strong>, so a reader cannot check what
+was frozen against what was reported. That is the second document in this notebook to be cited
+as frozen and be missing; the first was found and restored on 2026-09-21. Until this one turns
+up, the page is filed exploratory whatever the contrast's provenance.</p>
+<p><strong>The frozen contrast fuses two things that are not alike.</strong> It treats the first and last
+groups as one category, "extremes". The amplitude sweep in the same files shows they behave
+differently, so the contrast passed by averaging a real effect with an anomaly. That is
+pitfall 42, and this is the registry's own example.</p>
+<p><strong>One seed per cell, except one prompt.</strong> The seed-noise figure that makes the effect size
+meaningful comes from the single prompt that was rendered at three seeds. Everything else is one
+render per cell.</p>
+<p><strong>The measurement file mixes two experiments.</strong> <code>data/pilot_rotations.csv</code> holds 270 rows, not
+216: fifty-four of them belong to a different perturbation family, and every one of those sits
+on the third block group. A plain average per block silently folds another experiment into that
+one group and moves it from 0.117 to 0.106. The derivation script for this page filters on the
+family and raises if the count is not 216; the near-miss is recorded here because nothing else
+would have caught it.</p>
+<p><strong>The p-values carry one bit.</strong> Every p above is exactly 2/2⁷ = 0.0156, the smallest number
+seven prompts can produce. With all seven agreeing the test cannot tell an enormous effect from
+a barely consistent one. The seed-noise ratio is doing the work the p cannot.</p>
+<p><strong>Coherence follows amplitude.</strong> A group that moves ten times as far is measured ten times as
+well, so its direction looks more consistent for reasons that have nothing to do with direction.
+That is pitfall 36, it nearly swallowed the direction result below, and the test that gets
+around it is the only one reported.</p>
+<h2 id="p-04-where-in-the-model--the-data">The data</h2>
+<h3 id="p-04-where-in-the-model--how-it-was-measured">How it was measured</h3>
+<p>Nine benchmark reports from before the project had rules, sweeping six groups of the 28-block
+backbone: <code>Block_1</code> = blocks 0–4 through <code>Block_6</code> = blocks 24–27. Each group rotated by ±15°
+and ±30° — 216 cells — and separately scaled by ±1 and ±2, another 216. The nine reports are
+<strong>seven</strong> prompts, because one appears three times at different seeds, so the unit of analysis
+is the prompt and the exact sign-flip floor is 2/2⁷ = 0.0156.</p>
+<p>Displacement was not assumed. It was measured offline from the checkpoint, tensor by tensor, for
+every group and angle, and is in <code>data/pilot_rotation_displacement.csv</code>.</p>
+<h3 id="p-04-where-in-the-model--the-null-hypothesis-and-how-badly-it-lost">The null hypothesis, and how badly it lost</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>block group</th>
+<th>mean CLIP distance</th>
+<th>displacement at 30°</th>
+<th>displacement rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Block_1</code> (0–4)</td>
+<td>0.3179</td>
+<td>0.05674</td>
+<td>2nd largest</td>
+</tr>
+<tr>
+<td><code>Block_2</code> (5–9)</td>
+<td>0.1234</td>
+<td><strong>0.05844</strong></td>
+<td><strong>largest</strong></td>
+</tr>
+<tr>
+<td><code>Block_3</code> (10–14)</td>
+<td>0.1171</td>
+<td>0.05331</td>
+<td>3rd</td>
+</tr>
+<tr>
+<td><code>Block_4</code> (15–19)</td>
+<td>0.1163</td>
+<td>0.05080</td>
+<td>4th</td>
+</tr>
+<tr>
+<td><code>Block_5</code> (20–23)</td>
+<td>0.1038</td>
+<td>0.04337</td>
+<td>5th</td>
+</tr>
+<tr>
+<td><strong><code>Block_6</code> (24–27)</strong></td>
+<td><strong>0.4623</strong></td>
+<td><strong>0.04199</strong></td>
+<td><strong>smallest</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Against <code>Block_2</code>, the last group displaces <strong>28% less</strong> and moves the image <strong>3.7× more</strong>.
+Across all six groups the Spearman between image movement and displacement is +0.086 — nothing.
+Across the four middle groups alone it is <strong>+1.000</strong>.</p>
+<p>Regressed over all 168 paired points, whole-checkpoint displacement explains <strong>6.2%</strong> of the
+variance in image movement; the block's own local displacement explains <strong>36.7%</strong>. The
+remaining two thirds is where the block sits.</p>
+<p>The frozen contrast, extremes against middle, per prompt: <strong>+0.2750</strong>, seven of seven, p at the
+floor. Residualising on whole-model displacement moves it to +0.2800 and on block displacement
+to +0.2118 — the effect does not live in the displacement it is being corrected for.</p>
+<h3 id="p-04-where-in-the-model--the-two-ends-are-not-the-same-thing">The two ends are not the same thing</h3>
+<p>The amplitude sweep is a different operation from rotation and it was sitting in the same files.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>family</th>
+<th>dose</th>
+<th><code>Block_1</code> vs middle</th>
+<th><code>Block_6</code> vs middle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rotation</td>
+<td>15°</td>
+<td>+0.0606 · 7/7 · p 0.0156</td>
+<td>+0.2424 · 7/7 · p 0.0156</td>
+</tr>
+<tr>
+<td>rotation</td>
+<td>30°</td>
+<td>+0.3450 · 7/7 · p 0.0156</td>
+<td>+0.4520 · 7/7 · p 0.0156</td>
+</tr>
+<tr>
+<td>amplitude</td>
+<td>×1</td>
+<td>+0.0033 · p 0.219</td>
+<td>+0.0132 · p 0.250</td>
+</tr>
+<tr>
+<td>amplitude</td>
+<td>×2</td>
+<td>+0.0291 · p 0.094</td>
+<td><strong>+0.1011 · 7/7 · p 0.0156</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>The last group replicates in both families. The first does not.</strong> Under amplitude scaling the
+first group is indistinguishable from the middle at both doses. Its rotation signature is a
+different animal — nearly normal at 15° and ×3.14 by 30° against ×1.36–1.45 for the middle
+groups — and in the one prompt with three seeds it has the highest seed-to-seed variance of any
+group. That reads as breakage at a large angle, not as position.</p>
+<h3 id="p-04-where-in-the-model--the-direction-and-why-it-is-not-a-result">The direction, and why it is not a result</h3>
+<p>The 216 rotations were re-measured with the project's own stroke and palette features. Those
+have a <strong>sign</strong>, which a distance does not, so the response splits: <code>S = (Δ⁺ + Δ⁻)/2</code>, how much
+it moves either way, and <code>A = (Δ⁺ − Δ⁻)/2</code>, how much reverses when the rotation reverses.</p>
+<p><img alt="Symmetric and antisymmetric norms per block group at 30 degrees, with the antisymmetric share above each pair. The largest share belongs to the fifth group and the largest antisymmetric movement to the sixth." src="assets/04-where-in-the-model/F04.2_antisymmetry_by_block.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>block group</th>
+<th>‖S‖</th>
+<th>‖A‖</th>
+<th>antisymmetric share</th>
+<th>direction coherence across prompts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Block_1</code></td>
+<td>3.86</td>
+<td>1.91</td>
+<td>0.33</td>
+<td>+0.65</td>
+</tr>
+<tr>
+<td><code>Block_2</code></td>
+<td>1.12</td>
+<td>0.51</td>
+<td>0.31</td>
+<td>−0.02</td>
+</tr>
+<tr>
+<td><code>Block_3</code></td>
+<td>1.50</td>
+<td>0.45</td>
+<td>0.23</td>
+<td>−0.01</td>
+</tr>
+<tr>
+<td><code>Block_4</code></td>
+<td>1.20</td>
+<td>0.60</td>
+<td>0.33</td>
+<td>+0.16</td>
+</tr>
+<tr>
+<td><code>Block_5</code></td>
+<td>1.35</td>
+<td>1.77</td>
+<td><strong>0.57</strong></td>
+<td>+0.44</td>
+</tr>
+<tr>
+<td><code>Block_6</code></td>
+<td>5.65</td>
+<td><strong>6.12</strong></td>
+<td>0.52</td>
+<td><strong>+0.90</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>There is a methodological gift here: <strong><code>A</code> is invariant to the centering convention</strong>, because
+subtracting any constant from every delta cancels in (Δ⁺ − Δ⁻)/2. That is the convention that
+sank the stage 9 test, where the sign flipped in eleven cells of eighteen. The one statistic
+that is convention-proof is the one carrying the result — verified: recomputing <code>A</code> with the
+joint mean subtracted returns 6.1243 for the last group, to the digit, while <code>S</code> moves from 5.65
+to 4.57.</p>
+<p><strong>An earlier write-up put the middle groups' antisymmetric share at 0.23–0.33, and that is
+wrong.</strong> It holds for groups 2, 3 and 4. The fifth group's share is <strong>0.57</strong> — higher than the
+sixth's 0.52. What separates the last group is not the <em>share</em> of its response that reverses but
+the <em>size</em> of it: ‖A‖ = 6.12 against 1.77 for the next largest, three and a half times further.
+The sentence "half of what the last group does is antisymmetric, the middles mostly just move"
+is true of three middle groups of four.</p>
+<p><strong>The trap, and it nearly swallowed this.</strong> Within-block coherence — do different prompts move
+the same way under the same block — reads +0.90 for the last group, +0.65 for the first, +0.44
+for the fifth, and about zero for the rest. That looks like the answer. It is half an artefact:
+coherence and amplitude are ranked almost identically, Spearman +0.943 on <code>A</code> and +1.000 on <code>S</code>.
+A block measured ten times as well looks ten times as consistent.</p>
+<p>The test that gets around it compares only the groups measured well enough to be compared, and
+asks whether a prompt's direction agrees more with the <em>same</em> block's other prompts than with
+the <em>other</em> block's:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>comparison</th>
+<th>same-block advantage</th>
+<th>p</th>
+<th>prompts agreeing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>first against last</td>
+<td><strong>+0.689</strong></td>
+<td>0.0156</td>
+<td><strong>7 / 7</strong></td>
+</tr>
+<tr>
+<td>first against fifth</td>
+<td>+0.545</td>
+<td>0.0156</td>
+<td>7 / 7</td>
+</tr>
+<tr>
+<td>fifth against last</td>
+<td>+0.232</td>
+<td>0.0469</td>
+<td>6 / 7</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two places in the model, both measured well, pushing at large angles to each other. Amplitude
+cannot explain that.</p>
+<p><strong>And it still is not a result.</strong> With seven prompts the floor is 0.0156, and that arithmetic has
+a consequence: <strong>Holm can carry at most three tests in a family</strong>, because 0.0156 × 3 = 0.0469
+passes and × 4 = 0.0625 does not. There are three comparisons in texture space and one in
+palette. Treat them as two families — which is how a later pre-registration in this notebook
+defines them — and the three texture tests pass at exactly 0.0469, on the wire. Treat them as
+one and nothing passes. <strong>The family was never declared</strong>, so the finding sits precisely on the
+boundary that the declaration would have decided.</p>
+<h3 id="p-04-where-in-the-model--what-it-does-not-mean">What it does not mean</h3>
+<p>It does not mean position carries <em>meaning</em>. The headline metric is an unsigned distance from
+baseline: it can say the image moved, never in which direction, so this design cannot tell a
+sensitivity from a specialisation.</p>
+<p>And the ordinary explanation is untouched. <code>Block_6</code> is the last four blocks of twenty-eight. A
+perturbation there has almost nothing downstream left to absorb it, and the first and last
+groups behaving unlike the middle is a known regularity of transformers rather than a discovery
+about this model. The profile is at least not a simple depth ramp — groups 2 to 5 <em>decrease</em>
+with depth, and that decrease is exactly the displacement ordering — but "the two ends are
+special" needs no explanation from this project.</p>
+<p>Separating function from proximity needs a measurement of <em>what</em> moved rather than how far, on
+a design with a matched control. That design was written out of this page and has since been
+run.</p>
+<h3 id="p-04-where-in-the-model--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository, and these renders predate the
+    manifest convention
+sampling:
+  sampler: euler_ancestral
+  steps: 6            # six, not the nine every later bench uses
+  cfg: 1.0
+  scheduler: simple
+  resolution: not recorded in the source reports
+tuner:
+  node: rotation and amplitude sweep over block groups, pre-dating the preset loader
+  version: not recorded
+  mode: block-group rotation (rotX) and amplitude scaling
+prompts:
+  file: data/pilot_rotations.csv
+  ids: [african_scientist, combat_robot, elf_brawler, flag, preraphaelite_altar,
+        tiefling, troll_shaman]
+  note: nine reports, seven prompts -- tiefling appears three times at different seeds
+seeds: [42, 777, 4242145]
+conditions:
+  - name: rotX_15
+    family: rotation
+    measured_D: 0.02862      # Block_1; per group and angle in pilot_rotation_displacement.csv
+  - name: rotX_30
+    family: rotation
+    measured_D: 0.05674      # Block_1 at 30 degrees; measured offline, tensor by tensor
+  - name: amplitude_1x
+    family: amplitude
+    measured_D: not measured -- the offline sweep covers rotation only
+  - name: amplitude_2x
+    family: amplitude
+    measured_D: not measured -- the offline sweep covers rotation only
+outputs:
+  folder: the nine benchmark_*_report.html trees, outside the repository
+  manifest: data/pilot_rotations.csv and data/pilot_macro.csv
+analysis:
+  scripts:
+    - experiments/analyze_pilot_rotations.py
+    - experiments/analyze_pilot_rotations_followup.py
+    - experiments/analyze_pilot_rotation_directions.py
+  persisted_by: experiments/pilot_rotations_position.py
+  produces: data/pilot_rotations_position.csv
+  figures: experiments/notebook_charts.py
+</code></pre>
+<p>Two of those <code>measured_D</code> entries say "not measured", and that is the honest state: the offline
+displacement sweep covers the rotation family and not the amplitude family, so the amplitude
+rows of the table above have no displacement attached to them. Writing a nominal number there
+would be pitfall 13. The rotation displacements are measured, per group and per angle, in
+<code>data/pilot_rotation_displacement.csv</code>.</p>
+<p><code>experiments/pilot_rotations_position.py</code> does not re-derive the decomposition. It imports the
+analysis module's own functions and refuses to write unless all twelve recomputed norms agree
+with <code>data/pilot_rotation_direction_tests.csv</code>, the table the original run wrote.</p>
+<h2 id="p-04-where-in-the-model--provenance">Provenance</h2>
+<p><strong>Pre-registration.</strong> None in the repository. The extremes-against-middle contrast was frozen in
+a brief that is not committed; see <em>Why I might be wrong</em>.</p>
+<p><strong>Verdict and amendments.</strong> <code>docs/pilot_rotations_verdict.md</code> — 4,900 words carrying the original
+verdict, the six declared limitations, and two dated amendments that correct its reading: that
+it is a last-group effect rather than a U-shaped profile, and that the proximity-to-output
+alternative was never excluded.</p>
+<p><strong>Measurement files.</strong> <code>data/pilot_rotations.csv</code> (270 rows, of which 216 are the rotation
+sweep), <code>data/pilot_macro.csv</code> (the amplitude sweep),
+<code>data/pilot_rotation_displacement.csv</code> (displacement measured offline per group and angle),
+<code>data/pilot_rotations_followup.csv</code> (the contrast and replication tests),
+<code>data/pilot_rotations_style_features.csv</code> and <code>data/pilot_rotations_palette_features.csv</code>
+(the signed feature spaces), <code>data/pilot_rotation_direction_tests.csv</code> (the direction tests),
+<code>data/pilot_rotations_directions.csv</code>, and <code>data/pilot_rotations_position.csv</code>, derived here on
+2026-09-21.</p>
+<p><strong>What came out of it.</strong> <code>docs/prereg_rotations_block1_vs_block6.md</code> and
+<code>docs/rotations_block1_vs_block6_results.md</code> are the pre-registered follow-up this page
+specified: one primary test on the antisymmetric component in
+texture space, ten prompts for a floor of 0.00195 with room for twenty-five tests, three seeds a
+cell, displacement matched by construction, nine sampling steps, and a sign-scrambled control at
+the same displacement.</p>
+<p><strong>Pitfalls that apply.</strong> 17 (nine reports are seven prompts, so the unit is the prompt),
+30 (two experiments in one measurement file, and the fifty-four rows that belong to another one
+all sit on a single block group), 36 (coherence follows amplitude, so a ranking of direction is
+partly a ranking of precision — this sweep is the registry's second example), 42 (a
+pre-registered contrast that fuses two conditions assumed to be alike — this contrast is the
+registry's own example).</p>
+<p>Rules 8 and 11 of the fifteen govern the floor: seven prompts give 2/2⁷ = 0.0156, which is one
+bit of resolution and room for exactly three tests under Holm.</p>
 </section>
 <section id="p-05-knob-or-cost">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">386 renders · 2 prompts · 3 seeds · pre-registered · 2026-09-20</span></p>

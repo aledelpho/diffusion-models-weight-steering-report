@@ -78,6 +78,19 @@ migrated:
     page: 07-chromatic-signatures
     date: 2026-09-21
     source: "README@c843d61, ledger"
+  - id: position-beats-displacement
+    page: 04-where-in-the-model
+    date: 2026-09-21
+    source: "README@c843d61 §4.1-§4.4"
+  - id: blocks-point-in-different-directions
+    page: 04-where-in-the-model
+    date: 2026-09-21
+    source: "README@c843d61 §4.5"
+    split_from: position-beats-displacement
+  - id: position-function-or-proximity
+    page: 04-where-in-the-model
+    date: 2026-09-21
+    source: "README@c843d61 §4.4"
 
 pending:
 
@@ -118,14 +131,6 @@ pending:
     source: "README@c843d61 §1.4"
     page: 01-mark-style
 
-  - id: position-beats-displacement
-    claim: >
-      Where the edit lands changes how much the picture moves, and it is not a matter of how
-      far the weights moved. The last four blocks move 28% less in Frobenius terms than blocks
-      5-9 and change the image 3.7 times more.
-    source: "README@c843d61 §4.1-§4.4"
-    page: 04-where-in-the-model
-
   - id: preset-is-a-sharp-operator
     claim: >
       The hand-calibrated preset is a sharply defined operator, not a vague nudge: darker,
@@ -152,13 +157,6 @@ pending:
     source: "README@c843d61, ledger; docs/stage9_verdict.md"
     page: 09-style-direction
     note: "Migrates as status overturned, typeset exactly like a page that holds."
-
-  - id: position-function-or-proximity
-    claim: >
-      That the position effect is about function rather than about proximity to the output.
-      CLIP-Dist measures how much the image moved, never what moved.
-    source: "README@c843d61 §4.4"
-    page: 04-where-in-the-model
 
   - id: block1-does-not-replicate
     claim: >

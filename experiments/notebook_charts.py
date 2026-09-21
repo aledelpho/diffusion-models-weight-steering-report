@@ -471,6 +471,102 @@ def chromatic_exploratory_vs_confirmation(out: Path) -> Path:
                  "data/palette_condition_cosines_stage7.csv")
 
 
+
+def _position_rows() -> list[dict]:
+    src = DATA / "pilot_rotations_position.csv"
+    if not src.exists():
+        raise FileNotFoundError(
+            f"{src} is missing -- run experiments/pilot_rotations_position.py")
+    return list(csv.DictReader(src.open(encoding="utf-8", newline="")))
+
+
+def _ramp(i: int, n: int) -> str:
+    """Depth is ordered, so it wears one hue light to dark, never categorical colours."""
+    import matplotlib.colors as mc
+    base = mc.to_rgb(CAT[0])
+    f = 0.22 + 0.78 * (i / max(n - 1, 1))
+    return mc.to_hex(tuple(1 - f * (1 - c) for c in base))
+
+
+def position_against_displacement(out: Path) -> Path:
+    """How much the picture moved against how far the weights moved, per block group."""
+    rows = _position_rows()
+    n = len(rows)
+    fig, ax = _canvas(7.4, 4.4)
+    mids = [r for r in rows if r["block"] not in ("Block_1", "Block_6")]
+    xs = [float(r["d_model_at_30deg"]) for r in mids]
+    ys = [float(r["clip_dist_mean_rotation"]) for r in mids]
+    order = sorted(range(len(xs)), key=lambda i: xs[i])
+    ax.plot([xs[i] for i in order], [ys[i] for i in order], color=GRID, lw=1.4, zorder=1)
+
+    for i, r in enumerate(rows):
+        ax.scatter([float(r["d_model_at_30deg"])], [float(r["clip_dist_mean_rotation"])],
+                   s=82, color=_ramp(i, n), edgecolor=SURFACE, linewidth=0.9, zorder=3)
+    for name, dx, dy in (("Block_6", 10, 0), ("Block_1", 8, -4), ("Block_2", 6, -14)):
+        r = next(x for x in rows if x["block"] == name)
+        ax.annotate(name.replace("_", " ").lower(),
+                    (float(r["d_model_at_30deg"]), float(r["clip_dist_mean_rotation"])),
+                    textcoords="offset points", xytext=(dx, dy), color=INK, fontsize=8.5)
+    ax.annotate("the four middle groups, in displacement order",
+                (sum(xs) / len(xs), min(ys)), textcoords="offset points", xytext=(0, -26),
+                ha="center", color=DIM, fontsize=8)
+
+    b6 = next(x for x in rows if x["block"] == "Block_6")
+    b2 = next(x for x in rows if x["block"] == "Block_2")
+    ratio = float(b6["clip_dist_mean_rotation"]) / float(b2["clip_dist_mean_rotation"])
+    less = 1 - float(b6["d_model_at_30deg"]) / float(b2["d_model_at_30deg"])
+    ax.set_xlabel("relative Frobenius displacement of the checkpoint at 30 degrees",
+                  color=DIM, fontsize=9)
+    ax.set_ylabel("mean CLIP distance from baseline", color=DIM, fontsize=9)
+    ax.set_title(f"The last group moves the weights {less:.0%} less than the largest and the "
+                 f"picture {ratio:.1f} times more\nthe amplitude account is not merely "
+                 f"rejected, it is rejected backwards",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(0.16)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 "216 rotation cells · 6 block groups · 7 prompts, averaged per prompt first"
+                 "  ·  source data/pilot_rotations_position.csv")
+
+
+def antisymmetry_by_block(out: Path) -> Path:
+    """How much of each group's response reverses when the rotation reverses."""
+    rows = _position_rows()
+    fig, ax = _canvas(7.6, 4.0)
+    x = range(len(rows))
+    w = 0.38
+    ax.bar([i - w / 2 for i in x], [float(r["norm_S_texture_30deg"]) for r in rows],
+           width=w, color=CAT[0], label="‖S‖  how much it moves, either way", zorder=3)
+    ax.bar([i + w / 2 for i in x], [float(r["norm_A_texture_30deg"]) for r in rows],
+           width=w, color=CAT[1], label="‖A‖  how much reverses with the sign", zorder=3)
+    for i, r in enumerate(rows):
+        ax.annotate(f"{float(r['antisymmetric_share']):.2f}",
+                    (i, max(float(r["norm_S_texture_30deg"]),
+                            float(r["norm_A_texture_30deg"]))),
+                    textcoords="offset points", xytext=(0, 6), ha="center",
+                    color=INK, fontsize=8.5)
+    top = max(float(r["antisymmetric_share"]) for r in rows)
+    top_block = next(r["block"] for r in rows
+                     if abs(float(r["antisymmetric_share"]) - top) < 1e-9)
+    ax.set_xticks(list(x))
+    ax.set_xticklabels([r["block"].replace("_", " ").lower() for r in rows],
+                       color=DIM, fontsize=8.5)
+    ax.set_ylabel("norm of the mean direction, texture space", color=DIM, fontsize=9)
+    ax.set_title("The antisymmetric share above each pair, and the magnitude beneath it\n"
+                 f"the largest share belongs to {top_block.replace('_', ' ').lower()} "
+                 f"({top:.2f}), the largest antisymmetric movement to block 6",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="upper left", fontsize=8, frameon=False, labelcolor=DIM)
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 "rotation at 30 degrees · texture space, uncentred · 7 prompts  ·  "
+                 "source data/pilot_rotations_position.csv")
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
@@ -487,6 +583,10 @@ def main() -> int:
                                      / "F07.1_coherence_decision.webp"),
         chromatic_exploratory_vs_confirmation(
             ASSETS / "07-chromatic-signatures" / "F07.2_exploratory_vs_confirmation.webp"),
+        position_against_displacement(ASSETS / "04-where-in-the-model"
+                                      / "F04.1_position_against_displacement.webp"),
+        antisymmetry_by_block(ASSETS / "04-where-in-the-model"
+                              / "F04.2_antisymmetry_by_block.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")
