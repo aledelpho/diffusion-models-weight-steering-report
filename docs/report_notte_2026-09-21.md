@@ -574,3 +574,107 @@ not four of nine, and the eight that fail are all bare names on pages 00 and 05.
 7. Page 01 stays blocked on its light-theme figures.
 8. Remaining in the ledger: 9 pending claims, most of them belonging to page 01 and to the
    front matter of the notebook rather than to an experiment page.
+
+---
+
+## 11. The reproducibility audit — how many numbers were typed by hand, and what was wrong
+
+Commits `cdb6850`, `9d0b3d6`. Prompted by the question the previous section raised: if
+`extract_repro.py` never existed, how much of the notebook is unverified?
+
+### 11.1 The size of it
+
+**All of it.** Every one of the nine reproducibility blocks was typed by hand. Counted as leaf
+fields (a key with a value, list items counted individually) they come to **486**.
+
+`experiments/extract_repro.py` now exists and reads `data/` — the manifests and feature tables
+that record, per image, the sampler configuration and the pixel dimensions the render actually
+had. It cannot read a PNG's embedded graph, because the renders are outside the repository.
+Against `data/`, **49 of the 486 fields are provable, ten per cent**:
+
+| page | fields | provable |
+| --- | ---: | ---: |
+| 00-the-bench | 42 | 0 |
+| 02-attribute-emergence | 68 | 3 |
+| 03-what-ends-up-in-the-picture | 62 | 8 |
+| 04-where-in-the-model | 46 | 3 |
+| 05-knob-or-cost | 32 | 1 |
+| 06-the-hatching-axis | 53 | 10 |
+| 07-chromatic-signatures | 56 | 10 |
+| 08-block1-vs-block6 | 59 | 7 |
+| 09-style-direction | 68 | 7 |
+
+**Four of the 49 were wrong.** An error rate of 8% on the only fields anything could check,
+which is the honest estimate to carry over to the 437 that nothing can.
+
+### 11.2 The four errors
+
+**1 · `08-block1-vs-block6`, resolution.** Published `1024x1280`. The bench is **1024×1760**:
+210 rows of `rotations_block1_vs_block6_style_features.csv` and 210 of
+`..._palette_features.csv` say so, and so does §94 of its own pre-registration. The page had
+been live for a day. Every rotation bench in the project is 1024×1760 and everything else is
+1024×1280, so the wrong value is the one a hand would reach for.
+
+**2 · `04-where-in-the-model`, resolution.** Published `not recorded in the source reports`.
+Recorded after all — 225 rows of `pilot_rotations_style_features.csv`, again 1024×1760. A
+field can be wrong by understatement.
+
+**3 · `04-where-in-the-model`, `measured_D`.** Published `rotX_15 → 0.02862` and
+`rotX_30 → 0.05674`, one number per angle. `data/pilot_rotation_displacement.csv` holds **six**
+per angle, one per block group: 0.02118–0.02947 at 15°, 0.04199–0.05844 at 30°. The two
+published numbers are `Block_1`'s rows. This is on the page whose entire argument is that
+displacement does not explain the ordering — and the page printed a displacement as though the
+angle fixed it. Pitfall 44's territory, inside the reproducibility block rather than the
+analysis.
+
+**4 · `05-knob-or-cost`, manifest.** Published `manifest: data/punto7_manifest.csv`. That file
+has never been in the repository.
+
+### 11.3 Two things worse than a wrong number
+
+**A provenance note asserting a verification that never ran.** Pages `00-the-bench` and
+`05-knob-or-cost` both carried, inside the block:
+
+> every value above was read back out of the renders themselves by
+> `experiments/extract_repro.py`, which also asserts that all 336 renders of this page share
+> one sampler configuration. They do.
+
+The script did not exist. The sentence claims the exact safeguard the contract requires, in
+the one place a reader would go to check whether it had been applied. Both notes now state
+what was actually done, what the new script can prove for that page, and what stays unverified
+— on `00-the-bench`, that is every field.
+
+**A render count contradicted by its own page.** `05-knob-or-cost` declared
+`corpus.renders: 386`. Its body says 336 renders (168 + 168), its Provenance itemises
+168 + 168 + 32 = **368**, and no file supports 386. Corrected to 368, with the arithmetic in
+the line. This is a changed published number and it is flagged as such: it rests on the page's
+own two other statements, not on a new measurement.
+
+### 11.4 What is now checked, and what still cannot be
+
+Three checks added to `validate_notebook.py`, all errors; self-test 21/21 → **24/24**:
+
+* every field of a block that a file in `data/` proves — resolution, sampler, steps, cfg, a
+  condition's `measured_D` (preset or rotation), and that a named manifest exists;
+* `corpus.renders` against the bench sizes a page itemises in its Provenance line — checkable
+  on 2 pages of 9, and it was one of those two that was wrong;
+* the opening block, from the previous pass.
+
+Not checkable from this repository, on any page: **checkpoint, VAE and text encoder.** No
+manifest records them. `09-style-direction` attributes its checkpoint through a `suite_git_sha`
+shared with the stage 7 bench and says so; the other eight simply assert. Closing that needs a
+script run where the renders are, reading each PNG's embedded graph. `AUTHORING.md` §8 now says
+this instead of claiming the check exists.
+
+### 11.5 Ramifications outside the blocks
+
+The audit was scoped to the reproducibility blocks. Two adjacent surfaces were not swept and
+should be:
+
+1. **Numbers in page prose.** Every figure is generated from a measurement file and every
+   caption is derived, but prose numbers are typed. The chromatic tables of page 07 and the
+   verdict tables of pages 08 and 09 were each checked against their CSVs when written; the
+   earlier pages were not checked this way.
+2. **`docs/`.** The frozen documents are the source the pages quote. `stage9_verdict.md` was
+   verified row by row against the CSVs during this pass and holds; the other verdict and
+   results documents have not been.
