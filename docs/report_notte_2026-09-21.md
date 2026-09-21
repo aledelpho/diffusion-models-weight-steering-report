@@ -1,14 +1,20 @@
 # Night report — 2026-09-21
 
-Session 22:25–00:5x UTC, autonomous, on `main`. Four commits, **no push**. Working tree clean,
-`validate_notebook.py` at 0 errors, the self-test at 18/18.
+Autonomous session on `main`, resumed the same day. Seven commits, **no push**. Working tree
+clean, `validate_notebook.py` at 0 errors, the self-test at 18/18.
 
 ```
+93f986e  feat(notebook): capitolo 03 - ingrandimento del soggetto e cecita' misurata
+f0fb0a2  fix(02): i pitfall 8 e 10 citati non erano pitfall, erano regole
+4d0fde4  docs: report della notte 2026-09-21
 0ab9261  docs: il registro delle claim, e l'inventario aggiornato
 aadf9fa  feat(notebook): capitolo 02 - attribute emergence, e il primo builder vero
 ed709c3  fix(figure): l'alt di F05.3 pubblicava il 12,4x ritrattato
 4d066c6  docs: inventario misurato del notebook prima della migrazione
 ```
+
+Four of the fifteen pages are live: 00, 02, 03, 05. The claims ledger stands at 6 migrated,
+17 pending.
 
 ---
 
@@ -128,3 +134,95 @@ In this order, because each unblocks the next.
 
 The old README is recovered with `git show c843d61:README.md`. Nothing else in the working tree
 contains it.
+
+
+---
+
+## 5. The second pass — page 03, and three things it turned up
+
+**Page 03 is live and filed `holds` / `confirmatory`**, which makes it the second genuinely
+confirmatory page in the notebook. `docs/prereg_stage12_ingrandimento.md` was deposited before a
+single render and, unlike the attribute-emergence pre-registration, it was actually executed —
+both of it, including experiment 12-B with its threshold of five joint hits in twenty fixed in
+advance.
+
+**`experiments/notebook_charts.py` now exists too**, with three builders that read a measurement
+file and derive their own titles and annotations from it. Together with `notebook_figures.py`
+that closes most of §0 item 3: the two modules the contract has named since it was written are
+no longer fiction. What remains missing is `extract_repro.py` and the eight builders that the
+figures of pages 00 and 05 name, which is why those eight figures still cannot be regenerated.
+
+### 5.1 A published verdict that does not reproduce
+
+`docs/stage12_verifica.md` §5 reports the stage-12 primary test failing under the statistic it
+calls the most defensible — the mean of the per-prompt log ratios — at 0.0176 raw and 0.0527
+after Holm, and concludes "confirmed with reservation".
+
+Two independent recomputations here, one in plain Python and one in numpy, give **0.0117 raw**
+(12 of the 1024 sign patterns, not 18) and **0.0352 after Holm**. That is also precisely what
+`data/stage12_bbox_results.csv` has recorded since the round was run, beside its own verdict of
+`CONFERMATO`. Duplicate handling does not move it; one- versus two-tailed does not produce
+0.0176 either.
+
+All four readings of the registered statistic pass after correction — 0.0352, 0.0234, 0.0293,
+0.0176 — so the reservation that survives is not "one statistic fails" but "the
+pre-registration named the test and not the statistic". Page 03 says that in the open, in *Why
+I might be wrong*. The whole table is in `data/stage12_enlargement_tests.csv`;
+`python experiments/stage12_enlargement_by_prompt.py` rebuilds it. **If the 0.0527 does
+reproduce by some route not tried here, that claim goes back to `ambiguous`.**
+
+### 5.2 Fifty renders that were never looked at, and a confirmation sitting inside them
+
+The stage-12 batch is 250 renders across five conditions; the bounding-box round annotated four
+of them. The 50 renders of `preset_pos_1x` were never scored.
+
+They are not a spare arm. The pre-registration registers a **second confirmatory hypothesis** on
+that same corpus — the headlight confirmation, with its own frozen directional prediction and
+its own clause about a wrong sign counting as failure — and it required exactly that fifth
+condition. No headlight scoring file for stage 12 exists in `data/`.
+
+Page 02's headlight claim is currently `ambiguous` precisely because it quantifies an
+observation on the renders that produced it. The confirmation it needs is a scoring pass over
+images **that already exist on disk**. No new generation, which is the constraint that was set.
+This is the cheapest upgrade available anywhere in the notebook.
+
+### 5.3 Two numberings in the error log, and I fell into it
+
+`docs/errors_log.md` carries the fifteen methodological rules at the top and the 63-entry
+pitfall registry below. The prose documents write "rule 8" and "rule 10" meaning the first; page
+02's front matter recorded them as pitfalls 8 and 10, which are "CLIP adherence computed against
+`prompt_tag`" and "round-trip sentinel composition" — two entries with no bearing on that page.
+Fixed in `f0fb0a2`, with every reference checked one at a time against the registry.
+
+The corrected list turned out better than the original: **pitfall 35 is literally that round.**
+Its registry entry reads "a scoring viewer that appends a row when the scorer goes back to
+correct — 284 rows for 280 images: four re-scores, two with a changed verdict", and prescribes
+"key on the item id and keep the last entry". That is the rule derived from the data on the
+first pass, before the entry was read. And **pitfall 34 is page 03's own result**, quoted in the
+registry with the 17-of-20 and 12-of-20 figures.
+
+### 5.4 Numbers that had no file, now persisted
+
+Three tables written by `experiments/stage12_enlargement_by_prompt.py`, all reproducing the
+prose write-ups to the digit:
+
+- `data/stage12_enlargement_by_prompt.csv` — 30 per-prompt ratios crossed with the per-style
+  discriminability;
+- `data/stage12_enlargement_tests.csv` — four statistics × three conditions, exact sign-flip p
+  over all 1024 patterns, and Holm;
+- `data/stage12_annotator_noise.csv` — test-retest from the 20 hidden duplicates (0.27 points of
+  canvas, r = +0.995) and the disturbance regression over the 50 original baselines (saturation
+  r = −0.096, p = 0.50).
+
+### 5.5 Where to restart, revised
+
+1. **Score the 50 `preset_pos_1x` renders** for headlights and run the registered stage-12
+   confirmation. It upgrades page 02 and costs no generation.
+2. **Write the eight missing builders** in `notebook_charts.py` and `notebook_figures.py` for the
+   figures of pages 00 and 05, following the four now in place.
+3. **Add the two validator checks**: every non-null `builder` resolves to a callable, and
+   `preregistration` resolves to a file. The second is red today because of page 05.
+4. **Page 06**, the hatching axis: a real executed pre-registration
+   (`prereg_hatching_axis_stage7.md`), source text at lines 681–803 of `c843d61:README.md`,
+   measurements in `data/style_features_stage7.csv`. Page 01 stays blocked on its light-theme
+   figures.

@@ -273,8 +273,8 @@ registered in `experiments/figures.yaml`, and `assets/03_what_ends_up_in_the_pic
 |---|---|---|---|---|
 | **00** | `00-the-bench` — Is the instrument lying to me? | verification | **live** | — |
 | **01** | `01-mark-style` — The style signature | confirmatory (§1.1–1.4 exploratory, §1.3 pre-registered) | old README 390–566, 804–844; `assets/01_steering`, `01_steering_stage7`; F01.1/F01.2 registered | `data/stage7_manifest.csv` **absent**; no figure builder |
-| **02** | `02-attribute-emergence` — What the edit puts in the picture | confirmatory | old README 845–1127; `docs/prereg_attribute_emergence_stage7.md`, `stage10_headlights_results.md`, `figure_brief.md`; `assets/02_attribute_emergence`; F02.1 registered | no figure builder; locator for the headlight crops |
-| **03** | `03-what-ends-up-in-the-picture` — Subject size, and how blind I was | confirmatory | old README 1128–1218; `prereg_stage12_ingrandimento.md`, `stage12_verifica.md`, `stage10_bbox_verification.md`; **3 finished figures already in `assets/03_what_ends_up_in_the_picture/_figures`** | figures not registered in `figures.yaml`; the missing `rand_pos` control is a declared gap |
+| **02** | `02-attribute-emergence` — What the edit puts in the picture | exploratory | **live** (2026-09-21) | filed `ambiguous`; the stage-12 headlight arm would confirm it |
+| **03** | `03-what-ends-up-in-the-picture` — Subject size, and how blind I was | confirmatory | **live** (2026-09-21) | the missing sign-scramble control is a declared gap; the two hand-captioned figures in `_figures` stay unpublished (pitfall 40) |
 | **04** | `04-where-in-the-model` — Position, displacement, and direction | exploratory | old README 1219–1364; `pilot_rotations_verdict.md`, `mappa_krea2_primo_esito.md`; `data/pilot_*` (8 files, all script-backed) | the §4.5 direction result is filed as hypothesis, not finding — keep that framing |
 | **05** | `05-knob-or-cost` — What an edit steers, and what it costs | confirmatory | **live** | its pre-registration file is missing (§0 item 5) |
 | **06** | `06-the-hatching-axis` | confirmatory | old README 681–803; `prereg_hatching_axis_stage7.md`, `reproduce_stage7.md`; `data/style_features_stage7.csv`, `confirmation_prompts.csv` | figure builders |
@@ -345,12 +345,18 @@ Three commits on `main`, no push.
 | `4d066c6` | this inventory |
 | `ed709c3` | F05.3's alt text published the retracted 12.4× rectification ratio; corrected to 9.1× against `data/punto7_blocks.csv` (13.621680 / 1.495314 = 9.11), in `figures.yaml`, on the page, and in the two `AUTHORING.md` examples that were teaching the wrong number |
 | `aadf9fa` | page `02-attribute-emergence`, `experiments/notebook_figures.py` with its first real builder, `experiments/headlights_by_style.py` → `data/stage9_headlights_by_style.csv`, five registered figures under `assets/02-attribute-emergence/` |
+| `0ab9261` | `notebook/_migrating.yaml` and this section |
+| `4d0fde4` | `docs/report_notte_2026-09-21.md` |
+| `f0fb0a2` | page 02 cited pitfalls 8 and 10, which are **rules** 8 and 10. `errors_log.md` carries two numberings — the 15 methodological rules and the 63-entry pitfall registry — and the prose documents reference the first. Corrected to 26, 34, 35, 39, 40, 50, each checked against the registry |
+| `93f986e` | page `03-what-ends-up-in-the-picture`, `experiments/notebook_charts.py` with three real builders, `experiments/stage12_enlargement_by_prompt.py` → three derived tables, three registered charts |
 
-Then `notebook/_migrating.yaml`: 23 claims, 3 migrated, 20 pending.
+`notebook/_migrating.yaml`: 23 claims, **6 migrated, 17 pending**.
 
-Three items from §0 are therefore closed: item 1 (the ledger exists), item 10 (the alt text),
-and part of item 3 (`notebook_figures.py` exists and holds one working builder;
-`notebook_charts.py` and the other eight builders do not).
+Items closed from §0: item 1 (the ledger exists), item 10 (the alt text), and most of item 3 —
+**both** `notebook_figures.py` and `notebook_charts.py` now exist, with four working builders
+between them (`barnacle_census`, `enlargement_by_prompt`, `discrimination_rates`,
+`discriminability_vs_effect`). Still missing: `extract_repro.py`, and the eight builders the
+00 and 05 figures name, which is why those eight figures still cannot be regenerated.
 
 **The order in §6 was inverted deliberately.** The plan was 01 then 02. Page 01 cannot be
 written to the contract: its evidence figures in `assets/01_steering/_figures` and
@@ -358,6 +364,23 @@ written to the contract: its evidence figures in `assets/01_steering/_figures` a
 `AUTHORING.md` §4.4 requires that those be regenerated rather than recoloured, by a generator
 that does not exist. `validate_notebook.py` would reject every one of them. Page 02's figures
 are already dark and already built from their measurement files, so 02 went first.
+
+**One number that does not reproduce, and it changes a verdict.**
+`docs/stage12_verifica.md` §5 reports that the stage-12 primary test fails under the most
+defensible statistic — 0.0176 raw, 0.0527 after Holm — and concludes "confirmed with
+reservation". Two independent recomputations give **0.0117 raw and 0.0352 after Holm**, which is
+also what `data/stage12_bbox_results.csv` has recorded since the round was run, next to its own
+verdict of confirmed. All four readings of the statistic pass. Page 03 is therefore filed
+`holds` and says so in the open; `data/stage12_enlargement_tests.csv` makes it a one-command
+check.
+
+**An arm that was rendered and never examined.** The stage-12 batch is 250 renders across five
+conditions and the annotation round covered four. The 50 renders of `preset_pos_1x` were never
+scored — and with them the **second confirmatory hypothesis that corpus was built to carry**.
+`docs/prereg_stage12_ingrandimento.md` registers a headlight confirmation on those same images,
+with its own frozen directional prediction, and no scoring file for it exists in `data/`. It
+would turn page 02's ambiguous headlight claim into a confirmed one, on images that already
+exist, with no new generation.
 
 **Left for the author, not decided here:**
 
