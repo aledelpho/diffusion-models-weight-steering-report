@@ -209,6 +209,30 @@ figures:
       eighty and the derangement in seventy-nine of eighty, with the single exception circled;
       the sign scramble spreads across zero.
 
+  # ---------------------------------------------------------------- 07-chromatic-signatures
+
+  - id: F07.1
+    page: 07-chromatic-signatures
+    kind: strip
+    builder: notebook_charts.chromatic_coherence_decision
+    source: data/stage7_chromatic_coherence.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Where each condition lands against the threshold fixed in advance. Three of six clear
+      Holm at 0.05, and the fourth misses it by 0.001.
+
+  - id: F07.2
+    page: 07-chromatic-signatures
+    kind: strip
+    builder: notebook_charts.chromatic_exploratory_vs_confirmation
+    source: data/stage7_chromatic_coherence.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Exploratory against confirmation for each condition. Four of six fell and two rose, the
+      mean went from +0.120 to +0.057, and the ranking reshuffled.
+
   # ---------------------------------------------------------------- 01-mark-style
 
   - id: F01.1

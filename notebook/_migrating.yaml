@@ -66,6 +66,18 @@ migrated:
     date: 2026-09-21
     source: "README@c843d61 §1.6; prereg_hatching_axis_stage7.md"
     split_from: hatching-axis-exists
+  - id: edits-move-colour-in-different-directions
+    page: 07-chromatic-signatures
+    date: 2026-09-21
+    source: "README@c843d61 §1.5"
+  - id: chromatic-signature-per-edit-is-ambiguous
+    page: 07-chromatic-signatures
+    date: 2026-09-21
+    source: "README@c843d61 §1.5"
+  - id: colour-and-texture-are-not-one-signature
+    page: 07-chromatic-signatures
+    date: 2026-09-21
+    source: "README@c843d61, ledger"
 
 pending:
 
@@ -105,13 +117,6 @@ pending:
       palette in detail, and vanishes when the model chooses the palette itself.
     source: "README@c843d61 §1.4"
     page: 01-mark-style
-
-  - id: edits-move-colour-in-different-directions
-    claim: >
-      Different weight edits move colour in directions that differ from one another.
-      Confirmed twice on independent corpora, at the floor of the permutation test both times.
-    source: "README@c843d61 §1.5"
-    page: 07-chromatic-signatures
 
   - id: position-beats-displacement
     claim: >
@@ -179,17 +184,3 @@ pending:
       Stated on 02 inside "The controls" as a limitation, but not carried as a claim. Decide
       which page owns it before publishing it anywhere.
 
-  - id: chromatic-signature-per-edit-is-ambiguous
-    claim: >
-      That every weight edit carries a chromatic signature of its own. Tested with the
-      threshold fixed in advance, it came back three of six against a bar of four. Ambiguous,
-      and written as ambiguous.
-    source: "README@c843d61 §1.5"
-    page: 07-chromatic-signatures
-
-  - id: colour-and-texture-are-not-one-signature
-    claim: >
-      That colour and texture are two readings of one signature. On the same 560 renders they
-      behave oppositely, and no account here explains both.
-    source: "README@c843d61, ledger"
-    page: 07-chromatic-signatures

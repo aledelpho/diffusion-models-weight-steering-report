@@ -1,0 +1,10 @@
+condition,cosine_confirmation,p_signflip,p_holm,survives_holm_0.05,cosine_exploratory,shrinkage_ratio
+blockshuf_neg,0.109,3.662e-04,2.197e-03,yes,0.0866,1.259
+rand_neg,0.0935,2.106e-03,1.053e-02,yes,0.2758,0.339
+preset_pos,0.0594,5.157e-03,2.063e-02,yes,0.1186,0.5
+rand_pos,0.0481,1.700e-02,5.099e-02,no,0.1964,0.245
+preset_neg,0.0174,1.739e-01,3.478e-01,no,0.0109,1.593
+blockshuf_pos,0.017,2.018e-01,3.478e-01,no,0.0297,0.571
+MEAN_WITHIN_CONDITION,0.0574,,,,0.1197,
+MEAN_BETWEEN_CONDITIONS_ABS,0.0229,,,,,
+WITHIN_MINUS_BETWEEN,0.0345,,,,,

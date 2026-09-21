@@ -86,6 +86,7 @@
 <li><a href="#p-03-what-ends-up-in-the-picture"><span class="dot" style="background:#0ca30c"></span>How much room the subject takes, and how blind I actually was</a></li>
 <li><a href="#p-05-knob-or-cost"><span class="dot" style="background:#0ca30c"></span>What an edit steers, and what it costs</a></li>
 <li><a href="#p-06-the-hatching-axis"><span class="dot" style="background:#0ca30c"></span>The hatching axis, and the sign that decides it</a></li>
+<li><a href="#p-07-chromatic-signatures"><span class="dot" style="background:#fab219"></span>What the edit does to colour, and what it does not</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
@@ -115,15 +116,18 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-first-block-runs-backwards">The first block is a knob that runs the opposite way to the tail: pushed positive it smooths, pushed negative it etches.</a></td><td class="ev">Pre-registered as P3. r+ = 0.841, r- = 1.100, swing 0.764.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-tail-is-rectified">On the last blocks the negative direction is the safe side: positive pushes wreck the image, negative pushes barely move it.</a></td><td class="ev">Amplitude ratio 9.1x on block 26, both arms on one scale. All six blocks from 22 onward asymmetric.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-06-the-hatching-axis--the-two-structured-families">A block-derangement edit crosses the hatching strokes when pushed positive and runs them parallel when pushed negative, and the sign of that displacement decides which.</a></td><td class="ev">Pre-registered sign, confirmed on 16 prompts sharing nothing with the corpus the observation came from. Delta +0.288 in crosshatch entropy, Holm p 9.2e-5 at the exact permutation floor, 16 prompts of 16 and 79 image pairs of 80.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-07-chromatic-signatures--the-directions-differ-and-that-is-the-claim-that-holds">Different weight edits move the palette in directions that differ from one another, so the colour response is a property of which edit was applied and not a single shared drift.</a></td><td class="ev">Pre-registered. Within-condition coherence +0.057 against +0.023 between conditions, a difference of +0.035 against a label-permutation null with mean -0.003 and a 95th percentile of +0.007. p = 1e-4, the Monte Carlo floor, and the second time this statistic has landed on its floor on an independent corpus.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-06-the-hatching-axis--the-check-that-was-registered-and-not-recorded">The calibrated preset moves the same measured axis with the opposite sign, so the axis is not a property of block derangement. Whether the measure tracks hatching orientation in this family was never checked.</a></td><td class="ev">Delta -0.370, Holm p 9.2e-5, 16 of 16 prompts and 80 of 80 pairs. But the pre-registration made the preset row conditional on a visual check of one pair, to be recorded before the analysis, and no outcome for that check exists.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-07-chromatic-signatures--three-of-six-and-the-bar-was-four">Whether each individual edit imprints a chromatic direction that survives a change of subject is undecided. Three of six conditions cleared the registered threshold and the threshold was four.</a></td><td class="ev">Pre-registered bar of four of six surviving Holm at 0.05, with three declared ambiguous in advance and not to be rounded up. Observed three: Holm 2.2e-3, 1.1e-2, 2.1e-2, and the fourth at 5.10e-2.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">A bidirectional, mirror-image response is the exception rather than the rule.</a></td><td class="ev">Falsified. 17 of 28 blocks are mirror-symmetric within 3σ. The prediction expected fewer than 10.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">Blocks at either end of the network respond violently in both directions.</a></td><td class="ev">Falsified. Predicted for the first block and at least three of five tail blocks; found in one of the five.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-06-the-hatching-axis--the-control-that-vanished">The exploratory hatching effect of the norm-matched sign scramble does not survive a fresh corpus. It was the third family of the registered prediction and it is not there.</a></td><td class="ev">Exploratory -0.187 on 18 prompts, 81 pairs of 90. Confirmation +0.020 with the sign reversed, p = 0.67, 5 of 16 prompts and 30 of 80 pairs in the predicted direction.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--one-attribute-one-prompt-family">Whether attribute emergence is a general property of structured weight edits or a fact about one prompt template is untested, and the design written to test it was never run.</a></td><td class="ev">The pre-registered stage-7 attribute table was never filled, so the primary test does not exist. Both positive prompts share nearly every token.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">Whether the enlargement comes from the structure of the edit or merely from its magnitude is undecided, because the design left out the one control that separates them.</a></td><td class="ev">The round compared two structured edits against a baseline. A sign-scrambled edit at the identical displacement was not rendered, so no point on the magnitude axis exists.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-07-chromatic-signatures--colour-and-texture-are-not-one-signature">Colour and stroke texture do not respond to these displacements in the same way, and no account here explains both.</a></td><td class="ev">On the same 560 renders, colour effects roughly halved and the sign scramble was among the strongest conditions, while texture held its size and the sign scramble vanished. Not tested against any alternative account.</td></tr>
       </tbody>
     </table>
   </section>
@@ -2003,6 +2007,388 @@ which is why a confirmation was needed), 38 (a metric validated against nothing 
 pre-registration argues the licence for one family and declares it missing for another).</p>
 <p>Rules 8 and 11 of the fifteen apply to the floor: at sixteen prompts the exact test cannot
 return less than 2/2¹⁶, and both structured families sit on it.</p>
+</section>
+<section id="p-07-chromatic-signatures">
+<p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">560 renders · 16 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
+<h1 id="p-07-chromatic-signatures--what-the-edit-does-to-colour-and-what-it-does-not">What the edit does to colour, and what it does not</h1>
+<h2 id="p-07-chromatic-signatures--in-two-minutes">In two minutes</h2>
+<p>The idea was that every weight edit leaves its own fingerprint on colour — not just the
+calibrated preset, but the sign scramble too, each pushing the palette in a direction of its
+own. That is a stronger claim than "the preset changes colour", and it was written down as two
+separate tests with their thresholds fixed before a single confirmation render existed.</p>
+<p>One came back yes. The other came back three of six, against a bar of four.</p>
+<p><img alt="Where each condition lands against the threshold fixed in advance. Three of six clear Holm at 0.05, and the fourth misses it by 0.001." src="assets/07-chromatic-signatures/F07.1_coherence_decision.webp" /></p>
+<p>Three is not four, and the pre-registration had already said what to do about three: report it
+as ambiguous, do not round it up. The condition that would have made it four misses the
+corrected threshold by one part in a thousand. That single dot, sitting a hair on the wrong
+side of a line drawn before the data existed, is the entire reason the line was drawn first.</p>
+<p>What did hold is the second test, and it is the one worth having: the conditions move colour in
+directions that <strong>differ from one another</strong>. That has now landed on the floor of its
+permutation test twice, on two corpora with no prompt in common.</p>
+<p>So: <em>different displacements move colour differently</em> is the claim the notebook carries.
+<em>Every displacement has its own chromatic signature</em> is the claim that failed.</p>
+<h2 id="p-07-chromatic-signatures--the-verdict">The verdict</h2>
+<p>The page is filed ambiguous, and it is filed that way on purpose even though one of its two
+registered primaries was confirmed. The thing the page is named for — a chromatic signature per
+edit — is the test that returned three of six, and the contract says an ambiguous result is
+written as ambiguous and never rounded up. The distinction it turns on is not cosmetic.</p>
+<p>Beneath that, two solid things and one open one. Solid: the conditions are distinguishable from
+each other in colour space, twice, at the floor. Also solid, in the uncomfortable direction:
+the effects on this corpus are about half the exploratory estimate, which is the third time
+this notebook has watched that happen.</p>
+<p>The open one is why they halved. There are two explanations, the design cannot separate them,
+and the second was hiding in this repository's own earlier work the whole time.</p>
+<h2 id="p-07-chromatic-signatures--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>The corpus did not meet its own coverage requirement.</strong> The amendment asked for four prompts
+in each of four 90° hue arcs. The selection returned fourteen in the first arc, one in the
+second, one in the fourth and <strong>none in the third</strong>. The rule executed as written and filled
+the shortfall from the largest arc; the candidate pool simply did not contain what was asked
+for. The lesson is specific and is now pitfall 31: hue is a property of the render, not of the
+prompt text, so a criterion stated on measured hue can only be enforced by looking at images
+and then choosing. Note the direction of that bias — a corpus of more similar prompts should
+make cross-prompt coherence <strong>easier</strong> to detect, not harder, so it does not excuse the result.</p>
+<p><strong>The shrinkage has a second explanation, and the design cannot separate it from the first.</strong>
+The account offered at the time was regression from an inflated exploratory estimate. Here is
+the other one:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>colour-pinned prompts</th>
+<th>mean within-condition coherence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exploratory, 18 prompts</td>
+<td><strong>18 of 18</strong></td>
+<td>+0.120</td>
+</tr>
+<tr>
+<td>confirmation, 16 prompts</td>
+<td><strong>0 of 16</strong></td>
+<td>+0.057</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every prompt in the exploratory set names a colour — <code>monochromatic &lt;colour&gt;</code>, or a
+colour-tinted rim light. Not one prompt in the confirmation set does. The mark-style work had
+already established, on a different colour instrument, that the palette effect is present where
+the prompt pins the palette and vanishes where it does not, and the confirmation was then run
+entirely on the side where that predicts little to find. The corpus changed on that variable at
+the same time as it changed from exploratory to confirmatory, and the two cannot be untangled
+afterwards. That is a design error and it belongs to this pre-registration, which fixed the
+statistics, the thresholds and the script hashes and did not fix the one prompt property
+already known to govern the effect being measured.</p>
+<p><strong>The ranking of conditions is partly a ranking of what was measured best.</strong> Cross-prompt
+coherence is attenuated by measurement error and the conditions do not share an error level.
+The ordering here correlates with each condition's own split-half reliability at r = +0.877,
+p = 0.022. The order survives disattenuation and the verdict stands, but a reader comparing
+<code>block derangement −</code> against <code>calibrated preset +</code> is partly comparing precision. That is
+pitfall 36.</p>
+<p><strong>A frozen script was not at its frozen hash.</strong> Recorded in full below; it is inert here and it
+is still a broken freeze.</p>
+<p><strong>One instrument, one framing.</strong> Six swatches plus paper and ink, on close-up character
+portraits where the swatches are dominated by skin and paper whatever the scene describes.</p>
+<h2 id="p-07-chromatic-signatures--the-data">The data</h2>
+<h3 id="p-07-chromatic-signatures--how-it-was-measured">How it was measured</h3>
+<p>Sixteen prompts sharing no <code>prompt_sha1</code> with any earlier stage, five seeds, seven cells —
+baseline plus six conditions: 560 renders, verified before analysis as sixteen prompts by seven
+by five with no cell short of a seed and no duplicates.</p>
+<p>The feature space is colour and nothing else: six palette swatches plus paper and ink, each as
+(L*, a*, b*), giving 24 dimensions. Hue in degrees is circular and cannot be averaged or
+subtracted — 359 and 1 are two degrees apart, not 358 — so a* and b* are reconstructed from
+chroma and hue. Mass shares stay out; they are composition, not colour.</p>
+<p>Every vector is a <strong>difference</strong> from the same prompt at the same seed in baseline. On absolute
+features the between-subject variance dominates and the analysis measures which character is
+depicted, which is pitfall 19. Seeds inside a prompt are averaged first, because the unit of
+analysis is the prompt (pitfall 17). Each dimension is then divided by its standard deviation
+over the set of differences, and each prompt's vector is normalised.</p>
+<p>Two tests, both fixed in advance:</p>
+<ul>
+<li><strong>coherence</strong> — for one condition, the mean pairwise cosine between its per-prompt direction
+  vectors. Null: exact sign-flip permutation across the sixteen prompts, Holm across the six
+  conditions. Confirmed at four of six surviving; refuted at two or fewer; <strong>three ambiguous
+  and reported as such</strong>.</li>
+<li><strong>distinctness</strong> — mean within-condition coherence minus the mean absolute cosine between
+  different conditions, both over pairs of <em>distinct</em> prompts so that prompt structure cannot
+  enter on one side only. Null: permutation of the condition labels inside each prompt,
+  10 000 draws. Confirmed at p &lt; 0.05.</li>
+</ul>
+<p>The absolute value on the between-condition term matters: a pos/neg pair sitting at −1 would be
+maximally aligned, not independent, and has to count as such.</p>
+<h3 id="p-07-chromatic-signatures--three-of-six-and-the-bar-was-four">Three of six, and the bar was four</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>condition</th>
+<th>cosine</th>
+<th>p</th>
+<th>Holm</th>
+<th>survives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>block derangement −</td>
+<td>+0.109</td>
+<td>3.7 × 10⁻⁴</td>
+<td>2.2 × 10⁻³</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td>sign scramble −</td>
+<td>+0.093</td>
+<td>2.1 × 10⁻³</td>
+<td>1.1 × 10⁻²</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td>calibrated preset +</td>
+<td>+0.059</td>
+<td>5.2 × 10⁻³</td>
+<td>2.1 × 10⁻²</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td>sign scramble +</td>
+<td>+0.048</td>
+<td>1.7 × 10⁻²</td>
+<td><strong>5.10 × 10⁻²</strong></td>
+<td>no</td>
+</tr>
+<tr>
+<td>calibrated preset −</td>
+<td>+0.017</td>
+<td>1.7 × 10⁻¹</td>
+<td>3.5 × 10⁻¹</td>
+<td>no</td>
+</tr>
+<tr>
+<td>block derangement +</td>
+<td>+0.017</td>
+<td>2.0 × 10⁻¹</td>
+<td>3.5 × 10⁻¹</td>
+<td>no</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three. The registered rule read: four or more confirmed, two or fewer refuted, three ambiguous
+and reported as ambiguous rather than rounded up. So: ambiguous.</p>
+<p>There was also a <strong>directional</strong> secondary, and it failed on its own terms. The prediction named
+<em>which</em> four would survive — sign scramble in both directions, preset positive, derangement
+negative — and the observed three are derangement negative, sign scramble negative and preset
+positive. Three of the four named, with the sign scramble's positive arm dropping out. The
+prediction was about which, not how many, and the set does not match.</p>
+<h3 id="p-07-chromatic-signatures--the-directions-differ-and-that-is-the-claim-that-holds">The directions differ, and that is the claim that holds</h3>
+<p>Within-condition coherence <strong>+0.057</strong>. Mean absolute cosine between different conditions
+<strong>+0.023</strong>. Difference <strong>+0.035</strong>, against a label-permutation null whose mean is −0.003 and
+whose 95th percentile is +0.007. <strong>p = 1 × 10⁻⁴</strong>, which is the Monte Carlo floor at 10 000
+draws rather than a measured value.</p>
+<p>This is the second independent corpus on which that statistic has hit its floor. It is also the
+test that does not depend on any single condition clearing a threshold, which is why it
+survives a corpus where four of six individually do not.</p>
+<p>Read the two together and the shape of the result is: the six conditions are <strong>distinguishable
+from one another</strong> in colour space, while <strong>only some of them</strong> are individually consistent
+enough across subjects to be called a signature.</p>
+<h3 id="p-07-chromatic-signatures--what-shrank-and-the-confound-that-explains-it-just-as-well">What shrank, and the confound that explains it just as well</h3>
+<p><img alt="Exploratory against confirmation for each condition. Four of six fell and two rose, the mean went from +0.120 to +0.057, and the ranking reshuffled." src="assets/07-chromatic-signatures/F07.2_exploratory_vs_confirmation.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>condition</th>
+<th>exploratory, 18 prompts</th>
+<th>confirmation, 16 new</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sign scramble −</td>
+<td>+0.276</td>
+<td>+0.093</td>
+</tr>
+<tr>
+<td>sign scramble +</td>
+<td>+0.196</td>
+<td>+0.048</td>
+</tr>
+<tr>
+<td>calibrated preset +</td>
+<td>+0.119</td>
+<td>+0.059</td>
+</tr>
+<tr>
+<td>block derangement −</td>
+<td>+0.087</td>
+<td><strong>+0.109</strong></td>
+</tr>
+<tr>
+<td>block derangement +</td>
+<td>+0.030</td>
+<td>+0.017</td>
+</tr>
+<tr>
+<td>calibrated preset −</td>
+<td>+0.011</td>
+<td>+0.017</td>
+</tr>
+<tr>
+<td><strong>mean</strong></td>
+<td><strong>+0.120</strong></td>
+<td><strong>+0.057</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The mean halved. The two conditions that were strongest collapsed to roughly a third, and the
+condition that was fourth is now first. The power curve in the amendment assumed the true effect
+equalled the exploratory one and predicted about 100% power at sixteen prompts; the true effect
+is about half that, and the sentence "sixteen is a floor, not a margin" turned out to be the
+operative one.</p>
+<p>Whether that is regression to the mean or the colour-pinning confound is exactly what this
+design cannot say. <strong>The test that separates them is cheap</strong>: matched pairs, the same subject
+written twice — once with the colour-pinning clause and once without — rendered in one run under
+the same six conditions and the same five seeds, with the coherence compared between the two
+arms. If the pinned arm returns to about +0.12 while the free arm stays near +0.06, prompt-stated
+colour is the governing variable and the confirmation was run on the wrong side of it. If both
+sit near +0.06, the exploratory estimate was simply inflated and the ambiguous verdict stands on
+its own feet. That test has not been run.</p>
+<p>Until it does, this page must not be read as <em>colour signatures are weak</em>. It reads as: <strong>tested
+on prompts that do not name a colour, three conditions of six carry a coherent chromatic
+direction, and whether naming a colour changes that is an open and registered question.</strong></p>
+<h3 id="p-07-chromatic-signatures--colour-and-texture-are-not-one-signature">Colour and texture are not one signature</h3>
+<p>The hatching confirmation ran on these same 560 renders, the same day, and came out the other
+way round.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>colour, here</th>
+<th>texture, on <a href="#p-07-chromatic-signatures--p-06-the-hatching-axis">the hatching axis</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>effect sizes against the exploratory round</td>
+<td>roughly halved</td>
+<td>held, one within 5%</td>
+</tr>
+<tr>
+<td>the norm-matched sign scramble</td>
+<td>among the strongest conditions</td>
+<td>absent, and its exploratory effect did not replicate</td>
+</tr>
+</tbody>
+</table></div>
+<p>Same displacements, same images, opposite patterns. So these are not two readings of one
+signature. Texture responds to the sign of a <em>structured</em> displacement, close to
+deterministically. Colour responds to displacement more diffusely and does not tell structure
+from noise in the same way. Whatever these perturbations turn out to be doing has to account
+for both, and nothing here does.</p>
+<h3 id="p-07-chromatic-signatures--the-deviations-recorded">The deviations, recorded</h3>
+<p><strong>The frozen script was not at its frozen hash.</strong> <code>analyze_palette_coherence.py</code> read
+<code>1888908f95cf</code> against the registered <code>1d07551eadcd</code>. The cause: a reporting bug was fixed in
+that script — it printed the exact permutation floor while running Monte Carlo above sixteen
+prompts — hours after the document naming its hash was written. That is pitfall 32. The frozen
+version was reconstructed by inverting the patch, hashes to <code>1d07551eadcd</code> exactly, and the
+analysis on record is that script's output; the current version then produced identical numbers
+to every printed digit, because at sixteen prompts both take the exact enumeration path and the
+edit touched only the Monte Carlo branch and a print statement. The deviation is inert here. It
+is recorded because a freeze honoured only when convenient is not a freeze.</p>
+<p><strong>The coverage requirement was not met</strong>, as described above, and its failure mode is pitfall 31.</p>
+<p><strong>A centering convention differs between two scripts in this family.</strong>
+<code>analyze_palette_coherence.py</code> divides by σ without centering; the stage 9 script subtracts the
+joint mean. Subtracting a common vector that is not a group's own mean leaves a shared −μ
+component in every one of its vectors, which inflates apparent agreement. That is pitfall 37,
+and it is why coherence numbers from the two scripts are not comparable with each other. Every
+number on this page comes from the first.</p>
+<h3 id="p-07-chromatic-signatures--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2PresetLoader
+  version: not recorded -- suite_git_sha ba28b12532175220
+  mode: preset_json
+  strength_model: 1.0
+  strength_clip: 1.0
+prompts:
+  file: data/stage7b_images.csv
+  selection: data/confirmation_prompts.csv
+  selected_by: experiments/select_confirmation_prompts.py
+  ids: 16 prompt_sha1 values, hashed and frozen before rendering
+  note: no prompt_sha1 shared with stage 4, 5 or 6, verified before analysis
+seeds: [42, 777, 1337, 9999, 4242145]
+conditions:
+  - name: preset_pos
+    preset: Arthemy_Bench_Base.json
+    measured_D: 0.05381584      # relative, DiT; data/preset_displacements.csv, status PASS
+  - name: preset_neg
+    preset: Arthemy_Bench_NEG.json
+    measured_D: 0.05381584
+  - name: blockshuf_pos
+    preset: Arthemy_Bench_BLOCKSHUFFLE.json
+    measured_D: 0.05381584
+  - name: blockshuf_neg
+    preset: Arthemy_Bench_BLOCKSHUFFLE_NEG.json
+    measured_D: 0.05381584
+  - name: rand_pos
+    preset: Arthemy_Bench_RANDSIGN.json
+    measured_D: 0.05381584
+  - name: rand_neg
+    preset: Arthemy_Bench_RANDSIGN_NEG.json
+    measured_D: 0.05381584
+  - name: baseline
+    preset: null
+    measured_D: 0.0
+outputs:
+  folder: benchmark_stage7/renders
+  manifest: data/stage7b_images.csv
+analysis:
+  features: data/palette_features_stage7_all.csv
+  frozen_script: experiments/analyze_palette_coherence.py
+  frozen_hash: 1d07551eadcd
+  produces: data/palette_condition_cosines_stage7.csv
+  persisted_by: experiments/stage7_chromatic_coherence.py
+  produces_table: data/stage7_chromatic_coherence.csv
+  figures: experiments/notebook_charts.py
+</code></pre>
+<p><code>experiments/stage7_chromatic_coherence.py</code> does not re-implement the analysis. It imports the
+frozen module's own functions, repeats its orchestration, and refuses to write anything unless
+every recomputed coherence agrees with <code>data/palette_condition_cosines_stage7.csv</code> — the matrix
+the frozen run wrote — to four decimals. It adds the Holm column, the pass/fail against the
+registered bar and the exploratory comparison, none of which existed in a file.</p>
+<h2 id="p-07-chromatic-signatures--provenance">Provenance</h2>
+<p><strong>Pre-registration.</strong> <code>docs/prereg_chromatic_signatures.md</code>, written 2026-09-16 with the two
+tests, the four-of-six bar, the explicit instruction not to round three up, the directional
+secondary, the corpus rule and the frozen script hashes; amended 2026-09-17 before any
+confirmation render; result and two deviations recorded in the same document; addendum the same
+evening recording the colour-pinning confound after the result was written.</p>
+<p><strong>Measurement files.</strong> <code>data/palette_features_stage7_all.csv</code> (the 560-row feature table),
+<code>data/palette_condition_cosines_stage7.csv</code> (the frozen run's matrix),
+<code>data/palette_condition_cosines.csv</code> (the exploratory matrix, 18 prompts),
+<code>data/confirmation_prompts.csv</code>, <code>data/stage7b_images.csv</code>, <code>data/preset_displacements.csv</code>,
+and <code>data/stage7_chromatic_coherence.csv</code>, derived here on 2026-09-21.</p>
+<p><strong>Scripts.</strong> <code>experiments/analyze_palette_coherence.py</code> (frozen),
+<code>experiments/stage7_chromatic_coherence.py</code>, <code>experiments/notebook_charts.py</code>,
+<code>experiments/palette_from_manifest.py</code>, <code>experiments/analyze_palette.py</code>,
+<code>experiments/palette_stage4_baseline.py</code>.</p>
+<p><strong>Written up in.</strong> <code>docs/reproduce_stage7.md</code>.</p>
+<p><strong>Pitfalls that apply.</strong> 17 (seeds inside a prompt are repeated measures), 19 (paired
+differences rather than absolute features, or the analysis measures which character is
+depicted), 31 (a stratification criterion that can only be checked after rendering — this
+corpus is the registry's own example), 32 (a script edited after its hash was frozen — likewise),
+36 (a ranking that is partly a ranking of what was measured best), 37 (two coherence statistics
+computed under different centering conventions).</p>
 </section>
 </main>
 </body>

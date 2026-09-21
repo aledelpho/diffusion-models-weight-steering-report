@@ -372,6 +372,105 @@ def hatching_axis_by_pair(out: Path) -> Path:
         marked=marked)
 
 
+
+COND_LABEL = {"blockshuf_neg": "block derangement −", "blockshuf_pos": "block derangement +",
+              "preset_neg": "calibrated preset −", "preset_pos": "calibrated preset +",
+              "rand_neg": "sign scramble −", "rand_pos": "sign scramble +"}
+
+
+def _chromatic_rows() -> list[dict]:
+    src = DATA / "stage7_chromatic_coherence.csv"
+    if not src.exists():
+        raise FileNotFoundError(
+            f"{src} is missing -- run experiments/stage7_chromatic_coherence.py")
+    return [r for r in csv.DictReader(src.open(encoding="utf-8", newline=""))
+            if r["condition"] in COND_LABEL]
+
+
+def chromatic_coherence_decision(out: Path) -> Path:
+    """Where each condition lands against the threshold that was fixed in advance."""
+    rows = sorted(_chromatic_rows(), key=lambda r: float(r["p_holm"]))
+    survivors = [r for r in rows if r["survives_holm_0.05"] == "yes"]
+
+    fig, ax = _canvas(7.6, 3.9)
+    ax.axvline(0.05, color=CAT[1], lw=1.3, ls="--", zorder=2)
+    ax.annotate("0.05", (0.05, len(rows) - 0.35), color=CAT[1], fontsize=8,
+                textcoords="offset points", xytext=(4, 0))
+    for i, r in enumerate(rows):
+        y = len(rows) - 1 - i
+        passed = r["survives_holm_0.05"] == "yes"
+        ax.plot([float(r["p_holm"]), 1.0], [y, y], color=GRID, lw=0.8, zorder=1)
+        ax.scatter([float(r["p_holm"])], [y], s=62,
+                   color=CAT[2] if passed else DIM, edgecolor=SURFACE, linewidth=0.8,
+                   zorder=3)
+        ax.annotate(f"cos {float(r['cosine_confirmation']):+.3f}",
+                    (float(r["p_holm"]), y), textcoords="offset points", xytext=(0, 9),
+                    ha="center", color=INK if passed else DIM, fontsize=8)
+    ax.set_xscale("log")
+    ax.set_xlim(1e-4, 1.4)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([COND_LABEL[r["condition"]] for r in reversed(rows)],
+                       color=DIM, fontsize=8.5)
+    ax.set_xlabel("Holm-corrected p for a coherent direction across prompts",
+                  color=DIM, fontsize=9)
+    ax.set_title(f"{len(survivors)} conditions of {len(rows)} carry a coherent chromatic "
+                 f"direction, against a bar of four\nthe fourth misses by "
+                 f"{float(rows[3]['p_holm']) - 0.05:.4f}, and the bar was written before the "
+                 f"data existed",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.set_ylim(-0.6, len(rows) - 0.05)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 f"16 prompts, exact sign-flip permutation, Holm across {len(rows)} conditions"
+                 f"  ·  source data/stage7_chromatic_coherence.csv")
+
+
+def chromatic_exploratory_vs_confirmation(out: Path) -> Path:
+    """What happened to each condition between the two corpora."""
+    rows = sorted(_chromatic_rows(), key=lambda r: -float(r["cosine_confirmation"]))
+    fig, ax = _canvas(8.0, 4.3)
+    # Two conditions land within 0.0004 of each other on the right; nudge their labels apart
+    # rather than let one print on top of the other.
+    last, bump = None, 0.0
+    for r in rows:
+        a, b = float(r["cosine_exploratory"]), float(r["cosine_confirmation"])
+        grew = b > a
+        ax.plot([0, 1], [a, b], color=CAT[2] if grew else CAT[1], lw=1.6, zorder=2)
+        ax.scatter([0, 1], [a, b], s=34, color=CAT[2] if grew else CAT[1],
+                   edgecolor=SURFACE, linewidth=0.7, zorder=3)
+        bump = bump - 11 if last is not None and abs(last - b) < 0.006 else -3
+        last = b
+        ax.annotate(COND_LABEL[r["condition"]], (1, b), textcoords="offset points",
+                    xytext=(8, bump), color=INK, fontsize=8)
+    mean_a = statistics.mean(float(r["cosine_exploratory"]) for r in rows)
+    mean_b = statistics.mean(float(r["cosine_confirmation"]) for r in rows)
+    ax.plot([0, 1], [mean_a, mean_b], color=INK, lw=2.6, ls=":", zorder=4)
+    ax.annotate(f"mean {mean_a:+.3f} to {mean_b:+.3f}", (0, mean_a),
+                textcoords="offset points", xytext=(-8, 8), ha="right",
+                color=INK, fontsize=8.5)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["exploratory\n18 prompts, colour named in all",
+                        "confirmation\n16 new prompts, colour named in none"],
+                       color=DIM, fontsize=8.5)
+    ax.set_xlim(-0.42, 1.55)
+    ax.set_ylabel("mean pairwise cosine between per-prompt directions", color=DIM, fontsize=9)
+    fell = sum(1 for r in rows
+               if float(r["cosine_confirmation"]) < float(r["cosine_exploratory"]))
+    ax.set_title(f"{fell} conditions of {len(rows)} fell and {len(rows) - fell} rose; the mean "
+                 f"went {mean_a:+.3f} to {mean_b:+.3f}\nthe corpora also differ on whether "
+                 f"the prompt names a colour, and the ranking reshuffled",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 "6 conditions, mean pairwise cosine over pairs of distinct prompts  ·  "
+                 "sources data/palette_condition_cosines.csv, "
+                 "data/palette_condition_cosines_stage7.csv")
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
@@ -384,6 +483,10 @@ def main() -> int:
                                 / "F06.1_hatching_axis_by_prompt.webp"),
         hatching_axis_by_pair(ASSETS / "06-the-hatching-axis"
                               / "F06.2_hatching_axis_by_pair.webp"),
+        chromatic_coherence_decision(ASSETS / "07-chromatic-signatures"
+                                     / "F07.1_coherence_decision.webp"),
+        chromatic_exploratory_vs_confirmation(
+            ASSETS / "07-chromatic-signatures" / "F07.2_exploratory_vs_confirmation.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")
