@@ -227,6 +227,36 @@ def check_header_corpus(fm: dict, body: str, path: Path, rep: Report) -> None:
                              f"front matter says corpus.renders: {declared}")
 
 
+CONTAMINATION_MARKER = "data/hud_contaminated_images.csv"
+
+
+def check_contaminated_pixels(body: str, path: Path, rep: Report) -> None:
+    """A page whose features were computed on HUD-bearing renders has to say so.
+
+    Every render of the three rotation benches was saved at 1024x1760: a 1280-tall picture
+    with a 480-pixel HUD strip attached. The features were therefore computed partly on an
+    overlay. 555 files, listed in data/hud_contaminated_images.csv. This check does not
+    decide what happens to the claims -- it only refuses to let a page rest on those pixels
+    without telling the reader.
+    """
+    cited = set(re.findall(r"data/[\w./-]+\.(?:csv|jsonl)", body))
+    dirty = []
+    for c in sorted(cited):
+        f = ROOT / c
+        if not f.exists() or c.endswith("hud_contaminated_images.csv"):
+            continue
+        try:
+            head = f.read_text(encoding="utf-8-sig", errors="ignore")
+        except OSError:
+            continue
+        if re.search(r"\b1760\b", head):
+            dirty.append(c)
+    if dirty and CONTAMINATION_MARKER not in body:
+        rep.error(path.name, f"cites {', '.join(dirty[:3])}, whose renders carry the 480-pixel "
+                             f"HUD (1024x1760), and does not carry the contamination banner "
+                             f"naming {CONTAMINATION_MARKER}")
+
+
 def check_repro_against_data(fm: dict, body: str, path: Path, rep: Report) -> None:
     """Every field of the reproducibility block that a file in `data/` can prove.
 
@@ -550,6 +580,7 @@ def main() -> int:
         check_repro_against_data(fm, body, path, rep)
         check_render_count(fm, body, rep, path)
         check_header_corpus(fm, body, path, rep)
+        check_contaminated_pixels(body, path, rep)
         check_reproducibility(body, path, rep)
         check_duplicate_columns(body, path, rep)
         check_language(body, path, rep)

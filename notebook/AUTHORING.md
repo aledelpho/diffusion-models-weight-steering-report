@@ -420,6 +420,7 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 | ✓ | **Every field of the block that a file in `data/` can prove — resolution, sampler, steps, cfg, a preset's `measured_D`, and that a named manifest exists** | error |
 | ✓ | **`corpus.renders` against the bench sizes the page itemises in its Provenance line** | error |
 | ✓ | **The render count in the status line against `corpus.renders`** — three pages disagreed with themselves until 2026-09-21 | error |
+| ✓ | **A page citing a feature table built on the HUD-bearing renders (1024×1760) must carry the contamination banner** — see `docs/hud_contamination_1024x1760.md` | error |
 | ✓ | Every figure referenced by a page is registered in `figures.yaml`, and registered *to that page* | error |
 | ✓ | **The figure file actually exists on disk** | error |
 | ✓ | **A link to a sibling page resolves to a page that exists** | error |

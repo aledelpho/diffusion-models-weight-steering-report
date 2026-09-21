@@ -56,6 +56,16 @@ claims:
 > **Ambiguous** · 432 cells found on disk, not designed · 6 block groups · 7 prompts
 > · exploratory, and it predates every pre-registration in this notebook
 > [← all experiments](../README.md#what-holds-and-what-does-not)
+> ⚠ **The pixels under this page are contaminated, and the page has not yet been withdrawn.**
+> Every render of this bench was saved at 1024×1760: a 1280-tall image with a 480-pixel HUD
+> strip attached to it. A HUD in the frame was found, in earlier work, to move the measurements
+> themselves — so every feature computed here was computed partly on an overlay rather than on
+> the picture. The affected files are listed in `data/hud_contaminated_images.csv`
+> (225 of the 555 images there belong to this bench) and the account is in
+> `docs/hud_contamination_1024x1760.md`. Nothing on this page should be quoted until the bench
+> is re-rendered without the HUD and the analysis re-run. The claims below are left at their
+> published status deliberately, pending that decision — they are not endorsed here.
+
 
 > **The direction I'm chasing.** The question I actually want answered is whether it matters
 > *where* in the model you push. If different parts of the backbone do different jobs, steering

@@ -121,6 +121,11 @@ CASES = [
                      "> **Holds** \u00b7 999 renders"),
      "the status line says 999 renders"),
 
+    ("a page rests on HUD-contaminated renders without saying so",
+     lambda t: patch(t, "notebook/08-block1-vs-block6.md",
+                     "data/hud_contaminated_images.csv", "data/some_other_file.csv"),
+     "does not carry the contamination banner"),
+
     ("a required section is gone",
      lambda t: patch(t, PAGE, "## Why I might be wrong", "## Some other heading"),
      "missing required section '## Why I might be wrong'"),
