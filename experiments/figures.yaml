@@ -179,6 +179,36 @@ figures:
       line-up. The mean ratio is 1.12 in the three styles never identified and 1.33 in the five
       always identified; the effect is smaller where the blinding held and it does not vanish.
 
+  # ---------------------------------------------------------------- 06-the-hatching-axis
+  #
+  # Charts, not renders: the stage-7 images live outside the repository and the figures that
+  # do exist for this experiment (assets/01_steering_stage7/_figures) were built in a light
+  # theme, which AUTHORING section 4.4 requires regenerating rather than recolouring.
+
+  - id: F06.1
+    page: 06-the-hatching-axis
+    kind: strip
+    builder: notebook_charts.hatching_axis_by_prompt
+    source: data/stage7_hatching_pairs.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      One difference per prompt for the three families, seeds averaged first. The calibrated
+      preset separates negative in all sixteen prompts, the block derangement positive in all
+      sixteen, and the norm-matched sign scramble straddles zero.
+
+  - id: F06.2
+    page: 06-the-hatching-axis
+    kind: strip
+    builder: notebook_charts.hatching_axis_by_pair
+    source: data/stage7_hatching_pairs.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Every seed-level pair for the three families. The preset separates in eighty pairs of
+      eighty and the derangement in seventy-nine of eighty, with the single exception circled;
+      the sign scramble spreads across zero.
+
   # ---------------------------------------------------------------- 01-mark-style
 
   - id: F01.1

@@ -1,0 +1,4 @@
+family,predicted_sign,delta,p_signflip,p_holm,prompts_matching_prediction,n_prompts,pairs_matching_prediction,n_pairs,prompts_matching_observed_sign,pairs_matching_observed_sign
+preset,negative,-0.370331,3.05176e-05,9.15527e-05,16,16,80,80,16,80
+blockshuffle,positive,0.287694,3.05176e-05,9.15527e-05,16,16,79,80,16,79
+randsign,negative,0.020389,0.665283,0.665283,5,16,30,80,11,50

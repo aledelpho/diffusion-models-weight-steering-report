@@ -11,6 +11,12 @@
 # THE RULE: when a claim is published on a page, delete its entry from `pending` and add a
 # line to `migrated`. A claim must never be in both places.
 #
+# THE ARITHMETIC: `migrated` can grow past the number of bullets it consumed, because one
+# bullet of the old ledger sometimes carries more than one testable statement and becomes
+# several claims. An entry that came out of another carries `split_from`. The invariant is not
+# len(migrated) + len(pending) == 23; it is that every one of the 23 bullets is either still in
+# `pending` or named by the `id`, `was` or `split_from` of something in `migrated`.
+#
 # NOT YET ENFORCED. validate_notebook.py does not read this file. The check to add is:
 # every id under `pending` must be absent from every page's claims[], and every id under
 # `migrated` must resolve to a claim id that exists on the page it names. Until that check
@@ -45,6 +51,21 @@ migrated:
     page: 03-what-ends-up-in-the-picture
     date: 2026-09-21
     source: "README@c843d61 §3.1"
+  - id: hatching-axis-holds-under-derangement
+    page: 06-the-hatching-axis
+    date: 2026-09-21
+    source: "README@c843d61 §1.6"
+    was: hatching-axis-exists
+  - id: hatching-axis-preset-runs-the-other-way
+    page: 06-the-hatching-axis
+    date: 2026-09-21
+    source: "README@c843d61 §1.6"
+    split_from: hatching-axis-exists
+  - id: randsign-hatching-did-not-replicate
+    page: 06-the-hatching-axis
+    date: 2026-09-21
+    source: "README@c843d61 §1.6; prereg_hatching_axis_stage7.md"
+    split_from: hatching-axis-exists
 
 pending:
 
@@ -107,16 +128,6 @@ pending:
       unrelated corpora.
     source: "README@c843d61 §1.6, §1.7, §2.8"
     page: 01-mark-style
-
-  - id: hatching-axis-exists
-    claim: >
-      There is a hatching axis, and the sign of a structured displacement moves you along it.
-      Predicted by sign in advance, confirmed on 16 new prompts at 16/16 and 80/80 pairs, with
-      the norm-matched random control absent.
-    source: "README@c843d61 §1.6"
-    page: 06-the-hatching-axis
-
-  # ---- withheld in the old ledger, and the withholding is itself the claim ---------
 
   - id: bounded-to-one-model-one-corner
     claim: >

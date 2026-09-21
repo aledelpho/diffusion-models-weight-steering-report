@@ -285,6 +285,93 @@ def headlight_floor_by_style(out: Path) -> Path:
                  f"source data/stage12_headlights_by_style.csv")
 
 
+
+FAMILY_LABEL = {"preset": "calibrated preset", "blockshuffle": "block derangement",
+                "randsign": "sign scramble (matched norm)"}
+
+
+def _hatching(level: str) -> tuple[list[dict], dict]:
+    src = DATA / ("stage7_hatching_pairs.csv" if level == "pair"
+                  else "stage7_hatching_summary.csv")
+    if not src.exists():
+        raise FileNotFoundError(f"{src} is missing -- run experiments/stage7_hatching_axis.py")
+    rows = list(csv.DictReader(src.open(encoding="utf-8", newline="")))
+    summary = {r["family"]: r for r in csv.DictReader(
+        (DATA / "stage7_hatching_summary.csv").open(encoding="utf-8", newline=""))}
+    return rows, summary
+
+
+def _hatching_strip(out: Path, values: dict, summary: dict, title: str, subtitle: str,
+                    strip: str, marked: tuple | None = None) -> Path:
+    fams = ["preset", "blockshuffle", "randsign"]
+    fig, ax = _canvas(7.8, 3.9)
+    ax.axvline(0.0, color=DIM, lw=1.0, ls="--", zorder=1)
+    for i, fam in enumerate(fams):
+        v = values[fam]
+        jitter = [len(fams) - 1 - i + (j - (len(v) - 1) / 2) * (0.55 / max(len(v) - 1, 1))
+                  for j in range(len(v))]
+        ax.scatter(v, jitter, s=30 if len(v) > 20 else 44, color=CAT[i],
+                   edgecolor=SURFACE, linewidth=0.6, zorder=3)
+        s = summary[fam]
+        ax.annotate(f"delta {float(s['delta']):+.3f}   Holm p {float(s['p_holm']):.1e}",
+                    (min(v), len(fams) - 1 - i + 0.33), color=DIM, fontsize=7.5,
+                    ha="left", textcoords="offset points", xytext=(-6, 0))
+    if marked:
+        ax.scatter([marked[0]], [marked[1]], s=150, facecolor="none", edgecolor=INK,
+                   linewidth=1.2, zorder=4)
+        ax.annotate(marked[2], (marked[0], marked[1]), textcoords="offset points",
+                    xytext=(-12, -20), ha="right", color=INK, fontsize=8)
+    ax.set_yticks(range(len(fams)))
+    ax.set_yticklabels([FAMILY_LABEL[f] for f in reversed(fams)], color=DIM, fontsize=8.5)
+    ax.set_xlabel("crosshatch entropy, positive arm minus negative arm", color=DIM, fontsize=9)
+    ax.set_title(f"{title}\n{subtitle}", color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.set_ylim(-0.55, len(fams) - 1 + 0.58)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(x=0.10)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out, strip)
+
+
+def hatching_axis_by_prompt(out: Path) -> Path:
+    """The registered unit: one difference per prompt, three families."""
+    rows, summary = _hatching("pair")
+    values = {}
+    for fam in summary:
+        byp = {}
+        for r in rows:
+            if r["family"] == fam:
+                byp.setdefault(r["prompt_sha1"], []).append(float(r["delta"]))
+        values[fam] = [statistics.mean(v) for v in byp.values()]
+    n = len(next(iter(values.values())))
+    return _hatching_strip(
+        out, values, summary,
+        "Two families separate on the hatching axis, sign fixed in advance",
+        "the norm-matched sign scramble, predicted negative, straddles zero",
+        f"one point per prompt, seeds averaged first  ·  n = {n} prompts per family  ·  "
+        f"source data/stage7_hatching_pairs.csv")
+
+
+def hatching_axis_by_pair(out: Path) -> Path:
+    """The concordance claim: every seed-level pair, and the single exception."""
+    rows, summary = _hatching("pair")
+    values = {fam: [float(r["delta"]) for r in rows if r["family"] == fam]
+              for fam in summary}
+    odd = [r for r in rows if r["family"] == "blockshuffle" and r["matches_prediction"] == "no"]
+    marked = None
+    if len(odd) == 1:
+        d = float(odd[0]["delta"])
+        marked = (d, 1 + (values["blockshuffle"].index(d) - 39.5) * (0.55 / 79),
+                  "the one pair of eighty that goes the other way")
+    return _hatching_strip(
+        out, values, summary,
+        "Eighty image pairs per family, and one exception in the whole design",
+        "the preset separates in 80 pairs of 80 and the derangement in 79 of 80",
+        f"one point per (prompt, seed) pair  ·  n = {len(values['preset'])} pairs per family  "
+        f"·  source data/stage7_hatching_pairs.csv",
+        marked=marked)
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
@@ -293,6 +380,10 @@ def main() -> int:
         discriminability_vs_effect(out / "F03.3_discriminability_vs_effect.webp"),
         headlight_floor_by_style(ASSETS / "02-attribute-emergence"
                                  / "F02.6_headlight_floor_by_style.webp"),
+        hatching_axis_by_prompt(ASSETS / "06-the-hatching-axis"
+                                / "F06.1_hatching_axis_by_prompt.webp"),
+        hatching_axis_by_pair(ASSETS / "06-the-hatching-axis"
+                              / "F06.2_hatching_axis_by_pair.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")

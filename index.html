@@ -85,6 +85,7 @@
 <li><a href="#p-02-attribute-emergence"><span class="dot" style="background:#fab219"></span>What the edit puts in the picture, and what it takes out</a></li>
 <li><a href="#p-03-what-ends-up-in-the-picture"><span class="dot" style="background:#0ca30c"></span>How much room the subject takes, and how blind I actually was</a></li>
 <li><a href="#p-05-knob-or-cost"><span class="dot" style="background:#0ca30c"></span>What an edit steers, and what it costs</a></li>
+<li><a href="#p-06-the-hatching-axis"><span class="dot" style="background:#0ca30c"></span>The hatching axis, and the sign that decides it</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
@@ -113,10 +114,13 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-common-mode-is-friction-not-a-knob">Pushing any block costs fine texture, in either direction, and the cost grows the closer the block sits to the output.</a></td><td class="ev">Pre-registered. Mean common mode 0.978, 23 of 28 blocks below 1, r = -0.659 against block index, 11-14σ.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-first-block-runs-backwards">The first block is a knob that runs the opposite way to the tail: pushed positive it smooths, pushed negative it etches.</a></td><td class="ev">Pre-registered as P3. r+ = 0.841, r- = 1.100, swing 0.764.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-tail-is-rectified">On the last blocks the negative direction is the safe side: positive pushes wreck the image, negative pushes barely move it.</a></td><td class="ev">Amplitude ratio 9.1x on block 26, both arms on one scale. All six blocks from 22 onward asymmetric.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-06-the-hatching-axis--the-two-structured-families">A block-derangement edit crosses the hatching strokes when pushed positive and runs them parallel when pushed negative, and the sign of that displacement decides which.</a></td><td class="ev">Pre-registered sign, confirmed on 16 prompts sharing nothing with the corpus the observation came from. Delta +0.288 in crosshatch entropy, Holm p 9.2e-5 at the exact permutation floor, 16 prompts of 16 and 79 image pairs of 80.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-06-the-hatching-axis--the-check-that-was-registered-and-not-recorded">The calibrated preset moves the same measured axis with the opposite sign, so the axis is not a property of block derangement. Whether the measure tracks hatching orientation in this family was never checked.</a></td><td class="ev">Delta -0.370, Holm p 9.2e-5, 16 of 16 prompts and 80 of 80 pairs. But the pre-registration made the preset row conditional on a visual check of one pair, to be recorded before the analysis, and no outcome for that check exists.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">A bidirectional, mirror-image response is the exception rather than the rule.</a></td><td class="ev">Falsified. 17 of 28 blocks are mirror-symmetric within 3σ. The prediction expected fewer than 10.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">Blocks at either end of the network respond violently in both directions.</a></td><td class="ev">Falsified. Predicted for the first block and at least three of five tail blocks; found in one of the five.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-06-the-hatching-axis--the-control-that-vanished">The exploratory hatching effect of the norm-matched sign scramble does not survive a fresh corpus. It was the third family of the registered prediction and it is not there.</a></td><td class="ev">Exploratory -0.187 on 18 prompts, 81 pairs of 90. Confirmation +0.020 with the sign reversed, p = 0.67, 5 of 16 prompts and 30 of 80 pairs in the predicted direction.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--one-attribute-one-prompt-family">Whether attribute emergence is a general property of structured weight edits or a fact about one prompt template is untested, and the design written to test it was never run.</a></td><td class="ev">The pre-registered stage-7 attribute table was never filled, so the primary test does not exist. Both positive prompts share nearly every token.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">Whether the enlargement comes from the structure of the edit or merely from its magnitude is undecided, because the design left out the one control that separates them.</a></td><td class="ev">The round compared two structured edits against a baseline. A sign-scrambled edit at the identical displacement was not rendered, so no point on the magnitude axis exists.</td></tr>
@@ -1724,6 +1728,281 @@ analysis:
 <li>Renders: <code>benchmark_profondita_neg/</code> (168, new), <code>benchmark_profondita/</code> (168, pre-existing), <code>benchmark_pavimento_rumore/</code> (32)</li>
 <li>Pitfalls that apply: <a href="docs/errors_log.md">2</a> (unsigned distance), 43 (averaging over signs), 57 (one-sided sweep), 60 (decorrelation ceiling), 61 (ratio with noise in the denominator), 62 (threshold calibrated on three seeds)</li>
 </ul>
+</section>
+<section id="p-06-the-hatching-axis">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">560 renders · 16 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
+<h1 id="p-06-the-hatching-axis--the-hatching-axis-and-the-sign-that-decides-it">The hatching axis, and the sign that decides it</h1>
+<h2 id="p-06-the-hatching-axis--in-two-minutes">In two minutes</h2>
+<p>It started the way most things here start: by looking. Across renders already seen, one edit
+seemed to shade with <strong>parallel</strong> strokes when pushed one way and with <strong>cross-hatching</strong> when
+pushed the other. The estimate by eye was 95%.</p>
+<p>What makes this one different is that nothing had to be scored. Parallel against crossed is a
+spread of stroke orientations, and a measure of exactly that — the entropy of local
+cross-hatching — had been in the feature set since the first day, computed by an unmodified
+script with no human in the loop. So the prediction could be written as a <strong>sign</strong>, per family,
+frozen before the next batch existed, with a clause saying that a family reaching significance
+with the wrong sign counts as a failure rather than a partial success.</p>
+<p>Then it came back, on sixteen prompts sharing no text with the corpus the idea came from.</p>
+<p><img alt="One difference per prompt for the three families, seeds averaged first. The calibrated preset separates negative in all sixteen prompts, the block derangement positive in all sixteen, and the norm-matched sign scramble straddles zero." src="assets/06-the-hatching-axis/F06.1_hatching_axis_by_prompt.webp" /></p>
+<p>Two of the three families landed on their predicted side of zero in every single prompt, at the
+smallest value the test can return. The third — the sign scramble carrying the same
+displacement, which had shown the effect in the exploratory round — was simply not there.</p>
+<p>That third failure is the part worth having. Had all three held, the hatching axis would have
+been a property of reversing any displacement at all. It is not: it belongs to the two
+structured directions, and the control matched to the identical Frobenius norm does not produce
+it.</p>
+<h2 id="p-06-the-hatching-axis--the-verdict">The verdict</h2>
+<p><strong>The primary prediction, as written, was not met.</strong> It was a conjunction over three families,
+and one of the three did not fire. Reporting the other two as a success requires saying that
+first, because a conjunction that fails is a prediction that failed.</p>
+<p>What survives is narrower and, for the argument the notebook is making, stronger. There is an
+axis in stroke orientation; the sign of a <strong>structured</strong> displacement decides where you sit on
+it; and which sign gives which texture depends on which structured direction you moved in —
+where the derangement crosses the strokes, the preset runs them parallel. Both at the exact
+permutation floor, both with every prompt and almost every image pair on the predicted side.
+The norm-matched scramble does nothing, and its exploratory effect did not replicate.</p>
+<p>One reservation is not statistical and is carried in the claims above: the measure was
+validated against the eye on the derangement family and never on the preset family, by the
+pre-registration's own account, and the check it scheduled to close that gap has no recorded
+outcome.</p>
+<h2 id="p-06-the-hatching-axis--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>The primary was a conjunction and it failed.</strong> Two of three is not three of three. The
+document said so at the time and this page says it again, because the temptation to report the
+two that worked and call the third a control is exactly the move the clause about wrong signs
+was written to block.</p>
+<p><strong>The measure is a proxy, and a better one was deliberately not used.</strong> Crosshatch entropy is a
+spread of local orientations, not a count of stroke crossings. The instrument that measures the
+phenomenon directly — the histogram of edge-gradient orientations, unimodal for parallel and
+bimodal for crossed — exists and was left for a later round on purpose, because swapping the
+instrument between the observation and its confirmation would confirm a different claim. That
+reasoning is right and it leaves the result resting on a proxy.</p>
+<p><strong>The exploratory numbers on this page cannot be recomputed from the repository.</strong> The
+comparison table below quotes the 18-prompt exploratory round from the pre-registration's own
+frozen text. <code>data/style_features.csv</code> holds 24 prompts across these families and no record of
+which 18 the earlier table used; recomputed over all 24 it gives -0.470, +0.257 and -0.152
+against the -0.484, +0.274 and -0.187 on record. Close, same signs, not the same numbers, and
+the subset that would reconcile them is not in <code>data/</code>.</p>
+<p><strong>One prompt family, one model, one aesthetic register.</strong> All sixteen prompts open on
+<code>Western comics style</code> and contain <code>hatched shadows</code>. The axis is measured inside a style that
+explicitly asks the model to hatch. Whether a structured displacement does anything at all to a
+style that does not hatch is untested, and the honest reading is that it might do nothing. The
+pre-registration for that test exists and has not been run.</p>
+<p><strong>The origin was discovery by eye, and the eye is not blind.</strong> The 95% estimate and the 87/90
+that quantified it both came from renders already seen, by someone who knew the hypothesis.
+That is pitfall 34 and it is why this round exists. It does not touch the confirmation, where
+nobody scores anything.</p>
+<h2 id="p-06-the-hatching-axis--the-data">The data</h2>
+<h3 id="p-06-the-hatching-axis--how-it-was-measured">How it was measured</h3>
+<p>Sixteen prompts selected by a rule fixed before the renders, five seeds, seven conditions:
+560 images, manifest in <code>data/stage7b_images.csv</code>, features in
+<code>data/style_features_stage7.csv</code>. The quantity is <code>crosshatch_entropy_mean</code>, produced by
+<code>style_features.extract_all_features</code> unchanged — the same function that produced the
+exploratory numbers, so the confirmation measures the same thing the observation did.</p>
+<p>The statistic is the difference between the positive and the negative arm of a family. Seeds
+are averaged inside a prompt first, because the unit of analysis is the prompt and seeds
+sharing a prompt are repeated measures on one subject; treating the eighty pairs as eighty
+independent observations is pitfall 17. Exact two-tailed sign-flip permutation over the
+sixteen prompts, Holm-corrected across the three families.</p>
+<h3 id="p-06-the-hatching-axis--the-two-structured-families">The two structured families</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>family</th>
+<th>predicted sign</th>
+<th>Δ observed</th>
+<th>Holm p</th>
+<th>prompts on the predicted side</th>
+<th>image pairs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>calibrated preset</strong></td>
+<td>negative</td>
+<td><strong>−0.370</strong></td>
+<td>9.2 × 10⁻⁵</td>
+<td><strong>16 / 16</strong></td>
+<td><strong>80 / 80</strong></td>
+</tr>
+<tr>
+<td><strong>block derangement</strong></td>
+<td>positive</td>
+<td><strong>+0.288</strong></td>
+<td>9.2 × 10⁻⁵</td>
+<td><strong>16 / 16</strong></td>
+<td><strong>79 / 80</strong></td>
+</tr>
+<tr>
+<td>sign scramble, matched norm</td>
+<td>negative</td>
+<td>+0.020</td>
+<td>0.67</td>
+<td>5 / 16</td>
+<td>30 / 80</td>
+</tr>
+</tbody>
+</table></div>
+<p>9.2 × 10⁻⁵ is the Holm-corrected exact permutation floor at sixteen prompts, 2/2¹⁶ before
+correction. It is the smallest value this test can return and it should be read as "below the
+resolution of the design", not as a measured quantity.</p>
+<p><img alt="Every seed-level pair for the three families. The preset separates in eighty pairs of eighty and the derangement in seventy-nine of eighty, with the single exception circled; the sign scramble spreads across zero." src="assets/06-the-hatching-axis/F06.2_hatching_axis_by_pair.webp" /></p>
+<p>Eighty pairs of eighty, and seventy-nine of eighty. One image pair in the entire design goes the
+other way, and it sits just past zero rather than out among the opposite family. That is what
+"the texture is not a lucky render" looks like when it is drawn rather than asserted.</p>
+<p><strong>A number in the published table is counted on a different rule from the two above it, and it
+is corrected here.</strong> The earlier write-up gives the sign scramble as 11/16 prompts and 50/80
+pairs, in the same column where the preset reads 16/16 and 80/80. Those two count agreement
+with the <strong>predicted</strong> sign; the scramble's figures count agreement with its <strong>observed</strong> one.
+Under the rule the other two rows use, the scramble is <strong>5/16 and 30/80</strong> — it goes the
+predicted way in fewer than half of its pairs. Both readings say the same thing about the
+verdict, and only one of them is comparable with the rows beside it. Both are written out in
+<code>data/stage7_hatching_summary.csv</code>.</p>
+<h3 id="p-06-the-hatching-axis--the-control-that-vanished">The control that vanished</h3>
+<p>The sign scramble was not an afterthought. In the exploratory round it was the third family of
+a real effect, and it was predicted to repeat.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>exploratory, 18 prompts</th>
+<th>confirmation, 16 new prompts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>calibrated preset</td>
+<td>−0.484, 90 pairs of 90</td>
+<td>−0.370, 80 of 80</td>
+</tr>
+<tr>
+<td>block derangement</td>
+<td>+0.274, 87 of 90</td>
+<td>+0.288, 79 of 80</td>
+</tr>
+<tr>
+<td>sign scramble</td>
+<td>−0.187, 81 of 90</td>
+<td><strong>+0.020, 30 of 80</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The two structured directions held their effect size across an independent corpus of new
+subjects — the derangement to within five per cent, which is the closest any exploratory
+estimate in this notebook has come to surviving intact. The random one collapsed: the sign
+reversed and the concordance fell to a coin.</p>
+<p>This is the Experiment 1 argument reproduced on a second visual property: structure rather than
+magnitude, with a mechanical measurement and nobody scoring anything. Two points still do not
+identify <strong>which</strong> structural property does the work.</p>
+<p>The exploratory column is quoted from the pre-registration's frozen text, not recomputed here;
+see <em>Why I might be wrong</em>.</p>
+<h3 id="p-06-the-hatching-axis--the-check-that-was-registered-and-not-recorded">The check that was registered, and not recorded</h3>
+<p>The pre-registration is explicit about why the measure is allowed to stand in for what the eye
+saw: <code>crosshatch_entropy_mean</code> reproduces, at 87 pairs of 90, a distinction made visually <strong>on
+the block-derangement family</strong>. That is the licence, and it covers one family.</p>
+<p>It then says, in its own words, that the measure fires on the other two families with different
+signs and that this <strong>has not been checked against the eye</strong>; that before stage 7 is analysed
+one <code>preset_pos</code> / <code>preset_neg</code> pair is to be inspected and the outcome recorded; and that if
+the predicted direction is not what is seen, <em>the preset row of the prediction is withdrawn in
+writing rather than reinterpreted afterwards</em>.</p>
+<p><strong>No outcome for that check exists.</strong> The document says "that check is recorded here, with its
+date, before the analysis" and the record is not in it, nor anywhere else in <code>docs/</code>. The
+statistics for the preset row are not in doubt — 16 of 16 and 80 of 80 at the floor, on the same
+measurement as the family where the licence was established. What is undetermined is whether
+that measurement means <em>hatching orientation</em> in this family or something else that moves with
+it, which is the question the check was written to settle and the reason the preset claim above
+is filed as ambiguous rather than as holding.</p>
+<p>Closing it costs one look at one pair of images. Until then, this page reports the preset row
+and declines to lean on it.</p>
+<h3 id="p-06-the-hatching-axis--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2PresetLoader
+  version: not recorded -- suite_git_sha ba28b12532175220
+  mode: preset_json
+  strength_model: 1.0
+  strength_clip: 1.0
+prompts:
+  file: data/stage7b_images.csv
+  selection: data/confirmation_prompts.csv
+  selected_by: experiments/select_confirmation_prompts.py
+  ids: 16 prompt_sha1 values, frozen before rendering
+seeds: [42, 777, 1337, 9999, 4242145]
+conditions:
+  - name: preset_pos
+    preset: Arthemy_Bench_Base.json
+    measured_D: 0.05381584      # relative, DiT; data/preset_displacements.csv, status PASS
+  - name: preset_neg
+    preset: Arthemy_Bench_NEG.json
+    measured_D: 0.05381584
+  - name: blockshuf_pos
+    preset: Arthemy_Bench_BLOCKSHUFFLE.json
+    measured_D: 0.05381584
+  - name: blockshuf_neg
+    preset: Arthemy_Bench_BLOCKSHUFFLE_NEG.json
+    measured_D: 0.05381584
+  - name: rand_pos
+    preset: Arthemy_Bench_RANDSIGN.json
+    measured_D: 0.05381584
+  - name: rand_neg
+    preset: Arthemy_Bench_RANDSIGN_NEG.json
+    measured_D: 0.05381584
+  - name: baseline
+    preset: null
+    measured_D: 0.0
+outputs:
+  folder: benchmark_stage7/renders
+  manifest: data/stage7b_images.csv
+analysis:
+  features: data/style_features_stage7.csv
+  script: experiments/stage7_hatching_axis.py
+  produces:
+    - data/stage7_hatching_pairs.csv
+    - data/stage7_hatching_summary.csv
+  figures: experiments/notebook_charts.py
+</code></pre>
+<p>Two gaps a stranger would hit. The renders live outside the repository, so the features file is
+the reproducible starting point rather than the images. And <code>data/preset_displacements.csv</code>
+gives every one of these presets the same relative displacement, 0.05381584 — that is the
+design, the controls are matched by construction, and pitfall 45 is the reminder that a
+permuted control does <strong>not</strong> inherit the target displacement automatically and has to be
+measured, which here it was.</p>
+<h2 id="p-06-the-hatching-axis--provenance">Provenance</h2>
+<p><strong>Pre-registration.</strong> <code>docs/prereg_hatching_axis_stage7.md</code>, written 2026-09-17 before any
+stage 7 render, carrying the per-family signs, the wrong-sign failure clause, the 14-of-16
+secondary concordance threshold, the metric-validity argument and the unrecorded check.</p>
+<p><strong>Measurement files.</strong> <code>data/style_features_stage7.csv</code> (600 rows, 560 after the selection),
+<code>data/confirmation_prompts.csv</code> (the 16 frozen prompt hashes),
+<code>data/stage7b_images.csv</code> (the manifest with sampler settings and prompt text),
+<code>data/preset_displacements.csv</code> (measured displacements), and two tables derived here on
+2026-09-21: <code>data/stage7_hatching_pairs.csv</code> (240 seed-level pairs) and
+<code>data/stage7_hatching_summary.csv</code> (the family table, with both counting rules named).</p>
+<p><strong>Scripts.</strong> <code>experiments/stage7_hatching_axis.py</code>, <code>experiments/notebook_charts.py</code>,
+<code>experiments/style_features.py</code>, <code>experiments/style_from_manifest.py</code>,
+<code>experiments/select_confirmation_prompts.py</code>, <code>experiments/run_stage7b.py</code>.</p>
+<p><strong>Written up in.</strong> <code>docs/reproduce_stage7.md</code>.</p>
+<p><strong>Read against.</strong> The chromatic confirmation ran on these same 560 renders the same day and
+came out the other way round: every colour effect roughly halved and its strongest condition
+was the sign scramble, where here the structured conditions hold their size and the scramble
+vanishes. Same displacements, same images, opposite patterns, so colour and texture are not two
+readings of one signature.</p>
+<p><strong>Pitfalls that apply.</strong> 17 (seeds inside a prompt are repeated measures, so the unit is the
+prompt), 34 (the observation that started this came from an expert eye on renders already seen,
+which is why a confirmation was needed), 38 (a metric validated against nothing — the
+pre-registration argues the licence for one family and declares it missing for another).</p>
+<p>Rules 8 and 11 of the fifteen apply to the floor: at sixteen prompts the exact test cannot
+return less than 2/2¹⁶, and both structured families sit on it.</p>
 </section>
 </main>
 </body>
