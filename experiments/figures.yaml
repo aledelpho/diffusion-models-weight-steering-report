@@ -120,6 +120,52 @@ figures:
       seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.84 percent
       measured on eighteen seeds each.
 
+  # ---------------------------------------------------------------- 03-what-ends-up-in-the-picture
+  #
+  # All three are charts built by notebook_charts.py from the derived tables, not from the
+  # renders: the stage-12 renders live outside the repository. Two finished figures from this
+  # round sit unregistered in assets/03_what_ends_up_in_the_picture/_figures because their
+  # boxes and captions are typed into build_figures_stage12.py rather than read from the
+  # annotation file -- pitfall 40, and the reason this page shows charts instead.
+
+  - id: F03.1
+    page: 03-what-ends-up-in-the-picture
+    kind: strip
+    builder: notebook_charts.enlargement_by_prompt
+    source: data/stage12_enlargement_by_prompt.csv
+    caption_from: source
+    crop: whole
+    direct_labels: [S04_gouache, S06_pastel]
+    alt: >
+      Per-prompt area ratio for the three conditions across ten new styles. The subject grows
+      in nine styles of ten under block derangement at double dose, geometric mean 1.234,
+      while the calibrated preset predicted to shrink it does nothing.
+
+  - id: F03.2
+    page: 03-what-ends-up-in-the-picture
+    kind: paired_bars
+    builder: notebook_charts.discrimination_rates
+    source: data/stage12_pattern_results.json
+    caption_from: source
+    crop: whole
+    alt: >
+      Identification rate for each condition in a four-way forced choice, against the chance
+      line. The calibrated preset was identified in 17 trials of 20 and the block derangement
+      in 12 of 20, against a 25% chance level; both in the same trial in 12 of 20 against 8.3%.
+
+  - id: F03.3
+    page: 03-what-ends-up-in-the-picture
+    kind: scatter
+    builder: notebook_charts.discriminability_vs_effect
+    source: data/stage12_enlargement_by_prompt.csv
+    caption_from: source
+    crop: whole
+    direct_labels: [S04_gouache, S06_pastel]
+    alt: >
+      Per-style area ratio against how often the annotator identified that condition in the
+      line-up. The mean ratio is 1.12 in the three styles never identified and 1.33 in the five
+      always identified; the effect is smaller where the blinding held and it does not vanish.
+
   # ---------------------------------------------------------------- 01-mark-style
 
   - id: F01.1

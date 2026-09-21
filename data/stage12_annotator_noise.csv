@@ -1,0 +1,8 @@
+quantity,n,value,unit,r,p_two_tailed
+test_retest_mean_abs_difference,20,0.2735,percentage points of canvas,,
+test_retest_sd_abs_difference,20,0.2448,percentage points of canvas,,
+test_retest_median_relative_error,20,0.009506,fraction,,
+test_retest_correlation,20,0.995394,pearson r,0.995394,
+annotated_area_on_sat_factor,50,-1.5335,percentage points per unit,-0.09618,0.5032
+annotated_area_on_lum_factor,50,11.694,percentage points per unit,0.229109,0.103
+annotated_area_on_noise_sigma,50,0.296,percentage points per unit,0.075883,0.598

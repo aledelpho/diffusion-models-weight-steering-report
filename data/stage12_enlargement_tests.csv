@@ -1,0 +1,13 @@
+statistic,condition,n_prompts,value,p_signflip_two_tailed,p_holm_across_3_conditions,passes_at_0.05
+mean_log_ratio,blockshuf_neg_1x,10,0.058836,0.048828,0.097656,no
+mean_log_ratio,blockshuf_neg_2x,10,0.210257,0.011719,0.035156,yes
+mean_log_ratio,preset_pos_2x,10,-0.010716,0.642578,0.642578,no
+log_mean_ratio,blockshuf_neg_1x,10,0.061774,0.036133,0.072266,no
+log_mean_ratio,blockshuf_neg_2x,10,0.224541,0.007812,0.023438,yes
+log_mean_ratio,preset_pos_2x,10,-0.008378,0.722656,0.722656,no
+mean_ratio_minus_one,blockshuf_neg_1x,10,0.063722,0.044922,0.089844,no
+mean_ratio_minus_one,blockshuf_neg_2x,10,0.251748,0.009766,0.029297,yes
+mean_ratio_minus_one,preset_pos_2x,10,-0.008343,0.705078,0.705078,no
+mean_delta_pp,blockshuf_neg_1x,10,1.24642,0.044922,0.089844,no
+mean_delta_pp,blockshuf_neg_2x,10,5.09223,0.005859,0.017578,yes
+mean_delta_pp,preset_pos_2x,10,-0.22915,0.644531,0.644531,no

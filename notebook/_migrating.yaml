@@ -31,6 +31,20 @@ migrated:
     page: 02-attribute-emergence
     date: 2026-09-21
     source: "README@c843d61 §2.6, §2.11"
+  - id: subject-enlargement-replicates
+    page: 03-what-ends-up-in-the-picture
+    date: 2026-09-21
+    source: "README@c843d61 §3.1"
+    was: blockshuf-neg-enlarges-the-subject
+  - id: blinding-is-a-measurement-and-it-failed
+    page: 03-what-ends-up-in-the-picture
+    date: 2026-09-21
+    source: "README@c843d61 §3.2"
+    was: scoring-rounds-were-not-blind
+  - id: enlargement-structure-or-magnitude
+    page: 03-what-ends-up-in-the-picture
+    date: 2026-09-21
+    source: "README@c843d61 §3.1"
 
 pending:
 
@@ -86,13 +100,6 @@ pending:
     source: "README@c843d61 §4.1-§4.4"
     page: 04-where-in-the-model
 
-  - id: blockshuf-neg-enlarges-the-subject
-    claim: >
-      A block-derangement edit makes the subject occupy more of the frame. Ratio 1.22 on 9
-      prompts of 10, on a new corpus, against a prediction frozen before the renders existed.
-    source: "README@c843d61 §3.1"
-    page: 03-what-ends-up-in-the-picture
-
   - id: preset-is-a-sharp-operator
     claim: >
       The hand-calibrated preset is a sharply defined operator, not a vague nudge: darker,
@@ -121,21 +128,6 @@ pending:
     note: >
       This is the limit that bounds every result in the notebook. It belongs on the front
       page, not on one experiment page.
-
-  - id: scoring-rounds-were-not-blind
-    claim: >
-      Hidden filenames do not blind an expert to a condition with a visible signature. In a
-      four-way forced choice against a 25% chance level the author identified two conditions
-      at 17/20 and 12/20 with the images mirrored, flipped, hue-rotated and noised.
-    source: "README@c843d61 §3.2"
-    page: 03-what-ends-up-in-the-picture
-
-  - id: enlargement-structure-or-magnitude
-    claim: >
-      Whether the enlargement is about structure or about magnitude is undecided: the
-      confirmation round left out the sign-scrambled control at the same displacement.
-    source: "README@c843d61 §3.1"
-    page: 03-what-ends-up-in-the-picture
 
   - id: style-does-not-steer-direction
     claim: >

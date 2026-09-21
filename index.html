@@ -83,6 +83,7 @@
   <ul>
 <li><a href="#p-00-the-bench"><span class="dot" style="background:#0ca30c"></span>Is the instrument lying to me?</a></li>
 <li><a href="#p-02-attribute-emergence"><span class="dot" style="background:#fab219"></span>What the edit puts in the picture, and what it takes out</a></li>
+<li><a href="#p-03-what-ends-up-in-the-picture"><span class="dot" style="background:#0ca30c"></span>How much room the subject takes, and how blind I actually was</a></li>
 <li><a href="#p-05-knob-or-cost"><span class="dot" style="background:#0ca30c"></span>What an edit steers, and what it costs</a></li>
   </ul>
   <h2>Elsewhere</h2>
@@ -107,6 +108,8 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--the-edit-that-undoes-itself-and-does-not">An edit and its exact inverse put the weights back where they were and do not put the image back, which sets a floor stricter than the seed floor.</a></td><td class="ev">Weights at D = 0; image differs by a mean of 16 of 255 across 15 cells.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--four-arms-that-do-nothing-and-one-that-proves-the-test-works">One of the text-encoder arms is exactly inert: it changes nothing at any dose, while a sibling arm in the same run changes the image at every dose.</a></td><td class="ev">RMS difference exactly 0.0 at five doses; the sibling arm runs 23.5 to 34.0.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--the-floor-that-moved-twice-before-it-was-measured">The seed-to-seed noise floor of fine texture is under 2% on the two prompts that every threshold in this notebook is calibrated against.</a></td><td class="ev">1.65% on P01 and 1.84% on P02, measured across 18 baseline seeds each.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-03-what-ends-up-in-the-picture--the-subject-grows-and-by-how-much">A block-derangement edit makes the subject occupy more of the frame, and the growth increases with the dose. Replicated on a corpus of ten styles that did not exist when the prediction was frozen.</a></td><td class="ev">Pre-registered. Geometric mean ratio 1.234 across 10 new styles, 9 of 10 above 1, all three predicted signs correct. Holm-corrected p of 0.018 to 0.035 across the four readings of the registered test.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-03-what-ends-up-in-the-picture--the-annotator-is-the-instrument">Hashed filenames do not blind an expert observer to a condition with a visible signature, and the gap is large enough to be measured on twenty trials.</a></td><td class="ev">Pre-registered threshold of 5 joint hits in 20 before the round. Four-way forced choice against a 25% chance level: 17 of 20 on one condition, 12 of 20 on the other, 12 of 20 on both in the same trial against a 8.3% joint chance level.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-common-mode-is-friction-not-a-knob">Pushing any block costs fine texture, in either direction, and the cost grows the closer the block sits to the output.</a></td><td class="ev">Pre-registered. Mean common mode 0.978, 23 of 28 blocks below 1, r = -0.659 against block index, 11-14σ.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-first-block-runs-backwards">The first block is a knob that runs the opposite way to the tail: pushed positive it smooths, pushed negative it etches.</a></td><td class="ev">Pre-registered as P3. r+ = 0.841, r- = 1.100, swing 0.764.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-tail-is-rectified">On the last blocks the negative direction is the safe side: positive pushes wreck the image, negative pushes barely move it.</a></td><td class="ev">Amplitude ratio 9.1x on block 26, both arms on one scale. All six blocks from 22 onward asymmetric.</td></tr>
@@ -116,6 +119,7 @@
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">Blocks at either end of the network respond violently in both directions.</a></td><td class="ev">Falsified. Predicted for the first block and at least three of five tail blocks; found in one of the five.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--one-attribute-one-prompt-family">Whether attribute emergence is a general property of structured weight edits or a fact about one prompt template is untested, and the design written to test it was never run.</a></td><td class="ev">The pre-registered stage-7 attribute table was never filled, so the primary test does not exist. Both positive prompts share nearly every token.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">Whether the enlargement comes from the structure of the edit or merely from its magnitude is undecided, because the design left out the one control that separates them.</a></td><td class="ev">The round compared two structured edits against a baseline. A sign-scrambled edit at the identical displacement was not rendered, so no point on the magnitude axis exists.</td></tr>
       </tbody>
     </table>
   </section>
@@ -444,14 +448,17 @@ before rendering, blind scoring, <code>(prompt, attribute)</code> as the unit of
 closing note records that the attribute table was never filled and the primary test never run.
 An unrun design is not a weaker result; it is no result.</p>
 <p><strong>The barnacle round was scored with the condition visible.</strong> The scorer was the author and he
-knew which image came from which arm. With 18 discordant seeds to 0 the headline will not
+knew which image came from which arm. Hashing the filenames would not have fixed it either: on a
+separate corpus the same observer picked these conditions out of a four-way line-up at 17 of 20
+and 12 of 20 against a 25% chance level, which is pitfall 34 and is measured on
+<a href="#p-02-attribute-emergence--p-03-what-ends-up-in-the-picture#the-annotator-is-the-instrument">what ends up in the picture</a>. With 18 discordant seeds to 0 the headline will not
 flip, but the intermediate cells are exactly where a borderline call moves a number: the
 DiT-only arm at 12/19 and the 0.50 dose point at 5/6 scorable are the two that a biased eye
 could have made.</p>
 <p><strong>The headlight round was blind, and still is not a confirmation.</strong> The observation was born by
 looking at those renders and is measured on the same renders. This is quantification of
-something already seen, which is pitfall 8: a number produced this way is an upper bound on
-what a fresh corpus would give. Three consecutive confirmation rounds elsewhere in this
+something already seen, and a number produced that way is an upper bound on what a fresh
+corpus would give. Three consecutive confirmation rounds elsewhere in this
 notebook have come back between a third and a half of their exploratory estimate.</p>
 <p><strong>The statistic is at its floor and looks weaker than the effect.</strong> With six informative
 prompts all moving the same way, the smallest value the exact test can return is
@@ -459,9 +466,12 @@ prompts all moving the same way, the smallest value the exact test can return is
 cleared that bar on this design. The right reading is neither "significant" nor "weak" but
 "floored" — the same structural ceiling that rule 8 of the error log describes.</p>
 <p><strong>Four images were scored twice during the blind round.</strong> Two of them received a different
-score the second time. The published rates reproduce exactly under "the later score wins" and
-under no other rule, so that is the rule this page applies. It touches exactly one condition,
-the scrambled control at double strength (2/36 rather than 3/37), and no headline number.</p>
+score the second time, because the viewer appended a row instead of replacing one — pitfall 35,
+whose registry entry is this very round. Counting both rows reads the preset at 32/39 instead
+of 31/38. The published rates reproduce exactly under "the later score wins", the remedy the
+registry names, so that is the rule this page applies; between keeping the later score and
+keeping the earlier one the only condition that moves is the scrambled control at double
+strength, 2/36 rather than 3/37, and no headline number.</p>
 <p><img alt="Four scenes from the brightest third by the lightness of the untouched render, baseline above and the edit below, with the full stratified table. In the scenes where a dark-image explanation has nothing to work with, the untouched model lights one car in eleven and the edit lights seven in thirteen." src="assets/02-attribute-emergence/F02.3_headlights_lightness_control.webp" /></p>
 <p><strong>The obvious confound was checked, and the first check was wrong.</strong> The edit darkens the image
 by 3.3 of L*, and lit headlights are more plausible in a dark scene. The first version
@@ -906,10 +916,390 @@ designs the confirmation and records, in its own closing note, that it was never
 <code>experiments/headlights_by_style.py</code>, <code>experiments/score_headlights.py</code>,
 <code>experiments/analyze_headlights.py</code>.</p>
 <p><strong>Written up in.</strong> <code>docs/stage10_headlights_results.md</code>, <code>docs/figure_brief.md</code>.</p>
-<p><strong>Pitfalls that apply.</strong> 8 (quantifying an observation on the renders that produced it),
-10 (a figure caption asserting what the data denies), 39 (stratifying on a variable the
-treatment moves), 40 (a crop is an assertion and five of twenty were wrong),
-50 (reporting a treatment-versus-control difference as a property of the treatment).</p>
+<p><strong>Pitfalls that apply.</strong> 26 (Fisher's exact on paired binary outcomes, where McNemar on the
+discordant pairs is the right test and is what the tables above use), 34 (an expert observer is
+not blinded by hashed filenames), 35 (a scoring viewer that appends a row when the scorer goes
+back to correct — the four re-scores in this round are the registry's own example),
+39 (stratifying on a covariate the treatment itself moves), 40 (a figure whose caption and crop
+were typed by hand), 50 (reporting a treatment-versus-control difference as a property of the
+treatment).</p>
+<p>Rules 8 and 9 of the fifteen also bear on this page: the resolution floor of an exact test, and
+blinding as a measurement rather than a procedure. Those are rules, and an earlier draft of this
+page cited them in the front matter by the pitfall registry's numbering, where 8 and 10 are two
+unrelated entries.</p>
+</section>
+<section id="p-03-what-ends-up-in-the-picture">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">250 renders · 10 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
+<h1 id="p-03-what-ends-up-in-the-picture--how-much-room-the-subject-takes-and-how-blind-i-actually-was">How much room the subject takes, and how blind I actually was</h1>
+<h2 id="p-03-what-ends-up-in-the-picture--in-two-minutes">In two minutes</h2>
+<p>Two things were noticed by eye: under one of the edits the car seems to take up more of the
+frame. The first attempt to measure that was worthless, and it took a while to see why — the
+boxes were drawn on the same images that produced the observation, by someone who knew the
+hypothesis, after the scoring key had already been opened eight minutes earlier for a different
+task. It returned a ratio of 2.14, the car growing from 13% to 28% of the canvas.</p>
+<p>So the prediction was written down, frozen, and a new corpus built: ten styles never used
+before, a different vehicle in a different setting, every image randomly mirrored, flipped,
+hue-rotated, re-saturated, re-brightened and noised, with the disturbances recorded. The
+annotator saw each render for the first time inside the annotation tool.</p>
+<p><img alt="Per-prompt area ratio for the three conditions across ten new styles. The subject grows in nine styles of ten under block derangement at double dose, geometric mean 1.234, while the calibrated preset predicted to shrink it does nothing." src="assets/03-what-ends-up-in-the-picture/F03.1_enlargement_by_prompt.webp" /></p>
+<p>The effect survived, at about a fifth of the size the first round claimed. All three predicted
+signs came out right.</p>
+<p>Then the more useful half. The same round measured the annotator. Twenty trials, four images
+side by side, and the task was to point at which was which — chance is 25%. He identified one
+condition 17 times in 20 and the other 12 times in 20, through all of that mirroring and hue
+rotation. <strong>The blinding failed, and now it is a number rather than an argument.</strong> It applies
+backwards to every human-scored round in this notebook.</p>
+<p>It does not, however, explain the size result — and the reason is an asymmetry worth following:
+the condition recognised almost perfectly is the one where no effect was drawn at all.</p>
+<h2 id="p-03-what-ends-up-in-the-picture--the-verdict">The verdict</h2>
+<p>The subject enlargement is real and much smaller than it first looked. On ten styles that did
+not exist when the prediction was frozen, the block-derangement edit at double dose gives a
+geometric mean area ratio of 1.234 with 9 of 10 styles above 1; at single dose 1.061 with 8 of
+10; and the calibrated preset, predicted to move the other way, gives 0.989 — right sign, no
+magnitude. The pre-registered test passes after Holm correction under all four readings of the
+statistic the pre-registration failed to name.</p>
+<p>Separately, and on the same round, the blinding of the annotation was measured against a
+threshold fixed in advance and <strong>failed</strong>: an expert observer picks these conditions out of a
+four-way line-up well above chance. That is pitfall 34, this page is where it was measured, and
+rule 9 of the fifteen — blinding is a measurement, not a procedure — was written from it.</p>
+<h2 id="p-03-what-ends-up-in-the-picture--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>The statistic was not named in advance, and this page is where that shows.</strong> The
+pre-registration fixed "exact sign-flip permutation on the ten prompts" and stopped there. Four
+readings are defensible, and a family of four chosen after seeing the answers is a degree of
+freedom even when the four agree. They do agree here — Holm-corrected p from 0.018 to 0.035,
+all four below 0.05 — which is the only reason this is a footnote rather than the verdict.</p>
+<p><strong>An earlier verification of this round reported that the most defensible statistic failed, and
+that does not reproduce.</strong> <code>docs/stage12_verifica.md</code> §5 gives 0.0176 raw and 0.0527 after Holm
+for the mean of the per-prompt log ratios, and concludes "confirmed with reservation". Two
+independent recomputations here give 0.0117 raw and 0.0352 after Holm — 12 of the 1024 sign
+patterns, not 18 — and that is also exactly what <code>data/stage12_bbox_results.csv</code> has recorded
+since the round was run, alongside its own verdict of confirmed. The table is now persisted to
+<code>data/stage12_enlargement_tests.csv</code> so the disagreement can be settled by running one script.
+Until someone reproduces the 0.0527, this page treats the primary as passed.</p>
+<p><strong>The negative control is the weak part.</strong> The calibrated preset was predicted to visibly shrink
+the subject and instead does essentially nothing: ratio 0.989, 4 prompts of 10 above 1, p = 0.64.
+The sign is right and the magnitude is absent. A bidirectional prediction was the main defence
+against a one-directional unconscious bias, and it is satisfied only in half.</p>
+<p><strong>One of the ten styles goes the other way.</strong> Pastel comes in at 0.785, the only style below 1,
+and it sits in the group where the annotator could not identify the condition at all. Nine of
+ten is not ten of ten, and the one that dissents dissents by more than most of the others agree.</p>
+<p><strong>The resolution floor is close.</strong> With ten prompts the exact sign-flip test cannot return less
+than 2/2¹⁰ = 0.00195, and Holm across three conditions moves the usable threshold in steps of
+that size. The verdict is stable across the four statistics but the p-values live within a
+factor of three of the floor; that is the granularity of the test, not the strength of the
+effect, and it is rule 11 of the fifteen.</p>
+<p><strong>Fifty renders of this corpus were never looked at.</strong> The batch was 250 — five conditions —
+and the annotation round covered four. See <a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">what this cannot separate</a>.</p>
+<h2 id="p-03-what-ends-up-in-the-picture--the-data">The data</h2>
+<h3 id="p-03-what-ends-up-in-the-picture--how-it-was-measured">How it was measured</h3>
+<p>Ten styles, one subject sentence shared by all ten, five seeds, five conditions: 250 renders,
+manifest in <code>data/stage12_images.csv</code>, prompts hashed and frozen in the pre-registration before
+rendering. The measure is a four-point bounding box drawn by hand around the subject, and the
+statistic is a <strong>ratio</strong> — the treated area over the area of its own paired baseline — because
+percentage points of canvas are not comparable across corpora with different framing.</p>
+<p>The unit of analysis is the prompt, not the cell. Five seeds inside one style are repeated
+measures on one subject, and treating them as thirty or fifty independent observations is
+pitfall 17. Each style contributes one ratio; the test runs on ten numbers.</p>
+<p>Blinding had three levels, all fixed in the pre-registration: the annotator never saw a render
+before annotating it, not even as a contact sheet or a quality check; the key was written before
+and opened after; and every image carried randomised mirroring, flipping, hue rotation,
+saturation between 0.6 and 1.6, brightness between 0.85 and 1.15 and Gaussian noise up to σ = 4,
+with the parameters stored per image. Twenty images were shown a second time with a different
+mirror state, hidden among the rest. Total presented: 220.</p>
+<h3 id="p-03-what-ends-up-in-the-picture--the-subject-grows-and-by-how-much">The subject grows, and by how much</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>condition</th>
+<th>geometric mean ratio</th>
+<th>arithmetic mean</th>
+<th>styles above 1</th>
+<th>predicted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>block derangement, negative, ×1</td>
+<td>1.061</td>
+<td>1.064</td>
+<td>8 / 10</td>
+<td>grows</td>
+</tr>
+<tr>
+<td><strong>block derangement, negative, ×2</strong></td>
+<td><strong>1.234</strong></td>
+<td><strong>1.252</strong></td>
+<td><strong>9 / 10</strong></td>
+<td>grows more</td>
+</tr>
+<tr>
+<td>calibrated preset, positive, ×2</td>
+<td>0.989</td>
+<td>0.992</td>
+<td>4 / 10</td>
+<td>shrinks</td>
+</tr>
+</tbody>
+</table></div>
+<p>All three signs are as predicted and the double dose exceeds the single dose, which is the
+directional clause of the pre-registration and it is binding: a condition reaching significance
+with the wrong sign would have counted as a failure of the whole document.</p>
+<p>The primary test, under each of the four readings of "exact sign-flip permutation on ρ", from
+<code>data/stage12_enlargement_tests.csv</code>:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>statistic</th>
+<th>value at ×2</th>
+<th>p</th>
+<th>p after Holm across 3 conditions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mean of the per-prompt log ratios</td>
+<td>0.2103</td>
+<td>0.0117</td>
+<td><strong>0.0352</strong></td>
+</tr>
+<tr>
+<td>log of the mean ratio</td>
+<td>0.2245</td>
+<td>0.0078</td>
+<td><strong>0.0234</strong></td>
+</tr>
+<tr>
+<td>mean of ρ − 1</td>
+<td>0.2517</td>
+<td>0.0098</td>
+<td><strong>0.0293</strong></td>
+</tr>
+<tr>
+<td>mean difference in percentage points</td>
+<td>5.092</td>
+<td>0.0059</td>
+<td><strong>0.0176</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Against the first round's 2.14, the confirmed effect is roughly a fifth of the size in
+log-ratio terms. That shrinkage is the third time this notebook has watched an exploratory
+estimate come back between a third and a half of itself, and it is the first time there is a
+mechanism rather than a shrug: the first round was annotated after the key had been opened, on
+images already examined.</p>
+<h3 id="p-03-what-ends-up-in-the-picture--the-annotator-is-the-instrument">The annotator is the instrument</h3>
+<p>Everything above rests on a person looking at pictures and writing down numbers while knowing
+what the experiment is about. Until this round that weakness had only ever been argued about.</p>
+<p>Twenty trials. Four images from one style at four distinct seeds — the target at double dose,
+the second target, a near-foil at half the dose of the first target, and an untouched baseline —
+in an order the annotator could not see, under the same disturbances as the main task. The task
+was to name two of the four. The threshold was fixed before the round at 5 joint hits in 20.</p>
+<p><img alt="Identification rate for each condition in a four-way forced choice, against the chance line. The calibrated preset was identified in 17 trials of 20 and the block derangement in 12 of 20, against a 25% chance level; both in the same trial in 12 of 20 against 8.3%." src="assets/03-what-ends-up-in-the-picture/F03.2_discrimination_rates.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>target</th>
+<th>identified</th>
+<th>chance</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>calibrated preset ×2</td>
+<td><strong>17 / 20</strong></td>
+<td>25%</td>
+<td>3.0 × 10⁻⁸</td>
+</tr>
+<tr>
+<td>block derangement ×2</td>
+<td><strong>12 / 20</strong></td>
+<td>25%</td>
+<td>9.4 × 10⁻⁴</td>
+</tr>
+<tr>
+<td>both, in one trial</td>
+<td><strong>12 / 20</strong></td>
+<td>8.3%</td>
+<td>7.5 × 10⁻⁹</td>
+</tr>
+</tbody>
+</table></div>
+<p>Observed 12 joint hits against a threshold of 5. Mirroring, flipping, hue rotation, saturation,
+brightness and noise did not hide the conditions from the person who characterised them.</p>
+<p>This is uncomfortable to publish and it is the most useful measurement on this page, because it
+applies backwards: every scoring round in this notebook before this one had assumed a blinding
+it never tested, including the barnacles on
+<a href="#p-03-what-ends-up-in-the-picture--p-02-attribute-emergence#why-i-might-be-wrong">the previous page</a>.</p>
+<h3 id="p-03-what-ends-up-in-the-picture--where-the-blinding-held">Where the blinding held</h3>
+<p>Two independent arguments say the failed blinding does not produce the size result, and the
+first is the stronger.</p>
+<p><strong>The asymmetry.</strong> The condition identified almost perfectly — the calibrated preset at 85% — is
+the one where no size effect was drawn at all, against a registered prediction that said it
+shrinks. The condition identified only 60% of the time is the one carrying the effect. If
+recognising the condition were steering the hand, this would be the wrong way round: the
+predicted shrinkage would have appeared exactly where the hand knew what it was looking at.</p>
+<p><img alt="Per-style area ratio against how often the annotator identified that condition in the line-up. The mean ratio is 1.12 in the three styles never identified and 1.33 in the five always identified; the effect is smaller where the blinding held and it does not vanish." src="assets/03-what-ends-up-in-the-picture/F03.3_discriminability_vs_effect.webp" /></p>
+<p><strong>The gradient, which is real and is reported as such.</strong> Crossing per-style discriminability
+with per-style effect: in the five styles the annotator identified both times, the mean ratio is
+1.329; in the three he identified neither time, 1.122. There is a gradient, and part of the
+effect may be inflated where he could tell. But the effect does not disappear where the blinding
+held — two of those three styles still grow, by 20% and 38%, and the third is the pastel outlier
+at 0.785 that pulls that group's mean down on its own.</p>
+<h3 id="p-03-what-ends-up-in-the-picture--the-controls">The controls</h3>
+<p><strong>The instrument's own noise, from the twenty hidden duplicates.</strong> Mean absolute difference
+between two annotations of the same image: <strong>0.27 percentage points of canvas</strong> (sd 0.24),
+median relative error 0.95%, test-retest correlation <strong>r = +0.995</strong>. The measured effect is
+about twenty times that. This quantity had never been measured in this project before.</p>
+<p><strong>The disturbances did not move the hand.</strong> Regressing annotated area on the disturbances we
+applied ourselves, over the fifty original baseline annotations:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>disturbance applied</th>
+<th>slope, points of canvas per unit</th>
+<th>r</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>saturation</td>
+<td>−1.53</td>
+<td>−0.096</td>
+<td>0.50</td>
+</tr>
+<tr>
+<td>brightness</td>
+<td>+11.69</td>
+<td>+0.229</td>
+<td>0.10</td>
+</tr>
+<tr>
+<td>noise σ</td>
+<td>+0.30</td>
+<td>+0.076</td>
+<td>0.60</td>
+</tr>
+</tbody>
+</table></div>
+<p>The saturation we imposed does not predict how large the rectangle is drawn. The bias the first
+round feared is excluded by a measurement rather than by an argument, which was the point of the
+design. Brightness is the largest of the three and does not reach significance; it is the one to
+watch.</p>
+<p><strong>Two figures from this round are not published here</strong>, and the reason is the rule they break.
+<code>assets/03_what_ends_up_in_the_picture/_figures</code> holds a paired frame with the annotated boxes
+drawn on and a reproduction of two line-up trials. Both are composed by
+<code>experiments/build_figures_stage12.py</code> with the box coordinates, the mirror correction and every
+caption typed into the source rather than read from <code>data/stage12_bbox_raw.csv</code> and the sealed
+key. That is pitfall 40 exactly, and the renders needed to rebuild them from the annotation file
+live outside the repository. The charts above carry the same claims from the measurement files.</p>
+<h3 id="p-03-what-ends-up-in-the-picture--what-this-cannot-separate">What this cannot separate</h3>
+<p>The batch was 250 renders across five conditions. The bounding-box round annotated four of them:
+baseline, the derangement at both doses, and the preset at double dose. <strong>The fifty renders of
+the preset at single dose were never scored</strong>, and neither was the second confirmatory
+hypothesis this corpus was built to carry — the pre-registration §"Un secondo esito" registered a
+headlight confirmation on these same images, with its own frozen directional prediction, and no
+scoring file for it exists in <code>data/</code>. An arm that was rendered and not examined is not a spare.</p>
+<p>More importantly for the claim itself: no sign-scrambled edit at the identical displacement was
+rendered. The round therefore separates <strong>two structured edits from each other and from doing
+nothing</strong>, and says nothing about structure against magnitude. That control exists elsewhere in
+the notebook — it is what makes the attribute-emergence result mean what it means — and it is
+missing here. Until it is in the design, the enlargement is a fact about this edit and not yet a
+fact about structured edits.</p>
+<p>Two further limits carry over unchanged: one subject, ten styles, one model; and the scorer is
+the author, whose discriminability is now measured but not removed.</p>
+<h3 id="p-03-what-ends-up-in-the-picture--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2PresetLoader
+  version: not recorded -- suite_git_sha ba28b12532175220
+  mode: preset_json
+prompts:
+  file: data/stage12_images.csv
+  ids: [S01_oil, S02_linocut, S03_cyberpunk, S04_gouache, S05_pencil,
+        S06_pastel, S07_comic, S08_papercraft, S09_fresco, S10_synthwave]
+  hashes_frozen_in: docs/prereg_stage12_ingrandimento.md
+seeds: [42, 777, 1337, 9999, 4242145]
+conditions:
+  - name: baseline
+    preset: null
+    strength: 1.0
+    measured_D: 0.0
+  - name: blockshuf_neg_1x
+    preset: Arthemy_Bench_BLOCKSHUFFLE_NEG.json
+    strength: 1.0
+    measured_D: 0.05381584      # relative, DiT; data/preset_displacements.csv, status PASS
+  - name: blockshuf_neg_2x
+    preset: Arthemy_Bench_BLOCKSHUFFLE_NEG.json
+    strength: 2.0
+    measured_D: 0.05381584      # measured at strength 1.0; NOT re-measured at 2.0 -- see note
+  - name: preset_pos_1x
+    preset: Arthemy_Bench_Base.json
+    strength: 1.0
+    measured_D: 0.05381584
+  - name: preset_pos_2x
+    preset: Arthemy_Bench_Base.json
+    strength: 2.0
+    measured_D: 0.05381584      # measured at strength 1.0; NOT re-measured at 2.0 -- see note
+outputs:
+  folder: benchmark_stage12/renders
+  manifest: data/stage12_images.csv
+annotation:
+  key: data/stage12_bbox_key.csv
+  boxes: data/stage12_bbox_raw.csv
+  discrimination_key: data/stage12_pattern_key.csv
+  discrimination_answers: data/stage12_pattern_raw.csv
+analysis:
+  script: experiments/stage12_enlargement_by_prompt.py
+  produces:
+    - data/stage12_enlargement_by_prompt.csv
+    - data/stage12_enlargement_tests.csv
+    - data/stage12_annotator_noise.csv
+  figures: experiments/notebook_charts.py
+</code></pre>
+<p>One honest gap in that block. <code>data/preset_displacements.csv</code> records each preset's displacement
+at strength 1.0 and nothing was measured at strength 2.0, so the double-dose rows above carry
+the single-dose measurement rather than their own. Doubling it would be a nominal number, which
+is what pitfall 13 exists to prevent, so the measured value is given with the gap named. The
+conditions are still distinguished by <code>strength</code> in the manifest, which is what was actually
+varied.</p>
+<h2 id="p-03-what-ends-up-in-the-picture--provenance">Provenance</h2>
+<p><strong>Pre-registration.</strong> <code>docs/prereg_stage12_ingrandimento.md</code>, deposited 2026-09-18 before a
+single render, with the corpus, the hashes, the three predicted signs, the decision rule and the
+diagnostics to publish whatever the outcome. The four-way discrimination test is registered in
+the same document as experiment 12-B, with its threshold of 5 joint hits in 20 fixed before the
+round.</p>
+<p><strong>Verification.</strong> <code>docs/stage12_verifica.md</code> (independent recomputation, 2026-09-18) and
+<code>docs/stage10_bbox_verification.md</code> (the first round, and the correction that followed from it).</p>
+<p><strong>Measurement files.</strong> <code>data/stage12_images.csv</code> (250-render manifest with the sampler settings
+and the prompt text), <code>data/stage12_bbox_key.csv</code> and <code>data/stage12_bbox_raw.csv</code> (the sealed key
+and the 220 annotations), <code>data/stage12_bbox_results.csv</code> (condition-level result as the round
+produced it), <code>data/stage12_pattern_key.csv</code>, <code>data/stage12_pattern_raw.csv</code> and
+<code>data/stage12_pattern_results.json</code> (the line-up round), and three tables derived here on
+2026-09-21: <code>data/stage12_enlargement_by_prompt.csv</code>, <code>data/stage12_enlargement_tests.csv</code>,
+<code>data/stage12_annotator_noise.csv</code>.</p>
+<p><strong>Scripts.</strong> <code>experiments/stage12_enlargement_by_prompt.py</code>, <code>experiments/notebook_charts.py</code>,
+<code>experiments/analyze_stage12_ingrandimento.py</code>, <code>experiments/analyze_stage12_pattern.py</code>,
+<code>experiments/prepare_stage12_blind.py</code>, <code>experiments/prepare_stage12_pattern.py</code>.</p>
+<p><strong>Pitfalls that apply.</strong> 17 (treating cells as independent observations when the unit is the
+prompt), 34 (an expert observer is not blinded by hashed filenames — this page is the entry's
+own source), 40 (a figure whose caption and crop were typed by hand, which is why two figures
+from this round stay unpublished).</p>
+<p>Rules 9 and 11 of the fifteen were both written out of this round: blinding is a measurement,
+and the resolution floor decides how many tests a family can hold before anything is rendered.</p>
 </section>
 <section id="p-05-knob-or-cost">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">386 renders · 2 prompts · 3 seeds · pre-registered · 2026-09-20</span></p>
