@@ -1,3 +1,7 @@
+> **MERGED — this staging file is spent (2026-09-21).** Its rows are in `errors_log.md`, which now
+> runs 1 to 67 with no gaps. Kept only because this session cannot delete files in the
+> working folder; safe to remove.
+
 # Pitfalls 64–67 — from the negative-arm sweep and the noise-floor bench (2026-09-20)
 
 Same column layout as `errors_log.md`. Four new rows; nothing renumbered. Pitfall 60 was

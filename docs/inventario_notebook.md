@@ -58,6 +58,8 @@ These are stated first because several of them block work that the plan treats a
    opening text — and are now stale duplicates. Only
    `docs/_pitfalls_64_67_da_inserire.md` (entries 64–67) is genuinely pending. The true
    backlog is four entries, not eleven.
+   *Closed 2026-09-21: 64–67 merged, the registry runs 1 to 67 contiguous, and all three
+   staging files now carry a MERGED banner. They still need deleting by hand.*
 
 8. **The validator self-test has 18 checks, not 20, and all 18 pass.** `CASES` holds 17
    injected faults plus the clean-tree check. It also copies the entire 2.4 GB tree once per
