@@ -371,6 +371,7 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 |---|---|---|
 | ✓ | Front matter present, `id` matches filename, required keys present | error |
 | ✓ | `status` is one of the four; `holds` + `exploratory` rejected; `confirmatory` without a pre-registration rejected | error |
+| ✓ | **The pre-registration file a page names exists on disk** | error |
 | ✓ | Every claim has `statement`, `evidence`, `status`, and an `anchor` that resolves to a heading on that page | error |
 | ✓ | No claim id is used twice, on one page or across pages | error |
 | ✓ | The five sections present, in order | error |
@@ -389,6 +390,7 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 | ✓ | A registered figure that its page never references | warn |
 | ✗ | `corpus.renders` against a manifest — **not implemented**: there is no per-page manifest file to count against. Until there is, that number is the one field on a page that nothing verifies |
 | ✗ | Locator hit rates — needs the renders, so it runs on the machine that holds them |
+| ✗ | `builder` resolving to a callable — **not implemented**: eight of the nine builders named in `figures.yaml` do not exist yet, so the check would be red across the board. `notebook_charts.py` and `notebook_figures.py` now exist and hold four of them |
 
 And one check that lives outside the validator, in `experiments/extract_repro.py`: every render
 in a bench must share one sampler configuration. A bench whose images were made at different

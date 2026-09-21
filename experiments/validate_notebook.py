@@ -130,8 +130,15 @@ def check_front_matter(fm: dict, path: Path, rep: Report) -> None:
     if status == "holds" and stage == "exploratory":
         rep.error(where, "status 'holds' with stage 'exploratory' -- an exploratory result "
                          "cannot hold; use 'open' or 'ambiguous'")
-    if stage == "confirmatory" and not fm.get("preregistration"):
+    prereg = fm.get("preregistration")
+    if stage == "confirmatory" and not prereg:
         rep.error(where, "stage 'confirmatory' requires a preregistration")
+    # A pre-registration that names a file which is not in the repository is not a
+    # pre-registration a reader can check. 05-knob-or-cost.md shipped for a day naming a
+    # document that had never been committed, and nothing noticed.
+    if prereg and not (ROOT / str(prereg)).exists():
+        rep.error(where, f"preregistration '{prereg}' does not exist in the repository -- "
+                         f"a frozen document nobody can open is not a frozen document")
 
     corpus = fm.get("corpus") or {}
     if not isinstance(corpus, dict) or "renders" not in corpus:

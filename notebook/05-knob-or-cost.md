@@ -159,7 +159,9 @@ r⁺ = HF₊/HF_base and r⁻ = HF₋/HF_base, the response splits into two orth
 log space:
 
 - **common mode** `c = √(r⁺ r⁻)` — what the edit does regardless of direction;
-- **swing** `s = r⁺/r⁻` — what the *sign* of the edit does.
+- **swing** `s = r⁺/r⁻` — what the *sign* of the edit does;
+- **specularity** `m = r⁺ r⁻` — 1 exactly when `r⁻ = 1/r⁺`, that is when the two directions
+  are mirror images of each other.
 
 ![Schematic of the two components: averaging the two directions gives the common mode, the cost; dividing them gives the swing, the steering. A ratio alone discards the first.](../assets/05-knob-or-cost/F05.5_decomposition_schema.svg)
 
@@ -179,7 +181,7 @@ completed, implementing the frozen §1 literally.
 | | prediction | outcome |
 |---|---|---|
 | P1 | mean `c` < 1 in [0.94, 0.99]; ≥ 18 blocks below 1 | **confirmed** — 0.978, 23/28 |
-| P2 | mean \|log `s`\| > 0.03; fewer than 10 blocks within [0.97, 1.03] | **falsified** — mean fine, but 17/28 inside |
+| P2 | mean \|log `m`\| > 0.03; fewer than 10 blocks within [0.97, 1.03] | **falsified** — mean 0.048 as predicted, but 17/28 inside |
 | P3 | block 0: r⁻ > 1.00, swing < 0.85 | **confirmed** — 1.100, 0.764 |
 | P4 | blocks 23/25/26 all with `c` < 0.96 | **confirmed** — 0.945, 0.926, 0.910 |
 | P5 | ≤ 8 blocks with \|log `s`\| > 0.10 | **grey zone** — 9 (falsification at ≥ 12) |
@@ -303,6 +305,14 @@ render would not survive.
 An earlier write-up put the ceiling at 0.514 and the single-block figure at 0.660. Both come
 out fractionally different when measured on this corpus with every pair counted, and the
 notebook now quotes one number for one quantity, from `data/bench_checks.csv`.
+
+The P2 row of the table above used to name the swing `s` where the pre-registration names the
+specularity `m`. The verdict was always the specularity one — 17 of 28 blocks mirror-symmetric
+within 3σ — and under `s` the same window holds only 8 blocks, which would not have falsified
+anything. The pre-registration file was missing from the repository until 2026-09-21, so for a
+day this table could not be checked against the document it reports on. All eight rows have now
+been recomputed from `data/punto7_blocks.csv` against the restored §3, and P2 was the only one
+that needed correcting.
 
 ### Reproducing this
 

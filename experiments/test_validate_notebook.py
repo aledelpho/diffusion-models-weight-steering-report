@@ -66,6 +66,11 @@ CASES = [
                      "preregistration: null"),
      "requires a preregistration"),
 
+    ("the pre-registration names a file that is not in the repository",
+     lambda t: patch(t, PAGE, "preregistration: docs/prereg_punto7_simmetria_segno.md",
+                     "preregistration: docs/prereg_that_was_never_committed.md"),
+     "does not exist in the repository"),
+
     ("a claim points at a heading that does not exist",
      lambda t: patch(t, PAGE, 'anchor: "#the-tail-is-rectified"',
                      'anchor: "#a-heading-that-does-not-exist"'),
