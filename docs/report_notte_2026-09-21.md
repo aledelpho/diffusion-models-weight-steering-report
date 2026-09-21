@@ -13,8 +13,8 @@ ed709c3  fix(figure): l'alt di F05.3 pubblicava il 12,4x ritrattato
 4d066c6  docs: inventario misurato del notebook prima della migrazione
 ```
 
-Five of the fifteen pages are live: 00, 02, 03, 05, 06. The claims ledger stands at 9 migrated
-and 16 pending, all 23 original bullets accounted for.
+Six of the fifteen pages are live: 00, 02, 03, 05, 06, 07. The claims ledger stands at 12
+migrated and 13 pending, all 23 original bullets accounted for.
 
 ---
 
@@ -304,4 +304,59 @@ banner; they still need deleting by hand.
 3. **The eight missing builders** for the figures of pages 00 and 05, then the validator check
    that a `builder` resolves to a callable.
 4. **A corpus where headlights are marginal**, if the headlight claim is worth confirming.
+5. Page 01 stays blocked on its light-theme figures.
+
+
+---
+
+## 7. Fourth pass — page 07, chromatic signatures
+
+The best-documented experiment in the repository, and the one whose pre-registration did the
+most work. Two tests with their thresholds fixed in advance, an amendment written before the
+renders, the result and two protocol deviations recorded in the same document, and an addendum
+the same evening recording a confound the author found after the result was already written.
+
+**Everything reproduces.** The frozen `analyze_palette_coherence.py` was run against
+`data/palette_features_stage7_all.csv` and printed every published digit: the six cosines, the
+six p-values, within +0.057, between +0.023, the difference +0.035, the null mean −0.003 with
+its 95th percentile +0.007, and p = 1e-4. `experiments/stage7_chromatic_coherence.py` then
+persists the table, and it refuses to write unless each recomputed coherence matches the frozen
+run's own matrix to four decimals.
+
+**The verdict is three of six against a bar of four, and the fourth misses by 0.0010.** The
+pre-registration said in advance that three is ambiguous and is not to be rounded up, so the
+page is filed `ambiguous`. That is a judgement worth naming: the *second* registered primary —
+that the conditions move colour in directions differing from one another — was confirmed, at
+the floor of its permutation test, for the second time on an independent corpus. The page is
+still filed ambiguous because the thing it is named for is the test that came back three.
+
+**The confound the addendum records is the most useful thing on the page.** The effects halved
+between corpora, and the explanation offered was regression from an inflated exploratory
+estimate. The other explanation was already in the repository: every one of the 18 exploratory
+prompts names a colour and **not one** of the 16 confirmation prompts does, on an effect the
+notebook had already shown to depend on exactly that. The corpus changed on that variable at
+the same time as it changed from exploratory to confirmatory. The matched-pair test that
+separates them is cheap and is written out on the page; it has not been run.
+
+**A caption I had to correct before publishing it.** F07.2's title read "every condition but one
+roughly halved". Four of six fell and two rose. The title is now computed from the table.
+
+**Four pitfalls in the registry have this experiment as their example**: 31 (a stratification
+criterion checkable only after rendering), 32 (a script edited after its hash was frozen), 36
+(a ranking that is partly a ranking of what was measured best, r = +0.877 against split-half
+reliability), 37 (two coherence statistics under different centering conventions, so numbers
+from the two scripts are not comparable).
+
+### 7.1 Where to restart
+
+1. **Look at one `preset_pos` / `preset_neg` pair** and record what you see — still the cheapest
+   open item, and it decides the status of a published claim on page 06.
+2. **The matched-pair colour test**: the same subject written twice, once pinning a colour and
+   once not, one run, six conditions, five seeds. It separates the two readings of page 07's
+   shrinkage and it is the registered open question there.
+3. **Page 04, where in the model** — exploratory, source text at lines 1219–1364 of
+   `c843d61:README.md`, measurements in the script-backed `data/pilot_*` family, and
+   `docs/pilot_rotations_verdict.md` is 4,900 words of verdict already written.
+4. **The eight missing builders** for the figures of pages 00 and 05, then the validator check
+   that a `builder` resolves to a callable.
 5. Page 01 stays blocked on its light-theme figures.

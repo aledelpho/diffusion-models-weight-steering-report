@@ -279,8 +279,8 @@ registered in `experiments/figures.yaml`, and `assets/03_what_ends_up_in_the_pic
 | **03** | `03-what-ends-up-in-the-picture` — Subject size, and how blind I was | confirmatory | **live** (2026-09-21) | the missing sign-scramble control is a declared gap; the two hand-captioned figures in `_figures` stay unpublished (pitfall 40) |
 | **04** | `04-where-in-the-model` — Position, displacement, and direction | exploratory | old README 1219–1364; `pilot_rotations_verdict.md`, `mappa_krea2_primo_esito.md`; `data/pilot_*` (8 files, all script-backed) | the §4.5 direction result is filed as hypothesis, not finding — keep that framing |
 | **05** | `05-knob-or-cost` — What an edit steers, and what it costs | confirmatory | **live** | its pre-registration file is missing (§0 item 5) |
-| **06** | `06-the-hatching-axis` | confirmatory | old README 681–803; `prereg_hatching_axis_stage7.md`, `reproduce_stage7.md`; `data/style_features_stage7.csv`, `confirmation_prompts.csv` | figure builders |
-| **07** | `07-chromatic-signatures` | confirmatory, **ambiguous** | old README 567–680; `prereg_chromatic_signatures.md`; `data/palette_*` (6 files) | the "3 of 6 against a bar of 4" verdict must be written as ambiguous, not rounded |
+| **06** | `06-the-hatching-axis` | confirmatory | **live** (2026-09-21) | the pre-registered visual check on the preset family has no recorded outcome |
+| **07** | `07-chromatic-signatures` | confirmatory, **ambiguous** | **live** (2026-09-21) | the matched-pair test that separates regression from the colour-pinning confound is registered and unrun |
 | **08** | `08-block1-vs-block6` | confirmatory | `prereg_rotations_block1_vs_block6.md`, `rotations_block1_vs_block6_results.md`; `data/rotations_block1_vs_block6_*` (6 files) | — |
 | **09** | `09-style-direction` | confirmatory, **overturned** | `prereg_stage9_style_direction.md`, `stage9_verdict.md`, `observations_stage9.md`; `data/stage9_coherence_results.csv`, `stage9_centering_sensitivity.csv` | must be typeset exactly like a `holds` page (AUTHORING §3) |
 | **10** | `10-block6-in-the-latent` | exploratory | `block6_nel_latente.md`, `block6_e_struttura_gruppi.md`; pitfall 62 | `data/block6_misure_dirette.jsonl` is named by nothing (§3) |
@@ -356,8 +356,10 @@ Three commits on `main`, no push.
 | `4b2931f` | the stage-12 headlight round: scored, verified against the sealed key, and reported as unresolvable — 9 styles of 10 never light one |
 | `231d850` | pitfalls 64–67 merged; the registry runs 1 to 67 |
 | `59392f7` | page `06-the-hatching-axis`, `experiments/stage7_hatching_axis.py` → two derived tables, two registered charts |
+| `8121930` | inventory and report updated |
+| `379dff6` | page `07-chromatic-signatures`, `experiments/stage7_chromatic_coherence.py` (which verifies itself against the frozen run's matrix), two registered charts |
 
-`notebook/_migrating.yaml`: 23 original bullets, **9 claims migrated, 16 pending**.
+`notebook/_migrating.yaml`: 23 original bullets, **12 claims migrated, 13 pending**.
 
 Items closed from §0: item 1 (the ledger exists), item 10 (the alt text), and most of item 3 —
 **both** `notebook_figures.py` and `notebook_charts.py` now exist, with four working builders
