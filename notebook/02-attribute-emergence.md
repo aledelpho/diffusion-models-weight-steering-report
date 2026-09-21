@@ -9,7 +9,9 @@ supersedes: []
 pitfalls: [26, 34, 35, 39, 40, 50]
 
 corpus:
-  renders: 870
+  renders: 920      # 390 + 280 + 250, itemised in Provenance. The header of this page read
+                    # 670 and this field read 870 until 2026-09-21; the page's own three
+                    # corpus counts support neither.
   prompts: 28
   seeds: [42, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
           201, 202, 203, 204, 205, 777, 1337, 9999, 4242145]
@@ -50,7 +52,7 @@ claims:
 
 # What the edit puts in the picture, and what it takes out
 
-> **Ambiguous** · 670 renders · 2 independent corpora · exploratory, no frozen threshold
+> **Ambiguous** · 920 renders · 3 corpora · exploratory, no frozen threshold
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** I want to know whether a weight edit changes *what* the model
@@ -420,6 +422,8 @@ here; the pixels are not.
 
 **Pre-registration.** None for the results on this page. `docs/prereg_attribute_emergence_stage7.md`
 designs the confirmation and records, in its own closing note, that it was never run.
+
+**Renders.** `barnacle corpus` (390, scored by the author with the condition visible), `stage 9 headlights` (280, blind round), `stage 12 headlights` (250, the replication on a new corpus).
 
 **Measurement files.** `data/attribute_emergence.csv` (390 scored renders),
 `data/attribute_emergence_recipe.json` (the scoring rule and generation settings),

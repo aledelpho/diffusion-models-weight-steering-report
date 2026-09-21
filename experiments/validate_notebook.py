@@ -210,6 +210,23 @@ def check_opening_block(body: str, path: Path, rep: Report) -> None:
         at = i
 
 
+def check_header_corpus(fm: dict, body: str, path: Path, rep: Report) -> None:
+    """The render count in the status line against `corpus.renders`.
+
+    Three pages disagreed with themselves in their own header line until 2026-09-21: 421
+    against 423, 670 against 870, and 168 against 368. A number written twice on one page is
+    a number that will drift, so the two are now tied together.
+    """
+    m = re.search(r"^>\s+\*\*\w+\*\*\s*\u00b7\s*([\d,]+)\s+(?:renders|cells)", body, re.M)
+    if not m:
+        return
+    shown = int(m.group(1).replace(",", ""))
+    declared = (fm.get("corpus") or {}).get("renders")
+    if isinstance(declared, int) and shown != declared:
+        rep.error(path.name, f"the status line says {shown} renders, "
+                             f"front matter says corpus.renders: {declared}")
+
+
 def check_repro_against_data(fm: dict, body: str, path: Path, rep: Report) -> None:
     """Every field of the reproducibility block that a file in `data/` can prove.
 
@@ -243,7 +260,7 @@ def check_render_count(fm: dict, body: str, rep: Report, path: Path) -> None:
     Where a page lists its benches with a count each, the front matter's total is arithmetic
     and can be checked. Page 05 read 386 against its own itemised 368 for a day.
     """
-    m = re.search(r"^\*\s*Renders:(.+)$", body, re.M)
+    m = re.search(r"^(?:\*\s*Renders:|\*\*Renders\.\*\*)(.+)$", body, re.M)
     if not m:
         return
     parts = [int(n) for n in re.findall(r"\((\d+)[,)]", m.group(1))]
@@ -532,6 +549,7 @@ def main() -> int:
         check_opening_block(body, path, rep)
         check_repro_against_data(fm, body, path, rep)
         check_render_count(fm, body, rep, path)
+        check_header_corpus(fm, body, path, rep)
         check_reproducibility(body, path, rep)
         check_duplicate_columns(body, path, rep)
         check_language(body, path, rep)

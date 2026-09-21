@@ -53,7 +53,7 @@ claims:
 
 # What an edit steers, and what it costs
 
-> **Holds** · 168 renders · 28 blocks · 2 prompts × 3 seeds · pre-registered 2026-09-20
+> **Holds** · 368 renders · 28 blocks · 2 prompts × 3 seeds · pre-registered 2026-09-20
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Every knob on a machine does two things: the thing you turned

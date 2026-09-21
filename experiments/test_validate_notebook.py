@@ -116,6 +116,11 @@ CASES = [
      lambda t: patch(t, PAGE, "  renders: 368", "  renders: 999"),
      "itemises"),
 
+    ("the status line and the front matter disagree on the render count",
+     lambda t: patch(t, PAGE, "> **Holds** \u00b7 368 renders",
+                     "> **Holds** \u00b7 999 renders"),
+     "the status line says 999 renders"),
+
     ("a required section is gone",
      lambda t: patch(t, PAGE, "## Why I might be wrong", "## Some other heading"),
      "missing required section '## Why I might be wrong'"),

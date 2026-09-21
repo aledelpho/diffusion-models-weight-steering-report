@@ -60,7 +60,7 @@ claims:
 
 # Is the instrument lying to me?
 
-> **Holds** · 421 renders · 5 prompts · verification, not an experiment
+> **Holds** · 423 renders · 5 prompts · verification, not an experiment
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Nothing on any other page is worth reading if this one is
