@@ -13,8 +13,8 @@ ed709c3  fix(figure): l'alt di F05.3 pubblicava il 12,4x ritrattato
 4d066c6  docs: inventario misurato del notebook prima della migrazione
 ```
 
-Four of the fifteen pages are live: 00, 02, 03, 05. The claims ledger stands at 6 migrated,
-17 pending.
+Five of the fifteen pages are live: 00, 02, 03, 05, 06. The claims ledger stands at 9 migrated
+and 16 pending, all 23 original bullets accounted for.
 
 ---
 
@@ -226,3 +226,82 @@ prose write-ups to the digit:
    (`prereg_hatching_axis_stage7.md`), source text at lines 681–803 of `c843d61:README.md`,
    measurements in `data/style_features_stage7.csv`. Page 01 stays blocked on its light-theme
    figures.
+
+
+---
+
+## 6. Third pass — page 06, and four defects the restored documents exposed
+
+The pre-registration of page 05 is back in the repository, the stage-12 headlights have been
+scored, and page 06 is live. Each of those turned up something.
+
+### 6.1 The eight predictions of page 05 are now checkable, and one row was wrong
+
+With `docs/prereg_punto7_simmetria_segno.md` restored, every row of page 05's prediction table
+was recomputed from `data/punto7_blocks.csv` against the frozen §3. Seven reproduce exactly.
+The eighth, P2, named the **swing** `s` where the pre-registration names the **specularity**
+`m`. The verdict was always the specularity one — 17 of 28 blocks mirror-symmetric within 3σ,
+which falsifies it — but under `s` the same window holds 8 blocks and nothing would have been
+falsified. The table contradicted its own outcome. Corrected, and `m` added to the
+decomposition, which listed only `c` and `s` while testing `m`.
+
+The validator now checks that the file named in `preregistration` exists. That is exactly the
+hole that let a confirmatory page ship for a day citing a document that had never been
+committed. The self-test went from 18 to 19 cases.
+
+### 6.2 The stage-12 headlight confirmation ran, and could not resolve anything
+
+Not because the effect is absent: **nine of the ten styles never light a headlight in any
+condition, the untouched model included.** All sixteen lit renders belong to one style. With one
+informative prompt the exact sign-flip floor is 2/2¹ = 1.0, so no effect of any magnitude could
+have reached significance — decidable from the prompt before rendering, since the subject
+sentence pins `golden hour, clear sky`.
+
+Inside the one informative style the arms behave as predicted and cannot be tested: the
+untouched model lights 5 of 5, so the positive arm has no room, and the derangement takes it to
+3 of 5 and then 1 of 5. Page 02's headlight claim therefore stays `ambiguous` — it gains a
+boundary rather than a confirmation, and the round that would settle it needs a corpus where
+headlights are **marginal**, chosen on that criterion before rendering.
+
+The scoring itself is sound: every tile re-joins to the sealed key without a disagreement,
+19 of 20 re-shown tiles scored identically, and the sensitivity the criterion promised and did
+not deliver (excluding the 27 tiles seen before the criterion was tightened) changes nothing.
+
+### 6.3 Page 06 reports a primary that failed, and a check that was never recorded
+
+The hatching axis is the cleanest confirmatory result in the notebook — two families at the
+exact permutation floor, 16 prompts of 16, 80 pairs of 80 and 79 of 80, effect sizes holding
+across an independent corpus to within five per cent. Three things had to be said alongside it:
+
+1. **The primary was a conjunction over three families and it was not met.** Two of three. The
+   page says so as the first sentence of its verdict.
+2. **One row of the published table is counted on a different rule from the others.** The sign
+   scramble's "11/16 prompts, 50/80 pairs" counts agreement with its *observed* sign while the
+   rows above it count agreement with the *predicted* one. Under the same rule it is 5/16 and
+   30/80.
+3. **A pre-registered validity check has no recorded outcome.** The pre-registration licenses
+   `crosshatch_entropy_mean` as a stand-in for what the eye saw on the derangement family only,
+   states that the preset family "has not been checked against the eye", schedules an
+   inspection of one pair before the analysis, and says the preset row is *withdrawn in
+   writing* if the check fails. The outcome is not in the document or anywhere in `docs/`. The
+   preset claim is filed `ambiguous` for that reason alone; one look at one pair closes it.
+
+### 6.4 The pitfall registry is merged and contiguous
+
+64 to 67 are in `errors_log.md`, which now runs 1 to 67 with no gaps, and the two counts inside
+the document were updated. The four new rows are **not** placed in the invariant families —
+that is taxonomy, not transcription — and a suggested placement is written at the head of the
+table for the author to confirm or replace. All three `_da_inserire` files carry a MERGED
+banner; they still need deleting by hand.
+
+### 6.5 Where to restart, revised again
+
+1. **Look at one `preset_pos` / `preset_neg` pair** and record what you see. It is the cheapest
+   open item in the notebook and it decides a published claim's status.
+2. **Page 07, chromatic signatures** — the third pre-registration on the same 560 renders,
+   verdict ambiguous and to be written as ambiguous, source text at lines 567–680 of
+   `c843d61:README.md`, measurements in the `data/palette_*` family.
+3. **The eight missing builders** for the figures of pages 00 and 05, then the validator check
+   that a `builder` resolves to a callable.
+4. **A corpus where headlights are marginal**, if the headlight claim is worth confirming.
+5. Page 01 stays blocked on its light-theme figures.

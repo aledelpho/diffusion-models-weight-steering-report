@@ -351,8 +351,13 @@ Three commits on `main`, no push.
 | `4d0fde4` | `docs/report_notte_2026-09-21.md` |
 | `f0fb0a2` | page 02 cited pitfalls 8 and 10, which are **rules** 8 and 10. `errors_log.md` carries two numberings — the 15 methodological rules and the 63-entry pitfall registry — and the prose documents reference the first. Corrected to 26, 34, 35, 39, 40, 50, each checked against the registry |
 | `93f986e` | page `03-what-ends-up-in-the-picture`, `experiments/notebook_charts.py` with three real builders, `experiments/stage12_enlargement_by_prompt.py` → three derived tables, three registered charts |
+| `3a4ea05` | inventory and report updated |
+| `d69e29d` | the restored pre-registration of page 05; all eight of its predictions recomputed, P2 corrected from `s` to `m`; the validator now requires the `preregistration` file to exist; self-test 18 → 19 |
+| `4b2931f` | the stage-12 headlight round: scored, verified against the sealed key, and reported as unresolvable — 9 styles of 10 never light one |
+| `231d850` | pitfalls 64–67 merged; the registry runs 1 to 67 |
+| `59392f7` | page `06-the-hatching-axis`, `experiments/stage7_hatching_axis.py` → two derived tables, two registered charts |
 
-`notebook/_migrating.yaml`: 23 claims, **6 migrated, 17 pending**.
+`notebook/_migrating.yaml`: 23 original bullets, **9 claims migrated, 16 pending**.
 
 Items closed from §0: item 1 (the ledger exists), item 10 (the alt text), and most of item 3 —
 **both** `notebook_figures.py` and `notebook_charts.py` now exist, with four working builders
