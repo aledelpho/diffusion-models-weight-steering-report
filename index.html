@@ -88,6 +88,7 @@
 <li><a href="#p-05-knob-or-cost"><span class="dot" style="background:#0ca30c"></span>What an edit steers, and what it costs</a></li>
 <li><a href="#p-06-the-hatching-axis"><span class="dot" style="background:#0ca30c"></span>The hatching axis, and the sign that decides it</a></li>
 <li><a href="#p-07-chromatic-signatures"><span class="dot" style="background:#fab219"></span>What the edit does to colour, and what it does not</a></li>
+<li><a href="#p-08-block1-vs-block6"><span class="dot" style="background:#0ca30c"></span>Two places in the model, pushed the same distance</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
@@ -118,11 +119,14 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-tail-is-rectified">On the last blocks the negative direction is the safe side: positive pushes wreck the image, negative pushes barely move it.</a></td><td class="ev">Amplitude ratio 9.1x on block 26, both arms on one scale. All six blocks from 22 onward asymmetric.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-06-the-hatching-axis--the-two-structured-families">A block-derangement edit crosses the hatching strokes when pushed positive and runs them parallel when pushed negative, and the sign of that displacement decides which.</a></td><td class="ev">Pre-registered sign, confirmed on 16 prompts sharing nothing with the corpus the observation came from. Delta +0.288 in crosshatch entropy, Holm p 9.2e-5 at the exact permutation floor, 16 prompts of 16 and 79 image pairs of 80.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-07-chromatic-signatures--the-directions-differ-and-that-is-the-claim-that-holds">Different weight edits move the palette in directions that differ from one another, so the colour response is a property of which edit was applied and not a single shared drift.</a></td><td class="ev">Pre-registered. Within-condition coherence +0.057 against +0.023 between conditions, a difference of +0.035 against a label-permutation null with mean -0.003 and a 95th percentile of +0.007. p = 1e-4, the Monte Carlo floor, and the second time this statistic has landed on its floor on an independent corpus.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--the-advantage-and-the-null-it-had-to-beat">Two block groups pushed exactly the same distance move the image in directions that can be told apart, and they separate further than two arbitrary perturbations of that same size do.</a></td><td class="ev">Pre-registered, single hypothesis, no alternatives. Same-block advantage +1.039 at the exact permutation floor p = 0.00195, positive in 10 prompts of 10, against a scramble null of +0.532; the paired advantage is +0.506, also at the floor and positive in 10 of 10. The criterion holds in all five measurement spaces.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">At a displacement matched by construction, the first block group&#x27;s direction is highly consistent across subjects rather than unstable.</a></td><td class="ev">Within-block coherence 0.949 for the first group and 0.958 for the last, in the primary space, on 10 prompts sharing no text with the pilot. The pilot estimate for the same quantity was 0.65 across 23 features.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-04-where-in-the-model--the-null-hypothesis-and-how-badly-it-lost">Where an edit lands changes how much the picture moves, and it is not a matter of how far the weights moved. The last block group moves the checkpoint least and the image most.</a></td><td class="ev">Exploratory, one seed per cell, one unsigned metric. The last group displaces 28% less than the largest and moves the image 3.7 times more, at about 15 times the seed noise, 7 of 7 prompts, p at the 2/2^7 floor. Among the four middle groups displacement explains the ordering completely.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-06-the-hatching-axis--the-check-that-was-registered-and-not-recorded">The calibrated preset moves the same measured axis with the opposite sign, so the axis is not a property of block derangement. Whether the measure tracks hatching orientation in this family was never checked.</a></td><td class="ev">Delta -0.370, Holm p 9.2e-5, 16 of 16 prompts and 80 of 80 pairs. But the pre-registration made the preset row conditional on a visual check of one pair, to be recorded before the analysis, and no outcome for that check exists.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-07-chromatic-signatures--three-of-six-and-the-bar-was-four">Whether each individual edit imprints a chromatic direction that survives a change of subject is undecided. Three of six conditions cleared the registered threshold and the threshold was four.</a></td><td class="ev">Pre-registered bar of four of six surviving Holm at 0.05, with three declared ambiguous in advance and not to be rounded up. Observed three: Holm 2.2e-3, 1.1e-2, 2.1e-2, and the fourth at 5.10e-2.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">Whether the first block group&#x27;s earlier anomaly was instability or position is unresolved. It looks like a participant under matched rotation and it did not replicate under amplitude scaling.</a></td><td class="ev">Amplitude scaling in the pilot put it at the middle groups&#x27; level at both doses. Matched rotation here puts its coherence at 0.949. The two families disagree and the pilot&#x27;s was not displacement-matched.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">A bidirectional, mirror-image response is the exception rather than the rule.</a></td><td class="ev">Falsified. 17 of 28 blocks are mirror-symmetric within 3σ. The prediction expected fewer than 10.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">Blocks at either end of the network respond violently in both directions.</a></td><td class="ev">Falsified. Predicted for the first block and at least three of five tail blocks; found in one of the five.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-06-the-hatching-axis--the-control-that-vanished">The exploratory hatching effect of the norm-matched sign scramble does not survive a fresh corpus. It was the third family of the registered prediction and it is not there.</a></td><td class="ev">Exploratory -0.187 on 18 prompts, 81 pairs of 90. Confirmation +0.020 with the sign reversed, p = 0.67, 5 of 16 prompts and 30 of 80 pairs in the predicted direction.</td></tr>
@@ -1426,10 +1430,9 @@ untouched: the last group is the last four blocks of twenty-eight, so a perturba
 almost nothing downstream left to absorb it, and first and last groups behave unlike the middle
 in nearly every transformer.</p>
 <p>The page earns its place by what it set up rather than by what it settled. The follow-up is
-fully specified because of it, and it has since been run: the first group against the last, at
-ten prompts with a matched control, is the pre-registered version of the question this page
-could only pose. It is <code>docs/prereg_rotations_block1_vs_block6.md</code> and it has not been migrated
-into the notebook yet.</p>
+fully specified because of it, and it has since been run:
+<a href="#p-04-where-in-the-model--p-08-block1-vs-block6">the first group against the last</a> is the pre-registered version of the
+question this page could only pose.</p>
 <h2 id="p-04-where-in-the-model--why-i-might-be-wrong">Why I might be wrong</h2>
 <p><strong>This is not a confirmatory page, and one contrast on it was frozen anyway.</strong> The
 extremes-against-middle contrast was fixed before the per-block numbers were looked at, and it
@@ -1769,9 +1772,8 @@ sweep), <code>data/pilot_macro.csv</code> (the amplitude sweep),
 (the signed feature spaces), <code>data/pilot_rotation_direction_tests.csv</code> (the direction tests),
 <code>data/pilot_rotations_directions.csv</code>, and <code>data/pilot_rotations_position.csv</code>, derived here on
 2026-09-21.</p>
-<p><strong>What came out of it.</strong> <code>docs/prereg_rotations_block1_vs_block6.md</code> and
-<code>docs/rotations_block1_vs_block6_results.md</code> are the pre-registered follow-up this page
-specified: one primary test on the antisymmetric component in
+<p><strong>What came out of it.</strong> <a href="#p-04-where-in-the-model--p-08-block1-vs-block6">The first group against the last</a> is the
+pre-registered follow-up this page specified: one primary test on the antisymmetric component in
 texture space, ten prompts for a floor of 0.00195 with room for twenty-five tests, three seeds a
 cell, displacement matched by construction, nine sampling steps, and a sign-scrambled control at
 the same displacement.</p>
@@ -2786,6 +2788,300 @@ depicted), 31 (a stratification criterion that can only be checked after renderi
 corpus is the registry's own example), 32 (a script edited after its hash was frozen — likewise),
 36 (a ranking that is partly a ranking of what was measured best), 37 (two coherence statistics
 computed under different centering conventions).</p>
+</section>
+<section id="p-08-block1-vs-block6">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">210 renders · 10 prompts · 3 seeds · pre-registered · 2026-09-21</span></p>
+<h1 id="p-08-block1-vs-block6--two-places-in-the-model-pushed-the-same-distance">Two places in the model, pushed the same distance</h1>
+<h2 id="p-08-block1-vs-block6--in-two-minutes">In two minutes</h2>
+<p><a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could pose the question and not answer it: does it
+matter <em>where</em> you push, or only how far? Its metric was an unsigned distance, its cells had one
+seed, and nothing was matched. This is the version written to settle it — one hypothesis, no
+alternatives, thresholds and formula frozen before a single image existed.</p>
+<p>The design does the matching by construction. Displacement does not scale linearly with a
+rotation angle, so the angles were solved numerically against the checkpoint until the two
+groups moved the weights by the same amount: 23.69° for the first group and 32.21° for the last,
+both landing at D = 0.045 with a residual difference of 0.0000006. Whatever separates them, it
+is not how far they went.</p>
+<p><img alt="Every prompt's same-block advantage against the null of two arbitrary scrambles at the same displacement. The two blocks separate further than two random perturbations do in all ten prompts." src="assets/08-block1-vs-block6/F08.1_advantage_by_prompt.webp" /></p>
+<p>The two groups' directions are tellable apart in all ten prompts, at the smallest value the test
+can return. And the control that makes it mean something: two <em>arbitrary</em> perturbations of the
+same size also separate from each other — the null is +0.532, not zero — and the real pair still
+beats it in every prompt.</p>
+<p>What the page does not show is that the difference is about <em>function</em>. The last group sits
+against the output. That alternative is untouched here, and the experiment built to settle it
+did not.</p>
+<h2 id="p-08-block1-vs-block6--the-verdict">The verdict</h2>
+<p>Two block groups, displaced by identical amounts, imprint directions on image texture that a
+leave-one-out test tells apart in ten prompts of ten, at the exact permutation floor. The
+registered falsification criterion — that the pair must separate further than two random
+perturbations of the same size — is met in the primary space and in all four secondary ones.</p>
+<p>In the primary space the two directions are close to orthogonal: cross-block cosine −0.062 raw,
+−0.065 after disattenuation. They are not opposite ends of one axis; they are different axes.</p>
+<p>This is the strongest confirmatory result in the notebook by margin and by concordance. It is
+also the narrowest in what it licenses: <strong>separability is not specialisation.</strong> The next section
+says why, and the question it leaves open is still open.</p>
+<h2 id="p-08-block1-vs-block6--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>Separability at the two ends is compatible with a plain depth effect.</strong> The last group is
+blocks 24–27, immediately upstream of the final projection to the decoder; the first is blocks
+0–4. A perturbation at the end acts on representations that have already converged and lands
+directly on high-frequency detail. The directional divergence is consistent with a genuine
+division of labour <em>and</em> with the ordinary fact that the two ends of a transformer behave unlike
+its middle. Nothing here separates the two readings.</p>
+<p><strong>The experiment built to separate them did not.</strong> The triangle added a middle group, and its
+Block_3-against-Block_6 side has no null anchored on Block_6, so it was never measured; its
+Block_1-against-Block_3 side does not separate from the null under the aggregation rule now
+declared. The question stays open and is recorded as open in
+<code>docs/rotations_block1_vs_block6_results.md</code> §2.</p>
+<p><strong>The null is large, and that is the interesting part.</strong> Two arbitrary scrambles at the same
+displacement separate from each other at +0.532, itself at the floor. Most of what the
+leave-one-out statistic measures is therefore not anatomy — it is that any two distinct
+perturbations leave distinguishable traces. The finding is the <em>excess</em> over that, +0.506, and a
+reader who takes +1.039 as the effect size is double-counting.</p>
+<p><strong>No middle group, and no third arm.</strong> Two groups at one displacement, one rotation family. The
+pilot's amplitude family is not represented here, which matters for the first block (below).</p>
+<p><strong>The coherence numbers set a ceiling the cross-cosine is read against.</strong> Cross-block cosine is
+attenuated by measurement error and the two groups are not measured with equal precision; the
+disattenuated figure is reported alongside the raw one for that reason, and it is pitfall 36.
+Here the two coherences are both high and nearly equal, 0.949 and 0.958, so the correction barely
+moves anything — which is the one case where the raw number can be trusted.</p>
+<p><strong>Three seeds per cell.</strong> Enough to average the antisymmetric component, not enough to measure
+per-cell noise.</p>
+<h2 id="p-08-block1-vs-block6--the-data">The data</h2>
+<h3 id="p-08-block1-vs-block6--how-it-was-measured">How it was measured</h3>
+<p>Ten style prompts, three seeds, seven conditions — baseline, the two groups at ±θ, and two
+independent scrambles: 210 renders, manifest in
+<code>data/rotations_block1_vs_block6_manifest.csv</code>. The prompts are the ten of the enlargement
+corpus, sharing no text with the pilot sweep.</p>
+<p>The quantity is the <strong>antisymmetric</strong> component of the response, averaged over seeds:</p>
+<p>$$A_b(p) = \tfrac{1}{3}\sum_{s} \tfrac{\Delta_{b,s}(+\theta_b) - \Delta_{b,s}(-\theta_b)}{2}$$</p>
+<p>where each Δ is the treated feature vector minus its own baseline at the same prompt and seed.
+The antisymmetric half is chosen because it is what reverses with the sign of the edit, and
+because it is invariant to the centering convention — subtracting any constant from every delta
+cancels in (Δ⁺ − Δ⁻)/2. That is the convention that sank an earlier test elsewhere in this
+notebook.</p>
+<p>The statistic is a leave-one-out same-block advantage, frozen in §1 of the pre-registration: for
+each prompt, how much more its direction agrees with the <em>other nine prompts of its own group</em>
+than with the other nine of the other group, symmetrised over the two groups. Seeds are averaged
+first; the unit of analysis is the prompt (pitfall 17). Exact two-tailed sign-flip permutation
+over the ten prompts, floor 2/2¹⁰ = 0.00195.</p>
+<p>The primary space is three texture features — GLCM contrast, GLCM homogeneity, LBP entropy —
+declared in advance, with four secondary families corrected separately.</p>
+<h3 id="p-08-block1-vs-block6--the-advantage-and-the-null-it-had-to-beat">The advantage, and the null it had to beat</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>mean</th>
+<th>p</th>
+<th>positive prompts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>same-block advantage</strong></td>
+<td><strong>+1.0386</strong></td>
+<td><strong>0.00195</strong></td>
+<td><strong>10 / 10</strong></td>
+</tr>
+<tr>
+<td>the same statistic on two arbitrary scrambles</td>
+<td>+0.5323</td>
+<td>0.00195</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>paired advantage, prompt by prompt</strong></td>
+<td><strong>+0.5063</strong></td>
+<td><strong>0.00195</strong></td>
+<td><strong>10 / 10</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Both p-values are the exact floor: at ten prompts the test cannot return less, and every prompt
+agreeing is the only way to reach it. The paired difference ranges from +0.297 to +0.821 — no
+prompt comes close to reversing.</p>
+<p>The pre-registration states the falsification criterion as a bare inequality, V̄ &gt; V̄_scramble,
+without a test on the difference. The paired version above is stricter than what was registered
+and it passes, so the criterion is met under either reading. It is derived here, not registered.</p>
+<p><img alt="The same comparison in each measurement space, primary and secondary. The registered falsification criterion is met in all five, and the gap above each pair is what the criterion compares." src="assets/08-block1-vs-block6/F08.2_advantage_by_space.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>space</th>
+<th>features</th>
+<th>advantage</th>
+<th>scramble null</th>
+<th>gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texture (primary)</strong></td>
+<td>3</td>
+<td>+1.0386</td>
+<td>+0.5323</td>
+<td><strong>+0.5063</strong></td>
+</tr>
+<tr>
+<td>Global</td>
+<td>23</td>
+<td>+0.9777</td>
+<td>+0.4881</td>
+<td>+0.4896</td>
+</tr>
+<tr>
+<td>Linework</td>
+<td>3</td>
+<td>+1.1138</td>
+<td>+0.1715</td>
+<td><strong>+0.9423</strong></td>
+</tr>
+<tr>
+<td>Shadow hardness</td>
+<td>2</td>
+<td>+1.0754</td>
+<td>+0.7134</td>
+<td>+0.3620</td>
+</tr>
+<tr>
+<td>Palette</td>
+<td>5</td>
+<td>+0.9561</td>
+<td>+0.1633</td>
+<td>+0.7928</td>
+</tr>
+</tbody>
+</table></div>
+<p>The advantage barely moves across spaces — 0.96 to 1.11 — while the null swings from 0.16 to
+0.71. What changes between spaces is how distinguishable two <em>random</em> perturbations are, not how
+distinguishable these two blocks are.</p>
+<h3 id="p-08-block1-vs-block6--the-geometry">The geometry</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>first group</th>
+<th>last group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>within-block coherence across prompts</td>
+<td><strong>+0.9491</strong></td>
+<td><strong>+0.9578</strong></td>
+</tr>
+<tr>
+<td>antisymmetric share of the response</td>
+<td>0.54</td>
+<td>0.42</td>
+</tr>
+</tbody>
+</table></div>
+<p>Cross-block cosine in the primary space: <strong>−0.0615</strong> raw, <strong>−0.0645</strong> disattenuated. The two
+directions are as close to orthogonal as a measurement of this kind gets. They are not one axis
+with two signs.</p>
+<h3 id="p-08-block1-vs-block6--what-this-says-about-the-first-block">What this says about the first block</h3>
+<p>The pilot read the first group as <strong>unstable rather than positional</strong>: its rotation signature
+was nearly normal at 15° and ×3.14 by 30°, it did not replicate under amplitude scaling, and it
+had the highest seed-to-seed variance of any group. Here, at a displacement matched by
+construction and a moderate 23.69°, its within-block coherence is <strong>0.949</strong> — as high as the last
+group's, and far above the 0.65 the pilot estimated across 23 features.</p>
+<p>Both readings can be true: a block that behaves coherently at a matched, moderate push and breaks
+down at a large unmatched one. But the pilot's angles were <strong>not</strong> displacement-matched, which is
+precisely the confound this design was built to remove, and the amplitude family is not
+represented here at all. So the claim above is filed as ambiguous rather than overturned: two
+families disagree, and only one of them was run under matched conditions.</p>
+<h3 id="p-08-block1-vs-block6--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+tuner:
+  node: per-block rotation of the DiT weights, angles solved offline
+  version: not recorded
+  mode: block-group rotation at matched displacement
+prompts:
+  file: data/rotations_block1_vs_block6_manifest.csv
+  ids: [S01_oil, S02_linocut, S03_cyberpunk, S04_gouache, S05_pencil,
+        S06_pastel, S07_comic, S08_papercraft, S09_fresco, S10_synthwave]
+seeds: [42, 1337, 4242145]
+conditions:
+  - name: Block_1_pos
+    angle_deg: 23.69
+    measured_D: 0.045002      # solved numerically against the checkpoint, not nominal
+  - name: Block_1_neg
+    angle_deg: -23.69
+    measured_D: 0.045002
+  - name: Block_6_pos
+    angle_deg: 32.21
+    measured_D: 0.045001      # |D_1 - D_6| = 0.0000006, against a gate of 0.0002
+  - name: Block_6_neg
+    angle_deg: -32.21
+    measured_D: 0.045001
+  - name: scramble_A
+    angle_deg: 23.69
+    measured_D: 0.045001      # Rademacher signs per tensor, generator seed 20260919
+  - name: scramble_B
+    angle_deg: 23.69
+    measured_D: 0.045002      # second independent realisation, generator seed 20260920
+  - name: baseline
+    angle_deg: 0
+    measured_D: 0.0
+outputs:
+  folder: benchmark_rotations_b1b6/renders
+  manifest: data/rotations_block1_vs_block6_manifest.csv
+analysis:
+  features: data/rotations_block1_vs_block6_style_features.csv,
+    data/rotations_block1_vs_block6_palette_features.csv
+  scripts:
+    - experiments/run_rotations_block1_vs_block6.py
+    - experiments/extract_block1_vs_block6_features.py
+    - experiments/analyze_block1_vs_block6.py
+  persisted_by: experiments/b1b6_paired_advantage.py
+  produces:
+    - data/b1b6_paired_by_prompt.csv
+    - data/b1b6_paired_by_space.csv
+  figures: experiments/notebook_charts.py
+</code></pre>
+<p>Every displacement above is <strong>solved and measured</strong> against the checkpoint rather than set
+nominally, including the two scrambles. That is the whole point of the design: a permuted or
+sign-flipped control does not inherit the target displacement automatically and has to be
+measured (pitfall 45), and a relative Frobenius displacement over the whole checkpoint is not a
+portable dose unit between two groups of different size (pitfall 44). Here both were handled by
+solving the angles rather than assuming them.</p>
+<h2 id="p-08-block1-vs-block6--provenance">Provenance</h2>
+<p><strong>Pre-registration.</strong> <code>docs/prereg_rotations_block1_vs_block6.md</code>, committed 2026-09-18 at
+23:10:13 with the single hypothesis, the leave-one-out formula written out, the primary space
+named, the matched-displacement calibration and the falsification criterion. The renders and
+their features arrived in the next commit two hours and nineteen minutes later, and the results
+document publishes that git audit itself — which is the cheapest way to show a freeze was a
+freeze, and the first time this notebook does it.</p>
+<p><strong>Results and reservations.</strong> <code>docs/rotations_block1_vs_block6_results.md</code>, whose §2 records the
+three structural limits, including the specialisation-against-proximity confound that is still
+open.</p>
+<p><strong>Measurement files.</strong> <code>data/rotations_block1_vs_block6_manifest.csv</code> (210 rows),
+<code>..._style_features.csv</code> and <code>..._palette_features.csv</code>, <code>..._prompt_scores.csv</code> (the 10
+per-prompt values of both statistics), <code>..._results.csv</code> (the five spaces), and two tables
+derived here on 2026-09-21: <code>data/b1b6_paired_by_prompt.csv</code> and <code>data/b1b6_paired_by_space.csv</code>.</p>
+<p><strong>What it did not settle.</strong> The triangle experiment, <code>Block_1</code>/<code>Block_3</code>/<code>Block_6</code>, was built to
+add the middle and decide between specialisation and proximity. Its verdict is <strong>not
+determined</strong>: see <code>docs/rotations_triangolo_block1_block3_block6_results.md</code> §1-bis, which
+records why — a missing null anchored on <code>Block_6</code>, and a floor chosen among exchangeable nulls
+after the data were seen.</p>
+<p><strong>Pitfalls that apply.</strong> 17 (seeds inside a prompt are repeated measures, so the unit is the
+prompt), 36 (coherence attenuates a cross-block cosine, so the disattenuated value is published
+beside the raw one), 44 (a whole-checkpoint relative displacement is not a portable dose unit
+between groups), 45 (a scrambled control does not inherit the target displacement — here both
+scrambles were measured).</p>
 </section>
 </main>
 </body>

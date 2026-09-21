@@ -91,6 +91,20 @@ migrated:
     page: 04-where-in-the-model
     date: 2026-09-21
     source: "README@c843d61 §4.4"
+  - id: block1-does-not-replicate
+    page: 08-block1-vs-block6
+    date: 2026-09-21
+    source: "README@c843d61 §4.3; docs/rotations_block1_vs_block6_results.md"
+  - id: blocks-separate-by-direction-not-distance
+    page: 08-block1-vs-block6
+    date: 2026-09-21
+    source: "docs/prereg_rotations_block1_vs_block6.md"
+    split_from: block1-does-not-replicate
+  - id: block1-coheres-at-matched-displacement
+    page: 08-block1-vs-block6
+    date: 2026-09-21
+    source: "docs/rotations_block1_vs_block6_results.md"
+    split_from: block1-does-not-replicate
 
 pending:
 
@@ -157,13 +171,6 @@ pending:
     source: "README@c843d61, ledger; docs/stage9_verdict.md"
     page: 09-style-direction
     note: "Migrates as status overturned, typeset exactly like a page that holds."
-
-  - id: block1-does-not-replicate
-    claim: >
-      That Block_1 shares the phenomenon. It looks like it does under rotation and does not
-      replicate under amplitude scaling. Read as instability, not position.
-    source: "README@c843d61 §4.3; docs/rotations_block1_vs_block6_results.md"
-    page: 08-block1-vs-block6
 
   - id: exploratory-sizes-are-upper-bounds
     claim: >

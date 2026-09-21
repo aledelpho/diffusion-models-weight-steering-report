@@ -99,10 +99,9 @@ almost nothing downstream left to absorb it, and first and last groups behave un
 in nearly every transformer.
 
 The page earns its place by what it set up rather than by what it settled. The follow-up is
-fully specified because of it, and it has since been run: the first group against the last, at
-ten prompts with a matched control, is the pre-registered version of the question this page
-could only pose. It is `docs/prereg_rotations_block1_vs_block6.md` and it has not been migrated
-into the notebook yet.
+fully specified because of it, and it has since been run:
+[the first group against the last](08-block1-vs-block6.md) is the pre-registered version of the
+question this page could only pose.
 
 ## Why I might be wrong
 
@@ -345,9 +344,8 @@ sweep), `data/pilot_macro.csv` (the amplitude sweep),
 `data/pilot_rotations_directions.csv`, and `data/pilot_rotations_position.csv`, derived here on
 2026-09-21.
 
-**What came out of it.** `docs/prereg_rotations_block1_vs_block6.md` and
-`docs/rotations_block1_vs_block6_results.md` are the pre-registered follow-up this page
-specified: one primary test on the antisymmetric component in
+**What came out of it.** [The first group against the last](08-block1-vs-block6.md) is the
+pre-registered follow-up this page specified: one primary test on the antisymmetric component in
 texture space, ten prompts for a floor of 0.00195 with room for twenty-five tests, three seeds a
 cell, displacement matched by construction, nine sampling steps, and a sign-scrambled control at
 the same displacement.

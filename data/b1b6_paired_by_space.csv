@@ -1,0 +1,6 @@
+space,n_features,V,p_V,V_scramble,p_V_scramble,paired_advantage,falsification_passed,coherence_block1,coherence_block6,cross_cosine,cross_cosine_disattenuated
+Tessitura (PRIMARIO),3,1.0386,0.00195,0.5323,0.00195,0.5063,True,0.9491,0.9578,-0.0615,-0.0645
+Global 23 Features (Secondario),23,0.9777,0.00195,0.4881,0.00195,0.4896,True,0.7723,0.8908,-0.078,-0.094
+Linework (Secondario),3,1.1138,0.00195,0.1715,0.00391,0.9423,True,0.2787,0.9361,-0.4499,-0.8809
+Shadow Hardness (Secondario),2,1.0754,0.00391,0.7134,0.00195,0.362,True,0.9629,0.3993,-0.4343,-0.7004
+Palette LAB/Chroma (Secondario),5,0.9561,0.00195,0.1633,0.00391,0.7928,True,0.5527,0.8994,-0.1382,-0.1961

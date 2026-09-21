@@ -567,6 +567,87 @@ def antisymmetry_by_block(out: Path) -> Path:
                  "source data/pilot_rotations_position.csv")
 
 
+
+def b1b6_advantage_by_prompt(out: Path) -> Path:
+    """Every prompt's same-block advantage against the null of two arbitrary scrambles."""
+    src = DATA / "b1b6_paired_by_prompt.csv"
+    if not src.exists():
+        raise FileNotFoundError(f"{src} is missing -- run experiments/b1b6_paired_advantage.py")
+    rows = sorted(csv.DictReader(src.open(encoding="utf-8", newline="")),
+                  key=lambda r: float(r["V"]))
+    y = range(len(rows))
+
+    fig, ax = _canvas(7.6, 4.4)
+    ax.axvline(0.0, color=GRID, lw=1.0, zorder=1)
+    for i, r in enumerate(rows):
+        v, vs = float(r["V"]), float(r["V_scramble"])
+        ax.plot([vs, v], [i, i], color=GRID, lw=1.6, zorder=2)
+        ax.scatter([vs], [i], s=46, color=CAT[1], edgecolor=SURFACE, linewidth=0.7, zorder=3)
+        ax.scatter([v], [i], s=46, color=CAT[0], edgecolor=SURFACE, linewidth=0.7, zorder=3)
+    ax.scatter([], [], s=46, color=CAT[0], label="Block_1 against Block_6")
+    ax.scatter([], [], s=46, color=CAT[1], label="two arbitrary scrambles, same displacement")
+
+    v_mean = statistics.mean(float(r["V"]) for r in rows)
+    s_mean = statistics.mean(float(r["V_scramble"]) for r in rows)
+    ahead = sum(1 for r in rows if r["exceeds_null"] == "yes")
+    ax.set_yticks(list(y))
+    ax.set_yticklabels([r["prompt_id"].split("_", 1)[1] for r in rows], color=DIM, fontsize=8.5)
+    ax.set_xlabel("same-block advantage, leave-one-out across prompts", color=DIM, fontsize=9)
+    ax.set_title(f"The two blocks separate further than two random perturbations do, in "
+                 f"{ahead} prompts of {len(rows)}\nmean {v_mean:+.3f} against a null that is "
+                 f"itself {s_mean:+.3f}, not zero",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="upper left", fontsize=7.5, frameon=False, labelcolor=DIM,
+              borderaxespad=0.8)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(x=0.10)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    return _save(fig, out,
+                 "10 style prompts x 3 seeds, displacement matched at D = 0.04500  ·  "
+                 "source data/b1b6_paired_by_prompt.csv")
+
+
+def b1b6_advantage_by_space(out: Path) -> Path:
+    """The same comparison in each measurement space, primary and secondary."""
+    src = DATA / "b1b6_paired_by_space.csv"
+    if not src.exists():
+        raise FileNotFoundError(f"{src} is missing -- run experiments/b1b6_paired_advantage.py")
+    rows = list(csv.DictReader(src.open(encoding="utf-8", newline="")))
+    labels = [r["space"].replace(" (PRIMARIO)", "").replace(" (Secondario)", "")
+              .replace(" (Secondaria)", "") for r in rows]
+
+    fig, ax = _canvas(8.0, 4.0)
+    x = range(len(rows))
+    w = 0.38
+    ax.bar([i - w / 2 for i in x], [float(r["V"]) for r in rows], width=w, color=CAT[0],
+           label="Block_1 against Block_6", zorder=3)
+    ax.bar([i + w / 2 for i in x], [float(r["V_scramble"]) for r in rows], width=w,
+           color=CAT[1], label="two arbitrary scrambles", zorder=3)
+    for i, r in enumerate(rows):
+        ax.annotate(f"+{float(r['paired_advantage']):.2f}", (i, float(r["V"])),
+                    textcoords="offset points", xytext=(0, 6), ha="center",
+                    color=INK, fontsize=8.5)
+    passed = sum(1 for r in rows if r["falsification_passed"] == "True")
+    ax.set_xticks(list(x))
+    ax.set_xticklabels([f"{l}\n{r['n_features']} feat." for l, r in zip(labels, rows)],
+                       color=DIM, fontsize=8)
+    ax.set_ylabel("same-block advantage", color=DIM, fontsize=9)
+    ax.set_title(f"The registered falsification criterion is met in {passed} spaces of "
+                 f"{len(rows)}\nthe gap above each pair is what the criterion actually "
+                 f"compares",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.set_ylim(0, max(float(r["V"]) for r in rows) * 1.34)
+    ax.legend(loc="upper center", ncol=2, fontsize=8, frameon=False, labelcolor=DIM,
+              bbox_to_anchor=(0.5, 1.02))
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.045, 1, 1))
+    return _save(fig, out,
+                 "5 measurement spaces, same 10 prompts and 3 seeds  ·  "
+                 "source data/b1b6_paired_by_space.csv")
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
@@ -587,6 +668,10 @@ def main() -> int:
                                       / "F04.1_position_against_displacement.webp"),
         antisymmetry_by_block(ASSETS / "04-where-in-the-model"
                               / "F04.2_antisymmetry_by_block.webp"),
+        b1b6_advantage_by_prompt(ASSETS / "08-block1-vs-block6"
+                                 / "F08.1_advantage_by_prompt.webp"),
+        b1b6_advantage_by_space(ASSETS / "08-block1-vs-block6"
+                                / "F08.2_advantage_by_space.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")

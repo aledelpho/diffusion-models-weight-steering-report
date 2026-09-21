@@ -261,6 +261,32 @@ figures:
       share above each pair. The largest share belongs to the fifth group and the largest
       antisymmetric movement to the sixth.
 
+  # ---------------------------------------------------------------- 08-block1-vs-block6
+
+  - id: F08.1
+    page: 08-block1-vs-block6
+    kind: strip
+    builder: notebook_charts.b1b6_advantage_by_prompt
+    source: data/b1b6_paired_by_prompt.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Every prompt's same-block advantage against the null of two arbitrary scrambles at the
+      same displacement. The two blocks separate further than two random perturbations do in
+      all ten prompts.
+
+  - id: F08.2
+    page: 08-block1-vs-block6
+    kind: paired_bars
+    builder: notebook_charts.b1b6_advantage_by_space
+    source: data/b1b6_paired_by_space.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The same comparison in each measurement space, primary and secondary. The registered
+      falsification criterion is met in all five, and the gap above each pair is what the
+      criterion compares.
+
   # ---------------------------------------------------------------- 01-mark-style
 
   - id: F01.1
