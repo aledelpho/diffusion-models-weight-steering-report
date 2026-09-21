@@ -6,7 +6,7 @@ stage: exploratory
 date: 2026-09-21
 preregistration: null
 supersedes: []
-pitfalls: [8, 10, 39, 40, 50]
+pitfalls: [26, 34, 35, 39, 40, 50]
 
 corpus:
   renders: 670
@@ -93,15 +93,18 @@ closing note records that the attribute table was never filled and the primary t
 An unrun design is not a weaker result; it is no result.
 
 **The barnacle round was scored with the condition visible.** The scorer was the author and he
-knew which image came from which arm. With 18 discordant seeds to 0 the headline will not
+knew which image came from which arm. Hashing the filenames would not have fixed it either: on a
+separate corpus the same observer picked these conditions out of a four-way line-up at 17 of 20
+and 12 of 20 against a 25% chance level, which is pitfall 34 and is measured on
+[what ends up in the picture](03-what-ends-up-in-the-picture.md#the-annotator-is-the-instrument). With 18 discordant seeds to 0 the headline will not
 flip, but the intermediate cells are exactly where a borderline call moves a number: the
 DiT-only arm at 12/19 and the 0.50 dose point at 5/6 scorable are the two that a biased eye
 could have made.
 
 **The headlight round was blind, and still is not a confirmation.** The observation was born by
 looking at those renders and is measured on the same renders. This is quantification of
-something already seen, which is pitfall 8: a number produced this way is an upper bound on
-what a fresh corpus would give. Three consecutive confirmation rounds elsewhere in this
+something already seen, and a number produced that way is an upper bound on what a fresh
+corpus would give. Three consecutive confirmation rounds elsewhere in this
 notebook have come back between a third and a half of their exploratory estimate.
 
 **The statistic is at its floor and looks weaker than the effect.** With six informative
@@ -111,9 +114,12 @@ cleared that bar on this design. The right reading is neither "significant" nor 
 "floored" — the same structural ceiling that rule 8 of the error log describes.
 
 **Four images were scored twice during the blind round.** Two of them received a different
-score the second time. The published rates reproduce exactly under "the later score wins" and
-under no other rule, so that is the rule this page applies. It touches exactly one condition,
-the scrambled control at double strength (2/36 rather than 3/37), and no headline number.
+score the second time, because the viewer appended a row instead of replacing one — pitfall 35,
+whose registry entry is this very round. Counting both rows reads the preset at 32/39 instead
+of 31/38. The published rates reproduce exactly under "the later score wins", the remedy the
+registry names, so that is the rule this page applies; between keeping the later score and
+keeping the earlier one the only condition that moves is the scrambled control at double
+strength, 2/36 rather than 3/37, and no headline number.
 
 ![Four scenes from the brightest third by the lightness of the untouched render, baseline above and the edit below, with the full stratified table. In the scenes where a dark-image explanation has nothing to work with, the untouched model lights one car in eleven and the edit lights seven in thirteen.](../assets/02-attribute-emergence/F02.3_headlights_lightness_control.webp)
 
@@ -368,7 +374,15 @@ designs the confirmation and records, in its own closing note, that it was never
 
 **Written up in.** `docs/stage10_headlights_results.md`, `docs/figure_brief.md`.
 
-**Pitfalls that apply.** 8 (quantifying an observation on the renders that produced it),
-10 (a figure caption asserting what the data denies), 39 (stratifying on a variable the
-treatment moves), 40 (a crop is an assertion and five of twenty were wrong),
-50 (reporting a treatment-versus-control difference as a property of the treatment).
+**Pitfalls that apply.** 26 (Fisher's exact on paired binary outcomes, where McNemar on the
+discordant pairs is the right test and is what the tables above use), 34 (an expert observer is
+not blinded by hashed filenames), 35 (a scoring viewer that appends a row when the scorer goes
+back to correct — the four re-scores in this round are the registry's own example),
+39 (stratifying on a covariate the treatment itself moves), 40 (a figure whose caption and crop
+were typed by hand), 50 (reporting a treatment-versus-control difference as a property of the
+treatment).
+
+Rules 8 and 9 of the fifteen also bear on this page: the resolution floor of an exact test, and
+blinding as a measurement rather than a procedure. Those are rules, and an earlier draft of this
+page cited them in the front matter by the pitfall registry's numbering, where 8 and 10 are two
+unrelated entries.
