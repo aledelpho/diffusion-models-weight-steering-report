@@ -99,6 +99,10 @@ CASES = [
      lambda t: patch_re(t, PAGE, r'^    evidence: ".*"$', '    evidence: ""'),
      "is missing 'evidence'"),
 
+    ("the opening block loses one of its three lines",
+     lambda t: patch(t, PAGE, "**What would kill it.**", "**What might go wrong.**"),
+     "is missing '**What would kill it.**'"),
+
     ("a required section is gone",
      lambda t: patch(t, PAGE, "## Why I might be wrong", "## Some other heading"),
      "missing required section '## Why I might be wrong'"),

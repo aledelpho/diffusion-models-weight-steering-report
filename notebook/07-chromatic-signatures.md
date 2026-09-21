@@ -55,6 +55,19 @@ claims:
 > 2026-09-16, amended before the renders existed
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** The interesting claim is not "the preset changes colour" — that
+> one is easy and dull. It is that **every** displacement leaves a chromatic fingerprint of its
+> own, the scramble included, each pushing the palette somewhere different. If that holds,
+> colour reads out *which* edit was applied, rather than merely reporting that one was.
+>
+> **What would kill it.** Conditions that all drag the palette the same way. Each would look
+> perfectly coherent on its own and there would be no signature anywhere — which is why one test
+> was never going to be enough, and why the pre-registration wrote two.
+>
+> **Where we are.** Split down the middle. The conditions do move colour in directions that
+> differ from each other, twice now, at the floor of the test. The signature-per-edit claim came
+> back three of six against a bar of four, and I am not rounding it up.
+
 ## In two minutes
 
 The idea was that every weight edit leaves its own fingerprint on colour — not just the

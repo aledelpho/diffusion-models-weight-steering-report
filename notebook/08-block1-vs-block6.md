@@ -56,6 +56,20 @@ claims:
 > two hours and nineteen minutes before the first render landed
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** [The pilot sweep](04-where-in-the-model.md) could ask whether
+> position matters and could not answer it. This is the version built to settle it: two block
+> groups pushed exactly the same distance by construction, one hypothesis, formula and
+> thresholds frozen before a single image existed.
+>
+> **What would kill it.** Two arbitrary perturbations of the same size separating just as much.
+> If any two distinct edits leave traces you can tell apart, then "these two groups differ" is a
+> fact about arithmetic and not about anatomy — so the null had to be measured, never assumed to
+> sit at zero.
+>
+> **Where we are.** The null is large, +0.532, and the real pair still beats it in all ten
+> prompts. It is the strongest result in the notebook and also the narrowest: separability is
+> not specialisation, and the experiment built to tell those apart came back not determined.
+
 ## In two minutes
 
 [The pilot sweep](04-where-in-the-model.md) could pose the question and not answer it: does it

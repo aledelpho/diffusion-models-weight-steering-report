@@ -63,6 +63,19 @@ claims:
 > **Holds** · 421 renders · 5 prompts · verification, not an experiment
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** Nothing on any other page is worth reading if this one is
+> wrong. Every result in this notebook is a difference between two pictures, which means every
+> result inherits whatever the machine does while I am touching nothing at all. I want that
+> number before I quote any other.
+>
+> **What would kill it.** A tuner that is not a no-op at zero, or a pipeline that renders
+> differently after a restart. Either one contaminates the treatment and the control by the
+> same invisible amount, so no comparison I could run would ever reveal it.
+>
+> **Where we are.** The instrument holds, and it holds bit-for-bit. What I had not expected is
+> that two of the floors it establishes are stricter than the ones I had been using, and one of
+> them killed a result I had already written up.
+
 ## In two minutes
 
 Everything else in this notebook is a difference between two pictures. I change some weights,

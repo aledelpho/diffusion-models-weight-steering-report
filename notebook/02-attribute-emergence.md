@@ -53,6 +53,20 @@ claims:
 > **Ambiguous** · 670 renders · 2 independent corpora · exploratory, no frozen threshold
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** I want to know whether a weight edit changes *what* the model
+> draws or only *how* it draws it. Those are two different machines. Something that renders the
+> same scene with a different finish is a filter; something that puts an object in the frame
+> that was never there is reaching into the content, and that is the thing worth understanding.
+>
+> **What would kill it.** A control that moves the weights exactly as far, by a different rule,
+> and produces the same attribute. If displacement alone recovers it, then the *structure* of
+> the edit is irrelevant and I am measuring distance with extra steps.
+>
+> **Where we are.** The control does nothing — twice, on two attributes, one the prompt asked
+> for and one nobody asked for. But I predicted neither in advance, I scored the first round
+> with the condition visible, and the design written to test whether any of this generalises was
+> never run. Large, repeatable, and filed ambiguous, which is where it belongs.
+
 ## In two minutes
 
 A prompt asked for `small barnacle-like clusters studding one earlobe`. The stock model drew

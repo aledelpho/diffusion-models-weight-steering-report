@@ -51,6 +51,20 @@ claims:
 > **Holds** · 250 renders · 10 new styles · pre-registered 2026-09-18, before a single render
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** I kept seeing the car take up more of the frame under one of
+> the edits. If composition is one of the things these edits move, they reach further into the
+> picture than texture and colour, and that changes what the whole project is about.
+>
+> **What would kill it.** The effect existing only on the images that produced the observation.
+> That is the honest failure mode here, and I had already walked into it once: boxes drawn on
+> the same renders that suggested the idea, by me, knowing the hypothesis, with the scoring key
+> already open.
+>
+> **Where we are.** It survived on a corpus that did not exist when the prediction was frozen,
+> at about a fifth of the size the first round claimed. And the same round measured something I
+> care about more than the result: **I am the measuring instrument, and nobody had ever measured
+> the instrument.**
+
 ## In two minutes
 
 Two things were noticed by eye: under one of the edits the car seems to take up more of the

@@ -180,6 +180,35 @@ def check_claims(fm: dict, body: str, path: Path, rep: Report) -> list[dict]:
     return claims
 
 
+OPENING_LEAD_INS = ["The direction I'm chasing.",
+                    "What would kill it.",
+                    "Where we are."]
+
+
+def check_opening_block(body: str, path: Path, rep: Report) -> None:
+    """The three first-person lines above 'In two minutes' (AUTHORING.md section 2).
+
+    Every experiment in the old README opened this way, and the migration nearly dropped the
+    habit: a page that starts at the finding tells a reader what was measured and never why
+    anyone cared. The check is structural only -- it cannot tell whether the third line is
+    honest.
+    """
+    head = body.split("\n## In two minutes", 1)[0]
+    quoted = "\n".join(l for l in head.splitlines() if l.lstrip().startswith(">"))
+    at = -1
+    for lead in OPENING_LEAD_INS:
+        i = quoted.find(f"**{lead}**", at + 1)
+        if i < 0:
+            rep.error(path.name, f"the opening block is missing '**{lead}**' above "
+                                 f"'## In two minutes' -- see AUTHORING.md section 2")
+            return
+        if i < at:
+            rep.error(path.name, f"'**{lead}**' comes out of order in the opening block "
+                                 f"(expected {OPENING_LEAD_INS})")
+            return
+        at = i
+
+
 def check_sections(body: str, path: Path, rep: Report) -> None:
     headings = [h.strip() for h in re.findall(r"^##\s+(.+)$", body, re.M)]
     order, missing = [], []
@@ -454,6 +483,7 @@ def main() -> int:
         for c in check_claims(fm, body, path, rep):
             all_claims.append((path.stem, c))
         check_sections(body, path, rep)
+        check_opening_block(body, path, rep)
         check_reproducibility(body, path, rep)
         check_duplicate_columns(body, path, rep)
         check_language(body, path, rep)

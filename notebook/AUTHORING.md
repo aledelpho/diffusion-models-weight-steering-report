@@ -41,6 +41,12 @@ where to look in every other.
 > **Holds** · 168 renders · 28 blocks · pre-registered 2026-09-20
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** <why this experiment exists, in the first person>
+>
+> **What would kill it.** <the result that would end the idea, named before the data>
+>
+> **Where we are.** <one or two sentences, and the honest part said out loud>
+
 ## In two minutes
 
 What I wanted to know, what I did, what came out. Plain language, figures, no mathematics.
@@ -68,6 +74,29 @@ The reservations, **before** the data.
 
 Pre-registration · measurement files · scripts · renders · the pitfalls that apply.
 ```
+
+### The opening block
+
+Three lines in the first person, above `## In two minutes`, in this order and with these exact
+bold lead-ins. They come from the old README, where every experiment opened this way, and the
+migration nearly lost them: a page that starts at "## In two minutes" tells a reader what was
+measured without ever telling them **why anyone cared**.
+
+* **The direction I'm chasing.** The idea, as it was before the test — including the part that
+  turned out wrong. Written in the present tense of the person who had it.
+* **What would kill it.** The falsifying outcome, named in plain words before the numbers
+  appear. On a confirmatory page it restates the registered criterion; on an exploratory one it
+  is the honest answer to "what would make me drop this?".
+* **Where we are.** Where it landed, and the part that is uncomfortable. If a page cannot write
+  an uncomfortable third line, the reservations in `## Why I might be wrong` are probably thin.
+
+The block never **introduces** a number. It may name one the page publishes further down, with
+its source, where a reader can check it; it may not be the only place a figure appears. And it
+is not a summary of the page: "In two minutes" is what was found, the opening block is why
+anyone went looking.
+
+The validator checks that the three lead-ins are present, in order, above `## In two minutes`.
+It cannot check that they are honest.
 
 ### Why "Why I might be wrong" comes before the data
 
@@ -375,6 +404,7 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 | ✓ | Every claim has `statement`, `evidence`, `status`, and an `anchor` that resolves to a heading on that page | error |
 | ✓ | No claim id is used twice, on one page or across pages | error |
 | ✓ | The five sections present, in order | error |
+| ✓ | **The opening block's three lead-ins present, in order, above `## In two minutes`** | error |
 | ✓ | Reproducibility block present, valid YAML, all required keys, `measured_D` on every condition | error |
 | ✓ | Every figure referenced by a page is registered in `figures.yaml`, and registered *to that page* | error |
 | ✓ | **The figure file actually exists on disk** | error |
@@ -390,8 +420,14 @@ listed `corpus.renders` against the manifest as implemented, and it never was.
 | ✓ | A registered figure that its page never references | warn |
 | ✗ | `corpus.renders` against a manifest — **not implemented**: there is no per-page manifest file to count against. Until there is, that number is the one field on a page that nothing verifies |
 | ✗ | Locator hit rates — needs the renders, so it runs on the machine that holds them |
-| ✗ | `builder` resolving to a callable — **not implemented**: eight of the nine builders named in `figures.yaml` do not exist yet, so the check would be red across the board. `notebook_charts.py` and `notebook_figures.py` now exist and hold four of them |
+| ✗ | `builder` resolving to a callable — **not implemented**, but close: 20 of the 28 builders named in `figures.yaml` now import and resolve. The 8 that do not are all on pages 00 and 05, and all of them are bare names with no module. The check turns green the day those two pages get their figures |
 
-And one check that lives outside the validator, in `experiments/extract_repro.py`: every render
-in a bench must share one sampler configuration. A bench whose images were made at different
-step counts is not a bench, and nothing else in the repository would notice.
+And one check that does **not** exist. Section 5 above tells an author to print the
+reproducibility block with `experiments/extract_repro.py` rather than type it from memory.
+**That script is not in the repository.** Until it is, every reproducibility block here is
+typed by hand from a manifest, which is the failure mode section 5 was written to prevent — and
+the block on `09-style-direction.md` already carries the mark of it: the checkpoint is
+attributed through a shared `suite_git_sha`, because that bench's manifest never recorded one.
+The check it should run: every render in a bench shares one sampler configuration. A bench
+whose images were made at different step counts is not a bench, and nothing else here would
+notice.

@@ -147,6 +147,18 @@
 <section id="p-00-the-bench">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">423 renders · 5 prompts · 5 seeds · 2026-09-20</span></p>
 <h1 id="p-00-the-bench--is-the-instrument-lying-to-me">Is the instrument lying to me?</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Nothing on any other page is worth reading if this one is
+wrong. Every result in this notebook is a difference between two pictures, which means every
+result inherits whatever the machine does while I am touching nothing at all. I want that
+number before I quote any other.</p>
+<p><strong>What would kill it.</strong> A tuner that is not a no-op at zero, or a pipeline that renders
+differently after a restart. Either one contaminates the treatment and the control by the
+same invisible amount, so no comparison I could run would ever reveal it.</p>
+<p><strong>Where we are.</strong> The instrument holds, and it holds bit-for-bit. What I had not expected is
+that two of the floors it establishes are stricter than the ones I had been using, and one of
+them killed a result I had already written up.</p>
+</blockquote>
 <h2 id="p-00-the-bench--in-two-minutes">In two minutes</h2>
 <p>Everything else in this notebook is a difference between two pictures. I change some weights,
 I render again, I measure how far the image moved. That only means something if the <em>rest</em> of
@@ -436,6 +448,19 @@ analysis:
 <section id="p-02-attribute-emergence">
 <p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">870 renders · 28 prompts · 20 seeds · 2026-09-21</span></p>
 <h1 id="p-02-attribute-emergence--what-the-edit-puts-in-the-picture-and-what-it-takes-out">What the edit puts in the picture, and what it takes out</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> I want to know whether a weight edit changes <em>what</em> the model
+draws or only <em>how</em> it draws it. Those are two different machines. Something that renders the
+same scene with a different finish is a filter; something that puts an object in the frame
+that was never there is reaching into the content, and that is the thing worth understanding.</p>
+<p><strong>What would kill it.</strong> A control that moves the weights exactly as far, by a different rule,
+and produces the same attribute. If displacement alone recovers it, then the <em>structure</em> of
+the edit is irrelevant and I am measuring distance with extra steps.</p>
+<p><strong>Where we are.</strong> The control does nothing — twice, on two attributes, one the prompt asked
+for and one nobody asked for. But I predicted neither in advance, I scored the first round
+with the condition visible, and the design written to test whether any of this generalises was
+never run. Large, repeatable, and filed ambiguous, which is where it belongs.</p>
+</blockquote>
 <h2 id="p-02-attribute-emergence--in-two-minutes">In two minutes</h2>
 <p>A prompt asked for <code>small barnacle-like clusters studding one earlobe</code>. The stock model drew
 them once in twenty renders. A weight edit that permutes blocks inside the checkpoint drew
@@ -1020,6 +1045,19 @@ unrelated entries.</p>
 <section id="p-03-what-ends-up-in-the-picture">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">250 renders · 10 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-03-what-ends-up-in-the-picture--how-much-room-the-subject-takes-and-how-blind-i-actually-was">How much room the subject takes, and how blind I actually was</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> I kept seeing the car take up more of the frame under one of
+the edits. If composition is one of the things these edits move, they reach further into the
+picture than texture and colour, and that changes what the whole project is about.</p>
+<p><strong>What would kill it.</strong> The effect existing only on the images that produced the observation.
+That is the honest failure mode here, and I had already walked into it once: boxes drawn on
+the same renders that suggested the idea, by me, knowing the hypothesis, with the scoring key
+already open.</p>
+<p><strong>Where we are.</strong> It survived on a corpus that did not exist when the prediction was frozen,
+at about a fifth of the size the first round claimed. And the same round measured something I
+care about more than the result: <strong>I am the measuring instrument, and nobody had ever measured
+the instrument.</strong></p>
+</blockquote>
 <h2 id="p-03-what-ends-up-in-the-picture--in-two-minutes">In two minutes</h2>
 <p>Two things were noticed by eye: under one of the edits the car seems to take up more of the
 frame. The first attempt to measure that was worthless, and it took a while to see why — the
@@ -1402,6 +1440,20 @@ and the resolution floor decides how many tests a family can hold before anythin
 <section id="p-04-where-in-the-model">
 <p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">432 renders · 7 prompts · 3 seeds · 2026-09-21</span></p>
 <h1 id="p-04-where-in-the-model--does-it-matter-where-you-edit">Does it matter where you edit?</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> The question I actually want answered is whether it matters
+<em>where</em> in the model you push. If different parts of the backbone do different jobs, steering
+has an anatomy and there is a map to draw. If they do not, there is one dial with a scale on
+it and everything else is decoration.</p>
+<p><strong>What would kill it.</strong> Displacement. If a block group moves the picture more simply because
+pushing it moves the weights more, then there is no anatomy here — only arithmetic I had
+failed to do.</p>
+<p><strong>Where we are.</strong> Rejected, and rejected backwards: the group that moves the weights least
+moves the picture most. But every number on this page predates the project's first
+pre-registration — one seed per cell, no displacement-matched control, and a metric that says
+the image moved without ever saying what moved. The page poses the question well and settles
+nothing.</p>
+</blockquote>
 <h2 id="p-04-where-in-the-model--in-two-minutes">In two minutes</h2>
 <p>The most important open question in the project is whether it matters <em>where</em> in the model you
 push. The data that speak to it were already sitting on disk, unlooked at, from before the
@@ -1793,6 +1845,18 @@ bit of resolution and room for exactly three tests under Holm.</p>
 <section id="p-05-knob-or-cost">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">386 renders · 2 prompts · 3 seeds · pre-registered · 2026-09-20</span></p>
 <h1 id="p-05-knob-or-cost--what-an-edit-steers-and-what-it-costs">What an edit steers, and what it costs</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Every knob on a machine does two things: the thing you turned
+it for, and the thing you pay for having turned it. I had only ever measured the first. I want
+them separated — what reverses when I push the other way is a <strong>knob</strong> I can aim, and what
+happens either way is a <strong>cost</strong> I can only budget for.</p>
+<p><strong>What would kill it.</strong> Finding that it is all knob. If every effect flips sign with the push,
+there is no hidden tax, and my suspicion — that the quantity I kept computing was throwing
+away the interesting half — is just me being dramatic.</p>
+<p><strong>Where we are.</strong> It is mostly cost, it grows the closer you push to the output, and it had
+been invisible to me for months, because the difference between the two directions is exactly
+the quantity that cancels it.</p>
+</blockquote>
 <h2 id="p-05-knob-or-cost--in-two-minutes">In two minutes</h2>
 <p>Every knob on a machine does two things. It does the thing you turned it for, and it does
 something else you did not ask for and have to live with. A volume dial adds hiss. A
@@ -2139,6 +2203,19 @@ analysis:
 <section id="p-06-the-hatching-axis">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">560 renders · 16 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-06-the-hatching-axis--the-hatching-axis-and-the-sign-that-decides-it">The hatching axis, and the sign that decides it</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> The same thing kept showing up across renders I had already
+seen: one edit shades with parallel strokes pushed one way and cross-hatches pushed the other.
+If that is real, the <strong>sign</strong> of a displacement carries information — and a sign is a far
+sharper thing to claim than a magnitude.</p>
+<p><strong>What would kill it.</strong> The norm-matched scramble doing it too. If a random displacement of
+identical size also splits parallel from crossed, the axis belongs to displacement in general
+and has nothing to do with these edits in particular.</p>
+<p><strong>Where we are.</strong> The prediction as written was a conjunction over three families, and one
+family did fail — which has to be said first, because a conjunction that fails is a prediction
+that failed. The family that failed is the scramble, and its failure is the reason the other
+two mean anything.</p>
+</blockquote>
 <h2 id="p-06-the-hatching-axis--in-two-minutes">In two minutes</h2>
 <p>It started the way most things here start: by looking. Across renders already seen, one edit
 seemed to shade with <strong>parallel</strong> strokes when pushed one way and with <strong>cross-hatching</strong> when
@@ -2414,6 +2491,18 @@ return less than 2/2¹⁶, and both structured families sit on it.</p>
 <section id="p-07-chromatic-signatures">
 <p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">560 renders · 16 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-07-chromatic-signatures--what-the-edit-does-to-colour-and-what-it-does-not">What the edit does to colour, and what it does not</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> The interesting claim is not "the preset changes colour" — that
+one is easy and dull. It is that <strong>every</strong> displacement leaves a chromatic fingerprint of its
+own, the scramble included, each pushing the palette somewhere different. If that holds,
+colour reads out <em>which</em> edit was applied, rather than merely reporting that one was.</p>
+<p><strong>What would kill it.</strong> Conditions that all drag the palette the same way. Each would look
+perfectly coherent on its own and there would be no signature anywhere — which is why one test
+was never going to be enough, and why the pre-registration wrote two.</p>
+<p><strong>Where we are.</strong> Split down the middle. The conditions do move colour in directions that
+differ from each other, twice now, at the floor of the test. The signature-per-edit claim came
+back three of six against a bar of four, and I am not rounding it up.</p>
+</blockquote>
 <h2 id="p-07-chromatic-signatures--in-two-minutes">In two minutes</h2>
 <p>The idea was that every weight edit leaves its own fingerprint on colour — not just the
 calibrated preset, but the sign scramble too, each pushing the palette in a direction of its
@@ -2796,6 +2885,19 @@ computed under different centering conventions).</p>
 <section id="p-08-block1-vs-block6">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">210 renders · 10 prompts · 3 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-08-block1-vs-block6--two-places-in-the-model-pushed-the-same-distance">Two places in the model, pushed the same distance</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> <a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could ask whether
+position matters and could not answer it. This is the version built to settle it: two block
+groups pushed exactly the same distance by construction, one hypothesis, formula and
+thresholds frozen before a single image existed.</p>
+<p><strong>What would kill it.</strong> Two arbitrary perturbations of the same size separating just as much.
+If any two distinct edits leave traces you can tell apart, then "these two groups differ" is a
+fact about arithmetic and not about anatomy — so the null had to be measured, never assumed to
+sit at zero.</p>
+<p><strong>Where we are.</strong> The null is large, +0.532, and the real pair still beats it in all ten
+prompts. It is the strongest result in the notebook and also the narrowest: separability is
+not specialisation, and the experiment built to tell those apart came back not determined.</p>
+</blockquote>
 <h2 id="p-08-block1-vs-block6--in-two-minutes">In two minutes</h2>
 <p><a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could pose the question and not answer it: does it
 matter <em>where</em> you push, or only how far? Its metric was an unsigned distance, its cells had one

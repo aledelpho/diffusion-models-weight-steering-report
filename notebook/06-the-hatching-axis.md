@@ -52,6 +52,20 @@ claims:
 > · pre-registered 2026-09-17
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
+> **The direction I'm chasing.** The same thing kept showing up across renders I had already
+> seen: one edit shades with parallel strokes pushed one way and cross-hatches pushed the other.
+> If that is real, the **sign** of a displacement carries information — and a sign is a far
+> sharper thing to claim than a magnitude.
+>
+> **What would kill it.** The norm-matched scramble doing it too. If a random displacement of
+> identical size also splits parallel from crossed, the axis belongs to displacement in general
+> and has nothing to do with these edits in particular.
+>
+> **Where we are.** The prediction as written was a conjunction over three families, and one
+> family did fail — which has to be said first, because a conjunction that fails is a prediction
+> that failed. The family that failed is the scramble, and its failure is the reason the other
+> two mean anything.
+
 ## In two minutes
 
 It started the way most things here start: by looking. Across renders already seen, one edit
