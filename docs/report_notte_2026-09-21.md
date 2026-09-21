@@ -13,8 +13,8 @@ ed709c3  fix(figure): l'alt di F05.3 pubblicava il 12,4x ritrattato
 4d066c6  docs: inventario misurato del notebook prima della migrazione
 ```
 
-Seven of the fifteen pages are live: 00, 02, 03, 04, 05, 06, 07. The claims ledger stands at
-15 migrated and 11 pending, all 23 original bullets accounted for.
+Eight of the fifteen pages are live: 00, 02, 03, 04, 05, 06, 07, 08. The claims ledger stands
+at 18 migrated and 10 pending, all 23 original bullets accounted for.
 
 ---
 
@@ -409,3 +409,83 @@ references are written out in prose instead. They should become links when page 
 which is the obvious next one: `docs/prereg_rotations_block1_vs_block6.md` is a real
 pre-registration that was executed, `docs/rotations_block1_vs_block6_results.md` is its written
 verdict, and six measurement files back it.
+
+
+---
+
+## 9. Sixth pass — the triangle revision, and page 08
+
+### 9.1 The revision was applied, and it needed three corrections of its own
+
+`docs/REVISIONE_triangolo_da_applicare.md` arrived as an operational hand-off. Its three defects
+were verified against the data before anything was changed, and all three hold exactly: the two
+floors (−0.0396 against +0.5630, which flips the primaries from +0.1197/+0.3934 to
+−0.4828/−0.2091), the borrowed floor, and the branch decided by 0.0237 with p = 0.0586.
+
+The borrowed floor turned out to be worse than described and easier to prove. It is not a
+copy-pasted column: the code called `calc_loo_v(A_scrC, A_scrA)` where the line above calls
+`calc_loo_v(A_scrA, A_scrC)`, and that function is **symmetric in its two arguments by
+construction**. The two columns were identical by algebra.
+
+Three corrections to the revision:
+
+1. **The concordance in its §3 is inverted.** It says three prompts of ten go with the mean and
+   seven against; the data say **seven with and three against**. Every other number in that
+   section reproduces to the digit.
+2. **The new pitfalls are 68 and 69, not 70 and 71.** The registry is contiguous and ended at 67.
+3. **The 4-of-5 salvage must not go above the fold in that form.** "Centro Piatto / Prossimità
+   ai Confini" is the decision tree's **failure branch** — you land there when a contrast fails
+   to clear its null — so four spaces landing on it are four non-rejections, not four concordant
+   votes. And one of the five, "Frequenze Spaziali", has **one feature** and every statistic
+   exactly 0.0000 at p = 1.0000: a dead arm counted as a vote. The branch was renamed in the
+   script and a new one added, "0. Non determinato", for the case where a primary is unmeasured.
+
+What actually survives is different and better grounded: Δ(1,6) is positive under **every**
+floor on the bench (+0.3485, +0.3925, +0.7718, +0.9950) and significant in three spaces of five
+— but it is the result `rotations_block1_vs_block6` had already established. The triangle does
+not add it; it confirms it. What the triangle was meant to add is the middle block, and the
+middle is exactly where it does not decide.
+
+The validator now refuses two columns with identical content in any CSV a page cites, with the
+matching self-test case. The suite is at **20/20**.
+
+### 9.2 Page 08 is live, and the null is the story
+
+The pre-registered confirmation the pilot specified: displacement matched by construction —
+23.69° against 32.21°, both at D = 0.045, residual 0.0000006 — same-block advantage +1.0386 at
+the exact floor, positive in 10 prompts of 10, criterion met in all five spaces.
+
+Three things the migration put in focus. **The null is +0.532, not zero**: two arbitrary
+scrambles at the same displacement separate from each other at the floor too, so the finding is
+the *excess*, +0.506, and reading +1.039 as the effect size double-counts. **The paired test is
+stricter than the registered one** — the pre-registration writes the criterion as a bare
+inequality between two means — and it passes anyway, 10 of 10, range +0.297 to +0.821; it is
+derived, not registered, and the page says so. And **the first block is not unstable at matched
+displacement**: coherence 0.949 here against the pilot's 0.65, though the pilot's angles were
+not matched and its amplitude family is absent here, so that claim stays `ambiguous`.
+
+Worth recording as a matter of practice: the pre-registration was committed at 23:10:13 and the
+renders landed in the next commit two hours and nineteen minutes later, and the results document
+publishes that git audit itself. It is the cheapest way to show a freeze was a freeze, and it is
+the first time this notebook does it.
+
+### 9.3 Where to restart
+
+1. **Look at one `preset_pos` / `preset_neg` pair** and record what you see — still open, still
+   decides a published claim's status on page 06.
+2. **`scramble_E`/`scramble_F` anchored on Block_6**, 60 renders, gives the triangle's side 2 its
+   own floor and makes the tree walkable.
+3. **The matched-pair colour test** for page 07's shrinkage.
+4. **Page 09, style direction** — `overturned`, and the contract requires it typeset exactly like
+   a page that holds; `docs/stage9_verdict.md` and `docs/observations_stage9.md` are written.
+5. The eight missing builders for pages 00 and 05, then the validator check that a `builder`
+   resolves to a callable.
+6. Page 01 stays blocked on its light-theme figures.
+
+### 9.4 Two things left untracked on purpose
+
+`qc_output/rotations_triangolo/` is 31 MB of PNG contact sheets, in a folder whose existing
+convention is webp — an asset-pipeline decision, not mine. And `_to_delete/` holds a directory
+literally named `C:\Users\aless\...` that the triangle script created by writing its output
+twice, the second time to a hard-coded Windows path; the script now falls back correctly, and
+this session cannot delete.

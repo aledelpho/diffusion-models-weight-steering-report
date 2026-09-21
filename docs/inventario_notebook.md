@@ -281,7 +281,7 @@ registered in `experiments/figures.yaml`, and `assets/03_what_ends_up_in_the_pic
 | **05** | `05-knob-or-cost` — What an edit steers, and what it costs | confirmatory | **live** | its pre-registration file is missing (§0 item 5) |
 | **06** | `06-the-hatching-axis` | confirmatory | **live** (2026-09-21) | the pre-registered visual check on the preset family has no recorded outcome |
 | **07** | `07-chromatic-signatures` | confirmatory, **ambiguous** | **live** (2026-09-21) | the matched-pair test that separates regression from the colour-pinning confound is registered and unrun |
-| **08** | `08-block1-vs-block6` | confirmatory | `prereg_rotations_block1_vs_block6.md`, `rotations_block1_vs_block6_results.md`; `data/rotations_block1_vs_block6_*` (6 files) | — |
+| **08** | `08-block1-vs-block6` | confirmatory | **live** (2026-09-21) | the specialisation-against-proximity question it raises is still open |
 | **09** | `09-style-direction` | confirmatory, **overturned** | `prereg_stage9_style_direction.md`, `stage9_verdict.md`, `observations_stage9.md`; `data/stage9_coherence_results.csv`, `stage9_centering_sensitivity.csv` | must be typeset exactly like a `holds` page (AUTHORING §3) |
 | **10** | `10-block6-in-the-latent` | exploratory | `block6_nel_latente.md`, `block6_e_struttura_gruppi.md`; pitfall 62 | `data/block6_misure_dirette.jsonl` is named by nothing (§3) |
 | **11** | `11-the-seed-watermark` | exploratory | `coerenza_traiettoria.md` | `data/coerenza_traiettoria.jsonl`, `coerenza_per_blocco_singolo.jsonl` named by nothing |
@@ -360,8 +360,11 @@ Three commits on `main`, no push.
 | `379dff6` | page `07-chromatic-signatures`, `experiments/stage7_chromatic_coherence.py` (which verifies itself against the frozen run's matrix), two registered charts |
 | `5089488` | inventory and report updated |
 | `06ce65b` | page `04-where-in-the-model`, `experiments/pilot_rotations_position.py`, two registered charts; the 54 rows of another experiment hiding in one block group, and the antisymmetric-share figure corrected |
+| `97bbe56` | inventory and report updated |
+| `0d2f927` | the triangle revision applied, with three corrections to the revision; pitfalls 68–69; the validator's duplicate-column check, self-test 19 → 20 |
+| `def4221` | page `08-block1-vs-block6`, `experiments/b1b6_paired_advantage.py`, two registered charts |
 
-`notebook/_migrating.yaml`: 23 original bullets, **15 claims migrated, 11 pending**.
+`notebook/_migrating.yaml`: 23 original bullets, **18 claims migrated, 10 pending**.
 
 Items closed from §0: item 1 (the ledger exists), item 10 (the alt text), and most of item 3 —
 **both** `notebook_figures.py` and `notebook_charts.py` now exist, with four working builders
