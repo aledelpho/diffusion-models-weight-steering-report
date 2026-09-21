@@ -489,3 +489,88 @@ convention is webp — an asset-pipeline decision, not mine. And `_to_delete/` h
 literally named `C:\Users\aless\...` that the triangle script created by writing its output
 twice, the second time to a hard-coded Windows path; the script now falls back correctly, and
 this session cannot delete.
+
+---
+
+## 10. Seventh pass — page 09, and the opening block on every page
+
+Commits `f0b82ab` and `272a611`. Validator 0 errors, self-test 21/21, ledger 21 migrated / 9
+pending. Nine pages are live.
+
+### 10.1 Page 09 is published as `overturned`
+
+`notebook/09-style-direction.md`. The registered hypothesis was that the direction a
+displacement imprints depends on the declared style more than on the subject. Three acceptance
+criteria were deposited at 08:55 on 2026-09-18; criterion 1, the only one that could confirm,
+is never met, and both artefact clauses fire. At the usable amplitude no cell of 12 reaches
+significance and 6 of 12 carry the opposite sign, all four calibrated-preset cells among them.
+
+Three figures, all read from CSVs already in `data/`:
+`F09.1_centering_flip.webp` (11 of 18 cells change sign under the uncentred convention),
+`F09.2_direction_at_usable_dose.webp`, `F09.3_quality_gate.webp` (18 of 24 outside the 3σ gate,
+worst at z = 131.7). Builders in `experiments/notebook_charts.py`, registered in
+`experiments/figures.yaml`.
+
+### 10.2 Three defects found while building it
+
+**The sign convention of stage 9 is not readable from its own outputs.** The decision statistic
+is `C_subject − C_style` (line 150 of `analyze_stage9_style_direction.py`) and the registered
+prediction asked for it to be **positive**. Nothing in the CSV headers says so: `delta_c_raw` is
+a bare name, and `p_value_raw` is one-sided in a direction the file does not record. The first
+version of all three figures here was labelled backwards, and it was caught by reading the
+script, not by reading the data. **Fix worth making:** a `direction` or `prediction` column, or
+a header comment, in any results file whose p is one-sided.
+
+**A fifth reason the five `CONFIRMED` cells fail, absent from the verdict.** The displacement of
+the 2.0x arm was never measured. `data/preset_displacements.csv` holds only the strength-1.0
+rows (D = 0.05381584, PASS). The D ≈ 0.108 quoted in the pre-registration is twice that number,
+under the assumption that the tuner's strength scales the delta linearly. No second bisection
+was run. This is pitfall 13 in its exact original form, and it sits under the only arm of the
+experiment that produced a significant result. Written into the page and into its
+reproducibility block as `measured_D: not measured`.
+
+**`data/stage9_images.csv` has 300 rows, not 280.** Twenty are a `chaos_edges_v2` arm rendered
+on four prompts of another corpus (I06, I07, I20, I24). The analysis excludes them correctly —
+280 remain — but no document declares them. This is the third manifest in the project found to
+contain rows from a different experiment (after the 54 rows on one block group, and pitfall 30
+twice).
+
+### 10.3 What could not be read, and what that exposes
+
+The reproducibility block for stage 9 could not be printed from the renders: they live outside
+the repository, and `data/stage9_images.csv` records no checkpoint, VAE or text encoder. They
+are attributed through `suite_git_sha ba28b12532175220`, shared with the stage 7 confirmation
+bench, and the block says so in a `note`.
+
+`AUTHORING.md` §5 tells an author to print that block with `experiments/extract_repro.py`
+rather than type it from memory. **That script does not exist.** §8 cited it as an existing
+check outside the validator; §8 now declares it missing. Every reproducibility block in the
+notebook is currently typed by hand.
+
+### 10.4 The opening block is now a contract element
+
+The old README opened every experiment with three first-person lines — *the direction I'm
+chasing / what would kill it / where we are*. The migration was dropping them. They are now
+`AUTHORING.md` §2, present on all nine pages, written from each page's own content, and
+enforced: `check_opening_block` errors if a lead-in is missing or out of order. Self-test case
+added, 21/21.
+
+Two stale rows of the §8 table were corrected in the same pass: builders resolving is 20 of 28,
+not four of nine, and the eight that fail are all bare names on pages 00 and 05.
+
+### 10.5 Where to restart
+
+1. **Look at one `preset_pos` / `preset_neg` pair** and record what you see — still open, still
+   decides a published claim's status on page 06.
+2. **`scramble_E`/`scramble_F` anchored on Block_6**, 60 renders, gives the triangle's side 2 its
+   own floor.
+3. **The matched-pair colour test** for page 07's shrinkage.
+4. **Write `experiments/extract_repro.py`**, then reprint every reproducibility block from the
+   renders and diff it against what is published. §5 has required this since the contract was
+   written.
+5. **Add a direction column to one-sided results files**, starting with stage 9.
+6. The eight missing builders for pages 00 and 05, then the validator check that a `builder`
+   resolves to a callable — 20 of 28 already resolve.
+7. Page 01 stays blocked on its light-theme figures.
+8. Remaining in the ledger: 9 pending claims, most of them belonging to page 01 and to the
+   front matter of the notebook rather than to an experiment page.
