@@ -1,0 +1,6 @@
+steps,space,type,dose_target_D,mean_s,p_signflip,floor,n_cells,supported,mean_cos_B1_B6,mean_cos_scrA_scrB
+7,Texture (Primary),primary,0.045001,-0.7905530633949702,0.0625,0.03125,6,False,0.32880092111994336,-0.46175214227502676
+7,Linework (Secondary),secondary,0.045001,-0.44889872283538934,0.15625,0.03125,6,secondary_only,0.17495265993463263,-0.27394606290075674
+7,Shadow (Secondary),secondary,0.045001,-0.8170536038691156,0.125,0.03125,6,secondary_only,0.7093473517809866,-0.10770625208812908
+7,Frequency (Secondary),secondary,0.045001,-1.0,0.25,0.03125,6,secondary_only,0.0,-1.0
+7,Palette (Secondary),secondary,0.045001,-0.29760521176918514,0.09375,0.03125,6,secondary_only,0.4076396516828081,0.11003443991362295

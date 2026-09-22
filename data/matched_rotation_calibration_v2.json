@@ -1,0 +1,168 @@
+{
+  "model_file": "krea2_turbo_bf16.safetensors",
+  "total_model_norm": 5009.4475,
+  "scramble_A_seed": 20260919,
+  "scramble_A_signs_40": [
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1
+  ],
+  "scramble_B_seed": 20260920,
+  "scramble_B_signs_32": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    -1
+  ],
+  "levels": {
+    "d030": {
+      "target_D": 0.03,
+      "Block_1": {
+        "angle_deg": 15.7296,
+        "d_model": 0.03,
+        "delta_norm": 150.2846,
+        "tensor_count": 40
+      },
+      "Block_6": {
+        "angle_deg": 21.3119,
+        "d_model": 0.029999,
+        "delta_norm": 150.2804,
+        "tensor_count": 32
+      },
+      "tolerance_achieved": 8.5e-07,
+      "scramble_A": {
+        "anchor": "Block_1",
+        "angle_deg": 15.7296,
+        "d_model": 0.03,
+        "seed": 20260919
+      },
+      "scramble_B": {
+        "anchor": "Block_6",
+        "angle_deg": 21.3119,
+        "d_model": 0.029999,
+        "seed": 20260920
+      }
+    },
+    "d045": {
+      "target_D": 0.045001,
+      "Block_1": {
+        "angle_deg": 23.69,
+        "d_model": 0.045002,
+        "delta_norm": 225.4332,
+        "tensor_count": 40
+      },
+      "Block_6": {
+        "angle_deg": 32.21,
+        "d_model": 0.045001,
+        "delta_norm": 225.4305,
+        "tensor_count": 32
+      },
+      "tolerance_achieved": 5.5e-07,
+      "scramble_A": {
+        "anchor": "Block_1",
+        "angle_deg": 23.69,
+        "d_model": 0.045001,
+        "seed": 20260919
+      },
+      "scramble_B": {
+        "anchor": "Block_6",
+        "angle_deg": 32.21,
+        "d_model": 0.045001,
+        "seed": 20260920
+      }
+    },
+    "d060": {
+      "target_D": 0.06,
+      "Block_1": {
+        "angle_deg": 31.7657,
+        "d_model": 0.059995,
+        "delta_norm": 300.5419,
+        "tensor_count": 40
+      },
+      "Block_6": {
+        "angle_deg": 43.405426,
+        "d_model": 0.059995,
+        "delta_norm": 300.5417,
+        "tensor_count": 32
+      },
+      "tolerance_achieved": 4e-08,
+      "scramble_A": {
+        "anchor": "Block_1",
+        "angle_deg": 31.7657,
+        "d_model": 0.059995,
+        "seed": 20260919
+      },
+      "scramble_B": {
+        "anchor": "Block_6",
+        "angle_deg": 43.405426,
+        "d_model": 0.059995,
+        "seed": 20260920
+      }
+    }
+  }
+}
