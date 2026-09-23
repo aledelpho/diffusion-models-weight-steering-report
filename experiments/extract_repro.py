@@ -41,9 +41,20 @@ NOTEBOOK = ROOT / "notebook"
 EVIDENCE: dict[str, dict] = {
     "00-the-bench": {
         # bench_checks.csv is a ledger of checks, not a render manifest: no per-image row,
-        # no dimensions, no sampler. Nothing in the repository records this bench's renders.
-        "dims": [],
+        # no dimensions, no sampler. Since 2026-09-23 one slice of this page does have a
+        # per-image file -- the 38 baseline renders the noise floor was measured on, with
+        # their resolution and sha256. It covers the resolution field and nothing else:
+        # there is still no manifest, and no sampler is recorded anywhere for this bench.
+        "dims": ["noise_floor_hf_by_render.csv"],
         "manifest": None,
+    },
+    "01-mark-style": {
+        # The five manifests global_aggregation_corrected.py actually loads. Until 2026-09-23
+        # this entry named the stage-7 files, which belong to page 06: the page was checking
+        # its reproduction block against a corpus its numbers do not come from.
+        "dims": ["stage2_images.csv", "stage4_images.csv", "stage5_images.csv",
+                 "stage6_images.csv", "stage6b_pilot_images.csv"],
+        "manifest": "stage5_images.csv",
     },
     "02-attribute-emergence": {
         # The barnacle arm has no dimension column. The headlight arm rides on the stage 9
@@ -84,6 +95,11 @@ EVIDENCE: dict[str, dict] = {
     "09-style-direction": {
         "dims": ["stage9_images.csv", "palette_features_stage9.csv"],
         "manifest": "stage9_images.csv",
+    },
+    "10-all-blocks-clean": {
+        "dims": ["all_blocks_clean_v2_style_features.csv",
+                 "all_blocks_clean_v2_palette_features.csv"],
+        "manifest": None,
     },
 }
 

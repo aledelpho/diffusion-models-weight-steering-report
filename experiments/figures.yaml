@@ -20,7 +20,7 @@ figures:
   - id: F05.1
     page: 05-knob-or-cost
     kind: scatter
-    builder: knob_vs_cost_scatter
+    builder: notebook_charts.knob_vs_cost_scatter
     source: data/punto7_blocks.csv
     caption_from: source
     crop: whole
@@ -34,7 +34,7 @@ figures:
   - id: F05.2
     page: 05-knob-or-cost
     kind: scatter
-    builder: depth_profile
+    builder: notebook_charts.depth_profile
     source: data/punto7_blocks.csv
     caption_from: source
     crop: whole
@@ -46,21 +46,22 @@ figures:
   - id: F05.3
     page: 05-knob-or-cost
     kind: paired_bars
-    builder: rectification_bars
+    builder: notebook_charts.rectification_bars
     source: data/punto7_blocks.csv
     caption_from: source
     crop: whole
     alt: >
       Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised
       on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive
-      direction; block 27 is the only one that reverses this.
+      direction; of the last six blocks only block 27 reverses it, and four blocks in the
+      middle of the network reverse it too.
 
   # Built and looked at: the difference reads clearly at whole-frame size, so no crop.
   # The control is the same baseline twice, NOT two seeds — see AUTHORING §4.3.
   - id: F05.4
     page: 05-knob-or-cost
     kind: toggle
-    builder: toggle_animation
+    builder: notebook_charts.inverted_knob_toggle
     source: data/punto7_blocks.csv
     caption_from: source
     crop: whole
@@ -86,7 +87,7 @@ figures:
   - id: F00.1
     page: 00-the-bench
     kind: toggle
-    builder: toggle_animation
+    builder: notebook_charts.roundtrip_sentinel
     source: data/bench_checks.csv
     caption_from: source
     crop: whole
@@ -111,13 +112,13 @@ figures:
   - id: F00.3
     page: 00-the-bench
     kind: paired_bars
-    builder: noise_floor_history
-    source: data/bench_checks.csv
+    builder: notebook_charts.noise_floor_history
+    source: data/noise_floor_history.csv
     caption_from: source
     crop: whole
     alt: >
       The seed-to-seed noise floor as it was estimated three times: 1.15 percent on three
-      seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.84 percent
+      seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.83 percent
       measured on eighteen seeds each.
 
   - id: F02.6
@@ -292,8 +293,8 @@ figures:
   - id: F01.1
     page: 01-mark-style
     kind: strip
-    builder: scale_comparison
-    source: data/stage7_manifest.csv
+    builder: notebook_charts.scale_comparison
+    source: data/stage7b_images.csv
     caption_from: source
     crop: whole
     alt: >
@@ -304,8 +305,8 @@ figures:
   - id: F01.2
     page: 01-mark-style
     kind: toggle
-    builder: toggle_gif
-    source: data/stage7_manifest.csv
+    builder: notebook_charts.mark_style_toggle
+    source: data/stage5_images.csv
     caption_from: source
     crop: whole
     control: baseline_pair_seed42_seed777
@@ -383,6 +384,19 @@ figures:
       below, each panel captioned with its recorded score. At the identical displacement the
       scramble draws the attribute once in twenty, the same rate as the untouched model.
 
+  - id: F08.3
+    page: 08-block1-vs-block6
+    kind: strip
+    builder: notebook_charts.b1b6_hud_vs_recovered
+    source: data/rotations_block1_vs_block6_recovered_results.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The same ten-prompt experiment measured twice, with the HUD panel in frame and on the
+      recovered pixels, in all five spaces. In the primary space the scramble null halves while
+      the advantage barely moves, so the excess the criterion compares grows; three of the four
+      secondary spaces move the other way.
+
   - id: F09.1
     page: 09-style-direction
     kind: strip
@@ -418,6 +432,45 @@ figures:
       Each cell at double amplitude, its distance from the baseline range in sigma against the
       3-sigma gate declared before the analysis. Eighteen of twenty-four sit outside it, the
       worst by two orders of magnitude.
+
+  - id: F01.3
+    page: 01-mark-style
+    kind: paired_bars
+    builder: notebook_charts.downsample_blindness
+    source: data/downsample_blindness.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Eleven stroke and texture statistics, their paired effect size separating the preset
+      from the block-shuffle control, measured on the renders as saved and again after CLIP's
+      224 by 224 resample. Ten of the eleven keep at least half their effect size and five
+      grow, so the resample is not what would make CLIP blind.
+
+  - id: F10.1
+    page: 10-all-blocks-clean
+    kind: paired_bars
+    builder: notebook_charts.all_blocks_depth_profile
+    source: data/all_blocks_clean_v2_response_by_block.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The antisymmetric response of each of the six block groups at 5, 10 and 15 degrees,
+      with the standard deviation across the six cells. Every group grows with angle, and at
+      15 degrees the output group B6 moves the image more than four times further than the
+      next group.
+
+  - id: F10.2
+    page: 10-all-blocks-clean
+    kind: paired_bars
+    builder: notebook_charts.sensitivity_per_displacement
+    source: data/sensitivity_by_block.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      B6's response divided by B1's, at each of the three angles, before and after dividing
+      each by the weight displacement the group actually received. Rotating by the same angle
+      pushes B6 only 74 percent as far as B1, so correcting for the dose widens the gap from
+      4.1 to 5.4 times up to 5.6 to 7.2 times.
 
   # A locator must be qualified before it may be used here. Declare it, measure its hit rate
   # across the corpus, publish the rate next to the figure, and fall back to the whole frame

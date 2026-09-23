@@ -1,0 +1,9 @@
+tag,n,n_fail,degraded
+B1_neg,36,0,False
+B1_pos,36,0,False
+B6_neg,36,5,True
+B6_pos,36,0,False
+scrA_neg,36,0,False
+scrA_pos,36,0,False
+scrB_neg,36,34,True
+scrB_pos,36,35,True

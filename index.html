@@ -82,6 +82,7 @@
   <h2>Experiments</h2>
   <ul>
 <li><a href="#p-00-the-bench"><span class="dot" style="background:#0ca30c"></span>Is the instrument lying to me?</a></li>
+<li><a href="#p-01-mark-style"><span class="dot" style="background:#898781"></span>A tiny payload shifts mark style</a></li>
 <li><a href="#p-02-attribute-emergence"><span class="dot" style="background:#fab219"></span>What the edit puts in the picture, and what it takes out</a></li>
 <li><a href="#p-03-what-ends-up-in-the-picture"><span class="dot" style="background:#0ca30c"></span>How much room the subject takes, and how blind I actually was</a></li>
 <li><a href="#p-04-where-in-the-model"><span class="dot" style="background:#fab219"></span>Does it matter where you edit?</a></li>
@@ -90,10 +91,12 @@
 <li><a href="#p-07-chromatic-signatures"><span class="dot" style="background:#fab219"></span>What the edit does to colour, and what it does not</a></li>
 <li><a href="#p-08-block1-vs-block6"><span class="dot" style="background:#0ca30c"></span>Two places in the model, pushed the same distance</a></li>
 <li><a href="#p-09-style-direction"><span class="dot" style="background:#d03b3b"></span>Eight styles, one direction, and a design that cannot say why</a></li>
+<li><a href="#p-10-all-blocks-clean"><span class="dot" style="background:#898781"></span>All six block groups under matched rotation</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
     <li><a href="#claims">What holds, what does not</a></li>
+    <li><a href="docs/scope.md">Scope and ladder</a></li>
     <li><a href="docs/errors_log.md">The pitfalls checklist</a></li>
     <li><a href="data/">Measurement files</a></li>
   </ul>
@@ -112,7 +115,7 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--the-same-render-twice-weeks-apart">The pipeline reproduces a render exactly across a restart, so measurements taken weeks apart can be compared to each other.</a></td><td class="ev">Maximum channel difference 0, P01 at seed 42, across a ComfyUI restart.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--the-edit-that-undoes-itself-and-does-not">An edit and its exact inverse put the weights back where they were and do not put the image back, which sets a floor stricter than the seed floor.</a></td><td class="ev">Weights at D = 0; image differs by a mean of 16 of 255 across 15 cells.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--four-arms-that-do-nothing-and-one-that-proves-the-test-works">One of the text-encoder arms is exactly inert: it changes nothing at any dose, while a sibling arm in the same run changes the image at every dose.</a></td><td class="ev">RMS difference exactly 0.0 at five doses; the sibling arm runs 23.5 to 34.0.</td></tr>
-<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--the-floor-that-moved-twice-before-it-was-measured">The seed-to-seed noise floor of fine texture is under 2% on the two prompts that every threshold in this notebook is calibrated against.</a></td><td class="ev">1.65% on P01 and 1.84% on P02, measured across 18 baseline seeds each.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-00-the-bench--the-floor-that-moved-twice-before-it-was-measured">The seed-to-seed noise floor of fine texture is under 2% on the two prompts that every threshold in this notebook is calibrated against.</a></td><td class="ev">1.6468% on P01 and 1.8313% on P02 in data/noise_floor_measured.csv, across 18 distinct baseline seeds each (153 pairs), 16 of them from benchmark_pavimento_rumore and the last two from benchmark_latenti_b6.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-03-what-ends-up-in-the-picture--the-subject-grows-and-by-how-much">A block-derangement edit makes the subject occupy more of the frame, and the growth increases with the dose. Replicated on a corpus of ten styles that did not exist when the prediction was frozen.</a></td><td class="ev">Pre-registered. Geometric mean ratio 1.234 across 10 new styles, 9 of 10 above 1, all three predicted signs correct. Holm-corrected p of 0.018 to 0.035 across the four readings of the registered test.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-03-what-ends-up-in-the-picture--the-annotator-is-the-instrument">Hashed filenames do not blind an expert observer to a condition with a visible signature, and the gap is large enough to be measured on twenty trials.</a></td><td class="ev">Pre-registered threshold of 5 joint hits in 20 before the round. Four-way forced choice against a 25% chance level: 17 of 20 on one condition, 12 of 20 on the other, 12 of 20 on both in the same trial against a 8.3% joint chance level.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-common-mode-is-friction-not-a-knob">Pushing any block costs fine texture, in either direction, and the cost grows the closer the block sits to the output.</a></td><td class="ev">Pre-registered. Mean common mode 0.978, 23 of 28 blocks below 1, r = -0.659 against block index, 11-14σ.</td></tr>
@@ -120,8 +123,8 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-05-knob-or-cost--the-tail-is-rectified">On the last blocks the negative direction is the safe side: positive pushes wreck the image, negative pushes barely move it.</a></td><td class="ev">Amplitude ratio 9.1x on block 26, both arms on one scale. All six blocks from 22 onward asymmetric.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-06-the-hatching-axis--the-two-structured-families">A block-derangement edit crosses the hatching strokes when pushed positive and runs them parallel when pushed negative, and the sign of that displacement decides which.</a></td><td class="ev">Pre-registered sign, confirmed on 16 prompts sharing nothing with the corpus the observation came from. Delta +0.288 in crosshatch entropy, Holm p 9.2e-5 at the exact permutation floor, 16 prompts of 16 and 79 image pairs of 80.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-07-chromatic-signatures--the-directions-differ-and-that-is-the-claim-that-holds">Different weight edits move the palette in directions that differ from one another, so the colour response is a property of which edit was applied and not a single shared drift.</a></td><td class="ev">Pre-registered. Within-condition coherence +0.057 against +0.023 between conditions, a difference of +0.035 against a label-permutation null with mean -0.003 and a 95th percentile of +0.007. p = 1e-4, the Monte Carlo floor, and the second time this statistic has landed on its floor on an independent corpus.</td></tr>
-<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--the-advantage-and-the-null-it-had-to-beat">Two block groups pushed exactly the same distance move the image in directions that can be told apart, and they separate further than two arbitrary perturbations of that same size do.</a></td><td class="ev">Pre-registered, single hypothesis, no alternatives. Same-block advantage +1.039 at the exact permutation floor p = 0.00195, positive in 10 prompts of 10, against a scramble null of +0.532; the paired advantage is +0.506, also at the floor and positive in 10 of 10. The criterion holds in all five measurement spaces.</td></tr>
-<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">At a displacement matched by construction, the first block group&#x27;s direction is highly consistent across subjects rather than unstable.</a></td><td class="ev">Within-block coherence 0.949 for the first group and 0.958 for the last, in the primary space, on 10 prompts sharing no text with the pilot. The pilot estimate for the same quantity was 0.65 across 23 features.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--the-advantage-and-the-null-it-had-to-beat">Two block groups pushed exactly the same distance move the image in directions that can be told apart, and they separate further than two arbitrary perturbations of that same size do.</a></td><td class="ev">Pre-registered, single hypothesis, no alternatives. Measured on recovered pixels: same-block advantage +1.108 at the exact permutation floor p = 0.00195, positive in 10 prompts of 10, against a scramble null of +0.274; the paired advantage is +0.834, also at the floor and positive in 10 of 10. The criterion holds in all five measurement spaces. The figures published before 2026-09-23 were +1.039, +0.532 and +0.506, measured with a HUD panel in the frame that inflated the null.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">At a displacement matched by construction, the first block group&#x27;s direction is highly consistent across subjects rather than unstable.</a></td><td class="ev">Within-block coherence 0.942 for the first group and 0.977 for the last, in the primary space, on 10 prompts sharing no text with the pilot, measured on recovered pixels. The pilot estimate for the same quantity was 0.65 across 23 features. Removing the HUD moved these two by less than 0.02: the coherence was never the contaminated part.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-09-style-direction--why-the-five-confirmed-cells-do-not-survive">The only amplitude that produced significant cells sits outside the quality range declared for it in advance, in three quarters of its cells.</a></td><td class="ev">The 3-sigma gate was frozen while the render queue was still running and before any feature was extracted. 18 cells of 24 at the double amplitude fall outside it on edge density or on texture entropy, the worst at z = 131.7. That arm&#x27;s displacement was never measured either: its 0.1076 is twice the measured single-dose value, not a second measurement.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
@@ -134,18 +137,28 @@
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-06-the-hatching-axis--the-control-that-vanished">The exploratory hatching effect of the norm-matched sign scramble does not survive a fresh corpus. It was the third family of the registered prediction and it is not there.</a></td><td class="ev">Exploratory -0.187 on 18 prompts, 81 pairs of 90. Confirmation +0.020 with the sign reversed, p = 0.67, 5 of 16 prompts and 30 of 80 pairs in the predicted direction.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-09-style-direction--what-the-frozen-criteria-returned">That the direction a weight displacement imprints on the image depends on the style the prompt declares more than it depends on the subject the prompt describes. Tested against criteria frozen before the renders, not supported, and at the usable dose it runs the other way.</a></td><td class="ev">Pre-registered 2026-09-18 at 08:55 with three acceptance criteria. Criterion 1, full confirmation in the complete space and in the texture space, is never met: texture is not significant at either amplitude. At the usable amplitude no cell of 12 is significant and 6 of 12 carry the sign opposite to the prediction, including all four cells of the calibrated preset. The two artefact clauses, criteria 2 and 3, both fire.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--the-53-kb-payload">A 53 KB hand-calibrated weight perturbation shifts the mark style of a 12.8-billion parameter diffusion model coherently and repeatably across seeds.</a></td><td class="ev">On 24 prompts in data/global_aggregation_corrected.csv the preset separates from both controls on the stroke-continuity axis: PC1 -2.532, 95% CI [-2.997, -2.067], dz = -2.30, Holm p = 3e-05 against block derangement, and -2.117, CI [-2.692, -1.542], Holm p = 3e-05 against the sign scramble. Crosshatch entropy moves with it, -1.691 and -0.485, both Holm significant. Exploratory: no threshold was frozen before these were computed.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--direction-not-distance">This is not &quot;the further from the checkpoint, the more the style changes&quot;. Controls at the same Frobenius displacement without the calibrated structure do not reproduce it.</a></td><td class="ev">Both controls carry the identical measured displacement, d_model_relative = 0.05381584 in data/preset_displacements.csv, and both are separated from the preset on the same axis: PC1 -2.532 against block derangement and -2.117 against the sign scramble, Holm p = 3e-05 each, in data/global_aggregation_corrected.csv. Distance is held constant by construction, so what differs is the structure.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--clip-at-224-is-still-untested">Whether CLIP at 224x224 can see this change is untested. The reason this page gave for expecting it to be blind -- that the resample destroys the stroke detail -- has now been measured, and it does not hold.</a></td><td class="ev">Measured, on mark morphology: stroke width +0.238, Holm p = 0.0164 against block derangement and +0.394, Holm p = 0.0202 against the sign scramble, on 24 prompts in data/global_aggregation_corrected.csv. Measured, on the resample: across 16 prompts of the stage 7 corpus, 10 of 11 statistics keep at least half their paired effect size after CLIP&#x27;s 224x224 bicubic resize and centre crop and 5 of them grow; lbp entropy keeps 92 per cent of its effect and stays significant at p = 0.0006, in data/downsample_blindness.csv. NOT measured: no CLIP distance exists in this repository for this corpus. The only clip_dist column in data/ belongs to the rotation pilot, a different experiment.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--generalisation-across-prompts">The mark-style effect is present across 24 prompts rather than on the one it was found on. No generalisation criterion was frozen in advance; the ledger entry that said so was inherited from the old README and is corrected here.</a></td><td class="ev">24 prompts pooled in data/global_aggregation_corrected.csv, where the stroke-axis and stroke-width contrasts above are Holm significant. On the 6 colour-free prompts alone (data/global_aggregation_colour_free_6p.csv) the stroke axis still excludes zero, -1.958 and -3.815, but neither survives Holm at that sample size: both corrected p = 0.138. The generalisation rests on the pooled corpus, not on the small subset.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--colour-does-not-generalise">The colour effect does not generalise: it is present only where the prompt pins the palette, absent when the model chooses it.</a></td><td class="ev">On the 24 pooled prompts the colour contrasts are strong -- effective colour count -0.376 and -0.237, top-four cluster share +0.384 and +0.234, Holm p between 0.0012 and 0.0058. On the 6 colour-free prompts, 7 of the 8 preset colour contrasts contain zero (data/global_aggregation_colour_free_6p.csv). The exception is top-four cluster share against the sign scramble, +0.241, CI [+0.014, +0.467] -- the old README said &quot;every&quot; palette contrast contained zero, and seven of eight is the accurate figure.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--a-sharp-operator">The preset acts as a sharp multi-feature operator: darker, greyer, grainier, parallel-stroked, and headlights on across two unrelated corpora.</a></td><td class="ev">Five metrics moving together on 24 pooled prompts, both controls on the far side of all of them: stroke-continuity axis -2.532 and -2.117, stroke width +0.238 and +0.394, crosshatch entropy -1.691 and -0.485, effective colour count -0.376 and -0.237, top-four cluster share +0.384 and +0.234. Holm p between 3e-05 and 0.0202 across the family, in data/global_aggregation_corrected.csv. The concordance was read off after the fact and nothing about it was predicted, which is why the claim is open rather than holding.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--what-is-still-open">Which structural property of the perturbation is the operative one remains unresolved. Two points separate structure from magnitude, but do not identify what about the structure does the work.</a></td><td class="ev">The matched displacement and the two separated controls show that structure, not distance, carries the effect. Nothing here isolates which structural property: no layer ablation, no spectral decomposition and no rank sweep was executed. This is a claim of absence and carries no measurement on purpose.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--one-attribute-one-prompt-family">Whether attribute emergence is a general property of structured weight edits or a fact about one prompt template is untested, and the design written to test it was never run.</a></td><td class="ev">The pre-registered stage-7 attribute table was never filled, so the primary test does not exist. Both positive prompts share nearly every token.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">Whether the enlargement comes from the structure of the edit or merely from its magnitude is undecided, because the design left out the one control that separates them.</a></td><td class="ev">The round compared two structured edits against a baseline. A sign-scrambled edit at the identical displacement was not rendered, so no point on the magnitude axis exists.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-04-where-in-the-model--the-direction-and-why-it-is-not-a-result">Two well-measured block groups appear to push the image in different directions, not merely by different amounts. It is a hypothesis, not a result.</a></td><td class="ev">Same-block advantage +0.689 for the first group against the last, unanimous on 7 prompts, p at the floor. The family of comparisons was never declared, and at seven prompts Holm can carry exactly three: the result sits on the boundary that the declaration would have decided.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-04-where-in-the-model--what-it-does-not-mean">Whether the position effect is about what a block does or merely about how little of the network remains downstream of it is untested, and the second explanation is the ordinary one.</a></td><td class="ev">The last group is the last four blocks of twenty-eight. An unsigned distance says the image moved, never what moved, so this design cannot separate a sensitivity from a specialisation.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-07-chromatic-signatures--colour-and-texture-are-not-one-signature">Colour and stroke texture do not respond to these displacements in the same way, and no account here explains both.</a></td><td class="ev">On the same 560 renders, colour effects roughly halved and the sign scramble was among the strongest conditions, while texture held its size and the sign scramble vanished. Not tested against any alternative account.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-09-style-direction--the-reading-this-design-licenses">Whether the reversal says anything about declared styles, or only about the fact that the eight style prompts share one scene while the eighteen subject prompts do not, cannot be decided from this design.</a></td><td class="ev">Sharing a scene raises measured coherence directly, and the reliabilities show it from the other side: the style corpus measures more reliably than the subject corpus in 22 cells of 24. This is the exchangeability limit declared a priori in amendment 4, and here it bites in full. A crossed design would settle it and has not been run.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-monotonic-response-across-angles">Response grows monotonically with rotation angle for every block group, with the output group (B6) moving the image most and the input group (B1) second, while middle groups remain substantially weaker.</a></td><td class="ev">B6 runs 0.63 / 1.65 / 3.71, B1 runs 0.12 / 0.40 / 0.90, middle groups 0.07 to 0.49 in data/all_blocks_clean_v2_response_by_block.csv.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--chroma-shape-ratio-versus-separability">The chroma/shape specialization ratio makes B1 and B6 the closest of all fifteen block pairs, yet pairwise separability tests put B1-B6, B1-B2, and B1-B4 at the exact permutation floor with similar cosines.</a></td><td class="ev">Gap 0.0073 (p = 0.067) in data/specialisation_vs_proximity.csv vs floor p = 0.03125 in data/all_blocks_clean_v2_separability.csv.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-same-angle-is-not-the-same-dose">The output group&#x27;s lead over the input group is not an artefact of rotating every group by the same angle: correcting for the displacement each group actually received widens the lead instead of closing it.</a></td><td class="ev">B6 receives 0.740 of B1&#x27;s displacement at a common angle, so the ratio 5.35 / 4.16 / 4.13 as rendered becomes 7.23 / 5.62 / 5.58 per unit of displacement, in data/sensitivity_by_block.csv.</td></tr>
       </tbody>
     </table>
   </section>
 
 <section id="p-00-the-bench">
-<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">423 renders · 5 prompts · 5 seeds · 2026-09-20</span></p>
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">427 renders · 5 prompts · 5 seeds · 2026-09-20</span></p>
 <h1 id="p-00-the-bench--is-the-instrument-lying-to-me">Is the instrument lying to me?</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> Nothing on any other page is worth reading if this one is
@@ -194,7 +207,8 @@ properly. That story is below, because a reader deserves to see how the sausage 
 <h2 id="p-00-the-bench--the-verdict">The verdict</h2>
 <p>The instrument holds. The tuner is bit-exact identity at gain zero, on 15 cells across three
 prompts. The pipeline reproduces a render exactly across a restart. The seed-to-seed floor of
-fine texture is 1.65% on P01 and 1.84% on P02, measured on 18 baseline seeds each.</p>
+fine texture is 1.65% on P01 and 1.83% on P02, measured on 18 baseline seeds each and
+reproduced from the renders by <code>experiments/measure_noise_floor.py</code>.</p>
 <p>Two findings here are stricter than expected and constrain the rest of the notebook. The
 round-trip sentinel sets a floor above the seed floor: weights returned to D = 0 do not return
 the image, by a mean of 16 of 255. And a change of seed leaves two baselines correlated at only
@@ -281,7 +295,7 @@ as an RMS or mean over all channels, where the question is <em>how much</em>.</p
 <tr>
 <td>noise floor, P02</td>
 <td>measured on ≥ 18 seeds</td>
-<td style="text-align: right;"><strong>1.84%</strong></td>
+<td style="text-align: right;"><strong>1.83%</strong></td>
 <td>pass</td>
 </tr>
 <tr>
@@ -353,12 +367,12 @@ varies between two renders that differ only by their seed. That number has a his
 </tr>
 <tr>
 <td>measured</td>
-<td style="text-align: right;"><strong>1.65%</strong> (P01), <strong>1.84%</strong> (P02)</td>
+<td style="text-align: right;"><strong>1.65%</strong> (P01), <strong>1.83%</strong> (P02)</td>
 <td>18 seeds each, 153 pairs each</td>
 </tr>
 </tbody>
 </table></div>
-<p><img alt="The seed-to-seed noise floor as it was estimated three times: 1.15 percent on three seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.84 percent measured on eighteen seeds each." src="assets/00-the-bench/F00.3_noise_floor_history.webp" /></p>
+<p><img alt="The seed-to-seed noise floor as it was estimated three times: 1.15 percent on three seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.83 percent measured on eighteen seeds each." src="assets/00-the-bench/F00.3_noise_floor_history.webp" /></p>
 <p>The first was unreliable: a standard deviation on three samples has two degrees of freedom and
 can be wrong by a factor of two or three. The correction then over-shot in the other direction
 by importing a figure from prompts that behave differently. In between, conclusions sitting at
@@ -426,7 +440,8 @@ conditions:
     dose: 0.005 / 0.020 / 0.050 / 0.120 / 0.200
     measured_D: not applicable — a text-encoder gain, not a backbone displacement
 outputs:
-  folder: benchmark_stage1_gate, benchmark_determinismo, benchmark_testo_pilota, benchmark_pavimento_rumore
+  folder: benchmark_stage1_gate, benchmark_determinismo, benchmark_testo_pilota,
+    benchmark_pavimento_rumore, benchmark_latenti_b6
   manifest: none -- data/bench_checks.csv is a ledger of checks (11 rows, one per check),
     not a per-render manifest. No file in the repository lists these 423 renders.
 analysis:
@@ -440,13 +455,299 @@ analysis:
     verification. The block was typed by hand. experiments/extract_repro.py exists as of
     2026-09-21 and reads data/, not the renders; for this page it can prove nothing, because
     no file here records these benches image by image. Every field above is unverified.
+
+    AS OF 2026-09-23 there are two exceptions and one new problem. The exceptions are the
+    two noise_floor rows: experiments/measure_noise_floor.py reads the 38 baseline renders
+    of benchmark_latenti_b6 and benchmark_pavimento_rumore, records them image by image in
+    data/noise_floor_hf_by_render.csv with their resolution and sha256, and reproduces the
+    published floor from the pixels -- 1.6468% on P01 and 1.8313% on P02. That file is now
+    what extract_repro.py reads for this page, so the resolution field above is proven for
+    38 of the 427 renders. The problem is the script field itself: experiments/measure_bench.py
+    is not in the repository, so the sha256 beside it is the hash of a file nobody can
+    produce, and the other nine rows of data/bench_checks.csv are still hand-typed with no
+    code behind them.
 </code></pre>
 <h2 id="p-00-the-bench--provenance">Provenance</h2>
 <ul>
-<li>Measurement file: <a href="../data/bench_checks.csv"><code>data/bench_checks.csv</code></a> — one row per check, each with the criterion it was judged against</li>
-<li>Script: <code>experiments/measure_bench.py</code></li>
-<li>Renders: <code>benchmark_stage1_gate</code> (360, sentinels and the norm-matched bench), <code>benchmark_determinismo</code> (1), <code>benchmark_testo_pilota</code> (30), <code>benchmark_pavimento_rumore</code> (32, the 18-seed floor)</li>
+<li>Measurement files: <a href="../data/bench_checks.csv"><code>data/bench_checks.csv</code></a> — one row per check, each with the criterion it was judged against; <a href="../data/noise_floor_measured.csv"><code>data/noise_floor_measured.csv</code></a> and <a href="../data/noise_floor_hf_by_render.csv"><code>data/noise_floor_hf_by_render.csv</code></a> — the floor, and the 38 renders it was measured on</li>
+<li>Scripts: <code>experiments/measure_noise_floor.py</code> (the two noise-floor rows); <code>experiments/measure_bench.py</code> is named for the other nine and is not in the repository</li>
+<li>Renders: <code>benchmark_stage1_gate</code> (360, sentinels and the norm-matched bench), <code>benchmark_determinismo</code> (1), <code>benchmark_testo_pilota</code> (30), <code>benchmark_pavimento_rumore</code> (32, sixteen of the eighteen floor seeds), <code>benchmark_latenti_b6</code> (4, the last two floor seeds on both prompts)</li>
 <li>Pitfalls that apply: 4 and 5 (a sentinel below the precision of the format, and an acceptance criterion mismatched to it), 10 (round-trip composition), 13 (a tolerance that returns its best candidate instead of failing), 15 (a gate that tallies misses and proceeds), 54 (assuming the node is a no-op instead of measuring it), 55 (a seed change used as a noise floor), 62 (a threshold calibrated on three seeds)</li>
+</ul>
+</section>
+<section id="p-01-mark-style">
+<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">1272 renders · 24 prompts · 15 seeds · 2026-09-15</span></p>
+<h1 id="p-01-mark-style--a-tiny-payload-shifts-mark-style">A tiny payload shifts mark style</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> I want to steer how a diffusion model draws — its strokes, hatching, and mark-making — without retraining it, without prompting gymnastics, and without blowing up its weights. A 53 KB delta on a 12.8-billion parameter backbone was the first hint that small, targeted rank perturbations could act as precision instruments rather than sledgehammers.</p>
+<p><strong>What would kill it.</strong> If the shift in mark style is just an artifact of moving away from the baseline — any random perturbation of that same size doing the same thing — or if standard vision encoders like CLIP see right through it or ignore it entirely because the strokes are below their spatial resolution.</p>
+<p><strong>Where we are.</strong> The calibrated preset undeniably shifts stroke density and mark texture across multiple seeds and prompts, and random perturbations at the identical displacement fail to reproduce it. But because this stage was exploratory and un-preregistered, the claims remain open.</p>
+</blockquote>
+<h2 id="p-01-mark-style--in-two-minutes">In two minutes</h2>
+<p>A 53 KB hand-calibrated patch applied to Krea-2 alters mark morphology repeatably across seeds. It is not an amplitude artifact: controls matched to the exact same Frobenius displacement (<code>d_model_relative = 0.0538</code>) do not induce the same stroke behavior.</p>
+<p><img alt="Baseline, preset and the norm-matched random control alternating on one prompt and one seed. The preset changes how the marks are drawn; the control at the same displacement does not." src="assets/01-mark-style/F01.2_mark_style_toggle.webp" /></p>
+<p>Standard image metrics like CLIP similarity at 224×224 are essentially blind to this change: downsampling to the thumbnail resolution evaluated by CLIP strips away high-frequency linework and cross-hatching detail, making the images appear near-identical to the encoder while remaining visibly altered to human observers.</p>
+<p><img alt="The same baseline and preset pair shown at full resolution and again at 224 by 224, the size CLIP actually looks at. The stroke detail that separates them does not survive the downsample." src="assets/01-mark-style/F01.1_scale_comparison.webp" /></p>
+<h2 id="p-01-mark-style--the-verdict">The verdict</h2>
+<p>The pilot demonstrates that weight steering in diffusion models can operate in fine-grained stylistic regimes. However, because stage 5 and stage 7 were designed during initial exploration before pre-registration standards were enforced in this notebook, all findings are catalogued as <strong>open</strong>.</p>
+<ol>
+<li>The preset produces visible shifts in stroke thickness, contour structure, and hatching density.</li>
+<li>Random controls at the exact same displacement do not reproduce the effect, establishing that direction matters, not merely distance from the base weights.</li>
+<li>The effect generalises across multiple prompts, but secondary attributes like color shifts do not consistently co-occur unless the prompt explicitly constrains the palette.</li>
+</ol>
+<h2 id="p-01-mark-style--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>No pre-registration.</strong> Stage 5 was exploratory. The thresholds and prompt sets were adjusted interactively during discovery. While stage 7 added confirmation prompts, it inherited hypotheses formulated post hoc.</p>
+<p><strong>Spatial confounding.</strong> Visual evaluation of stroke changes can be confounded by prompt semantic drift. Although seed-matched comparisons isolate the perturbation, full parametric isolation of the causal layers was not achieved at this stage.</p>
+<h2 id="p-01-mark-style--the-data">The data</h2>
+<h3 id="p-01-mark-style--the-53-kb-payload">The 53 KB payload</h3>
+<p>The steering vector occupies 53 KB, against a 12.8-billion-parameter checkpoint. What it does is
+measured on 24 prompts in <code>data/global_aggregation_corrected.csv</code>, pooled across seeds, Holm
+corrected within the contrast family:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>metric</th>
+<th>against block derangement</th>
+<th>against sign scramble</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stroke-continuity axis (PC1)</td>
+<td><strong>−2.532</strong> [−2.997, −2.067], Holm p = 3e-05</td>
+<td><strong>−2.117</strong> [−2.692, −1.542], Holm p = 3e-05</td>
+</tr>
+<tr>
+<td>stroke width (median px)</td>
+<td><strong>+0.238</strong> [+0.076, +0.399], Holm p = 0.0164</td>
+<td><strong>+0.394</strong> [+0.101, +0.686], Holm p = 0.0202</td>
+</tr>
+<tr>
+<td>crosshatch entropy</td>
+<td><strong>−1.691</strong> [−1.901, −1.481], Holm p = 3e-05</td>
+<td><strong>−0.485</strong> [−0.728, −0.242], Holm p = 0.00041</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three metrics, both controls, one direction. Nothing here was frozen in advance, so every size on
+this page is an upper bound — this notebook has watched confirmation rounds come back at a third
+to a half of their exploratory estimate three times running.</p>
+<h3 id="p-01-mark-style--direction-not-distance">Direction, not distance</h3>
+<p><code>data/preset_displacements.csv</code> gives the preset and both controls the same measured displacement,
+<strong>d_model_relative = 0.05381584</strong> — not approximately, identically, because the controls are built
+from the same multiset of gains. Distance is held constant by construction, and the separations in
+the table above are what is left once it is.</p>
+<p>That is the whole argument, and it is worth saying what it does <em>not</em> show: it separates structure
+from magnitude without identifying which structural property does the work.</p>
+<h3 id="p-01-mark-style--clip-at-224-is-still-untested">CLIP at 224 is still untested</h3>
+<p>Measured: on mark morphology the effect is solid. Stroke width separates the preset from both
+controls, <strong>+0.238</strong> (Holm p = 0.0164) and <strong>+0.394</strong> (Holm p = 0.0202), and crosshatch entropy
+moves with it.</p>
+<p><strong>The reason this page gave for expecting CLIP to be blind is wrong.</strong> Until 2026-09-23 the
+argument was that CLIP's vision tower reads a 224×224 thumbnail, that the preset's signature
+lives in high-frequency stroke detail, and that the resample therefore destroys it before the
+encoder ever looks. F01.1 shows the pair at both sizes and invites the reader to agree. That
+argument is testable without any encoder, and it has now been tested.</p>
+<p><code>experiments/measure_downsample_blindness.py</code> takes the preset arm and the block-shuffle
+control at the same seed on 16 stage-7 prompts — the same contrast as the published PC1 —
+and extracts this repository's own stroke and texture features twice: once on the render as
+saved, once after CLIP's exact preprocessing (bicubic resize of the shorter side to 224, then
+a 224×224 centre crop). Then the paired effect size across prompts, in both.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th style="text-align: right;">|dz| native</th>
+<th style="text-align: right;">|dz| at 224</th>
+<th style="text-align: right;">kept</th>
+<th style="text-align: right;">p native</th>
+<th style="text-align: right;">p at 224</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>crosshatch entropy mean</td>
+<td style="text-align: right;">1.861</td>
+<td style="text-align: right;">0.720</td>
+<td style="text-align: right;">39%</td>
+<td style="text-align: right;">0.00003</td>
+<td style="text-align: right;">0.0105</td>
+</tr>
+<tr>
+<td>crosshatch entropy p90</td>
+<td style="text-align: right;">0.894</td>
+<td style="text-align: right;">0.649</td>
+<td style="text-align: right;">73%</td>
+<td style="text-align: right;">0.00082</td>
+<td style="text-align: right;">0.0152</td>
+</tr>
+<tr>
+<td>lbp entropy</td>
+<td style="text-align: right;">0.732</td>
+<td style="text-align: right;">0.669</td>
+<td style="text-align: right;"><strong>92%</strong></td>
+<td style="text-align: right;">0.00012</td>
+<td style="text-align: right;"><strong>0.00061</strong></td>
+</tr>
+<tr>
+<td>contour n components</td>
+<td style="text-align: right;">0.619</td>
+<td style="text-align: right;">0.502</td>
+<td style="text-align: right;">81%</td>
+<td style="text-align: right;">0.0262</td>
+<td style="text-align: right;">0.0616</td>
+</tr>
+<tr>
+<td>edge density</td>
+<td style="text-align: right;">0.586</td>
+<td style="text-align: right;">0.341</td>
+<td style="text-align: right;">58%</td>
+<td style="text-align: right;">0.0344</td>
+<td style="text-align: right;">0.195</td>
+</tr>
+<tr>
+<td>glcm contrast</td>
+<td style="text-align: right;">0.508</td>
+<td style="text-align: right;">0.268</td>
+<td style="text-align: right;">53%</td>
+<td style="text-align: right;">0.0620</td>
+<td style="text-align: right;">0.303</td>
+</tr>
+<tr>
+<td>stroke width std px</td>
+<td style="text-align: right;">0.441</td>
+<td style="text-align: right;"><strong>1.084</strong></td>
+<td style="text-align: right;"><strong>246%</strong></td>
+<td style="text-align: right;">0.0985</td>
+<td style="text-align: right;"><strong>0.00018</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Ten of the eleven declared statistics keep at least half their effect size, five of them grow,
+and two are still significant at 224 — one of them, stroke-width dispersion, becomes
+significant only after the resample, which is what aliasing of a fine periodic texture does.
+The separation does not live above CLIP's input resolution. It survives the trip down.</p>
+<p><img alt="Eleven stroke and texture statistics, their paired effect size separating the preset from the block-shuffle control, measured on the renders as saved and again after CLIP's 224 by 224 resample. Ten of the eleven keep at least half their effect size and five grow, so the resample is not what would make CLIP blind." src="assets/01-mark-style/F01.3_downsample_blindness.webp" /></p>
+<p>So the claim is now <strong>open for a different reason than before</strong>. Blindness, if it exists, would
+have to come from the encoder's learned representation rather than from its input size: a
+network can fail to encode a signal that reaches it perfectly well. That still has not been
+measured here — <strong>no CLIP distance has ever been computed on this corpus</strong>, and the only
+<code>clip_dist</code> column anywhere in <code>data/</code> belongs to the rotation pilot, a different experiment on
+different renders. <code>experiments/measure_clip_distance.py</code> runs the encoder that is already on
+this machine and reports the within-prompt distance as a fraction of the across-prompt
+distance, because a raw cosine on its own says nothing. It has not been run.</p>
+<p>Two limits on the table above. It is 16 prompts at one seed, not the 24 of the published
+contrast; the prompt is the unit because seeds are repeated measures (pitfall 17). And the
+feature extractor is not scale-invariant — its crosshatch window is 24 px whether the frame is
+1024 or 224 wide — so "kept" compares the same statistic computed at two scales, which is what
+an encoder does too, but it is not a clean measure of how much information the resample
+destroyed.</p>
+<h3 id="p-01-mark-style--generalisation-across-prompts">Generalisation across prompts</h3>
+<p>The contrasts above are computed on 24 prompts pooled, not on the one the effect was noticed on.</p>
+<p>The subset tells a second story worth having. On the <strong>6 colour-free prompts alone</strong>
+(<code>data/global_aggregation_colour_free_6p.csv</code>) the stroke axis still excludes zero — −1.958
+[−2.496, −1.420] against block derangement and −3.815 [−5.671, −1.960] against the scramble — but
+<strong>neither survives Holm correction at that sample size: both corrected p = 0.138.</strong> The old README
+quoted those two intervals as contrasts that "exclude zero" without the corrected p beside them.
+Both statements are true; only one of them is the test.</p>
+<h3 id="p-01-mark-style--colour-does-not-generalise">Colour does not generalise</h3>
+<p>Pooled over 24 prompts the colour effect is strong: effective colour count −0.376 and −0.237
+against the two controls, top-four cluster share +0.384 and +0.234, Holm p between 0.0012 and
+0.0058.</p>
+<p>On the 6 prompts that leave the palette to the model, <strong>7 of the 8 preset colour contrasts contain
+zero.</strong> The exception is top-four cluster share against the sign scramble, +0.241 [+0.014, +0.467].
+The old README said <em>every</em> palette contrast contained zero; seven of eight is the accurate count,
+and the difference matters because "every" is the kind of word a reader checks.</p>
+<h3 id="p-01-mark-style--a-sharp-operator">A sharp operator</h3>
+<p>Not one metric moving, but several moving together in one direction: the stroke axis, stroke width
+and crosshatch entropy in the table above, and the two colour metrics on the pooled corpus. Both
+controls sit on the far side of all five.</p>
+<p>What makes this an operator rather than a nudge is the concordance. What keeps it exploratory is
+that the concordance was never predicted — it was read off afterwards, on a family of contrasts
+assembled from what had already been measured.</p>
+<h3 id="p-01-mark-style--what-is-still-open">What is still open</h3>
+<p>The exact structural property of the weight matrix responsible for the steering effect remains unidentified. Comparing the calibrated preset against random controls proves that structure is required, but does not isolate whether low-rank projections, specific transformer blocks, or attention mechanisms carry the causal load.</p>
+<h3 id="p-01-mark-style--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+tuner:
+  node: ArthemyKrea2ModelTuner
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value, driven by vectors_override
+prompts:
+  file: data/stage5_images.csv
+  ids: [F1, F2, F3, F4, G1, G2, G3, G4, G5, G6, I01, I02, I03, I04, I05, I06, I07, I08, I09, I10, I11, I12, I13, I14]
+seeds: [42, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 777, 1337, 9999, 4242145]
+conditions:
+  - name: baseline
+    dose: 0.0
+    measured_D: 0.0
+  - name: preset_pos
+    dose: +1.0
+    measured_D: 0.05381584
+  - name: preset_neg
+    dose: -1.0
+    measured_D: 0.05381584
+  - name: rand_pos
+    dose: +1.0
+    measured_D: 0.05381584
+outputs:
+  folder: benchmark_stage5/renders
+  manifest: data/stage5_images.csv
+analysis:
+  script: experiments/notebook_charts.py
+  produces: data/stage5_images.csv
+</code></pre>
+<h2 id="p-01-mark-style--provenance">Provenance</h2>
+<p><strong>Where the numbers come from.</strong> Every contrast on this page is a row of
+<code>data/global_aggregation_corrected.csv</code> (24 prompts, Holm corrected within the contrast family),
+except the subset paragraphs, which read <code>data/global_aggregation_colour_free_6p.csv</code> (6
+colour-free prompts). The matched displacement is <code>data/preset_displacements.csv</code>. The render
+manifests are <code>data/stage5_images.csv</code> (340 rows), <code>data/stage7a_images.csv</code> (120 rows, all
+baselines) and <code>data/stage7b_images.csv</code> (480 rows, no baselines).</p>
+<p><strong>Two corrections to the old README, made while sourcing these numbers.</strong> §1.3 quoted the two
+colour-free stroke-axis contrasts as excluding zero without their Holm-corrected p, which is 0.138
+for both. §1.4 said <em>every</em> palette contrast on those 6 prompts contains zero; seven of the eight
+do.</p>
+<p><strong>The count that would not reconstruct, and now does.</strong> The old README said sections 1.1 to 1.4
+rest on 1272 renders. Until 2026-09-23 this page said the manifests accounted for 940 rows, or
+1020 with the stage-7b baselines, and declared the rest unexplained. It was this page that was
+wrong: it had been naming the stage-7 benches, which belong to page 06, while every number above
+comes from <code>experiments/global_aggregation_corrected.py</code>, and that script loads five manifests
+and no others —</p>
+<pre><code>MANIFEST_COND = stage4, stage5, stage6, stage6b_pilot
+MANIFEST_BASE = stage2, stage5, stage6, stage6b_pilot
+</code></pre>
+<p>300 + 100 + 340 + 304 + 228 = <strong>1272 rows, and 1272 distinct filenames</strong> — the union has no
+duplicate, so the old figure was a plain sum and it was right. That arithmetic is now a file
+rather than a sentence: <code>experiments/verify_corpus_counts.py</code> reads the manifest list out of
+<code>global_aggregation_corrected.py</code> itself, counts the rows, the distinct basenames, the prompts
+and the resolutions, and writes <code>data/corpus_reconstruction.csv</code>. If that script's inputs ever
+change, the count changes with them instead of drifting away from them. The 24 prompts are 10 F/G, 8 H and
+6 S7, which is where the <code>n_prompts = 24</code> of <code>data/global_aggregation_corrected.csv</code> comes from;
+the 24 I-prompts of stage 7a are a different corpus.</p>
+<p>Two things fell out of checking it. All 1272 rows record <strong>1024x1280</strong>, so none of this corpus is
+HUD-contaminated. And the stage-2 and stage-4 manifests carry a <code>hud_path</code> column pointing at a
+parallel <code>hud/</code> folder: the HUD versions of that era were saved <em>beside</em> the renders, never
+analysed in their place, which is why they are not in <code>data/hud_contaminated_images.csv</code> and why
+the contamination that hit the rotation benches did not reach this page.</p>
+<ul>
+<li>Pre-registration: None (exploratory)</li>
+<li>Measurement files: the five manifests <code>experiments/global_aggregation_corrected.py</code> loads — <code>data/stage2_images.csv</code> (300 rows), <code>data/stage4_images.csv</code> (100), <code>data/stage5_images.csv</code> (340), <code>data/stage6_images.csv</code> (304), <code>data/stage6b_pilot_images.csv</code> (228) — plus <code>data/global_aggregation_corrected.csv</code>, <code>data/preset_displacements.csv</code>, <code>data/corpus_reconstruction.csv</code> (the count above), and <code>data/downsample_blindness.csv</code> (22 rows, the resample test, measured on the stage-7 corpus instead)</li>
+<li>Scripts: <code>experiments/global_aggregation_corrected.py</code> (every contrast above), <code>experiments/verify_corpus_counts.py</code> (the corpus), <code>experiments/notebook_charts.py</code>, <code>experiments/extract_repro.py</code></li>
+<li>Renders: <code>benchmark_stage5</code> (300), <code>benchmark_stage4_preset</code> (40), <code>benchmark_stage6</code> (304), <code>benchmark_stage7</code> (228, the stage-6b pilot, which shares that folder with the stage-7 bench of page 06 — pitfall 30), the stage-2 round (300) and the stage-4 round (100), whose manifests record filenames but no output folder</li>
+<li>Scripts added 2026-09-23: <code>experiments/measure_downsample_blindness.py</code> (the resample test, run); <code>experiments/measure_clip_distance.py</code> (the encoder itself, not run)</li>
+<li>Pitfalls that apply: 2 (unsigned distance), 17 (repeated measures), 30 (two experiments sharing an output folder), 34 (observation on seen renders), 38 (unvalidated metrics), 45 (unmeasured control displacement)</li>
 </ul>
 </section>
 <section id="p-02-attribute-emergence">
@@ -1446,6 +1747,14 @@ and the resolution floor decides how many tests a family can hold before anythin
 <p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">432 renders · 7 prompts · 3 seeds · 2026-09-21</span></p>
 <h1 id="p-04-where-in-the-model--does-it-matter-where-you-edit">Does it matter where you edit?</h1>
 <blockquote>
+<p>But <strong>the numbers on this page do not come from those features.</strong> They come from CLIP distances
+read out of the nine benchmark reports, computed on the HUD images at the time, and nothing has
+recomputed them. <code>data/pilot_rotations_style_recovered_features.csv</code> and its palette twin now
+exist and are clean; <code>data/pilot_rotations.csv</code> and <code>data/pilot_macro.csv</code> are not. Until the
+CLIP measurement is re-run on the recovered pixels, every figure below is a measurement of a
+picture with a panel attached to it, and on the page next door the same panel turned out to
+inflate a control by a factor of two. The claims keep their published status pending that
+re-measurement; they are not endorsed here.</p>
 <p><strong>The direction I'm chasing.</strong> The question I actually want answered is whether it matters
 <em>where</em> in the model you push. If different parts of the backbone do different jobs, steering
 has an anatomy and there is a map to draw. If they do not, there is one dial with a scale on
@@ -2118,7 +2427,7 @@ in <em>Why I might be wrong</em>.</p>
 barely moves. The single exception is block 27, the last one, which is more violent negative
 and is also the only tail block with a strong positive swing (1.393, the highest of the 28).
 Block 27 is an outlier on every axis here and deserves an experiment of its own.</p>
-<p><img alt="Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive direction; block 27 is the only one that reverses this." src="assets/05-knob-or-cost/F05.3_rectification.webp" /></p>
+<p><img alt="Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive direction; of the last six blocks only block 27 reverses it, and four blocks in the middle of the network reverse it too." src="assets/05-knob-or-cost/F05.3_rectification.webp" /></p>
 <h4 id="p-05-knob-or-cost--what-i-got-wrong">What I got wrong</h4>
 <p><strong>P2 falsified, and the model is more regular than predicted.</strong> 17 blocks of 28 sit within 3σ
 of a perfectly bidirectional response. Mirror symmetry is the rule, not the exception. The 11
@@ -2131,7 +2440,10 @@ tail blocks met the criterion.</p>
 <p><strong>The floor bench.</strong> 32 renders and 32 latents. The two control renders (P01 and P02 at seed
 42) are pixel-identical to the baselines of the earlier benches and the latents are bit-identical,
 so the 15 new seeds are comparable. σ(HF) measured across 18 seeds per prompt, 153 pairs each:
-<strong>1.65%</strong> on P01 and <strong>1.83%</strong> on P02.</p>
+<strong>1.65%</strong> on P01 and <strong>1.83%</strong> on P02 — 1.6468% and 1.8313% when recomputed from the
+renders on 2026-09-23, in <code>data/noise_floor_measured.csv</code>. Two of the eighteen seeds are not in this
+bench: 777 and 1337 come from <code>benchmark_latenti_b6</code>, and seed 42 is in both benches,
+pixel-identical, counted once.</p>
 <p><em>A note on the gate itself</em>: the first check failed because the specification asked for the
 SHA-256 of the file. A PNG carries its ComfyUI graph in <code>tEXt</code> chunks, and the new script
 writes a different graph, so file hashes differ at identical pixels. The correct test is on
@@ -2216,7 +2528,7 @@ analysis:
 <ul>
 <li>Pre-registration: <a href="docs/prereg_punto7_simmetria_segno.md"><code>docs/prereg_punto7_simmetria_segno.md</code></a>, deposited 14:50 with the destination folder verified empty</li>
 <li>Measurement files: <code>data/punto7_blocks.csv</code> (28 rows: r+, r-, common mode, swing, specularity, both amplitudes)</li>
-<li>Scripts: <code>experiments/verifica_punto7.py</code>, <code>experiments/run_pavimento_rumore.py</code>, <code>experiments/analisi_modo_comune.py</code></li>
+<li>Scripts: <code>experiments/measure_noise_floor.py</code> (the floor, from the renders). <code>experiments/verifica_punto7.py</code>, <code>experiments/run_pavimento_rumore.py</code> and <code>experiments/analisi_modo_comune.py</code> were named here until 2026-09-23 and are not in the repository: the 28 rows of <code>data/punto7_blocks.csv</code> have no code behind them</li>
 <li>Renders: <code>benchmark_profondita_neg/</code> (168, new), <code>benchmark_profondita/</code> (168, pre-existing), <code>benchmark_pavimento_rumore/</code> (32)</li>
 <li>Pitfalls that apply: <a href="docs/errors_log.md">2</a> (unsigned distance), 43 (averaging over signs), 57 (one-sided sweep), 60 (decorrelation ceiling), 61 (ratio with noise in the denominator), 62 (threshold calibrated on three seeds)</li>
 </ul>
@@ -2907,6 +3219,22 @@ computed under different centering conventions).</p>
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">210 renders · 10 prompts · 3 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-08-block1-vs-block6--two-places-in-the-model-pushed-the-same-distance">Two places in the model, pushed the same distance</h1>
 <blockquote>
+<p><strong>In the primary space the HUD was inflating the null, not the effect.</strong> The panel was
+identical in every image, so it injected a shared component into every feature vector and made
+two arbitrary scrambles look more alike than they are. Removing it leaves the advantage almost
+where it was and halves the control: the excess this page rests on grows from +0.506 to
+<strong>+0.834</strong>. The published result was conservative.</p>
+<p>The four secondary spaces do not all move that way — three of them lose gap rather than gain
+it. A shared component in the frame does not push every cosine in one direction, and the figure
+below is the honest version of that.</p>
+<p><strong>A re-render was attempted first, and stopped — that account still stands</strong>, because it
+constrains any future change of dose. At D = 0.045 clean renders of the last group come out
+black or washed out; the sign-scrambled control on that group shifts exposure by 20–40 grey
+levels down to D ≈ 0.0035, while below D ≈ 0.005 bf16 rounding bends the applied edit away from
+the intended one (cos 0.985 at 0.0035, 0.955 at 0.0018). No dose satisfies both walls, and the
+confirmation was stopped rather than a gate loosened after it failed. See
+<code>docs/prereg_rotations_block1_vs_block6_emendamento_v4.md</code>. The recovery makes that re-render
+unnecessary for <em>this</em> page: the clean pixels of the registered dose already existed.</p>
 <p><strong>The direction I'm chasing.</strong> <a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could ask whether
 position matters and could not answer it. This is the version built to settle it: two block
 groups pushed exactly the same distance by construction, one hypothesis, formula and
@@ -2915,9 +3243,12 @@ thresholds frozen before a single image existed.</p>
 If any two distinct edits leave traces you can tell apart, then "these two groups differ" is a
 fact about arithmetic and not about anatomy — so the null had to be measured, never assumed to
 sit at zero.</p>
-<p><strong>Where we are.</strong> The null is large, +0.532, and the real pair still beats it in all ten
+<p><strong>Where we are.</strong> The null is large, +0.274, and the real pair still beats it in all ten
 prompts. It is the strongest result in the notebook and also the narrowest: separability is
-not specialisation, and the experiment built to tell those apart came back not determined.</p>
+not specialisation, and the experiment built to tell those apart came back not determined.
+And I nearly threw it away: the images carried a HUD panel that made the <em>control</em> look
+stronger than it is, so for two days I thought the page was contaminated when it was merely
+understated.</p>
 </blockquote>
 <h2 id="p-08-block1-vs-block6--in-two-minutes">In two minutes</h2>
 <p><a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could pose the question and not answer it: does it
@@ -2932,7 +3263,7 @@ is not how far they went.</p>
 <p><img alt="Every prompt's same-block advantage against the null of two arbitrary scrambles at the same displacement. The two blocks separate further than two random perturbations do in all ten prompts." src="assets/08-block1-vs-block6/F08.1_advantage_by_prompt.webp" /></p>
 <p>The two groups' directions are tellable apart in all ten prompts, at the smallest value the test
 can return. And the control that makes it mean something: two <em>arbitrary</em> perturbations of the
-same size also separate from each other — the null is +0.532, not zero — and the real pair still
+same size also separate from each other — the null is +0.274, not zero — and the real pair still
 beats it in every prompt.</p>
 <p>What the page does not show is that the difference is about <em>function</em>. The last group sits
 against the output. That alternative is untouched here, and the experiment built to settle it
@@ -2960,16 +3291,16 @@ Block_1-against-Block_3 side does not separate from the null under the aggregati
 declared. The question stays open and is recorded as open in
 <code>docs/rotations_block1_vs_block6_results.md</code> §2.</p>
 <p><strong>The null is large, and that is the interesting part.</strong> Two arbitrary scrambles at the same
-displacement separate from each other at +0.532, itself at the floor. Most of what the
+displacement separate from each other at +0.274, itself at the floor. Much of what the
 leave-one-out statistic measures is therefore not anatomy — it is that any two distinct
-perturbations leave distinguishable traces. The finding is the <em>excess</em> over that, +0.506, and a
-reader who takes +1.039 as the effect size is double-counting.</p>
+perturbations leave distinguishable traces. The finding is the <em>excess</em> over that, +0.834, and a
+reader who takes +1.108 as the effect size is double-counting.</p>
 <p><strong>No middle group, and no third arm.</strong> Two groups at one displacement, one rotation family. The
 pilot's amplitude family is not represented here, which matters for the first block (below).</p>
 <p><strong>The coherence numbers set a ceiling the cross-cosine is read against.</strong> Cross-block cosine is
 attenuated by measurement error and the two groups are not measured with equal precision; the
 disattenuated figure is reported alongside the raw one for that reason, and it is pitfall 36.
-Here the two coherences are both high and nearly equal, 0.949 and 0.958, so the correction barely
+Here the two coherences are both high and nearly equal, 0.942 and 0.977, so the correction barely
 moves anything — which is the one case where the raw number can be trusted.</p>
 <p><strong>Three seeds per cell.</strong> Enough to average the antisymmetric component, not enough to measure
 per-cell noise.</p>
@@ -2994,6 +3325,7 @@ over the ten prompts, floor 2/2¹⁰ = 0.00195.</p>
 <p>The primary space is three texture features — GLCM contrast, GLCM homogeneity, LBP entropy —
 declared in advance, with four secondary families corrected separately.</p>
 <h3 id="p-08-block1-vs-block6--the-advantage-and-the-null-it-had-to-beat">The advantage, and the null it had to beat</h3>
+<p><img alt="The same ten-prompt experiment measured twice, with the HUD panel in frame and on the recovered pixels, in all five spaces. In the primary space the scramble null halves while the advantage barely moves, so the excess the criterion compares grows; three of the four secondary spaces move the other way." src="assets/08-block1-vs-block6/F08.3_hud_vs_recovered.webp" /></p>
 <div class="tablewrap"><table>
 <thead>
 <tr>
@@ -3006,26 +3338,26 @@ declared in advance, with four secondary families corrected separately.</p>
 <tbody>
 <tr>
 <td><strong>same-block advantage</strong></td>
-<td><strong>+1.0386</strong></td>
+<td><strong>+1.1078</strong></td>
 <td><strong>0.00195</strong></td>
 <td><strong>10 / 10</strong></td>
 </tr>
 <tr>
 <td>the same statistic on two arbitrary scrambles</td>
-<td>+0.5323</td>
+<td>+0.2742</td>
 <td>0.00195</td>
 <td>—</td>
 </tr>
 <tr>
 <td><strong>paired advantage, prompt by prompt</strong></td>
-<td><strong>+0.5063</strong></td>
+<td><strong>+0.8336</strong></td>
 <td><strong>0.00195</strong></td>
 <td><strong>10 / 10</strong></td>
 </tr>
 </tbody>
 </table></div>
 <p>Both p-values are the exact floor: at ten prompts the test cannot return less, and every prompt
-agreeing is the only way to reach it. The paired difference ranges from +0.297 to +0.821 — no
+agreeing is the only way to reach it. The paired difference ranges from +0.608 to +1.073 — no
 prompt comes close to reversing.</p>
 <p>The pre-registration states the falsification criterion as a bare inequality, V̄ &gt; V̄_scramble,
 without a test on the difference. The paired version above is stricter than what was registered
@@ -3045,43 +3377,47 @@ and it passes, so the criterion is met under either reading. It is derived here,
 <tr>
 <td><strong>Texture (primary)</strong></td>
 <td>3</td>
-<td>+1.0386</td>
-<td>+0.5323</td>
-<td><strong>+0.5063</strong></td>
+<td>+1.1078</td>
+<td>+0.2742</td>
+<td><strong>+0.8336</strong></td>
 </tr>
 <tr>
 <td>Global</td>
 <td>23</td>
-<td>+0.9777</td>
-<td>+0.4881</td>
-<td>+0.4896</td>
+<td>+0.8479</td>
+<td>+0.5523</td>
+<td>+0.2956</td>
 </tr>
 <tr>
 <td>Linework</td>
 <td>3</td>
-<td>+1.1138</td>
-<td>+0.1715</td>
-<td><strong>+0.9423</strong></td>
+<td>+0.7546</td>
+<td>+0.2110</td>
+<td>+0.5436</td>
 </tr>
 <tr>
 <td>Shadow hardness</td>
 <td>2</td>
-<td>+1.0754</td>
-<td>+0.7134</td>
-<td>+0.3620</td>
+<td>+1.1170</td>
+<td>+0.5701</td>
+<td>+0.5469</td>
 </tr>
 <tr>
 <td>Palette</td>
-<td>5</td>
-<td>+0.9561</td>
-<td>+0.1633</td>
-<td>+0.7928</td>
+<td>5 †</td>
+<td>+0.8638</td>
+<td>+0.3302</td>
+<td>+0.5336</td>
 </tr>
 </tbody>
 </table></div>
-<p>The advantage barely moves across spaces — 0.96 to 1.11 — while the null swings from 0.16 to
-0.71. What changes between spaces is how distinguishable two <em>random</em> perturbations are, not how
-distinguishable these two blocks are.</p>
+<p>The criterion is met in all five. The advantage runs 0.75 to 1.12 and the null 0.21 to 0.57:
+what changes between spaces is still mostly how distinguishable two <em>random</em> perturbations are.</p>
+<p>† <strong>The palette row is not fully recovered.</strong> The palette extractor refused 24 images whose
+subject mask fell below 5% of the frame, so 13 of this bench's 210 palette rows keep their
+contaminated values (<code>data/recovered_extraction_failures.csv</code>). Almost all of them are
+<code>Block_6_pos</code>. The primary space is unaffected — it is built from three style features and all
+210 style rows were re-measured.</p>
 <h3 id="p-08-block1-vs-block6--the-geometry">The geometry</h3>
 <div class="tablewrap"><table>
 <thead>
@@ -3094,25 +3430,25 @@ distinguishable these two blocks are.</p>
 <tbody>
 <tr>
 <td>within-block coherence across prompts</td>
-<td><strong>+0.9491</strong></td>
-<td><strong>+0.9578</strong></td>
+<td><strong>+0.9421</strong></td>
+<td><strong>+0.9771</strong></td>
 </tr>
 <tr>
 <td>antisymmetric share of the response</td>
-<td>0.54</td>
 <td>0.42</td>
+<td>0.39</td>
 </tr>
 </tbody>
 </table></div>
-<p>Cross-block cosine in the primary space: <strong>−0.0615</strong> raw, <strong>−0.0645</strong> disattenuated. The two
+<p>Cross-block cosine in the primary space: <strong>−0.1268</strong> raw, <strong>−0.1322</strong> disattenuated. The two
 directions are as close to orthogonal as a measurement of this kind gets. They are not one axis
 with two signs.</p>
 <h3 id="p-08-block1-vs-block6--what-this-says-about-the-first-block">What this says about the first block</h3>
 <p>The pilot read the first group as <strong>unstable rather than positional</strong>: its rotation signature
 was nearly normal at 15° and ×3.14 by 30°, it did not replicate under amplitude scaling, and it
 had the highest seed-to-seed variance of any group. Here, at a displacement matched by
-construction and a moderate 23.69°, its within-block coherence is <strong>0.949</strong> — as high as the last
-group's, and far above the 0.65 the pilot estimated across 23 features.</p>
+construction and a moderate 23.69°, its within-block coherence is <strong>0.942</strong> — nearly as high as
+the last group's 0.977, and far above the 0.65 the pilot estimated across 23 features.</p>
 <p>Both readings can be true: a block that behaves coherently at a matched, moderate push and breaks
 down at a large unmatched one. But the pilot's angles were <strong>not</strong> displacement-matched, which is
 precisely the confound this design was built to remove, and the amplitude family is not
@@ -3197,6 +3533,15 @@ freeze, and the first time this notebook does it.</p>
 <p><strong>Results and reservations.</strong> <code>docs/rotations_block1_vs_block6_results.md</code>, whose §2 records the
 three structural limits, including the specialisation-against-proximity confound that is still
 open.</p>
+<p><strong>Recovery, 2026-09-23.</strong> The 210 renders of this bench were cropped back to 1024×1280 and
+re-measured; the analysis was re-run by <code>experiments/analyze_block1_vs_block6_recovered.py</code>, a
+copy of the frozen script with only its four path constants changed, and produced
+<code>data/rotations_block1_vs_block6_recovered_results.csv</code> and <code>..._recovered_prompt_scores.csv</code>.
+Every number on this page now comes from those two files. The recovered feature tables are
+<code>..._style_recovered_features.csv</code> and <code>..._palette_recovered_features.csv</code>; the 24 images the
+palette extractor refused are in <code>data/recovered_extraction_failures.csv</code>. The account, including
+a mistake that overwrote the contaminated results file and how to restore it, is
+<code>docs/recovered_vs_contaminated.md</code>.</p>
 <p><strong>Measurement files.</strong> <code>data/rotations_block1_vs_block6_manifest.csv</code> (210 rows),
 <code>..._style_features.csv</code> and <code>..._palette_features.csv</code>, <code>..._prompt_scores.csv</code> (the 10
 per-prompt values of both statistics), <code>..._results.csv</code> (the five spaces), and two tables
@@ -3538,6 +3883,329 @@ computed under different centring conventions).</p>
 subjects, rendered in one bench at one measured dose, so that scene-sharing and style-variation
 are separable. Nothing short of that turns the observation at the end of the second section
 into a result.</p>
+</section>
+<section id="p-10-all-blocks-clean">
+<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">294 renders · 2 prompts · 3 seeds · 2026-09-23</span></p>
+<h1 id="p-10-all-blocks-clean--all-six-block-groups-under-matched-rotation">All six block groups under matched rotation</h1>
+<blockquote>
+<ul>
+<li><strong>The direction I'm chasing.</strong> I wanted to map weight rotation across the full depth of the network -- not just comparing the extreme ends B1 and B6, but observing how all six block groups respond across three calibrated angles on clean, HUD-free renders.</li>
+<li><strong>What would kill it.</strong> If intermediate blocks showed no coherent response to rotation angle, or if steering directions collapsed into an undifferentiated drift identical across all blocks.</li>
+<li><strong>Where we are.</strong> Two statistics on the exact same 294 clean renders point in opposite directions: the chroma-to-shape ratio pairs B1 with B6 as the closest of all fifteen pairs, while pairwise separability puts B1-B6, B1-B2, and B1-B4 all at the exact permutation floor.</li>
+</ul>
+</blockquote>
+<h2 id="p-10-all-blocks-clean--in-two-minutes">In two minutes</h2>
+<p>This benchmark evaluates 294 HUD-free renders spanning all six DiT block groups (<code>B1</code> through <code>B6</code>), two Rademacher scrambled controls (<code>scrA</code>, <code>scrB</code>), and clean unperturbed baselines. Each condition was rendered across three rotation angles (<code>low</code> at 5 deg, <code>mid</code> at 10 deg, <code>high</code> at 15 deg), both signs (<code>pos</code> and <code>neg</code>), on two prompt archetypes (<code>P01</code>, <code>P02</code>) and three seeds.</p>
+<p>Two findings emerge from this corpus, and they disagree on what <code>B1</code> is doing:</p>
+<ol>
+<li><strong>Monotonic response with depth asymmetry.</strong> Across all six block groups, the magnitude of output change grows monotonically with rotation angle. However, sensitivity is heavily concentrated at the output end: group <code>B6</code> moves the image by 0.63 at low, 1.65 at mid, and 3.71 at high angle. Group <code>B1</code> produces the second largest displacement (0.12, 0.40, 0.90), while the four intermediate groups (<code>B2</code> through <code>B5</code>) remain clustered at a fraction of that response (ranging from 0.07 to 0.49).</li>
+<li><strong>A structural contradiction between specialization and separability.</strong> When computing the ratio of chromatic shift to morphological shape change, <code>B1</code> and <code>B6</code> appear almost identical: their ratio gap is 0.0073 (permutation p = 0.067 over all 15 block pairs), suggesting they perform a similar functional trade-off at different depths. But testing directional separability tells a different story: at moderate dose (<code>mid</code>), <code>B1</code> separates from <code>B6</code>, <code>B2</code>, and <code>B4</code> at the exact sign-flip floor (p = 0.03125) with similarly negative cosines (-0.51, -0.48, -0.46). This indicates that <code>B1</code> is not uniquely paired with <code>B6</code>, but rather occupies an isolated direction distinct from multiple groups.</li>
+</ol>
+<h2 id="p-10-all-blocks-clean--the-verdict">The verdict</h2>
+<p>Both claims remain <strong>Open</strong>. This is an exploratory round with no frozen pre-registration, 2 prompts, and 3 seeds per cell. While the monotonic scaling with angle is unambiguous across every block group, the functional role of the input group <code>B1</code> cannot be resolved from this design alone: the aggregate feature ratio suggests common specialization with <code>B6</code>, while directional separability treats <code>B1</code> as distinct from several middle blocks.</p>
+<h2 id="p-10-all-blocks-clean--why-i-might-be-wrong">Why I might be wrong</h2>
+<ol>
+<li><strong>Two prompts cannot support a general claim about block specialization.</strong> With only <code>P01</code> and <code>P02</code>, prompt-specific semantic features could dominate the feature vectors, mimicking structural alignment between blocks that would diverge on a broader palette of styles.</li>
+<li><strong>The dose sign-flip pitfall (candidate pitfall 72).</strong> In small sample regimes (6 cells per condition), any consistent directional sign across seeds reaches the mathematical permutation floor (p = 0.03125). In earlier benches, opposite rotation doses were caught reaching the exact floor with opposite signs.</li>
+<li><strong>Chroma-shape ratios collapse complex multi-dimensional manifolds.</strong> The ratio |norm_A_chroma / norm_A_shape| compresses dozens of extracted metrics into a single scalar. Two blocks could yield identical ratios while pushing completely orthogonal feature subspaces.</li>
+<li><strong>The dose normalisation assumes this bench's <code>B1</code> and <code>B6</code> are the tuner's <code>Block_1 (All 0-4)</code> and <code>Block_6 (All 24-27)</code>.</strong> That is what <code>data/matched_rotation_calibration_v4.json</code> calibrated, and the table above says <code>B6</code> spans blocks 23-27. One of the two is wrong, and nothing in the repository settles it: the bench wrote no record of which indices each group covered. <code>experiments/measure_block_group_displacements.py</code> writes the indices straight out of the node's own map, which will confirm the normalisation or retract it.</li>
+<li><strong>144 of the 294 renders have no manifest row.</strong> <code>data/rotations_clean_v2_manifest.csv</code> records the <code>B1</code>, <code>B6</code>, <code>scrA</code> and <code>scrB</code> arms -- 150 rows -- and the <code>B2</code> through <code>B5</code> arms were rendered into the same folder without one (pitfall 30). Their sampler, checkpoint hash and timestamps are unrecorded; only their resolution survives, in the feature tables, and it is 1024x1280 on all 294, so none of this page is HUD-contaminated.</li>
+</ol>
+<h2 id="p-10-all-blocks-clean--the-data">The data</h2>
+<p>The 294 renders were analyzed using the standard 23-feature extraction pipeline, isolating the antisymmetric response component $\Delta_A = (\Delta_{\text{pos}} - \Delta_{\text{neg}})/2$ to eliminate static baseline drift.</p>
+<h3 id="p-10-all-blocks-clean--the-monotonic-response-across-angles">The monotonic response across angles</h3>
+<p>The mean Euclidean norm of the antisymmetric response vector $|A|$ increases monotonically across all three rotation angles for every block group:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Block Group</th>
+<th>Low (5°)</th>
+<th>Mid (10°)</th>
+<th>High (15°)</th>
+<th>Layers Spanned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B1</strong></td>
+<td>0.118 ± 0.047</td>
+<td>0.397 ± 0.052</td>
+<td>0.897 ± 0.071</td>
+<td>Blocks 0-4</td>
+</tr>
+<tr>
+<td><strong>B2</strong></td>
+<td>0.092 ± 0.019</td>
+<td>0.087 ± 0.034</td>
+<td>0.134 ± 0.074</td>
+<td>Blocks 5-9</td>
+</tr>
+<tr>
+<td><strong>B3</strong></td>
+<td>0.170 ± 0.052</td>
+<td>0.259 ± 0.087</td>
+<td>0.385 ± 0.121</td>
+<td>Blocks 10-14</td>
+</tr>
+<tr>
+<td><strong>B4</strong></td>
+<td>0.141 ± 0.042</td>
+<td>0.183 ± 0.016</td>
+<td>0.441 ± 0.109</td>
+<td>Blocks 15-18</td>
+</tr>
+<tr>
+<td><strong>B5</strong></td>
+<td>0.070 ± 0.027</td>
+<td>0.112 ± 0.029</td>
+<td>0.166 ± 0.055</td>
+<td>Blocks 19-22</td>
+</tr>
+<tr>
+<td><strong>B6</strong></td>
+<td><strong>0.634 ± 0.041</strong></td>
+<td><strong>1.651 ± 0.123</strong></td>
+<td><strong>3.706 ± 0.223</strong></td>
+<td>Blocks 23-27</td>
+</tr>
+</tbody>
+</table></div>
+<p>The output group <code>B6</code> exhibits dramatic leverage over the generated pixels, scaling to over four times the displacement of <code>B1</code> and over twenty times that of <code>B5</code> at high angle.</p>
+<p><img alt="The antisymmetric response of each of the six block groups at 5, 10 and 15 degrees, with the standard deviation across the six cells. Every group grows with angle, and at 15 degrees the output group B6 moves the image more than four times further than the next group." src="assets/10-all-blocks-clean/F10.1_depth_profile_by_angle.webp" /></p>
+<h3 id="p-10-all-blocks-clean--the-same-angle-is-not-the-same-dose">The same angle is not the same dose</h3>
+<p>The table above is a depth profile of the <strong>bench</strong>, not yet of the model. Every group was
+rotated by the same number of degrees, and a rotation by a fixed angle is not a fixed
+perturbation: what the weights actually travel is <code>D = ||dW||_F / ||W||_F</code>, and it scales with
+the rotated group's own norm. This is the confound that decides whether <code>B6</code> is more
+<em>sensitive</em> or merely more <em>pushed</em>.</p>
+<p><code>data/matched_rotation_calibration_v4.json</code> answers it for the two ends. To reach the same
+displacement, <code>B6</code> needs a larger angle than <code>B1</code>: 2.4723 degrees against 1.8295 at D =
+0.0035, and the ratio holds at 1.351370, 1.351431 and 1.351339 across the three calibrated
+doses -- constant to five figures, which is what <code>D</code> proportional to <code>sin(theta/2)</code> predicts
+and is the evidence that one angle-independent ratio is legitimate. At a common angle, then,
+<strong><code>B6</code> receives only 0.740 of <code>B1</code>'s displacement</strong> -- and still moves the image four to five
+times further.</p>
+<p>Dividing one by the other widens the gap rather than closing it:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Angle</th>
+<th style="text-align: right;">B6 / B1 as rendered</th>
+<th style="text-align: right;">B6 / B1 per unit of displacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>low (5°)</td>
+<td style="text-align: right;">5.35x</td>
+<td style="text-align: right;"><strong>7.23x</strong></td>
+</tr>
+<tr>
+<td>mid (10°)</td>
+<td style="text-align: right;">4.16x</td>
+<td style="text-align: right;"><strong>5.62x</strong></td>
+</tr>
+<tr>
+<td>high (15°)</td>
+<td style="text-align: right;">4.13x</td>
+<td style="text-align: right;"><strong>5.58x</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><img alt="B6's response divided by B1's, at each of the three angles, before and after dividing each by the weight displacement the group actually received. Rotating by the same angle pushes B6 only 74 percent as far as B1, so correcting for the dose widens the gap from 4.1 to 5.4 times up to 5.6 to 7.2 times." src="assets/10-all-blocks-clean/F10.2_sensitivity_per_displacement.webp" /></p>
+<p>Two things are worth noticing and neither is settled here. The lead is <strong>largest at the
+smallest angle</strong> and flattens from mid to high, which is what saturation at the output end
+would look like; three angles cannot tell saturation from noise. And the normalisation covers
+<code>B1</code> and <code>B6</code> only, because the calibration file covers only those two. <code>B2</code> through <code>B5</code>
+carry <code>not measured</code> in <code>data/sensitivity_by_block.csv</code> rather than a guess;
+<code>experiments/measure_block_group_displacements.py</code> reads the checkpoint and fills them in
+without rendering anything.</p>
+<h3 id="p-10-all-blocks-clean--chroma-shape-ratio-versus-separability">Chroma-shape ratio versus separability</h3>
+<p>Evaluating the balance between chromatic shift and structural linework yields the following specialization summary across the six groups:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Chroma Norm</th>
+<th>Shape Norm</th>
+<th>Texture Norm</th>
+<th>Chroma / Shape Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B1</strong></td>
+<td>0.8746</td>
+<td>1.1437</td>
+<td>0.4386</td>
+<td><strong>0.7647</strong></td>
+</tr>
+<tr>
+<td><strong>B2</strong></td>
+<td>0.3519</td>
+<td>0.2616</td>
+<td>0.1519</td>
+<td>1.3455</td>
+</tr>
+<tr>
+<td><strong>B3</strong></td>
+<td>0.3163</td>
+<td>0.5407</td>
+<td>0.3064</td>
+<td>0.5850</td>
+</tr>
+<tr>
+<td><strong>B4</strong></td>
+<td>0.5626</td>
+<td>0.4476</td>
+<td>0.2087</td>
+<td>1.2569</td>
+</tr>
+<tr>
+<td><strong>B5</strong></td>
+<td>0.5554</td>
+<td>0.5886</td>
+<td>0.1763</td>
+<td>0.9436</td>
+</tr>
+<tr>
+<td><strong>B6</strong></td>
+<td>2.0583</td>
+<td>2.6662</td>
+<td>1.8560</td>
+<td><strong>0.7720</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The gap between <code>B1</code> and <code>B6</code> is |0.7647 - 0.7720| = <strong>0.0073</strong>, ranking 1st among all 15 pairwise comparisons (permutation p = 1/15 = 0.067). In contrast, middle groups average a pairwise gap of 0.4324, and end-to-middle pairs average 0.3561.</p>
+<p>However, the directional cosine separability test at moderate rotation (<code>mid</code>) reveals that <code>B1</code> is negatively aligned with multiple groups, reaching the permutation floor across the board:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Pair</th>
+<th>Mean Cosine</th>
+<th>Permutation p</th>
+<th>Floor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B1 - B6</strong></td>
+<td>-0.5138</td>
+<td>0.03125</td>
+<td>0.03125</td>
+</tr>
+<tr>
+<td><strong>B1 - B2</strong></td>
+<td>-0.4808</td>
+<td>0.03125</td>
+<td>0.03125</td>
+</tr>
+<tr>
+<td><strong>B1 - B4</strong></td>
+<td>-0.4618</td>
+<td>0.03125</td>
+<td>0.03125</td>
+</tr>
+<tr>
+<td><strong>B4 - B6</strong></td>
+<td>+0.7587</td>
+<td>0.03125</td>
+<td>0.03125</td>
+</tr>
+<tr>
+<td><strong>B3 - B6</strong></td>
+<td>+0.4868</td>
+<td>0.03125</td>
+<td>0.03125</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>B1</code> does not align directionally with <code>B6</code>; rather, it points away from <code>B6</code>, <code>B2</code>, and <code>B4</code> alike, showing that identical chroma/shape proportions do not imply shared directional vectors.</p>
+<h3 id="p-10-all-blocks-clean--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: not recorded (needs bench manifest)
+  steps: not recorded (needs bench manifest)
+  cfg: not recorded (needs bench manifest)
+  scheduler: not recorded (needs bench manifest)
+  resolution: 1024x1280
+tuner:
+  architecture: block_rotation
+  mode: six block groups, three angles (low=5°, mid=10°, high=15°), both signs
+  blocks: [B1, B2, B3, B4, B5, B6]
+prompts:
+  P01: &quot;Western comics style, sharp ink outlines, crosshatching...&quot;
+  P02: &quot;Western comics style, expressive ink strokes, subtle shadows...&quot;
+seeds: [1618033, 2718281, 3141592]
+conditions:
+  - name: B1
+    mode: rotation
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured on this bench -- nominal angles fixed at 5°, 10°, 15°. The
+      displacement RELATIVE to B1 is 1.0 by construction; see data/sensitivity_by_block.csv
+  - name: B2
+    mode: rotation
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured -- nominal angles fixed at 5°, 10°, 15°
+  - name: B3
+    mode: rotation
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured -- nominal angles fixed at 5°, 10°, 15°
+  - name: B4
+    mode: rotation
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured -- nominal angles fixed at 5°, 10°, 15°
+  - name: B5
+    mode: rotation
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured -- nominal angles fixed at 5°, 10°, 15°
+  - name: B6
+    mode: rotation
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured on this bench -- nominal angles fixed at 5°, 10°, 15°. The
+      displacement RELATIVE to B1 at a common angle is 0.739984, derived from
+      data/matched_rotation_calibration_v4.json; see data/sensitivity_by_block.csv
+  - name: scrA
+    mode: scramble
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured -- nominal angles fixed at 5°, 10°, 15°
+  - name: scrB
+    mode: scramble
+    angles_deg: [5.0, 10.0, 15.0]
+    measured_D: not measured -- nominal angles fixed at 5°, 10°, 15°
+  - name: baseline
+    mode: identity
+    measured_D: 0.0
+outputs:
+  directory: benchmark_rotations_clean_v2/renders
+  manifest: data/rotations_clean_v2_manifest.csv -- 150 of the 294 renders. The B2 to B5
+    arms were written into the same folder with no manifest row of their own.
+analysis:
+  feature_tables:
+    - data/all_blocks_clean_v2_style_features.csv
+    - data/all_blocks_clean_v2_palette_features.csv
+  summary_tables:
+    - data/all_blocks_clean_v2_response_by_block.csv
+    - data/all_blocks_clean_v2_separability.csv
+    - data/all_blocks_specialization_summary.csv
+    - data/specialisation_vs_proximity.csv
+    - data/sensitivity_by_block.csv
+</code></pre>
+<h2 id="p-10-all-blocks-clean--provenance">Provenance</h2>
+<ul>
+<li>Renders: all_blocks_clean_v2 (294)</li>
+<li>Feature extraction: <code>data/all_blocks_clean_v2_style_features.csv</code> and <code>data/all_blocks_clean_v2_palette_features.csv</code></li>
+<li>Analysis scripts: <code>experiments/run_recovery_and_analysis.py</code> (phase 6 and phase 7), <code>experiments/sensitivity_curve.py</code> (the dose normalisation), <code>experiments/measure_block_group_displacements.py</code> (the displacements themselves, not yet run)</li>
+<li>Data files: <code>data/all_blocks_clean_v2_response_by_block.csv</code>, <code>data/all_blocks_clean_v2_separability.csv</code>, <code>data/all_blocks_specialization_summary.csv</code>, <code>data/specialisation_vs_proximity.csv</code>, <code>data/sensitivity_by_block.csv</code></li>
+<li>Figures: F10.1 and F10.2, both registered in <code>experiments/figures.yaml</code> and built by <code>experiments/notebook_charts.py</code></li>
+<li>Pitfalls that apply: 4, 10, 15, 30 (two arms sharing an output folder, one of them with no manifest), 68, 72</li>
+</ul>
 </section>
 </main>
 </body>

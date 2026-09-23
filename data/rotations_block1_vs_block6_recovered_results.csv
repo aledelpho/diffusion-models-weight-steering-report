@@ -1,0 +1,6 @@
+space,n_features,mean_V,p_val_V,floor_V,mean_V_scramble,p_val_V_scramble,falsification_passed,coh_b1,coh_b6,coh_scramble_A,coh_scramble_B,raw_cross_cos_B1_B6,disattenuated_cos,share_antisym_B1,share_antisym_B6
+Tessitura (PRIMARIO),3,1.10782,0.00195,0.00195,0.27418,0.00195,True,0.94206,0.97706,0.88292,0.60873,-0.12679,-0.13215,0.4157,0.3939
+Global 23 Features (Secondario),23,0.84793,0.00195,0.00195,0.5523,0.00195,True,0.71871,0.83529,0.68074,0.53818,0.02798,0.03611,0.3537,0.3548
+Linework (Secondario),3,0.75457,0.00391,0.00195,0.21101,0.00781,True,0.23056,0.6924,0.6146,0.23193,-0.1743,-0.43623,0.2689,0.2207
+Shadow Hardness (Secondario),2,1.11698,0.00391,0.00195,0.57008,0.00195,True,0.94697,0.46637,0.49139,0.85023,-0.45527,-0.68507,0.397,0.2419
+Palette LAB/Chroma (Secondario),5,0.86382,0.00195,0.00195,0.33022,0.00391,True,0.87281,0.96057,0.84542,0.38765,0.10777,0.1177,0.5637,0.4607

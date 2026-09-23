@@ -1,0 +1,2 @@
+page,manifests,n_manifests,rows,distinct_files,duplicates,prompts,resolutions,declared_corpus_renders,verdict
+01-mark-style,stage4_images.csv=100 + stage5_images.csv=340 + stage6_images.csv=304 + stage6b_pilot_images.csv=228 + stage2_images.csv=300,5,1272,1272,0,24,1024x1280,1272,MATCH

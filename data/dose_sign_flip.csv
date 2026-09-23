@@ -1,0 +1,4 @@
+dose_column,n_cells,mean_s,n_positive,p_signflip,floor,reaches_floor
+s_d045_texture,6,-0.8568028958556125,0,0.03125,0.03125,True
+s_d030_texture,6,0.8620454570732804,6,0.03125,0.03125,True
+s_d060_texture,6,0.18516819524519304,4,0.21875,0.03125,False

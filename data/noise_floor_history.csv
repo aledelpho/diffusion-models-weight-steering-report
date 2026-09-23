@@ -1,0 +1,5 @@
+estimate,value_pct,n_seeds,subject,method,date,superseded_by,source
+1,1.15,3,P01 and P02,typical sigma over the two per-prompt figures on 3 seeds (0.27% P01 and 2.03% P02),2026-09-15,2,docs/prereg_punto7_simmetria_segno.md section 1
+2,5.20,not recorded,P1 other corpus,borrowed from another corpus of three prompts (3.26 / 4.93 / 5.20) and over-corrected,2026-09-16,3,docs/prereg_punto7_simmetria_segno.md addendum
+3,1.65,18,P01,relative sigma of fine texture across 18 seeds (153 pairs),2026-09-17,current,data/noise_floor_measured.csv
+4,1.83,18,P02,relative sigma of fine texture across 18 seeds (153 pairs),2026-09-17,current,data/noise_floor_measured.csv

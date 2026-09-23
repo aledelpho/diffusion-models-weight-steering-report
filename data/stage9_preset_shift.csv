@@ -1,0 +1,22 @@
+condition,feature,paired_mean,sd_across_cells,n_cells,aggregation,source
+blockshuf_neg_1x,L_star,2.1984,5.7734,40,mass-weighted mean of sw1..sw6 L* by swN_share; paper and ink excluded,data/palette_features_stage9.csv
+blockshuf_neg_2x,L_star,0.8660,9.6192,40,mass-weighted mean of sw1..sw6 L* by swN_share; paper and ink excluded,data/palette_features_stage9.csv
+chaos_edges_v2,L_star,not computable,,0,no baseline for this condition in this bench,data/palette_features_stage9.csv
+preset_pos_1x,L_star,-1.7580,3.4400,40,mass-weighted mean of sw1..sw6 L* by swN_share; paper and ink excluded,data/palette_features_stage9.csv
+preset_pos_2x,L_star,-3.3033,4.6580,40,mass-weighted mean of sw1..sw6 L* by swN_share; paper and ink excluded,data/palette_features_stage9.csv
+rand_pos_1x,L_star,1.1711,4.1545,40,mass-weighted mean of sw1..sw6 L* by swN_share; paper and ink excluded,data/palette_features_stage9.csv
+rand_pos_2x,L_star,0.6693,5.1064,40,mass-weighted mean of sw1..sw6 L* by swN_share; paper and ink excluded,data/palette_features_stage9.csv
+blockshuf_neg_1x,colorfulness_hs,6.6843,4.7480,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+blockshuf_neg_1x,lbp_entropy,-0.0594,0.0816,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+blockshuf_neg_2x,colorfulness_hs,27.6873,11.6113,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+blockshuf_neg_2x,lbp_entropy,-0.3223,0.3461,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+chaos_edges_v2,colorfulness_hs,13.7858,25.7544,20,"plain paired mean, one value per image",data/style_features_stage9.csv
+chaos_edges_v2,lbp_entropy,-0.3526,0.2184,20,"plain paired mean, one value per image",data/style_features_stage9.csv
+preset_pos_1x,colorfulness_hs,-2.1701,2.9818,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+preset_pos_1x,lbp_entropy,0.0366,0.0258,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+preset_pos_2x,colorfulness_hs,-3.5407,4.1995,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+preset_pos_2x,lbp_entropy,0.0698,0.0553,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+rand_pos_1x,colorfulness_hs,1.4363,4.5049,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+rand_pos_1x,lbp_entropy,0.0037,0.0659,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+rand_pos_2x,colorfulness_hs,9.1275,7.5751,40,"plain paired mean, one value per image",data/style_features_stage9.csv
+rand_pos_2x,lbp_entropy,-0.0366,0.0914,40,"plain paired mean, one value per image",data/style_features_stage9.csv

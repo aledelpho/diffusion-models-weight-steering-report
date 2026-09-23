@@ -789,6 +789,513 @@ def stage9_quality_gate(out: Path) -> Path:
                  f"source data/stage9_amplitude2x_quality_gate.csv")
 
 
+SPACE_SHORT = {"Tessitura (PRIMARIO)": "Texture  (primary)",
+               "Global 23 Features (Secondario)": "Global, 23 features",
+               "Linework (Secondario)": "Linework",
+               "Shadow Hardness (Secondario)": "Shadow hardness",
+               "Palette LAB/Chroma (Secondario)": "Palette"}
+
+
+def b1b6_hud_vs_recovered(out: Path) -> Path:
+    """The same experiment measured twice: with the HUD panel in frame, and without it.
+
+    The renders of this bench were written 1024x1760 -- the picture plus a 480-pixel panel
+    appended underneath. The panel was added after generation, so cropping it returns the
+    original render, and the whole analysis could be re-run on real pixels. Each row is one
+    measurement: the segment runs from the scramble null to the same-block advantage, so its
+    length is the excess the falsification criterion compares.
+    """
+    hud = list(csv.DictReader((DATA / "rotations_block1_vs_block6_results.csv")
+                              .open(encoding="utf-8-sig", newline="")))
+    rec = list(csv.DictReader((DATA / "rotations_block1_vs_block6_recovered_results.csv")
+                              .open(encoding="utf-8-sig", newline="")))
+    by_space = {r["space"]: r for r in rec}
+    order = [r["space"] for r in hud]
+
+    fig, ax = _canvas(8.2, 5.0)
+    labels, ypos, y = [], [], 0
+    gaps = {}
+    for space in reversed(order):
+        for tag, row, colour in (("recovered", by_space[space], CAT[1]),
+                                 ("with the HUD", next(r for r in hud if r["space"] == space), DIM)):
+            v, n = float(row["mean_V"]), float(row["mean_V_scramble"])
+            gaps.setdefault(space, {})[tag] = v - n
+            ax.plot([n, v], [y, y], color=colour, lw=3.0, solid_capstyle="butt", zorder=3)
+            ax.scatter([n], [y], s=46, facecolor=SURFACE, edgecolor=colour, linewidth=1.6, zorder=4)
+            ax.scatter([v], [y], s=46, color=colour, edgecolor=SURFACE, linewidth=0.7, zorder=4)
+            ax.annotate(f"{v - n:+.2f}", (v, y), textcoords="offset points", xytext=(9, 0),
+                        va="center", color=colour, fontsize=7.5)
+            labels.append(f"{SPACE_SHORT.get(space, space)} · {tag}")
+            ypos.append(y)
+            y += 1
+        y += 0.6
+
+    ax.scatter([], [], s=46, facecolor=SURFACE, edgecolor=DIM, linewidth=1.6,
+               label="the scramble null")
+    ax.scatter([], [], s=46, color=DIM, edgecolor=SURFACE, linewidth=0.7,
+               label="the same-block advantage")
+    ax.legend(loc="upper left", fontsize=7.5, frameon=False, labelcolor=DIM, borderpad=0.2,
+              handletextpad=0.6)
+
+    ax.set_yticks(ypos)
+    ax.set_yticklabels(labels, color=DIM, fontsize=7.5)
+    ax.set_xlabel("leave-one-out same-block advantage; the segment is the excess over the null",
+                  color=DIM, fontsize=9)
+    prim = gaps["Tessitura (PRIMARIO)"]
+    ax.set_title(f"The HUD moved the control more than the effect\n"
+                 f"primary space: the excess grows {prim['with the HUD']:+.2f} to {prim['recovered']:+.2f}\n"
+                 f"three of the four secondary spaces move the other way",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(x=0.13, y=0.03)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out,
+                 "5 spaces x 2 measurements, 10 prompts each  ·  sources "
+                 "data/rotations_block1_vs_block6_results.csv and "
+                 "..._recovered_results.csv")
+
+
+def _punto7():
+    """The 28-block table of page 05, as plain lists -- this module carries no numpy."""
+    rows = list(csv.DictReader((DATA / "punto7_blocks.csv").open(encoding="utf-8-sig",
+                                                                newline="")))
+    out = {k: [float(r[k]) for r in rows] for k in
+           ("r_pos", "r_neg", "common_mode", "swing", "specularity", "amp_pos", "amp_neg")}
+    out["block"] = [int(r["block"]) for r in rows]
+    return out
+
+
+def _pearson(xs, ys):
+    n = len(xs)
+    mx, my = sum(xs) / n, sum(ys) / n
+    sxy = sum((a - mx) * (b - my) for a, b in zip(xs, ys))
+    sxx = sum((a - mx) ** 2 for a in xs)
+    syy = sum((b - my) ** 2 for b in ys)
+    return sxy / math.sqrt(sxx * syy)
+
+
+def _fit(xs, ys):
+    n = len(xs)
+    mx, my = sum(xs) / n, sum(ys) / n
+    m = (sum((a - mx) * (b - my) for a, b in zip(xs, ys))
+         / sum((a - mx) ** 2 for a in xs))
+    return m, my - m * mx
+
+
+def knob_vs_cost_scatter(out: Path) -> Path:
+    """Every block placed by how much it steers against how much it costs.
+
+    The cost is the common mode -- what an edit does whichever way you push it. The steering is
+    the swing -- what reverses with the sign. A ratio alone discards the first, which is exactly
+    the quantity this page exists to recover.
+    """
+    d = _punto7()
+    blocks, sw, cm = d["block"], d["swing"], d["common_mode"]
+    fig, ax = _canvas(7.4, 5.0)
+    ax.axhline(1.0, color=DIM, lw=1.0, ls="--", zorder=2)
+    ax.axvline(1.0, color=DIM, lw=1.0, ls="--", zorder=2)
+    top = max(blocks)
+    sc = ax.scatter(sw, cm, c=[b / top for b in blocks], cmap="magma", s=64,
+                    edgecolor=SURFACE, linewidth=0.7, zorder=3, vmin=0, vmax=1)
+    for b in (0, 26, 27):
+        i = blocks.index(b)
+        right = sw[i] < 1.2          # keep the label inside the axes for the far-right point
+        ax.annotate(f"block {b}", (sw[i], cm[i]), textcoords="offset points",
+                    xytext=(8 if right else -8, 5), ha="left" if right else "right",
+                    color=INK, fontsize=8)
+    cb = fig.colorbar(sc, ax=ax, pad=0.02)
+    cb.set_label("block index, 0 to 27", color=DIM, fontsize=8)
+    cb.ax.tick_params(colors=DIM, labelsize=7)
+    cb.outline.set_edgecolor(GRID)
+    ax.set_xlabel("steering: the swing, what reverses with the sign", color=DIM, fontsize=9)
+    ax.set_ylabel("cost: the common mode, what happens either way", color=DIM, fontsize=9)
+    below = sum(1 for v in cm if v < 1)
+    ax.set_title(f"Almost every block sits below the line where an edit would be free\n"
+                 f"{below} of {len(blocks)} lose fine texture whichever way they are "
+                 f"pushed\nthe dashed lines are 'no change' on each axis",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(x=0.09)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{len(blocks)} blocks, 2 prompts x 3 seeds  ·  "
+                           f"source data/punto7_blocks.csv")
+
+
+def depth_profile(out: Path) -> Path:
+    """The cost against depth, with its fitted line. The headline of page 05."""
+    d = _punto7()
+    b, cm = [float(x) for x in d["block"]], d["common_mode"]
+    r = _pearson(b, cm)
+    m, q = _fit(b, cm)
+    fig, ax = _canvas(7.6, 4.6)
+    ax.axhline(1.0, color=DIM, lw=1.0, ls="--", zorder=2)
+    xs = [min(b), max(b)]
+    ax.plot(xs, [m * x + q for x in xs], color=CAT[0], lw=1.6, zorder=3)
+    ax.scatter(b, cm, s=58, color=CAT[1], edgecolor=SURFACE, linewidth=0.7, zorder=4)
+    ax.annotate(f"r = {r:.3f}", (xs[1], m * xs[1] + q), textcoords="offset points",
+                xytext=(-6, -16), ha="right", color=CAT[0], fontsize=9)
+    below = sum(1 for v in cm if v < 1)
+    ax.set_xlabel("block index, 0 at the input and 27 against the output", color=DIM, fontsize=9)
+    ax.set_ylabel("common mode (1.0 = no cost)", color=DIM, fontsize=9)
+    ax.set_title(f"The cost deepens the closer the push lands to the output\n"
+                 f"mean {sum(cm) / len(cm):.3f} of the baseline's fine texture, "
+                 f"{below} of {len(b)} blocks below 1",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.grid(color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{len(b)} blocks  ·  source data/punto7_blocks.csv")
+
+
+def rectification_bars(out: Path) -> Path:
+    """Per-block amplitude on the two arms, paired, to show where the sign decides."""
+    d = _punto7()
+    b, ap, an = d["block"], d["amp_pos"], d["amp_neg"]
+    flips = [x for x, p_, n_ in zip(b, ap, an) if n_ > p_]
+    tail_flips = [x for x in flips if x >= 22]
+    mid_flips = [x for x in flips if x < 22]
+    i26 = b.index(26)
+    ratio = ap[i26] / an[i26]
+    fig, ax = _canvas(8.4, 4.8)
+    w = 0.40
+    ax.bar([x - w / 2 for x in b], ap, width=w, color=CAT[0], edgecolor=SURFACE, linewidth=0.5,
+           label="pushed positive", zorder=3)
+    ax.bar([x + w / 2 for x in b], an, width=w, color=CAT[1], edgecolor=SURFACE, linewidth=0.5,
+           label="pushed negative", zorder=3)
+    for x in flips:
+        i = b.index(x)
+        ax.annotate("\u2195", (x, max(ap[i], an[i])), textcoords="offset points", xytext=(0, 3),
+                    ha="center", color=CAT[2], fontsize=9)
+    ax.annotate(f"block 26: {ratio:.1f}x", (26, ap[i26]), textcoords="offset points",
+                xytext=(-4, 10), ha="right", color=INK, fontsize=8)
+    ax.set_yscale("log")
+    ax.set_xticks(b[::2])
+    ax.set_xlabel("block index  \u00b7  \u2195 marks a block that moves further on the "
+                  "negative arm", color=DIM, fontsize=9)
+    ax.set_ylabel("amplitude, log scale", color=DIM, fontsize=9)
+    ax.set_title(f"The tail is rectified: on the last blocks one direction moves the image far "
+                 f"further\nblock 26 by {ratio:.1f}x. Of the last six only block "
+                 f"{tail_flips[0] if tail_flips else '-'} reverses it, and "
+                 f"{len(mid_flips)} blocks in the middle reverse it too",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="upper left", fontsize=8, frameon=False, labelcolor=DIM)
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{len(b)} blocks, both arms at |dose| = 0.200  \u00b7  "
+                           f"source data/punto7_blocks.csv")
+
+
+# ---------------------------------------------------------------- toggle and render comparisons
+
+
+def toggle_animation(out: Path, panels: list[tuple[str, str | Path]], control: tuple[str | Path, str | Path],
+                     caption_source: Path) -> Path:
+    """Whole frames, one prompt, one seed, with a control panel of two untouched baselines.
+
+    `panels` is [(label, image_path), ...] in reading order; `control` is the baseline pair.
+    Every label is read out of `caption_source`, never typed here (pitfall 40).
+    """
+    c1, c2 = control
+    items = list(panels)
+    if str(c1) == str(c2):
+        items.append(("Control · untouched baseline (same twice)", c1))
+    else:
+        items.append(("Control · baseline at seed 777", c2))
+
+    n = len(items)
+    fig, axes = plt.subplots(1, n, figsize=(3.0 * n, 4.5), dpi=150)
+    fig.patch.set_facecolor(SURFACE)
+    if n == 1:
+        axes = [axes]
+
+    for ax, (label, p) in zip(axes, items):
+        ax.set_facecolor(SURFACE)
+        im = Image.open(p).convert("RGB")
+        ax.imshow(im)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for spine in ax.spines.values():
+            spine.set_color(GRID)
+            spine.set_linewidth(1.0)
+        is_ctrl = label.startswith("Control")
+        ax.set_title(label, color=CAT[1] if is_ctrl else INK, fontsize=7.5, pad=6)
+
+    fig.tight_layout(rect=(0.01, 0.04, 0.99, 0.96))
+    strip = f"{n} panels, whole frames  ·  source {caption_source.relative_to(ROOT)}"
+    return _save(fig, out, strip)
+
+
+def inverted_knob_toggle(out: Path) -> Path:
+    """F05.4: Block 0 and block 27 alternating against baseline, with control."""
+    src = DATA / "punto7_blocks.csv"
+    rows = {r["block"]: r for r in csv.DictReader(src.open(encoding="utf-8-sig", newline=""))}
+    r0, r27 = rows["00"], rows["27"]
+    lab0 = f"Block 0 (+0.200) · swing {float(r0['swing']):.3f} · amp {float(r0['amp_pos']):.2f}"
+    lab27 = f"Block 27 (+0.200) · swing {float(r27['swing']):.3f} · amp {float(r27['amp_pos']):.2f}"
+
+    p_base = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_mappa\renders\P01_baseline_krea2_seed42_00001_.png")
+    p_b00 = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_profondita\renders\P01_blk00pos_0.200_krea2_seed42_00001_.png")
+    p_b27 = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_profondita\renders\P01_blk27pos_0.200_krea2_seed42_00001_.png")
+
+    panels = [
+        ("Baseline · P01, seed 42", p_base),
+        (lab0, p_b00),
+        (lab27, p_b27),
+    ]
+    control = (p_base, p_base)
+    return toggle_animation(out, panels, control, src)
+
+
+def roundtrip_sentinel(out: Path) -> Path:
+    """F00.1: Edit and exact inverse alternating against baseline, with control."""
+    src = DATA / "bench_checks.csv"
+    rows = {r["check"]: r for r in csv.DictReader(src.open(encoding="utf-8-sig", newline=""))}
+    rz, rr = rows["sentinel_zero"], rows["sentinel_roundtrip"]
+    lab_z = f"Gain zero · max diff {rz['value']} ({rz['verdict']})"
+    lab_r = f"Round-trip (D=0) · mean diff {rr['value']} ({rr['verdict']})"
+
+    p_base = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_baseline_seed42_00001_.png")
+    p_zero = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_sentinel_zero_seed42_00001_.png")
+    p_round = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_sentinel_roundtrip_seed42_00001_.png")
+
+    panels = [
+        ("Baseline · P1, seed 42", p_base),
+        (lab_z, p_zero),
+        (lab_r, p_round),
+    ]
+    control = (p_base, p_base)
+    return toggle_animation(out, panels, control, src)
+
+
+def mark_style_toggle(out: Path) -> Path:
+    """F01.2: Baseline, preset and norm-matched random control, with seed-pair control."""
+    src = DATA / "stage5_images.csv"
+    root = ASSETS / "01_steering"
+    p_base = root / "baseline" / "G1_seatouched_teal_30de058455" / "42.webp"
+    p_preset = root / "preset" / "G1_seatouched_teal_30de058455" / "42.webp"
+    p_rand = root / "randsign" / "G1_seatouched_teal_30de058455" / "42.webp"
+    p_ctrl = root / "baseline" / "G1_seatouched_teal_30de058455" / "777.webp"
+
+    panels = [
+        ("Baseline · G1, seed 42", p_base),
+        ("Calibrated preset · +1.000", p_preset),
+        ("Rand control · norm-matched", p_rand),
+    ]
+    control = (p_base, p_ctrl)
+    return toggle_animation(out, panels, control, src)
+
+
+def noise_floor_history(out: Path) -> Path:
+    """F00.3: The seed-to-seed noise floor estimated three times."""
+    src = DATA / "noise_floor_history.csv"
+    rows = list(csv.DictReader(src.open(encoding="utf-8-sig", newline="")))
+
+    fig, ax = _canvas(7.5, 4.4)
+    xs = list(range(len(rows)))
+    vals = [float(r["value_pct"]) for r in rows]
+    labels = [f"Est {r['estimate']}\n{r['subject']}\n(n={r['n_seeds']})" for r in rows]
+
+    colors = [DIM, CAT[1], CAT[0], CAT[0]]
+    bars = ax.bar(xs, vals, color=colors, width=0.55, edgecolor=SURFACE, linewidth=0.8, zorder=3)
+
+    for x, v in zip(xs, vals):
+        ax.annotate(f"{v:.2f}%", (x, v), textcoords="offset points", xytext=(0, 5),
+                    ha="center", color=INK, fontsize=8.5, fontweight="bold")
+
+    current = [float(r["value_pct"]) for r in rows if r["superseded_by"] == "current"]
+    floor = sum(current) / len(current)
+    ax.axhline(floor, color=CAT[2], linestyle="--", linewidth=1.2, zorder=2,
+               label=f"measured mean floor ({floor:.2f}%)")
+
+    ax.set_xticks(xs)
+    ax.set_xticklabels(labels, color=DIM, fontsize=8)
+    ax.set_ylabel("relative sigma of fine texture (%)", color=DIM, fontsize=9)
+    ax.set_title("The seed-to-seed noise floor estimated three times\n"
+                 "1.15% on 3 seeds \u2192 over-corrected to 5.20% (borrowed) \u2192 1.65% and 1.83% on 18",
+                 color=INK, fontsize=10.0, loc="left", pad=12)
+    ax.legend(loc="upper right", fontsize=8, frameon=False, labelcolor=DIM)
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(y=0.15)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{len(rows)} estimates  \u00b7  source data/noise_floor_history.csv")
+
+
+
+def _response_by_block() -> list[dict]:
+    src = DATA / "all_blocks_clean_v2_response_by_block.csv"
+    return list(csv.DictReader(src.open(encoding="utf-8-sig", newline="")))
+
+
+def all_blocks_depth_profile(out: Path) -> Path:
+    """F10.1: how far the image moves per block group, at each of the three angles."""
+    rows = _response_by_block()
+    angles = [("low", 5), ("mid", 10), ("high", 15)]
+    blocks = sorted({r["block"] for r in rows})
+    by = {(r["angle"], r["block"]): (float(r["mean_norm_A"]), float(r["sd_norm_A"])) for r in rows}
+    missing = [(a, b) for a, _ in angles for b in blocks if (a, b) not in by]
+    if missing:
+        raise SystemExit(f"the measurement file has no row for {missing[:3]}")
+
+    fig, ax = _canvas(7.6, 4.6)
+    width = 0.26
+    for i, (label, deg) in enumerate(angles):
+        xs = [j + (i - 1) * width for j in range(len(blocks))]
+        vals = [by[(label, b)][0] for b in blocks]
+        errs = [by[(label, b)][1] for b in blocks]
+        ax.bar(xs, vals, width=width, color=CAT[i], edgecolor=SURFACE, linewidth=0.7,
+               zorder=3, label=f"{deg} deg")
+        ax.errorbar(xs, vals, yerr=errs, fmt="none", ecolor=DIM, elinewidth=0.9,
+                    capsize=2.5, zorder=4)
+    top = by[("high", "B6")][0]
+    second = max(by[("high", b)][0] for b in blocks if b != "B6")
+    ax.set_xticks(range(len(blocks)))
+    ax.set_xticklabels(blocks, color=DIM, fontsize=9)
+    ax.set_xlabel("block group, B1 at the input and B6 against the output", color=DIM, fontsize=9)
+    ax.set_ylabel("mean |A|, the antisymmetric response", color=DIM, fontsize=9)
+    ax.set_title(f"Response grows with angle in every group, and the output group dwarfs "
+                 f"the rest\nat 15 deg B6 moves the image {top / second:.1f} times further "
+                 f"than the next group",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="upper left", fontsize=8, frameon=False, labelcolor=DIM,
+              title="rotation angle", title_fontsize=8)
+    ax.get_legend().get_title().set_color(DIM)
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{len(rows)} rows, 6 cells each  \u00b7  "
+                           f"source data/all_blocks_clean_v2_response_by_block.csv")
+
+
+def sensitivity_per_displacement(out: Path) -> Path:
+    """F10.2: B6 against B1, before and after dividing by the displacement each received."""
+    src = DATA / "sensitivity_by_block.csv"
+    rows = [r for r in csv.DictReader(src.open(encoding="utf-8-sig", newline=""))
+            if r["response_per_unit_displacement"] != "not measured"]
+    if not rows:
+        raise SystemExit(f"{src.name} has no normalised row: run "
+                         f"experiments/measure_block_group_displacements.py first")
+    need = {("B1", a) for a in ("low", "mid", "high")} | {("B6", a) for a in ("low", "mid", "high")}
+    have = {(r["block"], r["angle_label"]) for r in rows}
+    if not need <= have:
+        raise SystemExit(f"the pair B1/B6 is not complete in {src.name}: missing {sorted(need - have)}")
+    raw = {(r["block"], r["angle_label"]): float(r["mean_norm_A"]) for r in rows}
+    norm = {(r["block"], r["angle_label"]): float(r["response_per_unit_displacement"]) for r in rows}
+    angles = ("low", "mid", "high")
+    degrees = {"low": 5, "mid": 10, "high": 15}
+    as_rendered = [raw[("B6", a)] / raw[("B1", a)] for a in angles]
+    per_dose = [norm[("B6", a)] / norm[("B1", a)] for a in angles]
+    src_note = rows[0]["displacement_source"]
+
+    fig, ax = _canvas(7.6, 4.6)
+    xs = list(range(len(angles)))
+    width = 0.34
+    ax.bar([x - width / 2 for x in xs], as_rendered, width=width, color=DIM,
+           edgecolor=SURFACE, linewidth=0.7, zorder=3, label="as rendered, equal angle")
+    ax.bar([x + width / 2 for x in xs], per_dose, width=width, color=CAT[1],
+           edgecolor=SURFACE, linewidth=0.7, zorder=3, label="per unit of weight displacement")
+    for x, v in zip(xs, as_rendered):
+        ax.annotate(f"{v:.2f}x", (x - width / 2, v), textcoords="offset points", xytext=(0, 4),
+                    ha="center", color=INK, fontsize=8.5)
+    for x, v in zip(xs, per_dose):
+        ax.annotate(f"{v:.2f}x", (x + width / 2, v), textcoords="offset points", xytext=(0, 4),
+                    ha="center", color=INK, fontsize=8.5, fontweight="bold")
+    ax.axhline(1.0, color=CAT[2], ls="--", lw=1.1, zorder=2, label="B6 and B1 equally sensitive")
+    ax.set_xticks(xs)
+    ax.set_xticklabels([f"{a} ({degrees[a]} deg)" for a in angles], color=DIM, fontsize=9)
+    ax.set_ylabel("B6 response divided by B1 response", color=DIM, fontsize=9)
+    ax.set_title(f"The same angle is not the same dose, and correcting for it widens the gap\n"
+                 f"B6 receives {1 / (norm[('B6', 'high')] / raw[('B6', 'high')]):.0%} of B1's "
+                 f"displacement at the same angle\n"
+                 f"and still answers {min(per_dose):.1f} to {max(per_dose):.1f} times harder",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="upper right", fontsize=8, frameon=False, labelcolor=DIM)
+    ax.grid(axis="y", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    ax.margins(y=0.16)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{len(rows)} normalised rows  \u00b7  source data/sensitivity_by_block.csv, "
+                           f"displacement from {src_note.split(' (')[0]}")
+
+
+
+def downsample_blindness(out: Path) -> Path:
+    """F01.3: does the separation survive CLIP's 224x224 resample? Mostly, yes."""
+    src = DATA / "downsample_blindness.csv"
+    rows = list(csv.DictReader(src.open(encoding="utf-8-sig", newline="")))
+    native = {r["feature"]: float(r["abs_dz"]) for r in rows if r["scale"] == "native"}
+    small = {r["feature"]: float(r["abs_dz"]) for r in rows if r["scale"] == "clip224"}
+    if not native or set(native) != set(small):
+        raise SystemExit(f"{src.name} does not carry both scales for the same features")
+    feats = sorted(native, key=lambda f: -native[f])
+    n = int(next(r["n_prompts"] for r in rows))
+
+    fig, ax = _canvas(7.8, 5.0)
+    ys = list(range(len(feats)))
+    height = 0.36
+    ax.barh([y + height / 2 for y in ys], [native[f] for f in feats], height=height,
+            color=CAT[0], edgecolor=SURFACE, linewidth=0.7, zorder=3,
+            label="as rendered, 1024x1280")
+    ax.barh([y - height / 2 for y in ys], [small[f] for f in feats], height=height,
+            color=CAT[1], edgecolor=SURFACE, linewidth=0.7, zorder=3,
+            label="after CLIP's 224x224 resample")
+    ax.invert_yaxis()
+    ax.set_yticks(ys)
+    ax.set_yticklabels([f.replace("_", " ") for f in feats], color=DIM, fontsize=8)
+    ax.set_xlabel("|dz|, the paired effect size of preset against block shuffle",
+                  color=DIM, fontsize=9)
+    kept = sum(1 for f in feats if small[f] >= 0.5 * native[f])
+    grew = sum(1 for f in feats if small[f] > native[f])
+    ax.set_title(f"The resample does not wipe the separation out\n"
+                 f"{kept} of {len(feats)} statistics keep at least half their effect size at "
+                 f"224x224, and {grew} grow",
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="lower right", fontsize=8, frameon=False, labelcolor=DIM)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    return _save(fig, out, f"{n} prompts, one seed  \u00b7  source data/downsample_blindness.csv")
+
+
+def scale_comparison(out: Path) -> Path:
+    """F01.1: Baseline and preset at full resolution vs 224x224 (as CLIP sees it)."""
+    src = DATA / "stage7b_images.csv"
+    p_base = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders\I01_baseline_seed42_00001_.png")
+    p_preset = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7\renders\I01_preset_pos_seed42_00001_.png")
+
+    im_b = Image.open(p_base).convert("RGB")
+    im_p = Image.open(p_preset).convert("RGB")
+
+    im_b224 = im_b.resize((224, 224), Image.LANCZOS)
+    im_p224 = im_p.resize((224, 224), Image.LANCZOS)
+
+    items = [
+        ("Baseline · full resolution (1024×1280)", im_b),
+        ("Preset · full resolution (1024×1280)", im_p),
+        ("Baseline · 224×224 (CLIP input scale)", im_b224),
+        ("Preset · 224×224 (CLIP input scale)", im_p224),
+    ]
+
+    fig, axes = plt.subplots(1, 4, figsize=(12.0, 4.4), dpi=150)
+    fig.patch.set_facecolor(SURFACE)
+    for ax, (label, img) in zip(axes, items):
+        ax.set_facecolor(SURFACE)
+        ax.imshow(img)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for spine in ax.spines.values():
+            spine.set_color(GRID)
+            spine.set_linewidth(1.0)
+        ax.set_title(label, color=INK, fontsize=7.5, pad=6)
+
+    fig.tight_layout(rect=(0.01, 0.04, 0.99, 0.96))
+    strip = "full resolution vs 224x224 downsample  \u00b7  source data/stage7b_images.csv"
+    return _save(fig, out, strip)
+
+
 def main() -> int:
     out = ASSETS / "03-what-ends-up-in-the-picture"
     built = [
@@ -809,15 +1316,30 @@ def main() -> int:
                                       / "F04.1_position_against_displacement.webp"),
         antisymmetry_by_block(ASSETS / "04-where-in-the-model"
                               / "F04.2_antisymmetry_by_block.webp"),
+        knob_vs_cost_scatter(ASSETS / "05-knob-or-cost" / "F05.1_knob_vs_cost.webp"),
+        depth_profile(ASSETS / "05-knob-or-cost" / "F05.2_depth_profile.webp"),
+        rectification_bars(ASSETS / "05-knob-or-cost" / "F05.3_rectification.webp"),
+        inverted_knob_toggle(ASSETS / "05-knob-or-cost" / "F05.4_inverted_knob_toggle.webp"),
+        roundtrip_sentinel(ASSETS / "00-the-bench" / "F00.1_roundtrip_sentinel.webp"),
+        noise_floor_history(ASSETS / "00-the-bench" / "F00.3_noise_floor_history.webp"),
+        scale_comparison(ASSETS / "01-mark-style" / "F01.1_scale_comparison.webp"),
+        mark_style_toggle(ASSETS / "01-mark-style" / "F01.2_mark_style_toggle.webp"),
+        b1b6_hud_vs_recovered(ASSETS / "08-block1-vs-block6"
+                              / "F08.3_hud_vs_recovered.webp"),
         b1b6_advantage_by_prompt(ASSETS / "08-block1-vs-block6"
                                  / "F08.1_advantage_by_prompt.webp"),
         b1b6_advantage_by_space(ASSETS / "08-block1-vs-block6"
-                                / "F08.2_advantage_by_space.webp"),
+                                 / "F08.2_advantage_by_space.webp"),
         stage9_centering_flip(ASSETS / "09-style-direction"
                               / "F09.1_centering_flip.webp"),
         stage9_direction_at_usable_dose(ASSETS / "09-style-direction"
                                         / "F09.2_direction_at_usable_dose.webp"),
         stage9_quality_gate(ASSETS / "09-style-direction" / "F09.3_quality_gate.webp"),
+        all_blocks_depth_profile(ASSETS / "10-all-blocks-clean"
+                                 / "F10.1_depth_profile_by_angle.webp"),
+        sensitivity_per_displacement(ASSETS / "10-all-blocks-clean"
+                                     / "F10.2_sensitivity_per_displacement.webp"),
+        downsample_blindness(ASSETS / "01-mark-style" / "F01.3_downsample_blindness.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")

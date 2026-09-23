@@ -262,6 +262,7 @@ TEMPLATE = """<!DOCTYPE html>
   <h2>Elsewhere</h2>
   <ul>
     <li><a href="#claims">What holds, what does not</a></li>
+    <li><a href="docs/scope.md">Scope and ladder</a></li>
     <li><a href="docs/errors_log.md">The pitfalls checklist</a></li>
     <li><a href="data/">Measurement files</a></li>
   </ul>

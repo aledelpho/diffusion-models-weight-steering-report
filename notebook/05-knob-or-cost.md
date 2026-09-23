@@ -271,7 +271,7 @@ barely moves. The single exception is block 27, the last one, which is more viol
 and is also the only tail block with a strong positive swing (1.393, the highest of the 28).
 Block 27 is an outlier on every axis here and deserves an experiment of its own.
 
-![Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive direction; block 27 is the only one that reverses this.](../assets/05-knob-or-cost/F05.3_rectification.webp)
+![Per-block amplitude at plus 0.200 against minus 0.200, paired, both arms standardised on the same 18-seed noise estimate. Block 26 moves 9.1 times further in the positive direction; of the last six blocks only block 27 reverses it, and four blocks in the middle of the network reverse it too.](../assets/05-knob-or-cost/F05.3_rectification.webp)
 
 #### What I got wrong
 
@@ -289,7 +289,10 @@ tail blocks met the criterion.
 **The floor bench.** 32 renders and 32 latents. The two control renders (P01 and P02 at seed
 42) are pixel-identical to the baselines of the earlier benches and the latents are bit-identical,
 so the 15 new seeds are comparable. σ(HF) measured across 18 seeds per prompt, 153 pairs each:
-**1.65%** on P01 and **1.83%** on P02.
+**1.65%** on P01 and **1.83%** on P02 — 1.6468% and 1.8313% when recomputed from the
+renders on 2026-09-23, in `data/noise_floor_measured.csv`. Two of the eighteen seeds are not in this
+bench: 777 and 1337 come from `benchmark_latenti_b6`, and seed 42 is in both benches,
+pixel-identical, counted once.
 
 *A note on the gate itself*: the first check failed because the specification asked for the
 SHA-256 of the file. A PNG carries its ComfyUI graph in `tEXt` chunks, and the new script
@@ -384,6 +387,6 @@ analysis:
 
 * Pre-registration: [`docs/prereg_punto7_simmetria_segno.md`](../docs/prereg_punto7_simmetria_segno.md), deposited 14:50 with the destination folder verified empty
 * Measurement files: `data/punto7_blocks.csv` (28 rows: r+, r-, common mode, swing, specularity, both amplitudes)
-* Scripts: `experiments/verifica_punto7.py`, `experiments/run_pavimento_rumore.py`, `experiments/analisi_modo_comune.py`
+* Scripts: `experiments/measure_noise_floor.py` (the floor, from the renders). `experiments/verifica_punto7.py`, `experiments/run_pavimento_rumore.py` and `experiments/analisi_modo_comune.py` were named here until 2026-09-23 and are not in the repository: the 28 rows of `data/punto7_blocks.csv` have no code behind them
 * Renders: `benchmark_profondita_neg/` (168, new), `benchmark_profondita/` (168, pre-existing), `benchmark_pavimento_rumore/` (32)
 * Pitfalls that apply: [2](../docs/errors_log.md) (unsigned distance), 43 (averaging over signs), 57 (one-sided sweep), 60 (decorrelation ceiling), 61 (ratio with noise in the denominator), 62 (threshold calibrated on three seeds)

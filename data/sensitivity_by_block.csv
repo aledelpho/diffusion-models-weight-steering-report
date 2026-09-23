@@ -1,0 +1,19 @@
+angle_label,angle_deg,block,n_cells,mean_norm_A,sd_norm_A,relative_displacement_vs_B1,response_per_unit_displacement,displacement_source,ratio_to_B1
+low,5.0,B1,6,0.118486,0.047065,1.0,0.118486,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",1.0
+low,5.0,B2,6,0.09215,0.018813,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+low,5.0,B3,6,0.170261,0.051728,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+low,5.0,B4,6,0.140964,0.041671,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+low,5.0,B5,6,0.070303,0.027144,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+low,5.0,B6,6,0.633968,0.041085,0.739984,0.856731,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",7.2307
+mid,10.0,B1,6,0.396921,0.052006,1.0,0.396921,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",1.0
+mid,10.0,B2,6,0.087185,0.033552,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+mid,10.0,B3,6,0.258589,0.087262,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+mid,10.0,B4,6,0.182855,0.015621,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+mid,10.0,B5,6,0.111668,0.029121,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+mid,10.0,B6,6,1.650977,0.123004,0.739984,2.231098,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",5.621
+high,15.0,B1,6,0.897497,0.070971,1.0,0.897497,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",1.0
+high,15.0,B2,6,0.133636,0.073575,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+high,15.0,B3,6,0.385482,0.120724,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+high,15.0,B4,6,0.440836,0.108995,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+high,15.0,B5,6,0.165929,0.05544,not measured,not measured,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",not measured
+high,15.0,B6,6,3.705586,0.223493,0.739984,5.007655,"data/matched_rotation_calibration_v4.json (B1 and B6 only, theta_B6/theta_B1 = 1.351380 across 3 doses)",5.5796

@@ -56,15 +56,21 @@ claims:
 > **Ambiguous** · 432 cells found on disk, not designed · 6 block groups · 7 prompts
 > · exploratory, and it predates every pre-registration in this notebook
 > [← all experiments](../README.md#what-holds-and-what-does-not)
-> ⚠ **The pixels under this page are contaminated, and the page has not yet been withdrawn.**
-> Every render of this bench was saved at 1024×1760: a 1280-tall image with a 480-pixel HUD
-> strip attached to it. A HUD in the frame was found, in earlier work, to move the measurements
-> themselves — so every feature computed here was computed partly on an overlay rather than on
-> the picture. The affected files are listed in `data/hud_contaminated_images.csv`
-> (225 of the 555 images there belong to this bench) and the account is in
-> `docs/hud_contamination_1024x1760.md`. Nothing on this page should be quoted until the bench
-> is re-rendered without the HUD and the analysis re-run. The claims below are left at their
-> published status deliberately, pending that decision — they are not endorsed here.
+> **The pixels are recovered. These numbers are not — not yet.**
+> This bench was written at 1024×1760: the 1280-tall render with a 480-pixel HUD panel appended
+> underneath after generation. The affected files are listed in `data/hud_contaminated_images.csv`
+> (225 of the 555 images belong to this bench). Cropping the panel returns the original render
+> exactly, proved against 30 bit-identical baseline pairs, and all 225 images have been recovered
+> and re-measured (`docs/recovered_vs_contaminated.md`).
+>
+> But **the numbers on this page do not come from those features.** They come from CLIP distances
+> read out of the nine benchmark reports, computed on the HUD images at the time, and nothing has
+> recomputed them. `data/pilot_rotations_style_recovered_features.csv` and its palette twin now
+> exist and are clean; `data/pilot_rotations.csv` and `data/pilot_macro.csv` are not. Until the
+> CLIP measurement is re-run on the recovered pixels, every figure below is a measurement of a
+> picture with a panel attached to it, and on the page next door the same panel turned out to
+> inflate a control by a factor of two. The claims keep their published status pending that
+> re-measurement; they are not endorsed here.
 
 
 > **The direction I'm chasing.** The question I actually want answered is whether it matters

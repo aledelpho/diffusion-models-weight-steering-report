@@ -37,6 +37,18 @@ ROOT = HERE.parent
 DATA = ROOT / "data"
 ASSETS = ROOT / "assets"
 
+try:
+    from notebook_charts import (
+        toggle_animation,
+        inverted_knob_toggle,
+        roundtrip_sentinel,
+        mark_style_toggle,
+        noise_floor_history,
+        scale_comparison,
+    )
+except ImportError:
+    pass
+
 # The surface validate_notebook.py samples for, and the palette of notebook_charts.py as
 # AUTHORING section 4.4 declares it.
 SURFACE = (0x1A, 0x1A, 0x19)

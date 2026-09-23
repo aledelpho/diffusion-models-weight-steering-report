@@ -9,7 +9,7 @@ supersedes: []
 pitfalls: [4, 5, 10, 13, 15, 54, 55, 62]
 
 corpus:
-  renders: 423
+  renders: 427
   prompts: 5
   seeds: [42, 777, 1337, 9999, 4242145]
 
@@ -47,7 +47,9 @@ claims:
     statement: >
       The seed-to-seed noise floor of fine texture is under 2% on the two prompts that
       every threshold in this notebook is calibrated against.
-    evidence: "1.65% on P01 and 1.84% on P02, measured across 18 baseline seeds each."
+    evidence: "1.6468% on P01 and 1.8313% on P02 in data/noise_floor_measured.csv, across
+      18 distinct baseline seeds each (153 pairs), 16 of them from benchmark_pavimento_rumore
+      and the last two from benchmark_latenti_b6."
     anchor: "#the-floor-that-moved-twice-before-it-was-measured"
   - id: two-arms-undiagnosed
     status: open
@@ -60,7 +62,7 @@ claims:
 
 # Is the instrument lying to me?
 
-> **Holds** · 423 renders · 5 prompts · verification, not an experiment
+> **Holds** · 427 renders · 5 prompts · verification, not an experiment
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Nothing on any other page is worth reading if this one is
@@ -122,7 +124,8 @@ properly. That story is below, because a reader deserves to see how the sausage 
 
 The instrument holds. The tuner is bit-exact identity at gain zero, on 15 cells across three
 prompts. The pipeline reproduces a render exactly across a restart. The seed-to-seed floor of
-fine texture is 1.65% on P01 and 1.84% on P02, measured on 18 baseline seeds each.
+fine texture is 1.65% on P01 and 1.83% on P02, measured on 18 baseline seeds each and
+reproduced from the renders by `experiments/measure_noise_floor.py`.
 
 Two findings here are stricter than expected and constrain the rest of the notebook. The
 round-trip sentinel sets a floor above the seed floor: weights returned to D = 0 do not return
@@ -176,7 +179,7 @@ as an RMS or mean over all channels, where the question is *how much*.
 | `clipL1` at five doses *(positive control)* | > 0 at every dose | **23.5 → 34.0** | pass |
 | `clipL1` rising with dose | each dose ≥ the one below | **23.5 → 27.5 → 26.1 → 33.1 → 34.0** | **fail** |
 | noise floor, P01 | measured on ≥ 18 seeds | **1.65%** | pass |
-| noise floor, P02 | measured on ≥ 18 seeds | **1.84%** | pass |
+| noise floor, P02 | measured on ≥ 18 seeds | **1.83%** | pass |
 | two baselines, different seeds | reported, never used as a floor | **r = 0.50** | measured |
 
 #### The node adds nothing of its own
@@ -239,9 +242,9 @@ varies between two renders that differ only by their seed. That number has a his
 |---|--:|---|
 | first | 1.15% | 3 seeds |
 | second | 5.2% | borrowed from three different prompts, which are genuinely noisier |
-| measured | **1.65%** (P01), **1.84%** (P02) | 18 seeds each, 153 pairs each |
+| measured | **1.65%** (P01), **1.83%** (P02) | 18 seeds each, 153 pairs each |
 
-![The seed-to-seed noise floor as it was estimated three times: 1.15 percent on three seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.84 percent measured on eighteen seeds each.](../assets/00-the-bench/F00.3_noise_floor_history.webp)
+![The seed-to-seed noise floor as it was estimated three times: 1.15 percent on three seeds, then 5.2 percent borrowed from other prompts, then 1.65 and 1.83 percent measured on eighteen seeds each.](../assets/00-the-bench/F00.3_noise_floor_history.webp)
 
 The first was unreliable: a standard deviation on three samples has two degrees of freedom and
 can be wrong by a factor of two or three. The correction then over-shot in the other direction
@@ -320,7 +323,8 @@ conditions:
     dose: 0.005 / 0.020 / 0.050 / 0.120 / 0.200
     measured_D: not applicable — a text-encoder gain, not a backbone displacement
 outputs:
-  folder: benchmark_stage1_gate, benchmark_determinismo, benchmark_testo_pilota, benchmark_pavimento_rumore
+  folder: benchmark_stage1_gate, benchmark_determinismo, benchmark_testo_pilota,
+    benchmark_pavimento_rumore, benchmark_latenti_b6
   manifest: none -- data/bench_checks.csv is a ledger of checks (11 rows, one per check),
     not a per-render manifest. No file in the repository lists these 423 renders.
 analysis:
@@ -334,11 +338,22 @@ analysis:
     verification. The block was typed by hand. experiments/extract_repro.py exists as of
     2026-09-21 and reads data/, not the renders; for this page it can prove nothing, because
     no file here records these benches image by image. Every field above is unverified.
+
+    AS OF 2026-09-23 there are two exceptions and one new problem. The exceptions are the
+    two noise_floor rows: experiments/measure_noise_floor.py reads the 38 baseline renders
+    of benchmark_latenti_b6 and benchmark_pavimento_rumore, records them image by image in
+    data/noise_floor_hf_by_render.csv with their resolution and sha256, and reproduces the
+    published floor from the pixels -- 1.6468% on P01 and 1.8313% on P02. That file is now
+    what extract_repro.py reads for this page, so the resolution field above is proven for
+    38 of the 427 renders. The problem is the script field itself: experiments/measure_bench.py
+    is not in the repository, so the sha256 beside it is the hash of a file nobody can
+    produce, and the other nine rows of data/bench_checks.csv are still hand-typed with no
+    code behind them.
 ```
 
 ## Provenance
 
-* Measurement file: [`data/bench_checks.csv`](../data/bench_checks.csv) — one row per check, each with the criterion it was judged against
-* Script: `experiments/measure_bench.py`
-* Renders: `benchmark_stage1_gate` (360, sentinels and the norm-matched bench), `benchmark_determinismo` (1), `benchmark_testo_pilota` (30), `benchmark_pavimento_rumore` (32, the 18-seed floor)
+* Measurement files: [`data/bench_checks.csv`](../data/bench_checks.csv) — one row per check, each with the criterion it was judged against; [`data/noise_floor_measured.csv`](../data/noise_floor_measured.csv) and [`data/noise_floor_hf_by_render.csv`](../data/noise_floor_hf_by_render.csv) — the floor, and the 38 renders it was measured on
+* Scripts: `experiments/measure_noise_floor.py` (the two noise-floor rows); `experiments/measure_bench.py` is named for the other nine and is not in the repository
+* Renders: `benchmark_stage1_gate` (360, sentinels and the norm-matched bench), `benchmark_determinismo` (1), `benchmark_testo_pilota` (30), `benchmark_pavimento_rumore` (32, sixteen of the eighteen floor seeds), `benchmark_latenti_b6` (4, the last two floor seeds on both prompts)
 * Pitfalls that apply: 4 and 5 (a sentinel below the precision of the format, and an acceptance criterion mismatched to it), 10 (round-trip composition), 13 (a tolerance that returns its best candidate instead of failing), 15 (a gate that tallies misses and proceeds), 54 (assuming the node is a no-op instead of measuring it), 55 (a seed change used as a noise floor), 62 (a threshold calibrated on three seeds)

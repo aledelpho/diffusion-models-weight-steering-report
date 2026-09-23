@@ -1,0 +1,197 @@
+{
+  "model_file": "krea2_turbo_bf16.safetensors",
+  "total_model_norm": 5009.4475,
+  "scramble_A_seed": 20260919,
+  "scramble_A_signs_40": [
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1
+  ],
+  "scramble_B_seed": 20260920,
+  "scramble_B_signs_32": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    -1
+  ],
+  "tolerance_target": 1e-06,
+  "levels": {
+    "d0141": {
+      "target_D": 0.0141,
+      "Block_1": {
+        "angle_deg": 7.374755859375,
+        "d_model": 0.01409992,
+        "delta_norm": 70.63283,
+        "tensor_count": 40
+      },
+      "Block_6": {
+        "angle_deg": 9.97151171875,
+        "d_model": 0.01409994,
+        "delta_norm": 70.63289,
+        "tensor_count": 32
+      },
+      "tolerance_achieved": 1.2e-08,
+      "scramble_A": {
+        "anchor": "Block_1",
+        "angle_deg": 7.374755859375,
+        "d_model": 0.01409987,
+        "seed": 20260919,
+        "scarto_vs_anchor_pct": 0.0004
+      },
+      "scramble_B": {
+        "anchor": "Block_6",
+        "angle_deg": 9.97151171875,
+        "d_model": 0.01409989,
+        "seed": 20260920,
+        "scarto_vs_anchor_pct": 0.0004
+      },
+      "node_verification": {
+        "Block_1_pos": {
+          "tensors_touched": 40,
+          "d_measured_on_node": 0.01409992,
+          "relative_discrepancy": 2.8e-07
+        },
+        "Block_6_pos": {
+          "tensors_touched": 32,
+          "d_measured_on_node": 0.01409994,
+          "relative_discrepancy": 3e-07
+        },
+        "scrA_pos": {
+          "tensors_touched": 40,
+          "d_measured_on_node": 0.01409987,
+          "relative_discrepancy": 1.8e-07
+        },
+        "scrB_pos": {
+          "tensors_touched": 32,
+          "d_measured_on_node": 0.01409989,
+          "relative_discrepancy": 3.2e-07
+        }
+      }
+    },
+    "d0106": {
+      "target_D": 0.0106,
+      "Block_1": {
+        "angle_deg": 5.54251171875,
+        "d_model": 0.01060003,
+        "delta_norm": 53.1003,
+        "tensor_count": 40
+      },
+      "Block_6": {
+        "angle_deg": 7.492,
+        "d_model": 0.01059971,
+        "delta_norm": 53.09871,
+        "tensor_count": 32
+      },
+      "tolerance_achieved": 3.19e-07,
+      "scramble_A": {
+        "anchor": "Block_1",
+        "angle_deg": 5.54251171875,
+        "d_model": 0.01059999,
+        "seed": 20260919,
+        "scarto_vs_anchor_pct": 0.0004
+      },
+      "scramble_B": {
+        "anchor": "Block_6",
+        "angle_deg": 7.492,
+        "d_model": 0.01059969,
+        "seed": 20260920,
+        "scarto_vs_anchor_pct": 0.0002
+      }
+    },
+    "d0071": {
+      "target_D": 0.0071,
+      "Block_1": {
+        "angle_deg": 3.7115117187499997,
+        "d_model": 0.00709978,
+        "delta_norm": 35.56599,
+        "tensor_count": 40
+      },
+      "Block_6": {
+        "angle_deg": 5.01651171875,
+        "d_model": 0.00710011,
+        "delta_norm": 35.56763,
+        "tensor_count": 32
+      },
+      "tolerance_achieved": 3.29e-07,
+      "scramble_A": {
+        "anchor": "Block_1",
+        "angle_deg": 3.7115117187499997,
+        "d_model": 0.00709975,
+        "seed": 20260919,
+        "scarto_vs_anchor_pct": 0.0005
+      },
+      "scramble_B": {
+        "anchor": "Block_6",
+        "angle_deg": 5.01651171875,
+        "d_model": 0.00710012,
+        "seed": 20260920,
+        "scarto_vs_anchor_pct": 0.0001
+      }
+    }
+  }
+}

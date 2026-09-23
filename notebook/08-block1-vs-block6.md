@@ -22,10 +22,12 @@ claims:
       be told apart, and they separate further than two arbitrary perturbations of that same
       size do.
     evidence: >
-      Pre-registered, single hypothesis, no alternatives. Same-block advantage +1.039 at the
-      exact permutation floor p = 0.00195, positive in 10 prompts of 10, against a scramble
-      null of +0.532; the paired advantage is +0.506, also at the floor and positive in 10 of
-      10. The criterion holds in all five measurement spaces.
+      Pre-registered, single hypothesis, no alternatives. Measured on recovered pixels:
+      same-block advantage +1.108 at the exact permutation floor p = 0.00195, positive in 10
+      prompts of 10, against a scramble null of +0.274; the paired advantage is +0.834, also at
+      the floor and positive in 10 of 10. The criterion holds in all five measurement spaces.
+      The figures published before 2026-09-23 were +1.039, +0.532 and +0.506, measured with a
+      HUD panel in the frame that inflated the null.
     anchor: "#the-advantage-and-the-null-it-had-to-beat"
   - id: block1-coheres-at-matched-displacement
     status: holds
@@ -33,9 +35,10 @@ claims:
       At a displacement matched by construction, the first block group's direction is highly
       consistent across subjects rather than unstable.
     evidence: >
-      Within-block coherence 0.949 for the first group and 0.958 for the last, in the primary
-      space, on 10 prompts sharing no text with the pilot. The pilot estimate for the same
-      quantity was 0.65 across 23 features.
+      Within-block coherence 0.942 for the first group and 0.977 for the last, in the primary
+      space, on 10 prompts sharing no text with the pilot, measured on recovered pixels. The
+      pilot estimate for the same quantity was 0.65 across 23 features. Removing the HUD moved
+      these two by less than 0.02: the coherence was never the contaminated part.
     anchor: "#what-this-says-about-the-first-block"
   - id: block1-does-not-replicate
     status: ambiguous
@@ -55,15 +58,32 @@ claims:
 > **Holds** · 210 renders · 10 style prompts, 3 seeds · pre-registered 2026-09-18 at 23:10,
 > two hours and nineteen minutes before the first render landed
 > [← all experiments](../README.md#what-holds-and-what-does-not)
-> ⚠ **The pixels under this page are contaminated, and the page has not yet been withdrawn.**
-> Every render of this bench was saved at 1024×1760: a 1280-tall image with a 480-pixel HUD
-> strip attached to it. A HUD in the frame was found, in earlier work, to move the measurements
-> themselves — so every feature computed here was computed partly on an overlay rather than on
-> the picture. The affected files are listed in `data/hud_contaminated_images.csv`
-> (210 of the 555 images there belong to this bench) and the account is in
-> `docs/hud_contamination_1024x1760.md`. Nothing on this page should be quoted until the bench
-> is re-rendered without the HUD and the analysis re-run. The claims below are left at their
-> published status deliberately, pending that decision — they are not endorsed here.
+> **The pixels were recovered, and every number below was re-measured on them, 2026-09-23.**
+> This bench was written at 1024×1760 — the 1280-tall render with a 480-pixel HUD panel appended
+> underneath by a vertical batch node. The panel was added *after* generation, so cropping it off
+> returns the original render exactly. That is proved, not assumed: 30 baseline images cropped
+> from this bench are bit-identical to the same prompts and seeds re-rendered clean in
+> `rotations_matched_v3`, worst maximum channel difference 0. The 555 files are listed in
+> `data/hud_contaminated_images.csv`, the recovery in `docs/recovered_vs_contaminated.md`.
+>
+> **In the primary space the HUD was inflating the null, not the effect.** The panel was
+> identical in every image, so it injected a shared component into every feature vector and made
+> two arbitrary scrambles look more alike than they are. Removing it leaves the advantage almost
+> where it was and halves the control: the excess this page rests on grows from +0.506 to
+> **+0.834**. The published result was conservative.
+>
+> The four secondary spaces do not all move that way — three of them lose gap rather than gain
+> it. A shared component in the frame does not push every cosine in one direction, and the figure
+> below is the honest version of that.
+>
+> **A re-render was attempted first, and stopped — that account still stands**, because it
+> constrains any future change of dose. At D = 0.045 clean renders of the last group come out
+> black or washed out; the sign-scrambled control on that group shifts exposure by 20–40 grey
+> levels down to D ≈ 0.0035, while below D ≈ 0.005 bf16 rounding bends the applied edit away from
+> the intended one (cos 0.985 at 0.0035, 0.955 at 0.0018). No dose satisfies both walls, and the
+> confirmation was stopped rather than a gate loosened after it failed. See
+> `docs/prereg_rotations_block1_vs_block6_emendamento_v4.md`. The recovery makes that re-render
+> unnecessary for *this* page: the clean pixels of the registered dose already existed.
 
 
 > **The direction I'm chasing.** [The pilot sweep](04-where-in-the-model.md) could ask whether
@@ -76,9 +96,12 @@ claims:
 > fact about arithmetic and not about anatomy — so the null had to be measured, never assumed to
 > sit at zero.
 >
-> **Where we are.** The null is large, +0.532, and the real pair still beats it in all ten
+> **Where we are.** The null is large, +0.274, and the real pair still beats it in all ten
 > prompts. It is the strongest result in the notebook and also the narrowest: separability is
 > not specialisation, and the experiment built to tell those apart came back not determined.
+> And I nearly threw it away: the images carried a HUD panel that made the *control* look
+> stronger than it is, so for two days I thought the page was contaminated when it was merely
+> understated.
 
 ## In two minutes
 
@@ -97,7 +120,7 @@ is not how far they went.
 
 The two groups' directions are tellable apart in all ten prompts, at the smallest value the test
 can return. And the control that makes it mean something: two *arbitrary* perturbations of the
-same size also separate from each other — the null is +0.532, not zero — and the real pair still
+same size also separate from each other — the null is +0.274, not zero — and the real pair still
 beats it in every prompt.
 
 What the page does not show is that the difference is about *function*. The last group sits
@@ -134,10 +157,10 @@ declared. The question stays open and is recorded as open in
 `docs/rotations_block1_vs_block6_results.md` §2.
 
 **The null is large, and that is the interesting part.** Two arbitrary scrambles at the same
-displacement separate from each other at +0.532, itself at the floor. Most of what the
+displacement separate from each other at +0.274, itself at the floor. Much of what the
 leave-one-out statistic measures is therefore not anatomy — it is that any two distinct
-perturbations leave distinguishable traces. The finding is the *excess* over that, +0.506, and a
-reader who takes +1.039 as the effect size is double-counting.
+perturbations leave distinguishable traces. The finding is the *excess* over that, +0.834, and a
+reader who takes +1.108 as the effect size is double-counting.
 
 **No middle group, and no third arm.** Two groups at one displacement, one rotation family. The
 pilot's amplitude family is not represented here, which matters for the first block (below).
@@ -145,7 +168,7 @@ pilot's amplitude family is not represented here, which matters for the first bl
 **The coherence numbers set a ceiling the cross-cosine is read against.** Cross-block cosine is
 attenuated by measurement error and the two groups are not measured with equal precision; the
 disattenuated figure is reported alongside the raw one for that reason, and it is pitfall 36.
-Here the two coherences are both high and nearly equal, 0.949 and 0.958, so the correction barely
+Here the two coherences are both high and nearly equal, 0.942 and 0.977, so the correction barely
 moves anything — which is the one case where the raw number can be trusted.
 
 **Three seeds per cell.** Enough to average the antisymmetric component, not enough to measure
@@ -181,14 +204,16 @@ declared in advance, with four secondary families corrected separately.
 
 ### The advantage, and the null it had to beat
 
+![The same ten-prompt experiment measured twice, with the HUD panel in frame and on the recovered pixels, in all five spaces. In the primary space the scramble null halves while the advantage barely moves, so the excess the criterion compares grows; three of the four secondary spaces move the other way.](../assets/08-block1-vs-block6/F08.3_hud_vs_recovered.webp)
+
 | | mean | p | positive prompts |
 |---|---|---|---|
-| **same-block advantage** | **+1.0386** | **0.00195** | **10 / 10** |
-| the same statistic on two arbitrary scrambles | +0.5323 | 0.00195 | — |
-| **paired advantage, prompt by prompt** | **+0.5063** | **0.00195** | **10 / 10** |
+| **same-block advantage** | **+1.1078** | **0.00195** | **10 / 10** |
+| the same statistic on two arbitrary scrambles | +0.2742 | 0.00195 | — |
+| **paired advantage, prompt by prompt** | **+0.8336** | **0.00195** | **10 / 10** |
 
 Both p-values are the exact floor: at ten prompts the test cannot return less, and every prompt
-agreeing is the only way to reach it. The paired difference ranges from +0.297 to +0.821 — no
+agreeing is the only way to reach it. The paired difference ranges from +0.608 to +1.073 — no
 prompt comes close to reversing.
 
 The pre-registration states the falsification criterion as a bare inequality, V̄ > V̄_scramble,
@@ -199,24 +224,29 @@ and it passes, so the criterion is met under either reading. It is derived here,
 
 | space | features | advantage | scramble null | gap |
 |---|---|---|---|---|
-| **Texture (primary)** | 3 | +1.0386 | +0.5323 | **+0.5063** |
-| Global | 23 | +0.9777 | +0.4881 | +0.4896 |
-| Linework | 3 | +1.1138 | +0.1715 | **+0.9423** |
-| Shadow hardness | 2 | +1.0754 | +0.7134 | +0.3620 |
-| Palette | 5 | +0.9561 | +0.1633 | +0.7928 |
+| **Texture (primary)** | 3 | +1.1078 | +0.2742 | **+0.8336** |
+| Global | 23 | +0.8479 | +0.5523 | +0.2956 |
+| Linework | 3 | +0.7546 | +0.2110 | +0.5436 |
+| Shadow hardness | 2 | +1.1170 | +0.5701 | +0.5469 |
+| Palette | 5 † | +0.8638 | +0.3302 | +0.5336 |
 
-The advantage barely moves across spaces — 0.96 to 1.11 — while the null swings from 0.16 to
-0.71. What changes between spaces is how distinguishable two *random* perturbations are, not how
-distinguishable these two blocks are.
+The criterion is met in all five. The advantage runs 0.75 to 1.12 and the null 0.21 to 0.57:
+what changes between spaces is still mostly how distinguishable two *random* perturbations are.
+
+† **The palette row is not fully recovered.** The palette extractor refused 24 images whose
+subject mask fell below 5% of the frame, so 13 of this bench's 210 palette rows keep their
+contaminated values (`data/recovered_extraction_failures.csv`). Almost all of them are
+`Block_6_pos`. The primary space is unaffected — it is built from three style features and all
+210 style rows were re-measured.
 
 ### The geometry
 
 | | first group | last group |
 |---|---|---|
-| within-block coherence across prompts | **+0.9491** | **+0.9578** |
-| antisymmetric share of the response | 0.54 | 0.42 |
+| within-block coherence across prompts | **+0.9421** | **+0.9771** |
+| antisymmetric share of the response | 0.42 | 0.39 |
 
-Cross-block cosine in the primary space: **−0.0615** raw, **−0.0645** disattenuated. The two
+Cross-block cosine in the primary space: **−0.1268** raw, **−0.1322** disattenuated. The two
 directions are as close to orthogonal as a measurement of this kind gets. They are not one axis
 with two signs.
 
@@ -225,8 +255,8 @@ with two signs.
 The pilot read the first group as **unstable rather than positional**: its rotation signature
 was nearly normal at 15° and ×3.14 by 30°, it did not replicate under amplitude scaling, and it
 had the highest seed-to-seed variance of any group. Here, at a displacement matched by
-construction and a moderate 23.69°, its within-block coherence is **0.949** — as high as the last
-group's, and far above the 0.65 the pilot estimated across 23 features.
+construction and a moderate 23.69°, its within-block coherence is **0.942** — nearly as high as
+the last group's 0.977, and far above the 0.65 the pilot estimated across 23 features.
 
 Both readings can be true: a block that behaves coherently at a matched, moderate push and breaks
 down at a large unmatched one. But the pilot's angles were **not** displacement-matched, which is
@@ -319,6 +349,16 @@ freeze, and the first time this notebook does it.
 **Results and reservations.** `docs/rotations_block1_vs_block6_results.md`, whose §2 records the
 three structural limits, including the specialisation-against-proximity confound that is still
 open.
+
+**Recovery, 2026-09-23.** The 210 renders of this bench were cropped back to 1024×1280 and
+re-measured; the analysis was re-run by `experiments/analyze_block1_vs_block6_recovered.py`, a
+copy of the frozen script with only its four path constants changed, and produced
+`data/rotations_block1_vs_block6_recovered_results.csv` and `..._recovered_prompt_scores.csv`.
+Every number on this page now comes from those two files. The recovered feature tables are
+`..._style_recovered_features.csv` and `..._palette_recovered_features.csv`; the 24 images the
+palette extractor refused are in `data/recovered_extraction_failures.csv`. The account, including
+a mistake that overwrote the contaminated results file and how to restore it, is
+`docs/recovered_vs_contaminated.md`.
 
 **Measurement files.** `data/rotations_block1_vs_block6_manifest.csv` (210 rows),
 `..._style_features.csv` and `..._palette_features.csv`, `..._prompt_scores.csv` (the 10

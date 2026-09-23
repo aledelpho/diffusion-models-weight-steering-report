@@ -355,6 +355,10 @@ def check_duplicate_columns(body: str, path: Path, rep: Report) -> None:
     """
     import csv as _csv
     for rel in sorted(set(re.findall(r"`(data/[A-Za-z0-9_./-]+\.csv)`", body))):
+        # Render manifests record generation parameters, not measured effects --
+        # columns like (cfg, denoise) or fixed batch parameters are run settings.
+        if rel.endswith("_manifest.csv") or rel.endswith("_images.csv"):
+            continue
         f = ROOT / rel
         if not f.exists():
             continue
