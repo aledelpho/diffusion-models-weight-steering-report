@@ -1,4 +1,18 @@
-# Data-Temporary: Historical Measurements from README@c843d61
+# The old README's numbers, transcribed
+
+> **This is a source document, not data.** It is a verbatim transcription of every quantitative
+> figure in the monolithic README at `c843d61`, made on 2026-09-23 so the migration could be
+> checked against what it replaced. It lived at `data/data-temporary.md` for a day, which was
+> the wrong place: `data/` holds measurements, and a transcription of a document is not one.
+>
+> **The list that is data is [`data/historical_numbers.csv`](../data/historical_numbers.csv).**
+> One row per figure below: what the old README said, what the repository says now, the file
+> that says it, and a verdict — `reproduced`, `corrected`, `unsupported` or `not_checked`.
+> `experiments/check_historical_numbers.py` re-reads every row that names a source and holds
+> it to that file.
+>
+> Read what follows as the old README's own words. Where it is wrong the CSV says so and this
+> page is left alone: a source document that gets edited stops being a source.
 
 > **Source**: `git show c843d61:README.md`  
 > **Extraction date**: 2026-09-23  
