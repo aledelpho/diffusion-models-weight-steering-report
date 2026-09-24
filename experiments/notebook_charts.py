@@ -1260,6 +1260,73 @@ def downsample_blindness(out: Path) -> Path:
     return _save(fig, out, f"{n} prompts, one seed  \u00b7  source data/downsample_blindness.csv")
 
 
+
+ARM_LABEL = {
+    "preset_pos_1x": "preset ×1", "preset_pos_2x": "preset ×2",
+    "blockshuf_neg_1x": "derangement −×1", "blockshuf_neg_2x": "derangement −×2",
+    "rand_pos_1x": "sign scramble ×1", "rand_pos_2x": "sign scramble ×2",
+}
+
+
+def arm_coherence_bars(out: Path) -> Path:
+    """F02.9: is an edit a direction the whole batch is pushed along, or 40 separate accidents?"""
+    src = DATA / "arm_coherence.csv"
+    rows = [r for r in csv.DictReader(src.open(encoding="utf-8-sig", newline=""))
+            if r["arm"] in ARM_LABEL]
+    if len(rows) != len(ARM_LABEL):
+        raise SystemExit(f"{src.name} carries {len(rows)} of the {len(ARM_LABEL)} arms this "
+                         f"figure draws; chaos_edges_v2 is excluded on purpose, it ran on "
+                         f"other prompts")
+    rows.sort(key=lambda r: -float(r["coherence_across_seeds"]))
+    null = statistics.fmean(float(r["seed_null_coherence"]) for r in rows)
+
+    fig, ax = _canvas(7.8, 4.8)
+    ys = list(range(len(rows)))
+    h = 0.36
+    ax.barh([y + h / 2 for y in ys], [float(r["coherence_across_seeds"]) for r in rows],
+            height=h, color=CAT[0], edgecolor=SURFACE, linewidth=0.7, zorder=3,
+            label="across the five seeds of one prompt")
+    ax.barh([y - h / 2 for y in ys], [float(r["coherence_across_prompts"]) for r in rows],
+            height=h, color=CAT[1], edgecolor=SURFACE, linewidth=0.7, zorder=3,
+            label="across different prompts")
+    ax.axvline(null, color=CAT[2], ls="--", lw=1.2, zorder=4,
+               label=f"a change of seed ({null:.3f})")
+    ax.set_xlim(0, max(float(r["coherence_across_seeds"]) for r in rows) * 1.06)
+    ax.invert_yaxis()
+    ax.set_yticks(ys)
+    ax.set_yticklabels([ARM_LABEL[r["arm"]] for r in rows], color=DIM, fontsize=9)
+    ax.set_xlabel("mean cosine between the difference vectors of two cells",
+                  color=DIM, fontsize=9)
+    top = max(rows, key=lambda r: float(r["coherence_across_seeds"]))
+    # The headline is the control, not the effect. Holding the seed fixed is enough to make a
+    # random perturbation look like a direction, and the figure has to say so.
+    tests = DATA / "arm_coherence_tests.csv"
+    if not tests.exists():
+        raise SystemExit(f"{tests.name} is missing: this figure must not be drawn without the "
+                         f"test against the norm-matched control")
+    t = [r for r in csv.DictReader(tests.open(encoding="utf-8-sig", newline=""))
+         if r["against"].startswith("rand")]
+    worst = max(float(r["p_holm"]) for r in t)
+    best = min(float(r["p_holm"]) for r in t)
+    sep = [r for r in t if float(r["p_holm"]) < 0.05]
+    ax.set_title(f"Every arm is a direction \u2014 and so is the random control\n"
+                 f"cosines {min(float(r['coherence_across_seeds']) for r in rows):.2f} to "
+                 f"{float(top['coherence_across_seeds']):.2f} across the seeds of one prompt, "
+                 f"against {null:.2f} for a seed change\n"
+                 + (f"{len(sep)} of {len(t)} structured arms separate from the sign scramble"
+                    if sep else
+                    f"no structured arm separates from the sign scramble "
+                    f"(Holm {best:.2f} to {worst:.2f})"),
+                 color=INK, fontsize=10.5, loc="left", pad=12)
+    ax.legend(loc="lower right", fontsize=8, frameon=False, labelcolor=DIM)
+    ax.grid(axis="x", color=GRID, lw=0.6)
+    ax.set_axisbelow(True)
+    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    n = rows[0]["n_cells"]
+    return _save(fig, out, f"{len(rows)} arms, {n} cells each, "
+                           f"{rows[0]['space']}  ·  source data/arm_coherence.csv")
+
+
 def scale_comparison(out: Path) -> Path:
     """F01.1: Baseline and preset at full resolution vs 224x224 (as CLIP sees it)."""
     src = DATA / "stage7b_images.csv"
@@ -1340,6 +1407,7 @@ def main() -> int:
         sensitivity_per_displacement(ASSETS / "10-all-blocks-clean"
                                      / "F10.2_sensitivity_per_displacement.webp"),
         downsample_blindness(ASSETS / "01-mark-style" / "F01.3_downsample_blindness.webp"),
+        arm_coherence_bars(ASSETS / "02-attribute-emergence" / "F02.9_arm_coherence.webp"),
     ]
     for p in built:
         print(f"built {p.relative_to(ROOT)}")

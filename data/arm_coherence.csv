@@ -1,0 +1,8 @@
+arm,n_cells,n_prompts,corpus,mean_displacement_in_feature_space,sd_displacement,seed_null_displacement,times_the_seed_null,coherence_across_seeds,coherence_across_prompts,seed_null_coherence,n_pairs_same_prompt,n_pairs_other_prompt,space
+blockshuf_neg_1x,40,8,S1 S2 S3 S4 S5 S6 S7 S8,3.7043,1.2666,1.9545,1.895,0.7116,0.1847,0.1038,80,700,"23-D style features, standardised on this corpus's baselines"
+blockshuf_neg_2x,40,8,S1 S2 S3 S4 S5 S6 S7 S8,9.4069,6.3581,1.9545,4.813,0.9112,0.3621,0.1038,80,700,"23-D style features, standardised on this corpus's baselines"
+chaos_edges_v2,20,4,I06 I07 I20 I24,12.9075,2.3721,3.7672,3.426,0.9217,0.6756,0.1207,40,150,"23-D style features, standardised on this corpus's baselines"
+preset_pos_1x,40,8,S1 S2 S3 S4 S5 S6 S7 S8,3.2675,1.4158,1.9545,1.672,0.6439,0.2118,0.1038,80,700,"23-D style features, standardised on this corpus's baselines"
+preset_pos_2x,40,8,S1 S2 S3 S4 S5 S6 S7 S8,5.4232,2.3843,1.9545,2.775,0.8229,0.3832,0.1038,80,700,"23-D style features, standardised on this corpus's baselines"
+rand_pos_1x,40,8,S1 S2 S3 S4 S5 S6 S7 S8,2.8264,0.8423,1.9545,1.446,0.501,0.1039,0.1038,80,700,"23-D style features, standardised on this corpus's baselines"
+rand_pos_2x,40,8,S1 S2 S3 S4 S5 S6 S7 S8,4.3385,1.8213,1.9545,2.22,0.6613,0.2235,0.1038,80,700,"23-D style features, standardised on this corpus's baselines"

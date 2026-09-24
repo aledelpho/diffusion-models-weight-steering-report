@@ -1,0 +1,7 @@
+arm,against,n_prompts,mean_difference_in_coherence,prompts_in_favour,p_sign_flip,p_floor,p_holm,verdict
+preset_pos_1x,rand_pos_1x,8,0.1429,5,0.148438,0.007812,0.148438,does NOT separate -- the control matches it
+preset_pos_2x,rand_pos_2x,8,0.1615,6,0.070312,0.007812,0.140625,does NOT separate -- the control matches it
+blockshuf_neg_1x,rand_pos_1x,8,0.2106,7,0.023438,0.007812,0.09375,does NOT separate -- the control matches it
+blockshuf_neg_2x,rand_pos_2x,8,0.2498,7,0.023438,0.007812,0.09375,does NOT separate -- the control matches it
+preset_pos_1x,__seed_null__,8,0.5401,8,0.007812,0.007812,0.046875,separates
+rand_pos_1x,__seed_null__,8,0.3972,8,0.007812,0.007812,0.046875,separates

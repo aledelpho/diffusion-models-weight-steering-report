@@ -22,6 +22,7 @@ PHASES
   displacements  measure_block_group_displacements.py   the checkpoint, needs torch + ComfyUI
   sensitivity    sensitivity_curve.py               data only
   figures        the four charts whose data moved
+  historical     check_historical_numbers.py        the old README's numbers vs data/
   contract       validate_notebook.py, then build_notebook.py --check
 
 `displacements` is the one phase that was never run: it needs the safetensors and ComfyUI's
@@ -237,6 +238,14 @@ def phase_figures(out: Path, write: bool) -> tuple[bool, list[str]]:
     return True, bad
 
 
+def phase_historical(out: Path, write: bool) -> tuple[bool, list[str]]:
+    """data/historical_numbers.csv against the files it names. Reads only; nothing to compare,
+    because the check IS the comparison."""
+    if not run([HERE / "check_historical_numbers.py"]):
+        return False, ["check_historical_numbers.py: a row disagrees with the file it names"]
+    return True, []
+
+
 def phase_contract(out: Path, write: bool) -> tuple[bool, list[str]]:
     bad = []
     if not run([HERE / "validate_notebook.py"]):
@@ -254,6 +263,7 @@ PHASES = [
     ("displacements", phase_displacements, "D per block group per angle, from the checkpoint"),
     ("sensitivity",   phase_sensitivity,   "response per unit of displacement"),
     ("figures",       phase_figures,       "the four charts whose data this run touches"),
+    ("historical",    phase_historical,    "the old README's numbers against the files that hold them"),
     ("contract",      phase_contract,      "validator, then the build freshness check"),
 ]
 

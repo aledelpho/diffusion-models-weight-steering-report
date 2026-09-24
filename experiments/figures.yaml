@@ -433,6 +433,20 @@ figures:
       3-sigma gate declared before the analysis. Eighteen of twenty-four sit outside it, the
       worst by two orders of magnitude.
 
+  - id: F02.7
+    page: 02-attribute-emergence
+    kind: strip
+    builder: build_animations.headlights_switch
+    source: data/stage9_headlights_key.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      One prompt in watercolour, the same five seeds throughout, and all seven arms of the
+      bench in turn. Six arms light no headlights in any of the five seeds; the calibrated
+      preset at double amplitude lights all five. Each cell carries the verdict the blind
+      scorer gave that image and each header the mean lightness shift of that arm, because
+      the preset darkens the frame as well.
+
   - id: F01.3
     page: 01-mark-style
     kind: paired_bars
@@ -445,6 +459,32 @@ figures:
       from the block-shuffle control, measured on the renders as saved and again after CLIP's
       224 by 224 resample. Ten of the eleven keep at least half their effect size and five
       grow, so the resample is not what would make CLIP blind.
+
+  - id: F02.8
+    page: 02-attribute-emergence
+    kind: strip
+    builder: build_animations.headlights_switch_lowpoly
+    source: data/stage9_headlights_key.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The same prompt in low-poly, the same five seeds, all seven arms of the bench. Two arms
+      of seven light a majority here rather than one: the calibrated preset at double
+      amplitude lights all five, and the negative block derangement at single amplitude
+      lights three, while the untouched model already lights one.
+
+  - id: F02.9
+    page: 02-attribute-emergence
+    kind: paired_bars
+    builder: notebook_charts.arm_coherence_bars
+    source: data/arm_coherence.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Six arms of the bench, the mean cosine between their per-cell difference vectors,
+      measured across the five seeds of one prompt and across different prompts, against the
+      cosine between two baselines at different seeds. Every arm sits far above the seed line
+      across seeds; the sign scramble at single amplitude falls exactly on it across prompts.
 
   - id: F10.1
     page: 10-all-blocks-clean

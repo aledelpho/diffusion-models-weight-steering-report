@@ -1,0 +1,22 @@
+arm_a,arm_b,cosine_between_mean_directions,shared_prompts,comparable
+blockshuf_neg_1x,blockshuf_neg_2x,0.8458,8,yes
+blockshuf_neg_1x,chaos_edges_v2,0.2328,0,"NO -- the two arms ran on different prompts, so this cosine mixes the edit with the scene"
+blockshuf_neg_1x,preset_pos_1x,-0.4271,8,yes
+blockshuf_neg_1x,preset_pos_2x,-0.5664,8,yes
+blockshuf_neg_1x,rand_pos_1x,-0.351,8,yes
+blockshuf_neg_1x,rand_pos_2x,0.3301,8,yes
+blockshuf_neg_2x,chaos_edges_v2,0.4648,0,"NO -- the two arms ran on different prompts, so this cosine mixes the edit with the scene"
+blockshuf_neg_2x,preset_pos_1x,-0.1803,8,yes
+blockshuf_neg_2x,preset_pos_2x,-0.2896,8,yes
+blockshuf_neg_2x,rand_pos_1x,-0.2461,8,yes
+blockshuf_neg_2x,rand_pos_2x,0.418,8,yes
+chaos_edges_v2,preset_pos_1x,-0.1264,0,"NO -- the two arms ran on different prompts, so this cosine mixes the edit with the scene"
+chaos_edges_v2,preset_pos_2x,-0.1598,0,"NO -- the two arms ran on different prompts, so this cosine mixes the edit with the scene"
+chaos_edges_v2,rand_pos_1x,-0.2104,0,"NO -- the two arms ran on different prompts, so this cosine mixes the edit with the scene"
+chaos_edges_v2,rand_pos_2x,0.0607,0,"NO -- the two arms ran on different prompts, so this cosine mixes the edit with the scene"
+preset_pos_1x,preset_pos_2x,0.9567,8,yes
+preset_pos_1x,rand_pos_1x,0.3177,8,yes
+preset_pos_1x,rand_pos_2x,0.1253,8,yes
+preset_pos_2x,rand_pos_1x,0.4549,8,yes
+preset_pos_2x,rand_pos_2x,0.1449,8,yes
+rand_pos_1x,rand_pos_2x,0.6336,8,yes
