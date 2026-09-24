@@ -57,17 +57,17 @@ claims:
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Every knob on a machine does two things: the thing you turned
-> it for, and the thing you pay for having turned it. I had only ever measured the first. I want
-> them separated — what reverses when I push the other way is a **knob** I can aim, and what
-> happens either way is a **cost** I can only budget for.
+> it for, and the thing you pay for turning it. I had only ever measured the first. I want them
+> apart — what flips when you push the other way is a **knob** you can aim, and what happens
+> either way is a **cost** you can only budget for.
 >
-> **What would kill it.** Finding that it is all knob. If every effect flips sign with the push,
-> there is no hidden tax, and my suspicion — that the quantity I kept computing was throwing
-> away the interesting half — is just me being dramatic.
+> **What would kill it.** Finding out it's all knob. If every effect reverses with the push,
+> there's no hidden tax, and my suspicion — that the number I kept computing was throwing away
+> the interesting half — is just me being dramatic.
 >
-> **Where we are.** It is mostly cost, it grows the closer you push to the output, and it had
-> been invisible to me for months, because the difference between the two directions is exactly
-> the quantity that cancels it.
+> **Where we are.** It's mostly cost. It grows the closer you push to the output. And it stayed
+> invisible to me for months, because the difference between the two directions is exactly the
+> quantity that cancels it out.
 
 ## In two minutes
 

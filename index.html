@@ -144,6 +144,7 @@
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--colour-does-not-generalise">The colour effect does not generalise: it is present only where the prompt pins the palette, absent when the model chooses it.</a></td><td class="ev">On the 24 pooled prompts the colour contrasts are strong -- effective colour count -0.376 and -0.237, top-four cluster share +0.384 and +0.234, Holm p between 0.0012 and 0.0058. On the 6 colour-free prompts, 7 of the 8 preset colour contrasts contain zero (data/global_aggregation_colour_free_6p.csv). The exception is top-four cluster share against the sign scramble, +0.241, CI [+0.014, +0.467] -- the old README said &quot;every&quot; palette contrast contained zero, and seven of eight is the accurate figure.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--a-sharp-operator">The preset acts as a sharp multi-feature operator: darker, greyer, grainier, parallel-stroked, and headlights on across two unrelated corpora.</a></td><td class="ev">Five metrics moving together on 24 pooled prompts, both controls on the far side of all of them: stroke-continuity axis -2.532 and -2.117, stroke width +0.238 and +0.394, crosshatch entropy -1.691 and -0.485, effective colour count -0.376 and -0.237, top-four cluster share +0.384 and +0.234. Holm p between 3e-05 and 0.0202 across the family, in data/global_aggregation_corrected.csv. The concordance was read off after the fact and nothing about it was predicted, which is why the claim is open rather than holding.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--what-is-still-open">Which structural property of the perturbation is the operative one remains unresolved. Two points separate structure from magnitude, but do not identify what about the structure does the work.</a></td><td class="ev">The matched displacement and the two separated controls show that structure, not distance, carries the effect. Nothing here isolates which structural property: no layer ablation, no spectral decomposition and no rank sweep was executed. This is a claim of absence and carries no measurement on purpose.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--why-all-five-seeds-move-together">At a fixed seed every arm moves the whole batch along one direction rather than perturbing each image separately -- and so does a norm-matched random perturbation, so this is a fact about holding the seed fixed and not yet a fact about structure.</a></td><td class="ev">Across the five seeds of one prompt the mean cosine between per-cell difference vectors runs 0.501 to 0.911 against 0.104 for a change of seed; the preset beats that null on 8 prompts of 8, sign-flip p = 0.0078 at the exact floor, and so does the sign scramble on 8 of 8. No structured arm separates from the scramble: +0.143 to +0.250, Holm 0.094 to 0.148, in data/arm_coherence_tests.csv. What does differ, untested: across prompts the scramble sits at the seed null (+0.104) while the preset reaches +0.383, and amplitude is a scalar on a fixed direction for the preset (+0.957) and the derangement (+0.846) but much less for the scramble (+0.634). Exploratory, cosines not disattenuated.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-02-attribute-emergence--one-attribute-one-prompt-family">Whether attribute emergence is a general property of structured weight edits or a fact about one prompt template is untested, and the design written to test it was never run.</a></td><td class="ev">The pre-registered stage-7 attribute table was never filled, so the primary test does not exist. Both positive prompts share nearly every token.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-03-what-ends-up-in-the-picture--what-this-cannot-separate">Whether the enlargement comes from the structure of the edit or merely from its magnitude is undecided, because the design left out the one control that separates them.</a></td><td class="ev">The round compared two structured edits against a baseline. A sign-scrambled edit at the identical displacement was not rendered, so no point on the magnitude axis exists.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-04-where-in-the-model--the-direction-and-why-it-is-not-a-result">Two well-measured block groups appear to push the image in different directions, not merely by different amounts. It is a hypothesis, not a result.</a></td><td class="ev">Same-block advantage +0.689 for the first group against the last, unanimous on 7 prompts, p at the floor. The family of comparisons was never declared, and at seven prompts Holm can carry exactly three: the result sits on the boundary that the declaration would have decided.</td></tr>
@@ -161,16 +162,16 @@
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">427 renders · 5 prompts · 5 seeds · 2026-09-20</span></p>
 <h1 id="p-00-the-bench--is-the-instrument-lying-to-me">Is the instrument lying to me?</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> Nothing on any other page is worth reading if this one is
-wrong. Every result in this notebook is a difference between two pictures, which means every
-result inherits whatever the machine does while I am touching nothing at all. I want that
-number before I quote any other.</p>
-<p><strong>What would kill it.</strong> A tuner that is not a no-op at zero, or a pipeline that renders
-differently after a restart. Either one contaminates the treatment and the control by the
-same invisible amount, so no comparison I could run would ever reveal it.</p>
-<p><strong>Where we are.</strong> The instrument holds, and it holds bit-for-bit. What I had not expected is
-that two of the floors it establishes are stricter than the ones I had been using, and one of
-them killed a result I had already written up.</p>
+<p><strong>The direction I'm chasing.</strong> Every result in this notebook is a difference between two
+pictures. Which means every result also inherits whatever the machine does on its own, while
+I'm touching nothing at all. I want that number first. Without it, nothing on any other page
+is worth reading.</p>
+<p><strong>What would kill it.</strong> A tuner that isn't a perfect no-op at zero, or a pipeline that renders
+differently after a restart. Either one poisons the treatment and the control by the same
+invisible amount — so no comparison I could ever run would catch it.</p>
+<p><strong>Where we are.</strong> The instrument holds, bit for bit. What I didn't see coming: two of the
+floors it sets are stricter than the ones I'd been using, and one of them killed a result I
+had already written up.</p>
 </blockquote>
 <h2 id="p-00-the-bench--in-two-minutes">In two minutes</h2>
 <p>Everything else in this notebook is a difference between two pictures. I change some weights,
@@ -479,9 +480,17 @@ analysis:
 <p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">1272 renders · 24 prompts · 15 seeds · 2026-09-15</span></p>
 <h1 id="p-01-mark-style--a-tiny-payload-shifts-mark-style">A tiny payload shifts mark style</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> I want to steer how a diffusion model draws — its strokes, hatching, and mark-making — without retraining it, without prompting gymnastics, and without blowing up its weights. A 53 KB delta on a 12.8-billion parameter backbone was the first hint that small, targeted rank perturbations could act as precision instruments rather than sledgehammers.</p>
-<p><strong>What would kill it.</strong> If the shift in mark style is just an artifact of moving away from the baseline — any random perturbation of that same size doing the same thing — or if standard vision encoders like CLIP see right through it or ignore it entirely because the strokes are below their spatial resolution.</p>
-<p><strong>Where we are.</strong> The calibrated preset undeniably shifts stroke density and mark texture across multiple seeds and prompts, and random perturbations at the identical displacement fail to reproduce it. But because this stage was exploratory and un-preregistered, the claims remain open.</p>
+<p><strong>The direction I'm chasing.</strong> I want to change how the model <em>draws</em> — its strokes, its
+hatching, the way it puts ink down — without retraining it, without prompt gymnastics, and
+without blowing the weights apart. A 53 KB file moving a 12.8-billion-parameter model was the
+first hint that a tiny, targeted push might work like a scalpel instead of a hammer.</p>
+<p><strong>What would kill it.</strong> If the shift turns out to be "you moved away from the baseline, that's
+all" — any random push of the same size doing the same job. Or if CLIP looks at the two
+pictures and sees nothing, because the strokes live below the resolution it reads at.</p>
+<p><strong>Where we are.</strong> The preset does move stroke density and mark texture, across seeds and
+across prompts, and random pushes of exactly the same size don't reproduce it. Two things keep
+it open: nothing here was frozen in advance, and the reason I'd been giving for CLIP being
+blind turned out to be wrong the moment I actually tested it.</p>
 </blockquote>
 <h2 id="p-01-mark-style--in-two-minutes">In two minutes</h2>
 <p>A 53 KB hand-calibrated patch applied to Krea-2 alters mark morphology repeatably across seeds. It is not an amplitude artifact: controls matched to the exact same Frobenius displacement (<code>d_model_relative = 0.0538</code>) do not induce the same stroke behavior.</p>
@@ -729,11 +738,7 @@ and no others —</p>
 MANIFEST_BASE = stage2, stage5, stage6, stage6b_pilot
 </code></pre>
 <p>300 + 100 + 340 + 304 + 228 = <strong>1272 rows, and 1272 distinct filenames</strong> — the union has no
-duplicate, so the old figure was a plain sum and it was right. That arithmetic is now a file
-rather than a sentence: <code>experiments/verify_corpus_counts.py</code> reads the manifest list out of
-<code>global_aggregation_corrected.py</code> itself, counts the rows, the distinct basenames, the prompts
-and the resolutions, and writes <code>data/corpus_reconstruction.csv</code>. If that script's inputs ever
-change, the count changes with them instead of drifting away from them. The 24 prompts are 10 F/G, 8 H and
+duplicate, so the old figure was a plain sum and it was right. The 24 prompts are 10 F/G, 8 H and
 6 S7, which is where the <code>n_prompts = 24</code> of <code>data/global_aggregation_corrected.csv</code> comes from;
 the 24 I-prompts of stage 7a are a different corpus.</p>
 <p>Two things fell out of checking it. All 1272 rows record <strong>1024x1280</strong>, so none of this corpus is
@@ -743,8 +748,8 @@ analysed in their place, which is why they are not in <code>data/hud_contaminate
 the contamination that hit the rotation benches did not reach this page.</p>
 <ul>
 <li>Pre-registration: None (exploratory)</li>
-<li>Measurement files: the five manifests <code>experiments/global_aggregation_corrected.py</code> loads — <code>data/stage2_images.csv</code> (300 rows), <code>data/stage4_images.csv</code> (100), <code>data/stage5_images.csv</code> (340), <code>data/stage6_images.csv</code> (304), <code>data/stage6b_pilot_images.csv</code> (228) — plus <code>data/global_aggregation_corrected.csv</code>, <code>data/preset_displacements.csv</code>, <code>data/corpus_reconstruction.csv</code> (the count above), and <code>data/downsample_blindness.csv</code> (22 rows, the resample test, measured on the stage-7 corpus instead)</li>
-<li>Scripts: <code>experiments/global_aggregation_corrected.py</code> (every contrast above), <code>experiments/verify_corpus_counts.py</code> (the corpus), <code>experiments/notebook_charts.py</code>, <code>experiments/extract_repro.py</code></li>
+<li>Measurement files: the five manifests <code>experiments/global_aggregation_corrected.py</code> loads — <code>data/stage2_images.csv</code> (300 rows), <code>data/stage4_images.csv</code> (100), <code>data/stage5_images.csv</code> (340), <code>data/stage6_images.csv</code> (304), <code>data/stage6b_pilot_images.csv</code> (228) — plus <code>data/global_aggregation_corrected.csv</code>, <code>data/preset_displacements.csv</code>, and <code>data/downsample_blindness.csv</code> (22 rows, the resample test, measured on the stage-7 corpus instead)</li>
+<li>Scripts: <code>experiments/global_aggregation_corrected.py</code> (every contrast above), <code>experiments/notebook_charts.py</code>, <code>experiments/extract_repro.py</code></li>
 <li>Renders: <code>benchmark_stage5</code> (300), <code>benchmark_stage4_preset</code> (40), <code>benchmark_stage6</code> (304), <code>benchmark_stage7</code> (228, the stage-6b pilot, which shares that folder with the stage-7 bench of page 06 — pitfall 30), the stage-2 round (300) and the stage-4 round (100), whose manifests record filenames but no output folder</li>
 <li>Scripts added 2026-09-23: <code>experiments/measure_downsample_blindness.py</code> (the resample test, run); <code>experiments/measure_clip_distance.py</code> (the encoder itself, not run)</li>
 <li>Pitfalls that apply: 2 (unsigned distance), 17 (repeated measures), 30 (two experiments sharing an output folder), 34 (observation on seen renders), 38 (unvalidated metrics), 45 (unmeasured control displacement)</li>
@@ -754,17 +759,18 @@ the contamination that hit the rotation benches did not reach this page.</p>
 <p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">920 renders · 28 prompts · 20 seeds · 2026-09-21</span></p>
 <h1 id="p-02-attribute-emergence--what-the-edit-puts-in-the-picture-and-what-it-takes-out">What the edit puts in the picture, and what it takes out</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> I want to know whether a weight edit changes <em>what</em> the model
-draws or only <em>how</em> it draws it. Those are two different machines. Something that renders the
-same scene with a different finish is a filter; something that puts an object in the frame
-that was never there is reaching into the content, and that is the thing worth understanding.</p>
+<p><strong>The direction I'm chasing.</strong> Does a weight edit change <em>what</em> the model draws, or only
+<em>how</em>? Those are two completely different machines. Something that redraws the same scene with
+a different finish is a filter. Something that puts an object in the frame that was never
+there is reaching into the content — and that's the part worth understanding.</p>
 <p><strong>What would kill it.</strong> A control that moves the weights exactly as far, by a different rule,
-and produces the same attribute. If displacement alone recovers it, then the <em>structure</em> of
-the edit is irrelevant and I am measuring distance with extra steps.</p>
-<p><strong>Where we are.</strong> The control does nothing — twice, on two attributes, one the prompt asked
-for and one nobody asked for. But I predicted neither in advance, I scored the first round
-with the condition visible, and the design written to test whether any of this generalises was
-never run. Large, repeatable, and filed ambiguous, which is where it belongs.</p>
+and gets the same attribute anyway. If plain distance recovers it, then the <em>structure</em> of the
+edit doesn't matter and I'm measuring distance the long way round.</p>
+<p><strong>Where we are.</strong> The control does nothing — twice, on two different attributes, one the
+prompt asked for and one nobody asked for. But I predicted neither in advance, I scored the
+first round with the condition in plain sight, and the design written to test whether any of
+it generalises was never run. Big, repeatable, and filed as ambiguous, which is where it
+belongs.</p>
 </blockquote>
 <h2 id="p-02-attribute-emergence--in-two-minutes">In two minutes</h2>
 <p>A prompt asked for <code>small barnacle-like clusters studding one earlobe</code>. The stock model drew
@@ -1092,6 +1098,401 @@ its <strong>placement</strong> exactly as wrong as the stock model would have le
 the negative permutation puts the lights out in thirty-nine renders of thirty-nine, including
 the style where the untouched model had them lit four times in five.</p>
 <p><img alt="Five seeds of one style, whole frames, the untouched model above and the negative permutation below. The untouched model lights four of five; the edit lights none, and changes the whole scene while doing it." src="assets/02-attribute-emergence/F02.2_headlights_switch_off.webp" /></p>
+<p>Those two figures are stills, and a still cannot show a reader that the layout stayed put
+while the lamps changed. This one can. One prompt, the same five seeds throughout, and every
+one of the seven arms the bench ran — nothing moves between frames except the edit.</p>
+<p><img alt="One prompt in watercolour, the same five seeds, and all seven arms of the bench in turn. Six arms light no headlights in any of the five seeds; the calibrated preset at double amplitude lights all five. Each cell carries the verdict the blind scorer gave that image and each header the mean lightness shift of that arm." src="assets/02-attribute-emergence/F02.7_headlights_switch.gif" /></p>
+<p>Six of the seven arms light nothing at all. The seventh, the calibrated preset at double
+amplitude, lights all five. The two controls at the identical displacement sit with the rest
+at zero, which is the comparison the table above makes in numbers and this figure makes in
+pictures.</p>
+<p>Three things it is honest about, and the stills were not. Every cell carries the verdict the
+<strong>blind scorer</strong> gave that exact image, read out of <code>data/stage9_headlights_key.csv</code> joined to
+<code>data/stage9_headlights_raw.csv</code>, including the cells the scorer marked ambiguous — there are
+five of them on this style and they are marked in orange rather than rounded away. Every
+header carries the mean L* shift of that arm from <code>data/stage9_preset_shift.csv</code>, because the
+preset darkens the frame by 3.30 and a reader should be able to ask whether the lamps are lit
+or merely brighter than a darker scene. And the provenance strip states how many arms of seven
+light a majority, counted from the scoring rather than typed: here, one.</p>
+<p><strong>One style is an illustration, never the measure.</strong> This is watercolour, and the eight styles
+do not behave alike. On low-poly the same seven arms give a different picture: the untouched
+model already lights one seed of five, the preset at double amplitude lights all five, and the
+negative block derangement at <em>single</em> amplitude lights three — a second arm reaching a
+majority, which the aggregate row of 6 lit in 38 hides completely. Three of the eight styles
+never light a lamp in any condition at all. Here is low-poly, same layout, same seeds, so the
+two can be put side by side:</p>
+<p><img alt="The same prompt in low-poly, the same five seeds, all seven arms. Two arms of seven light a majority here rather than one: the calibrated preset at double amplitude lights all five, and the negative block derangement at single amplitude lights three, while the untouched model already lights one." src="assets/02-attribute-emergence/F02.8_headlights_switch_lowpoly.gif" /></p>
+<p>The second arm is worth a look. Negative block derangement at <em>single</em> amplitude lights three
+of five here, and across all eight styles that arm is recorded as 6 lit of 38 — so half of its
+lit renders sit on this one style. The page says the permutation puts the lights out; on
+low-poly, at half the dose, it turns them on. Nothing here explains that, and no experiment
+has been run on it.</p>
+<h3 id="p-02-attribute-emergence--why-all-five-seeds-move-together">Why all five seeds move together</h3>
+<p>Watching either animation, the thing that jumps out is not one cell but the row: five seeds
+that share nothing except the prompt, all moving the same way at once. That is a claim about
+what an edit <em>is</em>, and it is measurable on the same 280 renders.</p>
+<p>For every arm, take the paired difference from the baseline at the same prompt and seed, in
+the 23-dimensional style-feature space, standardised once on the corpus's own baselines. Then
+ask how much two of those difference vectors agree. The scale to read it against is the same
+statistic computed on two baselines at different seeds: a change of seed is a large move in
+this space, and it has no shared direction.</p>
+<p><img alt="Six arms of the bench, the mean cosine between their per-cell difference vectors, measured across the five seeds of one prompt and across different prompts, against the cosine between two baselines at different seeds. Every arm sits far above the seed line across seeds, the norm-matched sign scramble included, and no structured arm separates from it; across prompts the scramble at single amplitude falls back exactly onto the seed line." src="assets/02-attribute-emergence/F02.9_arm_coherence.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>arm</th>
+<th style="text-align: right;">‖Δ‖</th>
+<th style="text-align: right;">× the seed null</th>
+<th style="text-align: right;">cosine across seeds</th>
+<th style="text-align: right;">across prompts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>derangement −×2</td>
+<td style="text-align: right;">9.41</td>
+<td style="text-align: right;">4.81</td>
+<td style="text-align: right;">+0.911</td>
+<td style="text-align: right;">+0.362</td>
+</tr>
+<tr>
+<td>preset ×2</td>
+<td style="text-align: right;">5.42</td>
+<td style="text-align: right;">2.77</td>
+<td style="text-align: right;">+0.823</td>
+<td style="text-align: right;">+0.383</td>
+</tr>
+<tr>
+<td>scramble ×2</td>
+<td style="text-align: right;">4.34</td>
+<td style="text-align: right;">2.22</td>
+<td style="text-align: right;">+0.661</td>
+<td style="text-align: right;">+0.224</td>
+</tr>
+<tr>
+<td>derangement −×1</td>
+<td style="text-align: right;">3.70</td>
+<td style="text-align: right;">1.90</td>
+<td style="text-align: right;">+0.712</td>
+<td style="text-align: right;">+0.185</td>
+</tr>
+<tr>
+<td>preset ×1</td>
+<td style="text-align: right;">3.27</td>
+<td style="text-align: right;">1.67</td>
+<td style="text-align: right;">+0.644</td>
+<td style="text-align: right;">+0.212</td>
+</tr>
+<tr>
+<td>scramble ×1</td>
+<td style="text-align: right;">2.83</td>
+<td style="text-align: right;">1.45</td>
+<td style="text-align: right;">+0.501</td>
+<td style="text-align: right;">+0.104</td>
+</tr>
+<tr>
+<td><em>a change of seed</em></td>
+<td style="text-align: right;">1.95</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">+0.104</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table></div>
+<p>Across the seeds of one prompt every arm is a direction: 0.50 to 0.91 against 0.10 for a seed
+change. That is the animation, in a number, and every arm clears the seed null on all eight
+styles at the exact sign-flip floor, p = 0.0078.</p>
+<p><strong>And so does the sign scramble, which is the point.</strong> The scramble is a norm-matched <em>random</em>
+perturbation — the control built to have no structure at all — and it clears the seed null on
+8 styles of 8 as well. Tested arm against control, style by style, no structured arm separates
+from it:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>arm, against the sign scramble at its own amplitude</th>
+<th style="text-align: right;">difference</th>
+<th style="text-align: right;">styles</th>
+<th style="text-align: right;">p</th>
+<th style="text-align: right;">Holm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>preset ×1</td>
+<td style="text-align: right;">+0.143</td>
+<td style="text-align: right;">5 / 8</td>
+<td style="text-align: right;">0.148</td>
+<td style="text-align: right;">0.148</td>
+</tr>
+<tr>
+<td>preset ×2</td>
+<td style="text-align: right;">+0.162</td>
+<td style="text-align: right;">6 / 8</td>
+<td style="text-align: right;">0.070</td>
+<td style="text-align: right;">0.141</td>
+</tr>
+<tr>
+<td>derangement −×1</td>
+<td style="text-align: right;">+0.211</td>
+<td style="text-align: right;">7 / 8</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.094</td>
+</tr>
+<tr>
+<td>derangement −×2</td>
+<td style="text-align: right;">+0.250</td>
+<td style="text-align: right;">7 / 8</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.094</td>
+</tr>
+<tr>
+<td><em>preset ×1, against the seed null</em></td>
+<td style="text-align: right;"><em>+0.540</em></td>
+<td style="text-align: right;"><em>8 / 8</em></td>
+<td style="text-align: right;"><em>0.008</em></td>
+<td style="text-align: right;"><em>0.047</em></td>
+</tr>
+<tr>
+<td><em>sign scramble ×1, against the seed null</em></td>
+<td style="text-align: right;"><em>+0.397</em></td>
+<td style="text-align: right;"><em>8 / 8</em></td>
+<td style="text-align: right;"><em>0.008</em></td>
+<td style="text-align: right;"><em>0.047</em></td>
+</tr>
+</tbody>
+</table></div>
+<p>So the coherence across seeds is <strong>a fact about holding the seed fixed, not a fact about
+structure.</strong> Fix the noise and any perturbation of that size pushes the batch somewhere
+together. A reader who watches the animation and concludes that the calibrated preset is doing
+something a random edit could not has drawn more than this measurement supports, and the
+figure's title says so.</p>
+<p>Two places where the structured arms do look different, neither of them tested, both single
+estimates rather than paired comparisons:</p>
+<ul>
+<li><strong>Across prompts.</strong> The scramble at single amplitude lands on <strong>+0.104</strong>, the seed line
+  exactly — no cross-prompt direction at all. The preset reaches +0.212 at the same amplitude
+  and +0.383 at double, the derangement +0.185 and +0.362. Surviving a change of scene is where
+  a difference would live, and this bench has one estimate per arm and no test for it.</li>
+<li><strong>Amplitude as a scalar</strong>, in the matrix below: +0.957 for the preset and +0.846 for the
+  derangement against +0.634 for the scramble.</li>
+</ul>
+<p>Both are worth a design. Neither is a result.</p>
+<h4 id="p-02-attribute-emergence--one-style-at-a-time">One style at a time</h4>
+<p>The averages above are over eight styles, and the styles are not alike. The same question
+asked one scene at a time — same prompt, same five seeds, ten pairs — gives this, each row
+against its own seed null because that varies too:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>style</th>
+<th style="text-align: right;">preset ×1</th>
+<th style="text-align: right;">preset ×2</th>
+<th style="text-align: right;">deran. −×1</th>
+<th style="text-align: right;">deran. −×2</th>
+<th style="text-align: right;">scramble ×1</th>
+<th style="text-align: right;">scramble ×2</th>
+<th style="text-align: right;">a seed change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1 photo</td>
+<td style="text-align: right;">+0.681</td>
+<td style="text-align: right;">+0.716</td>
+<td style="text-align: right;">+0.827</td>
+<td style="text-align: right;">+0.941</td>
+<td style="text-align: right;">+0.288</td>
+<td style="text-align: right;">+0.170</td>
+<td style="text-align: right;">+0.225</td>
+</tr>
+<tr>
+<td>S2 watercolour</td>
+<td style="text-align: right;">+0.640</td>
+<td style="text-align: right;">+0.805</td>
+<td style="text-align: right;">+0.750</td>
+<td style="text-align: right;">+0.865</td>
+<td style="text-align: right;">+0.794</td>
+<td style="text-align: right;">+0.900</td>
+<td style="text-align: right;">+0.189</td>
+</tr>
+<tr>
+<td><strong>S3 low-poly</strong></td>
+<td style="text-align: right;"><strong>+0.325</strong></td>
+<td style="text-align: right;">+0.711</td>
+<td style="text-align: right;">+0.582</td>
+<td style="text-align: right;">+0.912</td>
+<td style="text-align: right;">+0.464</td>
+<td style="text-align: right;">+0.533</td>
+<td style="text-align: right;">+0.113</td>
+</tr>
+<tr>
+<td>S4 claymation</td>
+<td style="text-align: right;">+0.705</td>
+<td style="text-align: right;">+0.896</td>
+<td style="text-align: right;">+0.652</td>
+<td style="text-align: right;">+0.880</td>
+<td style="text-align: right;">+0.381</td>
+<td style="text-align: right;">+0.799</td>
+<td style="text-align: right;">+0.118</td>
+</tr>
+<tr>
+<td>S5 ukiyo-e</td>
+<td style="text-align: right;">+0.606</td>
+<td style="text-align: right;">+0.835</td>
+<td style="text-align: right;">+0.494</td>
+<td style="text-align: right;">+0.875</td>
+<td style="text-align: right;">+0.115</td>
+<td style="text-align: right;">+0.793</td>
+<td style="text-align: right;">+0.098</td>
+</tr>
+<tr>
+<td><strong>S6 pixel art</strong></td>
+<td style="text-align: right;">+0.616</td>
+<td style="text-align: right;">+0.813</td>
+<td style="text-align: right;">+0.744</td>
+<td style="text-align: right;">+0.878</td>
+<td style="text-align: right;">+0.543</td>
+<td style="text-align: right;">+0.859</td>
+<td style="text-align: right;">−0.026</td>
+</tr>
+<tr>
+<td>S7 glass</td>
+<td style="text-align: right;">+0.652</td>
+<td style="text-align: right;">+0.856</td>
+<td style="text-align: right;">+0.729</td>
+<td style="text-align: right;">+0.946</td>
+<td style="text-align: right;">+0.717</td>
+<td style="text-align: right;">+0.688</td>
+<td style="text-align: right;">+0.117</td>
+</tr>
+<tr>
+<td>S8 charcoal</td>
+<td style="text-align: right;"><strong>+0.926</strong></td>
+<td style="text-align: right;">+0.951</td>
+<td style="text-align: right;">+0.915</td>
+<td style="text-align: right;">+0.992</td>
+<td style="text-align: right;">+0.707</td>
+<td style="text-align: right;">+0.547</td>
+<td style="text-align: right;">−0.003</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Low-poly is where the preset is least itself.</strong> At single amplitude its coherence is
+<strong>+0.325</strong>, the lowest cell in the table, and the ten pairwise cosines behind that average run
+from <strong>−0.22 to +0.73</strong> — two of the five seeds are pushed in opposite directions. Its
+displacement there is <strong>1.00×</strong> the seed null: on a low-poly render, at single amplitude, the
+preset moves the image no further than changing the seed would, and not in a consistent
+direction either.</p>
+<p><strong>Pixel art, by contrast, is ordinary.</strong> +0.616 at the same amplitude, pairs from +0.22 to
++0.78, displacement 1.21× the null — unremarkable, middle of the table. Which is worth saying
+because pixel art is one of the styles that never lights a headlight in any condition: whatever
+stops the attribute appearing there, it is not that the edit fails to act coherently.</p>
+<p>Low-poly is also the style where the headlight counts misbehaved — the untouched model already
+lights one seed of five, and the negative derangement at single amplitude lights three. The
+style where the preset acts least coherently is the style where the attribute behaves least
+like the rest of the corpus. That is one observation on one style out of eight, made after
+looking, and it is a reason to run something, not a result.</p>
+<p><strong>Two patterns that hold across the whole table.</strong> Doubling the amplitude raises coherence in
+every single cell — low-poly's preset goes 0.325 to 0.711, ukiyo-e's scramble 0.115 to 0.793.
+Some of that is real and some is measurement: a direction estimated at twice the signal is
+estimated better, and attenuation pulls the weaker one down harder (pitfall 36). Nothing here
+separates the two. And the negative derangement at double amplitude is the most consistent arm
+on every one of the eight styles, 0.865 to 0.992, which is the arm that also moves furthest —
+it is the closest thing on this bench to an edit that does one definite thing.</p>
+<h3 id="p-02-attribute-emergence--the-arms-against-each-other">The arms against each other</h3>
+<p>The same difference vectors answer the second question: are these six edits six different
+operations, or one operation at six settings?</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>preset ×1</th>
+<th>preset ×2</th>
+<th>deran. −×1</th>
+<th>deran. −×2</th>
+<th>scramble ×1</th>
+<th>scramble ×2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>preset ×1</strong></td>
+<td>—</td>
+<td><strong>+0.957</strong></td>
+<td>−0.427</td>
+<td>−0.180</td>
+<td>+0.318</td>
+<td>+0.125</td>
+</tr>
+<tr>
+<td><strong>preset ×2</strong></td>
+<td><strong>+0.957</strong></td>
+<td>—</td>
+<td>−0.566</td>
+<td>−0.290</td>
+<td>+0.455</td>
+<td>+0.145</td>
+</tr>
+<tr>
+<td><strong>deran. −×1</strong></td>
+<td>−0.427</td>
+<td>−0.566</td>
+<td>—</td>
+<td><strong>+0.846</strong></td>
+<td>−0.351</td>
+<td>+0.330</td>
+</tr>
+<tr>
+<td><strong>deran. −×2</strong></td>
+<td>−0.180</td>
+<td>−0.290</td>
+<td><strong>+0.846</strong></td>
+<td>—</td>
+<td>−0.246</td>
+<td>+0.418</td>
+</tr>
+<tr>
+<td><strong>scramble ×1</strong></td>
+<td>+0.318</td>
+<td>+0.455</td>
+<td>−0.351</td>
+<td>−0.246</td>
+<td>—</td>
+<td>+0.634</td>
+</tr>
+<tr>
+<td><strong>scramble ×2</strong></td>
+<td>+0.125</td>
+<td>+0.145</td>
+<td>+0.330</td>
+<td>+0.418</td>
+<td>+0.634</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three readings, in descending order of how much weight they can carry.</p>
+<p><strong>Amplitude is a scalar on a fixed direction.</strong> The preset at single and double amplitude agree
+at <strong>+0.957</strong>, the derangement at <strong>+0.846</strong>. Doubling the dose does not do a different thing;
+it does the same thing further. The sign scramble is the exception at +0.634 — it is the
+control, and it behaves least like a settable knob. This is the clearest separation between the
+structured arms and the random one anywhere on this page, and it rests on three numbers with no
+test under them.</p>
+<p><strong>The two structured edits point away from each other.</strong> Preset against derangement runs −0.18
+to −0.57. They are not two strengths of one effect and not two unrelated effects either: on
+this bench they are closer to opposed. It is the same picture page 07 reports for colour alone,
+here across the whole feature set.</p>
+<p><strong>The scramble sits in between, and moves.</strong> It leans toward the preset at single amplitude
+(+0.32, +0.46) and toward the derangement at double (+0.33, +0.42). A norm-matched random
+direction has no business being consistently anywhere, and with 23 features and 40 cells these
+cosines are not precise enough to say it is. Treat this row as unexplained rather than as a
+finding.</p>
+<p>What none of this settles, beyond the control result above: the arms are <strong>not at matched
+displacement</strong> on this bench — page 09
+records that the double-amplitude figure was taken as twice the single-dose value rather than
+measured — so the ‖Δ‖ column ranks how hard each arm was pushed as much as how much it moves
+the image. The cosines do not depend on that. And no cosine here is disattenuated, so every one
+of them is a lower bound.</p>
 <p>Per style, from <code>data/stage9_headlights_by_style.csv</code>:</p>
 <div class="tablewrap"><table>
 <thead>
@@ -1331,6 +1732,8 @@ scores were joined to), <code>data/stage12_headlights_results.csv</code> (the ro
 <p><strong>Scripts.</strong> <code>experiments/notebook_figures.py</code> (F02.4, F02.5),
 <code>experiments/notebook_charts.py</code> (F02.6), <code>experiments/stage12_headlights.py</code>,
 <code>experiments/build_figures_headlights.py</code> (F02.1 to F02.3),
+<code>experiments/build_animations.py</code> (F02.7 and F02.8, the animations),
+<code>experiments/arm_coherence.py</code> (F02.9 and the two tables),
 <code>experiments/headlights_by_style.py</code>, <code>experiments/score_headlights.py</code>,
 <code>experiments/analyze_headlights.py</code>.</p>
 <p><strong>Written up in.</strong> <code>docs/stage10_headlights_results.md</code>, <code>docs/figure_brief.md</code>,
@@ -1352,17 +1755,17 @@ unrelated entries.</p>
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">250 renders · 10 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-03-what-ends-up-in-the-picture--how-much-room-the-subject-takes-and-how-blind-i-actually-was">How much room the subject takes, and how blind I actually was</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> I kept seeing the car take up more of the frame under one of
-the edits. If composition is one of the things these edits move, they reach further into the
-picture than texture and colour, and that changes what the whole project is about.</p>
-<p><strong>What would kill it.</strong> The effect existing only on the images that produced the observation.
-That is the honest failure mode here, and I had already walked into it once: boxes drawn on
-the same renders that suggested the idea, by me, knowing the hypothesis, with the scoring key
-already open.</p>
-<p><strong>Where we are.</strong> It survived on a corpus that did not exist when the prediction was frozen,
-at about a fifth of the size the first round claimed. And the same round measured something I
-care about more than the result: <strong>I am the measuring instrument, and nobody had ever measured
-the instrument.</strong></p>
+<p><strong>The direction I'm chasing.</strong> I kept noticing the car filling more of the frame under one of
+the edits. If these edits move <em>composition</em>, they reach a lot further into the picture than
+texture and colour do — and that changes what this whole project is about.</p>
+<p><strong>What would kill it.</strong> The effect existing only on the very images that gave me the idea.
+That's the honest failure mode here, and I had already walked straight into it once: boxes
+drawn on those same renders, by me, knowing the hypothesis, with the answer key open beside
+me.</p>
+<p><strong>Where we are.</strong> It survived on a corpus that didn't exist yet when the prediction was
+frozen, at about a fifth of the size the first round claimed. And that round measured
+something I care about more than the result: <strong>I am the measuring instrument, and nobody had
+ever measured me.</strong></p>
 </blockquote>
 <h2 id="p-03-what-ends-up-in-the-picture--in-two-minutes">In two minutes</h2>
 <p>Two things were noticed by eye: under one of the edits the car seems to take up more of the
@@ -1755,18 +2158,15 @@ CLIP measurement is re-run on the recovered pixels, every figure below is a meas
 picture with a panel attached to it, and on the page next door the same panel turned out to
 inflate a control by a factor of two. The claims keep their published status pending that
 re-measurement; they are not endorsed here.</p>
-<p><strong>The direction I'm chasing.</strong> The question I actually want answered is whether it matters
-<em>where</em> in the model you push. If different parts of the backbone do different jobs, steering
-has an anatomy and there is a map to draw. If they do not, there is one dial with a scale on
-it and everything else is decoration.</p>
-<p><strong>What would kill it.</strong> Displacement. If a block group moves the picture more simply because
-pushing it moves the weights more, then there is no anatomy here — only arithmetic I had
-failed to do.</p>
-<p><strong>Where we are.</strong> Rejected, and rejected backwards: the group that moves the weights least
-moves the picture most. But every number on this page predates the project's first
-pre-registration — one seed per cell, no displacement-matched control, and a metric that says
-the image moved without ever saying what moved. The page poses the question well and settles
-nothing.</p>
+<p><strong>The direction I'm chasing.</strong> Does it matter <em>where</em> in the model you push? If different
+parts of the backbone do different jobs, then steering has an anatomy and there's a map to
+draw. If they don't, there's one dial with a scale on it and everything else is decoration.</p>
+<p><strong>What would kill it.</strong> Displacement. If a block group moves the picture more just because
+pushing it moves the weights more, there's no anatomy here — only arithmetic I forgot to do.</p>
+<p><strong>Where we are.</strong> Rejected, and rejected backwards: the group that moves the weights <em>least</em>
+moves the picture <em>most</em>. But every number on this page predates the project's first
+pre-registration — one seed per cell, no displacement-matched control, and a metric that tells
+you the image moved without ever telling you what moved. Good question, no answer.</p>
 </blockquote>
 <h2 id="p-04-where-in-the-model--in-two-minutes">In two minutes</h2>
 <p>The most important open question in the project is whether it matters <em>where</em> in the model you
@@ -2169,15 +2569,15 @@ bit of resolution and room for exactly three tests under Holm.</p>
 <h1 id="p-05-knob-or-cost--what-an-edit-steers-and-what-it-costs">What an edit steers, and what it costs</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> Every knob on a machine does two things: the thing you turned
-it for, and the thing you pay for having turned it. I had only ever measured the first. I want
-them separated — what reverses when I push the other way is a <strong>knob</strong> I can aim, and what
-happens either way is a <strong>cost</strong> I can only budget for.</p>
-<p><strong>What would kill it.</strong> Finding that it is all knob. If every effect flips sign with the push,
-there is no hidden tax, and my suspicion — that the quantity I kept computing was throwing
-away the interesting half — is just me being dramatic.</p>
-<p><strong>Where we are.</strong> It is mostly cost, it grows the closer you push to the output, and it had
-been invisible to me for months, because the difference between the two directions is exactly
-the quantity that cancels it.</p>
+it for, and the thing you pay for turning it. I had only ever measured the first. I want them
+apart — what flips when you push the other way is a <strong>knob</strong> you can aim, and what happens
+either way is a <strong>cost</strong> you can only budget for.</p>
+<p><strong>What would kill it.</strong> Finding out it's all knob. If every effect reverses with the push,
+there's no hidden tax, and my suspicion — that the number I kept computing was throwing away
+the interesting half — is just me being dramatic.</p>
+<p><strong>Where we are.</strong> It's mostly cost. It grows the closer you push to the output. And it stayed
+invisible to me for months, because the difference between the two directions is exactly the
+quantity that cancels it out.</p>
 </blockquote>
 <h2 id="p-05-knob-or-cost--in-two-minutes">In two minutes</h2>
 <p>Every knob on a machine does two things. It does the thing you turned it for, and it does
@@ -2537,17 +2937,17 @@ analysis:
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">560 renders · 16 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-06-the-hatching-axis--the-hatching-axis-and-the-sign-that-decides-it">The hatching axis, and the sign that decides it</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> The same thing kept showing up across renders I had already
-seen: one edit shades with parallel strokes pushed one way and cross-hatches pushed the other.
-If that is real, the <strong>sign</strong> of a displacement carries information — and a sign is a far
-sharper thing to claim than a magnitude.</p>
-<p><strong>What would kill it.</strong> The norm-matched scramble doing it too. If a random displacement of
-identical size also splits parallel from crossed, the axis belongs to displacement in general
-and has nothing to do with these edits in particular.</p>
-<p><strong>Where we are.</strong> The prediction as written was a conjunction over three families, and one
-family did fail — which has to be said first, because a conjunction that fails is a prediction
-that failed. The family that failed is the scramble, and its failure is the reason the other
-two mean anything.</p>
+<p><strong>The direction I'm chasing.</strong> The same thing kept turning up in renders I had already looked
+at: one edit shades with parallel strokes pushed one way, and cross-hatches pushed the other.
+If that's real, the <strong>sign</strong> of a push carries information — and a sign is a much sharper
+thing to claim than a size.</p>
+<p><strong>What would kill it.</strong> The norm-matched scramble doing it too. If a random push of identical
+size also splits parallel from crossed, the axis belongs to pushing in general and has nothing
+to do with these edits in particular.</p>
+<p><strong>Where we are.</strong> What I wrote down was a prediction about three families at once, and one of
+them failed — which has to come first, because a prediction made as a conjunction either holds
+or it doesn't. The family that failed is the scramble. Its failure is the reason the other two
+mean anything.</p>
 </blockquote>
 <h2 id="p-06-the-hatching-axis--in-two-minutes">In two minutes</h2>
 <p>It started the way most things here start: by looking. Across renders already seen, one edit
@@ -2825,16 +3225,16 @@ return less than 2/2¹⁶, and both structured families sit on it.</p>
 <p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">560 renders · 16 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-07-chromatic-signatures--what-the-edit-does-to-colour-and-what-it-does-not">What the edit does to colour, and what it does not</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> The interesting claim is not "the preset changes colour" — that
-one is easy and dull. It is that <strong>every</strong> displacement leaves a chromatic fingerprint of its
-own, the scramble included, each pushing the palette somewhere different. If that holds,
-colour reads out <em>which</em> edit was applied, rather than merely reporting that one was.</p>
-<p><strong>What would kill it.</strong> Conditions that all drag the palette the same way. Each would look
-perfectly coherent on its own and there would be no signature anywhere — which is why one test
-was never going to be enough, and why the pre-registration wrote two.</p>
-<p><strong>Where we are.</strong> Split down the middle. The conditions do move colour in directions that
-differ from each other, twice now, at the floor of the test. The signature-per-edit claim came
-back three of six against a bar of four, and I am not rounding it up.</p>
+<p><strong>The direction I'm chasing.</strong> "The preset changes colour" is the boring version. The
+interesting one is that <strong>every</strong> push leaves a colour fingerprint of its own — the random
+scramble included — each dragging the palette somewhere different. If that holds, colour tells
+you <em>which</em> edit was applied, not just that one was.</p>
+<p><strong>What would kill it.</strong> All the conditions dragging the palette the same way. Each would look
+perfectly coherent on its own and there would be no fingerprint anywhere — which is why one
+test was never going to be enough, and why the pre-registration wrote two.</p>
+<p><strong>Where we are.</strong> Split down the middle. The conditions do push colour in directions that
+differ from each other, twice now, at the floor of the test. The fingerprint-per-edit claim
+came back three of six against a bar of four, and I'm not rounding it up.</p>
 </blockquote>
 <h2 id="p-07-chromatic-signatures--in-two-minutes">In two minutes</h2>
 <p>The idea was that every weight edit leaves its own fingerprint on colour — not just the
@@ -3236,19 +3636,19 @@ confirmation was stopped rather than a gate loosened after it failed. See
 <code>docs/prereg_rotations_block1_vs_block6_emendamento_v4.md</code>. The recovery makes that re-render
 unnecessary for <em>this</em> page: the clean pixels of the registered dose already existed.</p>
 <p><strong>The direction I'm chasing.</strong> <a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could ask whether
-position matters and could not answer it. This is the version built to settle it: two block
+position matters but couldn't answer it. This is the version built to settle it: two block
 groups pushed exactly the same distance by construction, one hypothesis, formula and
 thresholds frozen before a single image existed.</p>
-<p><strong>What would kill it.</strong> Two arbitrary perturbations of the same size separating just as much.
-If any two distinct edits leave traces you can tell apart, then "these two groups differ" is a
-fact about arithmetic and not about anatomy — so the null had to be measured, never assumed to
-sit at zero.</p>
-<p><strong>Where we are.</strong> The null is large, +0.274, and the real pair still beats it in all ten
-prompts. It is the strongest result in the notebook and also the narrowest: separability is
-not specialisation, and the experiment built to tell those apart came back not determined.
-And I nearly threw it away: the images carried a HUD panel that made the <em>control</em> look
-stronger than it is, so for two days I thought the page was contaminated when it was merely
-understated.</p>
+<p><strong>What would kill it.</strong> Two arbitrary pushes of the same size separating just as much. If any
+two edits leave traces you can tell apart, then "these two groups differ" is a fact about
+arithmetic and not about anatomy — so the null had to be measured, never assumed to sit at
+zero.</p>
+<p><strong>Where we are.</strong> The null is big, +0.274, and the real pair still beats it on all ten
+prompts. Strongest result in the notebook, and also the narrowest: telling two things apart
+isn't the same as knowing they do different jobs, and the experiment built to separate those
+came back undecided. I also nearly threw it away — the images had a HUD panel baked in that
+made the <em>control</em> look stronger than it is, so for two days I thought the page was
+contaminated when it was only understated.</p>
 </blockquote>
 <h2 id="p-08-block1-vs-block6--in-two-minutes">In two minutes</h2>
 <p><a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could pose the question and not answer it: does it
@@ -3561,21 +3961,20 @@ scrambles were measured).</p>
 <p class="status"><span class="pill" style="--c:#d03b3b">Overturned</span><span class="corpus">280 renders · 8 prompts · 5 seeds · pre-registered · 2026-09-21</span></p>
 <h1 id="p-09-style-direction--eight-styles-one-direction-and-a-design-that-cannot-say-why">Eight styles, one direction, and a design that cannot say why</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> If a push on the weights is a real thing, it should do the
-same real thing everywhere — one edit, one direction, no matter what I ask the model to
-draw. But the same preset kept <em>looking</em> like a different edit on a watercolour than on a
-photograph, and that is a fork in the road. Either the displacement carries a direction of
-its own and the prompt only decorates it, or the style I name is what decides where the push
-lands. I wrote down the version I believed — that the declared style matters more than the
-subject — and froze the test around it before I could talk myself out of it.</p>
-<p><strong>What would kill it.</strong> Styles that disagree with each other <em>less</em> than subjects do. If
-eight prompts as far apart as photography, watercolour, low-poly, claymation, ukiyo-e, pixel
-art, stained glass and charcoal all get pushed the same way, while eighteen different
-characters get pushed eighteen ways, then my hypothesis is not merely unsupported. It is
-backwards.</p>
-<p><strong>Where we are.</strong> It came back backwards. And the part I have to say out loud is that I
-cannot claim the reverse either: the eight styles share one scene and the eighteen subjects
-do not, so what I may have measured is the scene.</p>
+<p><strong>The direction I'm chasing.</strong> If a push on the weights is a real thing, it should do the same
+real thing everywhere — one edit, one direction, whatever I ask the model to draw. But the
+same preset kept <em>looking</em> like a different edit on a watercolour than on a photograph, and
+that's a fork in the road. Either the push carries a direction of its own and the prompt just
+decorates it, or the style I name is what decides where the push lands. I wrote down the
+version I believed — style over subject — and froze the test around it before I could talk
+myself out of it.</p>
+<p><strong>What would kill it.</strong> Styles disagreeing with each other <em>less</em> than subjects do. If
+photography, watercolour, low-poly, claymation, ukiyo-e, pixel art, stained glass and charcoal
+all get pushed the same way, while eighteen different characters get pushed eighteen different
+ways, then I'm not merely unsupported. I'm backwards.</p>
+<p><strong>Where we are.</strong> Backwards. And the part I have to say out loud is that I can't claim the
+reverse either: the eight styles share one scene and the eighteen subjects don't, so what I
+may have measured is the scene.</p>
 </blockquote>
 <h2 id="p-09-style-direction--in-two-minutes">In two minutes</h2>
 <p>The quantity is a cosine. Take one perturbation, hold it fixed, and ask how much the eight
@@ -3888,11 +4287,15 @@ into a result.</p>
 <p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">294 renders · 2 prompts · 3 seeds · 2026-09-23</span></p>
 <h1 id="p-10-all-blocks-clean--all-six-block-groups-under-matched-rotation">All six block groups under matched rotation</h1>
 <blockquote>
-<ul>
-<li><strong>The direction I'm chasing.</strong> I wanted to map weight rotation across the full depth of the network -- not just comparing the extreme ends B1 and B6, but observing how all six block groups respond across three calibrated angles on clean, HUD-free renders.</li>
-<li><strong>What would kill it.</strong> If intermediate blocks showed no coherent response to rotation angle, or if steering directions collapsed into an undifferentiated drift identical across all blocks.</li>
-<li><strong>Where we are.</strong> Two statistics on the exact same 294 clean renders point in opposite directions: the chroma-to-shape ratio pairs B1 with B6 as the closest of all fifteen pairs, while pairwise separability puts B1-B6, B1-B2, and B1-B4 all at the exact permutation floor.</li>
-</ul>
+<p><strong>The direction I'm chasing.</strong> I wanted the whole depth of the network in one picture — not
+just the two extremes, B1 against B6, but all six block groups at three calibrated angles, on
+clean renders with no HUD baked into them.</p>
+<p><strong>What would kill it.</strong> Middle blocks with no coherent response to the angle at all, or every
+group drifting the same way, so that "which block" stops meaning anything.</p>
+<p><strong>Where we are.</strong> Two statistics on the exact same 294 renders point opposite ways: the
+chroma-to-shape ratio makes B1 and B6 the closest of all fifteen pairs, while the separability
+test puts B1 against B6, B2 and B4 all at the permutation floor. They can't both be the whole
+story.</p>
 </blockquote>
 <h2 id="p-10-all-blocks-clean--in-two-minutes">In two minutes</h2>
 <p>This benchmark evaluates 294 HUD-free renders spanning all six DiT block groups (<code>B1</code> through <code>B6</code>), two Rademacher scrambled controls (<code>scrA</code>, <code>scrB</code>), and clean unperturbed baselines. Each condition was rendered across three rotation angles (<code>low</code> at 5 deg, <code>mid</code> at 10 deg, <code>high</code> at 15 deg), both signs (<code>pos</code> and <code>neg</code>), on two prompt archetypes (<code>P01</code>, <code>P02</code>) and three seeds.</p>

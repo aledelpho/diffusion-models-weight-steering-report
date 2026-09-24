@@ -62,23 +62,22 @@ claims:
 > and nothing yet extracted
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
-> **The direction I'm chasing.** If a push on the weights is a real thing, it should do the
-> same real thing everywhere — one edit, one direction, no matter what I ask the model to
-> draw. But the same preset kept *looking* like a different edit on a watercolour than on a
-> photograph, and that is a fork in the road. Either the displacement carries a direction of
-> its own and the prompt only decorates it, or the style I name is what decides where the push
-> lands. I wrote down the version I believed — that the declared style matters more than the
-> subject — and froze the test around it before I could talk myself out of it.
+> **The direction I'm chasing.** If a push on the weights is a real thing, it should do the same
+> real thing everywhere — one edit, one direction, whatever I ask the model to draw. But the
+> same preset kept *looking* like a different edit on a watercolour than on a photograph, and
+> that's a fork in the road. Either the push carries a direction of its own and the prompt just
+> decorates it, or the style I name is what decides where the push lands. I wrote down the
+> version I believed — style over subject — and froze the test around it before I could talk
+> myself out of it.
 >
-> **What would kill it.** Styles that disagree with each other *less* than subjects do. If
-> eight prompts as far apart as photography, watercolour, low-poly, claymation, ukiyo-e, pixel
-> art, stained glass and charcoal all get pushed the same way, while eighteen different
-> characters get pushed eighteen ways, then my hypothesis is not merely unsupported. It is
-> backwards.
+> **What would kill it.** Styles disagreeing with each other *less* than subjects do. If
+> photography, watercolour, low-poly, claymation, ukiyo-e, pixel art, stained glass and charcoal
+> all get pushed the same way, while eighteen different characters get pushed eighteen different
+> ways, then I'm not merely unsupported. I'm backwards.
 >
-> **Where we are.** It came back backwards. And the part I have to say out loud is that I
-> cannot claim the reverse either: the eight styles share one scene and the eighteen subjects
-> do not, so what I may have measured is the scene.
+> **Where we are.** Backwards. And the part I have to say out loud is that I can't claim the
+> reverse either: the eight styles share one scene and the eighteen subjects don't, so what I
+> may have measured is the scene.
 
 ## In two minutes
 

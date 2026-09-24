@@ -87,21 +87,21 @@ claims:
 
 
 > **The direction I'm chasing.** [The pilot sweep](04-where-in-the-model.md) could ask whether
-> position matters and could not answer it. This is the version built to settle it: two block
+> position matters but couldn't answer it. This is the version built to settle it: two block
 > groups pushed exactly the same distance by construction, one hypothesis, formula and
 > thresholds frozen before a single image existed.
 >
-> **What would kill it.** Two arbitrary perturbations of the same size separating just as much.
-> If any two distinct edits leave traces you can tell apart, then "these two groups differ" is a
-> fact about arithmetic and not about anatomy — so the null had to be measured, never assumed to
-> sit at zero.
+> **What would kill it.** Two arbitrary pushes of the same size separating just as much. If any
+> two edits leave traces you can tell apart, then "these two groups differ" is a fact about
+> arithmetic and not about anatomy — so the null had to be measured, never assumed to sit at
+> zero.
 >
-> **Where we are.** The null is large, +0.274, and the real pair still beats it in all ten
-> prompts. It is the strongest result in the notebook and also the narrowest: separability is
-> not specialisation, and the experiment built to tell those apart came back not determined.
-> And I nearly threw it away: the images carried a HUD panel that made the *control* look
-> stronger than it is, so for two days I thought the page was contaminated when it was merely
-> understated.
+> **Where we are.** The null is big, +0.274, and the real pair still beats it on all ten
+> prompts. Strongest result in the notebook, and also the narrowest: telling two things apart
+> isn't the same as knowing they do different jobs, and the experiment built to separate those
+> came back undecided. I also nearly threw it away — the images had a HUD panel baked in that
+> made the *control* look stronger than it is, so for two days I thought the page was
+> contaminated when it was only understated.
 
 ## In two minutes
 

@@ -114,11 +114,19 @@ claims:
 > **Open** · 1272 renders · 24 prompts · exploratory, and it predates every pre-registration in this notebook
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
-> **The direction I'm chasing.** I want to steer how a diffusion model draws — its strokes, hatching, and mark-making — without retraining it, without prompting gymnastics, and without blowing up its weights. A 53 KB delta on a 12.8-billion parameter backbone was the first hint that small, targeted rank perturbations could act as precision instruments rather than sledgehammers.
+> **The direction I'm chasing.** I want to change how the model *draws* — its strokes, its
+> hatching, the way it puts ink down — without retraining it, without prompt gymnastics, and
+> without blowing the weights apart. A 53 KB file moving a 12.8-billion-parameter model was the
+> first hint that a tiny, targeted push might work like a scalpel instead of a hammer.
 >
-> **What would kill it.** If the shift in mark style is just an artifact of moving away from the baseline — any random perturbation of that same size doing the same thing — or if standard vision encoders like CLIP see right through it or ignore it entirely because the strokes are below their spatial resolution.
+> **What would kill it.** If the shift turns out to be "you moved away from the baseline, that's
+> all" — any random push of the same size doing the same job. Or if CLIP looks at the two
+> pictures and sees nothing, because the strokes live below the resolution it reads at.
 >
-> **Where we are.** The calibrated preset undeniably shifts stroke density and mark texture across multiple seeds and prompts, and random perturbations at the identical displacement fail to reproduce it. But because this stage was exploratory and un-preregistered, the claims remain open.
+> **Where we are.** The preset does move stroke density and mark texture, across seeds and
+> across prompts, and random pushes of exactly the same size don't reproduce it. Two things keep
+> it open: nothing here was frozen in advance, and the reason I'd been giving for CLIP being
+> blind turned out to be wrong the moment I actually tested it.
 
 ## In two minutes
 
@@ -328,11 +336,7 @@ and no others —
     MANIFEST_BASE = stage2, stage5, stage6, stage6b_pilot
 
 300 + 100 + 340 + 304 + 228 = **1272 rows, and 1272 distinct filenames** — the union has no
-duplicate, so the old figure was a plain sum and it was right. That arithmetic is now a file
-rather than a sentence: `experiments/verify_corpus_counts.py` reads the manifest list out of
-`global_aggregation_corrected.py` itself, counts the rows, the distinct basenames, the prompts
-and the resolutions, and writes `data/corpus_reconstruction.csv`. If that script's inputs ever
-change, the count changes with them instead of drifting away from them. The 24 prompts are 10 F/G, 8 H and
+duplicate, so the old figure was a plain sum and it was right. The 24 prompts are 10 F/G, 8 H and
 6 S7, which is where the `n_prompts = 24` of `data/global_aggregation_corrected.csv` comes from;
 the 24 I-prompts of stage 7a are a different corpus.
 
@@ -344,8 +348,8 @@ the contamination that hit the rotation benches did not reach this page.
 
 
 * Pre-registration: None (exploratory)
-* Measurement files: the five manifests `experiments/global_aggregation_corrected.py` loads — `data/stage2_images.csv` (300 rows), `data/stage4_images.csv` (100), `data/stage5_images.csv` (340), `data/stage6_images.csv` (304), `data/stage6b_pilot_images.csv` (228) — plus `data/global_aggregation_corrected.csv`, `data/preset_displacements.csv`, `data/corpus_reconstruction.csv` (the count above), and `data/downsample_blindness.csv` (22 rows, the resample test, measured on the stage-7 corpus instead)
-* Scripts: `experiments/global_aggregation_corrected.py` (every contrast above), `experiments/verify_corpus_counts.py` (the corpus), `experiments/notebook_charts.py`, `experiments/extract_repro.py`
+* Measurement files: the five manifests `experiments/global_aggregation_corrected.py` loads — `data/stage2_images.csv` (300 rows), `data/stage4_images.csv` (100), `data/stage5_images.csv` (340), `data/stage6_images.csv` (304), `data/stage6b_pilot_images.csv` (228) — plus `data/global_aggregation_corrected.csv`, `data/preset_displacements.csv`, and `data/downsample_blindness.csv` (22 rows, the resample test, measured on the stage-7 corpus instead)
+* Scripts: `experiments/global_aggregation_corrected.py` (every contrast above), `experiments/notebook_charts.py`, `experiments/extract_repro.py`
 * Renders: `benchmark_stage5` (300), `benchmark_stage4_preset` (40), `benchmark_stage6` (304), `benchmark_stage7` (228, the stage-6b pilot, which shares that folder with the stage-7 bench of page 06 — pitfall 30), the stage-2 round (300) and the stage-4 round (100), whose manifests record filenames but no output folder
 * Scripts added 2026-09-23: `experiments/measure_downsample_blindness.py` (the resample test, run); `experiments/measure_clip_distance.py` (the encoder itself, not run)
 * Pitfalls that apply: 2 (unsigned distance), 17 (repeated measures), 30 (two experiments sharing an output folder), 34 (observation on seen renders), 38 (unvalidated metrics), 45 (unmeasured control displacement)

@@ -45,9 +45,17 @@ claims:
 
 > **Open** · 294 renders · 2 prompts · 3 seeds · 2026-09-23
 >
-> * **The direction I'm chasing.** I wanted to map weight rotation across the full depth of the network -- not just comparing the extreme ends B1 and B6, but observing how all six block groups respond across three calibrated angles on clean, HUD-free renders.
-> * **What would kill it.** If intermediate blocks showed no coherent response to rotation angle, or if steering directions collapsed into an undifferentiated drift identical across all blocks.
-> * **Where we are.** Two statistics on the exact same 294 clean renders point in opposite directions: the chroma-to-shape ratio pairs B1 with B6 as the closest of all fifteen pairs, while pairwise separability puts B1-B6, B1-B2, and B1-B4 all at the exact permutation floor.
+> **The direction I'm chasing.** I wanted the whole depth of the network in one picture — not
+> just the two extremes, B1 against B6, but all six block groups at three calibrated angles, on
+> clean renders with no HUD baked into them.
+>
+> **What would kill it.** Middle blocks with no coherent response to the angle at all, or every
+> group drifting the same way, so that "which block" stops meaning anything.
+>
+> **Where we are.** Two statistics on the exact same 294 renders point opposite ways: the
+> chroma-to-shape ratio makes B1 and B6 the closest of all fifteen pairs, while the separability
+> test puts B1 against B6, B2 and B4 all at the permutation floor. They can't both be the whole
+> story.
 
 ## In two minutes
 

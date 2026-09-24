@@ -73,20 +73,17 @@ claims:
 > re-measurement; they are not endorsed here.
 
 
-> **The direction I'm chasing.** The question I actually want answered is whether it matters
-> *where* in the model you push. If different parts of the backbone do different jobs, steering
-> has an anatomy and there is a map to draw. If they do not, there is one dial with a scale on
-> it and everything else is decoration.
+> **The direction I'm chasing.** Does it matter *where* in the model you push? If different
+> parts of the backbone do different jobs, then steering has an anatomy and there's a map to
+> draw. If they don't, there's one dial with a scale on it and everything else is decoration.
 >
-> **What would kill it.** Displacement. If a block group moves the picture more simply because
-> pushing it moves the weights more, then there is no anatomy here — only arithmetic I had
-> failed to do.
+> **What would kill it.** Displacement. If a block group moves the picture more just because
+> pushing it moves the weights more, there's no anatomy here — only arithmetic I forgot to do.
 >
-> **Where we are.** Rejected, and rejected backwards: the group that moves the weights least
-> moves the picture most. But every number on this page predates the project's first
-> pre-registration — one seed per cell, no displacement-matched control, and a metric that says
-> the image moved without ever saying what moved. The page poses the question well and settles
-> nothing.
+> **Where we are.** Rejected, and rejected backwards: the group that moves the weights *least*
+> moves the picture *most*. But every number on this page predates the project's first
+> pre-registration — one seed per cell, no displacement-matched control, and a metric that tells
+> you the image moved without ever telling you what moved. Good question, no answer.
 
 ## In two minutes
 

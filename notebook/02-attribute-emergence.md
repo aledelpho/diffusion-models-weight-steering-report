@@ -39,6 +39,14 @@ claims:
       second corpus was run and could not resolve anything: 9 of its 10 prompts never light
       a headlight in any condition.
     anchor: "#the-attribute-nobody-asked-for"
+  - id: an-edit-is-a-direction
+    status: open
+    statement: >
+      At a fixed seed every arm moves the whole batch along one direction rather than
+      perturbing each image separately -- and so does a norm-matched random perturbation, so
+      this is a fact about holding the seed fixed and not yet a fact about structure.
+    evidence: "Across the five seeds of one prompt the mean cosine between per-cell difference vectors runs 0.501 to 0.911 against 0.104 for a change of seed; the preset beats that null on 8 prompts of 8, sign-flip p = 0.0078 at the exact floor, and so does the sign scramble on 8 of 8. No structured arm separates from the scramble: +0.143 to +0.250, Holm 0.094 to 0.148, in data/arm_coherence_tests.csv. What does differ, untested: across prompts the scramble sits at the seed null (+0.104) while the preset reaches +0.383, and amplitude is a scalar on a fixed direction for the preset (+0.957) and the derangement (+0.846) but much less for the scramble (+0.634). Exploratory, cosines not disattenuated."
+    anchor: "#why-all-five-seeds-move-together"
   - id: attribute-emergence-generality-untested
     status: open
     statement: >
@@ -55,19 +63,20 @@ claims:
 > **Ambiguous** · 920 renders · 3 corpora · exploratory, no frozen threshold
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
-> **The direction I'm chasing.** I want to know whether a weight edit changes *what* the model
-> draws or only *how* it draws it. Those are two different machines. Something that renders the
-> same scene with a different finish is a filter; something that puts an object in the frame
-> that was never there is reaching into the content, and that is the thing worth understanding.
+> **The direction I'm chasing.** Does a weight edit change *what* the model draws, or only
+> *how*? Those are two completely different machines. Something that redraws the same scene with
+> a different finish is a filter. Something that puts an object in the frame that was never
+> there is reaching into the content — and that's the part worth understanding.
 >
 > **What would kill it.** A control that moves the weights exactly as far, by a different rule,
-> and produces the same attribute. If displacement alone recovers it, then the *structure* of
-> the edit is irrelevant and I am measuring distance with extra steps.
+> and gets the same attribute anyway. If plain distance recovers it, then the *structure* of the
+> edit doesn't matter and I'm measuring distance the long way round.
 >
-> **Where we are.** The control does nothing — twice, on two attributes, one the prompt asked
-> for and one nobody asked for. But I predicted neither in advance, I scored the first round
-> with the condition visible, and the design written to test whether any of this generalises was
-> never run. Large, repeatable, and filed ambiguous, which is where it belongs.
+> **Where we are.** The control does nothing — twice, on two different attributes, one the
+> prompt asked for and one nobody asked for. But I predicted neither in advance, I scored the
+> first round with the condition in plain sight, and the design written to test whether any of
+> it generalises was never run. Big, repeatable, and filed as ambiguous, which is where it
+> belongs.
 
 ## In two minutes
 
@@ -247,6 +256,186 @@ the negative permutation puts the lights out in thirty-nine renders of thirty-ni
 the style where the untouched model had them lit four times in five.
 
 ![Five seeds of one style, whole frames, the untouched model above and the negative permutation below. The untouched model lights four of five; the edit lights none, and changes the whole scene while doing it.](../assets/02-attribute-emergence/F02.2_headlights_switch_off.webp)
+
+Those two figures are stills, and a still cannot show a reader that the layout stayed put
+while the lamps changed. This one can. One prompt, the same five seeds throughout, and every
+one of the seven arms the bench ran — nothing moves between frames except the edit.
+
+![One prompt in watercolour, the same five seeds, and all seven arms of the bench in turn. Six arms light no headlights in any of the five seeds; the calibrated preset at double amplitude lights all five. Each cell carries the verdict the blind scorer gave that image and each header the mean lightness shift of that arm.](../assets/02-attribute-emergence/F02.7_headlights_switch.gif)
+
+Six of the seven arms light nothing at all. The seventh, the calibrated preset at double
+amplitude, lights all five. The two controls at the identical displacement sit with the rest
+at zero, which is the comparison the table above makes in numbers and this figure makes in
+pictures.
+
+Three things it is honest about, and the stills were not. Every cell carries the verdict the
+**blind scorer** gave that exact image, read out of `data/stage9_headlights_key.csv` joined to
+`data/stage9_headlights_raw.csv`, including the cells the scorer marked ambiguous — there are
+five of them on this style and they are marked in orange rather than rounded away. Every
+header carries the mean L\* shift of that arm from `data/stage9_preset_shift.csv`, because the
+preset darkens the frame by 3.30 and a reader should be able to ask whether the lamps are lit
+or merely brighter than a darker scene. And the provenance strip states how many arms of seven
+light a majority, counted from the scoring rather than typed: here, one.
+
+**One style is an illustration, never the measure.** This is watercolour, and the eight styles
+do not behave alike. On low-poly the same seven arms give a different picture: the untouched
+model already lights one seed of five, the preset at double amplitude lights all five, and the
+negative block derangement at *single* amplitude lights three — a second arm reaching a
+majority, which the aggregate row of 6 lit in 38 hides completely. Three of the eight styles
+never light a lamp in any condition at all. Here is low-poly, same layout, same seeds, so the
+two can be put side by side:
+
+![The same prompt in low-poly, the same five seeds, all seven arms. Two arms of seven light a majority here rather than one: the calibrated preset at double amplitude lights all five, and the negative block derangement at single amplitude lights three, while the untouched model already lights one.](../assets/02-attribute-emergence/F02.8_headlights_switch_lowpoly.gif)
+
+The second arm is worth a look. Negative block derangement at *single* amplitude lights three
+of five here, and across all eight styles that arm is recorded as 6 lit of 38 — so half of its
+lit renders sit on this one style. The page says the permutation puts the lights out; on
+low-poly, at half the dose, it turns them on. Nothing here explains that, and no experiment
+has been run on it.
+
+### Why all five seeds move together
+
+Watching either animation, the thing that jumps out is not one cell but the row: five seeds
+that share nothing except the prompt, all moving the same way at once. That is a claim about
+what an edit *is*, and it is measurable on the same 280 renders.
+
+For every arm, take the paired difference from the baseline at the same prompt and seed, in
+the 23-dimensional style-feature space, standardised once on the corpus's own baselines. Then
+ask how much two of those difference vectors agree. The scale to read it against is the same
+statistic computed on two baselines at different seeds: a change of seed is a large move in
+this space, and it has no shared direction.
+
+![Six arms of the bench, the mean cosine between their per-cell difference vectors, measured across the five seeds of one prompt and across different prompts, against the cosine between two baselines at different seeds. Every arm sits far above the seed line across seeds, the norm-matched sign scramble included, and no structured arm separates from it; across prompts the scramble at single amplitude falls back exactly onto the seed line.](../assets/02-attribute-emergence/F02.9_arm_coherence.webp)
+
+| arm | ‖Δ‖ | × the seed null | cosine across seeds | across prompts |
+|---|--:|--:|--:|--:|
+| derangement −×2 | 9.41 | 4.81 | +0.911 | +0.362 |
+| preset ×2 | 5.42 | 2.77 | +0.823 | +0.383 |
+| scramble ×2 | 4.34 | 2.22 | +0.661 | +0.224 |
+| derangement −×1 | 3.70 | 1.90 | +0.712 | +0.185 |
+| preset ×1 | 3.27 | 1.67 | +0.644 | +0.212 |
+| scramble ×1 | 2.83 | 1.45 | +0.501 | +0.104 |
+| *a change of seed* | 1.95 | 1.00 | +0.104 | — |
+
+Across the seeds of one prompt every arm is a direction: 0.50 to 0.91 against 0.10 for a seed
+change. That is the animation, in a number, and every arm clears the seed null on all eight
+styles at the exact sign-flip floor, p = 0.0078.
+
+**And so does the sign scramble, which is the point.** The scramble is a norm-matched *random*
+perturbation — the control built to have no structure at all — and it clears the seed null on
+8 styles of 8 as well. Tested arm against control, style by style, no structured arm separates
+from it:
+
+| arm, against the sign scramble at its own amplitude | difference | styles | p | Holm |
+|---|--:|--:|--:|--:|
+| preset ×1 | +0.143 | 5 / 8 | 0.148 | 0.148 |
+| preset ×2 | +0.162 | 6 / 8 | 0.070 | 0.141 |
+| derangement −×1 | +0.211 | 7 / 8 | 0.023 | 0.094 |
+| derangement −×2 | +0.250 | 7 / 8 | 0.023 | 0.094 |
+| *preset ×1, against the seed null* | *+0.540* | *8 / 8* | *0.008* | *0.047* |
+| *sign scramble ×1, against the seed null* | *+0.397* | *8 / 8* | *0.008* | *0.047* |
+
+So the coherence across seeds is **a fact about holding the seed fixed, not a fact about
+structure.** Fix the noise and any perturbation of that size pushes the batch somewhere
+together. A reader who watches the animation and concludes that the calibrated preset is doing
+something a random edit could not has drawn more than this measurement supports, and the
+figure's title says so.
+
+Two places where the structured arms do look different, neither of them tested, both single
+estimates rather than paired comparisons:
+
+* **Across prompts.** The scramble at single amplitude lands on **+0.104**, the seed line
+  exactly — no cross-prompt direction at all. The preset reaches +0.212 at the same amplitude
+  and +0.383 at double, the derangement +0.185 and +0.362. Surviving a change of scene is where
+  a difference would live, and this bench has one estimate per arm and no test for it.
+* **Amplitude as a scalar**, in the matrix below: +0.957 for the preset and +0.846 for the
+  derangement against +0.634 for the scramble.
+
+Both are worth a design. Neither is a result.
+
+#### One style at a time
+
+The averages above are over eight styles, and the styles are not alike. The same question
+asked one scene at a time — same prompt, same five seeds, ten pairs — gives this, each row
+against its own seed null because that varies too:
+
+| style | preset ×1 | preset ×2 | deran. −×1 | deran. −×2 | scramble ×1 | scramble ×2 | a seed change |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| S1 photo | +0.681 | +0.716 | +0.827 | +0.941 | +0.288 | +0.170 | +0.225 |
+| S2 watercolour | +0.640 | +0.805 | +0.750 | +0.865 | +0.794 | +0.900 | +0.189 |
+| **S3 low-poly** | **+0.325** | +0.711 | +0.582 | +0.912 | +0.464 | +0.533 | +0.113 |
+| S4 claymation | +0.705 | +0.896 | +0.652 | +0.880 | +0.381 | +0.799 | +0.118 |
+| S5 ukiyo-e | +0.606 | +0.835 | +0.494 | +0.875 | +0.115 | +0.793 | +0.098 |
+| **S6 pixel art** | +0.616 | +0.813 | +0.744 | +0.878 | +0.543 | +0.859 | −0.026 |
+| S7 glass | +0.652 | +0.856 | +0.729 | +0.946 | +0.717 | +0.688 | +0.117 |
+| S8 charcoal | **+0.926** | +0.951 | +0.915 | +0.992 | +0.707 | +0.547 | −0.003 |
+
+**Low-poly is where the preset is least itself.** At single amplitude its coherence is
+**+0.325**, the lowest cell in the table, and the ten pairwise cosines behind that average run
+from **−0.22 to +0.73** — two of the five seeds are pushed in opposite directions. Its
+displacement there is **1.00×** the seed null: on a low-poly render, at single amplitude, the
+preset moves the image no further than changing the seed would, and not in a consistent
+direction either.
+
+**Pixel art, by contrast, is ordinary.** +0.616 at the same amplitude, pairs from +0.22 to
++0.78, displacement 1.21× the null — unremarkable, middle of the table. Which is worth saying
+because pixel art is one of the styles that never lights a headlight in any condition: whatever
+stops the attribute appearing there, it is not that the edit fails to act coherently.
+
+Low-poly is also the style where the headlight counts misbehaved — the untouched model already
+lights one seed of five, and the negative derangement at single amplitude lights three. The
+style where the preset acts least coherently is the style where the attribute behaves least
+like the rest of the corpus. That is one observation on one style out of eight, made after
+looking, and it is a reason to run something, not a result.
+
+**Two patterns that hold across the whole table.** Doubling the amplitude raises coherence in
+every single cell — low-poly's preset goes 0.325 to 0.711, ukiyo-e's scramble 0.115 to 0.793.
+Some of that is real and some is measurement: a direction estimated at twice the signal is
+estimated better, and attenuation pulls the weaker one down harder (pitfall 36). Nothing here
+separates the two. And the negative derangement at double amplitude is the most consistent arm
+on every one of the eight styles, 0.865 to 0.992, which is the arm that also moves furthest —
+it is the closest thing on this bench to an edit that does one definite thing.
+
+### The arms against each other
+
+The same difference vectors answer the second question: are these six edits six different
+operations, or one operation at six settings?
+
+| | preset ×1 | preset ×2 | deran. −×1 | deran. −×2 | scramble ×1 | scramble ×2 |
+|---|---|---|---|---|---|---|
+| **preset ×1** | — | **+0.957** | −0.427 | −0.180 | +0.318 | +0.125 |
+| **preset ×2** | **+0.957** | — | −0.566 | −0.290 | +0.455 | +0.145 |
+| **deran. −×1** | −0.427 | −0.566 | — | **+0.846** | −0.351 | +0.330 |
+| **deran. −×2** | −0.180 | −0.290 | **+0.846** | — | −0.246 | +0.418 |
+| **scramble ×1** | +0.318 | +0.455 | −0.351 | −0.246 | — | +0.634 |
+| **scramble ×2** | +0.125 | +0.145 | +0.330 | +0.418 | +0.634 | — |
+
+Three readings, in descending order of how much weight they can carry.
+
+**Amplitude is a scalar on a fixed direction.** The preset at single and double amplitude agree
+at **+0.957**, the derangement at **+0.846**. Doubling the dose does not do a different thing;
+it does the same thing further. The sign scramble is the exception at +0.634 — it is the
+control, and it behaves least like a settable knob. This is the clearest separation between the
+structured arms and the random one anywhere on this page, and it rests on three numbers with no
+test under them.
+
+**The two structured edits point away from each other.** Preset against derangement runs −0.18
+to −0.57. They are not two strengths of one effect and not two unrelated effects either: on
+this bench they are closer to opposed. It is the same picture page 07 reports for colour alone,
+here across the whole feature set.
+
+**The scramble sits in between, and moves.** It leans toward the preset at single amplitude
+(+0.32, +0.46) and toward the derangement at double (+0.33, +0.42). A norm-matched random
+direction has no business being consistently anywhere, and with 23 features and 40 cells these
+cosines are not precise enough to say it is. Treat this row as unexplained rather than as a
+finding.
+
+What none of this settles, beyond the control result above: the arms are **not at matched
+displacement** on this bench — page 09
+records that the double-amplitude figure was taken as twice the single-dose value rather than
+measured — so the ‖Δ‖ column ranks how hard each arm was pushed as much as how much it moves
+the image. The cosines do not depend on that. And no cosine here is disattenuated, so every one
+of them is a lower bound.
 
 Per style, from `data/stage9_headlights_by_style.csv`:
 
@@ -440,6 +629,8 @@ scores were joined to), `data/stage12_headlights_results.csv` (the round's own s
 **Scripts.** `experiments/notebook_figures.py` (F02.4, F02.5),
 `experiments/notebook_charts.py` (F02.6), `experiments/stage12_headlights.py`,
 `experiments/build_figures_headlights.py` (F02.1 to F02.3),
+`experiments/build_animations.py` (F02.7 and F02.8, the animations),
+`experiments/arm_coherence.py` (F02.9 and the two tables),
 `experiments/headlights_by_style.py`, `experiments/score_headlights.py`,
 `experiments/analyze_headlights.py`.
 
