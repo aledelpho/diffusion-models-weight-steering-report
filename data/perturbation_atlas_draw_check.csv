@@ -1,3 +1,7 @@
 gate_name,target,status,details
 regression_gate_existing_chaos,reproduce d_model and d_clip across 6 chaos presets to 12 decimal places,PASS,"All 6 existing chaos presets reproduced bit-for-bit to twelve decimal places (d_model=267.372146268335, d_clip=55.276597565357, max residual=0.0)"
 regression_gate_generalized_scale_subset,reproduce d_model and d_clip across 6 chaos presets with callable predicate to 12 decimal places,PASS,"All 6 chaos presets reproduced bit-for-bit with git diff empty on data/chaos_presets_calibration.csv (max residual=0.0)"
+gate_1_determinism,bit-identical generation on repeated run,PASS,All 26 presets bit-identical on repeated generation
+gate_2_convergence,rescaling converges for all 26 presets,PASS,All 26 presets converged with max residual 4.16e-16 <= 1e-6
+gate_3_anchor,combined displacement matches D to 12 significant digits,PASS,All 26 presets match combined D=273.026311623145 to 12 digits (max residual 4.16e-16)
+gate_4_emptiness,rotation_recipes: [] and suite_rotation_effective: false verified on disk,PASS,All 26 presets read back from disk: rotation_recipes == [] and suite_rotation_effective == False verified (26/26)
