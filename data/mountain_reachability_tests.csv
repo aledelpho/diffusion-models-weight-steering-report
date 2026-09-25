@@ -1,0 +1,5 @@
+arm,space,mean_delta,prompts_negative,p_sign_flip,p_floor,p_holm,verdict_r2,verdict_r1,frac_above_p95_band
+preset_pos_1x,style,0.530427,3/8,0.109375,0.007812,0.21875,R2 ambiguous,R1 fails,0.4
+preset_pos_2x,style,1.412163,1/8,0.015625,0.007812,0.0625,R2 ambiguous,R1 fails,0.725
+blockshuf_neg_1x,style,0.198754,3/8,0.554688,0.007812,0.554688,R2 ambiguous,R1 fails,0.475
+rand_pos_1x,style,0.491982,1/8,0.039062,0.007812,0.117188,R2 ambiguous,R1 fails,0.625
