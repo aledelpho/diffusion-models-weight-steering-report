@@ -47,9 +47,14 @@ STAGE9_ARMS = [
     "blockshuf_neg_1x", "blockshuf_neg_2x",
     "rand_pos_1x", "rand_pos_2x"
 ]
-TESTED_ARMS = ["preset_pos_1x", "preset_pos_2x", "blockshuf_neg_1x", "rand_pos_1x"]
-
+STAGE9_TESTED_ARMS = ["preset_pos_1x", "preset_pos_2x", "blockshuf_neg_1x", "rand_pos_1x"]
 STYLE_PROMPTS = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"]
+
+STAGE7_ARMS = ["preset_pos", "blockshuf_neg", "rand_pos"]
+STAGE7_TEST_PROMPTS = [
+    "I01", "I02", "I05", "I06", "I07", "I09", "I10", "I11",
+    "I12", "I16", "I17", "I18", "I20", "I21", "I23", "I24"
+]
 
 NOT_FEATURES = {
     "file", "width_px", "height_px", "condition", "prompt_dir", "prompt_id",
@@ -355,81 +360,291 @@ def main() -> None:
     if n_prompts_b < 12:
         print(f"\n[POWER GATE FAILED] B holds {n_prompts_b} prompts (< 12). Analysis is declared UNDERPOWERED.")
     else:
-        print(f"\n[POWER GATE PASSED] B holds {n_prompts_b} prompts (>= 12). Sufficient power for statistical testing.")
+        print(f"\n[POWER GATE PASSED] B holds {n_prompts_b} prompts (>= 12).")
+        print("  - Stage 9 test prompts: 8 (< 12 -> descriptive only per amendment 01 §2)")
+        print("  - Stage 7 test prompts: 16 (>= 12 -> confirmatory replication per amendment 01 §3)")
 
     if args.inventory:
         sys.exit(0)
 
-    # If full run, check power gate
-    if n_prompts_b < 12:
-        sys.exit("Underpowered run (< 12 distinct prompts). Stopping per prereg §3.")
+    # ------------------------------------------------------------------
+    # FULL RUN: Stage 9 (Preserve & Re-label descriptive per D-A4)
+    # ------------------------------------------------------------------
+    out_csv = Path(args.out)
+    out_bp = Path(args.out_by_prompt)
+    out_tests = Path(args.out_tests)
+
+    # Read existing stage 9 rows if available to guarantee no numbers move (D-A4)
+    s9_reachability_rows = []
+    s9_by_prompt_rows = []
+    s9_test_rows = []
+
+    if out_csv.exists() and out_bp.exists() and out_tests.exists():
+        with out_csv.open(encoding="utf-8-sig") as fh:
+            for r in csv.DictReader(fh):
+                if r.get("corpus") in ("stage9", None):
+                    r_copy = dict(r)
+                    r_copy["corpus"] = "stage9"
+                    r_copy["status"] = "descriptive"
+                    s9_reachability_rows.append(r_copy)
+        with out_bp.open(encoding="utf-8-sig") as fh:
+            for r in csv.DictReader(fh):
+                if r.get("corpus") in ("stage9", None):
+                    r_copy = dict(r)
+                    r_copy["corpus"] = "stage9"
+                    r_copy["status"] = "descriptive"
+                    s9_by_prompt_rows.append(r_copy)
+        with out_tests.open(encoding="utf-8-sig") as fh:
+            for r in csv.DictReader(fh):
+                if r.get("corpus") in ("stage9", None):
+                    r_copy = dict(r)
+                    r_copy["corpus"] = "stage9"
+                    r_copy["status"] = "descriptive"
+                    s9_test_rows.append(r_copy)
+
+    # Fallback to computing Stage 9 if files did not exist
+    if not s9_reachability_rows:
+        s9_feat_path = DATA / f"{'style' if args.space == 'style' else 'palette'}_features_stage9.csv"
+        if not s9_feat_path.exists():
+            sys.exit(f"Stage 9 features file missing: {s9_feat_path}")
+        with s9_feat_path.open(encoding="utf-8-sig") as fh:
+            s9_rows = list(csv.DictReader(fh))
+
+        b_map = {(b["prompt"], b["seed"]): b for b in base_cloud}
+        b_p95 = float(statistics.quantiles(b_d_out_list, n=100)[94])
+
+        for r in s9_rows:
+            arm = r.get("condition") or r.get("arm")
+            if arm not in STAGE9_ARMS:
+                continue
+            raw_p = r.get("prompt_dir") or r.get("prompt_id")
+            p = raw_p.split("_")[0]
+            if p not in STYLE_PROMPTS:
+                continue
+            seed = int(r["seed"])
+            base_pair = b_map.get((p, seed))
+            if not base_pair:
+                continue
+
+            raw_vec = [float(r[col]) for col in feats_list]
+            z_edit = z_B(raw_vec)
+            z_base = base_pair["z"]
+
+            best_d_out = float("inf")
+            nearest_prompt_edited = ""
+            for b_cand in base_cloud:
+                if b_cand["prompt"] != p:
+                    d = euclidean_dist(z_edit, b_cand["z"])
+                    if d < best_d_out:
+                        best_d_out = d
+                        nearest_prompt_edited = b_cand["prompt"]
+
+            best_d_in = min(euclidean_dist(z_edit, b_cand["z"]) for b_cand in base_cloud)
+            d_out_base = base_pair["d_out"]
+            d_in_base = base_pair["d_in"]
+            delta = best_d_out - d_out_base
+            delta_norm = euclidean_dist(z_edit, z_base)
+
+            nearest_prompt_baseline = ""
+            best_d_out_b = float("inf")
+            for b_cand in base_cloud:
+                if b_cand["prompt"] != p:
+                    d = euclidean_dist(z_base, b_cand["z"])
+                    if d < best_d_out_b:
+                        best_d_out_b = d
+                        nearest_prompt_baseline = b_cand["prompt"]
+
+            s9_reachability_rows.append({
+                "corpus": "stage9",
+                "status": "descriptive",
+                "arm": arm,
+                "prompt": p,
+                "seed": seed,
+                "d_out_edited": round(best_d_out, 6),
+                "d_out_baseline": round(d_out_base, 6),
+                "delta": round(delta, 6),
+                "d_in_edited": round(best_d_in, 6),
+                "d_in_baseline": round(d_in_base, 6),
+                "nearest_prompt_edited": nearest_prompt_edited,
+                "nearest_prompt_baseline": nearest_prompt_baseline,
+                "delta_norm": round(delta_norm, 6),
+                "space": args.space,
+            })
+
+        for arm in STAGE9_ARMS:
+            arm_rows = [r for r in s9_reachability_rows if r["arm"] == arm]
+            for p in STYLE_PROMPTS:
+                p_rows = [r for r in arm_rows if r["prompt"] == p]
+                if not p_rows:
+                    continue
+                mean_delta = statistics.fmean(float(r["delta"]) for r in p_rows)
+                mean_d_out_edit = statistics.fmean(float(r["d_out_edited"]) for r in p_rows)
+                mean_d_out_base = statistics.fmean(float(r["d_out_baseline"]) for r in p_rows)
+                mean_d_norm = statistics.fmean(float(r["delta_norm"]) for r in p_rows)
+                s9_by_prompt_rows.append({
+                    "corpus": "stage9",
+                    "status": "descriptive",
+                    "arm": arm,
+                    "prompt": p,
+                    "n_seeds": len(p_rows),
+                    "mean_delta": round(mean_delta, 6),
+                    "mean_d_out_edited": round(mean_d_out_edit, 6),
+                    "mean_d_out_baseline": round(mean_d_out_base, 6),
+                    "mean_delta_norm": round(mean_d_norm, 6),
+                    "space": args.space,
+                })
+
+        raw_p_values = []
+        arm_stats = []
+        for arm in STAGE9_TESTED_ARMS:
+            sub = [r for r in s9_by_prompt_rows if r["arm"] == arm]
+            deltas = [float(r["mean_delta"]) for r in sub]
+            mean_d = statistics.fmean(deltas)
+            n_neg = sum(1 for d in deltas if d < 0)
+            p_val, p_fl = sign_flip(deltas)
+            raw_p_values.append(p_val)
+
+            arm_cells = [r for r in s9_reachability_rows if r["arm"] == arm]
+            frac_above_p95 = sum(1 for r in arm_cells if float(r["d_out_edited"]) > b_p95) / len(arm_cells)
+            r1_status = "R1 fails" if frac_above_p95 > 0.25 else "R1 holds"
+            arm_stats.append({
+                "arm": arm,
+                "mean_delta": mean_d,
+                "prompts_negative": f"{n_neg}/{len(deltas)}",
+                "p_sign_flip": p_val,
+                "p_floor": p_fl,
+                "frac_above_p95": frac_above_p95,
+                "r1_status": r1_status,
+            })
+
+        holm_ps = holm(raw_p_values)
+        for i, ast in enumerate(arm_stats):
+            p_h = holm_ps[i]
+            m_d = ast["mean_delta"]
+            n_neg_count = int(ast["prompts_negative"].split("/")[0])
+            if m_d < 0 and p_h <= 0.05 and n_neg_count >= 6:
+                r2_verdict = "R2 confirmed"
+            elif m_d > 0 and p_h <= 0.05:
+                r2_verdict = "R2 refuted"
+            else:
+                r2_verdict = "R2 ambiguous"
+
+            s9_test_rows.append({
+                "corpus": "stage9",
+                "status": "descriptive",
+                "arm": ast["arm"],
+                "space": args.space,
+                "mean_delta": round(m_d, 6),
+                "prompts_negative": ast["prompts_negative"],
+                "p_sign_flip": round(ast["p_sign_flip"], 6),
+                "p_floor": round(ast["p_floor"], 6),
+                "p_holm": round(p_h, 6),
+                "verdict_r2": r2_verdict,
+                "verdict_r1": ast["r1_status"],
+                "frac_above_p95_band": round(ast["frac_above_p95"], 4),
+            })
 
     # ------------------------------------------------------------------
-    # FULL RUN: Load Stage 9 Edited Renders
+    # FULL RUN: Stage 7 (Confirmatory Replication per D-A2 & Amendment §3, §7)
     # ------------------------------------------------------------------
-    s9_feat_path = DATA / f"{'style' if args.space == 'style' else 'palette'}_features_stage9.csv"
-    if not s9_feat_path.exists():
-        sys.exit(f"Stage 9 features file missing: {s9_feat_path}")
+    s7_feat_path = DATA / f"{'style' if args.space == 'style' else 'palette'}_features_stage7.csv"
+    if not s7_feat_path.exists():
+        sys.exit(f"Stage 7 features file missing: {s7_feat_path}")
 
-    with s9_feat_path.open(encoding="utf-8-sig") as fh:
-        s9_rows = list(csv.DictReader(fh))
+    with s7_feat_path.open(encoding="utf-8-sig") as fh:
+        s7_rows = list(csv.DictReader(fh))
 
-    # Base cloud map for fast lookup: (prompt, seed) -> b
-    b_map = {(b["prompt"], b["seed"]): b for b in base_cloud}
+    s7_baselines = [r for r in s7_rows if r.get("condition") == "baseline"]
+    if len(s7_baselines) != 120:
+        print(f"Warning: Expected 120 Stage 7 baselines, found {len(s7_baselines)}")
 
-    # Edited rows for the 8 style prompts and 6 arms
-    reachability_rows = []
-    # R1 baseline reference band: 5th and 95th percentiles of baselines' own d_out
-    b_p05 = float(statistics.quantiles(b_d_out_list, n=100)[4])
-    b_p95 = float(statistics.quantiles(b_d_out_list, n=100)[94])
+    # Standardisation from Stage 7 baselines only (Amendment 01 §7)
+    mu_s7 = [statistics.fmean(float(r[col]) for r in s7_baselines) for col in feats_list]
+    sd_s7 = [statistics.stdev(float(r[col]) for r in s7_baselines) for col in feats_list]
+    for i, s in enumerate(sd_s7):
+        if s == 0:
+            sys.exit(f"Feature {feats_list[i]} has zero standard deviation across Stage 7 baselines")
 
-    for r in s9_rows:
+    def z_s7(vec: list[float]) -> list[float]:
+        return [(vec[i] - mu_s7[i]) / sd_s7[i] for i in range(n_feats)]
+
+    # Project base cloud into Stage 7 standardized space
+    base_cloud_s7 = []
+    for b in base_cloud:
+        raw_v = existing_feat_cache[b["file"]]
+        base_cloud_s7.append({
+            "prompt": b["prompt"],
+            "seed": b["seed"],
+            "file": b["file"],
+            "z": z_s7(raw_v),
+        })
+
+    # Compute d_out and d_in for Stage 7 baselines
+    s7_base_map = {}
+    s7_b_d_out_list = []
+    for b in base_cloud_s7:
+        if b["file"] in {r["file"] for r in s7_baselines}:
+            d_out = min(
+                euclidean_dist(b["z"], other["z"])
+                for other in base_cloud_s7
+                if other["prompt"] != b["prompt"]
+            )
+            d_in = min(
+                euclidean_dist(b["z"], other["z"])
+                for other in base_cloud_s7
+                if other["file"] != b["file"]
+            )
+            b["d_out"] = d_out
+            b["d_in"] = d_in
+            s7_base_map[(b["prompt"], b["seed"])] = b
+            s7_b_d_out_list.append(d_out)
+
+    s7_b_p95 = float(statistics.quantiles(s7_b_d_out_list, n=100)[94])
+
+    s7_reachability_rows = []
+    for r in s7_rows:
         arm = r.get("condition") or r.get("arm")
-        if arm not in STAGE9_ARMS:
+        if arm not in STAGE7_ARMS:
             continue
-        raw_p = r.get("prompt_dir") or r.get("prompt_id")
-        p = raw_p.split("_")[0]
-        if p not in STYLE_PROMPTS:
+        p = r.get("prompt_dir") or r.get("prompt_id")
+        if p not in STAGE7_TEST_PROMPTS:
             continue
         seed = int(r["seed"])
-
-        base_pair = b_map.get((p, seed))
+        base_pair = s7_base_map.get((p, seed))
         if not base_pair:
             continue
 
         raw_vec = [float(r[col]) for col in feats_list]
-        z_edit = z_B(raw_vec)
+        z_edit = z_s7(raw_vec)
         z_base = base_pair["z"]
 
-        # d_out and d_in for edited
         best_d_out = float("inf")
         nearest_prompt_edited = ""
-        for b_cand in base_cloud:
+        for b_cand in base_cloud_s7:
             if b_cand["prompt"] != p:
                 d = euclidean_dist(z_edit, b_cand["z"])
                 if d < best_d_out:
                     best_d_out = d
                     nearest_prompt_edited = b_cand["prompt"]
 
-        best_d_in = min(euclidean_dist(z_edit, b_cand["z"]) for b_cand in base_cloud)
-
-        # Baseline distances
+        best_d_in = min(euclidean_dist(z_edit, b_cand["z"]) for b_cand in base_cloud_s7)
         d_out_base = base_pair["d_out"]
         d_in_base = base_pair["d_in"]
         delta = best_d_out - d_out_base
         delta_norm = euclidean_dist(z_edit, z_base)
 
-        # nearest prompt for baseline
         nearest_prompt_baseline = ""
         best_d_out_b = float("inf")
-        for b_cand in base_cloud:
+        for b_cand in base_cloud_s7:
             if b_cand["prompt"] != p:
                 d = euclidean_dist(z_base, b_cand["z"])
                 if d < best_d_out_b:
                     best_d_out_b = d
                     nearest_prompt_baseline = b_cand["prompt"]
 
-        reachability_rows.append({
+        s7_reachability_rows.append({
+            "corpus": "stage7",
+            "status": "confirmatory_replication",
             "arm": arm,
             "prompt": p,
             "seed": seed,
@@ -444,20 +659,11 @@ def main() -> None:
             "space": args.space,
         })
 
-    # Write data/mountain_reachability.csv
-    out_csv = Path(args.out)
-    out_csv.parent.mkdir(parents=True, exist_ok=True)
-    with out_csv.open("w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(reachability_rows[0].keys()))
-        w.writeheader()
-        w.writerows(reachability_rows)
-    print(f"wrote {out_csv} ({len(reachability_rows)} rows)")
-
-    # Aggregate by prompt (unit of analysis)
-    by_prompt_rows = []
-    for arm in STAGE9_ARMS:
-        arm_rows = [r for r in reachability_rows if r["arm"] == arm]
-        for p in STYLE_PROMPTS:
+    # By-prompt rows for Stage 7
+    s7_by_prompt_rows = []
+    for arm in STAGE7_ARMS:
+        arm_rows = [r for r in s7_reachability_rows if r["arm"] == arm]
+        for p in STAGE7_TEST_PROMPTS:
             p_rows = [r for r in arm_rows if r["prompt"] == p]
             if not p_rows:
                 continue
@@ -465,7 +671,9 @@ def main() -> None:
             mean_d_out_edit = statistics.fmean(r["d_out_edited"] for r in p_rows)
             mean_d_out_base = statistics.fmean(r["d_out_baseline"] for r in p_rows)
             mean_d_norm = statistics.fmean(r["delta_norm"] for r in p_rows)
-            by_prompt_rows.append({
+            s7_by_prompt_rows.append({
+                "corpus": "stage7",
+                "status": "confirmatory_replication",
                 "arm": arm,
                 "prompt": p,
                 "n_seeds": len(p_rows),
@@ -476,30 +684,22 @@ def main() -> None:
                 "space": args.space,
             })
 
-    out_bp = Path(args.out_by_prompt)
-    with out_bp.open("w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(by_prompt_rows[0].keys()))
-        w.writeheader()
-        w.writerows(by_prompt_rows)
-    print(f"wrote {out_bp} ({len(by_prompt_rows)} rows)")
-
-    # Hypothesis testing on 4 pre-registered arms (TESTED_ARMS)
-    raw_p_values = []
-    arm_stats = []
-    for arm in TESTED_ARMS:
-        sub = [r for r in by_prompt_rows if r["arm"] == arm]
+    # Test rows for Stage 7 (3 pre-registered arms)
+    raw_p_values_s7 = []
+    arm_stats_s7 = []
+    for arm in STAGE7_ARMS:
+        sub = [r for r in s7_by_prompt_rows if r["arm"] == arm]
         deltas = [r["mean_delta"] for r in sub]
         mean_d = statistics.fmean(deltas)
         n_neg = sum(1 for d in deltas if d < 0)
         p_val, p_fl = sign_flip(deltas)
-        raw_p_values.append(p_val)
+        raw_p_values_s7.append(p_val)
 
-        # R1 evaluation: fraction of edited renders above 95th percentile band
-        arm_cells = [r for r in reachability_rows if r["arm"] == arm]
-        frac_above_p95 = sum(1 for r in arm_cells if r["d_out_edited"] > b_p95) / len(arm_cells)
+        arm_cells = [r for r in s7_reachability_rows if r["arm"] == arm]
+        frac_above_p95 = sum(1 for r in arm_cells if r["d_out_edited"] > s7_b_p95) / len(arm_cells)
         r1_status = "R1 fails" if frac_above_p95 > 0.25 else "R1 holds"
 
-        arm_stats.append({
+        arm_stats_s7.append({
             "arm": arm,
             "mean_delta": mean_d,
             "prompts_negative": f"{n_neg}/{len(deltas)}",
@@ -509,23 +709,23 @@ def main() -> None:
             "r1_status": r1_status,
         })
 
-    holm_ps = holm(raw_p_values)
-
-    test_rows = []
-    for i, ast in enumerate(arm_stats):
-        p_h = holm_ps[i]
+    holm_ps_s7 = holm(raw_p_values_s7)
+    s7_test_rows = []
+    for i, ast in enumerate(arm_stats_s7):
+        p_h = holm_ps_s7[i]
         m_d = ast["mean_delta"]
         n_neg_count = int(ast["prompts_negative"].split("/")[0])
 
-        # Verbatim criteria from §4
-        if m_d < 0 and p_h <= 0.05 and n_neg_count >= 6:
+        if m_d < 0 and p_h <= 0.05 and n_neg_count >= 12:
             r2_verdict = "R2 confirmed"
         elif m_d > 0 and p_h <= 0.05:
             r2_verdict = "R2 refuted"
         else:
             r2_verdict = "R2 ambiguous"
 
-        test_rows.append({
+        s7_test_rows.append({
+            "corpus": "stage7",
+            "status": "confirmatory_replication",
             "arm": ast["arm"],
             "space": args.space,
             "mean_delta": round(m_d, 6),
@@ -538,13 +738,77 @@ def main() -> None:
             "frac_above_p95_band": round(ast["frac_above_p95"], 4),
         })
 
-    out_tests = Path(args.out_tests)
-    with out_tests.open("w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(test_rows[0].keys()))
+    # ------------------------------------------------------------------
+    # WRITE COMBINED OUTPUTS (D-A3: Separate rows, never pooled)
+    # ------------------------------------------------------------------
+    all_reachability_rows = s9_reachability_rows + s7_reachability_rows
+    all_by_prompt_rows = s9_by_prompt_rows + s7_by_prompt_rows
+    all_test_rows = s9_test_rows + s7_test_rows
+
+    reach_fieldnames = [
+        "corpus", "status", "arm", "prompt", "seed", "d_out_edited",
+        "d_out_baseline", "delta", "d_in_edited", "d_in_baseline",
+        "nearest_prompt_edited", "nearest_prompt_baseline", "delta_norm", "space"
+    ]
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
+    with out_csv.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=reach_fieldnames)
         w.writeheader()
-        w.writerows(test_rows)
-    print(f"wrote {out_tests} ({len(test_rows)} rows)")
+        w.writerows(all_reachability_rows)
+    print(f"wrote {out_csv} ({len(all_reachability_rows)} rows: {len(s9_reachability_rows)} s9, {len(s7_reachability_rows)} s7)")
+
+    bp_fieldnames = [
+        "corpus", "status", "arm", "prompt", "n_seeds", "mean_delta",
+        "mean_d_out_edited", "mean_d_out_baseline", "mean_delta_norm", "space"
+    ]
+    with out_bp.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=bp_fieldnames)
+        w.writeheader()
+        w.writerows(all_by_prompt_rows)
+    print(f"wrote {out_bp} ({len(all_by_prompt_rows)} rows: {len(s9_by_prompt_rows)} s9, {len(s7_by_prompt_rows)} s7)")
+
+    test_fieldnames = [
+        "corpus", "status", "arm", "space", "mean_delta", "prompts_negative",
+        "p_sign_flip", "p_floor", "p_holm", "verdict_r2", "verdict_r1", "frac_above_p95_band"
+    ]
+    with out_tests.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=test_fieldnames)
+        w.writeheader()
+        w.writerows(all_test_rows)
+    print(f"wrote {out_tests} ({len(all_test_rows)} rows: {len(s9_test_rows)} s9, {len(s7_test_rows)} s7)")
+
+    # Print summary
+    print("\n=== MOUNTAIN REACHABILITY SUMMARY ===")
+    print("--- Stage 9 (Descriptive, N=8) ---")
+    for r in s9_test_rows:
+        print(f"  {r['arm']:18s}: mean_delta={r['mean_delta']:>9s}, neg={r['prompts_negative']:>3s}, p_sign_flip={r['p_sign_flip']:>8s}, p_holm={r['p_holm']:>8s}, verdict_r2={r['verdict_r2']}")
+
+    print("--- Stage 7 (Confirmatory Replication, N=16) ---")
+    for r in s7_test_rows:
+        print(f"  {r['arm']:18s}: mean_delta={r['mean_delta']:>9.6f}, neg={r['prompts_negative']:>4s}, p_sign_flip={r['p_sign_flip']:>8.6f}, p_holm={r['p_holm']:>8.6f}, verdict_r2={r['verdict_r2']}, verdict_r1={r['verdict_r1']}")
+
+    # Verify D-A4: check that Stage 9 test rows match frozen values exactly
+    frozen_s9_expected = {
+        "preset_pos_1x": {"mean_delta": 0.530427, "prompts_negative": "3/8", "p_sign_flip": 0.109375, "p_floor": 0.007812, "p_holm": 0.21875, "frac_above_p95_band": 0.4},
+        "preset_pos_2x": {"mean_delta": 1.412163, "prompts_negative": "1/8", "p_sign_flip": 0.015625, "p_floor": 0.007812, "p_holm": 0.0625, "frac_above_p95_band": 0.725},
+        "blockshuf_neg_1x": {"mean_delta": 0.198754, "prompts_negative": "3/8", "p_sign_flip": 0.554688, "p_floor": 0.007812, "p_holm": 0.554688, "frac_above_p95_band": 0.475},
+        "rand_pos_1x": {"mean_delta": 0.491982, "prompts_negative": "1/8", "p_sign_flip": 0.039062, "p_floor": 0.007812, "p_holm": 0.117188, "frac_above_p95_band": 0.625},
+    }
+    for r in s9_test_rows:
+        arm = r["arm"]
+        if arm in frozen_s9_expected:
+            exp = frozen_s9_expected[arm]
+            for k, val in exp.items():
+                actual = float(r[k]) if isinstance(val, (int, float)) else str(r[k])
+                if isinstance(val, float):
+                    if abs(actual - val) > 1e-5:
+                        sys.exit(f"INTEGRITY ERROR (D-A4): Stage 9 number moved for {arm} {k}: expected {val}, got {actual}")
+                else:
+                    if actual != val:
+                        sys.exit(f"INTEGRITY ERROR (D-A4): Stage 9 string moved for {arm} {k}: expected {val}, got {actual}")
+    print("\n[INTEGRITY GATE PASSED] All Stage 9 numbers matched frozen values bit-for-bit.")
 
 
 if __name__ == "__main__":
     main()
+
