@@ -1,0 +1,15 @@
+region,domain,block_indices,tensor_pattern,n_model_tensors,n_clip_tensors,total_tensors,mean_tensors_per_block,share_of_model_tensors
+early_attn,model,0-6,blocks.[0-6].attn.*,49,0,49,7.0,0.114
+early_mlp,model,0-6,blocks.[0-6].mlp.*,21,0,21,3.0,0.0488
+early_mid_attn,model,7-13,blocks.[7-13].attn.*,49,0,49,7.0,0.114
+early_mid_mlp,model,7-13,blocks.[7-13].mlp.*,21,0,21,3.0,0.0488
+late_mid_attn,model,14-20,blocks.[14-20].attn.*,49,0,49,7.0,0.114
+late_mid_mlp,model,14-20,blocks.[14-20].mlp.*,21,0,21,3.0,0.0488
+late_attn,model,21-27,blocks.[21-27].attn.*,49,0,49,7.0,0.114
+late_mlp,model,21-27,blocks.[21-27].mlp.*,21,0,21,3.0,0.0488
+modulation_norm,model,0-27 (all blocks),"blocks.[0-27].{mod.lin, prenorm.scale, postnorm.scale}",84,0,84,3.0,0.1953
+txtfusion,model,adapters (txtfusion),txtfusion.*,49,0,49,0.0,0.114
+clip_only,clip,none,all CLIP patched tensors,0,629,629,0.0,0.0
+model_only,model,0-27 (all model),all model patched tensors,430,0,430,15.3571,1.0
+uniform_all,both,0-27 + CLIP,all model and CLIP patched tensors,430,629,1059,15.3571,1.0
+uncovered,model,non-block inputs/outputs/projections,"17 residual tensors (first: 2, last: 4, tmlp: 4, tproj: 2, txtmlp: 5)",17,0,17,0.0,0.0395
