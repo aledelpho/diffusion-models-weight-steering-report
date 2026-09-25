@@ -1,0 +1,38 @@
+diagnostic_id,item,axis_definition,value,reference_mean,reference_p95,percentile_in_reference,note,is_post_hoc_diagnostic
+D1_axis_angle,u_stage7_vs_u_stage9_all_arms,cross_definition,0.257047,,,,cosine between primary stage7 axis and pooled stage9 axis,yes
+D1_axis_angle,u_stage7_vs_u_loo_preset_pos_1x,cross_definition,0.294275,,,,cosine between stage7 axis and LOO axis for preset_pos_1x,yes
+D1_axis_angle,u_stage7_vs_u_loo_preset_pos_2x,cross_definition,0.284526,,,,cosine between stage7 axis and LOO axis for preset_pos_2x,yes
+D1_axis_angle,u_stage7_vs_u_loo_blockshuf_neg_1x,cross_definition,0.287509,,,,cosine between stage7 axis and LOO axis for blockshuf_neg_1x,yes
+D1_axis_angle,u_stage7_vs_u_loo_blockshuf_neg_2x,cross_definition,0.056654,,,,cosine between stage7 axis and LOO axis for blockshuf_neg_2x,yes
+D1_axis_angle,u_stage7_vs_u_loo_rand_pos_1x,cross_definition,0.243479,,,,cosine between stage7 axis and LOO axis for rand_pos_1x,yes
+D1_axis_angle,u_stage7_vs_u_loo_rand_pos_2x,cross_definition,0.240856,,,,cosine between stage7 axis and LOO axis for rand_pos_2x,yes
+D1_axis_angle,u_loo_preset_pos_1x_vs_u_loo_preset_pos_2x,within_stage9_loo,0.977441,,,,pairwise cosine between LOO axes of preset_pos_1x and preset_pos_2x,yes
+D1_axis_angle,u_loo_preset_pos_1x_vs_u_loo_blockshuf_neg_1x,within_stage9_loo,0.939643,,,,pairwise cosine between LOO axes of preset_pos_1x and blockshuf_neg_1x,yes
+D1_axis_angle,u_loo_preset_pos_1x_vs_u_loo_blockshuf_neg_2x,within_stage9_loo,0.664844,,,,pairwise cosine between LOO axes of preset_pos_1x and blockshuf_neg_2x,yes
+D1_axis_angle,u_loo_preset_pos_1x_vs_u_loo_rand_pos_1x,within_stage9_loo,0.982088,,,,pairwise cosine between LOO axes of preset_pos_1x and rand_pos_1x,yes
+D1_axis_angle,u_loo_preset_pos_1x_vs_u_loo_rand_pos_2x,within_stage9_loo,0.955439,,,,pairwise cosine between LOO axes of preset_pos_1x and rand_pos_2x,yes
+D1_axis_angle,u_loo_preset_pos_2x_vs_u_loo_blockshuf_neg_1x,within_stage9_loo,0.850611,,,,pairwise cosine between LOO axes of preset_pos_2x and blockshuf_neg_1x,yes
+D1_axis_angle,u_loo_preset_pos_2x_vs_u_loo_blockshuf_neg_2x,within_stage9_loo,0.509900,,,,pairwise cosine between LOO axes of preset_pos_2x and blockshuf_neg_2x,yes
+D1_axis_angle,u_loo_preset_pos_2x_vs_u_loo_rand_pos_1x,within_stage9_loo,0.941626,,,,pairwise cosine between LOO axes of preset_pos_2x and rand_pos_1x,yes
+D1_axis_angle,u_loo_preset_pos_2x_vs_u_loo_rand_pos_2x,within_stage9_loo,0.901048,,,,pairwise cosine between LOO axes of preset_pos_2x and rand_pos_2x,yes
+D1_axis_angle,u_loo_blockshuf_neg_1x_vs_u_loo_blockshuf_neg_2x,within_stage9_loo,0.853341,,,,pairwise cosine between LOO axes of blockshuf_neg_1x and blockshuf_neg_2x,yes
+D1_axis_angle,u_loo_blockshuf_neg_1x_vs_u_loo_rand_pos_1x,within_stage9_loo,0.960304,,,,pairwise cosine between LOO axes of blockshuf_neg_1x and rand_pos_1x,yes
+D1_axis_angle,u_loo_blockshuf_neg_1x_vs_u_loo_rand_pos_2x,within_stage9_loo,0.959327,,,,pairwise cosine between LOO axes of blockshuf_neg_1x and rand_pos_2x,yes
+D1_axis_angle,u_loo_blockshuf_neg_2x_vs_u_loo_rand_pos_1x,within_stage9_loo,0.704534,,,,pairwise cosine between LOO axes of blockshuf_neg_2x and rand_pos_1x,yes
+D1_axis_angle,u_loo_blockshuf_neg_2x_vs_u_loo_rand_pos_2x,within_stage9_loo,0.711590,,,,pairwise cosine between LOO axes of blockshuf_neg_2x and rand_pos_2x,yes
+D1_axis_angle,u_loo_rand_pos_1x_vs_u_loo_rand_pos_2x,within_stage9_loo,0.988968,,,,pairwise cosine between LOO axes of rand_pos_1x and rand_pos_2x,yes
+D2_share_vs_random,preset_pos_1x,stage7,0.201365,0.168987,0.251387,77.2,observed share falls below random-direction p95,yes
+D2_share_vs_random,preset_pos_1x,leave_one_out,0.262659,0.168987,0.251387,96.3,observed share above random-direction p95,yes
+D2_share_vs_random,preset_pos_2x,stage7,0.139225,0.169347,0.278567,34.0,observed share falls below random-direction p95,yes
+D2_share_vs_random,preset_pos_2x,leave_one_out,0.258578,0.169347,0.278567,92.0,observed share falls below random-direction p95,yes
+D2_share_vs_random,blockshuf_neg_1x,stage7,0.242479,0.171192,0.264103,91.1,observed share falls below random-direction p95,yes
+D2_share_vs_random,blockshuf_neg_1x,leave_one_out,0.205247,0.171192,0.264103,77.8,observed share falls below random-direction p95,yes
+D2_share_vs_random,blockshuf_neg_2x,stage7,0.232944,0.173141,0.295058,84.7,observed share falls below random-direction p95,yes
+D2_share_vs_random,blockshuf_neg_2x,leave_one_out,0.196870,0.173141,0.295058,71.5,observed share falls below random-direction p95,yes
+D2_share_vs_random,rand_pos_1x,stage7,0.256194,0.169978,0.254117,95.3,observed share above random-direction p95,yes
+D2_share_vs_random,rand_pos_1x,leave_one_out,0.210572,0.169978,0.254117,81.7,observed share falls below random-direction p95,yes
+D2_share_vs_random,rand_pos_2x,stage7,0.185042,0.170404,0.255844,65.4,observed share falls below random-direction p95,yes
+D2_share_vs_random,rand_pos_2x,leave_one_out,0.321262,0.170404,0.255844,99.3,observed share above random-direction p95,yes
+D3_null_cell_count,null_80_cells_all_pairs,unstripped_null,-0.003525,-0.003525,0.436657,,"80 baseline pairs across 8 style prompts (C(5,2)=10 per prompt)",yes
+D3_null_cell_count,null_40_cells_sampled,unstripped_null,-0.008973,-0.008973,0.492045,,40 baseline pairs sampled (5 per prompt across 8 style prompts),yes
+D3_null_cell_count,null_16_cells_strictly_disjoint,unstripped_null,-0.015119,-0.015119,0.357769,,16 strictly disjoint baseline pairs (each baseline used at most once per draw),yes
