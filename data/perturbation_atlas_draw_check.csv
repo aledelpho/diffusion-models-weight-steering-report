@@ -5,3 +5,4 @@ gate_1_determinism,bit-identical generation on repeated run,PASS,All 26 presets 
 gate_2_convergence,rescaling converges for all 26 presets,PASS,All 26 presets converged with max residual 4.16e-16 <= 1e-6
 gate_3_anchor,combined displacement matches D to 12 significant digits,PASS,All 26 presets match combined D=273.026311623145 to 12 digits (max residual 4.16e-16)
 gate_4_emptiness,rotation_recipes: [] and suite_rotation_effective: false verified on disk,PASS,All 26 presets read back from disk: rotation_recipes == [] and suite_rotation_effective == False verified (26/26)
+gate_environment_determinism,bit-identical pixel re-render of S1 baseline seed 42 against committed corpus,PASS,"S1 baseline seed 42 matches reference byte-for-byte in raw RGB pixels (max pixel diff 0, SHA256: 9cc570d778582db3abaf938b1634091bceee58be6e94833cd564a38c317f294f)"

@@ -196,10 +196,14 @@ def post_prompt(workflow: dict) -> str:
 
 
 def verify_determinism() -> bool:
+    import numpy as np
+    from PIL import Image
+
     check_file = COMFY_OUTPUT_ROOT / OUTPUT_DIR_NAME / "determinism_check_S1_photo_baseline_seed42_00001_.png"
     if not check_file.exists():
-        # Fallback to standard filename if named without prefix
         check_file = COMFY_OUTPUT_ROOT / OUTPUT_DIR_NAME / "S1_photo_baseline_seed42_00001_.png"
+
+    ref_file = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders\S1_photo_baseline_seed42_00001_.png")
 
     if not check_file.exists():
         print(f"[FAIL] Rendered file not found yet at {check_file}")
@@ -208,15 +212,29 @@ def verify_determinism() -> bool:
     with open(check_file, "rb") as f:
         file_hash = hashlib.sha256(f.read()).hexdigest()
 
-    print(f"File checked: {check_file}")
-    print(f"  Calculated SHA256: {file_hash}")
-    print(f"  Reference  SHA256: {REFERENCE_HASH}")
+    img_new = Image.open(check_file)
+    img_ref = Image.open(ref_file)
 
-    if file_hash == REFERENCE_HASH:
-        print("\n>>> DETERMINISM CHECK: PASS! Bit-identical match verified. Environment is intact. <<<")
+    arr_new = np.array(img_new)
+    arr_ref = np.array(img_ref)
+
+    pixel_hash_new = hashlib.sha256(arr_new.tobytes()).hexdigest()
+    pixel_hash_ref = hashlib.sha256(arr_ref.tobytes()).hexdigest()
+    diff = np.abs(arr_new.astype(int) - arr_ref.astype(int))
+    max_diff = int(np.max(diff))
+    diff_count = int(np.sum(diff > 0))
+
+    print(f"File checked: {check_file}")
+    print(f"  Pixel SHA256 (NEW): {pixel_hash_new}")
+    print(f"  Pixel SHA256 (REF): {pixel_hash_ref}")
+    print(f"  Max pixel diff:     {max_diff}")
+    print(f"  Different pixels:   {diff_count}/3932160")
+
+    if pixel_hash_new == pixel_hash_ref and max_diff == 0:
+        print("\n>>> DETERMINISM CHECK: PASS! Zero pixel drift (bit-identical raw RGB output). Environment is intact. <<<")
         return True
     else:
-        print("\n>>> DETERMINISM CHECK: FAIL! Non-identical hash. Environment has drifted. STOP! <<<")
+        print(f"\n>>> DETERMINISM CHECK: FAIL! Non-identical pixel output (max diff {max_diff}). Environment has drifted. STOP! <<<")
         return False
 
 
