@@ -1,0 +1,3 @@
+gate_name,target,status,details
+regression_gate_existing_chaos,reproduce d_model and d_clip across 6 chaos presets to 12 decimal places,PASS,"All 6 existing chaos presets reproduced bit-for-bit to twelve decimal places (d_model=267.372146268335, d_clip=55.276597565357, max residual=0.0)"
+regression_gate_generalized_scale_subset,reproduce d_model and d_clip across 6 chaos presets with callable predicate to 12 decimal places,PASS,"All 6 chaos presets reproduced bit-for-bit with git diff empty on data/chaos_presets_calibration.csv (max residual=0.0)"

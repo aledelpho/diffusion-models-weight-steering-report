@@ -1,4 +1,4 @@
-﻿import os
+import os
 import re
 import sys
 import json
@@ -57,12 +57,42 @@ def split_indexed(patches, pattern):
             rest[k] = v
     return dict(grouped), rest
 
-def scale_subset(base_patches, pattern, pref, norms, filter_fn):
+def scale_subset(base_patches, pattern, pref, norms, filter_fn, target_d: float | None = None):
+    if callable(pattern):
+        # Generalised path (Amendment 06 §2): pattern is a key predicate Callable[[str], bool]
+        sub_filtered = {}
+        rest = {}
+        for k, v in base_patches.items():
+            if pattern(k):
+                m = filter_fn(k, v) if callable(filter_fn) else 1.0
+                if m != 0.0:
+                    sub_filtered[k] = v * m
+            else:
+                rest[k] = v
+        d_rest = dn(rest, norms)
+        d_sub = dn(sub_filtered, norms)
+        d_target_total = target_d if target_d is not None else math.hypot(d_sub, d_rest)
+        target = d_target_total ** 2 - d_rest ** 2
+        if target <= 0:
+            raise RuntimeError("Il resto supera il totale")
+        if d_sub <= 0:
+            raise RuntimeError("Il sottoinsieme filtrato ha norma zero")
+        alpha = math.sqrt(target) / d_sub
+        new_patches = dict(rest)
+        for k, v in sub_filtered.items():
+            new_patches[k] = v * alpha
+        d_final = dn(new_patches, norms)
+        res = abs(d_final - d_target_total) / d_target_total
+        if res > 1e-6:
+            raise RuntimeError(f"Riscalatura non convergente: target {d_target_total:.8f}, ottenuto {d_final:.8f}, res {res:.2e}")
+        return new_patches, alpha, d_final
+
+    # Legacy regex-indexed path (preserves exact behavior for existing chaos presets)
     grouped, rest = split_indexed(base_patches, pattern)
     idx = sorted(grouped)
     sub_full = {f"{pref}{i}.{s}": v for i in idx for s, v in grouped[i].items()}
     d_rest = dn(rest, norms)
-    d_tot = math.hypot(dn(sub_full, norms), d_rest)
+    d_target_total = target_d if target_d is not None else math.hypot(dn(sub_full, norms), d_rest)
     
     # Apply filter_fn: returns multiplier m for (block_idx, suffix, val)
     sub_filtered = {}
@@ -74,7 +104,7 @@ def scale_subset(base_patches, pattern, pref, norms, filter_fn):
                 sub_filtered[k] = v * m
 
     d_filtered = dn(sub_filtered, norms)
-    target = d_tot ** 2 - d_rest ** 2
+    target = d_target_total ** 2 - d_rest ** 2
     if target <= 0:
         raise RuntimeError("Il resto supera il totale")
     if d_filtered <= 0:
@@ -88,9 +118,9 @@ def scale_subset(base_patches, pattern, pref, norms, filter_fn):
             new_patches[k] = sub_filtered.get(k, 0.0) * alpha
 
     d_final = dn(new_patches, norms)
-    res = abs(d_final - d_tot) / d_tot
+    res = abs(d_final - d_target_total) / d_target_total
     if res > 1e-6:
-        raise RuntimeError(f"Riscalatura non convergente: target {d_tot:.8f}, ottenuto {d_final:.8f}, res {res:.2e}")
+        raise RuntimeError(f"Riscalatura non convergente: target {d_target_total:.8f}, ottenuto {d_final:.8f}, res {res:.2e}")
         
     return new_patches, alpha, d_final
 
