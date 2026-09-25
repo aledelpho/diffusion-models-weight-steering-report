@@ -69,6 +69,20 @@ def load():
         )
     plan = list(csv.DictReader(PLAN.open(encoding="utf-8")))
     feats = {os.path.basename(r["file"]): r for r in csv.DictReader(FEATS.open(encoding="utf-8"))}
+
+    # GUARD, added 2026-09-25 before any data existed, after finding that the loader below
+    # keys baselines by seed alone. With more than one prompt in the plan that key collides and
+    # every displacement would be silently anchored to whichever prompt was read last. This is a
+    # loud stop, not a statistic: nothing computed below changes.
+    prompts = sorted({r.get("prompt_id", "") for r in plan})
+    if len(prompts) != 1:
+        die(
+            f"the plan carries {len(prompts)} prompts ({prompts}). "
+            "docs/prereg_style_capacity.md is written for the single-prompt Phase 1 and names its "
+            "quantity 'capacity on one scene'. A multi-prompt corpus needs prompt-paired baselines, "
+            "a null permuted within prompt, and leave-one-prompt-out identification: that is an "
+            "amendment to the pre-registration, to be written before this script is run."
+        )
     return plan, feats
 
 
