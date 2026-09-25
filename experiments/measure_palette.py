@@ -52,21 +52,23 @@ SEEDS = [42, 777, 1337, 9999, 4242145]
 
 def find_on_disk(rel_path: str, bench_folder: str = "benchmark_stage9") -> Path | None:
     fn = os.path.basename(rel_path.replace("\\", "/"))
+    bench_candidates = [bench_folder, "benchmark_stage7a", "benchmark_stage7", "benchmark_stage9"]
     for r in ROOTS:
         c1 = r / rel_path
         if c1.is_file():
             return c1
-        c2 = r / bench_folder / rel_path
-        if c2.is_file():
-            return c2
-        c3 = r / bench_folder / "renders" / fn
-        if c3.is_file():
-            return c3
-        bf = r / bench_folder
-        if bf.is_dir():
-            matches = list(bf.glob(f"**/{fn}"))
-            if matches:
-                return matches[0]
+        for bf in bench_candidates:
+            c2 = r / bf / rel_path
+            if c2.is_file():
+                return c2
+            c3 = r / bf / "renders" / fn
+            if c3.is_file():
+                return c3
+            d = r / bf
+            if d.is_dir():
+                matches = list(d.glob(f"**/{fn}"))
+                if matches:
+                    return matches[0]
     return None
 
 
@@ -135,9 +137,11 @@ def emd_ciede2000(w1: list[float], lab1: list[list[float]], w2: list[float], lab
 def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path: Path) -> dict:
     """Executes the mandatory instrument checks from §5 as amended by Amendment 01."""
     print("=== Running Mandatory Instrument Checks (§5 - Amendment 01) ===")
+    prompts = sorted(list({p for (p, s) in baseline_renders}))
+    print(f"Baselines provided: {len(baseline_renders)} renders across {len(prompts)} prompts: {prompts[:6]}...")
 
-    # Pre-extract Track A and Track B for all 40 baseline renders
-    print("Pre-extracting features for 40 baseline renders...")
+    # Pre-extract Track A and Track B for all baseline renders
+    print(f"Pre-extracting features for {len(baseline_renders)} baseline renders...")
     base_data = {}
     for (p, s), info in sorted(baseline_renders.items()):
         im = Image.open(info["path"]).convert("RGB")
@@ -152,17 +156,18 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
             "file": info["file"],
         }
 
-    # Check 1: Determinism (run twice on S1 seed 42)
-    s1_42_im = base_data[("S1", 42)]["im"]
-    pal_a, w_a, lab_a = quantize_palette(s1_42_im, 15)
-    pal_b, w_b, lab_b = quantize_palette(s1_42_im, 15)
+    # Check 1: Determinism (run twice on first prompt seed 42)
+    p0 = prompts[0]
+    p0_42_im = base_data[(p0, 42)]["im"]
+    pal_a, w_a, lab_a = quantize_palette(p0_42_im, 15)
+    pal_b, w_b, lab_b = quantize_palette(p0_42_im, 15)
     det_pass = (pal_a == pal_b) and (w_a == w_b) and (lab_a == lab_b)
     if not det_pass:
         sys.exit("FATAL: Check 1 (Determinism) failed! Palettes differ on identical run.")
 
     # Check 2: Zero on identity
-    v42_a = extract_track_a(s1_42_im)
-    v42_b = extract_track_a(s1_42_im)
+    v42_a = extract_track_a(p0_42_im)
+    v42_b = extract_track_a(p0_42_im)
     d_pal_id = emd_ciede2000(w_a, lab_a, w_b, lab_b)
     id_pass = (d_pal_id == 0.0) and (v42_a == v42_b)
     if not id_pass:
@@ -171,13 +176,14 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
     print("Check 1 (Determinism)      : PASS (palettes and weights byte-identical)")
     print(f"Check 2 (Zero on identity) : PASS (D_pal = {d_pal_id:.6f}, 9D vectors equal)")
 
-    # §2. §5.3 Replaced: Noise floor distribution across all 80 within-prompt baseline pairs
+    # §2. §5.3 Replaced: Noise floor distribution across all within-prompt baseline pairs
     pair_rows = []
     floor_d_pal_list = []
     floor_delta_list = []
 
-    print("Computing noise floor over 80 within-prompt baseline pairs...")
-    for p in STYLE_PROMPTS:
+    expected_pairs = len(prompts) * 10
+    print(f"Computing noise floor over {expected_pairs} within-prompt baseline pairs...")
+    for p in prompts:
         seeds_p = sorted(SEEDS)
         for i in range(len(seeds_p)):
             for j in range(i + 1, len(seeds_p)):
@@ -207,7 +213,7 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
                     "details": f"Baseline pair for prompt {p}"
                 })
 
-    assert len(floor_d_pal_list) == 80, f"Expected 80 baseline pairs, got {len(floor_d_pal_list)}"
+    assert len(floor_d_pal_list) == expected_pairs, f"Expected {expected_pairs} baseline pairs, got {len(floor_d_pal_list)}"
 
     d_pal_mean = float(np.mean(floor_d_pal_list))
     d_pal_sd = float(np.std(floor_d_pal_list, ddof=1))
@@ -224,12 +230,13 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
     print(f"Check 3 (Floor D_pal)      : mean={d_pal_mean:.4f}, sd={d_pal_sd:.4f}, median={d_pal_median:.4f}, p95={d_pal_p95:.4f}, max={d_pal_max:.4f}")
     print(f"Check 3 (Floor ||Delta||)  : mean={delta_mean:.4f}, sd={delta_sd:.4f}, median={delta_median:.4f}, p95={delta_p95:.4f}, max={delta_max:.4f}")
 
-    # §3. §5.4 Replaced: Positive control sensitivity curve (+10, +30, +90, +180 deg) on 8 baselines
-    print("Computing positive control sensitivity curve on 8 baselines (S1..S8, seed 42)...")
+    # §3. §5.4 Replaced: Positive control sensitivity curve (+10, +30, +90, +180 deg) on at least 8 baselines
+    ctrl_prompts = prompts[:8]
+    print(f"Computing positive control sensitivity curve on {len(ctrl_prompts)} baselines ({ctrl_prompts[0]}..{ctrl_prompts[-1]}, seed 42)...")
     angles = [10, 30, 90, 180]
     curve_data = {a: {"d_pal": [], "delta_a": [], "delta_b": []} for a in angles}
 
-    for p in STYLE_PROMPTS:
+    for p in ctrl_prompts:
         b = base_data[(p, 42)]
         im_orig = b["im"]
         v_orig = b["v"]
@@ -294,7 +301,7 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
     csv_rows.append({
         "record_type": "check_summary",
         "check_id": "check_1_determinism",
-        "prompt": "S1",
+        "prompt": p0,
         "seed_pair": "42_vs_42",
         "angle_deg": "",
         "metric_name": "quantization_determinism",
@@ -304,13 +311,13 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
         "delta_b": "0.0",
         "ratio_to_p95": "",
         "status": "PASS",
-        "details": "Two runs on S1 seed 42 yielded byte-identical palettes and weights"
+        "details": f"Two runs on {p0} seed 42 yielded byte-identical palettes and weights"
     })
     # Check 2
     csv_rows.append({
         "record_type": "check_summary",
         "check_id": "check_2_zero_on_identity",
-        "prompt": "S1",
+        "prompt": p0,
         "seed_pair": "42_vs_42",
         "angle_deg": "",
         "metric_name": "zero_on_identity",
@@ -326,8 +333,8 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
     csv_rows.append({
         "record_type": "floor_summary",
         "check_id": "check_3_floor_D_pal_stats",
-        "prompt": "ALL_8_PROMPTS",
-        "seed_pair": "80_PAIRS",
+        "prompt": f"ALL_{len(prompts)}_PROMPTS",
+        "seed_pair": f"{len(floor_d_pal_list)}_PAIRS",
         "angle_deg": "",
         "metric_name": "D_pal_distribution",
         "D_pal": f"mean={d_pal_mean:.6f};sd={d_pal_sd:.6f};median={d_pal_median:.6f};p95={d_pal_p95:.6f};max={d_pal_max:.6f}",
@@ -336,13 +343,13 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
         "delta_b": "",
         "ratio_to_p95": "1.000000",
         "status": "RECORDED",
-        "details": f"Floor D_pal over 80 within-prompt baseline pairs: p95={d_pal_p95:.6f}"
+        "details": f"Floor D_pal over {len(floor_d_pal_list)} within-prompt baseline pairs: p95={d_pal_p95:.6f}"
     })
     csv_rows.append({
         "record_type": "floor_summary",
         "check_id": "check_3_floor_delta_norm_stats",
-        "prompt": "ALL_8_PROMPTS",
-        "seed_pair": "80_PAIRS",
+        "prompt": f"ALL_{len(prompts)}_PROMPTS",
+        "seed_pair": f"{len(floor_d_pal_list)}_PAIRS",
         "angle_deg": "",
         "metric_name": "delta_norm_distribution",
         "D_pal": "",
@@ -351,14 +358,14 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
         "delta_b": "",
         "ratio_to_p95": "",
         "status": "RECORDED",
-        "details": f"Floor raw 9D delta norm over 80 within-prompt baseline pairs: p95={delta_p95:.6f}"
+        "details": f"Floor raw 9D delta norm over {len(floor_d_pal_list)} within-prompt baseline pairs: p95={delta_p95:.6f}"
     })
     # Check 4 Sensitivity curve summaries
     for c in curve_summary:
         csv_rows.append({
             "record_type": "sensitivity_curve",
             "check_id": f"check_4_positive_control_{c['theta']}deg",
-            "prompt": "8_BASELINES_S1_S8",
+            "prompt": f"{len(ctrl_prompts)}_BASELINES_{ctrl_prompts[0]}_{ctrl_prompts[-1]}",
             "seed_pair": "seed42_rotated",
             "angle_deg": str(c["theta"]),
             "metric_name": "hue_rotation_sensitivity",
@@ -415,7 +422,7 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
         w = csv.DictWriter(fh, fieldnames=fieldnames)
         w.writeheader()
         w.writerows(csv_rows)
-    print(f"wrote {out_path} ({len(csv_rows)} rows: summaries, curve, and 80 baseline pairs)")
+    print(f"wrote {out_path} ({len(csv_rows)} rows: summaries, curve, and {len(floor_d_pal_list)} baseline pairs)")
 
     return {
         "d_pal_p95": d_pal_p95,
@@ -435,8 +442,9 @@ def run_instrument_check(baseline_renders: dict[tuple[str, int], dict], out_path
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Measure colour palette position and recurrence.")
+    ap.add_argument("--stage", type=int, choices=[7, 9], default=9, help="Stage to analyze (7 or 9)")
     ap.add_argument("--check-only", action="store_true", help="Run only the §5 instrument checks and stop")
-    ap.add_argument("--out-check", default=str(DATA / "palette_instrument_check.csv"),
+    ap.add_argument("--out-check", default=None,
                     help="Target path for instrument check CSV")
     ap.add_argument("--out-pos", default=str(DATA / "palette_position.csv"),
                     help="Target path for Track A position CSV")
@@ -444,7 +452,46 @@ def main() -> None:
                     help="Target path for Track B swatches JSON")
     args = ap.parse_args()
 
+    if args.stage == 7:
+        stage7_csv = DATA / "stage7a_images.csv"
+        if not stage7_csv.exists():
+            sys.exit(f"stage7a_images.csv missing: {stage7_csv}")
+        with stage7_csv.open(encoding="utf-8-sig") as fh:
+            rows = list(csv.DictReader(fh))
+
+        out_check_path = Path(args.out_check) if args.out_check else DATA / "palette_instrument_check_stage7.csv"
+
+        baseline_renders = {}
+        missing = []
+        for r in rows:
+            if (r.get("cond_name") or r.get("arm")) != "baseline":
+                continue
+            p = r.get("prompt_id") or ""
+            seed = int(r["seed"])
+            rel = r.get("image_path") or ""
+            fn = os.path.basename(rel)
+            p_disk = find_on_disk(rel, "benchmark_stage7a")
+            if not p_disk:
+                missing.append(fn)
+                continue
+            baseline_renders[(p, seed)] = {
+                "arm": "baseline",
+                "prompt": p,
+                "seed": seed,
+                "file": fn,
+                "path": p_disk,
+            }
+        if missing:
+            sys.exit(f"FATAL: Missing {len(missing)} stage 7 baseline renders: {missing[:5]}")
+        if len(baseline_renders) != 120:
+            sys.exit(f"FATAL: Expected 120 stage 7 baseline renders, got {len(baseline_renders)}")
+
+        check_results = run_instrument_check(baseline_renders, out_check_path)
+        if args.check_only:
+            sys.exit(0)
+
     # Locate the 280 renders in stage9_images.csv
+    out_check_path = Path(args.out_check) if args.out_check else DATA / "palette_instrument_check.csv"
     stage9_csv = DATA / "stage9_images.csv"
     if not stage9_csv.exists():
         sys.exit(f"stage9_images.csv missing: {stage9_csv}")
@@ -491,7 +538,7 @@ def main() -> None:
         for (arm, p, s), info in renders.items()
         if arm == "baseline"
     }
-    check_results = run_instrument_check(baseline_renders, Path(args.out_check))
+    check_results = run_instrument_check(baseline_renders, out_check_path)
 
     if args.check_only:
         sys.exit(0)
