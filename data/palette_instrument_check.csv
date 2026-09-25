@@ -1,0 +1,91 @@
+record_type,check_id,prompt,seed_pair,angle_deg,metric_name,D_pal,delta_norm,delta_a,delta_b,ratio_to_p95,status,details
+check_summary,check_1_determinism,S1,42_vs_42,,quantization_determinism,0.0,0.0,0.0,0.0,,PASS,Two runs on S1 seed 42 yielded byte-identical palettes and weights
+check_summary,check_2_zero_on_identity,S1,42_vs_42,,zero_on_identity,0.000000,0.0,0.0,0.0,,PASS,D_pal == 0.0 and identical 9D vectors on identical render
+floor_summary,check_3_floor_D_pal_stats,ALL_8_PROMPTS,80_PAIRS,,D_pal_distribution,mean=3.722622;sd=0.988189;median=3.736664;p95=5.373563;max=5.633328,,,,1.000000,RECORDED,Floor D_pal over 80 within-prompt baseline pairs: p95=5.373563
+floor_summary,check_3_floor_delta_norm_stats,ALL_8_PROMPTS,80_PAIRS,,delta_norm_distribution,,mean=2.385149;sd=0.861317;median=2.265079;p95=4.022975;max=4.598573,,,,RECORDED,Floor raw 9D delta norm over 80 within-prompt baseline pairs: p95=4.022975
+sensitivity_curve,check_4_positive_control_10deg,8_BASELINES_S1_S8,seed42_rotated,10,hue_rotation_sensitivity,3.572991,,1.282666,0.314823,0.664920,BELOW_P95,"Hue +10 deg mean D_pal=3.5730, ratio to p95=0.66x"
+sensitivity_curve,check_4_positive_control_30deg,8_BASELINES_S1_S8,seed42_rotated,30,hue_rotation_sensitivity,7.204371,,3.206090,1.418434,1.340707,CLEARS_P95,"Hue +30 deg mean D_pal=7.2044, ratio to p95=1.34x"
+sensitivity_curve,check_4_positive_control_90deg,8_BASELINES_S1_S8,seed42_rotated,90,hue_rotation_sensitivity,11.552493,,3.547910,7.864672,2.149876,CLEARS_P95,"Hue +90 deg mean D_pal=11.5525, ratio to p95=2.15x"
+sensitivity_curve,check_4_positive_control_180deg,8_BASELINES_S1_S8,seed42_rotated,180,hue_rotation_sensitivity,19.384719,,10.849217,18.010490,3.607424,CLEARS_P95,"Hue +180 deg mean D_pal=19.3847, ratio to p95=3.61x"
+threshold_verdict,detection_threshold,ALL,,30,smallest_angle_clearing_p95,,,,,,RECORDED,Smallest angle that clears floor p95: +30 deg
+final_verdict,instrument_check_verdict,ALL,,180,ratio_180deg_to_p95_ge_1.5,19.384719,,,,3.607424,PASS,PASS requires ratio_180 >= 1.5; observed 3.607
+floor_pair,check_3_floor_distribution,S1,42_vs_777,,within_prompt_baseline_pair,2.595891,1.806116,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,42_vs_1337,,within_prompt_baseline_pair,3.573143,2.046919,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,42_vs_9999,,within_prompt_baseline_pair,2.986598,1.702673,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,42_vs_4242145,,within_prompt_baseline_pair,3.233066,1.627796,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,777_vs_1337,,within_prompt_baseline_pair,4.043007,2.108098,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,777_vs_9999,,within_prompt_baseline_pair,2.900337,0.521294,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,777_vs_4242145,,within_prompt_baseline_pair,3.693472,2.523750,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,1337_vs_9999,,within_prompt_baseline_pair,3.673782,2.203551,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,1337_vs_4242145,,within_prompt_baseline_pair,4.350344,3.508561,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S1,9999_vs_4242145,,within_prompt_baseline_pair,3.167961,2.354138,,,,RECORDED,Baseline pair for prompt S1
+floor_pair,check_3_floor_distribution,S2,42_vs_777,,within_prompt_baseline_pair,3.942423,1.652718,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,42_vs_1337,,within_prompt_baseline_pair,4.150611,2.744969,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,42_vs_9999,,within_prompt_baseline_pair,3.292297,2.335652,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,42_vs_4242145,,within_prompt_baseline_pair,3.517691,2.427911,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,777_vs_1337,,within_prompt_baseline_pair,4.041130,1.667747,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,777_vs_9999,,within_prompt_baseline_pair,4.166062,1.658791,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,777_vs_4242145,,within_prompt_baseline_pair,3.280877,0.908618,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,1337_vs_9999,,within_prompt_baseline_pair,4.057485,2.138726,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,1337_vs_4242145,,within_prompt_baseline_pair,4.377424,1.194863,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S2,9999_vs_4242145,,within_prompt_baseline_pair,3.337412,1.642899,,,,RECORDED,Baseline pair for prompt S2
+floor_pair,check_3_floor_distribution,S3,42_vs_777,,within_prompt_baseline_pair,3.779856,2.485879,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,42_vs_1337,,within_prompt_baseline_pair,5.633328,4.444281,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,42_vs_9999,,within_prompt_baseline_pair,3.824368,1.778665,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,42_vs_4242145,,within_prompt_baseline_pair,4.404108,2.813137,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,777_vs_1337,,within_prompt_baseline_pair,4.514158,3.833800,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,777_vs_9999,,within_prompt_baseline_pair,4.217542,1.281090,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,777_vs_4242145,,within_prompt_baseline_pair,4.848429,1.901106,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,1337_vs_9999,,within_prompt_baseline_pair,4.213262,3.832054,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,1337_vs_4242145,,within_prompt_baseline_pair,4.575991,4.317706,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S3,9999_vs_4242145,,within_prompt_baseline_pair,3.624935,1.453079,,,,RECORDED,Baseline pair for prompt S3
+floor_pair,check_3_floor_distribution,S4,42_vs_777,,within_prompt_baseline_pair,3.145842,1.685240,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,42_vs_1337,,within_prompt_baseline_pair,3.012536,2.274538,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,42_vs_9999,,within_prompt_baseline_pair,5.417362,4.430001,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,42_vs_4242145,,within_prompt_baseline_pair,2.702017,2.597790,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,777_vs_1337,,within_prompt_baseline_pair,3.535028,1.901206,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,777_vs_9999,,within_prompt_baseline_pair,4.912741,4.007463,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,777_vs_4242145,,within_prompt_baseline_pair,2.920045,1.242863,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,1337_vs_9999,,within_prompt_baseline_pair,4.559234,2.945384,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,1337_vs_4242145,,within_prompt_baseline_pair,2.327231,2.259933,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S4,9999_vs_4242145,,within_prompt_baseline_pair,4.919935,3.547855,,,,RECORDED,Baseline pair for prompt S4
+floor_pair,check_3_floor_distribution,S5,42_vs_777,,within_prompt_baseline_pair,4.469218,1.989025,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,42_vs_1337,,within_prompt_baseline_pair,4.685429,2.731704,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,42_vs_9999,,within_prompt_baseline_pair,5.411060,2.265025,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,42_vs_4242145,,within_prompt_baseline_pair,4.489550,1.501870,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,777_vs_1337,,within_prompt_baseline_pair,4.056807,2.322596,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,777_vs_9999,,within_prompt_baseline_pair,5.487072,2.953106,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,777_vs_4242145,,within_prompt_baseline_pair,4.394439,2.265132,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,1337_vs_9999,,within_prompt_baseline_pair,5.371589,3.365275,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,1337_vs_4242145,,within_prompt_baseline_pair,4.389421,3.331944,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S5,9999_vs_4242145,,within_prompt_baseline_pair,3.925787,1.237793,,,,RECORDED,Baseline pair for prompt S5
+floor_pair,check_3_floor_distribution,S6,42_vs_777,,within_prompt_baseline_pair,5.368785,2.986587,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,42_vs_1337,,within_prompt_baseline_pair,4.327277,2.632539,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,42_vs_9999,,within_prompt_baseline_pair,4.183695,2.635953,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,42_vs_4242145,,within_prompt_baseline_pair,5.137801,3.223907,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,777_vs_1337,,within_prompt_baseline_pair,4.883080,2.201402,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,777_vs_9999,,within_prompt_baseline_pair,3.594982,1.661343,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,777_vs_4242145,,within_prompt_baseline_pair,4.600569,2.759285,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,1337_vs_9999,,within_prompt_baseline_pair,5.165337,1.728906,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,1337_vs_4242145,,within_prompt_baseline_pair,4.603256,3.532293,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S6,9999_vs_4242145,,within_prompt_baseline_pair,5.034512,3.116469,,,,RECORDED,Baseline pair for prompt S6
+floor_pair,check_3_floor_distribution,S7,42_vs_777,,within_prompt_baseline_pair,2.666949,1.860684,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,42_vs_1337,,within_prompt_baseline_pair,2.274922,2.719127,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,42_vs_9999,,within_prompt_baseline_pair,2.543896,0.872071,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,42_vs_4242145,,within_prompt_baseline_pair,2.802883,2.764436,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,777_vs_1337,,within_prompt_baseline_pair,2.501802,3.050588,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,777_vs_9999,,within_prompt_baseline_pair,2.497550,1.513967,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,777_vs_4242145,,within_prompt_baseline_pair,1.978508,1.742411,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,1337_vs_9999,,within_prompt_baseline_pair,2.540359,2.737216,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,1337_vs_4242145,,within_prompt_baseline_pair,2.741023,4.598573,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S7,9999_vs_4242145,,within_prompt_baseline_pair,2.746026,2.257625,,,,RECORDED,Baseline pair for prompt S7
+floor_pair,check_3_floor_distribution,S8,42_vs_777,,within_prompt_baseline_pair,2.546410,2.223849,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,42_vs_1337,,within_prompt_baseline_pair,3.284136,3.432889,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,42_vs_9999,,within_prompt_baseline_pair,2.477940,2.305538,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,42_vs_4242145,,within_prompt_baseline_pair,2.857075,2.653340,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,777_vs_1337,,within_prompt_baseline_pair,2.309315,1.751477,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,777_vs_9999,,within_prompt_baseline_pair,2.756498,1.982598,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,777_vs_4242145,,within_prompt_baseline_pair,2.645246,2.086668,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,1337_vs_9999,,within_prompt_baseline_pair,2.266823,1.897622,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,1337_vs_4242145,,within_prompt_baseline_pair,2.490358,2.339198,,,,RECORDED,Baseline pair for prompt S8
+floor_pair,check_3_floor_distribution,S8,9999_vs_4242145,,within_prompt_baseline_pair,1.833431,1.771043,,,,RECORDED,Baseline pair for prompt S8
