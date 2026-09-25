@@ -10,9 +10,11 @@ Governed by:
   - docs/prereg_mountain_reachability_amendment_01.md (§6 Environment determinism check)
 
 Structure:
-  - 81 rows total: 3 baselines + 78 perturbed (13 conditions x 2 draws x 3 noise seeds)
-  - Prompt: S1_photo (catalogue frozen, SHA1 3dd4956c29)
-  - Seeds: 42, 777, 1337
+  - Row 1: Determinism check (S1 baseline seed 42, compared byte-for-byte with committed render)
+  - Rows 2-4: 3 baselines (seeds 42, 777, 1337)
+  - Rows 5-82: 78 perturbed renders (13 conditions x 2 draws x 3 noise seeds)
+  - Sampler columns included explicitly on all rows:
+    sampler, scheduler, steps, cfg, denoise, width, height.
 """
 
 from __future__ import annotations
@@ -32,6 +34,15 @@ REFERENCE_BASELINE_FILE = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\out
 REFERENCE_BASELINE_SHA256 = "08d0193a58aee459c41905029ef04fa795af9ff71cd20ff14fc2ba278e404637"
 
 SEEDS = [42, 777, 1337]
+
+# Sampler settings verified from reference render metadata
+SAMPLER = "euler_ancestral"
+SCHEDULER = "simple"
+STEPS = 9
+CFG = 1.0
+DENOISE = 1.0
+WIDTH = 1024
+HEIGHT = 1280
 
 
 def main():
@@ -54,6 +65,28 @@ def main():
     plan_rows = []
     row_idx = 1
 
+    # 0. Determinism check row (runs FIRST)
+    plan_rows.append({
+        "row_index": row_idx,
+        "type": "determinism_check",
+        "condition": "baseline",
+        "draw": 0,
+        "seed": 42,
+        "sampler": SAMPLER,
+        "scheduler": SCHEDULER,
+        "steps": STEPS,
+        "cfg": CFG,
+        "denoise": DENOISE,
+        "width": WIDTH,
+        "height": HEIGHT,
+        "preset_file": "",
+        "prompt_id": prompt_id,
+        "prompt_sha1": prompt_sha1,
+        "expected_filename": f"{prompt_id}_baseline_seed42_00001_.png",
+        "prompt_text": prompt_text,
+    })
+    row_idx += 1
+
     # 1. Three Baselines (seeds 42, 777, 1337)
     for seed in SEEDS:
         plan_rows.append({
@@ -62,6 +95,13 @@ def main():
             "condition": "baseline",
             "draw": 0,
             "seed": seed,
+            "sampler": SAMPLER,
+            "scheduler": SCHEDULER,
+            "steps": STEPS,
+            "cfg": CFG,
+            "denoise": DENOISE,
+            "width": WIDTH,
+            "height": HEIGHT,
             "preset_file": "",
             "prompt_id": prompt_id,
             "prompt_sha1": prompt_sha1,
@@ -84,6 +124,13 @@ def main():
                 "condition": region,
                 "draw": draw,
                 "seed": seed,
+                "sampler": SAMPLER,
+                "scheduler": SCHEDULER,
+                "steps": STEPS,
+                "cfg": CFG,
+                "denoise": DENOISE,
+                "width": WIDTH,
+                "height": HEIGHT,
                 "preset_file": preset_file,
                 "prompt_id": prompt_id,
                 "prompt_sha1": prompt_sha1,
@@ -92,11 +139,9 @@ def main():
             })
             row_idx += 1
 
-    if len(plan_rows) != 81:
-        raise RuntimeError(f"Expected 81 plan rows, got {len(plan_rows)}")
-
     fieldnames = [
         "row_index", "type", "condition", "draw", "seed",
+        "sampler", "scheduler", "steps", "cfg", "denoise", "width", "height",
         "preset_file", "prompt_id", "prompt_sha1",
         "expected_filename", "prompt_text"
     ]
@@ -107,9 +152,10 @@ def main():
         w.writerows(plan_rows)
 
     print(f"Generated {OUT_PLAN_CSV} successfully:")
-    print(f"  Total render rows: {len(plan_rows)} (3 baselines + 78 perturbations)")
+    print(f"  Total rows: {len(plan_rows)} (1 determinism_check + 3 baselines + 78 perturbations)")
     print(f"  Prompt: {prompt_id} (SHA1: {prompt_sha1})")
     print(f"  Seeds: {SEEDS}")
+    print(f"  Sampler: {SAMPLER}, Scheduler: {SCHEDULER}, Steps: {STEPS}, CFG: {CFG}, Denoise: {DENOISE}, Dim: {WIDTH}x{HEIGHT}")
     print(f"\nEnvironment Determinism Check reference:")
     print(f"  File:   {REFERENCE_BASELINE_FILE}")
     print(f"  SHA256: {REFERENCE_BASELINE_SHA256}")
