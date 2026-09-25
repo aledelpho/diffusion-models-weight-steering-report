@@ -400,6 +400,11 @@ def main() -> None:
                     r_copy = dict(r)
                     r_copy["corpus"] = "stage9"
                     r_copy["status"] = "descriptive"
+                    r_copy["r1_qualification"] = (
+                        "R1 has no statistical test (descriptive fraction threshold without null or p-value). "
+                        "Verdict diverges between corpora: stage 9 fails for all arms, stage 7 passes only for preset_pos, "
+                        "and stage 7 distribution is 0.19-0.33 lower; no claim promoted on R1."
+                    )
                     s9_test_rows.append(r_copy)
 
     # Fallback to computing Stage 9 if files did not exist
@@ -542,6 +547,11 @@ def main() -> None:
                 "verdict_r2": r2_verdict,
                 "verdict_r1": ast["r1_status"],
                 "frac_above_p95_band": round(ast["frac_above_p95"], 4),
+                "r1_qualification": (
+                    "R1 has no statistical test (descriptive fraction threshold without null or p-value). "
+                    "Verdict diverges between corpora: stage 9 fails for all arms, stage 7 passes only for preset_pos, "
+                    "and stage 7 distribution is 0.19-0.33 lower; no claim promoted on R1."
+                ),
             })
 
     # ------------------------------------------------------------------
@@ -736,6 +746,11 @@ def main() -> None:
             "verdict_r2": r2_verdict,
             "verdict_r1": ast["r1_status"],
             "frac_above_p95_band": round(ast["frac_above_p95"], 4),
+            "r1_qualification": (
+                "R1 has no statistical test (descriptive fraction threshold without null or p-value). "
+                "Verdict diverges between corpora: stage 9 fails for all arms, stage 7 passes only for preset_pos, "
+                "and stage 7 distribution is 0.19-0.33 lower; no claim promoted on R1."
+            ),
         })
 
     # ------------------------------------------------------------------
@@ -769,7 +784,8 @@ def main() -> None:
 
     test_fieldnames = [
         "corpus", "status", "arm", "space", "mean_delta", "prompts_negative",
-        "p_sign_flip", "p_floor", "p_holm", "verdict_r2", "verdict_r1", "frac_above_p95_band"
+        "p_sign_flip", "p_floor", "p_holm", "verdict_r2", "verdict_r1", "frac_above_p95_band",
+        "r1_qualification"
     ]
     with out_tests.open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=test_fieldnames)
