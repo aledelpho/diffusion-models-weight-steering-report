@@ -75,3 +75,33 @@ with a known, good score — at double amplitude, on a lineup that contained the
 
 This is the first time it is being used **predictively**, on named presets, at single amplitude,
 before the measurement. Whatever comes out is on the record.
+
+---
+
+## 5. Addendum, same session, extraction at 436 of 649, still no statistic computed
+
+**Prediction G — the observer.** *"Ah, e ci sono due preset uguali, direi. A occhio."*
+
+The pair was **not named** at the time of writing. As it stands the claim is only that **K < 26**,
+which is weak. It becomes a sharp prediction the moment a pair is named, and a named pair will be
+scored on one criterion, fixed here: that pair is **not distinguishable** in the consensus graph
+of `docs/prereg_style_capacity_amendment_01.md` §3, i.e. it is joined by an edge and falls inside
+one component.
+
+Procedure, to keep the test alive: no pair-level number from this corpus is shown to the observer
+until he names the pair. The naming is timestamped in this file when it happens.
+
+**Prediction H — the analyst, sealed at the same moment and for the same scoring.** My own guess,
+written before any distance exists and before the observer names his pair, so that it is
+falsifiable on the same terms: the collapsing pair is **`model_only` and `uniform_all`**.
+
+Reasoning, recorded so the guess cannot be re-explained afterwards: the two conditions differ
+only in whether the CLIP tensors are included — 430 model tensors against 430 + 629. And the CLIP
+side of `Arthemy_Bench_Base.json` carries only **6 distinct values** across its 629 tensors, with
+343 of them at −0.025, against 345 distinct values on the model side. A block of near-constant
+multipliers on the text encoder is the part of the payload most likely to contribute little to
+the rendered image, in which case adding it changes the picture hardly at all.
+
+If H is right, it is also a finding about the instrument and not only about two presets: it would
+say the CLIP half of every preset in this project is close to inert, which bears on
+`cliplult-is-a-dead-arm` and on how the tuner's payload should be described.
