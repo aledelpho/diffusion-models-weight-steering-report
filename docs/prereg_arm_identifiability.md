@@ -33,12 +33,17 @@ better than chance?
 
 ## 2. Corpus and representation — frozen
 
-**Primary: stage 7.** `data/style_features_stage7.csv`: 24 prompts x 5 seeds x
-(baseline + 6 arms), perfectly balanced. 720 edited cells, 6 classes.
+**Primary: stage 7.** `data/style_features_stage7.csv` holds 24 prompts, of which **16**
+carry `baseline` plus all six arms (`preset_pos`, `preset_neg`, `blockshuf_pos`,
+`blockshuf_neg`, `rand_pos`, `rand_neg`) at 5 seeds each. The other 8 are baseline-only and
+are excluded. **16 prompts x 5 seeds x 6 arms = 480 edited cells, 6 classes.**
 
-**Secondary: stage 9.** Different prompts and a different arm set, including the `_1x` /
-`_2x` doses. Reported separately. **The two corpora are never pooled into one fit** — their
-arms are not the same objects.
+**Secondary: stage 9.** Only the eight style prompts `S1`–`S8` carry `baseline` plus the six
+arms used by every other stage-9 study (`preset_pos_1x`, `preset_pos_2x`,
+`blockshuf_neg_1x`, `blockshuf_neg_2x`, `rand_pos_1x`, `rand_pos_2x`): **8 x 5 x 6 = 240
+edited cells**. `chaos_edges_v2` exists on four I-prompts only and is **excluded** — no
+prompt in stage 9 carries all seven arms. Reported separately. **The two corpora are never
+pooled into one fit** — their arms are not the same objects.
 
 Representation, per edited cell:
 
@@ -65,19 +70,19 @@ and cannot support a claim.
 
 ## 4. Validation — leave one prompt out
 
-24 folds. Each fold fits on the cells of 23 prompts and predicts the 30 held-out cells
-(5 seeds x 6 arms) of the remaining prompt.
+**16 folds** on stage 7 (8 on stage 9). Each fold fits on the cells of the other prompts
+and predicts the 30 held-out cells (5 seeds x 6 arms) of the remaining prompt.
 
 **Random cross-validation is forbidden.** It would leave cells of the same prompt on both
 sides of the split and inflate accuracy by leaking the scene. The claim is about
 generalising to a new scene, so the fold must be a scene.
 
-Statistic: overall accuracy over all 720 held-out predictions. Reported alongside the
+Statistic: overall accuracy over all 480 held-out predictions (240 on stage 9). Reported alongside the
 6 x 6 confusion matrix and per-arm recall.
 
 ## 5. The null — permutation, never a binomial test
 
-The 720 predictions are **not independent**: five share a prompt and a seed, thirty share a
+The 480 predictions are **not independent**: six share a prompt and a seed, thirty share a
 prompt. A binomial test against `1/6` would be wrong and must not appear anywhere.
 
 The null permutes the **arm labels within each (prompt, seed) group** — the six cells of a

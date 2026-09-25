@@ -1,0 +1,9 @@
+corpus,classifier,contrast,n_classes,n_prompts,n_cells,observed_accuracy,chance_accuracy,null_mean,null_p95,p_perm,p_floor,p_holm,max_arm_ratio,is_carried_by_one_arm,max_fold_share,is_fragile,verdict,details
+stage7,nearest_centroid,6_class,6,16,480,0.7083,0.1667,0.1666,0.2,0.0,0.001,0.0,1.39,False,0.0885,False,identifiable,Accuracy 0.7083 exceeds null p95 0.2000 at p_holm=0.0000; arm signature is decodable (§7)
+stage7,nearest_centroid,2_class,2,16,160,0.9688,0.5,0.4993,0.6062,0.0,0.001,0.0,1.04,False,0.0667,False,identifiable,Accuracy 0.9688 exceeds null p95 0.6062 at p_holm=0.0000; arm signature is decodable (§7)
+stage7,logistic_regression,6_class,6,16,480,0.8854,0.1667,0.167,0.1958,0.0,0.001,0.0,1.11,False,0.0725,False,identifiable,Accuracy 0.8854 exceeds null p95 0.1958 at p_holm=0.0000; arm signature is decodable (§7)
+stage7,logistic_regression,2_class,2,16,160,0.9938,0.5,0.4988,0.575,0.0,0.001,0.0,1.01,False,0.0633,False,identifiable,Accuracy 0.9938 exceeds null p95 0.5750 at p_holm=0.0000; arm signature is decodable (§7)
+stage9,nearest_centroid,6_class,6,8,240,0.4667,0.1667,0.1651,0.2042,0.0,0.001,0.0,1.29,False,0.1944,False,identifiable,Accuracy 0.4667 exceeds null p95 0.2042 at p_holm=0.0000; arm signature is decodable (§7)
+stage9,nearest_centroid,2_class,2,8,80,0.8125,0.5,0.4987,0.6119,0.0,0.001,0.0,1.1,False,0.2,False,identifiable,Accuracy 0.8125 exceeds null p95 0.6119 at p_holm=0.0000; arm signature is decodable (§7)
+stage9,logistic_regression,6_class,6,8,240,0.6917,0.1667,0.1676,0.2083,0.0,0.001,0.0,1.24,False,0.1508,False,identifiable,Accuracy 0.6917 exceeds null p95 0.2083 at p_holm=0.0000; arm signature is decodable (§7)
+stage9,logistic_regression,2_class,2,8,80,0.925,0.5,0.4976,0.6,0.0,0.001,0.0,1.0,False,0.1471,False,identifiable,Accuracy 0.9250 exceeds null p95 0.6000 at p_holm=0.0000; arm signature is decodable (§7)
