@@ -93,6 +93,17 @@ def load(cols):
         if miss:
             die(f"preset {p} is missing {len(miss)} (prompt, seed) cells")
     D = np.stack([[pert[p][(q, s)] - base[q][s] for (q, s) in cells] for p in presets])
+
+    # Validity exclusion, docs/prereg_style_capacity_amendment_02.md section 3: a preset whose
+    # displacement is exactly zero in every feature on every cell did not happen. Mechanical
+    # criterion, no discretion. Set ATLAS_KEEP_INERT=1 to reproduce the 26-preset run.
+    inert = [i for i in range(len(presets)) if not np.any(D[i])]
+    if inert and os.environ.get("ATLAS_KEEP_INERT") != "1":
+        print(f"  excluded as inert (exact zero displacement everywhere): "
+              f"{[presets[i] for i in inert]}")
+        keep = [i for i in range(len(presets)) if i not in inert]
+        presets = [presets[i] for i in keep]
+        D = D[keep]
     return presets, prompts, seeds, cells, D          # D: (P, Q*S, F)
 
 
