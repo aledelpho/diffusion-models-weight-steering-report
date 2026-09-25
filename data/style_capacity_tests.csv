@@ -1,0 +1,6 @@
+representation,geometry,n_presets,n_prompts,K_common,K_median,K_pooled,K_per_prompt,consensus_pairs_distinguishable,tau_mean,tau_pooled,pairs_above_tau_median,region_contrast_R,region_perm_p,spearman_median,lopo_accuracy,lopo_chance,lopo_max_recall,lopo_min_recall,lopo_perm_p
+features_23,euclidean,26,8,1,2.0,5,1 2 2 1 2 1 2 2,28,35.580189,10.499435,34.0,0.832518,0.158684,0.937756,,,,,
+features_23,cosine,26,8,1,1.0,1,1 1 1 1 1 1 1 1,0,1.841703,1.576935,0.0,-0.018492,0.615538,-0.226744,,,,,
+features_23,lopo_identification,26,8,,,,,,,,,,,,0.237179,0.038462,0.958333,0.0,0.000999
+features_19_texture,euclidean,26,8,2,2.0,5,1 2 2 1 2 1 2 2,25,34.833462,10.287501,25.5,0.965158,0.121088,0.929891,,,,,
+features_19_texture,cosine,26,8,1,1.0,1,1 1 1 1 1 1 1 1,0,1.879261,1.738824,0.0,-0.00069,0.49985,-0.228796,,,,,

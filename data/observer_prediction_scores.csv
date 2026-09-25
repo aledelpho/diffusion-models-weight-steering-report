@@ -1,0 +1,9 @@
+prompt,seen_by_observer,hit_A,hit_B,hit_C,hit_D,A_out_of_range,A_norm_upper_half,B_out_of_range,B_cos_below_median,C_colorfulness_up,C_contrast_up,C_colorfulness_top5,D_hf_up,D_hf_top8,D_closer_to_B_than_A
+S1_photo,1,1,0,1,0,1,1,1,0,1,1,1,0,0,1
+S2_watercolor,0,1,0,0,1,1,1,1,0,1,0,1,1,1,1
+S3_lowpoly,0,1,0,0,1,1,1,1,0,1,0,1,1,1,1
+S4_claymation,0,1,0,0,0,1,1,1,0,1,0,1,0,0,1
+S5_ukiyoe,0,1,0,1,0,1,1,1,0,1,1,1,1,0,1
+S6_pixel,0,1,0,0,0,1,1,1,0,1,0,1,0,0,1
+S7_glass,0,0,0,1,0,0,1,1,0,1,1,1,1,0,1
+S8_charcoal,0,1,0,0,0,1,1,1,0,0,1,0,0,0,1
