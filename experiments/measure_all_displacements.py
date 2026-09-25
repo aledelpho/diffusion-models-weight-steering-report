@@ -64,6 +64,21 @@ def dn(patches, norms):
     return math.sqrt(tot_sq)
 
 def main():
+    # Optional, additive: --all measures every preset in presets/ instead of the frozen list,
+    # and --out writes elsewhere. With no argument the behaviour is bit-identical to before,
+    # so data/preset_displacements.csv cannot change unless it is asked to.
+    import argparse
+    import glob as _glob
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--all", action="store_true",
+                    help="measure every presets/*.json, not only the frozen TARGET_PRESETS list")
+    ap.add_argument("--out", type=str, default=None, help="output CSV path")
+    args = ap.parse_args()
+    targets = TARGET_PRESETS
+    if args.all:
+        targets = sorted(os.path.splitext(os.path.basename(f))[0]
+                         for f in _glob.glob(os.path.join(PRESET_DIR, "*.json")))
+        print(f"[--all] {len(targets)} preset trovati in {PRESET_DIR}")
     print("=== MISURA DEI DISPLACEMENT DI TUTTI I PRESET (Norme Frobenius) ===")
     m_path = find_model(MODEL_FILE)
     c_path = find_model(CLIP_FILE)
@@ -80,7 +95,7 @@ def main():
 
     rows = []
     print("\nMisura dei preset...")
-    for p_name in TARGET_PRESETS:
+    for p_name in targets:
         p_path = os.path.join(PRESET_DIR, p_name + ".json")
         if not os.path.exists(p_path):
             print(f"  [MISSING] {p_name}.json")
@@ -111,7 +126,7 @@ def main():
             "status": "PASS"
         })
 
-    out_csv = os.path.join(REPORT_ROOT, "data", "preset_displacements.csv")
+    out_csv = args.out or os.path.join(REPORT_ROOT, "data", "preset_displacements.csv")
     fieldnames = ["preset_name", "delta_w_model_abs", "d_model_relative", "model_base_total_norm",
                   "delta_w_clip_abs", "d_clip_relative", "clip_base_total_norm", "status"]
     with open(out_csv, "w", newline="", encoding="utf-8") as f:
