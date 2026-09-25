@@ -490,6 +490,107 @@ def main() -> None:
         if args.check_only:
             sys.exit(0)
 
+        # Stage 7 Track A: load 480 edited renders from stage7b_images.csv
+        stage7b_csv = DATA / "stage7b_images.csv"
+        if not stage7b_csv.exists():
+            sys.exit(f"stage7b_images.csv missing: {stage7b_csv}")
+        with stage7b_csv.open(encoding="utf-8-sig") as fh:
+            rows_7b = list(csv.DictReader(fh))
+
+        stage7_arms = ["preset_pos", "preset_neg", "blockshuf_pos", "blockshuf_neg", "rand_pos", "rand_neg"]
+        stage7_prompts = [
+            "I01", "I02", "I05", "I06", "I07", "I09", "I10", "I11",
+            "I12", "I16", "I17", "I18", "I20", "I21", "I23", "I24"
+        ]
+
+        renders_7 = {}
+        # Include baselines in renders_7
+        for k, b_info in baseline_renders.items():
+            renders_7[("baseline", b_info["prompt"], b_info["seed"])] = b_info
+
+        missing_7 = []
+        for r in rows_7b:
+            p = r.get("prompt_id") or ""
+            if p not in stage7_prompts:
+                continue
+            arm = r.get("cond_name") or r.get("arm")
+            if arm not in stage7_arms:
+                continue
+            seed = int(r["seed"])
+            rel = r.get("image_path") or ""
+            fn = os.path.basename(rel)
+            p_disk = find_on_disk(rel, "benchmark_stage7")
+            if not p_disk:
+                missing_7.append(fn)
+                continue
+            renders_7[(arm, p, seed)] = {
+                "arm": arm,
+                "prompt": p,
+                "seed": seed,
+                "file": fn,
+                "path": p_disk,
+            }
+
+        if missing_7:
+            sys.exit(f"FATAL: Missing {len(missing_7)} stage 7 edited renders: {missing_7[:5]}")
+
+        expected_total = 120 + 480  # 120 baselines + 480 edited
+        if len(renders_7) != expected_total:
+            sys.exit(f"FATAL: Expected {expected_total} stage 7 renders, found {len(renders_7)}")
+
+        print(f"\nExtracting Track A CIELAB positions for {len(renders_7)} stage 7 renders...")
+        track_a_cols = ["mean_L", "mean_a", "mean_b", "std_L", "std_a", "std_b", "corr_La", "corr_Lb", "corr_ab"]
+
+        for i, (key, info) in enumerate(sorted(renders_7.items())):
+            im = Image.open(info["path"]).convert("RGB")
+            info["v9"] = extract_track_a(im)
+            if (i + 1) % 100 == 0:
+                print(f"  [{i+1}/{len(renders_7)}] renders extracted...")
+
+        # Standardise on stage-7 baselines only
+        baselines_info_7 = [info for (arm, p, s), info in renders_7.items() if arm == "baseline"]
+        mu_7 = [statistics.fmean(b["v9"][j] for b in baselines_info_7) for j in range(9)]
+        sd_7 = [statistics.stdev(b["v9"][j] for b in baselines_info_7) for j in range(9)]
+        for j, s in enumerate(sd_7):
+            if s == 0:
+                sys.exit(f"Stage 7 Track A feature {track_a_cols[j]} has 0 standard deviation across baselines")
+
+        def z_A7(v: list[float]) -> list[float]:
+            return [(v[j] - mu_7[j]) / sd_7[j] for j in range(9)]
+
+        for info in renders_7.values():
+            info["z9"] = z_A7(info["v9"])
+
+        delta_rows_7 = []
+        base_map_7 = {(info["prompt"], info["seed"]): info for info in baselines_info_7}
+
+        for (arm, p, s), info in sorted(renders_7.items()):
+            if arm == "baseline":
+                continue
+            base_pair = base_map_7[(p, s)]
+            delta_vec = [x - y for x, y in zip(info["z9"], base_pair["z9"])]
+            delta_norm = math.sqrt(sum(x * x for x in delta_vec))
+
+            r_dict = {
+                "file": info["file"],
+                "arm": arm,
+                "prompt": p,
+                "seed": s,
+                "delta_norm": round(delta_norm, 6),
+            }
+            for j, col in enumerate(track_a_cols):
+                r_dict[f"delta_{col}"] = round(delta_vec[j], 6)
+            delta_rows_7.append(r_dict)
+
+        out_pos_7 = Path(args.out_pos) if args.out_pos != str(DATA / "palette_position.csv") else DATA / "palette_position_stage7.csv"
+        out_pos_7.parent.mkdir(parents=True, exist_ok=True)
+        with out_pos_7.open("w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=list(delta_rows_7[0].keys()))
+            w.writeheader()
+            w.writerows(delta_rows_7)
+        print(f"wrote {out_pos_7} ({len(delta_rows_7)} cells)")
+        sys.exit(0)
+
     # Locate the 280 renders in stage9_images.csv
     out_check_path = Path(args.out_check) if args.out_check else DATA / "palette_instrument_check.csv"
     stage9_csv = DATA / "stage9_images.csv"
