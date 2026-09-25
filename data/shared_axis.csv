@@ -1,0 +1,13 @@
+arm,axis_definition,share,S,S_strip,null_mean,null_p95,null_mean_stripped,null_p95_stripped,verdict,n_cells,n_prompts
+preset_pos_1x,stage7,0.201365,0.598521,0.621053,-0.003525,0.436657,-0.002737,0.460218,keeps a direction of its own,40,8
+preset_pos_1x,leave_one_out,0.262659,0.598521,0.633030,-0.003525,0.436657,-0.006043,0.457865,keeps a direction of its own,40,8
+preset_pos_2x,stage7,0.139225,0.715856,0.727098,-0.003525,0.436657,-0.002737,0.460218,keeps a direction of its own,40,8
+preset_pos_2x,leave_one_out,0.258578,0.715856,0.745765,-0.003525,0.436657,-0.006781,0.436743,keeps a direction of its own,40,8
+blockshuf_neg_1x,stage7,0.242479,0.606911,0.650758,-0.003525,0.436657,-0.002737,0.460218,keeps a direction of its own,40,8
+blockshuf_neg_1x,leave_one_out,0.205247,0.606911,0.583013,-0.003525,0.436657,-0.002581,0.439444,keeps a direction of its own,40,8
+blockshuf_neg_2x,stage7,0.232944,0.665822,0.661815,-0.003525,0.436657,-0.002737,0.460218,keeps a direction of its own,40,8
+blockshuf_neg_2x,leave_one_out,0.196870,0.665822,0.678106,-0.003525,0.436657,0.004818,0.434192,keeps a direction of its own,40,8
+rand_pos_1x,stage7,0.256194,0.539292,0.609330,-0.003525,0.436657,-0.002737,0.460218,keeps a direction of its own,40,8
+rand_pos_1x,leave_one_out,0.210572,0.539292,0.567686,-0.003525,0.436657,-0.006614,0.458813,keeps a direction of its own,40,8
+rand_pos_2x,stage7,0.185042,0.655320,0.654034,-0.003525,0.436657,-0.002737,0.460218,keeps a direction of its own,40,8
+rand_pos_2x,leave_one_out,0.321262,0.655320,0.543098,-0.003525,0.436657,-0.006301,0.457553,keeps a direction of its own,40,8
