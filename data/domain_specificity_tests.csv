@@ -1,0 +1,13 @@
+standardisation,representation,arm,n_prompts,W_B,W_C,W,X,D,delta_vs_rand,perm_p,holm_p,rel_B,rel_C,n_pairs_BB,n_pairs_CC,n_pairs_BC,verdict_primary
+std_24_prompts,features_23,preset_pos,24,0.403634,0.296223,0.383313,0.04964,0.333673,0.261028,0.00075,0.0015,0.727752,0.787773,120,28,128,holds_provisionally_not_specific_to_calibration
+std_24_prompts,features_23,rand_pos,24,0.297803,0.140259,0.267997,0.195352,0.072645,,,,0.66545,0.651598,120,28,128,holds_provisionally_not_specific_to_calibration
+std_24_prompts,features_23,blockshuf_neg,24,0.416638,0.261617,0.38731,0.102367,0.284943,0.212298,0.0013,0.0015,0.681521,0.867568,120,28,128,holds_provisionally_not_specific_to_calibration
+std_24_prompts,features_19_texture,preset_pos,24,0.466361,0.271975,0.429585,0.032655,0.396931,0.311383,0.0003,0.0006,0.782847,0.776632,120,28,128,cross_check
+std_24_prompts,features_19_texture,rand_pos,24,0.330003,0.154436,0.296788,0.211241,0.085547,,,,0.712686,0.710178,120,28,128,cross_check
+std_24_prompts,features_19_texture,blockshuf_neg,24,0.475537,0.282898,0.439092,0.106778,0.332314,0.246767,0.00085,0.00085,0.689266,0.907034,120,28,128,cross_check
+std_48_prompts,features_23,preset_pos,24,0.492043,0.244162,0.445147,0.077154,0.367993,0.275442,0.0002,0.0004,0.755106,0.768215,120,28,128,cross_check
+std_48_prompts,features_23,rand_pos,24,0.382302,0.230366,0.353557,0.261006,0.092551,,,,0.713547,0.674695,120,28,128,cross_check
+std_48_prompts,features_23,blockshuf_neg,24,0.407177,0.297666,0.386459,0.104207,0.282252,0.189701,0.002,0.002,0.673208,0.889076,120,28,128,cross_check
+std_48_prompts,features_19_texture,preset_pos,24,0.524713,0.220132,0.46709,0.069424,0.397666,0.297415,0.0001,0.0002,0.779836,0.76449,120,28,128,cross_check
+std_48_prompts,features_19_texture,rand_pos,24,0.401475,0.234538,0.369892,0.269641,0.100251,,,,0.736493,0.692184,120,28,128,cross_check
+std_48_prompts,features_19_texture,blockshuf_neg,24,0.425949,0.299028,0.401937,0.094141,0.307795,0.207544,0.00185,0.00185,0.674781,0.900355,120,28,128,cross_check
