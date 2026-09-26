@@ -123,3 +123,75 @@ three reasons that belong in any write-up:
    perturbation, with no appeal to function at all. Until `position-function-or-proximity` is closed,
    the cross-architecture agreement may be an agreement about **depth in a stack** rather than about
    style. Which is why this experiment, and not another depth sweep, is the one to run.
+
+---
+
+## 7. Execution — the operational part
+
+**Standing constraints.** No render outside this plan. Nothing written under `notebook/`.
+`python experiments/validate_notebook.py` at 0 errors before every commit. Commit messages in
+Italian, small and descriptive. **Do not push.** Do not change the status of any published claim.
+Do not shut anything down.
+
+### Step 1 — build the 18 presets
+
+In ComfyUI, with **`ArthemyKrea2ModelBlockSurgeonTuner`** (Tier 2, deterministic — *not* the Chaos
+node). For each condition: set `target_block`, set the gain of the one component group involved,
+leave every other component at 0, then save with the Preset Saver.
+
+One gain magnitude for all 18, the node's own default, positive or negative according to the arm.
+
+Naming, exactly:
+
+    Arthemy_QKVO_<component>_<band>_<sign>.json
+
+with `<component>` ∈ {`wq`, `wk`, `wv`, `wo`}, `<band>` ∈ {`b1`, `b6`} for `Block_1 (All 0-4)` and
+the last band as the widget lists it, `<sign>` ∈ {`pos`, `neg`}. The two control presets:
+
+    Arthemy_QKVO_normscales_all_pos.json
+    Arthemy_QKVO_normscales_all_neg.json
+
+**Record, for every one of the 18, the info line the Preset Loader prints** — the
+`Model: N scalar layers` count. That single line is what caught the dead arm; a component that
+reports 0 matched layers must be reported and not silently rendered.
+
+Then, once:
+
+    python experiments/measure_all_displacements.py --all --out data/preset_displacements_qkvo.csv
+
+Commit the 18 presets and that CSV. **Stop and report before Step 2** if any preset reports a layer
+count of 0, or if the two control presets do not match the 84-layer count of
+`Arthemy_Atlas_modulation_norm_draw1` minus its 28 `mod.lin` entries (i.e. 56).
+
+### Step 2 — the render plan and the queue
+
+Write `data/qkvo_atlas_plan.csv` with a script modelled on
+`experiments/make_atlas_phase1_plan.py`, same columns, same discipline: one row per render,
+explicit sampler columns, a `determinism_check` row in the head, and `expected_filename` computed
+rather than typed.
+
+    18 presets × 8 prompts (S1_photo … S8_charcoal) × 3 seeds (42, 777, 1337) = 432 rows
+    + 1 determinism_check row
+
+The **8 baselines are not re-rendered**: they exist in
+`benchmark_atlas_phase1/renders` and the environment is byte-deterministic across a week
+(`data/perturbation_atlas_draw_check.csv`, gate `gate_environment_determinism`). The determinism
+check row re-renders `S1_photo` baseline at seed 42 and must come back at **zero pixel difference**
+before the queue proceeds. If it does not, stop: the environment has drifted and nothing may be
+pooled with the existing corpus.
+
+Queue with a copy of `experiments/queue_atlas_phase1.py`, changing only `OUTPUT_DIR_NAME` to
+`benchmark_qkvo_atlas/renders`. Commit the plan CSV before launching.
+
+### Step 3 — report back
+
+Feature extraction and the analysis are not this run's job. Report:
+
+1. the 18 layer counts from the Preset Loader, verbatim;
+2. the measured displacement of each preset from `data/preset_displacements_qkvo.csv`;
+3. the determinism check result;
+4. how many of the 432 renders completed, and the exact filenames of any that did not;
+5. anything that did not go as this document says, however small.
+
+Do not extract features, do not compute a cosine, do not interpret. The statistics of §3 and the
+decision rules of §4 were frozen before the renders and will be run separately, against them.
