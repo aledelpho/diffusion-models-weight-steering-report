@@ -115,3 +115,32 @@ tail, P4 fails for a reason that is about the grouping and not about the model.
 * It produces no new renders and requests none.
 * `c` and `m` are images and will be written out as viewable maps. Any statement made from **looking**
   at them is descriptive and labelled as such, never as a result.
+
+---
+
+## Amendment 01 — the same decomposition on the q/k/v/o corpus
+
+**Deposited**: 2026-09-26, after the `benchmark_mappa` result and after the trait-opposition result
+of `observer_prediction_sign_opposition.md`, **before** the statistic below was computed.
+
+The trait-level test just run on `benchmark_qkvo_atlas` found opposition rates of **0.07–0.12** for
+`wq` / `wk` and **0.54–0.76** for `wv` / `wo`: the routing path does not reverse with the sign, the
+value path does. That is the same ordering as the feature-space cosines in `qkvo_analyze.py`, by a
+different statistic, and it now has a pixel-level prediction attached.
+
+The q/k/v/o corpus admits the identical decomposition, because its `normscales_all` control has
+exactly zero displacement and is therefore a baseline render. 8 cells × 8 scenes × 3 seeds = **192
+pairs**, no new renders.
+
+**Frozen prediction A1-P1**: `F` (the sign-blind share of the pixel change) is **higher for `wq` and
+`wk` than for `wv` and `wo`**, in both bands, with a gap in the means of **> 0.15**.
+Falsified if the gap is < 0 (ordering reversed) or if the four projections fall within 0.05 of each
+other. Between the two: grey.
+
+**Frozen prediction A1-P2**: `F` for the q/k/v/o cells is **lower** than the 0.673 found for whole
+block groups on `benchmark_mappa`, in at least 6 of the 8 cells, because a single projection injects
+less broadband noise than all ten tensor types of a block group. Falsified if fewer than 3 of 8.
+
+These two predictions are the reason the pixel run on this corpus is worth doing rather than
+assumed: if `F` orders the projections the same way the traits do, the q/k vs v/o split has been
+found by three statistics on two representations, and stops being a post-hoc reading.
