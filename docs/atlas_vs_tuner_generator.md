@@ -63,26 +63,51 @@ rediscovered it from pixels, independently, six months of commits later.
 
 Two things follow, and the second is worse.
 
-**(a) The comment's factual claim is contradicted by the checkpoint.** It says Krea-2 has no
-`mod.lin` tensor. `docs/model_structures/krea2_turbo_bf16_details.json` lists
-`blocks.0.mod.lin` … `blocks.27.mod.lin` as real keys, alongside `blocks.N.prenorm.scale` and
-`blocks.N.postnorm.scale`. Whatever makes them inert, it is not their absence from the file. The
-loader resolves keys by exact match and these match; `is_bookkeeping_sd_key` tests for `_scale`,
-not `.scale`, so it does not catch them either. **The mechanism is still unexplained from the
-source.**
+**(a) The comment's factual claim is wrong, and so is its diagnosis.** It says Krea-2 has no
+`mod.lin` tensor and that "the widget matched nothing".
+`docs/model_structures/krea2_turbo_bf16_details.json` lists `blocks.0.mod.lin` …
+`blocks.27.mod.lin` as real keys, alongside `blocks.N.prenorm.scale` and
+`blocks.N.postnorm.scale`. And the Preset Loader, run on 2026-09-26, reports:
 
-**(b) `NORMS_block_scales` is still in the map and still in the UI.** It points at
-`("prenorm.scale", "postnorm.scale")` — the other 56 tensors of `modulation_norm`. If the whole
-region is inert, those 56 are inert too, and the node still offers a user a control that does
-nothing. That is a live defect in the product, not an artefact of this experiment.
+> `Loaded Preset 'Arthemy_Atlas_modulation_norm_draw1' | Model: 84 scalar layers, 0 granular
+> layers (x1.00) | CLIP: 0 scalar layers (x1.00)`
 
-**The decisive check is one node execution**, and the node already prints the number: load
-`presets/Arthemy_Atlas_modulation_norm_draw1.json` in the Preset Loader and read the info line.
-The loader counts `n_model_matched` against `n_model_unmatched` and reports both. If matched is 84
-the tensors are moved and the forward pass ignores them; if it is 0, or 28, the apply path is
-dropping them and the displacement of **every preset in this project that touches a `.scale`
-tensor is lower than its calibration says** — including the four `*_attn` regions, where 14 of 49
-tensors are `qknorm` scales.
+**84 of 84 matched.** Nothing was unmatched, nothing was skipped. The widget did not "match
+nothing"; it matched everything and changed no pixel. The removal was done for the right symptom
+with the wrong explanation, and that comment should not be trusted as a statement about the
+checkpoint.
+
+**(b) The scare about the displacement accounting is dead, and this is the important part.**
+If the keys had failed to resolve, every preset in this project touching a `.scale` tensor would
+have carried less displacement than its calibration claims — including the four `*_attn` regions,
+where 14 of 49 tensors are `qknorm` scales. They resolve. **The Frobenius matching of the whole
+project stands.** No published displacement is affected.
+
+**(c) What is left is a statement about the model, not about the tool.** Eighty-four parameters —
+`mod.lin`, `prenorm.scale`, `postnorm.scale`, across all 28 blocks — were rescaled by a
+multiplier of `model_alpha = 0.9365`, at the same Frobenius displacement as every other atlas
+condition, and the render is **byte-identical** to the baseline on all eight prompts. Not small:
+zero.
+
+Two mechanisms remain, and they are distinguishable by one more node execution:
+
+1. **The forward pass does not read them.** Many DiT implementations use a non-affine norm and take
+   the whole scale from the modulation path, which would leave `prenorm.scale` in the checkpoint as
+   an unused parameter. Under this branch the 84 weights really move and the model ignores them.
+2. **ComfyUI never materialises the patch for a parameter not named `.weight`.** The patch is
+   registered by `add_patches` — hence the count of 84 — but `calculate_weight` is only ever
+   applied to the tensors the patcher walks, and a `.scale` parameter may never be walked.
+
+**The check:** bake the patched model with the tuner's own Saver, which "materializes every patched
+weight" and reports `n_patched`, then compare the baked `blocks.0.prenorm.scale` against the
+original checkpoint. **Different → branch 1**, the weights moved and the architecture is insensitive
+to them, and that belongs in the sensitivity map as a genuine finding: *these 84 parameters are
+inert to rescaling, which makes them the safest thing in the model to touch and the most useless.*
+**Identical → branch 2**, and it is a ComfyUI-level limitation on which parameters a scalar patch
+can reach, which the tuner should detect and refuse rather than report as 84 patched layers.
+
+**Either way `NORMS_block_scales` is still exposed in the node's UI and does nothing.** That part
+does not depend on the mechanism.
 
 ## 5. What the next atlas should be
 
