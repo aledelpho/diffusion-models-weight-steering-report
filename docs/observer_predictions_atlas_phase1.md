@@ -105,3 +105,51 @@ the rendered image, in which case adding it changes the picture hardly at all.
 If H is right, it is also a finding about the instrument and not only about two presets: it would
 say the CLIP half of every preset in this project is close to inert, which bears on
 `cliplult-is-a-dead-arm` and on how the tuner's payload should be described.
+
+---
+
+## 6. Correction, 2026-09-26 — statement B was operationalised as the wrong claim
+
+The observer has said what he meant by *"rotto in un modo diverso dal precedente"*. It was **not**
+a claim about the direction of the displacement vector in feature space. It was a question about
+how the two presets are **built**: whether A and B touch blocks this project has identified as the
+most sensitive, and whether they push them in one direction or the opposite.
+
+§2 of this document scored B as `B_cos_below_median`, the cosine between Δ_A and Δ_B against the
+median of the 325 pairs. **That criterion does not encode his statement.** The 0 of 8 it returned
+is a fact about the analyst's operationalisation, not about the observer's claim. The frozen score
+stands as the record of what was frozen; the attribution is corrected here.
+
+Read as the observer meant it, from the preset files themselves:
+
+| | A = `early_attn_draw2` | B = `late_mlp_draw2` |
+|---|---|---|
+| blocks touched | **0–6** | **21–27** |
+| tensors | 49 attention | 21 mlp |
+| signs | 26 positive, 23 negative | 13 positive, 8 negative |
+| mean patch value | **−0.01799** | **+0.04307** |
+
+The two presets act on **opposite ends of the network**, and those two ends are precisely where
+this project has measured opposite behaviour: `first-block-is-an-inverted-knob` (the first block
+runs the other way to the tail) and `tail-is-rectified` (on the last blocks the negative direction
+is the safe side, amplitude ratio 9.1× on block 26). A is net negative at the input end; B is net
+positive on the tail, which is the side page 05 records as the destructive one.
+
+His third statement is confirmed by the same reading: D = `late_attn_draw1` touches blocks **21–27**
+with mean **+0.05220** — the same block range as B and the same net sign. That is why D resembles B
+rather than A, and it is the one item where the structural reading and the analyst's cosine
+criterion agree: `D_closer_to_B_than_A` scored **8 of 8**.
+
+**One caution against over-reading the sign.** The atlas draws are near-balanced sign patterns
+(26/23, 13/8, 29/20) and the per-preset mean is dominated by a few large values against a spread of
+±0.4 to ±0.6. Within A alone the per-block means run from **+0.159** (block 2) to **−0.154**
+(block 6). The **block range** is a categorical, certain distinction; the **net sign** is a thin
+summary and should not be read as "this preset pushes the region in one direction".
+
+**And the design limitation this exposes.** The atlas has **no signed arms**: it is 13 regions × 2
+*random* draws, never a region × (+, −) pair. So the question "in one direction or the opposite"
+cannot be answered by this corpus by construction — the original six arms had signs
+(`preset_pos/neg`, `blockshuf_pos/neg`, `rand_pos/neg`) but they were global, and the atlas traded
+signs for localisation. A region × sign atlas would be 13 × 2 = 26 presets, the same budget as the
+one just rendered, and it would answer the observer's question directly. This belongs in the
+specification of the next atlas.
