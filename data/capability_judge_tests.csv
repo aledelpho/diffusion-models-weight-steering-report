@@ -1,0 +1,2 @@
+judge_model,verdict,Q1_retest,Q1_n_retest,Q1_polarity_discarded,Q1_n_items,Q1_yes_share,Q2_retest,Q2_n_retest,Q2_polarity_discarded,Q2_n_items,Q2_yes_share
+qwen3.8:27b,"judge_unusable: Q1 yes-share 0.960 outside [0.05, 0.95]; Q2 yes-share 1.000 outside [0.05, 0.95]",1.0,30,0.135,173,0.959538,1.0,30,0.0,200,1
