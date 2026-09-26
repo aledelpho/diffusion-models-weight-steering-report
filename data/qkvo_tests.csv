@@ -1,0 +1,27 @@
+quantity,value,note
+A_proj,0.357195,"4 pairs, same projection across bands"
+A_band,0.305664,"12 pairs, different projections same band"
+G,0.051531,"A_proj - A_band, primary"
+p_two_sided_exact,0.7738095238095238,40320 permutations enumerated
+null_mean,0.0,
+null_sd,0.168274,
+verdict,neither_inside_the_null,docs/RUNBOOK_qkvo_atlas_plan.md section 4
+control_delta_norm_mean,0.0,normscales negative control
+control_exactly_zero,True,
+live_delta_norm_mean,5.312466,
+antisymmetry_wq_b1,0.406761,"cos(+,-)"
+antisymmetry_wq_b6,0.449768,"cos(+,-)"
+antisymmetry_wk_b1,0.373129,"cos(+,-)"
+antisymmetry_wk_b6,0.538504,"cos(+,-)"
+antisymmetry_wv_b1,-0.428136,"cos(+,-)"
+antisymmetry_wv_b6,-0.864835,"cos(+,-)"
+antisymmetry_wo_b1,-0.481027,"cos(+,-)"
+antisymmetry_wo_b6,-0.860313,"cos(+,-)"
+distinctiveness_wq_b1,5.428855,most distinct in b1: wv
+distinctiveness_wk_b1,5.277717,most distinct in b1: wv
+distinctiveness_wv_b1,5.493439,most distinct in b1: wv
+distinctiveness_wo_b1,5.245164,most distinct in b1: wv
+distinctiveness_wq_b6,7.417211,most distinct in b6: wv
+distinctiveness_wk_b6,7.44393,most distinct in b6: wv
+distinctiveness_wv_b6,7.575557,most distinct in b6: wv
+distinctiveness_wo_b6,7.244138,most distinct in b6: wv
