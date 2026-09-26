@@ -195,9 +195,9 @@ def main():
                             answer_raw=(raw or "").strip().replace("\n", " ")[:160],
                             answer=yesno(raw)))
             fh.flush()
-            if n % 20 == 0 or n == len(todo):
-                print(f"  [{n}/{len(todo)}]")
-    print(f"  done. data/capability_judge_raw.csv")
+            ans_str = (raw or "").strip().replace("\n", " ")[:20]
+            print(f"  [{n:3d}/{len(todo)}] {it['file']:42s} {q} {pol:8s} rep={rep} -> {ans_str}", flush=True)
+    print(f"  done. data/capability_judge_raw.csv", flush=True)
 
 
 if __name__ == "__main__":
