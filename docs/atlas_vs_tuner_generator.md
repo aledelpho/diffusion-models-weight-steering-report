@@ -120,3 +120,38 @@ actually holds.
 It also answers, for free, the two questions the current atlas cannot: the node has **single-block
 targets**, so per-block resolution is available; and `chaos_strength` takes a sign, so band × sign
 is expressible in the UI.
+
+---
+
+## 6. Provenance of the removal, and the design error it exposes — added 2026-09-26
+
+The observer states that **he** asked for that zone to be skipped, because across innumerable
+prompts it produced no visual change. So the removal of `MOD_lin_time` from the node was a
+deliberate decision based on his own repeated observation, not a bug that was papered over. His
+evidence was broader than this study's: many prompts against the atlas's eight, and the atlas
+confirmed it to byte-identity.
+
+**Which makes the inclusion of `modulation_norm` in the atlas an error of design, and it is mine.**
+`data/perturbation_atlas_regions.csv` lists thirteen regions. The pre-registration went through
+six amendments, each catching a real defect, and **not one of them asked whether any candidate
+region was already known to be inert.** The information existed in two places — in the observer's
+own experience and in a comment in the tuner's source — and neither was consulted. The region table
+was built from the architecture, not from what the project already knew about it.
+
+The cost is not only the 48 wasted renders (2 presets × 8 prompts × 3 seeds). It is that the dead
+region **manufactured a false positive in the primary region analysis**: with it included, the Q1
+contrast was R = 0.833 at p = 0.159; with it excluded, R = 0.391 at p = 0.278. The only apparent
+tendency toward "the region determines the style" was two draws of a dead region sitting at
+distance exactly zero from each other, by construction. Had it not been caught, the atlas's headline
+about region control would have leaned on an artefact.
+
+**The right fix is not to drop it next time. It is to keep it and declare it.** A region known in
+advance to be inert is the best negative control an atlas can have: if the instrument reports it as
+distinguishable from anything, the instrument is broken. Declared as a control, `modulation_norm`
+collapsing to distance zero would have been a **validation of the pipeline**; undeclared, it was a
+contaminant that had to be found and excluded after the fact. Every future atlas should carry at
+least one known-inert region on purpose, named as such in the pre-registration.
+
+**And the general lesson, which is cheap and was skipped:** before designing a sweep, ask the person
+who built the tool which knobs he already knows do nothing. It is one question and it would have
+removed a region, a false positive and two excluded presets.
