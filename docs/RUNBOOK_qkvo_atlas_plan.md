@@ -126,72 +126,107 @@ three reasons that belong in any write-up:
 
 ---
 
-## 7. Execution — the operational part
+## 7. Execution — unattended, and it does not stop
 
 **Standing constraints.** No render outside this plan. Nothing written under `notebook/`.
 `python experiments/validate_notebook.py` at 0 errors before every commit. Commit messages in
 Italian, small and descriptive. **Do not push.** Do not change the status of any published claim.
 Do not shut anything down.
 
-### Step 1 — build the 18 presets
+**This run is unattended. The default is to keep rendering.** An anomaly is recorded and worked
+around, never waited on. Only one condition ends the run, and it is named in §7.4. Nothing here
+relaxes §3 or §4: those govern the analysis, which happens later and separately.
+
+### 7.1 Build the 18 presets
 
 In ComfyUI, with **`ArthemyKrea2ModelBlockSurgeonTuner`** (Tier 2, deterministic — *not* the Chaos
 node). For each condition: set `target_block`, set the gain of the one component group involved,
-leave every other component at 0, then save with the Preset Saver.
-
-One gain magnitude for all 18, the node's own default, positive or negative according to the arm.
+leave every other component at 0, save with the Preset Saver. One gain magnitude for all 18, the
+node's own default, sign according to the arm.
 
 Naming, exactly:
 
     Arthemy_QKVO_<component>_<band>_<sign>.json
 
-with `<component>` ∈ {`wq`, `wk`, `wv`, `wo`}, `<band>` ∈ {`b1`, `b6`} for `Block_1 (All 0-4)` and
-the last band as the widget lists it, `<sign>` ∈ {`pos`, `neg`}. The two control presets:
+`<component>` ∈ {`wq`, `wk`, `wv`, `wo`}, `<band>` ∈ {`b1`, `b6`} for `Block_1 (All 0-4)` and the
+last band as the widget lists it, `<sign>` ∈ {`pos`, `neg`}. Controls:
 
     Arthemy_QKVO_normscales_all_pos.json
     Arthemy_QKVO_normscales_all_neg.json
 
-**Record, for every one of the 18, the info line the Preset Loader prints** — the
-`Model: N scalar layers` count. That single line is what caught the dead arm; a component that
-reports 0 matched layers must be reported and not silently rendered.
-
-Then, once:
+**Load every one of the 18 in the Preset Loader and write down the `Model: N scalar layers` line,
+verbatim, into `data/qkvo_preset_layer_counts.csv`** with columns `preset,layer_count,info_line`.
+That one line is what caught the dead arm. Then, once:
 
     python experiments/measure_all_displacements.py --all --out data/preset_displacements_qkvo.csv
 
-Commit the 18 presets and that CSV. **Stop and report before Step 2** if any preset reports a layer
-count of 0, or if the two control presets do not match the 84-layer count of
-`Arthemy_Atlas_modulation_norm_draw1` minus its 28 `mod.lin` entries (i.e. 56).
+Commit both files and the 18 presets.
 
-### Step 2 — the render plan and the queue
+### 7.2 Anomalies, and what to do instead of stopping
+
+| what you find | what you do |
+|---|---|
+| a preset reports **0 layers** | **skip that preset**, record it in the layer-count CSV, render the other 17. It affects that condition and nothing else. |
+| a control preset does not report **56 layers** | **render it anyway** and record the real count. The control being malformed makes the control unusable; it says nothing about the 16 live conditions, and the analysis will refuse to read it on its own. |
+| a preset will not save, or the node errors on a component | skip that one condition, record the exact error text, continue with the rest. |
+| a render fails or is missing at the end | record its exact filename in the report. Do not re-render it a second time in a different session without saying so. |
+
+**Never repair data to make a run look complete.** A missing cell reported is worth more than a
+cell filled in.
+
+### 7.3 The determinism check does not stop the run either — it changes the corpus
+
+Put the `determinism_check` row at the head of the plan as usual: it re-renders `S1_photo` baseline
+at seed 42 and compares against `benchmark_atlas_phase1/renders`.
+
+- **Zero pixel difference** → the 8 existing baselines are reusable. Render the 432 rows only.
+- **Any non-zero difference** → the environment has drifted, so the old baselines may not be pooled
+  with this batch. **Do not stop.** Add the 8 baselines to this queue — `8 prompts × 3 seeds = 24`
+  extra renders — so the batch is **self-contained** and analysable on its own. Record the maximum
+  pixel difference in the report.
+
+This is strictly better than halting: the batch stays valid either way, and whether it can be
+compared against the earlier atlas becomes a separate question answered afterwards, with the drift
+number in hand.
+
+### 7.4 The one condition that ends the run
+
+**If 9 or more of the 16 live presets report 0 layers**, the component naming is wrong and the queue
+would produce 432 copies of the baseline. That helps nobody and cannot be fixed without a design
+decision. In that case: commit the layer-count CSV, write the report, and stop.
+
+This check costs nothing and happens **before any render**, from the Preset Loader lines alone.
+
+### 7.5 The plan, the queue, and surviving the night
 
 Write `data/qkvo_atlas_plan.csv` with a script modelled on
-`experiments/make_atlas_phase1_plan.py`, same columns, same discipline: one row per render,
-explicit sampler columns, a `determinism_check` row in the head, and `expected_filename` computed
-rather than typed.
+`experiments/make_atlas_phase1_plan.py`: same columns, explicit sampler columns, the
+`determinism_check` row at the head, `expected_filename` computed and not typed.
 
-    18 presets × 8 prompts (S1_photo … S8_charcoal) × 3 seeds (42, 777, 1337) = 432 rows
-    + 1 determinism_check row
-
-The **8 baselines are not re-rendered**: they exist in
-`benchmark_atlas_phase1/renders` and the environment is byte-deterministic across a week
-(`data/perturbation_atlas_draw_check.csv`, gate `gate_environment_determinism`). The determinism
-check row re-renders `S1_photo` baseline at seed 42 and must come back at **zero pixel difference**
-before the queue proceeds. If it does not, stop: the environment has drifted and nothing may be
-pooled with the existing corpus.
+    up to 18 presets × 8 prompts (S1_photo … S8_charcoal) × 3 seeds (42, 777, 1337) = 432 rows
+    + 1 determinism_check row  [+ 24 baseline rows if §7.3 fires]
 
 Queue with a copy of `experiments/queue_atlas_phase1.py`, changing only `OUTPUT_DIR_NAME` to
-`benchmark_qkvo_atlas/renders`. Commit the plan CSV before launching.
+`benchmark_qkvo_atlas/renders`, and **make it resumable**: before each row, check whether
+`expected_filename` already exists in the output folder and skip it if so. An unattended run that
+dies at row 300 must continue from 300 when restarted, not from 1.
 
-### Step 3 — report back
+Keep a progress log as `data/qkvo_atlas_progress.log`, one line per completed render with a
+timestamp, so the state is readable without counting files.
 
-Feature extraction and the analysis are not this run's job. Report:
+Commit the plan CSV before launching.
 
-1. the 18 layer counts from the Preset Loader, verbatim;
-2. the measured displacement of each preset from `data/preset_displacements_qkvo.csv`;
-3. the determinism check result;
-4. how many of the 432 renders completed, and the exact filenames of any that did not;
-5. anything that did not go as this document says, however small.
+### 7.6 Report back
 
-Do not extract features, do not compute a cosine, do not interpret. The statistics of §3 and the
-decision rules of §4 were frozen before the renders and will be run separately, against them.
+Feature extraction and analysis are not this run's job.
+
+1. The 18 layer counts, verbatim.
+2. The measured displacement of each preset.
+3. The determinism check result, with the maximum pixel difference, and whether the 24 baseline rows
+   were added.
+4. How many renders completed, and the exact filenames of any that did not.
+5. Every anomaly from §7.2 that fired, with its error text.
+6. Anything that did not go as this document says, however small.
+
+**Do not extract features, do not compute a cosine, do not interpret.** The statistics of §3 and the
+decision rules of §4 were frozen before the renders and are run separately against them.
