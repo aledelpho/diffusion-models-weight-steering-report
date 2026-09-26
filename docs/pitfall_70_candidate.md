@@ -1,0 +1,10 @@
+# Candidate row 70 for `docs/errors_log.md` — PROPOSAL, NOT INSERTED
+
+Written 2026-09-26. `errors_log.md` is a canonical numbered document; adding a row is the
+observer's decision, not the analyst's. This file holds the draft so that it exists in the
+repository without altering that document. Delete this file when the row is either inserted or
+rejected.
+
+---
+
+| **70** | Treating a vision-language model as a measuring instrument without putting it in front of a known signal first | `experiments/vlm_gate.py` was written on 2026-09-15 to calibrate a VLM judge before use, with three probes: gross discrimination against a stroke width already measured in pixels, a resolution threshold, and a negative control of two baselines at different seeds where the correct answer is "same". | It was run, and the judge — Gemma4, on the observer's recollection, since the script records `--model` nowhere in its output — answered **"B" on all four trials of the two easiest pairs**, where the measured difference in median stroke width is 37.76 px and 35.41 px: position bias, not discrimination, 50 % correct by construction. On the negative control, where no weight was touched, it declared a visible difference in line weight in both orders and named **the opposite image each time**. All twelve rows carry confidence 5. The failure was never written up, never entered this log, and the CSV stayed in the other repository while the design sat unused. | Three rules, in order. **(a)** A judge is calibrated on the task it will be used for, and a gate is informative only about that task: failing at "which line is thicker" says nothing about "is this pixel art", and passing it says nothing either. **(b)** Forced choice at matched prompt and seed, both orders, never an absolute 1–5 rating: absolute scores are dominated by the subject, and the confidence field is dominated by nothing at all. **(c)** Every judge run logs model, backend, URL and timestamp in its own output, or the result is unattributable a week later — which is what happened here. Family: instrumentation. |

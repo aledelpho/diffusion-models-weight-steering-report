@@ -1,0 +1,13 @@
+gruppo,coppia,prompt_id,seed,ordine,ripetizione,delta_px,scelta,vince_il_piu_spesso,confidenza,motivo
+grossa,preset_pos|preset_neg,F1,777,AB,0,37.76,B,0,5,Lines in B are visibly bolder and thicker than in A.
+grossa,preset_pos|preset_neg,F1,777,BA,0,37.76,B,1,5,Lines in B are visibly bolder and thicker than in A.
+grossa,blockshuf_pos|blockshuf_neg,G6,1337,AB,0,35.413,B,0,5,The outer and inner contour lines in B are visibly bolder and thicker.
+grossa,blockshuf_pos|blockshuf_neg,G6,1337,BA,0,35.413,B,1,5,Outlines in B are visibly bolder and wider than in A.
+soglia,preset_neg|blockshuf_neg,F1,42,AB,0,3.162,B,1,5,Lines in B are consistently bolder and thicker than in A.
+soglia,preset_neg|blockshuf_neg,F1,42,BA,0,3.162,B,0,5,"Lines around eyes, nose, and hair are visibly bolder and thicker in B."
+soglia,blockshuf_pos|blockshuf_neg,F1,42,AB,0,3.162,A,1,5,"Image A features significantly bolder, thicker black outlines compared to Image "
+soglia,blockshuf_pos|blockshuf_neg,F1,42,BA,0,3.162,B,1,5,Image B features significantly bolder and thicker contour lines than Image A.
+controllo negativo,baseline|baseline,F1,base,AB,0,4.535,SAME,,5,The images are mirrored versions of the same illustration with identical line we
+controllo negativo,baseline|baseline,F1,base,BA,0,4.535,SAME,,5,Both images feature identical line weights and styles from the same illustration
+controllo negativo,baseline|baseline,F1,base,AB,0,2.088,B,1,5,"Lines around the eyes, nose, and hair are visibly thicker in image B."
+controllo negativo,baseline|baseline,F1,base,BA,0,2.088,A,1,5,"Lines around eyes, nose, and hair are visibly bolder and thicker in A."
