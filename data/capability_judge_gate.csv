@@ -1,0 +1,129 @@
+judge_model,backend,url,run_utc,image_scene,asked_about,is_own_style,polarity,question,answer_raw,answer
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S1_photo,1,positive,Is this image in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S1_photo,1,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S1_photo,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S2_watercolor,1,positive,Is this image in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S2_watercolor,1,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S2_watercolor,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S3_lowpoly,1,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S3_lowpoly,1,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S3_lowpoly,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S4_claymation,1,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S4_claymation,1,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S4_claymation,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S5_ukiyoe,1,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S5_ukiyoe,1,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S5_ukiyoe,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S6_pixel,1,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S6_pixel,1,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S6_pixel,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S7_glass,1,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S7_glass,1,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S8_charcoal,0,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S7_glass,S8_charcoal,0,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S1_photo,0,positive,Is this image in the style of realistic photography? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S1_photo,0,negative,Is this image NOT in the style of realistic photography? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S2_watercolor,0,positive,Is this image in the style of watercolor painting? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S2_watercolor,0,negative,Is this image NOT in the style of watercolor painting? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S3_lowpoly,0,positive,"Is this image in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S3_lowpoly,0,negative,"Is this image NOT in the style of lowpoly 3D, flat shaded polygons? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S4_claymation,0,positive,"Is this image in the style of claymation, stop-motion plasticine? Answer only yes or no.",No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S4_claymation,0,negative,"Is this image NOT in the style of claymation, stop-motion plasticine? Answer only yes or no.",Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S5_ukiyoe,0,positive,Is this image in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S5_ukiyoe,0,negative,Is this image NOT in the style of traditional Japanese ukiyo-e woodblock print? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S6_pixel,0,positive,Is this image in the style of 8-bit pixel art? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S6_pixel,0,negative,Is this image NOT in the style of 8-bit pixel art? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S7_glass,0,positive,Is this image in the style of stained glass window mosaic? Answer only yes or no.,No,0
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S7_glass,0,negative,Is this image NOT in the style of stained glass window mosaic? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S8_charcoal,1,positive,Is this image in the style of rough charcoal sketch? Answer only yes or no.,Yes,1
+qwen3.8:27b,ollama,http://127.0.0.1:11434,2026-09-26T08:04:14.277392+00:00,S8_charcoal,S8_charcoal,1,negative,Is this image NOT in the style of rough charcoal sketch? Answer only yes or no.,No,0
