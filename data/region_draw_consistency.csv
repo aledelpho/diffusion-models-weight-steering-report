@@ -1,0 +1,14 @@
+region,draw_distance,delta_norm,distance_over_norm,cosine_between_draws
+clip_only,6.3972,4.9596,1.2899,0.2629
+early_attn,31.8168,17.3651,1.8322,-0.1745
+early_mid_attn,5.8807,4.2683,1.3778,-0.0129
+early_mid_mlp,6.0127,3.9903,1.5068,-0.1167
+early_mlp,11.2253,10.2733,1.0927,0.5319
+late_attn,18.1629,13.0653,1.3902,-0.0143
+late_mid_attn,5.5217,4.3803,1.2606,0.2539
+late_mid_mlp,11.6445,7.3178,1.5913,-0.2088
+late_mlp,48.6549,26.4933,1.8365,-0.5984
+model_only,19.1798,17.9726,1.0672,0.6087
+txtfusion,7.0179,4.8358,1.4512,0.0726
+uniform_all,18.5804,16.7279,1.1107,0.6629
+__summary__,,"spearman(dist,norm)=+0.951","spearman(ratio,norm)=+0.035 mean=1.401","mean=+0.106 spearman(cos,norm)=-0.007"
