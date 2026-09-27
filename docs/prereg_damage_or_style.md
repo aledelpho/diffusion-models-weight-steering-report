@@ -71,7 +71,7 @@ baselines (image processing, not rendering):
 | **sharpness** | one copy Gaussian-blurred σ = 2 | which is sharper? |
 | **degradation** | two copies with Gaussian noise σ = 4 and σ = 16 | which has more visible defects? |
 
-8 baselines × 3 probes × 2 orders = **48 calls**.
+**Superseded by Amendment 01**: all 9 baselines × 3 probes × 2 orders = **54 calls**.
 
 **Gate criteria, frozen**: on each probe separately, ≥ **14 of 16** correct, and the two orders
 agreeing on ≥ **12 of 16**; and the overall share of first-position answers inside
@@ -145,3 +145,46 @@ broken" in both arms.
 * The judge's answers are data about the judge as much as about the images. Any statement of the
   form "the images *are* a style" is a statement about what this judge, gated this way, reports —
   and is written that way.
+
+---
+
+## Amendment 01 — two defects in the design, found before any call was made
+
+**Deposited**: 2026-09-27, before the gate ran. Nothing had been measured.
+
+### A. The gate silently dropped an image
+
+`judge_pairs_gate.py` took `sorted(baselines)[:8]`. There are **nine** baselines in this corpus
+(3 prompts × 3 seeds) and the slice discarded `P02_baseline_seed777` for no reason other than the
+number 8 appearing in §4. An unjustified exclusion, however small, is the beginning of a
+selection effect.
+
+**Fixed**: the gate uses **all nine** baselines — 9 × 3 probes × 2 orders = **54 calls** — and the
+thresholds are stated as proportions, **≥ 0.889 correct** and **≥ 0.778 order-agreeing** per probe,
+which at n = 9 means **16/18 and 14/18**. Both are **stricter** than the 14/16 and 12/16 first
+deposited (0.875 and 0.750); the amendment does not loosen a criterion.
+
+### B. The determinism re-test never touched Arm B
+
+§5 specified "the first 16 items of each arm" and the runbook implemented it as
+`sorted(item_ids)[:16]`. Item ids begin with `A|` and `B|`, so sorting puts **all sixteen in Arm A**
+and Arm B would never have been re-tested. Arm B is the arm the study exists for.
+
+**Fixed**: `experiments/judge_damage_style_retest.py` takes **8 items from each arm**, both orders,
+**32 calls**, snapshots the first run to `data/damage_style_answers_run1.csv` before re-running, and
+prints the test–retest rate against the frozen 0.95 threshold.
+
+### C. The call budget, restated
+
+| arm | items | × orders | calls |
+|---|--:|--:|--:|
+| gate | 27 | 2 | **54** |
+| A — damage | 144 | 2 | **288** |
+| A null — baseline vs baseline, different seed | 6 | 2 | **12** |
+| B — style identity | 72 | 2 | **144** |
+| B null — reference with two non-matching candidates | 12 | 2 | **24** |
+| determinism re-test — 8 items per arm | 16 | 2 | **32** |
+| | | | **554** |
+
+The §5 table said 548 and is superseded by this one. The item counts were verified against the
+renders on disk: 234 run items, **zero missing files**.

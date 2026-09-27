@@ -10,7 +10,7 @@ overall first-position share inside [0.30, 0.70].
 
     python experiments/judge_pairs_gate.py --renders "<...>\\benchmark_mappa\\renders" --model qwen3.8:27b
 """
-import argparse, csv, datetime, os, pathlib, sys, tempfile
+import argparse, csv, datetime, math, os, pathlib, sys, tempfile
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -45,10 +45,12 @@ def main():
     ap.add_argument("--model", required=True)
     ap.add_argument("--url", default="http://127.0.0.1:11434")
     a = ap.parse_args()
+    # Amendment 01: ALL baselines, never a silent slice. A dropped image is an
+    # unjustified exclusion, and there is no reason to give the gate less power.
     bases = sorted(f for f in os.listdir(a.renders) if "_baseline_" in f)
-    if len(bases) < 8:
-        sys.exit(f"expected at least 8 baselines, found {len(bases)}")
-    bases = bases[:8]
+    if len(bases) != 9:
+        print(f"NOTE: expected 9 baselines, found {len(bases)} -- thresholds scale with n")
+    n = len(bases)
     OUT.parent.mkdir(exist_ok=True)
     stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     fields = ["judge_model", "url", "run_utc", "probe", "baseline", "order",
@@ -83,9 +85,13 @@ def main():
         # i.e. the judge tracked the image and not the position. 6 pairs of 8 = 12 of 16.
         agree = sum(1 for i in range(0, len(sub), 2)
                     if sub[i]["correct"] == 1 and sub[i + 1]["correct"] == 1) * 2
-        p = ok >= 14 and agree >= 12
+        # Amendment 01: thresholds as proportions of n, >= 0.889 correct and >= 0.778
+        # order-agreeing -- both stricter than the 14/16 and 12/16 first deposited.
+        p = ok >= math.ceil(0.889 * 2 * n) and agree >= math.ceil(0.778 * 2 * n)
         allok &= p
-        print(f"  {probe:12s} correct {ok:2d}/16  order-agreeing {agree:2d}/16  -> {'PASS' if p else 'FAIL'}")
+        print(f"  {probe:12s} correct {ok:2d}/{2*n}  order-agreeing {agree:2d}/{2*n}"
+              f"  (need {math.ceil(0.889*2*n)} and {math.ceil(0.778*2*n)})"
+              f"  -> {'PASS' if p else 'FAIL'}")
     good = [r for r in rows if r["choice"]]
     share = sum(1 for r in good if r["choice"] == "A") / len(good) if good else 0
     ps = 0.30 <= share <= 0.70

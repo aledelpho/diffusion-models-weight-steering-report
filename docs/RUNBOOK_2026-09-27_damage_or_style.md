@@ -56,8 +56,8 @@ python experiments\judge_pairs_gate.py ^
   --model qwen3.8:27b
 ```
 
-48 calls. Three probes with certain ground truth — saturation, sharpness, added noise — each on 8
-baselines in both orders. Output: `data/damage_style_gate.csv`. The script prints PASS or FAIL and
+**54 calls** (Amendment 01). Three probes with certain ground truth — saturation, sharpness,
+added noise — each on **all nine** baselines in both orders. Output: `data/damage_style_gate.csv`. The script prints PASS or FAIL and
 exits 2 on failure.
 
 **If the gate fails, the failure is the result.** Do **not**:
@@ -82,8 +82,9 @@ python experiments\judge_damage_style_run.py ^
   --model qwen3.8:27b --arm all
 ```
 
-Output: `data/damage_style_answers.csv`. Interrupt and re-run the same command at any point; rows
-already on disk are skipped. Expect several hours: the calls carry two or three full-resolution
+Output: `data/damage_style_answers.csv`. 234 items × 2 orders = **468 calls**; total for the study
+is **554**. Interrupt and re-run the same command at any point; rows already on disk are skipped.
+Expect several hours: the calls carry two or three full-resolution
 images each.
 
 What the script does on its own, and what you must not defeat:
@@ -104,19 +105,22 @@ the item in the report and run with `--arm A` and then `--arm B` separately.
 
 ## 5. Step 3 — determinism
 
-Re-run the first 16 items of each arm against a second output file and compare:
-
 ```bat
-copy data\damage_style_answers.csv data\damage_style_answers_run1.csv
-python -c "import csv,pathlib;rows=list(csv.DictReader(open('data/damage_style_answers.csv',encoding='utf-8')));ids=sorted({r['item_id'] for r in rows if r['arm'] in ('A','B')})[:16];w=csv.DictWriter(open('data/damage_style_retest_plan.csv','w',newline='',encoding='utf-8'),fieldnames=['item_id']);w.writeheader();[w.writerow({'item_id':i}) for i in ids]"
+python experiments\judge_damage_style_retest.py ^
+  --renders "C:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_mappa\renders" ^
+  --model qwen3.8:27b
 ```
 
-then delete those 32 rows from `data\damage_style_answers.csv`, re-run step 2, and compare the new
-rows against `damage_style_answers_run1.csv`. **Test–retest below 0.95 invalidates the run** and
-must be reported as such. The previous study measured 1.000, so anything lower is news.
+32 calls: **8 items from each arm**, both orders. The script snapshots the first run to
+`data/damage_style_answers_run1.csv`, re-runs those items and prints the test–retest rate.
 
-If this step is awkward to automate, skip it and **say in the report that it was skipped** — do not
-silently omit it.
+**Test–retest below 0.95 invalidates the run** and must be reported as such. The previous study
+measured 1.000, so anything lower is news.
+
+A superseded one-liner used to live here. It selected the items with `sorted(item_ids)[:16]`, and
+because ids begin with `A|` and `B|` that put all sixteen in Arm A — Arm B, the arm this study
+exists for, would never have been re-tested. Amendment 01 replaced it with the script above. Do not
+reinstate a manual selection.
 
 ## 6. Step 4 — analysis
 
@@ -156,6 +160,7 @@ python experiments\validate_notebook.py
 git add docs\prereg_damage_or_style.md docs\RUNBOOK_2026-09-27_damage_or_style.md ^
         docs\report_damage_or_style.md experiments\judge_multi_image.py ^
         experiments\judge_pairs_gate.py experiments\judge_damage_style_run.py ^
+        experiments\judge_damage_style_retest.py ^
         experiments\judge_damage_style_analyze.py data\damage_style_*.csv data\damage_style_report.txt
 git commit
 del .git\*.lock
