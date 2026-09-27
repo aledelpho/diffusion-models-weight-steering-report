@@ -154,7 +154,7 @@ def main():
     # Write measurements CSV
     fieldnames = [
         "prompt_id", "seed", "mean_hue_deg", "median_hue_deg",
-        "mean_sat", "fg_share", "is_purple", "is_green", "object_intact", "file"
+        "mean_sat", "fg_pixels", "fg_share", "is_purple", "is_green", "object_intact", "file"
     ]
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
