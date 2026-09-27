@@ -1,0 +1,13 @@
+condition,block,sign,dose,lp_intact,lg_intact,ln_intact,lp_mean_shift_deg,lg_mean_shift_deg,ln_mean_shift_deg,classification,notes
+Block_1_pos,Block_1,pos,0.05,3/3,3/3,3/3,-0.4,0.1,15.7,partial_chromatic_shift,Asymmetric shift without full reversion
+Block_1_neg,Block_1,neg,0.05,3/3,3/3,3/3,-3.4,-0.8,-1.1,unperturbed_binding,Binding unaffected: all three arms remained stable
+Block_2_pos,Block_2,pos,0.05,3/3,3/3,3/3,-1.2,-0.4,12.7,partial_chromatic_shift,Asymmetric shift without full reversion
+Block_2_neg,Block_2,neg,0.05,3/3,3/3,3/3,1.5,0.1,-0.1,unperturbed_binding,Binding unaffected: all three arms remained stable
+Block_3_pos,Block_3,pos,0.05,3/3,3/3,3/3,3.2,-1.4,-0.1,unperturbed_binding,Binding unaffected: all three arms remained stable
+Block_3_neg,Block_3,neg,0.05,3/3,3/3,3/3,-11.8,1.0,31.0,partial_chromatic_shift,Asymmetric shift without full reversion
+Block_4_pos,Block_4,pos,0.05,3/3,3/3,3/3,-6.3,1.2,33.2,partial_chromatic_shift,Asymmetric shift without full reversion
+Block_4_neg,Block_4,neg,0.05,3/3,3/3,3/3,-0.2,-1.3,-0.6,unperturbed_binding,Binding unaffected: all three arms remained stable
+Block_5_pos,Block_5,pos,0.05,3/3,3/3,3/3,-5.7,-1.3,15.2,partial_chromatic_shift,Asymmetric shift without full reversion
+Block_5_neg,Block_5,neg,0.05,3/3,3/3,3/3,1.6,0.3,2.1,unperturbed_binding,Binding unaffected: all three arms remained stable
+Block_6_pos,Block_6,pos,0.05,3/3,3/3,3/3,-0.8,-0.7,-1.4,unperturbed_binding,Binding unaffected: all three arms remained stable
+Block_6_neg,Block_6,neg,0.05,3/3,3/3,3/3,-3.9,-0.3,15.9,partial_chromatic_shift,Asymmetric shift without full reversion
