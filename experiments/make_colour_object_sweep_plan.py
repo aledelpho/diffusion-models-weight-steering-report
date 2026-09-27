@@ -2,23 +2,20 @@
 """
 experiments/make_colour_object_sweep_plan.py
 ===========================================
-Generates Stage 2 sweep render plan for colour/object dissociation study.
-Governed by docs/RENDERS_2026-09-27_colour_object_pilot.md (§3).
+Generates Stage 2 sweep render plan with 3 arms (LP, LG, LN).
+Governed by:
+  - docs/prereg_colour_object_dissociation.md
+  - docs/RENDERS_2026-09-27_colour_object_pilot.md (§3)
 
 Factors:
-  - Prompts (2): LP (purple), LG (green)
+  - Prompts (3): LP (purple), LG (green), LN (natural prior)
   - Block groups (6): Block_1 through Block_6
   - Signs (2): pos (+0.050), neg (-0.050)
   - Dose: 0.050
   - Seeds (3): 42, 777, 1337
-  - Perturbed: 2 prompts x 6 blocks x 2 signs x 3 seeds = 72 renders
-  - Baselines: 2 prompts x 3 seeds = 6 renders
-  - Total: 78 renders
-
-Naming convention (matches benchmark_mappa):
-  - Perturbed: {prompt}_{block}{sign}_{dose:.3f}_krea2_seed{seed}_00001_.png
-    e.g. LP_Block_3pos_0.050_krea2_seed42_00001_.png
-  - Baseline:  {prompt}_baseline_krea2_seed{seed}_00001_.png
+  - Perturbed: 3 prompts x 6 blocks x 2 signs x 3 seeds = 108 renders
+  - Baselines: 3 prompts x 3 seeds = 9 renders
+  - Total: 117 renders
 """
 
 from __future__ import annotations
@@ -38,6 +35,10 @@ PROMPTS = [
     {
         "prompt_id": "LG",
         "text": "a single green leaf centred on a plain light grey background, macro photograph, sharp focus, even studio lighting, no other objects"
+    },
+    {
+        "prompt_id": "LN",
+        "text": "a single leaf centred on a plain light grey background, macro photograph, sharp focus, even studio lighting, no other objects"
     }
 ]
 
@@ -60,7 +61,7 @@ def main():
     plan_rows = []
     row_idx = 1
 
-    # 1. Six Baselines
+    # 1. Nine Baselines (3 prompts x 3 seeds)
     for p in PROMPTS:
         pid = p["prompt_id"]
         ptext = p["text"]
@@ -89,7 +90,7 @@ def main():
             })
             row_idx += 1
 
-    # 2. 72 Perturbed renders (grouped by block & sign for GPU efficiency)
+    # 2. 108 Perturbed renders (grouped by block & sign for GPU efficiency)
     for blk in BLOCKS:
         for sgn in SIGNS:
             gain = DOSE if sgn == "pos" else -DOSE
@@ -122,8 +123,8 @@ def main():
                     })
                     row_idx += 1
 
-    if len(plan_rows) != 78:
-        raise RuntimeError(f"Expected 78 rows, got {len(plan_rows)}")
+    if len(plan_rows) != 117:
+        raise RuntimeError(f"Expected 117 rows, got {len(plan_rows)}")
 
     fieldnames = [
         "row_index", "type", "prompt_id", "block", "sign", "dose", "gain",
@@ -138,7 +139,8 @@ def main():
         w.writerows(plan_rows)
 
     print(f"Generated {OUT_PLAN_CSV} successfully:")
-    print(f"  Total render rows: {len(plan_rows)} (6 baselines + 72 perturbed)")
+    print(f"  Total render rows: {len(plan_rows)} (9 baselines + 108 perturbed)")
+    print(f"  Prompts ({len(PROMPTS)}): {[p['prompt_id'] for p in PROMPTS]}")
     print(f"  Blocks ({len(BLOCKS)}): {BLOCKS}")
     print(f"  Signs: {SIGNS} (dose {DOSE:.3f})")
     print(f"  Seeds ({len(SEEDS)}): {SEEDS}")
