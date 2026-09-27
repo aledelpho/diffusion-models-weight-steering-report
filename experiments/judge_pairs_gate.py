@@ -10,7 +10,7 @@ overall first-position share inside [0.30, 0.70].
 
     python experiments/judge_pairs_gate.py --renders "<...>\\benchmark_mappa\\renders" --model qwen3.8:27b
 """
-import argparse, csv, datetime, math, os, pathlib, sys, tempfile
+import argparse, csv, datetime, math, os, pathlib, sys, tempfile, time
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -52,19 +52,43 @@ def main():
         print(f"NOTE: expected 9 baselines, found {len(bases)} -- thresholds scale with n")
     n = len(bases)
     OUT.parent.mkdir(exist_ok=True)
-    stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     fields = ["judge_model", "url", "run_utc", "probe", "baseline", "order",
               "correct_letter", "question", "answer_raw", "choice", "correct"]
-    new = not OUT.exists()
+    stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    prog_log = pathlib.Path("data/damage_style_progress.log")
     rows = []
+    done_keys = set()
+    if OUT.exists():
+        with OUT.open("r", encoding="utf-8") as rf:
+            for r in csv.DictReader(rf):
+                r["correct"] = int(r["correct"])
+                rows.append(r)
+                done_keys.add((r["baseline"], r["probe"], r["order"]))
+
+    total_calls = n * len(PROBES) * 2
+    t0 = time.time()
+    this_run_calls = 0
+
+    def log_progress(msg: str):
+        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        line = f"[{ts}] {msg}"
+        print(line, flush=True)
+        with prog_log.open("a", encoding="utf-8") as pf:
+            pf.write(line + "\n")
+
+    new = not OUT.exists() or len(rows) == 0
     with tempfile.TemporaryDirectory() as tmp, OUT.open("a", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=fields)
         if new:
             w.writeheader()
         for bn in bases:
             for probe, (q, _) in PROBES.items():
-                p_hi, p_lo = variants(os.path.join(a.renders, bn), probe, tmp)
+                p_hi, p_lo = None, None
                 for order in ("hi_first", "lo_first"):
+                    if (bn, probe, order) in done_keys:
+                        continue
+                    if p_hi is None:
+                        p_hi, p_lo = variants(os.path.join(a.renders, bn), probe, tmp)
                     imgs = [b64(p_hi), b64(p_lo)] if order == "hi_first" else [b64(p_lo), b64(p_hi)]
                     correct = "A" if order == "hi_first" else "B"
                     raw = ask(a.url, a.model, q, imgs)
@@ -74,8 +98,16 @@ def main():
                              answer_raw=(raw or "").replace("\n", " ")[:300], choice=ch,
                              correct=int(ch == correct) if ch else -1)
                     w.writerow(r); fh.flush(); rows.append(r)
-                    print(f"  {probe:12s} {bn[:28]:28s} {order:9s} -> {ch or '?':1s} "
-                          f"{'OK' if r['correct']==1 else 'x'}")
+                    done_keys.add((bn, probe, order))
+                    this_run_calls += 1
+                    status_str = 'OK' if r['correct']==1 else 'x'
+                    print(f"  [{len(rows)}/{total_calls}] {probe:12s} {bn[:28]:28s} {order:9s} -> {ch or '?':1s} {status_str}", flush=True)
+
+                    if len(rows) % 10 == 0 or len(rows) == total_calls:
+                        elapsed = time.time() - t0
+                        rate = elapsed / max(1, this_run_calls)
+                        rem_sec = (total_calls - len(rows)) * rate
+                        log_progress(f"[GATE PROGRESS] Chiamate completate: {len(rows)}/{total_calls} (mancanti: {total_calls - len(rows)}) | Tempo trascorso: {elapsed/60:.1f}m | Stima residua: {rem_sec/60:.1f}m")
     print("\n" + "=" * 62)
     allok = True
     for probe in PROBES:

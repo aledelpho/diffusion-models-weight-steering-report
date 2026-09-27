@@ -15,7 +15,7 @@ Generates no render. Resumable: completed rows are skipped. Guards halt an arm, 
     python experiments/judge_damage_style_run.py --renders "<...>\\benchmark_mappa\\renders" \
         --model qwen3.8:27b --arm all
 """
-import argparse, collections, csv, datetime, itertools, os, pathlib, sys
+import argparse, collections, csv, datetime, itertools, os, pathlib, sys, time
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from judge_multi_image import ask, ab, b64, guard
@@ -103,6 +103,18 @@ def items_B(renders, foils):
 
 def run(a, items, done, rows, halted):
     stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    prog_log = pathlib.Path("data/damage_style_progress.log")
+    t0 = time.time()
+    this_run_calls = 0
+    total_calls = len(items) * 2
+
+    def log_progress(msg: str):
+        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        line = f"[{ts}] {msg}"
+        print(line, flush=True)
+        with prog_log.open("a", encoding="utf-8") as pf:
+            pf.write(line + "\n")
+
     new = not OUT.exists()
     with OUT.open("a", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=FIELDS)
@@ -118,7 +130,7 @@ def run(a, items, done, rows, halted):
                 missing = [q for q in (it["imgs"] + ((it["ref"],) if "ref" in it else ()))
                            if not os.path.exists(q)]
                 if missing:
-                    print(f"  SKIP {it['item_id']} order {order}: missing {os.path.basename(missing[0])}")
+                    print(f"  SKIP {it['item_id']} order {order}: missing {os.path.basename(missing[0])}", flush=True)
                     continue
                 first, second = it["imgs"] if order == 0 else it["imgs"][::-1]
                 if "ref" in it:
@@ -138,7 +150,7 @@ def run(a, items, done, rows, halted):
                 try:
                     raw = ask(a.url, a.model, q, imgs)
                 except Exception as exc:                       # unattended: record, never stop
-                    print(f"  ERROR {it['item_id']} order {order}: {type(exc).__name__} {exc}")
+                    print(f"  ERROR {it['item_id']} order {order}: {type(exc).__name__} {exc}", flush=True)
                     raw = ""
                 ch = ab(raw)
                 row = dict(judge_model=a.model, url=a.url, run_utc=stamp, arm=it["arm"],
@@ -148,14 +160,23 @@ def run(a, items, done, rows, halted):
                            answer_raw=(raw or "").replace("\n", " ")[:300], choice=ch,
                            hit=(int(ch == expected) if ch and expected else -1))
                 w.writerow(row); fh.flush(); rows.append(row)
-                print(f"  {it['arm']:6s} {it['item_id']:34s} o{order} -> {ch or '?'}  "
-                      f"{'hit' if row['hit']==1 else ('miss' if row['hit']==0 else '-')}")
+                done.add(key)
+                this_run_calls += 1
+                hit_str = 'hit' if row['hit']==1 else ('miss' if row['hit']==0 else '-')
+                print(f"  [{len(rows)}/{total_calls}] {it['arm']:6s} {it['item_id']:34s} o{order} -> {ch or '?'}  {hit_str}", flush=True)
+
+                if len(rows) % 10 == 0 or len(rows) == total_calls:
+                    elapsed = time.time() - t0
+                    rate = elapsed / max(1, this_run_calls)
+                    rem_sec = (total_calls - len(rows)) * rate
+                    log_progress(f"[RUN PROGRESS] Chiamate completate: {len(rows)}/{total_calls} (mancanti: {total_calls - len(rows)}) | Tempo trascorso: {elapsed/60:.1f}m | Stima residua: {rem_sec/60:.1f}m")
+
                 for arm in ("A", "B"):
                     if arm in halted:
                         continue
                     ok, msg = guard(rows, arm)
                     if not ok:
-                        print("  !! " + msg + " -- arm halted, recorded, the other arm continues")
+                        print("  !! " + msg + " -- arm halted, recorded, the other arm continues", flush=True)
                         halted.add(arm)
 
 

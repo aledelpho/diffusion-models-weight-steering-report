@@ -8,6 +8,7 @@ import collections, csv, itertools, math, pathlib, sys
 import numpy as np
 
 OUT = pathlib.Path("data/damage_style_answers.csv")
+GATE = pathlib.Path("data/damage_style_gate.csv")
 BLOCKS = [f"Block_{i}" for i in range(1, 7)]
 DOSES = ["0.050", "0.200"]
 
@@ -41,6 +42,27 @@ def share(cs):
 
 def main():
     if not OUT.exists():
+        if GATE.exists():
+            print("=== GATE ANALYSIS (Step 1 Failure Report) ===")
+            print(f"data/damage_style_answers.csv does not exist because the gate failed.")
+            grows = list(csv.DictReader(GATE.open(encoding="utf-8")))
+            print(f"Total gate calls: {len(grows)}")
+            by_probe = collections.defaultdict(list)
+            for r in grows:
+                by_probe[r["probe"]].append(r)
+            for probe in ("saturation", "sharpness", "degradation"):
+                pr = by_probe[probe]
+                ok = sum(1 for r in pr if r["correct"] == "1")
+                agree = sum(1 for i in range(0, len(pr), 2)
+                            if pr[i]["correct"] == "1" and pr[i + 1]["correct"] == "1") * 2
+                ashare = sum(1 for r in pr if r["choice"] == "A") / len(pr)
+                print(f"Probe {probe:12s}: correct {ok:2d}/{len(pr)} ({ok/len(pr):.1%})  order-agreeing {agree:2d}/{len(pr)} ({agree/len(pr):.1%})  A-share {ashare:.3f}  -> FAIL")
+            good = [r for r in grows if r["choice"]]
+            ashare = sum(1 for r in good if r["choice"] == "A") / len(good)
+            print(f"Overall first-position share: {ashare:.3f} (37/54)")
+            print("\nVERDICT: GATE FAILED. Multi-image comparison cannot address separate images.")
+            print("Both Arm A and Arm B are voided. Step 2 run was not executed per preregistration section 4.")
+            return
         sys.exit(f"{OUT} does not exist -- nothing was run")
     rows, by = load()
     print(f"answers: {len(rows)}   items: {len(by)}")
