@@ -29,7 +29,7 @@ SEEDS = [42, 777, 1337]
 BLOCKS = ["Block_1", "Block_2", "Block_3", "Block_4", "Block_5", "Block_6"]
 SIGNS = ["pos", "neg"]
 PROMPTS = ["LP", "LG", "LN"]
-DOSE = 0.050
+DEFAULT_DOSE = 0.200
 
 GREEN_HUE_MIN = 65.0
 GREEN_HUE_MAX = 120.0
@@ -108,8 +108,8 @@ def analyze_image(path: Path) -> dict:
     }
 
 
-def main():
-    print("Evaluating Stage 2 Sweep Renders (3 Arms: LP, LG, LN)...")
+def run_evaluation(dose: float = DEFAULT_DOSE):
+    print(f"Evaluating Stage 2 Sweep Renders at dose {dose:.3f} (3 Arms: LP, LG, LN)...")
 
     meas_rows = []
 
@@ -133,7 +133,7 @@ def main():
         for sgn in SIGNS:
             for pid in PROMPTS:
                 for seed in SEEDS:
-                    fn = f"{pid}_{blk}{sgn}_{DOSE:.3f}_krea2_seed{seed}_00001_.png"
+                    fn = f"{pid}_{blk}{sgn}_{dose:.3f}_krea2_seed{seed}_00001_.png"
                     p = RENDERS_DIR / fn
                     m = analyze_image(p)
                     m.update({"type": "perturbed", "prompt_id": pid, "block": blk, "sign": sgn, "seed": seed})
@@ -178,7 +178,7 @@ def main():
                     "condition": cond_label,
                     "block": blk,
                     "sign": sgn,
-                    "dose": DOSE,
+                    "dose": dose,
                     "lp_intact": f"{lp_intact_count}/3",
                     "lg_intact": f"{lg_intact_count}/3",
                     "ln_intact": f"{ln_intact_count}/3",
@@ -236,7 +236,7 @@ def main():
                 "condition": cond_label,
                 "block": blk,
                 "sign": sgn,
-                "dose": DOSE,
+                "dose": dose,
                 "lp_intact": f"{lp_intact_count}/3",
                 "lg_intact": f"{lg_intact_count}/3",
                 "ln_intact": f"{ln_intact_count}/3",
@@ -259,6 +259,14 @@ def main():
         w.writerows(verdict_rows)
     print(f"\nWrote {VERDICT_CSV}")
 
+    # Also save dose-specific copy
+    dose_v_csv = DATA_DIR / f"colour_object_sweep_verdict_{dose:.3f}.csv"
+    with open(dose_v_csv, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=v_fields)
+        w.writeheader()
+        w.writerows(verdict_rows)
+    print(f"Wrote {dose_v_csv}")
+
     # Dissociation verdict
     print("\n=== FINAL DISSOCIATION VERDICT ===")
     if reversion_blocks and collapse_blocks:
@@ -268,7 +276,15 @@ def main():
     elif reversion_blocks:
         print(f"SELECTIVE REVERSION OBSERVED in: {reversion_blocks}")
     else:
-        print("NEGATIVE FINDING: No block produced selective colour/object dissociation at dose 0.050.")
+        print(f"NEGATIVE FINDING: No block produced selective colour/object dissociation at dose {dose:.3f}.")
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Evaluate colour object sweep")
+    parser.add_argument("--dose", type=float, default=DEFAULT_DOSE, help="Steering dose to evaluate (default: 0.200)")
+    args = parser.parse_args()
+    run_evaluation(dose=args.dose)
 
 
 if __name__ == "__main__":

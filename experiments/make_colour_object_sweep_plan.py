@@ -44,7 +44,7 @@ PROMPTS = [
 
 BLOCKS = ["Block_1", "Block_2", "Block_3", "Block_4", "Block_5", "Block_6"]
 SIGNS = ["pos", "neg"]
-DOSE = 0.050
+DEFAULT_DOSE = 0.200
 SEEDS = [42, 777, 1337]
 
 OUTPUT_FOLDER = "benchmark_colour_binding/renders"
@@ -57,7 +57,7 @@ WIDTH = 1024
 HEIGHT = 1280
 
 
-def main():
+def build_plan(dose: float = DEFAULT_DOSE):
     plan_rows = []
     row_idx = 1
 
@@ -93,21 +93,21 @@ def main():
     # 2. 108 Perturbed renders (grouped by block & sign for GPU efficiency)
     for blk in BLOCKS:
         for sgn in SIGNS:
-            gain = DOSE if sgn == "pos" else -DOSE
+            gain = dose if sgn == "pos" else -dose
             for p in PROMPTS:
                 pid = p["prompt_id"]
                 ptext = p["text"]
                 for seed in SEEDS:
                     cond_label = f"{blk}{sgn}"
-                    prefix = f"{OUTPUT_FOLDER}/{pid}_{cond_label}_{DOSE:.3f}_krea2_seed{seed}"
-                    expected_fn = f"{pid}_{cond_label}_{DOSE:.3f}_krea2_seed{seed}_00001_.png"
+                    prefix = f"{OUTPUT_FOLDER}/{pid}_{cond_label}_{dose:.3f}_krea2_seed{seed}"
+                    expected_fn = f"{pid}_{cond_label}_{dose:.3f}_krea2_seed{seed}_00001_.png"
                     plan_rows.append({
                         "row_index": row_idx,
                         "type": "perturbed",
                         "prompt_id": pid,
                         "block": blk,
                         "sign": sgn,
-                        "dose": DOSE,
+                        "dose": dose,
                         "gain": gain,
                         "seed": seed,
                         "sampler": SAMPLER,
@@ -142,8 +142,17 @@ def main():
     print(f"  Total render rows: {len(plan_rows)} (9 baselines + 108 perturbed)")
     print(f"  Prompts ({len(PROMPTS)}): {[p['prompt_id'] for p in PROMPTS]}")
     print(f"  Blocks ({len(BLOCKS)}): {BLOCKS}")
-    print(f"  Signs: {SIGNS} (dose {DOSE:.3f})")
+    print(f"  Signs: {SIGNS} (dose {dose:.3f})")
     print(f"  Seeds ({len(SEEDS)}): {SEEDS}")
+    return plan_rows
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Generate colour object sweep plan")
+    parser.add_argument("--dose", type=float, default=DEFAULT_DOSE, help="Steering dose per block (default: 0.200)")
+    args = parser.parse_args()
+    build_plan(dose=args.dose)
 
 
 if __name__ == "__main__":

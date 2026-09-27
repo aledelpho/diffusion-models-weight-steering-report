@@ -1,9 +1,10 @@
-# Pre-registration: Colour/Object Dissociation Sweep (Stage 2)
+# Pre-registration: Colour/Object Dissociation Sweep (Stage 2 & Stage 2b)
 
 - **Date:** 2026-09-27
 - **Governed by:** `docs/assessment_colour_object_dissociation.md` and `docs/RENDERS_2026-09-27_colour_object_pilot.md`.
-- **Amended before sweep execution:** Inclusion of `LN` as third arm (117 renders total).
-- **Written and committed:** after Stage 1 feasibility gate passed (4/4) and **before Stage 2 sweep completion**.
+- **Amended 22:04:** Inclusion of `LN` as third arm (117 renders total).
+- **Amended 23:25 (Stage 2b Extension at Dose 0.200):** After evaluating the 0.050 sweep (which yielded `unperturbed_binding` on all blocks with zero object collapse), an identical sweep is pre-registered at **dose 0.200** to test if higher steering energy induces selective binding dissociation or precipitates object collapse.
+- **Written and committed:** before any Stage 2b perturbed render is generated.
 
 ---
 
@@ -22,26 +23,28 @@ The natural unconstrained prior sits at **$36.0^\circ$** (warm autumnal ochre/br
 
 ---
 
-## 2. Experimental Design (3 Arms, 117 Renders)
+## 2. Experimental Design (3 Arms, 117 Renders per Dose)
 
 - **Prompts (3)**:
   - `LP`: *"a single purple leaf centered..."* (uncommon binding)
   - `LG`: *"a single green leaf centered..."* (prior control)
   - `LN`: *"a single leaf centered..."* (unspecified natural prior)
 - **Macro Blocks (6)**: `Block_1` through `Block_6`
-- **Signs (2)**: `pos` (+0.050), `neg` (-0.050)
-- **Dose**: 0.050
+- **Signs (2)**: `pos` (+d), `neg` (-d)
+- **Dose Batches**:
+  - Stage 2a: $d = 0.050$ (completed, negative finding)
+  - Stage 2b: $d = 0.200$ (new execution)
 - **Seeds (3)**: 42, 777, 1337
-- **Counts**:
+- **Counts per Dose**:
   - Perturbed: 12 conditions (6 blocks x 2 signs) x 3 prompts x 3 seeds = **108 renders**
-  - Baselines: 3 prompts x 3 seeds = **9 renders**
-  - Total: **117 renders**
+  - Baselines: 3 prompts x 3 seeds = **9 renders** (shared/reused from Stage 1 & 2a)
+  - Total: **117 renders** (108 newly queued perturbed + 9 existing baselines)
 
 ---
 
-## 3. Frozen Operational Definitions for Stage 2
+## 3. Frozen Operational Definitions (Identical Across Doses)
 
-For each macro block $B \in \{\text{Block\_1}, \dots, \text{Block\_6}\}$, sign $s \in \{\text{pos}, \text{neg}\}$ at dose $0.050$:
+For each macro block $B \in \{\text{Block\_1}, \dots, \text{Block\_6}\}$, sign $s \in \{\text{pos}, \text{neg}\}$ at dose $d \in \{0.050, 0.200\}$:
 
 ### A. Object Integrity Gate
 A render is **intact** if the segmented object occupies at least 3.0% of the frame area (`fg_share >= 0.030`) and exhibits non-zero chromatic structure (`mean_sat >= 0.15`).

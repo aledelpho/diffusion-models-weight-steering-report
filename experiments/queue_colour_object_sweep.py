@@ -195,12 +195,18 @@ def main():
     with open(PLAN_CSV, encoding="utf-8") as f:
         plan_rows = list(csv.DictReader(f))
 
-    print(f"Queuing Stage 2 Colour Object Sweep ({len(plan_rows)} tasks)...")
-
+    COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
     queued_count = 0
+    skipped_count = 0
     current_block_sign = None
 
     for r in plan_rows:
+        prefix = r["output_prefix"]
+        target_png = COMFY_OUTPUT_ROOT / (prefix + "_00001_.png")
+        if target_png.exists():
+            skipped_count += 1
+            continue
+
         row_type = r["type"]
         seed = int(r["seed"])
         steps = int(r["steps"])
@@ -211,7 +217,6 @@ def main():
         sampler = r["sampler"]
         scheduler = r["scheduler"]
         prompt_text = r["prompt_text"]
-        prefix = r["output_prefix"]
         block = r["block"]
         gain = float(r["gain"])
 
@@ -237,8 +242,9 @@ def main():
 
         post_prompt(wf)
         queued_count += 1
-        print(f"  [{queued_count}/{len(plan_rows)}] Queued: {prefix}")
+        print(f"  [{queued_count}/{len(plan_rows) - skipped_count}] Queued: {prefix}")
 
+    print(f"\nQueuing complete: Queued={queued_count}, Skipped={skipped_count} (already on disk)")
     print(f"\nVerifying queue count at {COMFY_HOST}/queue...")
     running, pending = get_queue_counts()
     print(f"ComfyUI Queue Status: Running={running}, Pending={pending}, Total Registered in ComfyUI={running + pending}")
