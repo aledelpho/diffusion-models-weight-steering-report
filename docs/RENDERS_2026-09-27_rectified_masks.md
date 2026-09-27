@@ -115,7 +115,43 @@ sub-block level fails and M5 means nothing whatever it says.
 **M6 is the one worth hoping for.** If it holds, the tuner has two independent axes built from four
 blocks. If it fails, the common mode swallows both and the register's §F changes.
 
-## 6. Standing constraints
+## 6. How it is driven — no preset file, no granular_json
+
+`benchmark_profondita` drove single blocks through **`ArthemyKrea2ModelTuner`** in **`Real Value`**
+mode with a **`vectors_override`** of **34 slots** — 28 transformer blocks, then 2 txtfusion
+layerwise, 2 refiner, 1 projector, 1 txtmlp. Verified from the render metadata: `blk15pos_0.200`
+carries **0.2 at index 15** and zero in the other 33.
+
+**Switching a block off is a `0.000` in that vector.** No `granular_json`, no preset JSON, nothing
+to build — which is how `blk24` and `blk25` are excluded from the `Block_6` mask, and it is the same
+mechanism the bench has used all along.
+
+The twelve vectors, non-zero slots only, everything else `0.000`:
+
+| condition | slots |
+|---|---|
+| `B4_mask_pos` | `[15]=+0.200` `[18]=−0.200` |
+| `B4_mask_neg` | `[15]=−0.200` `[18]=+0.200` |
+| `B4_anti_pos` | `[15]=+0.200` `[18]=+0.200` |
+| `B4_anti_neg` | `[15]=−0.200` `[18]=−0.200` |
+| `B6_mask_pos` | `[26]=−0.200` `[27]=+0.200` |
+| `B6_mask_neg` | `[26]=+0.200` `[27]=−0.200` |
+| `B6_anti_pos` | `[26]=+0.200` `[27]=+0.200` |
+| `B6_anti_neg` | `[26]=−0.200` `[27]=−0.200` |
+| `B4B6_mask_pos` | `[15]=+0.200` `[18]=−0.200` `[26]=−0.200` `[27]=+0.200` |
+| `B4B6_mask_neg` | `[15]=−0.200` `[18]=+0.200` `[26]=+0.200` `[27]=−0.200` |
+| `B4B6_anti_pos` | `[15]=+0.200` `[18]=+0.200` `[26]=+0.200` `[27]=+0.200` |
+| `B4B6_anti_neg` | `[15]=−0.200` `[18]=−0.200` `[26]=−0.200` `[27]=−0.200` |
+
+**Each mask and its anti-mask touch the same tensors at the same |gain|, so their Frobenius
+displacement is identical by construction** — the matching needs no calibration step and cannot
+drift.
+
+The full plan, with the 34-value vector spelled out per row and the prompt text carried from the
+`benchmark_mappa` metadata, is `data/rectified_mask_plan.csv`, built by
+`experiments/make_rectified_mask_plan.py`. **72 rows.**
+
+## 7. Standing constraints
 
 - The analyst generates no render and requests none beyond this document.
 - Nothing written under `notebook/`. No claim status changes.
