@@ -34,6 +34,8 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **B6** | the **augmentation-robustness** test used one strength per operation. Harsher settings would find the edge this one did not | cheap, bounded |
 | **B7** | backlog 23/09 items **A1–A6** — status unverified, need a pass | carried over |
 | **B8** | apply the **23 traits and the judge** to `benchmark_mappa`, which has never been scored by either | the damage-or-style question on the block corpus |
+| **B9** | **re-run the sign-stability pre-check on a Frobenius-matched bench.** It failed on the q/k/v/o cells (7/184 unanimous against 1.4 by chance), but those cells span a factor **2.77** in displacement, so "below noise" and "given less dose" are the same observation there | decides whether a sign-correction mask is buildable at all — `assessment_sign_correction_mask.md` §5 |
+| **B10** | rewrite `blk00` as a **contrast** knob. The variance ratios for all 28 blocks and both arms are already in `data/texture_audit_profondita.csv` | a replacement claim with a better estimator than the one just discredited |
 
 ## C. Costs renders — Alessandro launches
 
@@ -45,6 +47,9 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **C4** | `mod.lin` alone, to finish the dead-arm decomposition | 24 |
 | **C5** | a bench where **one block group and a scramble carry the same D** — the comparison `structured_vs_scattered.md` §4 could not make | ~72 |
 | **C6** | the crossed-domain replication of `prereg_domain_specificity` §8 | 160 |
+| **C11** | **replicate the angle rule at low dose.** ρ = 0.939 − 0.278·cos rests entirely on nine pairs at dose 0.200, a degraded regime whose cosines correlate only r = +0.42 with those at 0.050. Every stacking design depends on this law | ~72 |
+| **C12** | one more pair between cos −0.2 and 0.0, to test whether **super-additivity** (`B1+B4`, ρ = 1.167, 2.9 SE above 1) is systematic. If it is, the line is the chord of a curve and the optimal stack is not the linear one | 12 |
+| **C13** | the **signed map** at q/k/v/o granularity, at matched displacement, against `RANDSIGN` at the same D — only after **B9** and **C11** | 288 |
 | **C7** | Block K — trait combinations; page 02 is 0/4 | — |
 | **C8** | blind 4-AFC at 1× without the baseline in the lineup | — |
 | **C9** | the **"corrector"** objective: minimise noise at constant detail, beating "push block 0 positive" | — |
@@ -93,4 +98,8 @@ The other fifteen are listed in the notebook front matter and are not repeated h
    transferable output.
 3. **C1** — the only live experiment with a passed gate.
 4. The **`permutation-adds-a-neglected-attribute` replication** — 19/20 against 1/20 is the largest
-   effect in the project and it is stuck on a formality.
+   effect in the project and it is stuck on a formality. It is also the existence proof that a
+   *measured* rearrangement beats a *random* one at identical displacement, which is the premise of
+   every stacking and masking design in **C11–C13**.
+5. **C11** — the angle rule is load-bearing for three queued designs and was measured only in the
+   degraded regime.
