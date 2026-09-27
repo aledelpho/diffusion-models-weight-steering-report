@@ -188,3 +188,104 @@ prints the test–retest rate against the frozen 0.95 threshold.
 
 The §5 table said 548 and is superseded by this one. The item counts were verified against the
 renders on disk: 234 run items, **zero missing files**.
+
+---
+
+## Amendment 02 — the gate failed, what the failure actually says, and the instrument that replaces it
+
+**Deposited**: 2026-09-27, after the gate and **before any statistic of the replacement was
+computed.** No result of the replacement has been seen.
+
+### A. The gate result, independently recomputed from `data/damage_style_gate.csv`
+
+| probe | correct | order-agreeing | A-share | verdict |
+|---|--:|--:|--:|---|
+| saturation | 11/18 | 6/18 | **0.778** | FAIL |
+| sharpness | 9/18 | **0/18** | **1.000** | FAIL |
+| degradation | 8/18 | **0/18** | **0.278** | FAIL |
+| **pooled** | 28/54 | 6/54 | **0.685** | — |
+
+The report in `report_damage_or_style.md` reproduces exactly. No threshold was moved, no prompt
+reworded, no model substituted, and Arm B was correctly **not** run, because the contingency in the
+runbook covered a failure of the degradation probe alone and all three failed.
+
+### B. The failure has a mechanism, and it is not "the judge is noisy"
+
+On `sharpness` the judge answered **"A" in 18 calls out of 18**, against a Gaussian blur of σ = 2.
+Correct 9/9 when the sharp image was first, 0/9 when it was second. On `degradation` it answered
+"B" in 13 of 18. **It emits a fixed letter per question and does not consult the pixels.**
+
+Accuracy alone would have hidden this: 9/18 on `sharpness` reads as "chance". It is not chance.
+Under guessing, both orders of a pair agree correctly about a quarter of the time, so ~4–5 of 18;
+observed **0 of 18** on two probes, with P(0 of 9 pairs) = 0.75⁹ = 0.075 each and 0.0056 jointly.
+**Zero order agreement is below chance and is the signature of a constant answer.** The
+order-agreement criterion is what separated "noisy" from "not looking", and it is the part of the
+gate that earned its place.
+
+### C. A defect in the gate's own third criterion — pitfall candidate 73
+
+The pooled first-position share is **0.685, inside the [0.30, 0.70] bound: on that criterion the
+gate PASSES.** It passes because the three per-probe biases point in different directions — 1.000,
+0.778, 0.278 — and cancel when averaged.
+
+**A position-bias guard pooled over questions with different position preferences is not a guard.**
+Had §4 relied on the pooled share alone, a judge answering with a constant letter would have been
+certified. Only the per-probe criteria caught it.
+
+This generalises beyond the gate: guard **G1** in `judge_damage_style_run.py` computes the A-share
+pooled per *arm*. Each arm here happens to carry one question, so G1 is correct — **by luck, not by
+design.** Any future arm with more than one question form must compute it per question.
+
+**Pitfall candidate 73**: *a distributional guard averaged over heterogeneous questions can be
+satisfied by the cancellation of opposite pathologies. Compute it per question, and keep a
+consistency criterion (order agreement) alongside the accuracy criterion, because accuracy alone
+reads a constant answer as chance.*
+
+### D. What is voided, and what is not
+
+* **Voided**: multi-image judging with `qwen3.8:27b` over `/api/generate` at native resolution.
+  Arm A and Arm B as specified in §5 are unreachable with this instrument.
+* **Not voided**: the single-image gate of 2026-09-26 (`data/capability_judge_gate.csv`, 7/8 scenes,
+  polarity agreement 0.016). That judge passed, on one image, and nothing here contradicts it. The
+  boundary is exact: **this judge sees one image.**
+
+### E. The replacement for Arm B, and why the frozen prediction carries over unchanged
+
+Arm B asks whether a block edit is a **transferable treatment**: does the same edit applied to a
+different prompt and seed produce a recognisably related image, against a foil matched in ‖D‖?
+That is a 2-alternative forced choice with chance 0.50 — and **it does not need a judge.** In the
+23-trait space it is a nearest-neighbour decision:
+
+```
+for each (block b, dose d, sign s, seed sigma):
+    reference = feature vector of (b,d,s) on P01, seed sigma
+    target    = feature vector of (b,d,s) on P02, seed sigma
+    foil      = feature vector of (b',d,s) on P02, seed sigma,  b' the magnitude-matched block
+    hit  iff  cos(reference - mean_P01, target - mean_P02) > cos(reference - mean_P01, foil - mean_P02)
+```
+
+Each arm is centred on its own prompt's baseline mean, so content is removed and only the
+displacement direction is compared. Standardisation from **baselines only** (pitfall 33). Chance
+remains exactly **0.50**, the foils are the same magnitude-matched ones the runner computes, and the
+unit of analysis is the seed within prompt pair.
+
+**Therefore prediction D3 carries over verbatim**: confirmed if pooled > 0.60 with ≥ 5/6 blocks
+above 0.50; falsified if pooled ≤ 0.55. The instrument changed because the gate forced it, not
+because a result was seen — **none has been.** The exact sign test over the 12 block × dose cells
+is retained.
+
+Cost: **zero renders, zero judge calls.** `experiments/style_features.py` extracts the 23 traits
+from the 519 existing PNGs.
+
+### F. What cannot be replaced
+
+**Arm A cannot.** "Has visible rendering defects" is a perceptual judgement and there is no feature
+that means it. The project's nearest proxy is the loss of high-frequency energy against the
+same-seed baseline (`punto7_attrito_e_rettificazione.md` §1), and that measures **loss of fine
+texture, not the appearance of being broken** — a coherent flat style loses fine texture too, which
+is exactly the confusion this study existed to resolve.
+
+So the damage half stays open. It would need either a judge that addresses two images — the
+composite-canvas variant, where both images are pasted into one labelled canvas and the problem
+becomes single-image, re-gated with these same three probes at 54 calls — or a human. Neither is
+assumed here, and neither is run without Alessandro.
