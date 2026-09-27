@@ -75,7 +75,7 @@ English. The analysis documents are in Italian.** The quantity is called `sterzo
 Third time in one day that the repository already held the answer: the stroke-width quantisation
 (audit of 23/09), the CLIP claim wording, and now this.
 
-**Pitfall candidate 72**: *in a bilingual repository, a novelty check run in one language is not a
+**Pitfall candidate 73**: *in a bilingual repository, a novelty check run in one language is not a
 novelty check.* Search both, or search the data files' column names, which are language-neutral.
 
 ## 5. What is withdrawn

@@ -222,7 +222,7 @@ observed **0 of 18** on two probes, with P(0 of 9 pairs) = 0.75⁹ = 0.075 each 
 order-agreement criterion is what separated "noisy" from "not looking", and it is the part of the
 gate that earned its place.
 
-### C. A defect in the gate's own third criterion — pitfall candidate 73
+### C. A defect in the gate's own third criterion — pitfall candidate 74
 
 The pooled first-position share is **0.685, inside the [0.30, 0.70] bound: on that criterion the
 gate PASSES.** It passes because the three per-probe biases point in different directions — 1.000,
@@ -236,7 +236,7 @@ This generalises beyond the gate: guard **G1** in `judge_damage_style_run.py` co
 pooled per *arm*. Each arm here happens to carry one question, so G1 is correct — **by luck, not by
 design.** Any future arm with more than one question form must compute it per question.
 
-**Pitfall candidate 73**: *a distributional guard averaged over heterogeneous questions can be
+**Pitfall candidate 74**: *a distributional guard averaged over heterogeneous questions can be
 satisfied by the cancellation of opposite pathologies. Compute it per question, and keep a
 consistency criterion (order agreement) alongside the accuracy criterion, because accuracy alone
 reads a constant answer as chance.*

@@ -72,7 +72,7 @@ A sign swing of **1.82×**, the largest of the six — and the global measure ca
 > lowered*. On `Block_6` the two happen together and the second hides the first.**
 
 This is a defect of the measure, not of the data, and it was found by looking at the pixels after
-the number had already been reported. Pitfall candidate **74**: *a texture statistic that is not
+the number had already been reported. Pitfall candidate **75**: *a texture statistic that is not
 normalised for contrast, or restricted to regions where texture is the only thing present, reports
 the sum of two effects and can report the wrong sign of the one being asked about.*
 
