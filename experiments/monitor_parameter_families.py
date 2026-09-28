@@ -17,7 +17,7 @@ from pathlib import Path
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
 COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 RENDERS_DIR = COMFY_OUTPUT_ROOT / "benchmark_parameter_families" / "renders"
-TOTAL_GATE_EXPECTED = 6
+TOTAL_EXPECTED = 108
 POLL_INTERVAL_SEC = 20
 
 LOG_FILE = Path(r"c:\Users\aless\Desktop\comfyui-pilot\parameter_families_progress.log")
@@ -54,12 +54,11 @@ def count_png_renders():
 
 def main():
     log("=" * 72)
-    log("  AVVIO MONITOR PARAMETER FAMILIES (Gate: 12 render)")
+    log(f"  AVVIO MONITOR PARAMETER FAMILIES ({TOTAL_EXPECTED} render)")
     log(f"  Directory monitorata: {RENDERS_DIR}")
     log("=" * 72)
 
     start_time = time.time()
-    last_count = -1
     consecutive_empty = 0
 
     while True:
@@ -69,26 +68,26 @@ def main():
 
         if current_count > 0:
             avg_per_render = elapsed / current_count
-            remaining_gate = max(0, TOTAL_GATE_EXPECTED - current_count)
-            eta_seconds = remaining_gate * avg_per_render
+            remaining = max(0, TOTAL_EXPECTED - current_count)
+            eta_seconds = remaining * avg_per_render
             eta_str = (datetime.now() + timedelta(seconds=eta_seconds)).strftime("%H:%M")
             speed_str = f"{avg_per_render:.1f}s/render"
-            eta_display = f"ETA Gate: ~{int(eta_seconds//60)} min ({eta_str}) | {speed_str}"
+            eta_display = f"ETA: ~{int(eta_seconds//60)} min ({eta_str}) | {speed_str}"
         else:
             eta_display = "ETA: in calcolo..."
 
-        pct = (current_count / TOTAL_GATE_EXPECTED) * 100 if TOTAL_GATE_EXPECTED > 0 else 0.0
+        pct = (current_count / TOTAL_EXPECTED) * 100 if TOTAL_EXPECTED > 0 else 0.0
 
         log(
-            f"[Parameter Families Monitor] Render: {current_count}/{TOTAL_GATE_EXPECTED} ({pct:.1f}%) | "
+            f"[Parameter Families Monitor] Render: {current_count}/{TOTAL_EXPECTED} ({pct:.1f}%) | "
             f"Queue: {running} running, {pending} pending | {eta_display}"
         )
 
         if running == 0 and pending == 0:
             consecutive_empty += 1
-            if consecutive_empty >= 2 and current_count >= TOTAL_GATE_EXPECTED:
+            if consecutive_empty >= 2 and current_count >= TOTAL_EXPECTED:
                 log("=" * 72)
-                log("  TUTTI I 12 RENDER DELLO STAGE 1 GATE COMPLETATI!")
+                log(f"  TUTTI I {TOTAL_EXPECTED} RENDER DEL BENCHMARK COMPLETATI!")
                 log("=" * 72)
                 break
         else:
