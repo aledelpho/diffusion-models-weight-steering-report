@@ -1,412 +1,572 @@
 # The story so far
 
-*Read this first. It holds no new measurements. It tells you which question each page answers,
-why that page came next, and what the pages add up to once you put them side by side. Every
-number here is copied from the page it links to, and that page is where you check it. Act 5 is
-the exception: its results are not on a page yet, so each one links to its pre-registration and
-its data file instead.*
+*Read this first. The goal behind this notebook is to let anyone **shape and personalise a model
+with presets**. A preset is a list of numbers, one per weight tensor, that the tuner multiplies into
+the model. If every preset carries its own recognisable style, presets are a cheap way to make a
+model your own. **The hard problem is control**: choosing which style you get, how strongly, and
+without breaking the picture. Static per-tensor edits like these have barely been studied. The
+nearest prior work trains LoRAs or steers activations
+([prior work](../docs/prior_work_layer_specialisation.md)). So the only way to learn how they behave
+is to experiment, and this page follows those experiments. It is not an argument that any one
+preset is the best.*
 
-*Last brought up to date: 2026-09-28, local commit `2f49c3e`.*
+*This page holds no new measurements. Every number is copied from the page or document it links to,
+and that is where you check it. Links into `docs/` are results that are not on a notebook page yet:
+their verdict comes from their own pre-registration, or they are marked exploratory. An
+[index](#index-where-every-experiment-sits) at the end assigns every experiment in the repository
+to a section.*
+
+*Last brought up to date: 2026-09-28, local commit `9027ccc`.*
 
 ---
 
-## One question
+## Three questions
 
-Can you change **how** an image model draws (its strokes, its shading, its palette) by editing
-a tiny fraction of its weights directly, with no training and no prompt tricks?
+1. **Does a preset give the model a style of its own?** (sections II and III)
+2. **Can you control which style you get?** (sections IV, V and VI)
+3. **Is what you get a style, or damage?** (section VII)
 
-And if you can, the question that matters more: **is it the shape of the edit that does the
-work, or only how far the edit moves the weights?** If distance is all that counts, any edit of
-that size would do the same thing, and there would be nothing to understand, only a dial.
+Two further questions sit under all three: can the measurements be trusted (sections I and VIII),
+and does any of it carry over to another model (end of section III)?
 
-The model is Krea-2, a 12.8-billion-parameter diffusion transformer with 28 blocks. The first
-edit tried on it was a hand-calibrated file of 53 KB.
+## The answer so far
 
-## The three edits every page compares
+1. **Presets leave a real, reproducible signature.** It transfers to other prompts and seeds,
+   survives mirroring, hue rotation, noise and JPEG, and grows stronger with dose. The preset also
+   separates from its random control on a second model, Anima, on stroke shape. This supports the
+   idea that a preset can personalise a model.
+2. **But not every preset has a distinct one, and most of any push is the same thing.** About four
+   fifths of what any edit does, crafted or random, is grain injected along one shared axis. What
+   separates presets is mostly how hard and where they push. A random preset gets a signature as
+   readily as a designed one.
+3. **Control comes from location, and the six block groups are too coarse to give it.** The blocks
+   form a gradient, not six modules. The output end moves the picture most, with a step near block
+   23. Inside a block, the value projections steer and the routing ones do not. A few single blocks
+   are clean knobs, and the group sliders waste most of their budget.
+4. **Strength is not a dial.** Effect grows as dose^0.19. The dose used most sits past a knee where
+   the drawing breaks. Pushes in different directions add up, pushes in the same direction waste
+   each other. On Anima no dose was both visible and safe.
+5. **Colour is the hardest to control.** Hue barely moves, saturation does, and colour carries no
+   part of the signature that transfers. A colour the model infers can be switched off entirely.
+6. **Style and damage can now be told apart, partly.** A new axis asks whether the picture is still
+   a drawing. It works only on styles with a line, and it probably rewards some artefacts too.
+7. **Many corrections came from the instruments, not the model.** Several were caught by somebody
+   opening an image at full size.
 
-Almost every page on this notebook compares the same three edits. **They all move the weights
-by exactly the same amount** (a relative Frobenius displacement of D = 0.0538, measured). They
-differ in how the per-tensor gains are arranged:
+---
 
-| edit | its gains | structure it keeps |
+## Who is who
+
+**The model.** Krea-2 is a 12.8-billion-parameter diffusion transformer with 28 blocks. The tuner
+splits them into six groups, `Block_1` at the input to `Block_6` at the output. It also exposes
+single blocks (`blk00` … `blk27`) and the attention projections inside them (`wq`, `wk`, `wv`, `wo`)
+as separate controls. A second model, **Anima** (Cosmos-Predict2, also 28 blocks), was used once to
+test transfer.
+
+**A preset** is a list of per-tensor gains that the tuner multiplies into the weights. Its size is
+measured as a Frobenius displacement **D**, so two presets can be matched in size by construction.
+In this notebook *preset* and *edit* mean the same thing.
+
+**What a preset can and cannot reach.** One number per tensor scales the whole tensor. It cannot
+pick a direction *inside* a tensor, and the literature on this family of models finds features
+spread across many channels rather than one per channel
+([prior work §3](../docs/prior_work_layer_specialisation.md)). So a preset chooses *where* to push
+and *how hard*, but it cannot target an individual feature. That limits how fine the control can
+get. Matching D also matches the push, not the effect: the same D moves the image 3.7 times more at
+the tail than in the middle.
+
+**The three presets of the first two weeks** all move the weights by the same D = 0.0538 and differ
+only in how the gains are arranged. Comparing them asks whether the *pattern* of a preset matters,
+or only its size:
+
+| preset | its gains | structure it keeps |
 |---|---|---|
-| **calibrated preset** | hand-set plateaus: inside one block the gains are equal or nearly so, and their signs agree 96% of the time | all of it |
-| **block derangement** | the preset's gains, with each block's profile handed to a different block | coherence *inside* each block, but the wrong block gets it |
-| **sign scramble** | the preset's gains, with the sign of each tensor redrawn at random | none: coherence inside blocks is destroyed |
+| **calibrated preset** | hand-set plateaus; within one block the gains are equal or nearly so | all of it |
+| **block derangement** | the preset's gains, each block's profile handed to another block | coherence inside each block, in the wrong block |
+| **sign scramble** | the preset's gains, each tensor's sign redrawn at random | none: this is the control |
 
-Read as a ladder, this design isolates the variable that matters. **Distance is held constant,
-and the arrangement is what changes.** If the top rung does something and the bottom rung does
-not, distance does not explain it. The sign scramble is the control. The other two edits are
-hypotheses.
+All fourteen presets of that period, the random controls included, also carry **the same four
+seeded rotations on `Block_3`**. A comparison between two arms therefore isolates the gains. A
+comparison against the untouched model measures rotation and gains together.
+([amendment 03](../docs/prereg_perturbation_atlas_amendment_03.md))
 
-> **A floor under all three, found on 2026-09-25.** Every one of these presets, the random
-> controls included, also carries the same four seeded rotations on one block group (Block_3,
-> blocks 10–14, seeds 82, 60, 59 and 56). The script that builds the controls copies them from
-> the preset and never touches them. So each arm is really *the same rotation plus different
-> gains*. A comparison between two arms still isolates the gains, because the rotation is the
-> same on both sides. A comparison against the untouched model does not: it measures rotation
-> and gains together. ([amendment 03](../docs/prereg_perturbation_atlas_amendment_03.md))
+**Later presets** are simpler: one group, one block or one projection at a time, set to a single
+number, the **dose** (0.020 to 0.200), positive or negative. **Rotations** turn one block group by
+an angle. The **atlas** generates random presets inside one region at a time, all at the same D.
 
-A fourth family appears in the second half of the notebook: **rotations** of one block group at
-a time (the 28 blocks are split into six groups, B1 at the input to B6 at the output). It
-answers a different question: *where* in the model you push.
-
-## How to read a verdict
-
-Each claim carries one of four labels. **Holds**: it passed a criterion written down before the
-data existed. **Ambiguous**: it was tested and the result does not decide either way.
-**Overturned**: it was tested and came out false. **Open**: it has not been tested properly yet,
-however many numbers sit beside it.
+**How to read a verdict.** *Holds*: passed a criterion written down before the data existed.
+*Ambiguous*: tested, undecided. *Overturned*: tested, false. *Open*: not properly tested, however
+many numbers sit beside it.
 
 ---
 
-## Act 0 · Can the instrument be trusted?
+## What holds today
 
-Every result in this notebook is a difference between two pictures. So before any of them
-counts, the machine has to stay still when nothing is touched.
+A reader's summary, not the ledger. The ledger of all 46 claims is in the [README](../README.md).
 
-It does, bit for bit. With every gain at zero the tuner changes no pixel at all, and a render
-repeated after a restart is identical. The seed noise on fine texture is 1.65% and 1.83% on the
-two reference prompts. There is one surprise: an edit followed by its exact inverse returns the
-weights to where they were, but not the picture. Rounding leaves a mean difference of 16 out of
-255, and that floor is enough to withdraw one earlier result.
-
-→ [00 · Is the instrument lying to me?](00-the-bench.md) — **holds**
-
-## Act 1 · The edit changes the marks, and the shape of the edit matters
-
-**The first observation.** The preset visibly changes how the model draws: darker, greyer,
-grainier, strokes running parallel. On 24 prompts it separates clearly from *both* controls on
-the same stroke axis, even though both controls moved the weights exactly as far. This was the
-first experiment and it ran before the project froze predictions in advance, so it stays
-**open**. It is the observation everything else set out to check.
-→ [01 · A tiny payload shifts mark style](01-mark-style.md)
-
-**The sharpest test of the idea.** When hatching is measured by a script, with no human in the
-loop, the sign of a structured edit picks the kind of hatching. Pushed positive, the
-derangement crosses the strokes, while the preset runs them parallel. On 16 new prompts both land on the
-predicted side in 16 of 16, and the sign scramble is *not there*, even though it had shown the
-effect in the exploratory round. That failure is what makes the result mean something: the axis
-belongs to structured edits, not to any displacement of that size. The derangement half
-**holds**. The preset half stays **ambiguous**, because the visual check the pre-registration
-asked for was never recorded.
-→ [06 · The hatching axis, and the sign that decides it](06-the-hatching-axis.md)
-
-**Colour behaves differently.** Different edits push the palette in directions that differ from
-one another. That result **holds**, twice, on corpora that share no prompt. The stronger claim,
-that each edit leaves its own recognisable colour fingerprint, came back three of six against a
-bar of four set in advance, and it is filed **ambiguous**, not rounded up. The odd detail is the
-one to keep: the sign scramble, silent on strokes, is among the *strongest* edits on colour.
-Colour and texture do not respond to these edits in the same way.
-→ [07 · What the edit does to colour](07-chromatic-signatures.md)
-
-> **Where Act 1 leaves us.** On strokes, the ladder behaves as the idea requires: the structured
-> rungs act and the scrambled rung does not. What is still unknown is *which* property of the
-> structure does the work. The ladder says that coherence inside a block matters. It cannot say
-> more.
-
-## Act 2 · It reaches past the finish, into what is in the picture
-
-A filter changes how a scene is drawn. It does not add objects to it. So the next question was
-whether these edits change *what* is drawn.
-
-**Two attributes, one that nobody asked for.** A prompt asks for barnacle-like clusters on an
-earlobe. The stock model draws them in 1 render of 20, the block derangement in 19 of 20, and the
-sign scramble, at the same displacement, in 1 of 20. On a separate corpus of rally cars, with no
-lights mentioned anywhere, one edit switches the headlights on in 31 renders of 38 and another
-switches them off in all 39. Both effects are large, and both have a control that does nothing.
-Neither was predicted in advance, so the page is **ambiguous**.
-**The whole batch moves together, and that is not about structure.** The animations on the same
-page show all five seeds of a prompt moving the same way at once. Measured, every edit is a
-direction across the seeds of one prompt (mean cosine 0.50 to 0.91, against 0.10 for a change
-of seed). The sign scramble clears that bar on 8 styles of 8 too, and no structured edit
-separates from it after correction. Hold the noise fixed and *any* push of that size moves the
-batch together. **Open.**
-→ [02 · What the edit puts in the picture, and what it takes out](02-attribute-emergence.md)
-
-**The subject grows, less than it seemed.** Under the derangement the car seemed to fill more of
-the frame. The first measurement gave a ratio of 2.14, drawn on the very images that suggested
-the idea. Re-tested on ten new styles, with the prediction frozen first, it **holds** at 1.23:
-real, and about a fifth of the size first claimed. The same round measured something more
-important: the annotator. Shown four images, he picked out the conditions 17 times in 20 against
-a 25% chance rate. **Hiding the filenames did not keep him blind to the condition**, and that
-applies backwards to every round in this notebook scored by a person, the barnacles included.
-→ [03 · How much room the subject takes, and how blind I actually was](03-what-ends-up-in-the-picture.md)
-
-## Act 3 · Where in the model, and at what price
-
-Once it was clear that structure matters, the next question was *where* the structure matters.
-
-**A pilot that asked well and settled nothing.** Old sweeps sitting on disk, rotating each of
-the six block groups, show the last group moving the weights the *least* and the picture the
-*most* (3.7 times more). The simple explanation, that a group matters in proportion to how far it
-moves the weights, fails there, and it fails at both ends of the model. But the sweeps had one
-seed per cell and no matched control, and their images carried a panel (the HUD) appended to the
-frame. **Ambiguous**, pending re-measurement.
-→ [04 · Does it matter where you edit?](04-where-in-the-model.md)
-
-**The version built to settle it.** The first group (B1) and the last (B6) were each rotated
-until both moved the weights by exactly the same amount. The directions they push the image in
-can be told apart in 10 prompts of 10, and they are further apart than two random edits of the
-same size, which also separate, by a non-zero amount that had to be measured. This is the
-strongest result in the notebook and it **holds**. It is also narrow: *different* is not the
-same as *specialised*. B6 is the group next to the output, and nothing here rules out that being
-next to the output is all it takes.
-→ [08 · Two places in the model, pushed the same distance](08-block1-vs-block6.md)
-
-**All six groups, on clean images.** The response grows with the rotation angle in every group.
-B6 moves the image most, B1 second, and the four middle groups much less. On the same data, two
-statistics then disagree about whether B1 resembles B6 or stands apart from everything.
-**Open.**
-→ [10 · All six block groups under matched rotation](10-all-blocks-clean.md)
-
-**The price of touching anything.** Each block was pushed in both directions. The part of the
-effect that reverses when the push reverses is a *knob*. The part that happens either way is a
-*cost*. Most of it is cost: fine texture is lost whichever way you push, in 23 blocks of 28, and
-the loss grows towards the output. Two real knobs exist, at opposite ends of the network, and
-they run in opposite directions. The practical rule is that on the last blocks the negative side
-is the safe side. **Holds.**
-→ [05 · What an edit steers, and what it costs](05-knob-or-cost.md)
-
-## Act 4 · A prediction that came back backwards
-
-If an edit has a direction of its own, a watercolour and a photograph should be pushed the same
-way. The belief written down was the opposite: that the declared style decides the direction.
-Frozen in advance and tested, it came back **overturned**, and backwards: eight styles agree with
-each other *more* than eighteen subjects do. The reverse cannot be claimed either, because the
-eight style prompts share one scene and the eighteen subject prompts do not.
-→ [09 · Eight styles, one direction, and a design that cannot say why](09-style-direction.md)
-
-## Act 5 · Is the preset special?
-
-*These results are not on a notebook page yet. Each was run against a pre-registration frozen
-before the analysis, and the verdict is the one that document's rules return.*
-
-Acts 1 to 4 kept comparing one preset with its controls. The tests of 24 and 25 September asked
-the question underneath all of them directly: is there anything the preset does that a random
-edit of the same size does not?
-
-**Every edit is recognisable, the random ones included.** A classifier trained on some prompts
-and tested on a prompt it has never seen names which of six edits was applied 88.5% of the time,
-against a 16.7% chance rate. It tells the preset from its random control 99.4% of the time. But
-it recognises the random control just as well (93.8%). An edit leaves a signature. That does not
-make the edit special.
-([pre-registration](../docs/prereg_arm_identifiability.md), `data/arm_identifiability_tests.csv`)
-
-**No shared axis.** If all these edits pushed along one common direction, there would be an axis
-to steer on. Measured against a thousand random directions, the share each edit puts on the
-candidate axis falls inside the random range. The largest share of all belongs to a random arm,
-and the two definitions of the axis agree at a cosine of 0.257. What does survive is weaker and
-more general: each edit, random ones included, has an average direction that reproduces when the
-scene changes. Filed as a **negative** result.
-([pre-registration](../docs/prereg_shared_axis.md), `data/shared_axis_diagnostics.csv`)
-
-**One arm-specific result.** Does an edit change how much the seeds scatter? The preset neither
-adds scatter nor removes it: it moves the output without changing its spread. The negative block
-derangement is the exception. It injects variability (13 prompts of 16, Holm 0.017), and it
-injects more than its random control does (+1.002, 13 of 16, Holm 0.034). **That is the first
-time one of the three edits beats its own random control in a direct contrast that survives
-correction.**
-([pre-registration](../docs/prereg_seed_stability.md), `data/seed_stability_tests.csv`)
-
-**The instrument cannot see most of the colour.** A calibration curve puts the smallest palette
-shift the colour measure can tell from seed noise at a rotation of +30° in hue. Three of the four
-edits move the palette by less than that, so their comparisons are *uninterpretable*, not null.
-Without that gate the notebook would have published "preset against scramble, 8 prompts of 8,
-p = 0.0078" on quantities the instrument does not resolve. Adding colour to the stroke features
-also does not help identify the edit (88.8% without it, 86.0% with it).
-([pre-registration](../docs/prereg_palette_position.md), `data/palette_tests.csv`,
-`data/colour_identifiability_tests.csv`)
-
-**The edits leave the model's repertoire.** The belief written down in advance was that an edit
-steers the output into a region the untouched model already reaches with some other prompt.
-Refuted for all three arms on the 16-prompt corpus (Holm ≤ 0.0025). The edits push the output
-outside everything the untouched model produces. One pattern repeats on both corpora: the preset
-leaves the repertoire least, the derangement more, the random edit most. It has been seen on the
-two corpora it could be tested on, so it is frozen as a prediction and not claimed.
-([pre-registration](../docs/prereg_mountain_reachability.md),
-`data/mountain_reachability_tests.csv`, [the ordering](../docs/prereg_r1_ordering.md))
-
-> **Where Act 5 leaves us.** The corpus built around one preset has answered "is this preset
-> special?" several times, and each time the answer was no, or not measurably. What it cannot
-> answer is whether *every* perturbation carries its own signature, and which parts of the model
-> move colour. That needs many perturbations of equal size landing in different places. **The
-> atlas** is that design: 10 regions × 2 independent random draws, gains only, no inherited
-> rotation. It was frozen on 2026-09-25 and its first renders are queued. There are no results
-> yet. ([pre-registration](../docs/prereg_perturbation_atlas.md))
+| | finding | where |
+|---|---|---|
+| **holds** | The tuner at zero is bit-identical to no tuner; renders reproduce across restarts, days and benches | [00](00-the-bench.md) |
+| **holds** | The subject grows under block derangement, replicated on ten new styles (×1.23) | [03](03-what-ends-up-in-the-picture.md) |
+| **holds, weakened** | Two block groups pushed the same distance separate further than two random edits. But on clean re-renders the same statistic flips sign with dose, and the random baseline for `Block_6` cannot be rendered at a usable dose | [08](08-block1-vs-block6.md), [salvage map](../docs/salvage_map_clean_benches.md) |
+| **holds** | The sign of a structured preset picks parallel or crossed hatching on Krea-2; the random control does not. It does not carry over to Anima | [06](06-the-hatching-axis.md), [Anima review](../docs/anima_stage1_revisione.md) |
+| **holds** | Any push costs fine texture, more towards the output (4.8% → 2.8% after the contrast correction) | [05](05-knob-or-cost.md) |
+| **holds, contested** | "The first block is an inverted knob". A decisive test on its own corpus says it is a contrast change; the status has not been changed | [05](05-knob-or-cost.md), [test](../docs/first_block_knob_decisive_test.md) |
+| **pre-registered, confirmed** | A block preset is a transferable treatment (0.708 against 0.50 chance) and survives six image augmentations | [transfer](../docs/transfer_test_result.md), [augmentations](../docs/signature_robustness_result.md) |
+| **pre-registered, confirmed** | Transposed to Anima, the preset separates from its random control on stroke shape (two features, Holm 0.018) | [Anima review](../docs/anima_stage1_revisione.md) |
+| **pre-registered, provisional** | Structured presets keep their direction inside a style domain and lose it across; the random control does not | [domain](../docs/prereg_domain_specificity.md) |
+| **overturned** | The declared style decides the direction of a preset | [09](09-style-direction.md) |
+| **retracted** | The frontier of "best operating points" ranked by style against damage | [frontier](../docs/style_damage_frontier.md) |
+| **retracted** | The split of an edit into a sign-blind and a signed part on pixels (twice) | [retraction](../docs/sign_decomposition_retraction.md) |
 
 ---
 
-## Act 6 · The instruments were the experiment
+## I · Can the measurements be trusted?
 
-Three days in which almost every question asked about the model came back as a question about the
-bench. It is the least satisfying act and the one that changed the most.
+Every result here is a difference between two pictures, so the machine has to stay still when
+nothing is touched.
 
-**The pixel sign decomposition was retracted.** The split of an edit into a common part and a
-signed part was re-derived on pixels, agreed with a table from a week earlier to within 0.02 — and
-that table had already been withdrawn as a floor artefact. What survives is the q/k against v/o
-split, on four statistics.
-[retraction](../docs/sign_decomposition_retraction.md)
+**The bench holds, bit for bit.** With every gain at zero the tuner changes no pixel, on Krea-2 and
+on Anima. A render repeated after a restart is identical, and so is one repeated seven days later.
+A cell rendered weeks earlier from a different plan and queue script came back at 0.4472 against
+0.447, so determinism holds across benches. An edit followed by its exact inverse restores the
+weights but not the picture (mean difference 16 of 255).
+→ [00](00-the-bench.md) — **holds** · [Anima §0](../docs/anima_dosesweep_verifica.md)
 
-**The rectified masks did not answer their question.** `Block_4` fights itself on contrast and
-`Block_6` on grain, so the design flipped the opposing sub-blocks and measured against an
-anti-mask at identical displacement — the cleanest control in the project. The spec said in
-advance that if the arithmetic failed the experiment meant nothing. M4 missed by 0.31 **and by
-direction**, so it did. The idea is untested, not refuted.
-[result](../docs/rectified_mask_result.md)
+**A change of seed is not noise.** The first spatial map was declared empty because it compared
+edits against the difference between two seeds. At a fixed seed the null is exactly zero, and a
+change of seed is a maximal perturbation. Redone per seed, each block has a reproducible spatial
+signature (same block 0.40–0.47, different blocks 0.26–0.30, 6 cells of 6). Those signatures are
+tied to the seed. The sampler re-injects the same noise at each step for a given seed, so the same
+"dirt" pattern recurs in every render with that seed, whatever the weights.
+→ [trajectory coherence](../docs/coerenza_traiettoria.md) · [retracted map](../docs/mappa_krea2_primo_esito.md)
 
-**The colour gate measured saturation.** An achromatic object has no foreground under a
-saturation-defined mask, so the one render that kept its object and lost its colour was filed as a
-destroyed image. Re-measured with a colour-blind foreground — and then again, because the first
-replacement was defeated by grain in exactly the way it had been written to expose.
-[audit](../docs/colour_gate_and_chroma_audit.md)
+**555 renders carried a panel nobody asked for.** A batch node appended a 480-pixel HUD under the
+picture on every rotation bench. It was cut away, and the crop proved bit-identical to clean
+re-renders. The panel had inflated a random control by a factor of two.
+→ [HUD](../docs/hud_contamination_1024x1760.md) · [recovery](../docs/recovered_vs_contaminated.md)
 
-**Hue is pinned; chroma is not.** Nothing pre-registered had looked at saturation. `Block_3` and
-`Block_6` turn out to be antisymmetric chroma knobs — ×1.563 / ×0.931 and ×0.726 / ×1.815, every
-one of their 18 cells on the side its arm says, p = 1e-5 — while the mean hue shift over the same
-corpus is 12.7°. The project had been asking why colour would not move, and had been reading
-"colour" as hue.
+**Presets that never reach the model.** A preset can be well formed and counted in the displacement
+and still change nothing. It happened three times: one text-encoder arm, `modulation_norm` in the
+atlas, and 48 renders of the q/k/v/o atlas whose norm scales never arrived. Pixel identity with the
+baseline is now a provenance check.
+→ [normscales](../docs/normscales_never_applied.md) · [atlas vs generator](../docs/atlas_vs_tuner_generator.md)
 
-**No block releases a declared colour toward its prior.** If an edit cut the binding holding
-"purple" onto "leaf", the leaf should fall back to the colour it gets when nothing is said. Six
-cells of thirty-six move that way; the mean distance from the prior grows. Whatever a whole-block
-edit does, it is not cutting an attribute binding.
+---
 
-**A leaf loses all its colour, and keeps being a leaf.** Nine seeds in twenty, against zero in
-twenty unedited, with nothing between chroma ratio 0.085 and 0.518 — a switch, not a dimmer. It
-never happens when the prompt names a colour: 72 cells, none below 0.648. The reading that fits is
-that a *stated* colour is carried by the text and survives, while a colour the model has to infer
-from the object is produced by a step that can fail outright. Nothing in the unperturbed render
-predicts which seeds fail: twelve features, none surviving correction, and an exact permutation
-test over all 167 960 splits at p = 0.535.
-[result](../docs/leaf_collapse_and_blk16_result.md) ·
-[reading](../docs/what_broke_in_the_leaf.md) ·
-[predictors](../docs/leaf_collapse_predictors_result.md)
+## II · What does a preset do to a picture?
 
-**And the generality test was run on subjects that could not show it.** Mushroom, tomato, pinecone
-and banana were chosen for having a *strong* colour prior. For all four, not naming the colour
-gives the same picture as naming it — 0.9° to 9.9° apart, against 52.2° for the leaf — so there
-was no inference in them to break. The null was published as "leaf-specific" and has been
-withdrawn as untested.
+**It changes the marks.** Under the calibrated preset the model draws darker, greyer and grainier,
+with parallel strokes. On 24 prompts that separates from both size-matched controls. It was
+exploratory, so it stays **open**. → [01](01-mark-style.md)
+
+**The sign picks the hatching.** Pushed positive, the derangement crosses the strokes and the preset
+runs them parallel, on 16 new prompts of 16. The random control does not. **Holds** for the
+derangement; the preset half is **ambiguous**. → [06](06-the-hatching-axis.md)
+
+**It reaches into content.** Barnacles the prompt asks for come back in 19 of 20 renders under the
+derangement, against 1 of 20 for the stock model and for the random control. Headlights no prompt
+mentions switch on in 31 of 38 under one preset and off in 39 of 39 under another. Neither was
+predicted in advance: **ambiguous**. → [02](02-attribute-emergence.md)
+
+**It reframes the subject.** The subject grows under the derangement: ×2.14 on the images that
+suggested it, **holds** at ×1.23 on ten new styles. The same round showed the annotator was not
+blind to the conditions. → [03](03-what-ends-up-in-the-picture.md)
+
+**And most of any push is grain.** Across 180 displacements, one shared axis carries 78% of the
+energy, and its dominant feature is the share of high frequency. Crafted and random edits both sit
+on it. What differs is the rest. A `Block_6` rotation keeps a residual that reverses with the sign
+(cos −0.70), which no scramble can do. `Block_1`'s residual does not reverse (+0.65): that is drift,
+not steering. *This was measured on the HUD-carrying images and not re-measured. The panel adds a
+shared component to every feature vector, so the 78% is an upper bound.* The pixel-level version
+points the same way: the part of an edit that does not depend on the sign is high-frequency, and the
+signed part is structural (weakened: 1.469 against 1.276).
+→ [is it all scrambling?](../docs/e_tutto_scrambling.md) · [retraction §6](../docs/sign_decomposition_retraction.md)
+
+> **Where II leaves us.** A preset changes strokes, content and framing, not just the finish. Most
+> of what it does is shared grain, and the part that can be steered is the residual that reverses
+> with the sign.
+
+---
+
+## III · Does every preset have a style of its own?
+
+If presets are to personalise a model, each one has to leave a signature that is recognisable,
+stable across prompts, and different from the others.
+
+**Every preset is recognisable, the random ones included.** On a prompt it has never seen, a
+classifier names which of six presets was applied 88.5% of the time (chance 16.7%). It recognises
+the random control at 93.8%. Within one prompt, every preset moves all five seeds the same way, and so
+does the random one. → [identifiability](../docs/prereg_arm_identifiability.md) ·
+[02](02-attribute-emergence.md#why-all-five-seeds-move-together)
+
+**The signature belongs to the preset, not to the picture.** Applied to a different prompt and seed,
+a block preset lands closer to itself than to a different block of equal size: 0.708 against 0.50,
+85% of its ceiling on the same prompt. It is **stronger** at high dose. It survives mirroring, 90°
+rotation, hue rotation, halved saturation, noise and JPEG, and it lives in texture (0.778) and
+stroke (0.750). It **never lived in colour** (0.514). **Pre-registered, confirmed.**
+→ [transfer](../docs/transfer_test_result.md) · [augmentations](../docs/signature_robustness_result.md)
+
+**But distinct styles are few, and magnitude does most of the separating.** In the atlas of 24
+random regional presets, identification on unseen styles runs at 25.7% against 4.2% chance. It is
+concentrated in a minority: 95.8% and 91.7% for two late regions, chance for the middle bands, 0% for
+the text encoder alone. What separates presets is how far they push (ρ = 0.894 against magnitude).
+The number of clearly distinct styles came out between 1 and 5, a floor set by a test with 3 seeds
+and one subject. There is no shared axis to steer along: each preset's share of it sits inside what
+random directions give. → [atlas](../docs/prereg_perturbation_atlas.md) ·
+[capacity](../docs/prereg_style_capacity.md) · [shared axis](../docs/prereg_shared_axis.md)
+
+**A region does not pick a style.** Two random presets drawn in the same region are nearly
+orthogonal (cos +0.106), and region is not the unit of control (p = 0.278). A mosaic glitch seen in
+one early-attention preset belongs to that *draw*, not to the region: its twin in the same region
+at the same D sits below baseline. → [atlas](../docs/prereg_perturbation_atlas.md) ·
+[looking at B1/B6](../docs/looking_at_block1_and_block6.md)
+
+**Where the pattern does matter.** The preset and the derangement keep their direction *within* a
+style domain and lose it *across*. The random control carries a generic component instead (Δ = 0.261
+and 0.212, Holm 0.0015). So what matters is sign coherence *inside* each tensor. This is
+**provisional**, because the pattern was seen before the test was written. The negative
+derangement also adds seed-to-seed scatter beyond its control (Holm 0.034). Three other ways of
+separating crafted from random came back empty:
+- scattering a push is not finer than keeping it coherent (colour/texture ratio 0.710 against 0.710);
+- the family-coherence verdict was withdrawn (it hung on a 0.000283 margin);
+- style does not govern direction ([09](09-style-direction.md), overturned; the style-axis test,
+  M = −0.028, p = 0.584).
+
+→ [domain](../docs/prereg_domain_specificity.md) · [seed stability](../docs/prereg_seed_stability.md) ·
+[scattered](../docs/structured_vs_scattered.md) ·
+[family](../docs/prereg_family_coherence_amendment_02.md) · [style axis](../docs/prereg_style_axis_tradeoff.md)
+
+**Every preset leaves the model's repertoire.** The belief was that a preset steers into a look the
+model already produces for some other prompt. Refuted for all three arms (Holm ≤ 0.0025). Each
+preset pushes outside everything the untouched model makes. The preset leaves the repertoire least,
+the derangement more and the random one most, on both corpora. That order is frozen as a prediction,
+untested. → [repertoire](../docs/prereg_mountain_reachability.md) · [ordering](../docs/prereg_r1_ordering.md)
+
+**On a second model.** Transposed to Anima, with the dose scaled to its 30 steps, the preset
+separates from its random control on stroke shape: crosshatch +0.216 and contour length −20 px,
+both surviving Holm at 0.018. The cross-attention path is inert on strokes, as on Krea-2. What did
+**not** transfer is the direction: on Anima the preset and the derangement move hatching the *same*
+way (+0.292, +0.280). The random control is not inert there either. The native-corpus test that
+would separate "Krea-2 only" from "badly written prompts" is registered and not run.
+→ [Anima results](../docs/anima_stage1_results.md) · [review](../docs/anima_stage1_revisione.md) ·
+[stage 2 prereg](../docs/prereg_stage2_corpus_nativo.md)
+
+> **Where III leaves us.** Signatures are real and reproducible, and they survive a change of model
+> on stroke shape. That supports personalising a model with presets. Getting a *chosen* style is the
+> unsolved part. Magnitude and location do most of the separating, and a region decides how much a
+> preset does, not which style it gives. So control has to be built from knowing where to push, at a
+> finer grain than a region.
+
+---
+
+## IV · Where to push: a map of the model
+
+**The blocks are a gradient, not six modules.** Measured one by one, neighbouring blocks do similar
+things (cos +0.321 for adjacent blocks, falling to −0.058 for distant ones). But the six groups the
+tuner uses are an indifferent choice: their boundaries rank at the 31st percentile of random
+contiguous partitions. The best boundaries found (2, 7, 12, 17, 26) share the groups' period of five,
+shifted by three, so the current boundaries cut through natural groups rather than between them. No
+number of groups is "right": separation keeps growing as groups are added.
+→ [do the blocks exist?](../docs/esistono_i_blocchi.md)
+
+**The tail moves the picture most, and it is a step, not a ramp.** How much of the seed's own texture
+survives an edit does not rise across blocks 0–19. It jumps near block 23 (0.091 against 0.139,
+6 of 6). The last group moves the weights least and the picture most (3.7×). On clean rotations of all
+six groups, `Block_6` moves the image most and `Block_1` second (**open**). Prior work places style
+LoRAs in the late blocks of FLUX, so this is a replication in a different medium.
+→ [a step](../docs/monotonia_profondita_esito.md) · [04](04-where-in-the-model.md) ·
+[10](10-all-blocks-clean.md) · [prior work](../docs/prior_work_layer_specialisation.md)
+
+**Two ends, two directions, with a weakened proof.** Pushed exactly the same distance, the first and
+last groups imprint directions that can be told apart beyond two random edits of that size, in
+10 prompts of 10 (**holds**, [08](08-block1-vs-block6.md)). The clean re-renders weaken it:
+- at D = 0.030 the statistic is positive in 6 of 6 cells, at the registered D = 0.045 negative in
+  6 of 6, both at the floor;
+- the random baseline anchored on `Block_6` fails its quality gate in 69 of 72 renders;
+- the dose that passes the gate is 6.3× lower than the one registered.
+
+The page 08 result sits at one point of a curve that changes sign. Different is also not
+specialised: nothing yet separates "`Block_6` does something specific" from "`Block_6` is next to
+the output". → [salvage map](../docs/salvage_map_clean_benches.md) ·
+[triangle](../docs/rotations_triangolo_block1_block3_block6_results.md) ·
+[v2 audit](../docs/audit_rotations_clean_v2_2026-09-23.md)
+
+**Inside a block, the value path steers and the routing path does not.** Push `wq` or `wk` either way
+and the image moves the same way (cos(+,−) +0.37 to +0.54). Push `wv` or `wo` and it reverses, down to
+−0.86 at the tail. Three statistics agree in 8 scenes of 8. `q` and `k` are close to unusable as
+signed controls. It needs a replication on a band not used to find it.
+→ [retraction §6](../docs/sign_decomposition_retraction.md)
+
+**The text encoder moves pixels, not strokes.** A preset touching only the text encoder moves the
+pixels as far as one touching only the diffusion model (RMS 51–53 against 48). But on all 23 traits it
+moves less, and on stroke width it stays at the noise floor (0.89 against 2.65). The stroke shift
+comes from the diffusion model. → [where the stroke shift lives](../docs/where_the_stroke_shift_lives.md)
+
+**Some single blocks are clean knobs.**
+- `blk00` is a **contrast** knob, and it does all of `Block_1`'s work: the other four blocks in that
+  group are inert, so the slider spends four fifths of its budget on nothing.
+- `Block_5` negative is the cleanest group arm on the map, with no knee.
+- `blk16` adds style while strengthening the line.
+- `blk27` has two faces: negative it destroys the line, positive it is the largest line-preserving
+  move among 56 single-block arms.
+
+→ [dissection](../docs/block1_dissection.md) · [decisive test](../docs/first_block_knob_decisive_test.md) ·
+[the map re-read](../docs/retro_mappa_reading_result.md)
+
+**`Block_4` and `Block_6` are two mechanisms.** `Block_6` changes how the picture is *rendered*
+(tone, chroma and grain), powerfully and at the cost of the drawing, and its parts compose badly.
+`Block_4` changes *what is drawn*: it tilts energy from fine detail to broad shapes, keeps the line,
+and its parts add up. `Block_1` and `Block_6` act at the *same* scale (a peak at 4–8 px) with opposite
+signs, so what separates them is not scale. **Exploratory.**
+→ [synthesis](../docs/block4_vs_block6_synthesis.md) · [the map re-read](../docs/retro_mappa_reading_result.md)
+
+**Half of `Block_6` is hidden by the VAE.** Measured in the latent, before decoding, `Block_6` is a
+clean, symmetric detail knob: high frequency ×1.404 positive and ×0.695 negative. In pixels the
+positive half vanishes (×0.99). The decoder passes the loss of detail and absorbs the addition. What
+survives of the positive arm is a redistribution of detail across the frame.
+→ [Block 6 in the latent](../docs/block6_nel_latente.md) · [Block 6 and the groups](../docs/block6_e_struttura_gruppi.md)
+
+> **Where IV leaves us.** There is a map to steer by: the tail over the middle, the value path over
+> the routing path, `Block_4` over `Block_6` for keeping the drawing, and a handful of single blocks
+> that behave like knobs. The tool's own units work against it. Its six groups cut through the
+> model's natural structure, and each group bundles active and inert blocks together.
+
+---
+
+## V · How hard to push, and how to combine
+
+**Strength is not a dial.** Image movement grows as dose^0.19: six times the dose buys 1.39 times the
+effect. At the smallest dose ever tested the image has already moved half as far as a change of seed
+would move it. No small-edit regime responds linearly.
+→ [dose calibration](../docs/assessment_per_block_dose_calibration.md)
+
+**The working dose is past a knee.** For `Block_6` positive, `Block_5` positive and `Block_6` negative,
+the drawing holds up to 0.120 and collapses on the step to 0.200, the dose almost every bench uses. The
+calibrated preset has no knee between strengths 0.5 and 1.0, but at 2.0 it collapses in every style
+(82.5% of cells below 0.90). The negative derangement at 2.0 keeps and intensifies the line. On
+Anima, the smallest dose that moves the image three seed-noise units already breaks the drawing
+inside the subject. **No dose was both visible and safe**, and the dose also has to be scaled with the
+number of sampling steps. → [the map re-read](../docs/retro_mappa_reading_result.md) ·
+[stage 5 re-read](../docs/retro_stage5_reading_result.md) · [stage 9 re-read](../docs/retro_stage9_reading_result.md) ·
+[09](09-style-direction.md) · [Anima dose sweep](../docs/anima_dosesweep_verifica.md)
+
+**Pushes that point different ways add up.** Across nine pairs of groups,
+ρ = 0.939 − 0.278·cos(angle between them). Edits pointing different ways add, edits pointing the same
+way saturate and waste up to a third. A prediction deposited before its renders confirmed it:
+opposite-signed `B5 + B1` added on 4 quantities of 4, concordant `B5 + B4` on 0 of 4. The design rule
+that follows is to pick units that push the target property the same way and are otherwise as
+different as possible. **Confirmed on nine pairs, all at dose 0.200.** It needs a replication at a
+lower dose. → [angle rule](../docs/regola_angolo_9_coppie.md) ·
+[prediction 01](../docs/previsione_01_composizionalita.md) ·
+[prediction 02](../docs/previsione_02_saturazione_direzionale.md) ·
+[stacking](../docs/assessment_sign_aligned_stacking.md)
+
+**Inside a group, parts can fight.** `Block_4` reverses on contrast what its parts predict. In
+`Block_6`, `blk27` overturns the other three blocks on grain. Masks built to flip the fighting parts did not
+answer their question, because the arithmetic they depended on failed on `Block_6`: **untested, not
+refuted**. An earlier pre-check at the level of q/k/v/o had found no stable sign to flip.
+→ [fights](../docs/internal_fights_by_group.md) · [masks](../docs/rectified_mask_result.md) ·
+[sign mask pre-check](../docs/assessment_sign_correction_mask.md)
+
+> **Where V leaves us.** Strength has to be set per block, below the knee, and scaled to the
+> sampler. Combining presets follows a measurable rule, and that rule is what makes designing presets
+> from single units feasible.
+
+---
+
+## VI · What presets can and cannot do to colour
+
+Colour kept refusing to move, and for most of the project the reason was that "colour" was being read
+as hue.
+
+**Different presets push the palette differently** (**holds**, twice). Whether each leaves its own
+colour fingerprint came back three of six against a bar of four (**ambiguous**). The instrument could
+not resolve most palette shifts: its smallest detectable shift is a +30° hue rotation, and three of
+four presets move the palette by less. Colour carries no part of the signature that transfers.
+→ [07](07-chromatic-signatures.md) · [palette](../docs/prereg_palette_position.md) ·
+[augmentations §4](../docs/signature_robustness_result.md)
+
+**Hue is pinned; saturation moves.** Hue shifts 12.7° on average. `Block_3` and `Block_6` move the
+object's saturation in opposite directions with their two arms, 18 cells of 18. **`Block_6` positive
+does not desaturate. It moves colour off the object**: the object loses 27% and an empty grey
+background gains ×12.5. On Anima, the negative derangement is the only condition that moves
+colourfulness (+37.75, 9 prompts of 10), as on Krea-2. A table that labelled `Block_2` "chromatic"
+turned out to classify a structureless scramble as the most chromatic thing in the corpus.
+→ [chroma audit](../docs/colour_gate_and_chroma_audit.md) · [redistribution](../docs/chroma_redistribution.md) ·
+[Anima review §4](../docs/anima_stage1_revisione.md) · [v2 audit](../docs/audit_rotations_clean_v2_2026-09-23.md)
+
+**Naming a colour does not free it, and no preset cuts it loose.** With and without a colour clause,
+nothing measurable changes (3 of 6 pairs each way). That kills both registered hypotheses, at low
+power. On a leaf, the model's own unprompted colour is orange-brown, not green. No preset sends a
+named colour back to that prior (6 cells of 36). → [declared colour](../docs/declared_colour_result.md) ·
+[concept](../docs/colour_and_concept.md) · [pilot](../docs/colour_binding_pilot_gate.md) ·
+[binding](../docs/colour_binding_stage2_reading.md)
+
+**A leaf can lose all its colour and stay a leaf.** Under `Block_4` negative, the leaf with no colour
+named goes grey in 9 fresh seeds of 20, against 0 of 20 unedited. The result is a switch, not a dimmer:
+nothing lies between chroma 0.085 and 0.518. It never happens when the colour is named (72 cells, none
+below 0.648), and nothing in the unedited render predicts which seeds fail (p = 0.535 over all 167,960
+splits). The reading that fits: a stated colour is carried by the text, and an inferred one is
+produced by a step that can fail. Its generality test used subjects with no inference to break, so
+it is **withdrawn as untested**. → [11](11-what-the-numbers-could-not-see.md) ·
+[what broke](../docs/what_broke_in_the_leaf.md) · [predictors](../docs/leaf_collapse_predictors_result.md) ·
 [looking](../docs/looking_at_the_leaf_corpus.md)
 
-**Every statistic for ranking an edit measured displacement.** A frontier of 140 conditions was
-built, its top published as the best operating points, and the images said to agree. They did not:
-at 1:1 the two best-ranked renders are covered in defects. Structure coherence — whether the
-gradients still agree locally, which is what an ink line does — reverses the ranking at both ends.
-The five conditions recommended rank **75th to 80th of 80**; the one an observer picked out by eye
-ranks **1st**.
-[frontier and retraction](../docs/style_damage_frontier.md)
+---
 
-**`blk16` is the first edit that buys style and line together.** Across its dose ladder style
-multiplies by ten, 0.045 to 0.447, while coherence *rises* — 0.994 to 1.040, six cells of six at
-the top two doses. Everywhere else style is paid for by losing the drawing. A cell of that ladder
-already existed in another bench, rendered weeks earlier from a different plan and a different
-queue script: it returned 0.4472 against 0.447 and 1.0397 against 1.040, which moves the project's
-determinism claim from within-session to across-bench.
+## VII · Is it a style, or damage?
 
-**Then the observer read a sheet of 36 unlabelled renders in five lines, and the five lines were
-a table.** Energy at each scale of detail, which no statistic here reported because all of them sum
-over scale first. "Strong grain" and "weaker grain" are both energy added with its peak at 4–8
-pixels, the mask above its anti-mask in 12 cells of 12 (p = 0.0005). "Soft grain" and "loose blur"
-are both energy removed, separated by the *shape* of the profile: monotone stripping against a
-notch at 2–8 pixels. And the combined condition sits 3.8 to 11.5 times closer to `Block_6` than to
-`Block_4` in that space — a claim a first, layout-based test had returned as nothing.
-[taxonomy](../docs/mask_damage_taxonomy_result.md)
+Every statistic the project had measured *how far the image moved*. None measured *whether what is
+left is still a picture*.
 
-The act has its own page, and it is the page about the bench rather than the model.
-[11](11-what-the-numbers-could-not-see.md)
+**Asking a vision-language model failed twice.** First, on single images, the judge answered its two
+absolute questions "yes" 96% and 100% of the time. Four of its seven "no" answers fell on the two
+atlas presets an observer had called broken. Then, on pairs of images, it answered "A" to "which is
+sharper?" 18 times out of 18, whichever one was blurred.
+→ [judge amendment 02](../docs/prereg_capability_judge_amendment_02.md) ·
+[damage or style](../docs/report_damage_or_style.md)
+
+**A ranking by displacement picked the worst pictures.** A frontier of style against damage over 140
+conditions put the most-damaged renders at the top. **Structure coherence**, which asks whether local
+gradients still agree the way an ink line does, reverses it. The five conditions recommended rank 75th
+to 80th of 80, and the one picked by eye ranks 12th. → [frontier](../docs/style_damage_frontier.md) ·
+[11](11-what-the-numbers-could-not-see.md) · [estimator defect](../docs/estimator_precision_defect.md)
+
+**Some presets buy style and line together.** `blk16` multiplies style by ten while coherence rises
+(0.994 → 1.040). → [blk16](../docs/leaf_collapse_and_blk16_result.md)
+
+**The new axis has two limits, and the second is not yet flagged in the repository.**
+- **It only sees styles with a line.** Over all 3,735 renders it discriminates on photo, watercolour
+  and charcoal, and is nearly flat on low-poly, claymation, ukiyo-e and pixel art.
+  [atlas re-read §2](../docs/retro_axes_atlas_result.md)
+- **It rewards some artefacts.** The re-read names `early_attn_draw2` and `late_mlp_draw2` as the atlas
+  presets that "move most while keeping the line", and calls `late_mlp` the atlas's `blk16`. They are
+  the two presets the observer called visibly broken before any number existed. The judge rejected
+  them, and the mosaic glitch belongs to `early_attn_draw2`. An orientation statistic can read a
+  regular artefact as "more line". The `late_mlp` result should not be pre-registered on that
+  basis alone, and `blk16`'s rise has not yet been checked at full size either.
+  [observer](../docs/observer_predictions_atlas_phase1.md) ·
+  [looking at B1/B6](../docs/looking_at_block1_and_block6.md)
+
+**An observer's words became a table.** Five short phrases for 36 unlabelled renders matched energy at
+particular scales of detail, which no statistic here reported, because all of them sum over scale.
+Both "grain" descriptions are energy added at 4–8 px. "Soft grain" and "loose blur" are energy removed,
+told apart by the shape of the profile. In the atlas, 4 of the observer's 7 atomic statements
+generalised to 7–8 unseen styles of 8. → [taxonomy](../docs/mask_damage_taxonomy_result.md) ·
+[observer](../docs/observer_predictions_atlas_phase1.md)
+
+> **Where VII leaves us.** For the first time there is a way to tell a restyled picture from a broken
+> one. It works on drawings with a line, and it still needs an eye at full size beside it.
+
+---
+
+## VIII · How the measurements went wrong, and what caught them
+
+**A statistic can be blind in a way a glance is not.** Three times on 28 September a picture
+contradicted a published number, and each time somebody opened an image first.
+→ [11](11-what-the-numbers-could-not-see.md)
+
+**A glance can be wrong in a way a count is not.** In the same days an impression from one image failed
+its count, and a "no artefacts" had been said looking at frames shrunk to fit the screen. One image is
+one cell, whichever faculty reads it.
+
+**The estimator defects form a pattern:**
+- a grain statistic that did not divide by contrast;
+- a colour gate that defined the object by its saturation;
+- a float32 running sum that lost its precision;
+- a stroke width taking five values in total;
+- a threshold for "confirmed" set outside the estimator's range;
+- a statistic evaluated at several doses that returns the floor at whichever dose its sign happens to
+  be consistent;
+- a search for prior work run in English on a repository documented in Italian.
+
+**Three statistics agreeing is not corroboration when all three measure displacement.**
+
+The error log holds 69 entries, each with a mechanism and a fix, and the drafts run to number 87. It
+describes how measurement on generative models goes wrong, and that transfers beyond this model.
+→ [what the instrument has shown](../docs/what_the_instrument_has_shown.md) · [errors](../docs/errors_log.md) ·
+[texture audit](../docs/texture_estimator_audit_result.md) · [noise floor](../docs/noise_floor_provenance_2026-09-23.md) ·
+[methodological audit](../docs/audit_metodologico_2026-09-20.md)
+
+---
 
 ## What runs through all of it
 
-**Structure beats distance on some effects, not on the edit as a whole.** For strokes (Act 1),
-the requested attribute (Act 2) and position (Act 3), an edit of the same size without the
-structure does not reproduce the effect. But every whole-edit property tested in Act 5 (being
-recognisable, having a direction, coherence across seeds) is shared by the random control. The
-only direct win over the random control after correction is the derangement's added scatter. The honest version
-of the notebook's central idea is now: *every edit does something recognisable, and on a few
-specific effects the arrangement matters.* Nothing yet says which property of the arrangement
-does the work.
+**Signatures are easy; chosen styles are not.** Any preset leaves a signature, and that is good news
+for personalisation. Getting the style you want is the unsolved part.
 
-**Every confirmation shrinks the exploratory number.** The subject went from 2.14 to 1.23, colour
-halved, and across three rounds confirmation returned between a third and a half of the
-exploratory estimate. Read any exploratory number in this notebook as a ceiling.
+**Most of a push is grain.** About four fifths of any edit lies on one shared axis. What can be
+steered is the residual that reverses with the sign.
 
-**Instruments had to be checked before their verdicts could be trusted.** The observer was not
-blind (Act 2), the HUD panel inflated a control (Act 3), and the colour measure cannot resolve
-most of the shifts it was asked about (Act 5). Each time the check came *before* the claim, and
-each time it removed one.
+**Location is the handle, and the tool's units are coarse.** The six groups cut through the model's
+natural structure. Single blocks and the value projections are the finer handles.
 
-**In Act 6 the check came after, three times, and an observer supplied it.** A ranking was
-published, a null was published as a falsification, and a texture was described by a number that
-had summed over the scale it lived at. None of the three was caught by a measurement; each was
-caught by somebody opening an image, and the measurement came second. The symmetrical fact is that
-looking is not privileged either: twice in the same days an impression from a single image failed
-its count — the prototypical colour was not bleeding back (5 of 12 cells, p = 1.00) and the
-rewordings had not changed the object (chroma 0.503 against 0.474). **A single cell is a single
-cell, whichever faculty read it.** What survives is narrower: the statistics in use were blind in a
-way that a glance was not, and the repair was to add an axis, not to trust an eye.
+**Strength needs a ceiling per block.** The response is sublinear and has knees, and the dose used most
+sits past one.
 
-**All of the bench's statistics answered "how much moved".** None answered "is what is left still a
-drawing", and none answered "at what scale". Both were added in Act 6, both immediately changed a
-published conclusion, and both came from somebody describing a picture in words.
+**Every confirmation shrank the number.** Read every exploratory number as a ceiling.
 
-**Nearly everything is n = 1 of something.** There is one model and one calibrated preset. All
-40 prompts are character portraits containing "bold ink outlines" and "hatched shadows". A person
-scored the rounds in Act 2, and that person has been measured as not blind to the conditions.
-([scope](../docs/scope.md))
+**"How far" is not "how good".** The first quality axis now exists, with two limits.
+
+**Nearly everything is n = 1 of something**: two models, one family of presets, a handful of prompts
+per test, and one comic-line register for most structural claims. ([scope](../docs/scope.md))
 
 ## What is not known yet
 
-1. **Which property of the structure does the work.** No layer ablation, spectral decomposition
-   or rank sweep has been run. [01](01-mark-style.md#what-is-still-open)
-2. **Whether B6 is specialised or just next to the output.** Neither 08 nor 10 separates the two.
-   [08](08-block1-vs-block6.md), [10](10-all-blocks-clean.md)
-3. **Whether attribute emergence generalises beyond one prompt template.** The design written to
-   test it was never run. [02](02-attribute-emergence.md#one-attribute-one-prompt-family)
-4. **Whether the enlargement comes from structure or from magnitude.** The scramble control was
-   not rendered. [03](03-what-ends-up-in-the-picture.md#what-this-cannot-separate)
-5. **Whether every perturbation carries its own signature, and where colour lives in the
-   model.** This is what the atlas is built to answer.
-   [atlas](../docs/prereg_perturbation_atlas.md)
-6. **How much of each arm's effect against the untouched model is the shared Block_3 rotation**
-   and how much is the gains. The atlas removes the rotation, while the old corpus cannot
-   separate them. [amendment 03](../docs/prereg_perturbation_atlas_amendment_03.md)
-7. **Whether any of this holds outside Krea-2**, or outside this one corner of image space.
-8. **Whether the colour collapse generalises at all.** Its test has not been run: the subjects
-   used had unambiguous colour priors. The screening criterion now exists and costs two baselines
-   per candidate. [looking](../docs/looking_at_the_leaf_corpus.md)
-9. **What sets which seeds collapse.** Not the picture the model was going to draw — that is ruled
-   out. The dose ladder is the next handle, and it also decides whether the empty gap is a
-   bifurcation or an artefact of one dose.
-   [spec](../docs/RENDERS_2026-09-28_leaf_dose_ladder.md)
-10. **Whether structure coherence means anything outside comic linework.** It is one number on one
-    drawing style, and a strongly oriented one is the easy case.
-11. **Whether sub-block masks work at all.** Their arithmetic prerequisite failed on `Block_6`;
-    a mask built on directly measured joint effects has not been tried.
+1. **How many distinct styles presets can produce.** The atlas count (1 to 5) is a floor; more seeds
+   and more subjects would raise it.
+2. **Whether a single block or a single projection gives a *chosen* style**, rather than just a
+   recognisable one. The signed q/k/v/o atlas is planned, not run.
+   → [plan](../docs/RUNBOOK_signed_atlas_plan.md)
+3. **Where the tuner's group boundaries should be.** The data prefer 2, 7, 12, 17, 26, on one dose and
+   two scenes.
+4. **Whether the value/routing split replicates** on a band not used to find it.
+5. **Whether the angle rule holds at low dose**, where presets are usable.
+6. **Whether the coherence axis can be trusted** against a set of renders an observer has labelled at
+   full size, starting with `blk16`, `late_mlp` and the mosaic glitch.
+7. **Whether the colour switch is a switch at every dose** (spec ready, not run), and whether any
+   other colour can be switched off.
+8. **Whether `Block_6` specialises or is simply next to the output.**
+9. **Whether hatching direction is Krea-2-only** or was lost to prompts written for Krea-2. The Anima
+   native test is registered, not run.
+10. **Whether finer control needs a finer preset.** A number per tensor chooses where to push. Aiming at
+    *what* is stored there probably needs directions inside a tensor, which the tuner does not offer.
+11. **Whether any page status should change after this week**, starting with the first block's
+    "inverted knob". That decision is Alessandro's.
 
 ---
 
 ## Map
 
 ```mermaid
-flowchart LR
-  A0["00 · the instrument<br/>holds"] --> Q{{"Does the shape of an edit matter,<br/>or only its size?"}}
-  Q --> A1["Act 1 · marks"]
-  Q --> A2["Act 2 · content"]
-  Q --> A3["Act 3 · position & cost"]
-  Q --> A4["Act 4 · style"]
-  A1 --> P01["01 mark style<br/>open"] --> P06["06 hatching axis<br/>holds"]
-  P01 --> P07["07 colour<br/>ambiguous"]
-  A2 --> P02["02 attributes<br/>ambiguous"] --> P03["03 subject size<br/>holds"]
-  A3 --> P04["04 pilot<br/>ambiguous"] --> P08["08 B1 vs B6<br/>holds"] --> P10["10 all groups<br/>open"]
-  A3 --> P05["05 knob or cost<br/>holds"]
-  A4 --> P09["09 style direction<br/>overturned"]
-  Q --> A5["Act 5 · is the preset special?<br/>not yet on a page"]
-  A5 --> AT["atlas<br/>frozen, renders queued"]
-  Q --> A6["Act 6 · the instruments<br/>were the experiment"]
-  A6 --> P11["11 what the numbers<br/>could not see<br/>open"]
-  P11 --> NX{{"two axes added:<br/>is it still a drawing?<br/>at what scale?"}}
+flowchart TD
+  I["I · can the measurements be trusted?<br/>bench · seed ≠ noise · HUD · dead presets"] --> Q{{"Can presets personalise a model,<br/>and can they be controlled?"}}
+  Q --> II["II · what a preset does<br/>marks · content · framing · mostly grain"]
+  II --> III{{"III · does every preset have its own style?<br/>signature yes · distinct and chosen: rarely · Anima"}}
+  III --> IV["IV · where to push<br/>gradient not groups · tail step · value path · single blocks · latent"]
+  III --> V["V · how hard, how to combine<br/>dose^0.19 · knee · angle rule · fights"]
+  III --> VI["VI · colour<br/>hue pinned · chroma moves · the leaf switch"]
+  IV --> VII{{"VII · style or damage?<br/>coherence axis · its two limits"}}
+  V --> VII
+  VI --> VII
+  VII --> VIII["VIII · how measurements went wrong<br/>11 · error log"]
 ```
 
-The full ledger of all 42 claims, sorted by verdict, is in the [README](../README.md).
+---
+
+## Index: where every experiment sits
+
+Runbooks, render specs, briefs, amendments and pre-registrations are listed only where they carry a result. Otherwise the result document stands for them.
+
+| section | pages and documents |
+|---|---|
+| **I · measurements** | [00](00-the-bench.md) · [trajectory coherence](../docs/coerenza_traiettoria.md) · [first map (retracted §2)](../docs/mappa_krea2_primo_esito.md) · [HUD](../docs/hud_contamination_1024x1760.md) · [recovery](../docs/recovered_vs_contaminated.md) · [noise floor](../docs/noise_floor_provenance_2026-09-23.md) · [normscales](../docs/normscales_never_applied.md) · [atlas vs generator](../docs/atlas_vs_tuner_generator.md) |
+| **II · what a preset does** | [01](01-mark-style.md) · [02](02-attribute-emergence.md) · [03](03-what-ends-up-in-the-picture.md) · [06](06-the-hatching-axis.md) · [headlights](../docs/stage10_headlights_results.md) · [bounding boxes](../docs/stage10_bbox_verification.md) · [stage 12 criterion](../docs/stage12_headlights_criterion.md) · [stage 12 check](../docs/stage12_verifica.md) · [is it all scrambling?](../docs/e_tutto_scrambling.md) · [sign decomposition](../docs/sign_decomposition_result.md) and [its retraction](../docs/sign_decomposition_retraction.md) · [full map (retracted)](../docs/mappa_completa_sterzo_e_deriva.md) |
+| **III · signatures** | [identifiability](../docs/prereg_arm_identifiability.md) · [transfer](../docs/transfer_test_result.md) · [augmentations](../docs/signature_robustness_result.md) · [atlas](../docs/prereg_perturbation_atlas.md) · [capacity](../docs/prereg_style_capacity.md) · [shared axis](../docs/prereg_shared_axis.md) · [domain](../docs/prereg_domain_specificity.md) · [family](../docs/prereg_family_coherence_amendment_02.md) · [seed stability](../docs/prereg_seed_stability.md) · [scattered](../docs/structured_vs_scattered.md) · [repertoire](../docs/prereg_mountain_reachability.md) · [ordering](../docs/prereg_r1_ordering.md) · [style axis](../docs/prereg_style_axis_tradeoff.md) · [09](09-style-direction.md) · [stage 9 verdict](../docs/stage9_verdict.md) · [stage 9 observations](../docs/observations_stage9.md) · [Anima results](../docs/anima_stage1_results.md) · [Anima review](../docs/anima_stage1_revisione.md) · [Anima stage 2](../docs/prereg_stage2_corpus_nativo.md) |
+| **IV · where to push** | [04](04-where-in-the-model.md) · [08](08-block1-vs-block6.md) · [10](10-all-blocks-clean.md) · [pilot rotations](../docs/pilot_rotations_verdict.md) · [B1 vs B6 results](../docs/rotations_block1_vs_block6_results.md) · [triangle](../docs/rotations_triangolo_block1_block3_block6_results.md) · [matched v3](../docs/rotations_matched_v3_results.md) · [clean v1](../docs/rotations_clean_v1_results.md), [multi-step](../docs/rotations_clean_v1_multi_step_results.md) · [clean v2](../docs/rotations_clean_v2_results.md) · [all-blocks profile (superseded by the audit)](../docs/all_blocks_specialization_report.md) · [v2 audit](../docs/audit_rotations_clean_v2_2026-09-23.md) · [salvage map](../docs/salvage_map_clean_benches.md) · [do the blocks exist?](../docs/esistono_i_blocchi.md) · [a step](../docs/monotonia_profondita_esito.md), [its report](../docs/report_monotonia_profondita.md) · [q/k/v/o re-read](../docs/retro_qkvo_atlas_reading_result.md) · [stroke shift](../docs/where_the_stroke_shift_lives.md) · [Block_1](../docs/block1_dissection.md) · [first block](../docs/first_block_knob_decisive_test.md) · [B4/B6](../docs/block4_vs_block6_synthesis.md) · [Block 6 in the latent](../docs/block6_nel_latente.md) · [Block 6 and the groups](../docs/block6_e_struttura_gruppi.md) · [latent re-read](../docs/retro_latenti_reading_result.md) · [prior work](../docs/prior_work_layer_specialisation.md) |
+| **V · strength and combination** | [05](05-knob-or-cost.md) · [negative arm](../docs/punto7_attrito_e_rettificazione.md) · [dose calibration](../docs/assessment_per_block_dose_calibration.md) · [the map re-read](../docs/retro_mappa_reading_result.md) · [stage 4](../docs/retro_stage4_preset_reading_result.md), [5](../docs/retro_stage5_reading_result.md), [7](../docs/retro_stage7_reading_result.md), [9](../docs/retro_stage9_reading_result.md) re-reads · [Anima dose sweep](../docs/anima_dosesweep_verifica.md) · [angle rule](../docs/regola_angolo_9_coppie.md) · [prediction 01](../docs/previsione_01_composizionalita.md) · [prediction 02](../docs/previsione_02_saturazione_direzionale.md) · [stacking](../docs/assessment_sign_aligned_stacking.md) · [fights](../docs/internal_fights_by_group.md) · [masks](../docs/rectified_mask_result.md) · [sign mask pre-check](../docs/assessment_sign_correction_mask.md) |
+| **VI · colour** | [07](07-chromatic-signatures.md) · [palette](../docs/prereg_palette_position.md) · [colour identifiability](../docs/prereg_colour_identifiability.md) · [chroma audit](../docs/colour_gate_and_chroma_audit.md) · [redistribution](../docs/chroma_redistribution.md) · [colour binding re-read](../docs/retro_colour_binding_reading_result.md) · [v2 colour and stroke](../docs/rotations_clean_v2_chromatic_and_stroke_analysis.md) · [declared colour](../docs/declared_colour_result.md) · [concept](../docs/colour_and_concept.md) · [dissociation assessment](../docs/assessment_colour_object_dissociation.md) · [pilot](../docs/colour_binding_pilot_gate.md) · [binding](../docs/colour_binding_stage2_reading.md) · [11](11-what-the-numbers-could-not-see.md) · [what broke](../docs/what_broke_in_the_leaf.md) · [predictors](../docs/leaf_collapse_predictors_result.md) · [looking](../docs/looking_at_the_leaf_corpus.md) |
+| **VII · style or damage** | [capability judge](../docs/prereg_capability_judge_amendment_02.md) · [damage or style](../docs/report_damage_or_style.md) · [frontier](../docs/style_damage_frontier.md) · [blk16](../docs/leaf_collapse_and_blk16_result.md) · [atlas re-read](../docs/retro_axes_atlas_result.md) · [taxonomy](../docs/mask_damage_taxonomy_result.md) · [estimator defect](../docs/estimator_precision_defect.md) · [observer](../docs/observer_predictions_atlas_phase1.md) · [sign-opposition prediction](../docs/observer_prediction_sign_opposition.md) · [looking at B1/B6](../docs/looking_at_block1_and_block6.md) |
+| **VIII · method** | [11](11-what-the-numbers-could-not-see.md) · [errors](../docs/errors_log.md) · [what the instrument has shown](../docs/what_the_instrument_has_shown.md) · [claim map](../docs/instrument_claim_map.md) · [texture audit](../docs/texture_estimator_audit_result.md) · [methodological audit](../docs/audit_metodologico_2026-09-20.md) · [open work](../docs/open_work_register.md) · [scope](../docs/scope.md) |
+| **planned, not run** | [signed atlas](../docs/RUNBOOK_signed_atlas_plan.md) · [hand-made presets](../docs/RUNBOOK_weekend_handmade_presets.md) · [hatching on objects](../docs/prereg_hatching_order_stage8.md) · [leaf dose ladder](../docs/RENDERS_2026-09-28_leaf_dose_ladder.md) · [Anima native corpus](../docs/prereg_stage2_corpus_nativo.md) |
