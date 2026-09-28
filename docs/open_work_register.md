@@ -22,6 +22,7 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **A5** | whether `LN` (the no-colour-named arm) joins Stage 2 of the colour-binding study: +36 renders, 78 → 117 | `colour_binding_pilot_gate.md` §2 |
 | **A6** | whether any claim status changes on this week's results. **The analyst has changed none.** | — |
 | **A7** | **the eye veto of `benchmark_centre_push` (G_eye) — twelve blind pairs are built and waiting.** Open each `pair##.png` in `benchmark_centre_push/_eye_veto/` **at 100 %**, write A, B or `neither` in `data/centre_push_veto_answers.csv`, run `--score`. Fewer than 8 agreements out of 12 and the primary of the bench is reported as *"L not validated by eye"*. Nobody but Alessandro can supply this. | `centre_push_eye_veto.py --build` done; sealed key in `data/centre_push_veto_key.csv` |
+| **A8** | **what the primary of `centre_push` should now say.** The model-eye veto resolved only 5 of 12 pairs and `L` is wrong by eye on named units (`centre_push_eye_veto_result.md` §2). The analyst has changed nothing. | `centre_push_eye_veto_result.md` |
 
 ## B. Costs no renders — the data is already on disk
 
@@ -37,6 +38,7 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **B8** | apply the **23 traits and the judge** to `benchmark_mappa`, which has never been scored by either | the damage-or-style question on the block corpus |
 | **B9** | **re-run the sign-stability pre-check on a Frobenius-matched bench.** It failed on the q/k/v/o cells (7/184 unanimous against 1.4 by chance), but those cells span a factor **2.77** in displacement, so "below noise" and "given less dose" are the same observation there | decides whether a sign-correction mask is buildable at all — `assessment_sign_correction_mask.md` §5 |
 | **B10** | rewrite `blk00` as a **contrast** knob. The variance ratios for all 28 blocks and both arms are already in `data/texture_audit_profondita.csv` | a replacement claim with a better estimator than the one just discredited |
+| **B11** | **recompute structure coherence at 3\u00d73 and 5\u00d75 on the 24 crops of the eye veto.** If `L` tracks stroke coarseness and window scale rather than integrity, the smaller window reorders `Block_1 neg 0.500`, `Block_6 pos 0.080`, `Block_3 pos 0.350` and `Block_6 neg 0.200` \u2014 and the axis is repairable instead of merely discredited | decides whether coherence can be fixed or must be retired |
 
 ## C. Costs renders — Alessandro launches
 

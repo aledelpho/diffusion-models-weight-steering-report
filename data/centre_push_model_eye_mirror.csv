@@ -1,0 +1,13 @@
+pair,obs4,obs5,obs6,majority_mirrored,majority_original_coords
+01,A,A,A,A,B
+02,neither,neither,neither,neither,neither
+03,neither,neither,neither,neither,neither
+04,A,A,A,A,B
+05,neither,neither,neither,neither,neither
+06,B,B,neither,B,A
+07,B,B,B,B,A
+08,A,A,A,A,B
+09,neither,neither,neither,neither,neither
+10,A,A,A,A,B
+11,neither,neither,neither,neither,neither
+12,A,A,A,A,B

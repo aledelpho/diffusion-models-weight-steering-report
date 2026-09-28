@@ -135,8 +135,19 @@ pre-registration says, and that is a known weakness of matching on V alone.
 
 `python experiments/centre_push_eye_veto.py --score` reads the answers, writes
 `data/centre_push_veto_result.csv`, and reports an exact two-sided sign test alongside the
-pre-registered 8-of-12 threshold. **Until Alessandro answers, every L in this document is a
-statistic nobody has checked against a picture — which on 2026-09-28 was wrong three times.**
+pre-registered 8-of-12 threshold. **Alessandro's answers are still owed and G_eye is still open.**
+
+In the meantime the same twelve pairs were put to **six blind model observers**, three per
+orientation of the sheets — see [`centre_push_eye_veto_result.md`](centre_push_eye_veto_result.md),
+and the amendment [`prereg_centre_push_model_eye.md`](prereg_centre_push_model_eye.md) that fixed
+the procedure first. That is **not** G_eye and does not count toward its threshold. It found: five
+of twelve pairs resolvable, four agreeing with L; a mirror control that rules out position bias
+5/5; and **L inverted by eye on named units** — `Block_1 neg 0.500` is visibly destroyed at
+L = 1.0219/1.0341, *above* baseline, while the clean `Block_3 pos 0.350` scores 0.8675.
+
+**So every L in this document remains a statistic nobody has checked against a human picture — and
+the first six eyes to look at it put it the wrong way round on the cases where they could see at
+all.** No claim status has been changed on that basis; the decision is registered as A8.
 
 ## 6. Limits
 
