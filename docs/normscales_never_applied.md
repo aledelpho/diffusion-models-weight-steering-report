@@ -1,5 +1,15 @@
 # Withdrawn as a finding — this was already known, and better
 
+> **Correction, same day, 2026-09-28 (later).** The withdrawal below stands: this *was* already
+> known, and [`atlas_vs_tuner_generator.md`](atlas_vs_tuner_generator.md) says it better. But one of
+> its arguments was wrong. It dismissed the proposed mechanism because *"the Preset Loader reports
+> 84/84 matched"*. `benchmark_parameter_families` shows that counter is worthless: the loader prints
+> `n_model_matched`, which the source increments when a key resolves and `add_patches` is called —
+> **it counts registration, not effect**. At a multiplier of 2.0, three families patching disjoint
+> 1-D tensor sets produce pixel-identical renders while the loader reports 56, 56 and 28 layers
+> matched. See [`parameter_families_first_result.md`](parameter_families_first_result.md) §3. The
+> mechanism is still unsettled; it is no longer refuted by that argument.
+
 **Date**: 2026-09-28 · **Status**: **rewritten the same day, after Alessandro asked "had we not
 already noticed this?"** The answer is yes.
 

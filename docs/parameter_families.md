@@ -116,6 +116,19 @@ pitfall 68, which this project has already paid for once.
 Register items **C35** (family isolation bench) and **C36** (a matching rule for families that
 displacement cannot compare).
 
+## 5b. Correction — three of the six kinds are not reachable by this tool
+
+**Added 2026-09-28 after `benchmark_parameter_families`.** Everything above assumes the six kinds can
+be steered. Three cannot: at a multiplier of 2.0, `prenorm/postnorm.scale` (56), `attn.qknorm.*.scale`
+(56) and `mod.lin` (28) produce **pixel-identical renders** while the Preset Loader reports them as
+matched. Every dead tensor is **one-dimensional**; every live one is two-dimensional, including the
+twelve-parameter router at [1, 12]. The checkpoint holds **165 one-dimensional tensors out of 430**.
+
+So §5's experiment 1 (`qknorm` alone) and experiment 3 (`mod.lin` at a large α) **cannot be run with
+the present tool at all** — they would render the baseline. See
+[`parameter_families_first_result.md`](parameter_families_first_result.md), and C40 for the test that
+separates "one-dimensional" from "ignored by the forward pass".
+
 ## 6. Limits
 
 This is the checkpoint's inventory and the architecture's semantics, not a measurement. Which
