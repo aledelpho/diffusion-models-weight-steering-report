@@ -48,7 +48,10 @@ COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\outp
 OUTPUT_FOLDER_NAME = "benchmark_parameter_families/renders"
 TARGET_DIR = COMFY_OUTPUT_ROOT / OUTPUT_FOLDER_NAME
 MAPPA_DIR = COMFY_OUTPUT_ROOT / "benchmark_mappa" / "renders"
-COMFY_LOG_FILE = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui.log")
+COMFY_LOG_FILES = [
+    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui_8188.log"),
+    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui.log")
+]
 
 PROMPTS = {
     "P01": (
@@ -329,39 +332,46 @@ def evaluate_gate() -> Dict[str, dict]:
     return results
 
 
-def check_logs():
+def check_logs(save_capture: bool = True):
     """
     Scans ComfyUI logs for tuner preset logs to verify layer count resolution
-    and check if any patch was reported as skipped.
+    and check if any patch was reported as skipped. Keeps a copy beside the renders.
     """
-    if not COMFY_LOG_FILE.exists():
-        print(f"ComfyUI log file not found at {COMFY_LOG_FILE}")
+    active_log = None
+    for p in COMFY_LOG_FILES:
+        if p.exists() and p.stat().st_size > 0:
+            active_log = p
+            break
+
+    if not active_log:
+        print("ComfyUI log file not found.")
         return
 
     print("=" * 80)
-    print(f"SCANNING COMFYUI LOG: {COMFY_LOG_FILE}")
+    print(f"SCANNING COMFYUI LOG: {active_log}")
     print("=" * 80)
 
     preset_re = re.compile(r"Loaded Preset '(Family_[^']+)'")
     skipped_re = re.compile(r"Unmatched model layer '([^']+)' in preset '([^']+)' - skipped")
 
     found_presets = {}
+    captured_lines = []
     skipped_warnings = []
 
-    with open(COMFY_LOG_FILE, "r", encoding="utf-8", errors="ignore") as f:
+    with open(active_log, "r", encoding="utf-8", errors="ignore") as f:
         for line in f:
             if "Loaded Preset" in line and "Family_" in line:
+                captured_lines.append(line.strip())
                 m = preset_re.search(line)
                 if m:
                     pname = m.group(1)
                     found_presets[pname] = line.strip()
             if "skipped" in line and "Family_" in line:
-                m = skipped_re.search(line)
-                if m:
-                    skipped_warnings.append(line.strip())
+                skipped_warnings.append(line.strip())
+                captured_lines.append(line.strip())
 
     print(f"Found {len(found_presets)} Family preset loading events in log.")
-    for p, l in list(found_presets.items())[-15:]:
+    for p, l in found_presets.items():
         print(f"  {l}")
 
     if skipped_warnings:
@@ -370,6 +380,12 @@ def check_logs():
             print(f"  {w}")
     else:
         print("\nClean log: 0 skipped patch warnings found for Family presets.")
+
+    if save_capture:
+        capture_path = TARGET_DIR / "tuner_logger_capture.log"
+        with open(capture_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(captured_lines) + "\n")
+        print(f"Tuner log capture saved to: {capture_path}")
     print("=" * 80)
 
 
