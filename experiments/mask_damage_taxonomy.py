@@ -25,6 +25,7 @@ Writes data/mask_damage_taxonomy.csv. No render.
 import csv, os, statistics
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 H = os.path.expanduser("~/mnt")
 REN = f"{H}/benchmark_rectified_masks/renders"
@@ -46,9 +47,11 @@ def fine(a):
 
 
 def blur5(a):
+    """Binomial 5-tap, edges extended -- see damage_spatial_bands.py: mode="same" zero-pads and
+    invents band energy at the frame edge."""
     k = np.array([1, 4, 6, 4, 1], dtype=np.float32) / 16.0
-    b = np.apply_along_axis(lambda m: np.convolve(m, k, mode="same"), 0, a)
-    return np.apply_along_axis(lambda m: np.convolve(m, k, mode="same"), 1, b)
+    return ndimage.convolve1d(ndimage.convolve1d(a, k, axis=0, mode="nearest"),
+                              k, axis=1, mode="nearest")
 
 
 def bands(a, nb=5):

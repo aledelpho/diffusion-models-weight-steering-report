@@ -1,4 +1,9 @@
 # The observer's four categories, and the quantity nobody was measuring
+> **Correction, 2026-09-28.** Two numerical defects were found in the estimators this
+> document uses — a summed-area table in float32 and a zero-padding convolution. The
+> numbers below are the corrected ones; what moved and what did not is set out in
+> [`estimator_precision_defect.md`](estimator_precision_defect.md).
+
 
 **Date**: 2026-09-28 · **Origin**: Alessandro, given the 36-panel sheet of the rectified masks
 with no labels, described it in five lines · **Material**: `benchmark_rectified_masks`, already on
@@ -30,32 +35,32 @@ first.
 
 | condition | arm | 1–2 px | 2–4 px | 4–8 px | 8–16 px | 16–32 px | |
 |---|---|--:|--:|--:|--:|--:|---|
-| `B4_mask` | pos | 1.029 | 1.074 | 1.105 | 1.165 | 1.187 | flat, near 1 |
-| `B4_mask` | neg | 0.693 | 0.837 | 0.872 | 0.827 | 0.852 | flat, near 1 |
-| `B4_anti` | pos | 0.889 | 0.896 | 0.918 | 0.968 | 1.035 | flat, near 1 |
-| `B4_anti` | neg | 0.981 | 0.975 | 1.013 | 1.024 | 1.061 | flat, near 1 |
-| **`B6_mask`** | **pos** | 0.985 | 1.486 | **2.013** | 1.472 | 0.920 | **added at 4–8 px** |
-| **`B6_mask`** | **neg** | **0.393** | 0.456 | 0.584 | 0.705 | 0.800 | **monotone stripping** |
-| `B6_anti` | pos | 1.292 | 1.483 | **1.562** | 1.372 | 1.201 | added at 4–8 px, weaker |
-| `B6_anti` | neg | 0.789 | **0.455** | 0.515 | 0.742 | 0.975 | **a notch at 2–8 px** |
-| **`B4B6_mask`** | **pos** | 1.108 | 1.665 | **2.217** | 1.599 | 1.012 | added at 4–8 px |
-| **`B4B6_mask`** | **neg** | **0.363** | 0.408 | 0.515 | 0.598 | 0.662 | monotone stripping |
-| `B4B6_anti` | pos | 1.206 | 1.386 | **1.410** | 1.231 | 1.126 | added at 4–8 px, weaker |
-| `B4B6_anti` | neg | 0.845 | **0.445** | 0.497 | 0.701 | 0.959 | a notch at 2–8 px |
+| `B4_mask` | pos | 1.032 | 1.079 | 1.117 | 1.201 | 1.258 | flat, near 1 |
+| `B4_mask` | neg | 0.684 | 0.833 | 0.864 | 0.801 | 0.812 | flat, near 1 |
+| `B4_anti` | pos | 0.887 | 0.895 | 0.917 | 0.969 | 1.054 | flat, near 1 |
+| `B4_anti` | neg | 0.979 | 0.972 | 1.010 | 1.028 | 1.071 | flat, near 1 |
+| **`B6_mask`** | **pos** | 0.972 | 1.485 | **2.051** | 1.504 | 0.848 | **added at 4–8 px** |
+| **`B6_mask`** | **neg** | **0.373** | 0.433 | 0.548 | 0.638 | 0.693 | **monotone stripping** |
+| `B6_anti` | pos | 1.288 | 1.484 | **1.575** | 1.378 | 1.183 | added at 4–8 px, weaker |
+| `B6_anti` | neg | 0.788 | **0.445** | 0.495 | 0.727 | 0.999 | **a notch at 2–8 px** |
+| **`B4B6_mask`** | **pos** | 1.101 | 1.671 | **2.272** | 1.660 | 0.988 | added at 4–8 px |
+| **`B4B6_mask`** | **neg** | **0.342** | 0.385 | 0.477 | 0.519 | 0.535 | monotone stripping |
+| `B4B6_anti` | pos | 1.204 | 1.389 | **1.420** | 1.233 | 1.122 | added at 4–8 px, weaker |
+| `B4B6_anti` | neg | 0.843 | **0.431** | 0.470 | 0.675 | 0.966 | a notch at 2–8 px |
 
 **His five lines are this table.**
 
-* **Rows 1–2, "almost no artefacts":** the four `Block_4` profiles never leave 0.69–1.19 at any
+* **Rows 1–2, "almost no artefacts":** the four `Block_4` profiles never leave 0.68–1.26 at any
   scale. They are the only conditions in the bench that do not restructure the surface.
 * **"Very strong grain" against "weaker grain"** — both are energy added with its peak at
-  **4–8 pixels**, and the mask is the stronger one: ×2.01 against ×1.56, and ×2.22 against ×1.41.
+  **4–8 pixels**, and the mask is the stronger one: ×2.05 against ×1.58, and ×2.27 against ×1.42.
   Per cell, on the positive arm, the mask exceeds its anti-mask at 4–8 px in **12 of 12 cells**,
   exact sign test **p = 0.0005**.
 * **"Soft grain" against "loose blur"** — both are energy removed, and the shape is what separates
   them. `B6_mask neg` and `B4B6_mask neg` strip **monotonically**, hardest at the finest scale
-  (0.393 and 0.363) and progressively less as the scale grows. `B6_anti neg` and `B4B6_anti neg`
-  cut a **notch**: the finest scale is largely kept (0.789, 0.845), 2–8 px is gutted (≈ 0.45), and
-  16–32 px comes back to ≈ 0.97. Two different damages, and the observer had already given them
+  (0.373 and 0.342) and progressively less as the scale grows. `B6_anti neg` and `B4B6_anti neg`
+  cut a **notch**: the finest scale is largely kept (0.788, 0.843), 2–8 px is gutted (≈ 0.44), and
+  16–32 px comes back to ≈ 0.98. Two different damages, and the observer had already given them
   two different names.
 
 **The grain statistic got the first comparison backwards.** It reports `B6_anti pos` at 1.191 and
@@ -69,12 +74,12 @@ Distance between the combined condition and each single, in the space of the log
 
 | | arm | to `Block_6` | to `Block_4` | |
 |---|---|--:|--:|---|
-| `B4B6_mask` | pos | **0.102** | 0.402 | 3.9× closer to `Block_6` |
-| `B4B6_mask` | neg | **0.140** | 0.525 | 3.8× closer |
-| `B4B6_anti` | pos | **0.084** | 0.326 | 3.9× closer |
-| `B4B6_anti` | neg | **0.044** | 0.510 | 11.5× closer |
+| `B4B6_mask` | pos | **0.121** | 0.415 | 3.4× closer to `Block_6` |
+| `B4B6_mask` | neg | **0.174** | 0.599 | 3.5× closer |
+| `B4B6_anti` | pos | **0.083** | 0.329 | 3.9× closer |
+| `B4B6_anti` | neg | **0.055** | 0.540 | 9.9× closer |
 
-**Four of four, by factors of 3.8 to 11.5.** Adding `Block_4` to `Block_6` changes the surface
+**Four of four, by factors of 3.4 to 9.9.** Adding `Block_4` to `Block_6` changes the surface
 almost not at all — which is why row 5 is row 3 and row 6 is row 4.
 
 The first version of this test measured distance on the 8× downsampled luminance — the layout — and

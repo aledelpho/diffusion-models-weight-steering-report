@@ -1,4 +1,9 @@
 # Outcome — the achromatic leaf, and the `blk16` ladder
+> **Correction, 2026-09-28.** Two numerical defects were found in the estimators this
+> document uses — a summed-area table in float32 and a zero-padding convolution. The
+> numbers below are the corrected ones; what moved and what did not is set out in
+> [`estimator_precision_defect.md`](estimator_precision_defect.md).
+
 
 **Date**: 2026-09-28 · **Design**: [`RENDERS_2026-09-28_leaf_collapse_and_blk16.md`](RENDERS_2026-09-28_leaf_collapse_and_blk16.md),
 frozen before the renders · **Renders**: 214, launched by Alessandro (142 + 72) ·
@@ -111,14 +116,16 @@ repairs.
 
 | # | prediction | observed | verdict |
 |---|---|---|---|
-| **K3** | 0.200 reproduces: style 0.447 ± 0.08, coherence 1.040 ± 0.03 | **style 0.4472, coherence 1.0397** | **confirmed** |
-| **K1** | coherence ≥ 0.98 at every positive dose | 0.994, 1.001, 0.999, 1.004, 1.017, **1.040** | **confirmed** |
+| **K3** | 0.200 reproduces: style 0.447 ± 0.08, coherence 1.040 ± 0.03 | **style 0.4472, coherence 1.0146** | **confirmed** |
+| **K1** | coherence ≥ 0.98 at every positive dose | 0.992, 0.998, 0.995, 0.996, 1.002, **1.015** | **confirmed** |
 | **K2** | style monotone with dose, positive arm | 0.045, 0.066, 0.095, 0.138, 0.194, 0.447 | **confirmed** |
-| **K4** | negative arm loses line at 0.200 | 0.9813 | grey |
+| **K4** | negative arm loses line at 0.200 | 0.9829 | grey |
 
 **K3 is the result worth the bench.** That cell already existed in `benchmark_profondita`, rendered
 weeks ago from a different plan file, a different queueing script and a different drive path, and it
-came back at **0.4472 against 0.447** and **1.0397 against 1.040**. The whole chain — plan
+came back at **0.4472 against 0.447** on style. On coherence its frozen target came from a
+defective estimator; recomputed on both sides with the repaired one it is **1.0146 against
+1.0146** ([the defect](estimator_precision_defect.md)). The whole chain — plan
 generation, queueing, tuner, sampler, file naming, measurement — is reproducible to four decimals.
 That is a stronger determinism statement than `determinism_across_sessions`, because it crosses
 benches rather than sessions.
@@ -127,23 +134,25 @@ benches rather than sessions.
 
 | dose | style | coherence | cells above 1 |
 |--:|--:|--:|--:|
-| 0.020 | 0.045 | 0.994 | 1/6 |
-| 0.035 | 0.066 | 1.001 | 3/6 |
-| 0.050 | 0.095 | 0.999 | 4/6 |
-| 0.080 | 0.138 | 1.004 | 4/6 |
-| 0.120 | 0.194 | 1.017 | 6/6 |
-| **0.200** | **0.447** | **1.040** | **6/6** |
+| 0.020 | 0.045 | 0.992 | 1/6 |
+| 0.035 | 0.066 | 0.998 | 2/6 |
+| 0.050 | 0.095 | 0.995 | 2/6 |
+| 0.080 | 0.138 | 0.996 | 2/6 |
+| 0.120 | 0.194 | 1.002 | 3/6 |
+| **0.200** | **0.447** | **1.015** | **4/6** |
 
-**Coherence rises monotonically with dose, alongside style.** Everywhere else in this corpus style
+**Coherence rises with dose, alongside style** — not quite monotonically once the estimator is
+repaired (0.998 then 0.995), but from below baseline at the lowest dose to above it at the
+highest. Everywhere else in this corpus style
 is bought by losing the drawn line — the five conditions this project wrongly recommended are its
 five largest losses (`style_damage_frontier.md` §8c). `blk16 pos` is the opposite: the harder it is
-pushed the more oriented the drawing becomes, 6/6 cells at the top two doses.
+pushed the more oriented the drawing becomes, 4 of 6 cells at the top dose.
 
 Looked at at 100 %, as the procedure now requires: at 0.200 the ink contour is crisp, the wall
 cross-hatching legible, the face well formed, the hair resolved into distinct inked curls. None of
 the fibrous mush that the `Block_6` family produces.
 
-The negative arm is not the mirror: coherence 0.981 at 0.200 and style only 0.201 against 0.447.
+The negative arm is not the mirror: coherence 0.983 at 0.200 and style only 0.201 against 0.447.
 **`blk16` is asymmetric** — it gives much more, and much more cleanly, in one direction. K4 is grey
 because it neither holds the line (≥ 1.00) nor clearly loses it (< 0.98).
 

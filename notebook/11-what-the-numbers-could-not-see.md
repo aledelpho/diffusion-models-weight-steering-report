@@ -20,8 +20,8 @@ claims:
     statement: >
       Every statistic this project had for ranking an edit measures how far the image moved, and
       none of them can tell moving toward something from falling apart; the conditions ranked
-      best by displacement are the ones that destroy the drawing.
-    evidence: "The five conditions recommended on 2026-09-27 rank 75th to 80th of 80 on structure coherence in data/texture_anisotropy.csv; the condition picked by eye ranks 1st."
+      best by displacement are among the worst on it.
+    evidence: "The five conditions recommended on 2026-09-27 rank 75th to 80th of 80 on structure coherence in data/texture_anisotropy.csv; the condition picked by eye ranks 12th, above the median."
     anchor: "#the-best-edits-by-displacement-were-the-worst-pictures"
   - id: undeclared-colour-is-the-fragile-route
     status: open
@@ -138,18 +138,22 @@ changes nothing, so there is no inference for an edit to break.
 
 | condition | displacement | structure coherence | rank of 80 |
 |---|--:|--:|--:|
-| `B4_mask` positive | 0.261 | **1.041** | **1** |
-| `blk16` positive | 0.447 | 1.040 | 3 |
-| `Block_4` positive | 0.478 | 0.994 | 21 |
-| `blk27` negative | 0.394 | 0.802 | 75 |
-| `Block_6` negative | 0.340 | 0.793 | 76 |
-| `B6_anti` negative | 0.464 | 0.789 | 77 |
-| `B6_mask` negative | 0.846 | 0.729 | 79 |
-| `B4B6_mask` negative | 0.914 | **0.718** | **80** |
+| `B4_mask` positive | 0.261 | **1.017** | **12** |
+| `blk16` positive | 0.447 | 1.015 | 15 |
+| `Block_4` positive | 0.478 | 0.979 | 60 |
+| `blk27` negative | 0.394 | 0.805 | 75 |
+| `Block_6` negative | 0.340 | 0.794 | 76 |
+| `B6_anti` negative | 0.464 | 0.790 | 77 |
+| `B6_mask` negative | 0.846 | 0.747 | 79 |
+| `B4B6_mask` negative | 0.914 | **0.735** | **80** |
 
 The bottom four of that table are four of the five conditions this notebook recommended on
 2026-09-27, ranked by displacement against composition cost. The top line is the pair an observer
-picked out of the corpus without labels.
+picked out of the corpus without labels — 12th of eighty, above the median and far above anything
+recommended here. The first version of this page said **1st**, on a coherence figure inflated by a
+float32 defect in its own estimator, found the same day and corrected in
+[`estimator_precision_defect.md`](../docs/estimator_precision_defect.md). The bottom of the
+ranking, which is what the retraction rests on, did not move at all.
 
 ![The same head at 1:1 under three edits ranked by displacement as near neighbours. The first keeps the ink line; the other two have dissolved the whole picture into a field of curled marks, which every displacement statistic in this project scored as a large, successful style move.](../assets/11-what-the-numbers-could-not-see/F11.3_the_curl_field.webp)
 

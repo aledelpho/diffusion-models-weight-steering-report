@@ -1,4 +1,9 @@
 # `Block_4` and `Block_6`: what the whole line of work produced
+> **Correction, 2026-09-28.** Two numerical defects were found in the estimators this
+> document uses — a summed-area table in float32 and a zero-padding convolution. The
+> numbers below are the corrected ones; what moved and what did not is set out in
+> [`estimator_precision_defect.md`](estimator_precision_defect.md).
+
 
 **Date**: 2026-09-28 · **Question**: Alessandro — did anything interesting come out of the
 `Block_4` / `Block_6` game? · **Sources**: `internal_fights_by_group.md`,
@@ -45,12 +50,12 @@ family at dose 0.200 (`data/texture_anisotropy.csv`, 80 conditions in all):
 
 | family | n | mean | worst | best | above 1 |
 |---|--:|--:|--:|--:|--:|
-| `Block_4` | 16 | **1.0019** | blk19 pos 0.966 | B4_mask pos **1.041** | 7/16 |
-| `Block_6` | 14 | **0.9148** | B6_mask neg **0.729** | blk26 neg 1.020 | 3/14 |
+| `Block_4` | 16 | **0.9911** | blk19 pos 0.953 | B4_mask pos **1.017** | 7/16 |
+| `Block_6` | 14 | **0.9234** | B6_mask neg **0.747** | blk26 neg 1.023 | 5/14 |
 
-Three of the five best conditions in the corpus are `Block_4` family (`B4_mask pos` 1st,
-`blk16 pos` 3rd, `blk15 pos` 5th). Four of the five worst are `Block_6` family. **The `Block_4`
-family never drops below 0.966; the `Block_6` family reaches 0.729.**
+Four of the five worst conditions in the corpus are `Block_6` family. **The `Block_4` family never
+drops below 0.953; the `Block_6` family reaches 0.747.** The top of that ranking is not a
+`Block_4` monopoly — the original version said it was, on numbers a float32 defect had inflated.
 
 **(c) Colour.** `Block_6` is an antisymmetric chroma knob — pos ×0.726, neg ×1.815, **18/18 cells**,
 p = 1e-5. `Block_4` is weakly so, ×1.193 / ×0.927, 14/18, p = 0.031. And `Block_4 neg` is the edit
@@ -117,16 +122,17 @@ the group against its own members, both arms).
 
 | family | mean \|deviation\| | worst | |
 |---|--:|--:|---|
-| `Block_4` | **0.0146** | 0.032 | all six within 0.032 |
-| `Block_6` | **0.0626** | **0.135** | |
+| `Block_4` | **0.0189** | 0.046 | all six within 0.046 |
+| `Block_6` | **0.0532** | **0.117** | |
 
-**4.3× apart, exact two-sided Mann-Whitney p = 0.065.** Not significant at 6 against 6 — the
+**2.8× apart, exact two-sided Mann-Whitney p = 0.093.** Not significant at 6 against 6 — the
 smallest p that design can produce is 0.0022, so this is a near-separation and not a clean one, and
-it must not be quoted as though it cleared a threshold.
+it must not be quoted as though it cleared a threshold. The first version of this section said
+4.3× and p = 0.065, on a defective estimator.
 
-What it does add: the two worst misses are **`B6_anti pos` (+0.135)** and **`Block_6 pos`
-(+0.117)** — concordant-sign `Block_6` conditions overshooting upward, which is the same signature
+What it does add: the two worst misses are still concordant-sign `Block_6` conditions (+0.117
+and +0.104) — concordant-sign `Block_6` conditions overshooting upward, which is the same signature
 as M4, the prediction that killed the mask bench, on a completely different statistic. Two
-independent axes, 2.6× and 4.3×, same direction, same failing conditions. That is consistent
+independent axes, 2.6× and 2.8×, same direction, same failing conditions. That is consistent
 evidence of moderate strength, and the right next step is the direct joint measurement already
 queued as **C14**, not another indirect one.

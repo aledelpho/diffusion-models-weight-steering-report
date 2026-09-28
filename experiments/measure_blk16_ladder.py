@@ -17,6 +17,7 @@ Writes data/blk16_ladder_cells.csv and data/blk16_ladder_verdict.csv. No render.
 import csv, math, os, statistics
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 H = os.path.expanduser("~/mnt")
 REN = f"{H}/benchmark_blk16_ladder/renders"
@@ -29,8 +30,9 @@ DOSES = ["0.020", "0.035", "0.050", "0.080", "0.120", "0.200"]
 
 
 def box(a, k=9):
-    c = np.cumsum(np.cumsum(np.pad(a, ((1, 0), (1, 0))), 0), 1)
-    return (c[k:, k:] - c[:-k, k:] - c[k:, :-k] + c[:-k, :-k]) / (k * k)
+    """A 9x9 mean. The summed-area version this file used first loses 0.9% per window to float32
+    catastrophic cancellation -- see texture_anisotropy.py."""
+    return ndimage.uniform_filter(a, k)
 
 
 def feats(path):

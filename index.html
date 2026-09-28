@@ -156,7 +156,7 @@
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-monotonic-response-across-angles">Response grows monotonically with rotation angle for every block group, with the output group (B6) moving the image most and the input group (B1) second, while middle groups remain substantially weaker.</a></td><td class="ev">B6 runs 0.63 / 1.65 / 3.71, B1 runs 0.12 / 0.40 / 0.90, middle groups 0.07 to 0.49 in data/all_blocks_clean_v2_response_by_block.csv.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--chroma-shape-ratio-versus-separability">The chroma/shape specialization ratio makes B1 and B6 the closest of all fifteen block pairs, yet pairwise separability tests put B1-B6, B1-B2, and B1-B4 at the exact permutation floor with similar cosines.</a></td><td class="ev">Gap 0.0073 (p = 0.067) in data/specialisation_vs_proximity.csv vs floor p = 0.03125 in data/all_blocks_clean_v2_separability.csv.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-same-angle-is-not-the-same-dose">The output group&#x27;s lead over the input group is not an artefact of rotating every group by the same angle: correcting for the displacement each group actually received widens the lead instead of closing it.</a></td><td class="ev">B6 receives 0.740 of B1&#x27;s displacement at a common angle, so the ratio 5.35 / 4.16 / 4.13 as rendered becomes 7.23 / 5.62 / 5.58 per unit of displacement, in data/sensitivity_by_block.csv.</td></tr>
-<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--the-best-edits-by-displacement-were-the-worst-pictures">Every statistic this project had for ranking an edit measures how far the image moved, and none of them can tell moving toward something from falling apart; the conditions ranked best by displacement are the ones that destroy the drawing.</a></td><td class="ev">The five conditions recommended on 2026-09-27 rank 75th to 80th of 80 on structure coherence in data/texture_anisotropy.csv; the condition picked by eye ranks 1st.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--the-best-edits-by-displacement-were-the-worst-pictures">Every statistic this project had for ranking an edit measures how far the image moved, and none of them can tell moving toward something from falling apart; the conditions ranked best by displacement are among the worst on it.</a></td><td class="ev">The five conditions recommended on 2026-09-27 rank 75th to 80th of 80 on structure coherence in data/texture_anisotropy.csv; the condition picked by eye ranks 12th, above the median.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--a-colour-that-was-named-survives-a-colour-that-was-inferred-does-not">A colour stated in the prompt survives every edit measured, while a colour the model has to infer from the object can be removed entirely, leaving the object intact.</a></td><td class="ev">Declared probes never fall below chroma ratio 0.648 in 72 cells; the undeclared one reaches 0.040 and does so in 9 of 20 fresh seeds, against 0 of 20 unedited. data/leaf_collapse_cells.csv, data/colour_chroma_audit.csv.</td></tr>
       </tbody>
     </table>
@@ -4700,56 +4700,60 @@ changes nothing, so there is no inference for an edit to break.</p>
 <tr>
 <td><code>B4_mask</code> positive</td>
 <td style="text-align: right;">0.261</td>
-<td style="text-align: right;"><strong>1.041</strong></td>
-<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;"><strong>1.017</strong></td>
+<td style="text-align: right;"><strong>12</strong></td>
 </tr>
 <tr>
 <td><code>blk16</code> positive</td>
 <td style="text-align: right;">0.447</td>
-<td style="text-align: right;">1.040</td>
-<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.015</td>
+<td style="text-align: right;">15</td>
 </tr>
 <tr>
 <td><code>Block_4</code> positive</td>
 <td style="text-align: right;">0.478</td>
-<td style="text-align: right;">0.994</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.979</td>
+<td style="text-align: right;">60</td>
 </tr>
 <tr>
 <td><code>blk27</code> negative</td>
 <td style="text-align: right;">0.394</td>
-<td style="text-align: right;">0.802</td>
+<td style="text-align: right;">0.805</td>
 <td style="text-align: right;">75</td>
 </tr>
 <tr>
 <td><code>Block_6</code> negative</td>
 <td style="text-align: right;">0.340</td>
-<td style="text-align: right;">0.793</td>
+<td style="text-align: right;">0.794</td>
 <td style="text-align: right;">76</td>
 </tr>
 <tr>
 <td><code>B6_anti</code> negative</td>
 <td style="text-align: right;">0.464</td>
-<td style="text-align: right;">0.789</td>
+<td style="text-align: right;">0.790</td>
 <td style="text-align: right;">77</td>
 </tr>
 <tr>
 <td><code>B6_mask</code> negative</td>
 <td style="text-align: right;">0.846</td>
-<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">0.747</td>
 <td style="text-align: right;">79</td>
 </tr>
 <tr>
 <td><code>B4B6_mask</code> negative</td>
 <td style="text-align: right;">0.914</td>
-<td style="text-align: right;"><strong>0.718</strong></td>
+<td style="text-align: right;"><strong>0.735</strong></td>
 <td style="text-align: right;"><strong>80</strong></td>
 </tr>
 </tbody>
 </table></div>
 <p>The bottom four of that table are four of the five conditions this notebook recommended on
 2026-09-27, ranked by displacement against composition cost. The top line is the pair an observer
-picked out of the corpus without labels.</p>
+picked out of the corpus without labels — 12th of eighty, above the median and far above anything
+recommended here. The first version of this page said <strong>1st</strong>, on a coherence figure inflated by a
+float32 defect in its own estimator, found the same day and corrected in
+<a href="docs/estimator_precision_defect.md"><code>estimator_precision_defect.md</code></a>. The bottom of the
+ranking, which is what the retraction rests on, did not move at all.</p>
 <p><img alt="The same head at 1:1 under three edits ranked by displacement as near neighbours. The first keeps the ink line; the other two have dissolved the whole picture into a field of curled marks, which every displacement statistic in this project scored as a large, successful style move." src="assets/11-what-the-numbers-could-not-see/F11.3_the_curl_field.webp" /></p>
 <p>The failure mode has a shape, and it is not blur and not noise: the drawing is replaced by a field
 of curled comma-like marks, dense enough at <code>B6_mask</code> that the face is barely recoverable. A

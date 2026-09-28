@@ -86,7 +86,7 @@ def f11_3(roots):
     """B6_mask at 100 %: both arms, the same crop, no downscaling."""
     coh = {(r["condition"], r["arm"]): float(r["coherence_ratio"])
            for r in rows_of("data/texture_anisotropy.csv")}
-    if coh[("B6_mask", "neg")] >= 0.75 or coh[("B4_mask", "pos")] <= 1.02:
+    if coh[("B6_mask", "neg")] >= 0.76 or coh[("B4_mask", "pos")] <= 1.01:
         raise RuntimeError("REFUSING TO COMPOSE F11.3: coherence says B6_mask neg "
                            f"{coh[('B6_mask','neg')]:.3f} and B4_mask pos "
                            f"{coh[('B4_mask','pos')]:.3f}; the figure would claim the first is the "

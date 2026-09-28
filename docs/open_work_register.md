@@ -105,6 +105,8 @@ The other fifteen are listed in the notebook front matter and are not repeated h
 | **74** | a distributional guard averaged over heterogeneous questions can be satisfied by opposite pathologies cancelling | drafted, `prereg_damage_or_style.md` Am. 02 §C |
 | **75** | a texture statistic not normalised for contrast reports the sum of two effects and can report the wrong sign | drafted, `looking_at_block1_and_block6.md` §3 |
 | — | `evaluate_colour_object_gate.py` reports 15 files missing while all 15 are present and readable | **must be fixed before it gates anything** |
+| **85** | a convolution that zero-pads at the frame edge, inside a statistic that reads the frame edge as content. On a constant image, whose true band energy is 0, `np.convolve(..., mode="same")` reports 4.0e-4 — a quarter of a real render's band-0 energy. Away from an 8 px frame the two conventions agree to 0.000% | drafted, `estimator_precision_defect.md` §3 |
+| **84** | a summed-area table in float32. A cumulative sum over 1.3 million values of order 1e-4, then differenced, loses **0.9% per window** to catastrophic cancellation and 2.5% on the aggregate. It moved the headline condition of `style_damage_frontier.md` from 12th of 80 to 1st. Rule earned: **an estimator is cross-checked against an independent implementation before anything is published from it** | drafted, `estimator_precision_defect.md` §2 |
 | **83** | measuring a claim about the surface in the space of the layout. The first test of "the combined condition looks like Block_6" used the 8x downsampled luminance and returned 1.09x and 0.91x, i.e. nothing; in the space of the band profile the same claim is 3.8x to 11.5x, four times out of four. The measurement was not wrong, it was aimed at the wrong quantity | drafted, `mask_damage_taxonomy_result.md` §3 |
 | **80** | an isotropic texture summary reports a decrease while the texture is being wholly replaced: \|ln(grain ratio)\| against band-0 difference energy over 140 conditions gives **r = −0.054**, and `blk27 neg` reads grain 0.841 with band-0 difference energy 1.53x the baseline's | drafted, `style_damage_frontier.md` §8a |
 | **79** | two axes declared independent because they were *built* differently, without measuring it: `layout_cost_z` (8x downsample) against band-0 fine detail is **r = +0.798**, so a Pareto frontier between them is largely one quantity against itself | drafted, `style_damage_frontier.md` §8b |
@@ -120,7 +122,7 @@ The other fifteen are listed in the notebook front matter and are not repeated h
 ## F. What would change the most
 
 1. **B1** — if the grain statistic has been reporting the wrong sign, several published numbers move.
-2. **A1–A3** — seventeen drafted pitfalls sitting outside the error log, which is the project's most
+2. **A1–A3** — nineteen drafted pitfalls sitting outside the error log, which is the project's most
    transferable output.
 3. **C1** — the only live experiment with a passed gate.
 4. The **`permutation-adds-a-neglected-attribute` replication** — 19/20 against 1/20 is the largest

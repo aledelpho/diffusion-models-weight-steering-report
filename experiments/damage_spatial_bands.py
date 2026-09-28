@@ -22,6 +22,7 @@ Writes data/damage_bands_cells.csv and data/damage_bands.csv. Resumable: B is a 
 import csv, os, time
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 H = os.path.expanduser("~/mnt")
 BASE = f"{H}/benchmark_mappa--renders"
@@ -54,9 +55,12 @@ def jobs():
 
 
 def blur(a):
+    """Binomial 5-tap, separable, edges extended. `np.convolve(..., mode="same")` ZERO-PADS:
+    on a constant image, whose true band energy is 0, it reports 4.0e-4 -- a quarter of a real
+    render's band-0 energy. Away from an 8 px frame the two agree to 0.000%."""
     k = np.array([1, 4, 6, 4, 1], dtype=np.float32) / 16.0
-    b = np.apply_along_axis(lambda m: np.convolve(m, k, mode="same"), 0, a)
-    return np.apply_along_axis(lambda m: np.convolve(m, k, mode="same"), 1, b)
+    return ndimage.convolve1d(ndimage.convolve1d(a, k, axis=0, mode="nearest"),
+                              k, axis=1, mode="nearest")
 
 
 def pyramid(a):

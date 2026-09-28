@@ -113,6 +113,11 @@ it remains a proxy.
 ---
 
 # Retraction and correction, same day
+> **Correction, 2026-09-28.** Two numerical defects were found in the estimators this
+> document uses — a summed-area table in float32 and a zero-padding convolution. The
+> numbers below are the corrected ones; what moved and what did not is set out in
+> [`estimator_precision_defect.md`](estimator_precision_defect.md).
+
 
 Alessandro, on native-resolution crops of the two renders §4 called clean: *"these images you keep
 holding up as the best result actually have very visible structural defects — is it possible you
@@ -163,20 +168,24 @@ constant, and `blk27 neg` is *lower* in bands 1–3 than `B4_mask neg`. What sep
 where the energy sits but whether it is **oriented**. The baseline is comic linework — strongly
 oriented ink strokes. Coherence ratio, 80 conditions:
 
-| condition | coherence | cells above 1 | rank |
-|---|--:|--:|--:|
-| **`B4_mask` pos** | **×1.041** | 6/6 | **1 / 80** |
-| `Block_4` neg | ×1.026 | 5/6 | 9 / 80 |
-| `B4_mask` neg | ×0.974 | 0/6 | 65 / 80 |
-| `blk27` neg | ×0.802 | 0/6 | 75 / 80 |
-| `Block_6` neg | ×0.793 | 0/6 | 76 / 80 |
-| `B6_anti` neg | ×0.789 | 0/6 | 77 / 80 |
-| `B6_mask` neg | ×0.729 | 0/6 | 79 / 80 |
-| `B4B6_mask` neg | ×0.718 | 0/6 | 80 / 80 |
+| condition | coherence | rank |
+|---|--:|--:|
+| `B4B6_mask` pos | ×1.049 | 1 / 80 |
+| **`B4_mask` pos** | **×1.017** | **12 / 80** |
+| `blk16` pos | ×1.015 | 15 / 80 |
+| `Block_4` neg | ×1.002 | 30 / 80 |
+| `B4_mask` neg | ×0.972 | 63 / 80 |
+| `blk27` neg | ×0.805 | 75 / 80 |
+| `Block_6` neg | ×0.794 | 76 / 80 |
+| `B6_anti` neg | ×0.790 | 77 / 80 |
+| `B6_mask` neg | ×0.747 | 79 / 80 |
+| `B4B6_mask` neg | ×0.735 | 80 / 80 |
 
 **The five conditions this document recommended are the five largest losses of drawn line in the
-corpus.** The condition Alessandro picked out by eye is **first of eighty**. He was not describing
-a taste; he was reading a quantity nothing here was measuring.
+corpus.** The condition Alessandro picked out by eye is **twelfth of eighty** — above the median
+and far above everything recommended here, but not first; the "first" of the original version came
+from a float32 defect. He was not describing a taste; he was reading a quantity nothing here was
+measuring.
 
 His own phrasing turns out to be half right and worth keeping: the defect *is* a texture change,
 and it *is* invisible to the grain number. But it is not that the patches are looser at some
@@ -192,9 +201,9 @@ Pareto on style ↑ and coherence ↑, 80 conditions at dose 0.200:
 | mask | `B4B6_mask` | neg | 0.914 | 0.718 | maximum style, line destroyed |
 | mask | `B6_mask` | neg | 0.846 | 0.729 | same trade |
 | group | `Block_5` | pos | 0.620 | 0.969 | |
-| **group** | **`Block_4`** | **pos** | **0.478** | **0.994** | **style with the line intact** |
-| **sub-block** | **`blk16`** | **pos** | **0.447** | **1.040** | **style with the line reinforced** |
-| mask | `B4_mask` | pos | 0.261 | 1.041 | least style, best line |
+| **group** | **`Block_4`** | **pos** | **0.478** | **0.979** | **style, line nearly intact** |
+| **sub-block** | **`blk16`** | **pos** | **0.447** | **1.015** | **style with the line reinforced** |
+| mask | `B4_mask` | pos | 0.261 | 1.017 | least style, best line |
 
 **§3's conclusion is reversed. `Block_4` is not dominated — it is the family that does what
 Alessandro asked for**, and `blk16 pos` (a member of `Block_4`, indices 15–19) delivers nearly the
