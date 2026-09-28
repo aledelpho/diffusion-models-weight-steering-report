@@ -1,5 +1,9 @@
 # The eye veto of `benchmark_centre_push` — what six blind observers and one sighted one saw
 
+> **STOP — if you have not yet filled in `data/centre_push_veto_answers.csv`, close this file.**
+> §2 names the units and the pairs. Reading it destroys your own blindness, and `G_eye` — the only
+> veto that counts — needs a human who has not been told the answer. Twelve looks, then come back.
+
 **2026-09-28.** Governed by [`prereg_centre_push.md`](prereg_centre_push.md) §6 and its amendment
 [`prereg_centre_push_model_eye.md`](prereg_centre_push_model_eye.md). No render was generated: every
 image here is a 512-px centre crop at 1:1 from a PNG already on disk.
