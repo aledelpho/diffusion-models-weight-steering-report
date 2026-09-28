@@ -1,0 +1,9 @@
+style,baseline_coherence,baseline_spread,cells,coherence_ratio_mean,coherence_ratio_sd,pct_below_0_90
+S1_photo,0.5440,0.0100,78,0.9599,0.0908,27
+S2_watercolor,0.5288,0.0064,78,0.9792,0.1022,24
+S3_lowpoly,0.6444,0.0028,78,1.0014,0.0420,1
+S4_claymation,0.6589,0.0015,78,0.9828,0.0395,1
+S5_ukiyoe,0.6066,0.0083,78,0.9898,0.0555,1
+S6_pixel,0.5244,0.0108,78,1.0033,0.0380,1
+S7_glass,0.7019,0.0131,78,0.9811,0.0538,9
+S8_charcoal,0.5484,0.0106,78,0.9627,0.0994,31
