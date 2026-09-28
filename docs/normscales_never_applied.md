@@ -1,98 +1,92 @@
-# 48 renders of the q/k/v/o atlas were made with an edit that never reached the model
+# Withdrawn as a finding — this was already known, and better
 
-**Date**: 2026-09-28 · **Found by**: verifying Antigravity's re-reading of
-`benchmark_qkvo_atlas`, which correctly reported the `normscales` conditions at exactly zero
-displacement and described them as "acting as an identity operation" · **No render.**
+**Date**: 2026-09-28 · **Status**: **rewritten the same day, after Alessandro asked "had we not
+already noticed this?"** The answer is yes.
 
 ---
 
-## 1. The observation, and why "identity operation" is not the end of it
+## 1. What this document claimed, and why it should not have
 
-In `data/retro_qkvo_atlas_cells.csv`, `normscales_all_pos` and `normscales_all_neg` return
-**1.0000 on every measured quantity** — coherence, all five band energies, variance, chroma, hue —
-and displacement exactly 0.00000, pooled over eight styles and three seeds.
+Verifying Antigravity's re-reading of `benchmark_qkvo_atlas`, the `normscales_all_pos` and
+`normscales_all_neg` conditions returned exactly 1.0000 on every measured quantity. I checked the
+preset (56 layers at `prenorm.scale` / `postnorm.scale` = 0.1), compared decoded pixels against the
+baselines (**18 of 18 identical, maximum difference 0**), and wrote it up as a new finding with a
+proposed mechanism.
 
-A zero like that has two very different explanations, and the distinction decides whether 48
-renders are a control or a hole:
+**It is in the repository since 2026-09-26**, in
+[`atlas_vs_tuner_generator.md`](atlas_vs_tuner_generator.md), whose own commit message ends
+*"NORMS_block_scales e' ancora esposto in interfaccia"*. That document establishes more than this
+one did:
 
-* **a null by design** — the preset asks for nothing, and the condition is a sanity check;
-* **an edit that did not arrive** — the preset asks for something and the tool did not apply it.
+* the same effect on a different corpus — 84 parameters (`mod.lin`, `prenorm.scale`,
+  `postnorm.scale`, all 28 blocks) rescaled by `model_alpha = 0.9365`, render **byte-identical to
+  the baseline on all eight prompts**. *"Not small: zero."*
+* the tuner's own source comment, which documents `mod.lin` as **already known to be inert** and
+  records that the control was removed from the node for exactly this symptom;
+* that the removal's stated diagnosis is wrong — the keys do exist in the checkpoint;
+* that **the displacement accounting of the whole project is unaffected**, which is the question
+  that actually mattered and which I never asked;
+* two candidate mechanisms, and a decisive test that separates them.
 
-## 2. It is the second
+## 2. And my proposed mechanism is probably wrong
 
-**The preset is not empty.** `presets/Arthemy_QKVO_normscales_all_pos.json` carries
-`stats.model_patched_layers = 56` and 56 entries of the form
+I suggested the channel-scale adapter's `weight.ndim < 2` guard silently skips 1-D norm tensors.
+The earlier document has the Preset Loader's own report:
 
-```
-blocks.0.prenorm.scale  = 0.1
-blocks.0.postnorm.scale = 0.1
-...
-```
+> `Loaded Preset 'Arthemy_Atlas_modulation_norm_draw1' | Model: 84 scalar layers, 0 granular
+> layers (x1.00)`
 
-For comparison, `Arthemy_QKVO_wo_b6_neg.json` carries four entries
-(`blocks.24..27.attn.wo.weight = -0.1`) and moves the image plainly.
+**84 of 84 matched; nothing was skipped.** The scalar patch path is not the channel-scale adapter I
+read, so the guard I quoted is not the code that runs here. The two live hypotheses remain the ones
+already written down on 26/09:
 
-**The workflow is identical in structure.** Both renders load their preset through the same node,
-`ArthemyKrea2PresetLoader`, at `strength_model = 1.0`, after the same `ArthemyKrea2ResetPatcher`.
-Nothing distinguishes them but the file name.
+1. **the forward pass does not read these parameters** — a non-affine norm taking its whole scale
+   from the modulation path would leave `prenorm.scale` in the checkpoint as an unused weight;
+2. **ComfyUI never materialises a scalar patch on a parameter not named `.weight`** — registered by
+   `add_patches`, hence the count of 84, but never walked by `calculate_weight`.
 
-**And the output is the baseline, exactly.** Comparing pixel content rather than file bytes — the
-PNGs differ only because each embeds its own workflow, which names its own preset:
+The decisive test was specified there and **has never been run**: bake the patched model with the
+tuner's own Saver, which materialises every patched weight, and compare the baked
+`blocks.0.prenorm.scale` against the original checkpoint. Different → hypothesis 1, and *these
+parameters are inert to rescaling*, which is a real statement about the architecture. Identical →
+hypothesis 2, and it is a tool limitation the tuner should refuse rather than report as 84 patched
+layers. **It is now register item C34**, where it should have been put two days ago.
 
-> **18 of 18 `normscales` renders checked have pixel content identical to their baseline, maximum
-> absolute difference 0.** The control, `wo_b6_neg`, differs as it should.
+## 3. What survives from this document
 
-A weight change of 0.1 on 56 layers that produces a bit-identical image is not a weak effect. It is
-no effect: **the patch never reached the weights.**
+Two things, and they are replication and arithmetic, not discovery.
 
-## 3. The likely mechanism, stated as likely
+* **A second corpus.** The 26/09 result is on the atlas's `modulation_norm` conditions, 8 prompts.
+  This is the q/k/v/o bench's `normscales` conditions: **18 of 18 renders checked have pixel content
+  identical to their baseline, maximum absolute difference 0**, across three styles, three seeds and
+  both arms. Same phenomenon, second corpus, independent measurement.
+* **A count.** 48 renders of `benchmark_qkvo_atlas` (2 conditions × 8 styles × 3 seeds) are
+  duplicates of baselines that exist in `benchmark_atlas_phase1`.
 
-`Arthemy_Krea2_Tuner.py` knows these keys — line 312 maps `NORMS_block_scales` to
-`("prenorm.scale", "postnorm.scale")`. But its channel-scale adapter contains an explicit guard:
+The operational consequences are unchanged and worth keeping: **"no effect" from this tuner is not
+evidence of no effect until the patch is shown to have reached the weights**, and the tuner's own
+warnings go to a log no bench script captures (register **C33**).
 
-```python
-if weight.ndim < 2 or weight.shape[axis] != self.scales.numel():
-    ...
-    logger.warning(f"[Arthemy Channel Scale] '{key}' has {tuple(weight.shape)} but the "
-                   f"channel vector is {self.scales.numel()} long on axis {axis}; "
-                   "this patch was skipped.")
-    return weight
-```
+## 4. The process failure, which is the part worth keeping
 
-**Norm scales are 1-D tensors**, so `weight.ndim < 2` is true for every one of them, and the patch
-is skipped — with a warning that goes to a log nobody was reading at render time.
+**This is the third time in one day that I re-derived something already in this repository.** The
+sign decomposition on pixels had been retracted a week earlier; the specialisation table had been
+demolished on 23/09; and this. Pitfall candidate 73 says a novelty check run in one language is not
+a novelty check — but here **the check was not run at all**. I ran it only when asked, and the very
+first grep returned the right document as its first hit. Writing took an hour; the check took
+eleven seconds.
 
-This is stated as the likely mechanism and not as proven: confirming it means running the tuner and
-watching that logger, or diffing the patched weights, and neither was done here. What *is* proven is
-§2 — the edit did not reach the image.
+Drafted defect **87**: *a novelty check performed after publication is not a novelty check.* The
+rule it earns is narrow and mechanical, which is the only kind that survives:
 
-## 4. What it costs
+> **Before writing any document that reports a finding, grep `docs/` and `notebook/` for the
+> phenomenon's key terms in both English and Italian, and record in the document what the search
+> returned — including "nothing".** A stated negative is auditable; an unstated one is an
+> assumption.
 
-* **48 renders** of `benchmark_qkvo_atlas` (2 conditions × 8 styles × 3 seeds) are duplicates of
-  baselines that already exist in `benchmark_atlas_phase1`.
-* **Any statement in this project that norm scales do little or nothing is unsupported.** It is not
-  a finding about the model; it is a finding about the tool. Nothing has been found that makes such
-  a statement yet — this document exists so that none is made later.
-* The q/k/v/o atlas's other conditions are unaffected: they patch `attn.w*.weight`, which is 2-D,
-  and they move the image.
-* **A "no effect" result from this tuner is not evidence of no effect until the patch is shown to
-  have been applied.** The tuner writes a warning when it skips; nothing in this project's render
-  pipeline captures it.
+Defect **86** as originally drafted is withdrawn along with the finding: the phenomenon is real, it
+is simply not new, and its correct entry is the one already in `errors_log.md`'s neighbourhood via
+`atlas_vs_tuner_generator.md`.
 
-## 5. What to do
-
-1. **Capture the tuner's warnings at render time.** The one line that would have caught this in
-   April is already written and already emitted; it goes nowhere. Any bench script that drives the
-   tuner should record its logger output beside the renders.
-2. **Verify a preset moved the image before analysing it.** The check is one hash of the decoded
-   pixels against the baseline, it costs nothing, and it belongs in the provenance step next to the
-   metadata check that already exists (`verify_leaf_and_blk16_provenance.py`).
-3. If norm scales are still a question worth asking, they need a patch path that handles 1-D
-   tensors — which is a change to the tuner, not to a bench.
-
-Drafted defect **86**: *a tool that skips a patch it cannot apply, warns into a log nobody reads,
-and returns a perfectly clean null.* Register §E.
-
-**Credit where it is due:** Antigravity's re-reading surfaced the zero and put it in its table
-rather than smoothing it away. The gap was only in stopping at "identity operation" — which is what
-the number looks like, and not what it is.
+**Credit unchanged:** Antigravity put the zero in its table instead of smoothing it away, which is
+what made the check possible at all.

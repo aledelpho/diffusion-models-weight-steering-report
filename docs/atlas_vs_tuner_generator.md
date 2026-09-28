@@ -166,3 +166,21 @@ from each other.
 best negative control an atlas can have: declared as such, `modulation_norm` collapsing to zero
 validates the pipeline. Undeclared, it contaminates it. Every future atlas should carry one on
 purpose, named in the pre-registration.
+
+---
+
+## Replicated on a second corpus, 2026-09-28
+
+The q/k/v/o atlas carries the same thing under a different name. `Arthemy_QKVO_normscales_all_pos`
+and `..._neg` patch 56 layers (`blocks.N.prenorm.scale`, `blocks.N.postnorm.scale` = 0.1) through
+the same Preset Loader at strength 1.0, and **18 of 18 renders checked have pixel content identical
+to their baseline, maximum absolute difference 0** — three styles, three seeds, both arms. The
+control `wo_b6_neg`, which patches four 2-D `attn.wo.weight` tensors, moves the image plainly.
+
+So the effect is not particular to `modulation_norm` or to the atlas: **48 renders of
+`benchmark_qkvo_atlas` are duplicates of baselines that already exist.** The decisive test proposed
+above is now register item **C34**, and it has still never been run.
+
+*(That replication was first written up as a new finding, `normscales_never_applied.md`, before its
+author checked whether the repository already knew. It did — this document, two days earlier. That
+file now records the retraction and the rule it earned.)*
