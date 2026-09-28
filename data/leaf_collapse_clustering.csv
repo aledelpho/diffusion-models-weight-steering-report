@@ -1,0 +1,5 @@
+statistic,value
+mean_within_group_similarity_observed,0.849855
+exact_permutation_p,0.534758
+splits_enumerated,167960
+mean_pairwise_similarity_all_20,0.851899
