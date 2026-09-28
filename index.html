@@ -92,6 +92,7 @@
 <li><a href="#p-08-block1-vs-block6"><span class="dot" style="background:#0ca30c"></span>Two places in the model, pushed the same distance</a></li>
 <li><a href="#p-09-style-direction"><span class="dot" style="background:#d03b3b"></span>Eight styles, one direction, and a design that cannot say why</a></li>
 <li><a href="#p-10-all-blocks-clean"><span class="dot" style="background:#898781"></span>All six block groups under matched rotation</a></li>
+<li><a href="#p-11-what-the-numbers-could-not-see"><span class="dot" style="background:#898781"></span>Three times the pictures disagreed with the measurements</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
@@ -126,6 +127,7 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--the-advantage-and-the-null-it-had-to-beat">Two block groups pushed exactly the same distance move the image in directions that can be told apart, and they separate further than two arbitrary perturbations of that same size do.</a></td><td class="ev">Pre-registered, single hypothesis, no alternatives. Measured on recovered pixels: same-block advantage +1.108 at the exact permutation floor p = 0.00195, positive in 10 prompts of 10, against a scramble null of +0.274; the paired advantage is +0.834, also at the floor and positive in 10 of 10. The criterion holds in all five measurement spaces. The figures published before 2026-09-23 were +1.039, +0.532 and +0.506, measured with a HUD panel in the frame that inflated the null.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">At a displacement matched by construction, the first block group&#x27;s direction is highly consistent across subjects rather than unstable.</a></td><td class="ev">Within-block coherence 0.942 for the first group and 0.977 for the last, in the primary space, on 10 prompts sharing no text with the pilot, measured on recovered pixels. The pilot estimate for the same quantity was 0.65 across 23 features. Removing the HUD moved these two by less than 0.02: the coherence was never the contaminated part.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-09-style-direction--why-the-five-confirmed-cells-do-not-survive">The only amplitude that produced significant cells sits outside the quality range declared for it in advance, in three quarters of its cells.</a></td><td class="ev">The 3-sigma gate was frozen while the render queue was still running and before any feature was extracted. 18 cells of 24 at the double amplitude fall outside it on edge density or on texture entropy, the worst at z = 131.7. That arm&#x27;s displacement was never measured either: its 0.1076 is twice the measured single-dose value, not a second measurement.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-11-what-the-numbers-could-not-see--the-subjects-were-chosen-for-the-property-that-made-the-test-impossible">The generality test for the colour collapse was run on four subjects whose colour prior is unambiguous, where the mechanism predicts nothing to break, so its null is not evidence.</a></td><td class="ev">Undeclared against prototypical-declared: 0.9 to 9.9 degrees for the four subjects, 52.2 degrees for the leaf, in data/prior_ambiguity.csv.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-04-where-in-the-model--the-null-hypothesis-and-how-badly-it-lost">Where an edit lands changes how much the picture moves, and it is not a matter of how far the weights moved. The last block group moves the checkpoint least and the image most.</a></td><td class="ev">Exploratory, one seed per cell, one unsigned metric. The last group displaces 28% less than the largest and moves the image 3.7 times more, at about 15 times the seed noise, 7 of 7 prompts, p at the 2/2^7 floor. Among the four middle groups displacement explains the ordering completely.</td></tr>
@@ -154,6 +156,8 @@
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-monotonic-response-across-angles">Response grows monotonically with rotation angle for every block group, with the output group (B6) moving the image most and the input group (B1) second, while middle groups remain substantially weaker.</a></td><td class="ev">B6 runs 0.63 / 1.65 / 3.71, B1 runs 0.12 / 0.40 / 0.90, middle groups 0.07 to 0.49 in data/all_blocks_clean_v2_response_by_block.csv.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--chroma-shape-ratio-versus-separability">The chroma/shape specialization ratio makes B1 and B6 the closest of all fifteen block pairs, yet pairwise separability tests put B1-B6, B1-B2, and B1-B4 at the exact permutation floor with similar cosines.</a></td><td class="ev">Gap 0.0073 (p = 0.067) in data/specialisation_vs_proximity.csv vs floor p = 0.03125 in data/all_blocks_clean_v2_separability.csv.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-same-angle-is-not-the-same-dose">The output group&#x27;s lead over the input group is not an artefact of rotating every group by the same angle: correcting for the displacement each group actually received widens the lead instead of closing it.</a></td><td class="ev">B6 receives 0.740 of B1&#x27;s displacement at a common angle, so the ratio 5.35 / 4.16 / 4.13 as rendered becomes 7.23 / 5.62 / 5.58 per unit of displacement, in data/sensitivity_by_block.csv.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--the-best-edits-by-displacement-were-the-worst-pictures">Every statistic this project had for ranking an edit measures how far the image moved, and none of them can tell moving toward something from falling apart; the conditions ranked best by displacement are the ones that destroy the drawing.</a></td><td class="ev">The five conditions recommended on 2026-09-27 rank 75th to 80th of 80 on structure coherence in data/texture_anisotropy.csv; the condition picked by eye ranks 1st.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--a-colour-that-was-named-survives-a-colour-that-was-inferred-does-not">A colour stated in the prompt survives every edit measured, while a colour the model has to infer from the object can be removed entirely, leaving the object intact.</a></td><td class="ev">Declared probes never fall below chroma ratio 0.648 in 72 cells; the undeclared one reaches 0.040 and does so in 9 of 20 fresh seeds, against 0 of 20 unedited. data/leaf_collapse_cells.csv, data/colour_chroma_audit.csv.</td></tr>
       </tbody>
     </table>
   </section>
@@ -4609,6 +4613,358 @@ analysis:
 <li>Figures: F10.1 and F10.2, both registered in <code>experiments/figures.yaml</code> and built by <code>experiments/notebook_charts.py</code></li>
 <li>Pitfalls that apply: 4, 10, 15, 30 (two arms sharing an output folder, one of them with no manifest), 68, 72</li>
 </ul>
+</section>
+<section id="p-11-what-the-numbers-could-not-see">
+<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">214 renders · 11 prompts · 3 seeds · pre-registered · 2026-09-28</span></p>
+<h1 id="p-11-what-the-numbers-could-not-see--three-times-the-pictures-disagreed-with-the-measurements">Three times the pictures disagreed with the measurements</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> By this point the bench had a statistic for everything — contrast,
+grain, chroma, hue, displacement, composition — and I had started ranking edits with them and
+recommending the winners. If the numbers are good enough to rank by, looking at the renders is a
+courtesy, not a step.</p>
+<p><strong>What would kill it.</strong> An observer, given no labels, separating the renders in a way the
+statistics cannot reproduce. Or a null result that turns out to come from a design the numbers
+called clean.</p>
+<p><strong>Where we are.</strong> Both happened, on the same day, and one of the nulls was mine. The
+uncomfortable part is that none of the three was found by a measurement; each was found by
+somebody opening an image, and the measurement came second, to check.</p>
+</blockquote>
+<h2 id="p-11-what-the-numbers-could-not-see--in-two-minutes">In two minutes</h2>
+<p>Three disagreements, in the order they happened.</p>
+<p><strong>One.</strong> I ranked 140 edits by how far they moved the picture against how much of its composition
+they cost, published the top of that ranking as the best operating points, and said the images
+agreed. Alessandro cut one of them out at 1:1 and it was full of defects. Re-measured with a
+statistic that asks whether the drawing is still a drawing, the five conditions I had recommended
+turned out to be the five worst in the corpus, and the one he had picked out by eye was the best of
+eighty.</p>
+<p><strong>Two.</strong> An edit removes all the colour from a leaf while leaving the leaf perfectly drawn. It
+happens in nine of twenty fresh seeds and in none of the twenty unedited controls. It never happens
+when the prompt names a colour — not once in seventy-two cells, on an ordinary colour or an odd one.</p>
+<p><strong>Three.</strong> I tested whether that generalises on four other subjects, found nothing, and wrote
+"leaf-specific". The contact sheet shows why: for all four, the render told "brown" and the render
+told nothing are the same picture. I had chosen subjects for having a <em>strong</em> colour prior, to test
+a mechanism that needs a weak one.</p>
+<p><img alt="One mushroom, three prompts: told brown, told purple, told nothing, each with the edit beside it. The row told brown and the row told nothing are the same picture, so the subject had no colour left to infer and the experiment could not have failed there." src="assets/11-what-the-numbers-could-not-see/F11.1_the_prior_leaves_nothing_to_infer.webp" /></p>
+<h2 id="p-11-what-the-numbers-could-not-see--the-verdict">The verdict</h2>
+<p>Displacement statistics rank edits by how much moved, and this notebook had no statistic that asks
+whether what is left is still a drawing. Adding one reverses the ranking at both ends. Separately,
+a colour that the prompt states survives every edit measured here, while a colour the model has to
+infer can be removed outright — and the test of whether that generalises has not yet been run,
+because it was run on subjects that leave nothing to infer.</p>
+<p>Nothing on this page is pre-registered as a claim about the model. The first result is a repair to
+this notebook's own instruments; the second is a reproducible phenomenon with a proposed reading
+and no test of its scope; the third is a design error with its measurement attached.</p>
+<h2 id="p-11-what-the-numbers-could-not-see--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>Structure coherence is one number on one drawing style.</strong> It is the orientation agreement of the
+luminance gradient over a 9 × 9 window, as a ratio to the untouched render. The bench's prompts are
+comic-line illustration — strongly oriented ink strokes — which is exactly the case where such a
+statistic should work best. On a photographic family it may say nothing, and until that is checked
+every structural claim here inherits the caveat.</p>
+<p><strong>The two-routes reading of the colour collapse is a reading, not a test.</strong> It fits three facts —
+declared colours never collapse, the collapse is the object's and not the frame's, and it produces
+no colour rather than a wrong one — but all three come from one prompt and one edit. A reading that
+explains one cell is worth what one cell is worth.</p>
+<p><strong>The drift toward green is not significant.</strong> Nine of the eleven seeds that keep their colour move
+it toward green, mean +10.8°, exact sign test p = 0.065. It hints that the collapse is the far end
+of one push rather than a separate event; it does not establish it, and two of the largest drifts
+keep their chroma entirely.</p>
+<p><strong>And the honest reservation about the method of this page:</strong> finding three things by looking is
+not evidence that looking finds things. It is one day. What it does establish is narrower and
+enough — that the statistics in use were blind in a way that a glance was not.</p>
+<h2 id="p-11-what-the-numbers-could-not-see--the-data">The data</h2>
+<h3 id="p-11-what-the-numbers-could-not-see--how-it-was-measured">How it was measured</h3>
+<p><strong>Structure coherence.</strong> For each render, the structure tensor of the luminance gradient smoothed
+over 9 × 9, reduced to (λ₁−λ₂)/(λ₁+λ₂) and averaged over the frame, then divided by the same
+quantity for the untouched render at that prompt and seed. Near 1 the gradients point every way —
+speckle, or flat. Higher means they agree locally, which is what ink strokes and hatching do.</p>
+<p><strong>Chroma and object.</strong> The object is found without using colour: the value channel low-passed 8×,
+thresholded against the background value taken from the border ring, reduced to its largest
+connected component. A mask defined by saturation — which is what the first version of this
+measurement used — cannot represent an object that has lost its colour, and filed the one render
+that had as a destroyed image.</p>
+<p><strong>Prior ambiguity.</strong> For a subject, the circular hue distance between the render with no colour
+declared and the render with the prototypical colour declared. Small means naming the colour
+changes nothing, so there is no inference for an edit to break.</p>
+<h3 id="p-11-what-the-numbers-could-not-see--the-numbers">The numbers</h3>
+<h4 id="p-11-what-the-numbers-could-not-see--the-best-edits-by-displacement-were-the-worst-pictures">The best edits by displacement were the worst pictures</h4>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>condition</th>
+<th style="text-align: right;">displacement</th>
+<th style="text-align: right;">structure coherence</th>
+<th style="text-align: right;">rank of 80</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>B4_mask</code> positive</td>
+<td style="text-align: right;">0.261</td>
+<td style="text-align: right;"><strong>1.041</strong></td>
+<td style="text-align: right;"><strong>1</strong></td>
+</tr>
+<tr>
+<td><code>blk16</code> positive</td>
+<td style="text-align: right;">0.447</td>
+<td style="text-align: right;">1.040</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td><code>Block_4</code> positive</td>
+<td style="text-align: right;">0.478</td>
+<td style="text-align: right;">0.994</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr>
+<td><code>blk27</code> negative</td>
+<td style="text-align: right;">0.394</td>
+<td style="text-align: right;">0.802</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr>
+<td><code>Block_6</code> negative</td>
+<td style="text-align: right;">0.340</td>
+<td style="text-align: right;">0.793</td>
+<td style="text-align: right;">76</td>
+</tr>
+<tr>
+<td><code>B6_anti</code> negative</td>
+<td style="text-align: right;">0.464</td>
+<td style="text-align: right;">0.789</td>
+<td style="text-align: right;">77</td>
+</tr>
+<tr>
+<td><code>B6_mask</code> negative</td>
+<td style="text-align: right;">0.846</td>
+<td style="text-align: right;">0.729</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr>
+<td><code>B4B6_mask</code> negative</td>
+<td style="text-align: right;">0.914</td>
+<td style="text-align: right;"><strong>0.718</strong></td>
+<td style="text-align: right;"><strong>80</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The bottom four of that table are four of the five conditions this notebook recommended on
+2026-09-27, ranked by displacement against composition cost. The top line is the pair an observer
+picked out of the corpus without labels.</p>
+<p><img alt="The same head at 1:1 under three edits ranked by displacement as near neighbours. The first keeps the ink line; the other two have dissolved the whole picture into a field of curled marks, which every displacement statistic in this project scored as a large, successful style move." src="assets/11-what-the-numbers-could-not-see/F11.3_the_curl_field.webp" /></p>
+<p>The failure mode has a shape, and it is not blur and not noise: the drawing is replaced by a field
+of curled comma-like marks, dense enough at <code>B6_mask</code> that the face is barely recoverable. A
+statistic that sums squared second differences reads that as texture; the ratio of grain to the
+untouched render for <code>blk27</code> negative is <strong>0.841</strong>, which reads as <em>sixteen per cent less grain</em>
+while the fine detail has been entirely rewritten — across 140 conditions the correlation between
+that ratio and how much band-0 detail actually changed is <strong>−0.054</strong>.</p>
+<h4 id="p-11-what-the-numbers-could-not-see--a-colour-that-was-named-survives-a-colour-that-was-inferred-does-not">A colour that was named survives, a colour that was inferred does not</h4>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>probe</th>
+<th style="text-align: right;">cells</th>
+<th style="text-align: right;">lowest chroma ratio</th>
+<th style="text-align: right;">second lowest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>purple declared</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">0.648</td>
+<td style="text-align: right;">0.653</td>
+</tr>
+<tr>
+<td>green declared</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">0.658</td>
+<td style="text-align: right;">0.693</td>
+</tr>
+<tr>
+<td><strong>nothing declared</strong></td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;"><strong>0.040</strong></td>
+<td style="text-align: right;">0.783</td>
+</tr>
+</tbody>
+</table></div>
+<p>Under the same edit and the same seed that produced the achromatic leaf, the purple leaf comes back
+at 1.063 and the green one at 0.871.</p>
+<p>On twenty fresh seeds of the undeclared prompt the outcome is bimodal with an empty band:</p>
+<pre><code>0.034 0.037 0.037 0.038 0.043 0.044 0.049 0.082 0.085 | 0.518 0.602 0.948 0.965 1.005 1.016
+1.115 1.117 1.164 1.230 1.311
+</code></pre>
+<p><img alt="Ten seeds of one prompt, untouched above and edited below. The edit leaves the drawing intact in every one and takes the colour out of five of these ten, with nothing in between: the outcome is a switch, not a dimmer." src="assets/11-what-the-numbers-could-not-see/F11.2_nine_of_twenty.webp" /></p>
+<p>The drawing survives equally in both groups — overlap with the untouched render 0.877 for the nine
+that lose their colour against 0.895 for the eleven that keep it — and the loss is the object's, not
+the frame's: chroma inside the object falls to 0.050 of baseline while the background keeps its tint
+at 0.882, p = 0.131.</p>
+<h4 id="p-11-what-the-numbers-could-not-see--the-subjects-were-chosen-for-the-property-that-made-the-test-impossible">The subjects were chosen for the property that made the test impossible</h4>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>subject</th>
+<th style="text-align: right;">undeclared vs prototypical-declared</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pinecone</td>
+<td style="text-align: right;">0.9°</td>
+</tr>
+<tr>
+<td>banana</td>
+<td style="text-align: right;">1.4°</td>
+</tr>
+<tr>
+<td>mushroom</td>
+<td style="text-align: right;">3.1°</td>
+</tr>
+<tr>
+<td>tomato</td>
+<td style="text-align: right;">9.9°</td>
+</tr>
+<tr>
+<td><strong>leaf</strong></td>
+<td style="text-align: right;"><strong>52.2°</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="p-11-what-the-numbers-could-not-see--the-controls">The controls</h3>
+<p><strong>Twenty untouched renders.</strong> None of the twenty baselines of the undeclared prompt collapses on
+its own. This was written into the design as the result that would end the experiment, and read
+before anything else.</p>
+<p><strong>Twelve predictors, and an exact permutation test.</strong> Nothing in the untouched render says which
+seeds will collapse: twelve features of the baseline, exact Mann-Whitney with Bonferroni over
+twelve, zero survive; and a multivariate test over all 167 960 ways of splitting twenty seeds nine
+against eleven gives p = 0.535. Baseline chroma — the obvious candidate — is 0.50326 against
+0.50309.</p>
+<p><strong>Five rewordings.</strong> The same subject, still with no colour named, asked five other ways: no
+collapse in fifteen cells. The scenes differ in framing, but neither baseline chroma (0.503 against
+0.474) nor hue spread inside the object (14.5° against 16.8°) separates them, so the leaf's colour
+was not what the rewording moved.</p>
+<p><strong>A determinism check that crosses benches.</strong> One cell of the <code>blk16</code> ladder already existed in
+another bench, rendered weeks earlier from a different plan file and a different queueing script.
+It returned displacement 0.4472 against 0.447 and coherence 1.0397 against 1.040.</p>
+<h3 id="p-11-what-the-numbers-could-not-see--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  scheduler: simple
+  denoise: 1.0
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2ModelTuner
+  mode: Real Value
+  drives:
+    leaf_bench: named group input Block_4 = -0.2, vectors_override EMPTY, granular_json empty
+    blk16_bench: 34-slot vectors_override, slot 16 only, every named group input 0.0
+  warning: &gt;
+    the two drives are not interchangeable and a row from one must never be run with the other's
+    mechanism -- the comparison with the existing corpus is what makes either bench worth rendering
+prompts:
+  LN: &quot;a single leaf centred on a plain light grey background, macro photograph, sharp focus, even studio lighting, no other objects&quot;
+  LG: &quot;a single green leaf centred on ... (as LN, colour named)&quot;
+  LP: &quot;a single purple leaf centred on ... (as LN, colour named)&quot;
+  W1_W5: &quot;five near-synonymous rewordings of LN; full text in data/leaf_collapse_plan.csv&quot;
+  MU_TO_PC_BA: &quot;mushroom / tomato / pinecone / banana, same sentence frame, prototypical / purple / undeclared&quot;
+  P01: &quot;Western comics style, bold ink outlines, hatched shadows, medium wide shot...&quot;
+  P02: &quot;Western comics style, ... (full text carried in data/blk16_ladder_plan.csv)&quot;
+seeds: [42, 777, 1337, 2001-2020]
+conditions:
+  - name: leaf collapse
+    plan: data/leaf_collapse_plan.csv
+    renders: 142
+    arms: [20 fresh seeds, 5 rewordings, 4 subjects x 3 colour conditions]
+    baselines: one per perturbed cell, tuner node absent
+    measured_D: &gt;
+      not measured in weight space on this bench -- the gain is nominal (Block_4 = -0.2) and no
+      Frobenius displacement was computed, so nothing here compares this edit's size with any
+      other. The pixel-side displacement that IS measured is the chroma ratio against each cell's
+      own baseline, in data/leaf_collapse_cells.csv
+  - name: blk16 ladder
+    plan: data/blk16_ladder_plan.csv
+    renders: 72
+    doses: [0.020, 0.035, 0.050, 0.080, 0.120, 0.200]
+    arms: [pos, neg]
+    baselines: reused from benchmark_mappa, not re-rendered
+    measured_D: &gt;
+      measured on the pixels, not assumed from the gain: style displacement runs
+      0.045 / 0.066 / 0.095 / 0.138 / 0.194 / 0.447 across the six doses of the positive arm and
+      reaches 0.201 at 0.200 on the negative one, in data/blk16_ladder_cells.csv. Weight-space
+      displacement is not computed for this bench either
+outputs:
+  directories:
+    - benchmark_leaf_collapse/renders -- 142, outside the repository
+    - benchmark_blk16_ladder/renders -- 72, outside the repository
+  contact_sheets: benchmark_leaf_collapse/_contact_sheets -- every render of both benches,
+    laid out as sheets, kept so a later reader can look before measuring
+  manifests:
+    - data/leaf_collapse_plan.csv -- 142 rows, one per render
+    - data/blk16_ladder_plan.csv -- 72 rows, one per render
+  provenance:
+    - data/provenance_leaf_collapse.csv -- 142 of 142 match the plan
+    - data/provenance_blk16_ladder.csv -- 72 of 72 match the plan
+analysis:
+  feature_tables:
+    - data/leaf_collapse_cells.csv
+    - data/blk16_ladder_cells.csv
+    - data/texture_anisotropy.csv
+    - data/damage_bands_cells.csv
+  summary_tables:
+    - data/leaf_collapse_verdict.csv
+    - data/blk16_ladder_verdict.csv
+    - data/prior_ambiguity.csv
+    - data/leaf_collapse_scope.csv
+    - data/leaf_collapse_predictors.csv
+    - data/composition_by_family.csv
+</code></pre>
+<p>Every number above comes from <code>data/texture_anisotropy.csv</code>, <code>data/leaf_collapse_cells.csv</code>,
+<code>data/prior_ambiguity.csv</code>, <code>data/leaf_collapse_scope.csv</code>, <code>data/leaf_collapse_predictors.csv</code>,
+<code>data/damage_bands.csv</code> and <code>data/blk16_ladder_cells.csv</code>, each written by the script named beside
+it in Provenance. The renders of the two new benches live outside the repository, in ComfyUI's
+output tree, so <code>experiments/build_figures_looking.py</code> takes <code>--roots</code> to rebuild F11.1 to F11.3.
+Each of those three builders reads its own measurement file first and <strong>refuses to compose</strong> if the
+data no longer says what the caption says.</p>
+<h2 id="p-11-what-the-numbers-could-not-see--provenance">Provenance</h2>
+<p><strong>Pre-registration.</strong> <code>docs/RENDERS_2026-09-28_leaf_collapse_and_blk16.md</code> — predictions L1 to L5
+and K1 to K4, frozen before the 214 renders existed. L2 and L1 confirmed, L3 confirmed as far as it
+goes, L4 withdrawn as untested, L5 falsified and reversed. K1, K2 and K3 confirmed, K4 grey.</p>
+<p><strong>Measurement files.</strong> <code>data/texture_anisotropy.csv</code>, <code>data/composition_by_family.csv</code>,
+<code>data/damage_bands.csv</code>, <code>data/leaf_collapse_cells.csv</code>, <code>data/leaf_collapse_scope.csv</code>,
+<code>data/leaf_collapse_predictors.csv</code>, <code>data/leaf_collapse_clustering.csv</code>,
+<code>data/prior_ambiguity.csv</code>, <code>data/prior_colour_bleed.csv</code>, <code>data/blk16_ladder_cells.csv</code>,
+<code>data/provenance_leaf_collapse.csv</code>, <code>data/provenance_blk16_ladder.csv</code>.</p>
+<p><strong>Scripts.</strong> <code>experiments/texture_anisotropy.py</code>, <code>experiments/damage_spatial_bands.py</code>,
+<code>experiments/style_damage_frontier.py</code>, <code>experiments/measure_leaf_collapse.py</code>,
+<code>experiments/leaf_collapse_scope.py</code>, <code>experiments/leaf_collapse_predictors.py</code>,
+<code>experiments/prior_ambiguity.py</code>, <code>experiments/prior_colour_bleed.py</code>,
+<code>experiments/measure_blk16_ladder.py</code>, <code>experiments/verify_leaf_and_blk16_provenance.py</code>,
+<code>experiments/build_figures_looking.py</code> (F11.1 to F11.3).</p>
+<p><strong>Renders.</strong> <code>benchmark_leaf_collapse</code> (142), <code>benchmark_blk16_ladder</code> (72), and for the
+coherence table <code>benchmark_rectified_masks</code>, <code>benchmark_profondita</code>, <code>benchmark_profondita_neg</code> and
+<code>benchmark_mappa</code>. Provenance of the two new benches checked against the plans from each render's
+own metadata: 142 of 142 and 72 of 72, including that every baseline row carries no tuner node at
+all rather than a tuner set to zero.</p>
+<p><strong>Documents.</strong> <code>docs/style_damage_frontier.md</code> (§7 to §10 are the retraction),
+<code>docs/leaf_collapse_and_blk16_result.md</code>, <code>docs/what_broke_in_the_leaf.md</code>,
+<code>docs/looking_at_the_leaf_corpus.md</code>, <code>docs/block4_vs_block6_synthesis.md</code>,
+<code>docs/leaf_collapse_predictors_result.md</code>.</p>
+<p><strong>Pitfalls.</strong> 17 — the prompt is the unit, which is why every test on this page counts conditions
+or seeds and never renders. 63 — a statistic read near its own floor, the family the grain ratio
+turned out to belong to. Five more are drafted and not yet numbered in <code>docs/errors_log.md</code>: judging
+a pixel-level property from a downscaled frame; declaring two axes independent without measuring
+their correlation; an isotropic texture summary that reports a decrease while the texture is
+replaced; a base rate taken from the whole corpus for an event conditional on one cell; and choosing
+a test population by the property that makes the effect impossible. They are listed with their
+evidence in <code>docs/open_work_register.md</code> §E.</p>
 </section>
 </main>
 </body>

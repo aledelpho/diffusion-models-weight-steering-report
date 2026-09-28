@@ -523,3 +523,42 @@ figures:
   #     criterion: "the scored headlight region falls inside the box"
   #     threshold: 0.95
   #     evaluated_per: [prompt, condition, seed]
+
+  # ------------------------------------- 11-what-the-numbers-could-not-see
+
+  - id: F11.1
+    page: 11-what-the-numbers-could-not-see
+    kind: contact_sheet
+    builder: build_figures_looking.f11_1
+    source: data/prior_ambiguity.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      One mushroom, three prompts: told brown, told purple, told nothing, each with the edit
+      beside it. The row told brown and the row told nothing are the same picture, so the
+      subject had no colour left to infer and the experiment could not have failed there.
+
+  - id: F11.2
+    page: 11-what-the-numbers-could-not-see
+    kind: contact_sheet
+    builder: build_figures_looking.f11_2
+    source: data/leaf_collapse_cells.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Ten seeds of one prompt, untouched above and edited below. The edit leaves the drawing
+      intact in every one and takes the colour out of five of these ten, with nothing in
+      between: the outcome is a switch, not a dimmer.
+
+  - id: F11.3
+    page: 11-what-the-numbers-could-not-see
+    kind: contact_sheet
+    builder: build_figures_looking.f11_3
+    source: data/texture_anisotropy.csv
+    caption_from: source
+    crop: locator:face
+    alt: >
+      The same head at 1:1 under three edits ranked by displacement as near neighbours. The
+      first keeps the ink line; the other two have dissolved the whole picture into a field of
+      curled marks, which every displacement statistic in this project scored as a large,
+      successful style move.
