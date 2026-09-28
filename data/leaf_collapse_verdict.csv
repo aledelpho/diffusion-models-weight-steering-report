@@ -1,0 +1,6 @@
+id,quantity,observed,verdict
+L2,arm A baselines collapsing on their own (median chroma 0.5144),0/20,CONFIRMED -- the edit is the cause
+L1,"arm A hits (>=2 reproducible, 0 one-off)","9/20, binomial p=0.0000",CONFIRMED
+L3,arm B wordings with at least one hit (>=2 preset-driven),"0/5 wordings, 0/15 cells",FALSIFIED -- wording-specific
+L4,arm C subjects with at least one hit (>=2 subject-general),"0/4 subjects, 0/36 cells",FALSIFIED -- leaf-specific
+L5,arm C: prototypical < unusual < undeclared (P/U/N mean hue shift),"0/4 subjects: MU 0.7/6.0/1.4, TO 3.2/13.9/2.6, PC 0.7/27.4/2.9, BA 2.9/8.1/2.1",FALSIFIED

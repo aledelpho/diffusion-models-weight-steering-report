@@ -1,0 +1,5 @@
+id,quantity,observed,verdict
+K3,"blk16 pos 0.200 reproduces its measured point (style 0.447 +-0.08, coherence 1.040 +-0.03)","style 0.4472, coherence 1.0397",CONFIRMED
+K1,coherence at or above baseline across the positive ladder,"0.020:0.994, 0.035:1.001, 0.050:0.999, 0.080:1.004, 0.120:1.017, 0.200:1.040",CONFIRMED
+K2,"style grows monotonically with dose, positive arm","0.020:0.045, 0.035:0.066, 0.050:0.095, 0.080:0.138, 0.120:0.194, 0.200:0.447",CONFIRMED
+K4,negative arm buys style by losing line (coherence < 0.98 at 0.200),0.9813,GREY
