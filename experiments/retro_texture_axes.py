@@ -25,7 +25,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage
 
-H = os.path.expanduser("~/mnt")
+H = os.environ.get("COMFY_OUTPUT_ROOT", os.path.expanduser("~/mnt"))
 OUT = "data/retro_texture_axes.csv"
 BENCHES = [
     "benchmark_mappa--renders", "benchmark_profondita/renders", "benchmark_profondita_neg/renders",
@@ -35,6 +35,7 @@ BENCHES = [
     "benchmark_stage4_preset/renders", "benchmark_stage5/renders", "benchmark_stage7/renders",
     "benchmark_stage9/renders", "benchmark_latenti_b6/renders",
     "benchmark_pavimento_rumore/renders",
+    "benchmark_stage7a/renders", "benchmark_stage2_family/renders",
 ]
 FIELDS = ["bench", "file", "coherence", "band0", "band1", "band2", "band3", "band4",
           "variance", "chroma", "hue_deg"]
