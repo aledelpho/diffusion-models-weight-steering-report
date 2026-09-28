@@ -1,0 +1,31 @@
+{
+ "name": "Family_io_d+0.100",
+ "author": "Antigravity (C35)",
+ "created_at": "2026-09-28 18:20:27",
+ "version": "2.1",
+ "suite_rotation_effective": true,
+ "stats": {
+  "model_patched_layers": 2,
+  "model_granular_layers": 0,
+  "clip_patched_layers": 0,
+  "clip_granular_layers": 0,
+  "chaos_recipes_count": 0,
+  "rotation_recipes_count": 0,
+  "chaos_rotation_recipes_count": 0,
+  "channel_recipes_count": 0,
+  "five_d_recipes_count": 0,
+  "excluded_lora_tensors": 0
+ },
+ "model_patches": {
+  "first.weight": 0.1,
+  "last.linear.weight": 0.1
+ },
+ "model_granular_patches": {},
+ "clip_patches": {},
+ "clip_granular_patches": {},
+ "chaos_recipes": [],
+ "rotation_recipes": [],
+ "chaos_rotation_recipes": [],
+ "channel_recipes": [],
+ "five_d_recipes": []
+}
