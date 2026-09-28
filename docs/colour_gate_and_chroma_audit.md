@@ -131,6 +131,12 @@ Nothing pre-registered looked at saturation. Per block, over all 18 cells (3 pro
 | `Block_5` | ×1.145 | ×1.610 | 12/18 | 0.238 |
 | **`Block_6`** | **×0.726** | **×1.815** | **18/18** | **0.00001** |
 
+> **Restated 2026-09-28, later the same day.** These are *object-restricted* measurements, and
+> they stand as measured — but "knob" is the wrong word for one arm. On the whole frame `Block_6`
+> reads 1.488 / 1.814, both arms up, no antisymmetry: `Block_6 pos` multiplies the **background's**
+> chroma by 12.5 while taking 27 % off the object's. It moves the colour off the object rather than
+> removing it. See [`chroma_redistribution.md`](chroma_redistribution.md).
+
 **`Block_3` and `Block_6` are antisymmetric saturation knobs.** Every one of their 36 cells moves
 the way its arm says, across three prompts, three seeds and two declared colours plus none, with
 the object intact throughout (mean IoU 0.89 and 0.92). `Block_6` spans ×0.73 to ×1.82 — a factor of
