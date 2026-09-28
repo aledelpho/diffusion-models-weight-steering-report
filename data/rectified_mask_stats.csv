@@ -1,0 +1,16 @@
+id,quantity,predicted,observed,verdict
+M1,B4_mask pos contrast,1.1631,1.0435,GREY
+M2,B4_anti pos contrast,0.9528,0.9309,CONFIRMED
+M3,B6_mask pos grain,1.2497,1.0919,GREY
+M4,B6_anti pos grain,0.8818,1.1910,FALSIFIED
+M5a,separation on contrast (B4_mask - B4_anti),0.2100,0.1126,CONFIRMED
+M5b,separation on grain (B6_mask - B6_anti),0.3700,-0.0991,FALSIFIED
+M6a,|B4B6_mask - B4_mask| on contrast,0.0000,0.1665,GREY
+M6b,|B4B6_mask - B6_mask| on grain,0.0000,0.0515,CONFIRMED
+S1,masks: side of 1 correct out of 12,6,12,binomial p=0.00024
+S2,anti-masks: side of 1 correct out of 12,6,6,binomial p=0.61279
+S3,"masks vs anti-masks, all cells",,12/12 vs 6/12,Fisher exact p=0.01373
+S4,"masks vs anti-masks, combined arm dropped",,8/8 vs 4/8,Fisher exact p=0.07692
+S5_mask,naive rule 'always below 1' on mask cells,,9/12,control for the marginal tendency
+S5_anti,naive rule 'always below 1' on anti cells,,6/12,control for the marginal tendency
+S6,mask cells where composition predicts ABOVE 1,,3/3,binomial p=0.12500
