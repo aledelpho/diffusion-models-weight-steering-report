@@ -109,13 +109,34 @@ of `Block_1`.
 for months. On `Block_4 pos` and `Block_1 pos`, **0.500 is better on both axes at once** — more
 movement *and* a stronger line — and nothing in the corpus had been rendered there.
 
-## 5. What is still owed
+## 5. The eye veto — built, not yet answered
 
-**The eye veto has not been run**, and the pre-registration requires it: twelve centre/extreme pairs
-at matched V, 1:1 crops, blind. If Alessandro agrees with the ordering of L in fewer than 8 of 12,
-the primary is reported as *"L not validated by eye"*. `analyze_centre_push.py` does not implement
-it. Until it runs, every L in this document is a statistic nobody has checked against a picture —
-which on 2026-09-28 was wrong three times.
+`analyze_centre_push.py` does not implement G_eye, so `experiments/centre_push_eye_veto.py` does.
+It cuts **no new render**: twelve sheets, each two 512-px centre crops at **1:1, never resampled**,
+from renders already on disk. Sealed key in `data/centre_push_veto_key.csv`, blank form in
+`data/centre_push_veto_answers.csv`, sheets in `benchmark_centre_push/_eye_veto/`.
+
+Three things the deposited text left open were fixed in the builder, before any crop was cut:
+
+1. Only **10 end units** fall in V ∈ [1.5, 3] against 16 central ones, so twelve pairs cannot use
+   twelve distinct end units. An end unit may be used **twice**, never more, never with the same
+   seed; **all 24 images are distinct**.
+2. A unit is three renders. The one shown is the render whose own L is closest to the unit's mean L;
+   a unit shown twice uses the second-closest. The pick never looks at the other side of the pair.
+3. Pairs are matched on **V alone**, as written — matching within prompt was *not* imposed, because
+   it is not in the deposited text. The cost is recorded rather than hidden: **8 of the 12 pairs put
+   a P01 crop against a P02 crop**, two different scenes. `_baselines.png` gives both unperturbed
+   crops for reference, and "neither" is the honest answer where the contents do not compare.
+
+Side assignment is `random.Random(20260928)`: L names A in 6 pairs and B in 6, so the form carries
+no side bias. Two pairs are near-ties for L — pair 01 at ΔL = +0.0093 and pair 07 at −0.0110 — and
+the eye should not be expected to resolve them; they count against L if answered wrong, as the
+pre-registration says, and that is a known weakness of matching on V alone.
+
+`python experiments/centre_push_eye_veto.py --score` reads the answers, writes
+`data/centre_push_veto_result.csv`, and reports an exact two-sided sign test alongside the
+pre-registered 8-of-12 threshold. **Until Alessandro answers, every L in this document is a
+statistic nobody has checked against a picture — which on 2026-09-28 was wrong three times.**
 
 ## 6. Limits
 

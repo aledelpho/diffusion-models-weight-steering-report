@@ -1,0 +1,13 @@
+pair,sheet,dV,cross_prompt,A_position,A_unit,A_file,A_V,A_L,B_position,B_unit,B_file,B_V,B_L,dL_A_minus_B,L_says_more_broken
+01,pair01.png,0.0090,True,centre,Block_3_neg_0.350_P01,P01_Block_3neg_0.350_krea2_seed2718281_00001_.png,2.5308,1.0312,end,Block_1_neg_0.500_P02,P02_Block_1neg_0.500_krea2_seed1618033_00001_.png,2.5398,1.0219,+0.0093,B
+02,pair02.png,0.0131,True,end,Block_1_neg_0.080_P01,P01_Block_1neg_0.080_krea2_seed1618033_00001_.png,1.8202,1.0022,centre,Block_3_pos_0.350_P02,P02_Block_3pos_0.350_krea2_seed3141592_00001_.png,1.8333,0.8675,+0.1347,B
+03,pair03.png,0.0164,False,end,Block_6_pos_0.080_P01,P01_Block_6pos_0.080_krea2_seed1618033_00001_.png,2.4504,1.0375,centre,Block_5_pos_0.080_P01,P01_Block_5pos_0.080_krea2_seed1618033_00001_.png,2.4340,0.9927,+0.0449,B
+04,pair04.png,0.0166,False,end,Block_6_neg_0.200_P02,P02_Block_6neg_0.200_krea2_seed1618033_00001_.png,2.3297,0.8660,centre,Block_5_pos_0.350_P02,P02_Block_5pos_0.350_krea2_seed3141592_00001_.png,2.3463,0.8268,+0.0392,B
+05,pair05.png,0.0208,False,centre,Block_3_neg_0.350_P02,P02_Block_3neg_0.350_krea2_seed1618033_00001_.png,1.9815,0.9884,end,Block_1_pos_0.350_P02,P02_Block_1pos_0.350_krea2_seed1618033_00001_.png,1.9607,1.1007,-0.1123,A
+06,pair06.png,0.0211,True,centre,Block_3_neg_0.500_P02,P02_Block_3neg_0.500_krea2_seed3141592_00001_.png,1.7991,0.9031,end,Block_1_neg_0.080_P01,P01_Block_1neg_0.080_krea2_seed3141592_00001_.png,1.8202,0.9961,-0.0930,A
+07,pair07.png,0.0265,True,end,Block_1_neg_0.350_P02,P02_Block_1neg_0.350_krea2_seed3141592_00001_.png,2.0987,1.0525,centre,Block_2_neg_0.350_P01,P01_Block_2neg_0.350_krea2_seed1618033_00001_.png,2.1253,1.0635,-0.0110,A
+08,pair08.png,0.0286,False,centre,Block_4_pos_0.200_P01,P01_Block_4pos_0.200_krea2_seed3141592_00001_.png,2.4219,0.9483,end,Block_6_pos_0.080_P01,P01_Block_6pos_0.080_krea2_seed2718281_00001_.png,2.4504,1.0589,-0.1105,A
+09,pair09.png,0.0480,True,end,Block_6_neg_0.200_P02,P02_Block_6neg_0.200_krea2_seed2718281_00001_.png,2.3297,0.8737,centre,Block_2_neg_0.500_P01,P01_Block_2neg_0.500_krea2_seed1618033_00001_.png,2.2817,1.0173,-0.1435,A
+10,pair10.png,0.0504,True,centre,Block_2_pos_0.500_P01,P01_Block_2pos_0.500_krea2_seed1618033_00001_.png,2.4894,1.1820,end,Block_1_neg_0.500_P02,P02_Block_1neg_0.500_krea2_seed2718281_00001_.png,2.5398,1.0341,+0.1478,B
+11,pair11.png,0.0532,True,end,Block_1_pos_0.350_P02,P02_Block_1pos_0.350_krea2_seed2718281_00001_.png,1.9607,1.1000,centre,Block_2_pos_0.350_P01,P01_Block_2pos_0.350_krea2_seed1618033_00001_.png,1.9075,1.0524,+0.0476,B
+12,pair12.png,0.0841,True,centre,Block_3_pos_0.200_P01,P01_Block_3pos_0.200_krea2_seed1618033_00001_.png,2.6686,1.0183,end,Block_6_pos_0.200_P02,P02_Block_6pos_0.200_krea2_seed1618033_00001_.png,2.5845,0.9319,+0.0865,B
