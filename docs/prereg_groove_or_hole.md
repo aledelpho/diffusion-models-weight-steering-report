@@ -184,10 +184,40 @@ confirmation: it can only remove a groove.
 
 ## 7. Predictions — deposited before the first distance
 
-**Alessandro.** *To be written here, verbatim, before the script runs. The script refuses to run
-while this paragraph still reads "PENDING".*
+**Alessandro.** Deposited verbatim on 2026-09-28 at 17:14, before the script ran. Original Italian
+first, then an English translation. The operational reading is in amendment 02.
 
-> PENDING
+> Dipende cosa intendi per solco:
+> Io credo che ogni preset sia una manopola che muove milioni di manopole e, di conseguenza, è
+> difficile comprendere "cosa" si sia spostato, dato che alcune di esse si muovono in direzioni
+> opposte o hanno effetti complementari.
+> Credo però che si possano trovare o isolare delle aree che hanno degli effetti diversi che cambiano
+> il modo in cui vengono interpretati i prompt, non attraverso ciò che si scrive, ma attraverso i
+> collegamenti impliciti tra le parole (nelle sezioni più centrali) e nel modo in cui viene
+> sviluppata l'immagine attraverso una black box che facciamo fatica a comprendere.
+> Penso che i blocchi iniziali e finali spesso creino artefatti visivi, grana, pixel "sciolti" o
+> fuori fuoco, mentre quelli più centrali siano in grado di muovere molto più l'immagine, trovare
+> stili diversi o rappresentazioni differenti di quello stesso prompt, su una scala non lineare, ma
+> coerente tra seed diversi.
+> Credo che siamo lontani dall'avere un controllo su ciò che realmente accade, ma possiamo già usarlo
+> per fare uno steering del modello, in modo coerente e riproducibile a parità di famiglie di prompt
+> (se calibriamo cosa succede in aree legate allo stile "Comics" stiamo ricalibrando il modello su
+> quel prompt, di conseguenza non è sicuro che si avrà qualità altrove, anzi, è probabile che i pesi
+> tendano a rovinare ciò che non si stava guardando).
+
+*Translation.* It depends on what you mean by a groove. I believe every preset is one knob that moves
+millions of knobs, so it is hard to understand *what* has moved: some of them move in opposite
+directions or have complementary effects. I believe, though, that areas can be found or isolated
+that have different effects and change how prompts are interpreted. They act not through what is
+written, but through the implicit links between words (in the central sections) and through the way
+the image is developed inside a black box we struggle to understand. I think the first and last
+blocks often create visual artefacts, grain, "loose" or out-of-focus pixels. The central ones can
+move the image much more and find different styles or different representations of the same prompt,
+on a scale that is not linear but is coherent across seeds. I believe we are far from controlling
+what really happens, but we can already use it to steer the model coherently and reproducibly
+within a family of prompts. If we calibrate what happens in areas linked to the "Comics" style, we
+are recalibrating the model on that prompt, so there is no guarantee of quality elsewhere. On the
+contrary, the weights probably tend to spoil whatever was not being looked at.
 
 **Analyst.** I expect the hole reading to dominate.
 - In bench M, wherever `V ≥ 1`, I expect `Δout > 0`, rising with dose (ρ > 0) for at least 9 of the
