@@ -1,0 +1,7 @@
+test,T,p_one_sided,n_perm,central_arms_reaching_V2,verdict,betas,n_units_V>=1.5,share_L<0.98,n_visible,share_holes
+primary,0.0534,0.1899,495,6,not supported,Block_1 neg +0.0081; Block_1 pos +0.0302; Block_2 neg +0.0070; Block_2 pos +0.0648; Block_3 neg -0.0131; Block_3 pos +0.0192; Block_4 neg +0.0436; Block_4 pos +0.0676; Block_5 neg +0.0040; Block_5 pos -0.2513; Block_6 neg -0.1966; Block_6 pos -0.0844,,,,
+S1_end,,,,,,,25,0.56,,
+S1_centre,,,,,,,31,0.3871,,
+S4_end,,,,,,,,,27,0.9259
+S4_centre,,,,,,,,,46,0.6739
+S2,,,,,dropped: content embedding not available (§5 G_content),,,,,
