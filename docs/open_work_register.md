@@ -21,6 +21,7 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **A4** | the 20 mismatched `prompt_sha1` rows in `data/stage9_images.csv` — repair or declare | not repaired |
 | **A5** | whether `LN` (the no-colour-named arm) joins Stage 2 of the colour-binding study: +36 renders, 78 → 117 | `colour_binding_pilot_gate.md` §2 |
 | **A6** | whether any claim status changes on this week's results. **The analyst has changed none.** | — |
+| **A7** | **the eye veto of `benchmark_centre_push` (G_eye) — twelve blind pairs are built and waiting.** Open each `pair##.png` in `benchmark_centre_push/_eye_veto/` **at 100 %**, write A, B or `neither` in `data/centre_push_veto_answers.csv`, run `--score`. Fewer than 8 agreements out of 12 and the primary of the bench is reported as *"L not validated by eye"*. Nobody but Alessandro can supply this. | `centre_push_eye_veto.py --build` done; sealed key in `data/centre_push_veto_key.csv` |
 
 ## B. Costs no renders — the data is already on disk
 
