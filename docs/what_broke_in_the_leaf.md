@@ -67,12 +67,17 @@ it, not a connection between two stored things.
 
 ## 3. What this is not, and the limit that matters most
 
-**One prompt, one subject, one block, one arm, one dose.** The same edit on four other objects with
-a strong colour prior — mushroom, tomato, pinecone, banana — never does it, in 36 cells, and five
-near-synonymous rewordings of the leaf prompt never do it either, in 15 more
-(`leaf_collapse_and_blk16_result.md` §3). A mechanism that appears in one prompt and nowhere else is
-a **local instability**, and this reading describes what fails at that point; it does not establish
-that the same two routes exist everywhere.
+**One prompt, one subject, one block, one arm, one dose.** Five near-synonymous rewordings of the
+leaf prompt never produce it, in 15 cells.
+
+The four other subjects are a different matter, and the claim made here on 2026-09-28 was withdrawn
+the same day. Mushroom, tomato, pinecone and banana were chosen for having a *strong* colour prior —
+and for all four, not naming the colour gives the same picture as naming the prototypical one
+(0.9° to 9.9° apart, against **52.2°** for the leaf). There was no free inference in them to break,
+so this section's own mechanism predicts no collapse there. **Arm C did not test generality; it
+tested a population that cannot show the effect** (`looking_at_the_leaf_corpus.md` §1). Whether the
+two routes exist beyond this prompt is open, and the subjects that would decide it are the ones with
+an *ambiguous* prior.
 
 ## 4. A negative of my own, recorded because it was my impression
 

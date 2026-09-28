@@ -29,7 +29,7 @@ zero.
 | **L2** | no unperturbed baseline collapses on its own | **0/20** | **confirmed — the edit is the cause** |
 | **L1** | ≥ 2/20 on fresh seeds | **9/20** | **confirmed** |
 | **L3** | ≥ 2 of 5 other wordings | **0/5**, 0/15 cells | **falsified — wording-specific** |
-| **L4** | ≥ 2 of 4 other subjects | **0/4**, 0/36 cells | **falsified — leaf-specific** |
+| **L4** | ≥ 2 of 4 other subjects | **0/4**, 0/36 cells | ~~falsified — leaf-specific~~ **NOT TESTED** — see `looking_at_the_leaf_corpus.md` §1 |
 | **L5** | prototypical < unusual < undeclared | **0/4** subjects | **falsified — and reversed** |
 
 L2 was read first, as the spec required. It passes, so the rest is readable.
@@ -69,7 +69,11 @@ divided by.**
 against a mode that lives below 0.085. Changing "centred on a plain light grey background, macro
 photograph, sharp focus, even studio lighting" to any of five near-synonyms — including one that
 changes only the background from light grey to white — removes it completely. So does swapping the
-leaf for a mushroom, a tomato, a pinecone or a banana.
+leaf for a mushroom, a tomato, a pinecone or a banana — **but that last clause was withdrawn on
+2026-09-28**: for all four of those subjects, not naming the colour gives the same picture as naming
+the prototypical one (0.9° to 9.9° apart, against 52.2° for the leaf), so there was no free
+inference in them to break. Arm C tested a population that could not show the effect.
+See `looking_at_the_leaf_corpus.md` §1.
 
 This kills the interpretation the experiment was built to test. **There is no general
 colour/object dissociation here.** What there is, is a specific and strongly reproducible

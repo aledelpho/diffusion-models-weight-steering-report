@@ -1,0 +1,6 @@
+subject,corpus,mean_deg,per_seed,prior
+mushroom,benchmark_leaf_collapse,3.1,4; 4; 2,unambiguous
+tomato,benchmark_leaf_collapse,9.9,12; 9; 8,unambiguous
+pinecone,benchmark_leaf_collapse,0.9,1; 1; 1,unambiguous
+banana,benchmark_leaf_collapse,1.4,2; 0; 2,unambiguous
+leaf,stage 2b,52.2,53; 54; 50,ambiguous
