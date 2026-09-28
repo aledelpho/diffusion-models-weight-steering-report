@@ -30,8 +30,8 @@ FAMILIES = {
     "F_qknorm": ("2b q/k normalisation",     r"^blocks\.\d+\.attn\.qknorm\.[qk]norm\.scale$"),
     "F_proj":   ("6  12-parameter router",   r"^txtfusion\.projector\.weight$"),
 }
-GATE_DELTA = 1.00
-LADDER = [-1.00, -0.50, -0.10, 0.10, 0.50, 1.00]
+GATE_DELTA = 0.20
+LADDER = [-0.20, -0.10, -0.05, 0.05, 0.10, 0.20]
 PROMPTS = ["P01", "P02"]
 GATE_SEEDS = ["42"]
 LADDER_SEEDS = ["42", "777", "1337"]
