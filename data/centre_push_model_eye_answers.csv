@@ -1,0 +1,13 @@
+pair,obs1,obs2,obs3,majority
+01,B,B,B,B
+02,neither,neither,neither,neither
+03,neither,neither,neither,neither
+04,B,B,B,B
+05,neither,neither,neither,neither
+06,neither,neither,neither,neither
+07,A,neither,neither,neither
+08,B,neither,B,B
+09,neither,neither,neither,neither
+10,B,B,B,B
+11,neither,neither,neither,neither
+12,B,B,B,B
