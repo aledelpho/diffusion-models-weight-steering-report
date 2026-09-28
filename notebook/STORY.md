@@ -6,7 +6,7 @@ number here is copied from the page it links to, and that page is where you chec
 the exception: its results are not on a page yet, so each one links to its pre-registration and
 its data file instead.*
 
-*Last brought up to date: 2026-09-25, local commit `0604c2e`.*
+*Last brought up to date: 2026-09-28, local commit `2f49c3e`.*
 
 ---
 
@@ -237,6 +237,86 @@ two corpora it could be tested on, so it is frozen as a prediction and not claim
 
 ---
 
+## Act 6 · The instruments were the experiment
+
+Three days in which almost every question asked about the model came back as a question about the
+bench. It is the least satisfying act and the one that changed the most.
+
+**The pixel sign decomposition was retracted.** The split of an edit into a common part and a
+signed part was re-derived on pixels, agreed with a table from a week earlier to within 0.02 — and
+that table had already been withdrawn as a floor artefact. What survives is the q/k against v/o
+split, on four statistics.
+[retraction](../docs/sign_decomposition_retraction.md)
+
+**The rectified masks did not answer their question.** `Block_4` fights itself on contrast and
+`Block_6` on grain, so the design flipped the opposing sub-blocks and measured against an
+anti-mask at identical displacement — the cleanest control in the project. The spec said in
+advance that if the arithmetic failed the experiment meant nothing. M4 missed by 0.31 **and by
+direction**, so it did. The idea is untested, not refuted.
+[result](../docs/rectified_mask_result.md)
+
+**The colour gate measured saturation.** An achromatic object has no foreground under a
+saturation-defined mask, so the one render that kept its object and lost its colour was filed as a
+destroyed image. Re-measured with a colour-blind foreground — and then again, because the first
+replacement was defeated by grain in exactly the way it had been written to expose.
+[audit](../docs/colour_gate_and_chroma_audit.md)
+
+**Hue is pinned; chroma is not.** Nothing pre-registered had looked at saturation. `Block_3` and
+`Block_6` turn out to be antisymmetric chroma knobs — ×1.563 / ×0.931 and ×0.726 / ×1.815, every
+one of their 18 cells on the side its arm says, p = 1e-5 — while the mean hue shift over the same
+corpus is 12.7°. The project had been asking why colour would not move, and had been reading
+"colour" as hue.
+
+**No block releases a declared colour toward its prior.** If an edit cut the binding holding
+"purple" onto "leaf", the leaf should fall back to the colour it gets when nothing is said. Six
+cells of thirty-six move that way; the mean distance from the prior grows. Whatever a whole-block
+edit does, it is not cutting an attribute binding.
+
+**A leaf loses all its colour, and keeps being a leaf.** Nine seeds in twenty, against zero in
+twenty unedited, with nothing between chroma ratio 0.085 and 0.518 — a switch, not a dimmer. It
+never happens when the prompt names a colour: 72 cells, none below 0.648. The reading that fits is
+that a *stated* colour is carried by the text and survives, while a colour the model has to infer
+from the object is produced by a step that can fail outright. Nothing in the unperturbed render
+predicts which seeds fail: twelve features, none surviving correction, and an exact permutation
+test over all 167 960 splits at p = 0.535.
+[result](../docs/leaf_collapse_and_blk16_result.md) ·
+[reading](../docs/what_broke_in_the_leaf.md) ·
+[predictors](../docs/leaf_collapse_predictors_result.md)
+
+**And the generality test was run on subjects that could not show it.** Mushroom, tomato, pinecone
+and banana were chosen for having a *strong* colour prior. For all four, not naming the colour
+gives the same picture as naming it — 0.9° to 9.9° apart, against 52.2° for the leaf — so there
+was no inference in them to break. The null was published as "leaf-specific" and has been
+withdrawn as untested.
+[looking](../docs/looking_at_the_leaf_corpus.md)
+
+**Every statistic for ranking an edit measured displacement.** A frontier of 140 conditions was
+built, its top published as the best operating points, and the images said to agree. They did not:
+at 1:1 the two best-ranked renders are covered in defects. Structure coherence — whether the
+gradients still agree locally, which is what an ink line does — reverses the ranking at both ends.
+The five conditions recommended rank **75th to 80th of 80**; the one an observer picked out by eye
+ranks **1st**.
+[frontier and retraction](../docs/style_damage_frontier.md)
+
+**`blk16` is the first edit that buys style and line together.** Across its dose ladder style
+multiplies by ten, 0.045 to 0.447, while coherence *rises* — 0.994 to 1.040, six cells of six at
+the top two doses. Everywhere else style is paid for by losing the drawing. A cell of that ladder
+already existed in another bench, rendered weeks earlier from a different plan and a different
+queue script: it returned 0.4472 against 0.447 and 1.0397 against 1.040, which moves the project's
+determinism claim from within-session to across-bench.
+
+**Then the observer read a sheet of 36 unlabelled renders in five lines, and the five lines were
+a table.** Energy at each scale of detail, which no statistic here reported because all of them sum
+over scale first. "Strong grain" and "weaker grain" are both energy added with its peak at 4–8
+pixels, the mask above its anti-mask in 12 cells of 12 (p = 0.0005). "Soft grain" and "loose blur"
+are both energy removed, separated by the *shape* of the profile: monotone stripping against a
+notch at 2–8 pixels. And the combined condition sits 3.8 to 11.5 times closer to `Block_6` than to
+`Block_4` in that space — a claim a first, layout-based test had returned as nothing.
+[taxonomy](../docs/mask_damage_taxonomy_result.md)
+
+The act has its own page, and it is the page about the bench rather than the model.
+[11](11-what-the-numbers-could-not-see.md)
+
 ## What runs through all of it
 
 **Structure beats distance on some effects, not on the edit as a whole.** For strokes (Act 1),
@@ -256,6 +336,20 @@ exploratory estimate. Read any exploratory number in this notebook as a ceiling.
 blind (Act 2), the HUD panel inflated a control (Act 3), and the colour measure cannot resolve
 most of the shifts it was asked about (Act 5). Each time the check came *before* the claim, and
 each time it removed one.
+
+**In Act 6 the check came after, three times, and an observer supplied it.** A ranking was
+published, a null was published as a falsification, and a texture was described by a number that
+had summed over the scale it lived at. None of the three was caught by a measurement; each was
+caught by somebody opening an image, and the measurement came second. The symmetrical fact is that
+looking is not privileged either: twice in the same days an impression from a single image failed
+its count — the prototypical colour was not bleeding back (5 of 12 cells, p = 1.00) and the
+rewordings had not changed the object (chroma 0.503 against 0.474). **A single cell is a single
+cell, whichever faculty read it.** What survives is narrower: the statistics in use were blind in a
+way that a glance was not, and the repair was to add an axis, not to trust an eye.
+
+**All of the bench's statistics answered "how much moved".** None answered "is what is left still a
+drawing", and none answered "at what scale". Both were added in Act 6, both immediately changed a
+published conclusion, and both came from somebody describing a picture in words.
 
 **Nearly everything is n = 1 of something.** There is one model and one calibrated preset. All
 40 prompts are character portraits containing "bold ink outlines" and "hatched shadows". A person
@@ -279,6 +373,17 @@ scored the rounds in Act 2, and that person has been measured as not blind to th
    and how much is the gains. The atlas removes the rotation, while the old corpus cannot
    separate them. [amendment 03](../docs/prereg_perturbation_atlas_amendment_03.md)
 7. **Whether any of this holds outside Krea-2**, or outside this one corner of image space.
+8. **Whether the colour collapse generalises at all.** Its test has not been run: the subjects
+   used had unambiguous colour priors. The screening criterion now exists and costs two baselines
+   per candidate. [looking](../docs/looking_at_the_leaf_corpus.md)
+9. **What sets which seeds collapse.** Not the picture the model was going to draw — that is ruled
+   out. The dose ladder is the next handle, and it also decides whether the empty gap is a
+   bifurcation or an artefact of one dose.
+   [spec](../docs/RENDERS_2026-09-28_leaf_dose_ladder.md)
+10. **Whether structure coherence means anything outside comic linework.** It is one number on one
+    drawing style, and a strongly oriented one is the easy case.
+11. **Whether sub-block masks work at all.** Their arithmetic prerequisite failed on `Block_6`;
+    a mask built on directly measured joint effects has not been tried.
 
 ---
 
@@ -299,6 +404,9 @@ flowchart LR
   A4 --> P09["09 style direction<br/>overturned"]
   Q --> A5["Act 5 · is the preset special?<br/>not yet on a page"]
   A5 --> AT["atlas<br/>frozen, renders queued"]
+  Q --> A6["Act 6 · the instruments<br/>were the experiment"]
+  A6 --> P11["11 what the numbers<br/>could not see<br/>open"]
+  P11 --> NX{{"two axes added:<br/>is it still a drawing?<br/>at what scale?"}}
 ```
 
 The full ledger of all 42 claims, sorted by verdict, is in the [README](../README.md).
