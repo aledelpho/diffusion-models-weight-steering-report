@@ -50,6 +50,9 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **C11** | **replicate the angle rule at low dose.** ρ = 0.939 − 0.278·cos rests entirely on nine pairs at dose 0.200, a degraded regime whose cosines correlate only r = +0.42 with those at 0.050. Every stacking design depends on this law | ~72 |
 | **C12** | one more pair between cos −0.2 and 0.0, to test whether **super-additivity** (`B1+B4`, ρ = 1.167, 2.9 SE above 1) is systematic. If it is, the line is the chord of a curve and the optimal stack is not the linear one | 12 |
 | **C13** | the **signed map** at q/k/v/o granularity, at matched displacement, against `RANDSIGN` at the same D — only after **B9** and **C11** | 288 |
+| **C14** | **measure the joint effect of a sub-block pair directly, at both relative signs**, instead of predicting it by composing singles. Forced by `rectified_mask_result.md`: M4 missed by 0.31 *and by direction*, so every mask designed on composed predictions is untestable until this exists. `Block_6` (`blk26`/`blk27`) first, where the failure is largest | ~48 |
+| **C15** | **pre-register `LG` < `LP` < `LN`** — prototypical declared colour is pinned, unusual declared colour is not, undeclared is free — on a **second object and a second colour pair**. Post hoc at present: 10/12 conditions, p = 0.039 on one arm only, one object (`colour_gate_and_chroma_audit.md` §5) | ~108 |
+| **C16** | the achromatic singleton: one cell in 108 kept the object and lost 96 % of its chroma (`LN_Block_4neg_0.200`, seed 1337). Pre-register a chroma-collapse probe before calling it anything | ~36 |
 | **C7** | Block K — trait combinations; page 02 is 0/4 | — |
 | **C8** | blind 4-AFC at 1× without the baseline in the lineup | — |
 | **C9** | the **"corrector"** objective: minimise noise at constant detail, beating "push block 0 positive" | — |
@@ -88,13 +91,15 @@ The other fifteen are listed in the notebook front matter and are not repeated h
 | **74** | a distributional guard averaged over heterogeneous questions can be satisfied by opposite pathologies cancelling | drafted, `prereg_damage_or_style.md` Am. 02 §C |
 | **75** | a texture statistic not normalised for contrast reports the sum of two effects and can report the wrong sign | drafted, `looking_at_block1_and_block6.md` §3 |
 | — | `evaluate_colour_object_gate.py` reports 15 files missing while all 15 are present and readable | **must be fixed before it gates anything** |
+| **76** | an "object intact" criterion built from the same quantity the experiment is trying to move cannot see the experiment succeed — the sweep's foreground is `sat > 0.15`, so an object that loses its colour is filed as a destroyed object, and `mean_sat` is censored by the same mask | drafted, `colour_gate_and_chroma_audit.md` §2 |
+| — | `evaluate_colour_object_sweep.py` / `_gate.py`: foreground must become value-based before either gates anything again | **open**, replacement in `experiments/colour_chroma_audit.py` |
 | — | `stroke_width_median_px` is quantised to 5 values; still present in every feature table | flagged, not removed |
 | — | the eight q/k/v/o cells are **not** Frobenius-matched (23.50 … 65.06) | flagged; `F` survives it, magnitudes do not |
 
 ## F. What would change the most
 
 1. **B1** — if the grain statistic has been reporting the wrong sign, several published numbers move.
-2. **A1–A3** — nine drafted pitfalls sitting outside the error log, which is the project's most
+2. **A1–A3** — ten drafted pitfalls sitting outside the error log, which is the project's most
    transferable output.
 3. **C1** — the only live experiment with a passed gate.
 4. The **`permutation-adds-a-neglected-attribute` replication** — 19/20 against 1/20 is the largest

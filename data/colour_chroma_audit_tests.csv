@@ -1,0 +1,6 @@
+test,detail,n,value,p
+LN>LP,conditions where the undeclared probe moves more than declared purple,12,8/12,0.38770
+LN>LG,conditions where the undeclared probe moves more than declared green,12,10/12,0.03857
+LP hue shift,mean over cells with hue still defined,36,9.3 deg,max 32.0 deg
+LG hue shift,mean over cells with hue still defined,36,4.7 deg,max 24.4 deg
+LN hue shift,mean over cells with hue still defined,35,24.7 deg,max 56.2 deg
