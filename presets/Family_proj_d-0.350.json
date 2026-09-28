@@ -1,5 +1,5 @@
 {
- "name": "Family_proj_d-0.050",
+ "name": "Family_proj_d-0.350",
  "author": "Antigravity (C35)",
  "created_at": "2026-09-28 22:34:28",
  "version": "2.1",
@@ -17,7 +17,7 @@
   "excluded_lora_tensors": 0
  },
  "model_patches": {
-  "txtfusion.projector.weight": -0.05
+  "txtfusion.projector.weight": -0.35
  },
  "model_granular_patches": {},
  "clip_patches": {},

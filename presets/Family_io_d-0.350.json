@@ -1,11 +1,11 @@
 {
- "name": "Family_proj_d-0.050",
+ "name": "Family_io_d-0.350",
  "author": "Antigravity (C35)",
  "created_at": "2026-09-28 22:34:28",
  "version": "2.1",
  "suite_rotation_effective": true,
  "stats": {
-  "model_patched_layers": 1,
+  "model_patched_layers": 2,
   "model_granular_layers": 0,
   "clip_patched_layers": 0,
   "clip_granular_layers": 0,
@@ -17,7 +17,8 @@
   "excluded_lora_tensors": 0
  },
  "model_patches": {
-  "txtfusion.projector.weight": -0.05
+  "first.weight": -0.35,
+  "last.linear.weight": -0.35
  },
  "model_granular_patches": {},
  "clip_patches": {},
