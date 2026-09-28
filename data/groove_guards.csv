@@ -1,0 +1,12 @@
+guard,target,observed,n_prompts,pass,detail
+G0a,0.530427,0.530427,8,True,
+G0b,0.501902 / holm 0.002441,0.501902 / holm 0.002441,16,True,
+G2-cloud,409 resolved,409 resolved,52,True,
+G1-M,0 mismatches,0 of 432,2,True,
+G1-K,0 mismatches,0 of 72,2,True,
+G1-D,0 mismatches,0 of 336,2,True,
+G1-Q,0 mismatches,0 of 384,8,True,
+G2-tested,one text per tested prompt,0 prompts with >1 text,14,True,[]
+G3,"dead cells flagged, conditions >10% dead excluded","0 dead cells, 0 conditions excluded",,True,[]
+G4,>= 40 other prompts in B,0 prompts below,52,True,[]
+G1b,fresh vs cached baseline features within tolerance,"worst 0.0000 sd, 0 over tolerance",2,True,cached baselines used
