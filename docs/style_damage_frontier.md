@@ -109,3 +109,110 @@ it remains a proxy.
   a broken hand or an incoherent object.
 * Two prompts, three seeds, one model. Nothing here is pre-registered — it is a survey of existing
   material, and the ranking it produces is a hypothesis about where to look next.
+
+---
+
+# Retraction and correction, same day
+
+Alessandro, on native-resolution crops of the two renders §4 called clean: *"these images you keep
+holding up as the best result actually have very visible structural defects — is it possible you
+don't feel them as full of grain only because the patches of colour are looser?"*
+
+He is right, §4 is withdrawn, and chasing the reason has cost this document three of its claims.
+
+## 7. §4 is withdrawn: the look was done at the wrong resolution
+
+"No artefacts" was asserted after viewing whole 1024 × 1280 frames rendered down to fit. That view
+cannot show a pixel-level property, so the claim had no support whatever the images look like.
+Re-cut at native resolution, 340 × 340 over the face:
+
+* **`blk27 neg`** — the skin is covered in fibrous, creased filaments; the neck is streaked with
+  sinewy strands; the brick wall and window behind the figure have dissolved into an unstructured
+  wash; a stray glyph sits on the left shoulder.
+* **`B6_anti neg`** — the same family of defect, further along: ink linework replaced by soft
+  mottling, hair melting into the background, the background itself almost entirely black with no
+  legible object in it.
+* **`B4_mask neg`**, by comparison, keeps crisp line, coherent flat colour and a well-formed face.
+
+**The observer's ranking was right and this document's was wrong.** What follows is why the
+statistics could not see it.
+
+## 8. Three estimator defects, measured
+
+Bands are octaves of a Gaussian pyramid of (render − baseline), normalised by the baseline's own
+energy in the same band (`experiments/damage_spatial_bands.py`, `data/damage_bands.csv`, 140
+conditions). Orientation is the structure-tensor coherence (λ₁−λ₂)/(λ₁+λ₂) over a 9 × 9 window,
+as a ratio to baseline (`experiments/texture_anisotropy.py`, `data/texture_anisotropy.csv`,
+80 conditions at dose 0.200).
+
+**(a) The grain statistic carries no information about how much fine texture was rewritten.**
+Across 140 conditions, |ln(grain ratio)| against band-0 difference energy: **r = −0.054**.
+`blk27 neg` reports grain **0.841** — "16 % less grain" — while its band-0 difference energy is
+**1.53×** the baseline's own. **An edit can replace the finest texture wholesale and the summary
+will report a decrease**, because a sum of squared second differences throws away everything but
+the total.
+
+**(b) §1's two axes are not independent, as claimed.** `layout_cost_z` against band-0 difference
+energy: **r = +0.798**. The 8× downsample was supposed to isolate composition; it mostly tracks
+how much fine detail changed. So the Pareto frontier in §2 is not "style against damage", it is
+largely one quantity plotted against itself, and its ordering cannot be read as a trade-off.
+
+**(c) Alessandro's spectral explanation is not what happened — the orientation is.** The middle
+bands are not a blind spot: mid-band share is 0.353 to 0.466 across all 140 conditions, essentially
+constant, and `blk27 neg` is *lower* in bands 1–3 than `B4_mask neg`. What separates them is not
+where the energy sits but whether it is **oriented**. The baseline is comic linework — strongly
+oriented ink strokes. Coherence ratio, 80 conditions:
+
+| condition | coherence | cells above 1 | rank |
+|---|--:|--:|--:|
+| **`B4_mask` pos** | **×1.041** | 6/6 | **1 / 80** |
+| `Block_4` neg | ×1.026 | 5/6 | 9 / 80 |
+| `B4_mask` neg | ×0.974 | 0/6 | 65 / 80 |
+| `blk27` neg | ×0.802 | 0/6 | 75 / 80 |
+| `Block_6` neg | ×0.793 | 0/6 | 76 / 80 |
+| `B6_anti` neg | ×0.789 | 0/6 | 77 / 80 |
+| `B6_mask` neg | ×0.729 | 0/6 | 79 / 80 |
+| `B4B6_mask` neg | ×0.718 | 0/6 | 80 / 80 |
+
+**The five conditions this document recommended are the five largest losses of drawn line in the
+corpus.** The condition Alessandro picked out by eye is **first of eighty**. He was not describing
+a taste; he was reading a quantity nothing here was measuring.
+
+His own phrasing turns out to be half right and worth keeping: the defect *is* a texture change,
+and it *is* invisible to the grain number. But it is not that the patches are looser at some
+particular scale — it is that the model stops drawing lines and starts smearing tone, at every
+scale at once.
+
+## 9. The corrected frontier, and `Block_4` is vindicated
+
+Pareto on style ↑ and coherence ↑, 80 conditions at dose 0.200:
+
+| family | condition | arm | style | coherence | |
+|---|---|---|--:|--:|---|
+| mask | `B4B6_mask` | neg | 0.914 | 0.718 | maximum style, line destroyed |
+| mask | `B6_mask` | neg | 0.846 | 0.729 | same trade |
+| group | `Block_5` | pos | 0.620 | 0.969 | |
+| **group** | **`Block_4`** | **pos** | **0.478** | **0.994** | **style with the line intact** |
+| **sub-block** | **`blk16`** | **pos** | **0.447** | **1.040** | **style with the line reinforced** |
+| mask | `B4_mask` | pos | 0.261 | 1.041 | least style, best line |
+
+**§3's conclusion is reversed. `Block_4` is not dominated — it is the family that does what
+Alessandro asked for**, and `blk16 pos` (a member of `Block_4`, indices 15–19) delivers nearly the
+whole group's style movement while *increasing* the orientation of the drawing. `blk27` should not
+have been recommended: it buys its style by dissolving the line.
+
+The original §3 remains true as written — `B4_mask neg` does beat `Block_4 neg` on style at lower
+layout cost — but "layout cost" is defect (b), so that comparison should not be leaned on either.
+
+## 10. What changes
+
+* §2 and §4 of this document are superseded by §8 and §9. §1's independence claim is false.
+* **`blk16`** is the new candidate for the single-block experiment, not `blk27`. Register **C19**
+  is rewritten accordingly; `blk27` keeps its own entry as the grain anomaly, not as an operating
+  point.
+* Coherence is the project's first quality axis that is not a displacement measure. It is one
+  number on one drawing style, and a comic-line baseline is exactly the case where it should work
+  best — it needs checking on a photographic prompt family before it is trusted (**C20**).
+* Three drafted defects, register §E: **78** judging a pixel-level property at a resolution that
+  cannot show it; **79** declaring two axes independent without measuring their correlation;
+  **80** an isotropic texture summary that reports a decrease while the texture is being replaced.
