@@ -1,6 +1,13 @@
 test,detail,n,value,p
 LN>LP,conditions where the undeclared probe moves more than declared purple,12,8/12,0.38770
 LN>LG,conditions where the undeclared probe moves more than declared green,12,10/12,0.03857
-LP hue shift,mean over cells with hue still defined,36,9.3 deg,max 32.0 deg
-LG hue shift,mean over cells with hue still defined,36,4.7 deg,max 24.4 deg
-LN hue shift,mean over cells with hue still defined,35,24.7 deg,max 56.2 deg
+LP hue shift,mean over cells with hue still defined,36,9.4 deg,max 32.0 deg
+LG hue shift,mean over cells with hue still defined,36,4.1 deg,max 14.8 deg
+LN hue shift,mean over cells with hue still defined,35,24.9 deg,max 56.4 deg
+Block_1 chroma antisymmetry,"pos x1.308, neg x1.067 -- cells on the consistent side of 1",18,12/18,0.23788
+Block_2 chroma antisymmetry,"pos x1.083, neg x1.184 -- cells on the consistent side of 1",18,12/18,0.23788
+Block_3 chroma antisymmetry,"pos x1.563, neg x0.931 -- cells on the consistent side of 1",18,18/18,0.00001
+Block_4 chroma antisymmetry,"pos x1.193, neg x0.927 -- cells on the consistent side of 1",18,14/18,0.03088
+Block_5 chroma antisymmetry,"pos x1.145, neg x1.610 -- cells on the consistent side of 1",18,12/18,0.23788
+Block_6 chroma antisymmetry,"pos x0.726, neg x1.815 -- cells on the consistent side of 1",18,18/18,0.00001
+hue vs chroma,mean |hue shift| in degrees against mean |log chroma ratio| in percent,107,12.7 deg,28.0 pct

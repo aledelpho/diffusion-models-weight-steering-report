@@ -1,4 +1,4 @@
 probe,n,chroma_ratio_mean,chroma_ratio_min,cells_chroma_below_0_5,iou_mean,cells_iou_below_0_5,cells_kept_and_bleached
-LP,36,1.2099,0.3852,3,0.8607,2,0
-LG,36,1.1103,0.2977,3,0.8213,3,0
-LN,36,1.2293,0.0395,4,0.8349,3,1
+LP,36,1.2307,0.6475,0,0.8976,0,0
+LG,36,1.1395,0.6580,0,0.8605,0,0
+LN,36,1.2676,0.0395,1,0.8840,0,1

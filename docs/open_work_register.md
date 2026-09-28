@@ -52,7 +52,9 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **C13** | the **signed map** at q/k/v/o granularity, at matched displacement, against `RANDSIGN` at the same D — only after **B9** and **C11** | 288 |
 | **C14** | **measure the joint effect of a sub-block pair directly, at both relative signs**, instead of predicting it by composing singles. Forced by `rectified_mask_result.md`: M4 missed by 0.31 *and by direction*, so every mask designed on composed predictions is untestable until this exists. `Block_6` (`blk26`/`blk27`) first, where the failure is largest | ~48 |
 | **C15** | **pre-register `LG` < `LP` < `LN`** — prototypical declared colour is pinned, unusual declared colour is not, undeclared is free — on a **second object and a second colour pair**. Post hoc at present: 10/12 conditions, p = 0.039 on one arm only, one object (`colour_gate_and_chroma_audit.md` §5) | ~108 |
-| **C16** | the achromatic singleton: one cell in 108 kept the object and lost 96 % of its chroma (`LN_Block_4neg_0.200`, seed 1337). Pre-register a chroma-collapse probe before calling it anything | ~36 |
+| **C16** | the achromatic singleton: one cell in 108 kept the object and lost 96 % of its chroma (`LN_Block_4neg_0.200`, seed 1337), and it replicates on neither of its own two sibling seeds. **Same condition, ~20 seeds**, to separate a seed × condition interaction from a one-off. Cheap and decisive | ~20 |
+| **C17** | pre-register the **chroma antisymmetry** of `Block_3` (pos ×1.563 / neg ×0.931) and `Block_6` (pos ×0.726 / neg ×1.815), 18/18 cells each, p = 1e-5, on a second object and a second prompt family. Hue is pinned, chroma is not — and nothing pre-registered had looked at chroma (`colour_gate_and_chroma_audit.md` §6) | ~72 |
+| **C18** | **colour binding at q/k/v/o granularity, key projection first.** Forced by §8: no whole block, in either arm, releases a declared unusual colour toward its prior (6/36 cells). ColorWave (arXiv 2503.09864) localises attribute binding at the key projection, and `benchmark_qkvo_atlas` has never been pointed at colour | ~192 |
 | **C7** | Block K — trait combinations; page 02 is 0/4 | — |
 | **C8** | blind 4-AFC at 1× without the baseline in the lineup | — |
 | **C9** | the **"corrector"** objective: minimise noise at constant detail, beating "push block 0 positive" | — |
@@ -91,6 +93,7 @@ The other fifteen are listed in the notebook front matter and are not repeated h
 | **74** | a distributional guard averaged over heterogeneous questions can be satisfied by opposite pathologies cancelling | drafted, `prereg_damage_or_style.md` Am. 02 §C |
 | **75** | a texture statistic not normalised for contrast reports the sum of two effects and can report the wrong sign | drafted, `looking_at_block1_and_block6.md` §3 |
 | — | `evaluate_colour_object_gate.py` reports 15 files missing while all 15 are present and readable | **must be fixed before it gates anything** |
+| **77** | a value-threshold foreground with no low-pass measures texture, not shape: on the grain block it tripled the foreground to 0.30 of the frame and reported a 60 % chroma collapse and a destroyed object, both artefacts. Committed in `9eef1ad` inside a document criticising a detector for exactly this | drafted, `colour_gate_and_chroma_audit.md` §7 |
 | **76** | an "object intact" criterion built from the same quantity the experiment is trying to move cannot see the experiment succeed — the sweep's foreground is `sat > 0.15`, so an object that loses its colour is filed as a destroyed object, and `mean_sat` is censored by the same mask | drafted, `colour_gate_and_chroma_audit.md` §2 |
 | — | `evaluate_colour_object_sweep.py` / `_gate.py`: foreground must become value-based before either gates anything again | **open**, replacement in `experiments/colour_chroma_audit.py` |
 | — | `stroke_width_median_px` is quantised to 5 values; still present in every feature table | flagged, not removed |
@@ -99,7 +102,7 @@ The other fifteen are listed in the notebook front matter and are not repeated h
 ## F. What would change the most
 
 1. **B1** — if the grain statistic has been reporting the wrong sign, several published numbers move.
-2. **A1–A3** — ten drafted pitfalls sitting outside the error log, which is the project's most
+2. **A1–A3** — eleven drafted pitfalls sitting outside the error log, which is the project's most
    transferable output.
 3. **C1** — the only live experiment with a passed gate.
 4. The **`permutation-adds-a-neglected-attribute` replication** — 19/20 against 1/20 is the largest

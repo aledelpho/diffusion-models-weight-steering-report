@@ -13,7 +13,14 @@ that criterion cannot represent. It is also the reason `mean_sat` in that file i
 averaged over pixels selected for being saturated.
 
 This script replaces the foreground with a value-based one (deviation from the background value
-measured on the border ring), which is blind to chroma, and reports for every render:
+measured on the border ring), which is blind to chroma. The value channel is low-passed 8x and the
+mask reduced to its largest connected component FIRST: a plain per-pixel threshold is defeated by
+grain, which floods the background with value deviation and triples the foreground -- on
+`Block_6 pos` it took the region from 0.10 to 0.30 of the frame and dragged the measured chroma
+down with the grey noise it had swallowed. That is the same failure this script was written to
+expose, committed by this script's first version. See colour_gate_and_chroma_audit.md section 7.
+
+It reports for every render:
   fg_share  -- size of the object region
   iou       -- overlap of that region with the same prompt/seed baseline: structure kept or not
   chroma    -- mean saturation inside it, uncensored
@@ -29,6 +36,7 @@ data/colour_chroma_audit_tests.csv. No render.
 import csv, math, os, statistics
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 REN = os.environ.get("REN", os.path.expanduser(
     "~/mnt/benchmark_colour_binding--renders"))
@@ -54,10 +62,19 @@ def load(path):
     m = (mx == r) & (d > 1e-5); hue[m] = (60 * ((g[m] - b[m]) / d[m]) + 360) % 360
     m = (mx == g) & (d > 1e-5); hue[m] = (60 * ((b[m] - r[m]) / d[m]) + 120) % 360
     m = (mx == b) & (d > 1e-5); hue[m] = (60 * ((r[m] - g[m]) / d[m]) + 240) % 360
-    # background value from the border ring, foreground = anything that departs from it
-    ring = np.concatenate([mx[:40].ravel(), mx[-40:].ravel(),
-                           mx[:, :40].ravel(), mx[:, -40:].ravel()])
-    fg = np.abs(mx - float(np.median(ring))) > 0.06
+    # Foreground by departure from the background value -- blind to chroma, and low-passed so
+    # that grain cannot manufacture foreground. Largest connected component only.
+    small = np.asarray(Image.fromarray((mx * 255).astype(np.uint8)).resize(
+        (mx.shape[1] // 8, mx.shape[0] // 8), Image.BOX), dtype=np.float32) / 255.0
+    ring = np.concatenate([small[:5].ravel(), small[-5:].ravel(),
+                           small[:, :5].ravel(), small[:, -5:].ravel()])
+    m = np.abs(small - float(np.median(ring))) > 0.06
+    m = ndimage.binary_opening(m, np.ones((3, 3)))
+    lab, n = ndimage.label(m)
+    if n:
+        m = lab == (np.bincount(lab.ravel())[1:].argmax() + 1)
+    fg = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).resize(
+        (mx.shape[1], mx.shape[0]), Image.NEAREST)) > 127
     return fg, sat, hue
 
 
@@ -159,6 +176,28 @@ def main():
         tests.append(dict(test=f"{p_} hue shift", detail="mean over cells with hue still defined",
                           n=len(v), value=f"{statistics.fmean(v):.1f} deg",
                           p=f"max {max(v):.1f} deg"))
+    # Chroma is a separate axis from hue and nothing pre-registered looked at it. Per block:
+    # does the chroma ratio sit on opposite sides of 1 for the two arms, in every cell?
+    for blk in BLOCKS:
+        cell = {sg: [float(r["chroma_ratio"]) for r in pert
+                     if r["block"] == blk and r["sign"] == sg] for sg in SIGNS}
+        up = sum(1 for v in cell["pos"] if v > 1) + sum(1 for v in cell["neg"] if v < 1)
+        dn = sum(1 for v in cell["pos"] if v < 1) + sum(1 for v in cell["neg"] if v > 1)
+        n = len(cell["pos"]) + len(cell["neg"])
+        k = max(up, dn)
+        tests.append(dict(
+            test=f"{blk} chroma antisymmetry",
+            detail=f"pos x{statistics.fmean(cell['pos']):.3f}, neg x{statistics.fmean(cell['neg']):.3f}"
+                   f" -- cells on the consistent side of 1",
+            n=n, value=f"{k}/{n}",
+            p=f"{min(1.0, 2*sum(math.comb(n, i) for i in range(k, n+1))/2**n):.5f}"))
+    # Hue against chroma: which of the two actually moves.
+    hs = [float(r["hue_shift_deg"]) for r in pert if float(r["chroma_ratio"]) >= 0.20]
+    cr = [abs(math.log(float(r["chroma_ratio"]))) for r in pert if float(r["chroma_ratio"]) >= 0.20]
+    tests.append(dict(test="hue vs chroma", n=len(hs),
+                      detail="mean |hue shift| in degrees against mean |log chroma ratio| in percent",
+                      value=f"{statistics.fmean(hs):.1f} deg",
+                      p=f"{100*(math.exp(statistics.fmean(cr))-1):.1f} pct"))
     with open(OUT_T, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["test", "detail", "n", "value", "p"]); w.writeheader()
         for r in tests: w.writerow(r)

@@ -6,6 +6,11 @@ colour sweep at dose 0.200, already on disk · **Script**: `experiments/colour_c
 `data/colour_chroma_audit.csv`, `data/colour_chroma_audit_summary.csv`,
 `data/colour_chroma_audit_tests.csv` · **No render.**
 
+> **Sections 4–8 supersede the first version of this document, committed the same day in `9eef1ad`.
+> Its foreground detector was defeated by grain (§7) and its per-probe figures were wrong.** The
+> conclusions did not reverse; the numbers moved and one finding appeared that the broken detector
+> had buried.
+
 ---
 
 ## 1. The image, and where it went
@@ -46,62 +51,59 @@ Two consequences, and the second is worse than the first:
 
 This is the same family as the audit of 23/09, where a structureless scramble scored as the most
 chromatically specialised object in the corpus: a statistic whose name describes one thing and whose
-arithmetic measures another. It is a **drafted pitfall candidate**, not a numbered one — the log
-stands at 69 and nine candidates are already queued under register item A1.
+arithmetic measures another.
 
 ## 3. Re-measured with a foreground that is blind to colour
 
-`experiments/colour_chroma_audit.py` replaces the foreground with a **value-based** one: background
-value taken from the border ring, foreground = every pixel departing from it by more than 0.06.
-It then reports, for all 117 renders, the region's size, its overlap (IoU) with the same
-prompt-and-seed baseline — a structural, colour-free test of whether the object is still there —
-its uncensored mean chroma, and a chroma-weighted hue.
+The replacement foreground is **value-based**: background value from the border ring, foreground =
+departure from it by more than 0.06, after an 8× low-pass and reduced to its largest connected
+component (the low-pass is not optional — see §7). It is blind to chroma, so it can see an object
+that has lost its colour. Reported per render: region size, IoU with the same prompt-and-seed
+baseline (a structural, colour-free test that the object is still there), uncensored mean chroma,
+and a chroma-weighted hue.
 
 On the image in question:
 
 | | foreground share | chroma |
 |---|--:|--:|
-| `LN` baseline, seed 1337 | 0.0845 | **0.5167** |
-| `LN_Block_4neg_0.200`, seed 1337 | 0.0814 | **0.0204** |
+| `LN` baseline, seed 1337 | 0.0850 | **0.5071** |
+| `LN_Block_4neg_0.200`, seed 1337 | 0.0821 | **0.0200** |
 
-**IoU with its baseline 0.936.** The object is in the same place and the same size; 96 % of its
-colour is gone. That is a dissociation, and the gate saw a broken image.
+**IoU with its baseline 0.936.** Same place, same size; 96 % of the colour gone. That is a
+dissociation, and the gate saw a broken image.
 
-## 4. And now the deflation: it is one cell out of 108
+## 4. And it is one cell out of 108
 
-| probe | n | mean chroma ratio | min | cells with chroma < 50 % | mean IoU | **object kept and bleached** |
-|---|--:|--:|--:|--:|--:|--:|
-| `LP` (purple declared) | 36 | 1.210 | 0.385 | 3 | 0.861 | **0** |
-| `LG` (green declared) | 36 | 1.110 | 0.298 | 3 | 0.821 | **0** |
-| `LN` (nothing declared) | 36 | 1.229 | 0.040 | 4 | 0.835 | **1** |
+| probe | n | mean chroma ratio | min | cells below 50 % | mean IoU | cells IoU < 0.5 | **kept and bleached** |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| `LP` (purple declared) | 36 | 1.231 | 0.648 | 0 | 0.898 | 0 | **0** |
+| `LG` (green declared) | 36 | 1.140 | 0.658 | 0 | 0.861 | 0 | **0** |
+| `LN` (nothing declared) | 36 | 1.268 | 0.040 | 1 | 0.884 | 0 | **1** |
 
-Criterion: IoU ≥ 0.70 and chroma below half the baseline's.
+With the repaired detector the isolation is sharper than the first version reported: **every object
+in the corpus survives** (no IoU below 0.5) and **exactly one cell in 108 loses its colour**, the
+one Alessandro spotted, at 4 % of baseline chroma while the next lowest is 65 %.
 
-**Perturbation does not desaturate on average — it saturates**, by 11–23 %. Across 108 cells exactly
-one shows the object kept and the colour gone, and it is the one Alessandro spotted. The other cells
-that lose chroma also lose the object.
+Within its own condition it does not replicate: `LN`/`Block_4 neg` gives chroma ×1.652 on seed 42,
+×0.898 on seed 777, ×0.040 on seed 1337. **Nor is seed 1337 globally fragile** — its mean chroma
+ratio over all 36 of its cells is 1.135 against 1.308 and 1.195 for the other two seeds. So the
+event is neither a property of the condition nor a property of the seed as such. With n = 1 a
+seed × condition interaction cannot be told apart from a one-off, and that is a cheap render to
+settle (§9).
 
-So the gate flaw is real and must be fixed, and the phenomenon it hid is **a singleton**. It is a
-lead worth a pre-registration of its own; it is not evidence of a systematic colour/object
-dissociation, and the pre-registered verdict of Stage 2b is not disturbed by it — that prediction
-was about hue rotation and it fell on hue rotation.
+## 5. The declared/undeclared reading gets sharper, and changes shape
 
-## 5. What the re-measurement does change: the declared/undeclared reading gets sharper
-
-Measured again on the colour-free foreground, cells whose hue is undefined (chroma below 20 % of
-baseline) excluded:
+Cells whose hue is undefined (chroma below 20 % of baseline) excluded:
 
 | probe | n | mean hue shift | max |
 |---|--:|--:|--:|
-| `LG` — green, the prototypical colour, declared | 36 | **4.7°** | 24.4° |
-| `LP` — purple, an unusual colour, declared | 36 | **9.3°** | 32.0° |
-| `LN` — nothing declared | 35 | **24.7°** | 56.2° |
+| `LG` — green, the prototypical colour, declared | 36 | **4.1°** | 14.8° |
+| `LP` — purple, an unusual colour, declared | 36 | **9.4°** | 32.0° |
+| `LN` — nothing declared | 35 | **24.9°** | 56.4° |
 
 The ordering **`LG` < `LP` < `LN`** replicates the published reading (25.2 / 8.7 / 4.6) under an
-independent foreground definition, and slightly strengthens it.
-
-Tested with the tool's condition as the unit — block × sign, 12 of them, seeds pooled, per pitfall
-17 — and an exact two-sided sign test:
+independent foreground definition. Tested with the tool's condition as the unit — block × sign,
+12 of them, seeds pooled, per pitfall 17 — and an exact two-sided sign test:
 
 | comparison | conditions | p |
 |---|--:|--:|
@@ -109,21 +111,100 @@ Tested with the tool's condition as the unit — block × sign, 12 of them, seed
 | `LN` moves more than `LP` | 8/12 | 0.388 |
 
 **The asymmetry is between undeclared and *prototypically* declared, not between undeclared and
-declared.** Purple — a colour the model rarely sees on a leaf — sits in the middle and is not
-significantly more pinned than saying nothing at all. That is closer to Alessandro's original
-conjecture than the earlier reading was: what pins a colour is not the fact of declaring it but how
-strongly the colour is already bound to the object.
+declared.** Purple sits in the middle and is not significantly more pinned than saying nothing.
+What pins a colour is not the act of declaring it but how strongly that colour is already bound to
+that object.
 
-**Caveat, stated plainly:** this analysis was chosen after seeing the images and is not
-pre-registered. `LG` < `LP` < `LN` is a hypothesis now, with a p of 0.039 on one of its two arms and
-a single object. It needs a second object, a second prototypical/unusual colour pair, and a
-pre-registration, before it is anything more.
+Post hoc, and stated as such: one object, one unusual colour, p = 0.039 on one of two arms.
 
-## 6. Actions
+## 6. What the broken detector had buried: hue is pinned, **chroma is not**
+
+Nothing pre-registered looked at saturation. Per block, over all 18 cells (3 probes × 3 seeds ×
+2 arms), counting cells that fall on the consistent side of 1 for their arm:
+
+| block | pos | neg | consistent cells | p |
+|---|--:|--:|--:|--:|
+| `Block_1` | ×1.308 | ×1.067 | 12/18 | 0.238 |
+| `Block_2` | ×1.083 | ×1.184 | 12/18 | 0.238 |
+| **`Block_3`** | **×1.563** | **×0.931** | **18/18** | **0.00001** |
+| `Block_4` | ×1.193 | ×0.927 | 14/18 | 0.031 |
+| `Block_5` | ×1.145 | ×1.610 | 12/18 | 0.238 |
+| **`Block_6`** | **×0.726** | **×1.815** | **18/18** | **0.00001** |
+
+**`Block_3` and `Block_6` are antisymmetric saturation knobs.** Every one of their 36 cells moves
+the way its arm says, across three prompts, three seeds and two declared colours plus none, with
+the object intact throughout (mean IoU 0.89 and 0.92). `Block_6` spans ×0.73 to ×1.82 — a factor of
+2.5 between its arms. Bonferroni over the six blocks leaves both at p < 1e-4.
+
+Blocks 1, 2 and 5 raise chroma in *both* directions: they are not knobs on this axis, they are
+damage.
+
+Set against §5, the separation is the point:
+
+> **mean hue shift 12.7°, mean chroma change 28 %.** Hue barely moves and is pinned hardest where
+> the colour is prototypical. Chroma moves a lot, moves *antisymmetrically*, and has two blocks
+> that steer it cleanly.
+
+The project has been asking "why can't we move colour". The answer appears to be that **"colour"
+was being read as hue**. Also post hoc — but unlike §5 it is a direction prediction, 18/18 twice,
+and it costs one cheap replication to pre-register.
+
+## 7. The detector in §3 had the same defect it was written to expose
+
+The first version of this document thresholded value **per pixel**, with no low-pass. On
+`Block_6 pos` — the grain block — grain floods the background with value deviation: the measured
+foreground went from 0.10 to **0.30** of the frame, swallowing grey noise, and the chroma computed
+inside it collapsed to 0.407 with IoU 0.26–0.55. Read literally that said "`Block_6 pos`
+desaturates by 60 % and destroys the object". Both were artefacts of the mask. With the low-pass
+and largest-component step the same condition reads ×0.726 with IoU 0.860 — a real effect, less
+than half as large, on an object that is fine.
+
+**A colour-blind foreground is not enough; it must also be texture-blind.** Written here in full
+because it was committed, in `9eef1ad`, in a document criticising a foreground detector for
+measuring the thing it was supposed to control for. Drafted defect, register §E.
+
+## 8. Alessandro's actual hypothesis, tested — and it fails at this granularity
+
+The conjecture was not that colour can be moved. It was: *"purple leaf" is a crossing the model
+rarely saw, so "leaf" and "change of colour" may sit in separate places, and there may be a
+dividing line to find.*
+
+That has a sharp consequence. **If an edit cuts the binding that holds "purple" onto "leaf", the
+leaf should fall back to its prior** — the colour the model gives it when nothing is declared,
+which is measured here as the `LN` baseline of the same seed, 36.4° (orange-brown), not green.
+Purple sits 84.5° away from it. There is room to move either way.
+
+Over all 36 `LP` cells:
+
+| | |
+|---|--:|
+| cells that move **toward** the prior | **6/36** |
+| conditions (block × sign) that mostly move toward the prior | **1/12** |
+| mean distance from the prior, baseline → perturbed | 84.5° → **93.2°** |
+
+**Not one block, in either direction, releases the purple leaf toward its default colour. Thirty of
+thirty-six cells move further away.** Whatever a whole-block edit at dose 0.200 does, it is not
+cutting a colour-to-object binding — if anything it entrenches the declared colour while degrading
+everything around it.
+
+This is a negative result on the mechanism, not on the idea, and it is the negative result
+Alessandro's own plan expected from the coarse pass: *"strong block-level perturbations first, to
+identify which area to work in, then narrow the field."* The coarse pass is now done and it says
+**no block is the area**. The next step is the one his plan already named — finer granularity — and
+the literature says where to point it: ColorWave (arXiv 2503.09864) localises colour-attribute
+binding at the **key projection**, and this project already has a q/k/v/o apparatus
+(`benchmark_qkvo_atlas`) that has never been pointed at colour.
+
+## 9. Actions
 
 * `evaluate_colour_object_sweep.py` and `evaluate_colour_object_gate.py` must not gate anything else
-  until the foreground is value-based. Register item.
-* Pitfall candidate drafted (A1): *a "structure intact" criterion built out of the same quantity the
-  experiment is trying to move cannot see the experiment succeed.*
-* Register item: pre-register `LG` < `LP` < `LN` on a second object before citing it.
+  until the foreground is value-based **and** low-passed. Register item.
+* Two drafted defects (register §E): *a "structure intact" criterion built out of the same quantity
+  the experiment is trying to move cannot see the experiment succeed*; and *a foreground threshold
+  without a low-pass measures texture, not shape.*
+* **C15** — pre-register `LG` < `LP` < `LN` on a second object and colour pair.
+* **C16** — the achromatic singleton: same condition, ~20 seeds, to separate a seed × condition
+  interaction from a one-off. Cheap and decisive.
+* **C17** — pre-register the chroma antisymmetry of `Block_3` and `Block_6` on a second object.
+* **C18** — colour binding at q/k/v/o granularity, key projection first, per §8.
 * No published claim changes status here.
