@@ -1,0 +1,13 @@
+family,condition,arm,kind,predicted,observed,deviation
+B4,B4_mask,pos,mask,1.0568,1.0409,-0.0160
+B4,B4_mask,neg,mask,0.9765,0.9743,-0.0022
+B4,B4_anti,pos,mask,1.0160,0.9845,-0.0316
+B4,B4_anti,neg,mask,1.0157,0.9837,-0.0320
+B6,B6_mask,pos,mask,1.0202,0.9936,-0.0266
+B6,B6_mask,neg,mask,0.6889,0.7293,+0.0404
+B6,B6_anti,pos,mask,0.8593,0.9943,+0.1350
+B6,B6_anti,neg,mask,0.8179,0.7895,-0.0284
+B4,Block_4,pos,group,0.9949,0.9938,-0.0011
+B4,Block_4,neg,group,1.0305,1.0258,-0.0047
+B6,Block_6,pos,group,0.7887,0.9055,+0.1169
+B6,Block_6,neg,group,0.8213,0.7927,-0.0286

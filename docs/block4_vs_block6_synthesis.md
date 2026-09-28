@@ -100,3 +100,33 @@ looking at a crop at 100 % caught.
   work best. Until **C20** checks it on a photographic family, every structural claim here inherits
   that caveat.
 * All of §2(b) and §3 rest on two prompts and three seeds.
+
+---
+
+## 6. Tested on an axis that was not used to form it
+
+§2(a) measured composition with contrast and grain — the same statistics the masks were designed
+with, which makes it suggestive and circular in equal measure. Structure coherence was invented
+afterwards, for a different question, and never entered the mask design. If the two-mechanisms
+reading is right, the separation must appear there too.
+
+`experiments/composition_by_family.py` → `data/composition_by_family.csv`. Each condition's
+coherence ratio is predicted by the product of its members' single-block ratios, the same
+multiplicative rule the mask bench used; six comparisons per family (four mask/anti conditions and
+the group against its own members, both arms).
+
+| family | mean \|deviation\| | worst | |
+|---|--:|--:|---|
+| `Block_4` | **0.0146** | 0.032 | all six within 0.032 |
+| `Block_6` | **0.0626** | **0.135** | |
+
+**4.3× apart, exact two-sided Mann-Whitney p = 0.065.** Not significant at 6 against 6 — the
+smallest p that design can produce is 0.0022, so this is a near-separation and not a clean one, and
+it must not be quoted as though it cleared a threshold.
+
+What it does add: the two worst misses are **`B6_anti pos` (+0.135)** and **`Block_6 pos`
+(+0.117)** — concordant-sign `Block_6` conditions overshooting upward, which is the same signature
+as M4, the prediction that killed the mask bench, on a completely different statistic. Two
+independent axes, 2.6× and 4.3×, same direction, same failing conditions. That is consistent
+evidence of moderate strength, and the right next step is the direct joint measurement already
+queued as **C14**, not another indirect one.
