@@ -1,0 +1,14 @@
+pair,answer,L_says,dL_A_minus_B,agrees
+01,B,B,+0.0093,True
+02,NEITHER,B,+0.1347,
+03,A,B,+0.0449,False
+04,B,B,+0.0392,True
+05,NEITHER,A,-0.1123,
+06,A,A,-0.0930,True
+07,A,A,-0.0110,True
+08,B,A,-0.1105,False
+09,A,A,-0.1435,True
+10,B,B,+0.1478,True
+11,NEITHER,B,+0.0476,
+12,B,B,+0.0865,True
+TOTAL,9 judged,7 agree,p=0.1797,L not validated by eye

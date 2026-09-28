@@ -20,11 +20,18 @@ check that `benchmark_qkvo_atlas` failed without anyone noticing for two days.
 S2 (content) is dropped: the DINOv2 embedding was not available, as §5 of the pre-registration
 provides for.
 
-## 2. Primary: **not supported**
+## 2. Primary: **not supported**, and **`L not validated by eye`**
 
 Slope β of L on ln V per arm; statistic T = mean(centres) − mean(extremes); exact null over 495
 relabellings, one-sided.
 
+> **`L not validated by eye`** — G_eye was answered on 2026-09-28: Alessandro resolved 9 of the 12
+> pairs and agreed with the ordering of `L` in 7, against a pre-registered threshold of 8. The label
+> is attached by the rule deposited before this bench was rendered. See
+> [`centre_push_eye_veto_result.md`](centre_push_eye_veto_result.md); both of the disagreements are
+> the same unit, `Block_6 pos 0.080`, which `L` scores **above** baseline and which three
+> independent looks call damaged.
+>
 > **T = +0.0534, p = 0.1899.** G_range passes — six central arms reach V ≥ 2 — so this is a null,
 > not an inconclusive.
 

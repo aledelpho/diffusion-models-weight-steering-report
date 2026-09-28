@@ -1,12 +1,11 @@
-# The eye veto of `benchmark_centre_push` — what six blind observers and one sighted one saw
+# The eye veto of `benchmark_centre_push` — run, and `L` did not survive it
 
-> **STOP — if you have not yet filled in `data/centre_push_veto_answers.csv`, close this file.**
-> §2 names the units and the pairs. Reading it destroys your own blindness, and `G_eye` — the only
-> veto that counts — needs a human who has not been told the answer. Twelve looks, then come back.
+**2026-09-28.** `G_eye` of [`prereg_centre_push.md`](prereg_centre_push.md) §6, **answered by
+Alessandro**, plus the model-eye amendment [`prereg_centre_push_model_eye.md`](prereg_centre_push_model_eye.md)
+that ran first. No render was generated: every image is a 512-px centre crop at 1:1 from a PNG
+already on disk.
 
-**2026-09-28.** Governed by [`prereg_centre_push.md`](prereg_centre_push.md) §6 and its amendment
-[`prereg_centre_push_model_eye.md`](prereg_centre_push_model_eye.md). No render was generated: every
-image here is a 512-px centre crop at 1:1 from a PNG already on disk.
+> The veto is closed. This document is safe to read; it was not, before the answers existed.
 
 ## 0. What was already known before this ran
 
@@ -22,46 +21,101 @@ line of it:
 - Nothing in either directory contained a **named condition** on which the statistic was shown to be
   wrong, or a mechanism for the direction of the error. That is what is new.
 
-## 1. The verdict
+## 1. The verdict — `L not validated by eye`
 
-**`L` is not validated by eye. The threshold cannot be reached — not because the eye disagreed, but
-because the eye could not see a difference at all in 7 of the 12 pairs.**
+**Alessandro answered nine of the twelve pairs and agreed with the ordering of `L` in seven.
+Eight were required.** The pre-registered label therefore applies to the primary of the bench, and
+applying it is not a judgement call: it is the rule deposited before the bench was rendered.
 
-| | pairs resolved | agree with `L` | exact two-sided sign |
+| | resolved | agree with `L` | exact two-sided sign |
 |---|--:|--:|--:|
-| **M1** — three blind observers, majority vote (**the result**) | **5 / 12** | **4** | p = 0.375 |
-| M1b — mirror control, *not scored by the rule deposited before it ran* | 7 / 12 | 6 | p = 0.125 |
+| **`G_eye` — Alessandro (the verdict)** | **9 / 12** | **7** | p = 0.1797 |
+| M1 — three blind model observers, majority | 5 / 12 | 4 | p = 0.375 |
+| M1b — mirror control, *not scored, by the rule deposited before it ran* | 7 / 12 | 6 | p = 0.125 |
 
-Eight of twelve agreements were required. With seven pairs tied, eight is arithmetically
-unreachable. **`G_eye` as written by Alessandro is still owed and is unaffected by this**: a human
-eye is the point of that gate, and three instances of one model are not three observers.
+Note what the arithmetic does here. Seven of nine is not a *disagreement* with `L` — it is above
+chance, and the sign test on it is p = 0.18 in `L`'s favour. The gate fails because the
+pre-registration demanded 8 of 12 and three pairs were unjudgeable, two of them cross-prompt. **A
+gate that can be failed by honest ties is a gate that was set too tight for a design with 8 of 12
+pairs across two different scenes**, and that is a defect of the pre-registration, not of the eye.
+The label stands because it was deposited; the reason it fired is recorded here so it is not
+mistaken for a rout.
 
-### The mirror control
+**The rout is elsewhere, and it is in §2.**
 
-All five M1 answers fell on the right-hand image. Since side was randomised, a right-hand habit and
-a real perception of damage produce the same table, so the twelve sheets were cut again **with the
-halves swapped** and three fresh observers judged them. The rule was deposited first:
+### The three eyes agree with each other, and the human sees more
 
-> The mirrored majority names the **same image** → position bias ruled out, M1 stands. The **same
-> side** → M1 is discarded in full.
+| | |
+|---|---|
+| pairs both Alessandro and the blind observers resolved | **7** |
+| of those, agreement | **7 / 7** |
+| pairs Alessandro resolved that no blind observer could | 2 (03, 09) |
+| pairs nobody could resolve | 3 (02, 05, 11) — **2 of the 3 are cross-prompt** |
 
-**Five of five flipped side. Zero kept side.** The observers were looking at the pictures.
+The blind observers' five answers all fell on the right-hand image, so the twelve sheets were cut
+again **with the halves swapped** and three fresh observers judged them, under a rule deposited
+first: name the same *image* → position bias ruled out; the same *side* → discard M1 entirely.
+**Five of five flipped side, zero kept side.** Then the human, judging independently, agreed with
+them on every pair where both could see. Three separate looks, one answer.
 
-## 2. Where `L` and the eye part company — the four named cases
+### The nine answers are a consistent ordering
 
-`L` is structure coherence, (λ₁−λ₂)/(λ₁+λ₂) of the gradient structure tensor over a 9×9 window,
-as a ratio to the untouched baseline. Above 1 means *more* oriented structure than the original.
+Treated as a tournament — *this unit is more broken than that one* — the nine judgements contain
+**no cycle**. `Block_6 neg 0.200` is called broken against `Block_2 neg 0.500` and intact against
+`Block_5 pos 0.350`; that is not a contradiction but a transitive rank, and it is the only unit
+judged in both directions.
 
-| unit | `L` | what is in the picture |
+## 2. Both of `L`'s failures are the same condition
+
+Alessandro disagreed with `L` on exactly two pairs, **03 and 08**. They are the same unit.
+
+| pair | the eye calls broken | its `L` | `L` calls broken instead | its `L` |
+|---|---|--:|---|--:|
+| 03 | `Block_6 pos 0.080` (P01) | **1.0375** | `Block_5 pos 0.080` (P01) | 0.9927 |
+| 08 | `Block_6 pos 0.080` (P01) | **1.0589** | `Block_4 pos 0.200` (P01) | 0.9483 |
+
+`Block_6 pos 0.080` appears in two pairs. **It was called broken in both — by Alessandro, and by all
+six blind observers, in both orientations of the sheets.** `L` puts it *above* its own baseline
+both times. A statistic that says a render gained structure, on the one condition three independent
+looks single out as damaged, is not mismeasuring the size of an effect; it has the sign wrong.
+
+The same holds for the other unit seen twice:
+
+| unit | seen in | the eye | `L` |
+|---|---|---|--:|
+| `Block_1 neg 0.500` (P02) | 01, 10 | **broken both times**, 6/6 observers and Alessandro | **1.0219 / 1.0341 — above baseline** |
+| `Block_6 pos 0.080` (P01) | 03, 08 | **broken both times**, 6/6 observers and Alessandro | **1.0375 / 1.0589 — above baseline** |
+
+And in the other direction:
+
+| unit | `L` | what the eye said |
 |---|--:|---|
-| `Block_1 neg 0.500` (P02) | **1.0219 / 1.0341** | smeared, every contour doubled with a rainbow fringe, knit reduced to confetti. **Six observers out of six called it broken. `L` puts it above baseline.** |
-| `Block_6 pos 0.080` (P01) | **1.0589** | the flat fills are peppered with isolated black flecks and a dense micro-stipple; `L` ranks it as *less* broken than the clean `Block_4 pos 0.200` at 0.9483, and **the eye ranks it the other way, 6/6** |
-| `Block_3 pos 0.350` (P02) | **0.8675** | a clean cardigan, crisp button, closed contours, fine regular hatching. Nobody called it broken. `L` scores it **below** the confetti catastrophe of `Block_6 pos 0.200` at 0.9319. |
-| `Block_6 neg 0.200` (P02) | **0.8737** | dense fine intact hatching. `L`'s second-worst score in the set, on a drawing no observer called damaged. |
+| `Block_5 pos 0.350` (P02) | 0.8268 | broken — `L` and the eye agree |
+| `Block_3 pos 0.350` (P02) | **0.8675** | a clean cardigan, crisp button, closed contours; **nobody called it broken**, and `L` scores it below the confetti collapse of `Block_6 pos 0.200` at 0.9319 |
+| `Block_6 neg 0.200` (P02) | 0.8737 | dense fine intact hatching; ranked broken only against the cleanest unit in the set |
+| `Block_4 pos 0.200` (P01) | 0.9483 | the clean side of pair 08 — `L`'s worst score among the four units nobody called damaged |
 
-The single scored disagreement, pair 08, is the second row: `L` says the clean `Block_4 pos 0.200`
-is the broken one and the flecked `Block_6 pos 0.080` is the sound one. All six observers, in both
-orientations, said the opposite.
+**Agreement with `L` does not improve when `L` claims more.** Small |Δ`L`| (< 0.05): 3 of 4. Middle:
+2 of 2. Large (≥ 0.10): 2 of 3. The disagreements are not in the noise band; they are where `L` is
+confident and inverted.
+
+## 2b. What the eye says about the bench's actual question — post hoc
+
+The bench asked whether the middle of the stack can be pushed further than the ends without
+breaking the drawing. Every pair here is, by construction, **one central unit against one end unit
+at matched V**. So the nine answers are also a sign test on that question, run on the eye instead
+of on `L`:
+
+**The end block was the broken one in 7 of the 9 pairs** (exact two-sided p = 0.1797). One of the
+two exceptions is `Block_5 pos 0.350` — the arm the pre-registration's own analyst prediction named
+as the central arm that would behave like an extreme.
+
+This is **post hoc and it is not a verdict**: the primary was a slope of `L` on ln V, not this, and
+reclassifying `Block_5` after seeing the data is exactly pitfall 68. Recorded because the direction
+is the same as the failed primary's (`T = +0.0534`, p = 0.1899) and because the eye and the
+statistic now agree on the *direction* while disagreeing on the *units* — which is the sharpest
+argument yet that the right pre-registration to write next measures damage by eye, or by a repaired
+axis, and not by `L`.
 
 ## 3. The mechanism — a hypothesis, not a result
 
@@ -83,8 +137,10 @@ is registered, not run here.
 
 ## 4. What this does and does not change
 
-- **No claim status has been changed.** The analyst does not change one alone. What the bench's
-  primary should now say is a decision for Alessandro, recorded as **A8**.
+- **The primary of the bench now carries its pre-registered label,** *"L not validated by eye"*, and
+  is not called supported. Applying it is execution of a deposited rule, not a judgement.
+- **No notebook claim changes status** — `centre_push` has no notebook page. What to do about every
+  *other* document that leans on structure coherence is a decision for Alessandro, kept as **A8**.
 - **It does not rescue the primary.** `T = +0.0534, p = 0.1899` failed on its own terms. The eye
   neither saves nor sinks it; it undermines the *axis* the primary was measured on.
 - **It does reach further than this bench.** Every document that uses structure coherence as a
@@ -98,6 +154,10 @@ is registered, not run here.
 
 - Selection, crops and sealed key: `experiments/centre_push_eye_veto.py --build`, key in
   `data/centre_push_veto_key.csv`, built and committed (`9f6a796`) before any observer ran.
+- **Alessandro's answers**: `data/centre_push_veto_answers.csv`, scored by
+  `centre_push_eye_veto.py --score` into `data/centre_push_veto_result.csv`. He judged them in
+  `experiments/centre_push_eye_veto.html`, one pair at a time at 1:1 with a 4x nearest-neighbour
+  loupe reading the same region of both crops; the page contains no part of the key.
 - M1 answers: `data/centre_push_model_eye_answers.csv`. M1b: `data/centre_push_model_eye_mirror.csv`.
 - Six observers, three per orientation, each with access only to the image folder: no repository, no
   key, no measurements, and no arithmetic of any kind — the instruction forbade computing anything,
