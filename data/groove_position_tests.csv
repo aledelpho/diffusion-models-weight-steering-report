@@ -1,0 +1,14 @@
+claim,bench,ends,centre,holds,note
+A1,M,0.2708,0.1354,True,share of units with L < 0.98
+A2a,M,,0 of 6 doses,False,0.020: centre 0.360 / ends 0.425; 0.035: centre 0.497 / ends 0.639; 0.050: centre 0.639 / ends 0.684; 0.080: centre 0.707 / ends 0.875; 0.120: centre 0.950 / ends 1.389; 0.200: centre 1.190 / ends 2.328
+A2b,M,0.1667,0.1771,True,share of units with V >= 1 and L >= 0.98
+A3,M,,0.5652,False,23 visible central units; share with all seeds agreeing on the sign of delta_out
+A1,D,0.3056,0.1974,True,share of units with L < 0.98
+A2a,D,0.8591,0.7696,False,median V at 0.200
+A2b,D,0.1667,0.2105,True,share of units with V >= 1 and L >= 0.98
+A3,D,,0.6957,True,23 visible central units; share with all seeds agreeing on the sign of delta_out
+A1,M+D,,,,supported
+A2a,M+D,,,,not supported
+A2b,M+D,,,,supported
+A3,M+D,,,,partial
+A4,-,,,,untested: benches M and D hold two comic prompts
