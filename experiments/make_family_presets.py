@@ -24,10 +24,7 @@ OUT = os.path.join(ROOT, "data", "family_bench_plan.csv")
 # family id -> (kind, regex over the checkpoint's own keys)
 FAMILIES = {
     "F_wo":     ("1  2-D linear projection", r"^blocks\.\d+\.attn\.wo\.weight$"),
-    "F_mod":    ("3  modulation",            r"^blocks\.\d+\.mod\.lin$"),
     "F_io":     ("5  latent interface",      r"^(first\.weight|last\.linear\.weight)$"),
-    "F_norms":  ("2a block norm gains",      r"^blocks\.\d+\.(pre|post)norm\.scale$"),
-    "F_qknorm": ("2b q/k normalisation",     r"^blocks\.\d+\.attn\.qknorm\.[qk]norm\.scale$"),
     "F_proj":   ("6  12-parameter router",   r"^txtfusion\.projector\.weight$"),
 }
 GATE_DELTA = 0.20

@@ -17,7 +17,7 @@ from pathlib import Path
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
 COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 RENDERS_DIR = COMFY_OUTPUT_ROOT / "benchmark_parameter_families" / "renders"
-TOTAL_GATE_EXPECTED = 12
+TOTAL_GATE_EXPECTED = 6
 POLL_INTERVAL_SEC = 20
 
 LOG_FILE = Path(r"c:\Users\aless\Desktop\comfyui-pilot\parameter_families_progress.log")
