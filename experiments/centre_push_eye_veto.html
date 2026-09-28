@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veto a occhio</title>
+<style>
+  :root{
+    --bg:#1a1a1c; --panel:#242427; --line:#37373c; --ink:#e8e8ea; --dim:#9a9aa2;
+    --surround:#6e6e73;          /* mid grey: the neutral an image is judged against */
+    --a:#d8a13a; --b:#5b9dd9; --n:#7a7a82; --ok:#4caf7d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 80px}
+  h1{font-size:22px;margin:0 0 4px;font-weight:650;letter-spacing:-.01em}
+  .sub{color:var(--dim);font-size:13px;margin:0 0 22px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin:0 0 18px}
+  .warn{border-color:#8a5a20;background:#2a2118}
+  .warn b{color:#f0b458}
+  kbd{background:#33333a;border:1px solid #45454d;border-bottom-width:2px;border-radius:4px;
+      padding:1px 6px;font:12px ui-monospace,Menlo,Consolas,monospace}
+  code{font:13px ui-monospace,Menlo,Consolas,monospace;background:#2e2e34;padding:1px 5px;border-radius:4px}
+  button{font:inherit;color:inherit;background:#303038;border:1px solid var(--line);
+         border-radius:8px;padding:9px 16px;cursor:pointer}
+  button:hover{background:#3a3a44}
+  button:disabled{opacity:.35;cursor:default}
+  .big{padding:14px 26px;font-size:16px;font-weight:600;border-width:2px}
+  .big.a{border-color:var(--a)} .big.a:hover{background:#3a3020}
+  .big.b{border-color:var(--b)} .big.b:hover{background:#1f2c3a}
+  .big.n{border-color:var(--n)}
+  .big.sel{background:#3d3d47;box-shadow:inset 0 0 0 1px #fff3}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .stage{background:var(--surround);border-radius:8px;padding:10px;overflow:auto;margin:14px 0}
+  .stage canvas{display:block;image-rendering:pixelated}
+  .tag{display:flex;gap:24px;padding:0 0 6px;font:600 13px ui-monospace,monospace;color:#1b1b1d}
+  .tag span{width:512px;text-align:center}
+  .loupe{display:flex;gap:16px;justify-content:center;margin:12px 0 0}
+  .loupe figure{margin:0}
+  .loupe figcaption{text-align:center;font:600 12px ui-monospace,monospace;color:var(--dim);padding:6px 0 0}
+  .loupe canvas{background:#000;border-radius:6px;image-rendering:pixelated;display:block}
+  .prog{display:flex;gap:5px;margin:0 0 14px;flex-wrap:wrap}
+  .pip{width:30px;height:28px;border-radius:6px;border:1px solid var(--line);background:#2a2a30;
+       font:600 12px ui-monospace,monospace;color:var(--dim);cursor:pointer;display:grid;place-items:center}
+  .pip.done{background:#2b3b33;border-color:#3d6b56;color:#bfe6d3}
+  .pip.now{outline:2px solid #fff6;outline-offset:1px;color:var(--ink)}
+  textarea{width:100%;height:220px;background:#141417;color:var(--ink);border:1px solid var(--line);
+           border-radius:8px;padding:12px;font:13px ui-monospace,Menlo,Consolas,monospace;resize:vertical}
+  .hint{color:var(--dim);font-size:13px}
+  .hide{display:none}
+  table{border-collapse:collapse;font-size:13px;width:100%}
+  td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+  th{color:var(--dim);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div id="intro">
+  <h1>Veto a occhio &mdash; benchmark_centre_push</h1>
+  <p class="sub">G_eye, <code>docs/prereg_centre_push.md</code> &sect;6. Dodici coppie, ritagli centrali 512&nbsp;px a 1:1.</p>
+
+  <div class="card warn">
+    <p style="margin:0 0 8px"><b>Non aprire <code>docs/centre_push_eye_veto_result.md</code> prima di aver finito.</b>
+    Quel documento nomina le unit&agrave; e le coppie: leggerlo distrugge la tua cecit&agrave;, e il tuo &egrave; l&rsquo;unico veto che conta.</p>
+    <p style="margin:0" class="hint">Questa pagina non contiene la chiave. Non sa quale lato sia quale, e non te lo dir&agrave;.</p>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 10px"><b>La domanda, per ogni coppia: da quale lato il <i>disegno</i> &egrave; pi&ugrave; rotto?</b></p>
+    <p style="margin:0 0 10px" class="hint">La linea e la struttura: i tratti sono ancora tratti, i contorni si chiudono e stanno dove devono, il tratteggio &egrave; ancora tratteggio o &egrave; diventato poltiglia o rumore.</p>
+    <p style="margin:0 0 10px" class="hint">Non quale ti piace di pi&ugrave;, non quale &egrave; pi&ugrave; colorato o pi&ugrave; scuro, non quale &egrave; pi&ugrave; lontano dal prompt. Un&rsquo;immagine molto stilizzata con la linea intatta <b>non</b> &egrave; rotta. Un&rsquo;immagine la cui linea si &egrave; sciolta in grana o sbavatura <b>lo &egrave;</b>, anche se &egrave; piacevole.</p>
+    <p style="margin:0" class="hint"><b>neither</b> se non riesci a distinguerle su questo criterio, o se i due contenuti sono scene diverse e non si confrontano onestamente. Otto coppie su dodici sono fra prompt diversi: &egrave; quello che chiedeva la preregistrazione, non un errore, ed &egrave; un motivo legittimo per <b>neither</b>.</p>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 10px"><b>La lente.</b> Passa il mouse sulle immagini: la stessa identica regione dei due lati compare ingrandita 4&times; a interpolazione nulla, affiancata. <kbd>A</kbd> <kbd>B</kbd> <kbd>N</kbd> per rispondere, <kbd>&larr;</kbd> <kbd>&rarr;</kbd> per navigare.</p>
+    <p style="margin:0" class="hint">Se il browser &egrave; a zoom diverso da 100% i ritagli non sono pi&ugrave; a 1:1. <kbd>Ctrl</kbd>+<kbd>0</kbd> prima di cominciare.</p>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 10px"><b>Riferimento: i due render non perturbati.</b> Guardali per primi &mdash; dicono che aspetto ha &ldquo;non rotto&rdquo; per ciascuna delle due scene.</p>
+    <div class="stage"><img src="_baselines.png" alt="baselines" style="display:block"></div>
+  </div>
+
+  <div class="row"><button class="big" id="start">Comincia &rarr;</button>
+    <span class="hint" id="resume"></span></div>
+</div>
+
+<div id="app" class="hide">
+  <div class="prog" id="prog"></div>
+  <div class="row" style="justify-content:space-between">
+    <div><b id="ptitle">Coppia 01</b> <span class="hint" id="pcount"></span></div>
+    <div class="row">
+      <button id="prev">&larr;</button><button id="next">&rarr;</button>
+      <button id="finish">Finisci e genera il CSV</button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="tag"><span>A</span><span>B</span></div>
+    <canvas id="sheet" width="1048" height="512"></canvas>
+  </div>
+
+  <div class="loupe">
+    <figure><canvas id="la" width="384" height="384"></canvas><figcaption>A &mdash; 4&times;</figcaption></figure>
+    <figure><canvas id="lb" width="384" height="384"></canvas><figcaption>B &mdash; 4&times;</figcaption></figure>
+  </div>
+
+  <div class="row" style="justify-content:center;margin:20px 0 0">
+    <button class="big a" data-v="A">A &mdash; il sinistro &egrave; pi&ugrave; rotto</button>
+    <button class="big n" data-v="neither">neither</button>
+    <button class="big b" data-v="B">B &mdash; il destro &egrave; pi&ugrave; rotto</button>
+  </div>
+</div>
+
+<div id="done" class="hide">
+  <h1>Fatto.</h1>
+  <p class="sub">Incolla questo in <code>data\centre_push_veto_answers.csv</code>, sovrascrivendolo, poi lancia
+     <code>python experiments\centre_push_eye_veto.py --score</code>.</p>
+  <div class="card">
+    <div class="row" style="margin:0 0 10px">
+      <button id="copy">Copia negli appunti</button>
+      <button id="dl">Scarica il CSV</button>
+      <button id="back">&larr; Torna a rivedere</button>
+      <span class="hint" id="tally"></span>
+    </div>
+    <textarea id="csv" readonly></textarea>
+  </div>
+  <div class="card">
+    <table id="summary"></table>
+  </div>
+</div>
+
+</div>
+<script>
+const N = 12, W = 512, GAP = 536, MAG = 4, LP = 96;   // 96 px region -> 384 px at 4x, no interpolation
+const id = n => String(n).padStart(2, "0");
+const store = "centre_push_veto_v1";
+let answers = {}, cur = 1, imgs = {};
+
+try { answers = JSON.parse(localStorage.getItem(store) || "{}"); } catch (e) { answers = {}; }
+const save = () => { try { localStorage.setItem(store, JSON.stringify(answers)); } catch (e) {} };
+
+const $ = s => document.querySelector(s);
+const sheet = $("#sheet"), sctx = sheet.getContext("2d");
+const la = $("#la").getContext("2d"), lb = $("#lb").getContext("2d");
+[sctx, la, lb].forEach(c => c.imageSmoothingEnabled = false);
+
+const nAns = () => Object.keys(answers).length;
+if (nAns()) $("#resume").textContent = nAns() + " risposte gia' salvate in questo browser.";
+
+function load(n) {
+  if (imgs[n]) return Promise.resolve(imgs[n]);
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => { imgs[n] = im; res(im); };
+    im.onerror = () => res(null);
+    im.src = "pair" + id(n) + ".png";
+  });
+}
+
+function pips() {
+  $("#prog").innerHTML = "";
+  for (let i = 1; i <= N; i++) {
+    const d = document.createElement("div");
+    d.className = "pip" + (answers[id(i)] ? " done" : "") + (i === cur ? " now" : "");
+    d.textContent = id(i);
+    d.onclick = () => go(i);
+    $("#prog").appendChild(d);
+  }
+}
+
+async function go(n) {
+  cur = Math.min(N, Math.max(1, n));
+  const im = await load(cur);
+  sctx.clearRect(0, 0, sheet.width, sheet.height);
+  if (im) sctx.drawImage(im, 0, 0); else { sctx.fillStyle = "#000"; sctx.fillRect(0,0,sheet.width,sheet.height); }
+  $("#ptitle").textContent = "Coppia " + id(cur);
+  $("#pcount").textContent = "— " + nAns() + " di " + N + " risposte";
+  document.querySelectorAll("[data-v]").forEach(b =>
+    b.classList.toggle("sel", answers[id(cur)] === b.dataset.v));
+  la.clearRect(0,0,384,384); lb.clearRect(0,0,384,384);
+  pips();
+  [1,2,3].forEach(k => { if (cur + k <= N) load(cur + k); });   // prefetch
+}
+
+sheet.addEventListener("mousemove", e => {
+  const im = imgs[cur]; if (!im) return;
+  const r = sheet.getBoundingClientRect();
+  const sx = sheet.width / r.width, sy = sheet.height / r.height;
+  let x = (e.clientX - r.left) * sx, y = (e.clientY - r.top) * sy;
+  if (x >= W && x < GAP) return;                   // the gutter
+  if (x >= GAP) x -= GAP;                          // same coordinate in both crops
+  x = Math.max(LP/2, Math.min(W - LP/2, x));
+  y = Math.max(LP/2, Math.min(W - LP/2, y));
+  const ox = x - LP/2, oy = y - LP/2;
+  la.drawImage(im, ox,       oy, LP, LP, 0, 0, LP*MAG, LP*MAG);
+  lb.drawImage(im, ox + GAP, oy, LP, LP, 0, 0, LP*MAG, LP*MAG);
+});
+
+document.querySelectorAll("[data-v]").forEach(b => b.onclick = () => {
+  answers[id(cur)] = b.dataset.v; save();
+  if (cur < N) go(cur + 1); else go(cur);
+});
+$("#prev").onclick = () => go(cur - 1);
+$("#next").onclick = () => go(cur + 1);
+$("#start").onclick = () => { $("#intro").classList.add("hide"); $("#app").classList.remove("hide"); go(1); };
+$("#back").onclick  = () => { $("#done").classList.add("hide");  $("#app").classList.remove("hide"); go(1); };
+
+addEventListener("keydown", e => {
+  if ($("#app").classList.contains("hide")) return;
+  const k = e.key.toLowerCase();
+  if (k === "a" || k === "b") { answers[id(cur)] = k.toUpperCase(); save(); go(cur < N ? cur+1 : cur); }
+  else if (k === "n") { answers[id(cur)] = "neither"; save(); go(cur < N ? cur+1 : cur); }
+  else if (e.key === "ArrowLeft")  go(cur - 1);
+  else if (e.key === "ArrowRight") go(cur + 1);
+});
+
+$("#finish").onclick = () => {
+  let csv = "pair,more_broken\n", t = {A:0, B:0, neither:0, "":0};
+  let tab = "<tr><th>coppia</th><th>risposta</th></tr>";
+  for (let i = 1; i <= N; i++) {
+    const v = answers[id(i)] || "";
+    csv += id(i) + "," + v + "\n";
+    t[v]++;
+    tab += "<tr><td>" + id(i) + "</td><td>" + (v || "<i>vuota</i>") + "</td></tr>";
+  }
+  $("#csv").value = csv;
+  $("#summary").innerHTML = tab;
+  $("#tally").textContent = "A: " + t.A + "  ·  B: " + t.B + "  ·  neither: " + t.neither +
+                            (t[""] ? "  ·  non risposte: " + t[""] : "");
+  $("#app").classList.add("hide"); $("#done").classList.remove("hide");
+};
+$("#copy").onclick = () => { $("#csv").select(); document.execCommand("copy"); $("#copy").textContent = "copiato"; };
+$("#dl").onclick = () => {
+  const b = new Blob([$("#csv").value], {type: "text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(b); a.download = "centre_push_veto_answers.csv"; a.click();
+};
+</script>
+</body>
+</html>

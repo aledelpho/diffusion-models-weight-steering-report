@@ -29,6 +29,11 @@ and are reported as such:
       the deposited text, and the number of cross-prompt pairs is reported instead so the reader can
       discount them.
 
+`--build` also drops `centre_push_eye_veto.html` next to the sheets as `veto.html`: a self-contained
+page that shows one pair at a time at 1:1, carries a 4x nearest-neighbour loupe reading the SAME
+region of both crops at once, takes A / B / neither from the keyboard, and writes out the answer CSV.
+It loads the PNGs from its own folder and contains no part of the key.
+
 No render is generated. Crops are cut from renders already on disk.
 """
 from __future__ import annotations
@@ -171,6 +176,10 @@ def build() -> None:
             w.writerow(["pair", "more_broken"])  # A | B | neither
             for r in rows:
                 w.writerow([r["pair"], ""])
+    page = ROOT / "experiments" / "centre_push_eye_veto.html"
+    if page.is_file():
+        (out_dir / "veto.html").write_text(page.read_text(encoding="utf-8"), encoding="utf-8")
+        print(f"  veto.html -> {out_dir} (open it in a browser at 100 % zoom)")
     print(f"  {len(rows)} sheets -> {out_dir}")
     print(f"  sealed key -> {KEY}")
     print(f"  blank answer form -> {ANSWERS}")
