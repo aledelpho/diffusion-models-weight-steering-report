@@ -83,7 +83,28 @@ supported" and stands. It is recorded because the pre-registration's own analyst
 *"`Block_5 pos` si comporterà come un estremo"* before the data existed, which makes the
 misclassification an anticipated flaw in the design rather than a rescue invented afterwards.
 
-## 4. And the question that prompted the bench: yes, some of them hold at 0.500
+## 4. ~~And the question that prompted the bench: yes, some of them hold at 0.500~~ — RETRACTED
+
+> **Retracted 2026-09-29, by the analyst, after Alessandro showed the renders.** This section called
+> `Block_4 pos` and `Block_1 pos` at 0.500 *"better on both axes at once"* and *"the largest finding
+> of the bench"*. **Nobody had opened those renders.** Opened now:
+>
+> - **`Block_4 pos` 0.500** (`P01` seed 2718281, `P02` seeds 1618033 and 3141592): **no subject is
+>   left** — the whole frame is a crumpled-paper texture of dense black strokes. `L` = 1.2041 because
+>   that texture is oriented line everywhere: exactly the failure of `L` that the eye veto exposed a
+>   day later (`centre_push_eye_veto_result.md`).
+> - **`Block_1 pos` 0.500** (`P01` seed 2718281, `P02` seed 3141592): **pure colour confetti**, no
+>   subject. `L` = 1.0576.
+> - **`Block_4 pos` 0.350**, all six renders — the ones Alessandro sent: the subject survives but is
+>   broken — faces flattened into masks, anatomy undone, the drawing collapsed into flat shapes.
+> - For contrast, `Block_4 pos` 0.200 and `Block_1 pos` 0.350 (`P01`, seed 2718281) are intact.
+>
+> **What went wrong.** `V` is a distance from the baseline, and a destroyed image is *far* from it;
+> `L` rewards any regular oriented texture. High `V` with `L ≥ 1` was read as "moves a lot and keeps
+> the line". It meant "destroyed into a regular texture". **No row of the table below can be read as
+> "holds"** — each is a statistic, and the only two rows now looked at are destructions. The table is
+> kept, struck through in meaning, as the record of the error. `C37`, which proposed pushing both
+> arms further, is withdrawn.
 
 Alessandro asked for the extreme dose specifically — *"valori molto elevati, per vedere se si
 rompono di meno"*. Per arm, at dose 0.500 against dose 0.080:
@@ -103,8 +124,9 @@ rompono di meno"*. Per arm, at dose 0.500 against dose 0.080:
 | `Block_6` | neg | 3.95 | 0.6162 | 0.61 | 0.9732 |
 | `Block_5` | pos | 5.22 | **0.4266** | 0.83 | 0.9990 |
 
-**`Block_4 pos` at 0.500 moves the image 3.3× the seed floor with the line 20 % stronger than
-baseline.** `Block_1 pos` moves 3.8× with the line still above it. At the other end, `Block_5 pos`
+~~**`Block_4 pos` at 0.500 moves the image 3.3× the seed floor with the line 20 % stronger than
+baseline.** `Block_1 pos` moves 3.8× with the line still above it.~~ *(Both destroyed — see the
+retraction above.)* At the other end, `Block_5 pos`
 moves 5.2× and the drawing is gone.
 
 The pre-registration's analyst prediction — *"at least one central arm (`Block_4`) will reach
@@ -112,7 +134,7 @@ V ≥ 2.5 with L ≥ 0.98"* — is **confirmed**: 3.28 and 1.2041. Its companion
 extremes at 0.500 will come out black or washed out"*, is **half wrong**: true of `Block_6`, false
 of `Block_1`.
 
-**Operationally this is the largest finding of the bench.** This project has worked at dose 0.200
+~~**Operationally this is the largest finding of the bench.**~~ *(Retracted.)* This project has worked at dose 0.200
 for months. On `Block_4 pos` and `Block_1 pos`, **0.500 is better on both axes at once** — more
 movement *and* a stronger line — and nothing in the corpus had been rendered there.
 
