@@ -186,8 +186,38 @@ def scan_wo_depth(B: Path) -> dict:
                     "tutte insieme, o a qualcosa che nessuna delle sei è?"}
 
 
+# ----------------------------------------------------------------- single_blocks_atlas
+SB_PAT = re.compile(r"^(P01_blacksmith|S1_rally|F4_closeup)_blk(\d\d)_(pos|neg)_d([\d.]+)_krea2_seed(\d+)_")
+SB_BASE = re.compile(r"^(P01_blacksmith|S1_rally|F4_closeup)_baseline_krea2_seed(\d+)_")
+SB_GROUP = {**{b: "Block_1" for b in range(0, 5)}, **{b: "Block_2" for b in range(5, 10)},
+            **{b: "Block_3" for b in range(10, 15)}, **{b: "Block_4" for b in range(15, 20)},
+            **{b: "Block_5" for b in range(20, 24)}, **{b: "Block_6" for b in range(24, 28)}}
+
+
+def scan_single_blocks_atlas(B: Path) -> dict:
+    idx: dict = {}; base: dict = {}
+    for p in sorted((B / "renders").glob("*.png")):
+        m = SB_PAT.match(p.name)
+        if m:
+            P, b, sign, dose, seed = m.groups()
+            v = (-1 if sign == "neg" else 1) * float(dose)
+            idx.setdefault(P, {}).setdefault(seed, {}).setdefault(f"blk{b}", {})[f"{v:+.3f}"] = f"renders/{p.name}"
+            continue
+        m = SB_BASE.match(p.name)
+        if m:
+            base.setdefault(m.group(1), {})[m.group(2)] = f"renders/{p.name}"
+    groups = {f"blk{b:02d}": {"title": f"blk{b:02d}", "meta": f"blocco {b} · nel gruppo {SB_GROUP[b]}"} for b in range(28)}
+    return {"idx": idx, "base": base, "groups": groups, "order": [f"blk{b:02d}" for b in range(28)],
+            "stats": {}, "unit": "il blocco",
+            "title": "Atlante per singolo blocco — −0.350, baseline, +0.350",
+            "sub": "benchmark_single_blocks_atlas · 28 blocchi, tre prompt, un solo seme",
+            "note": "<b>Un solo seme</b>: parte di quello che vedi in un blocco può essere la traiettoria di quel seme e "
+                    "non il blocco. Il confronto utile è <b>fra prompt</b>: se un blocco fa la stessa cosa su "
+                    "fabbro, auto e primo piano, è un controllo; se fa cose diverse, dipende dall'immagine."}
+
+
 BENCHES = {"parameter_families": scan_parameter_families, "centre_push": scan_centre_push,
-           "wo_depth": scan_wo_depth}
+           "wo_depth": scan_wo_depth, "single_blocks_atlas": scan_single_blocks_atlas}
 
 
 def thumbs(B: Path, files: set[str]) -> None:
