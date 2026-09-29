@@ -52,3 +52,29 @@ baseline, which is necessary for a linear control but not sufficient.
 A block's label is **supported** if it passes H1 **and** H2(a) **and** H4 on at least 3 of its 4
 arm × prompt cells. **Partly supported** if H1 and H4 pass but another measure moves more (H2a
 fails). **Not supported** otherwise.
+
+---
+
+## Amendment — "not really a knob", added before any H1–H4 result was looked at
+
+**2026-09-29, same session.** At this point the atlas measures had been computed
+(`late_blocks_atlas_extra.csv`) but **no test statistic had been computed or printed**. Alessandro,
+verbatim:
+
+> *"Tieni conto però, che non è 'Realmente' una manopola, perché il modello è (da quello che mi sembra)
+> un'approssimazione di una manopola. perché tramite il training non è detto che questa distinzione
+> sia mai stata definita e, pertanto, si trovano solo in tale area tante leve che hanno quello scopo."*
+
+This is a different, weaker claim than the one H2(a) tests. It says: the attribute is **carried by a
+region** (22–27), a named block is **one lever** that moves it, and that block may move other things
+as much or more. So two readings are now scored side by side, and neither replaces the other:
+
+- **Strong reading — "each block is the knob for its word"**: H1, H2(a) and H4, as deposited.
+- **Lever reading — his clarified claim**: H1 and H4 for the named block, **plus H5**:
+  - **H5 — the attribute lives in the region.** For each of the six measures, the mean |standardised
+    swing| over blocks 22–27 is **larger than over blocks 0–21**. Exact one-sided Mann–Whitney, 6 vs 22,
+    per measure. Supported for a measure if p ≤ 0.05.
+  - A label is **supported under the lever reading** if H1 passes, H4 passes on ≥ 3 of 4 cells, and H5
+    passes for its measure. H2(a) is reported but not required.
+
+The strong reading's verdict rule is unchanged. Both verdicts are reported for every block.
