@@ -152,6 +152,17 @@ TEMPLATE = r"""<!doctype html>
          padding:10px 14px;display:flex;gap:12px;align-items:center;z-index:51;flex-wrap:wrap}
   #ovbar textarea{flex:1;min-width:280px;min-height:52px;border:1px solid var(--line);border-radius:7px}
   #ovlab{font:600 14px ui-monospace,monospace;min-width:190px}
+  .nav{position:fixed;top:0;bottom:90px;width:96px;z-index:52;border:0;border-radius:0;
+       background:linear-gradient(90deg,#000a,#0000);display:flex;flex-direction:column;
+       align-items:center;justify-content:center;gap:8px;opacity:.35;transition:opacity .12s;padding:0}
+  .nav:hover{opacity:1;background:linear-gradient(90deg,#000c,#0004)}
+  .nav.r{left:auto;right:0;background:linear-gradient(270deg,#000a,#0000)}
+  .nav.r:hover{background:linear-gradient(270deg,#000c,#0004)}
+  .nav{left:0}
+  .nav .ar{font-size:46px;line-height:1;font-weight:300}
+  .nav .to{font:600 13px ui-monospace,monospace;color:#cfcfd6;text-align:center;padding:0 6px}
+  .nav[disabled]{opacity:.08;cursor:default;background:none}
+  #ov.show .nav{display:flex}
 </style>
 </head>
 <body>
@@ -161,9 +172,13 @@ TEMPLATE = r"""<!doctype html>
 
   <div class="card" style="margin-top:16px">
     <p style="margin:0 0 9px"><b>Clicca una miniatura per aprire il render vero a 1:1.</b>
-      Nell'ingrandimento: <kbd>←</kbd> <kbd>→</kbd> scorrono la scala, <kbd>B</kbd> alterna con il
-      baseline (tienilo premuto e rilascialo per vedere cosa cambia), <kbd>Esc</kbd> chiude. Puoi
-      scrivere gli appunti anche da lì.</p>
+      Nell'ingrandimento: le <b>frecce ai due lati</b> — o <kbd>←</kbd> <kbd>→</kbd> — passano al
+      preset vicino e ne mostrano il valore, <kbd>B</kbd> alterna con il baseline (tienilo premuto e
+      rilascialo), <kbd>Esc</kbd> chiude. Puoi scrivere gli appunti anche da lì.</p>
+    <p style="margin:0 0 9px" class="hint"><b>Il punto in cui hai trascinato l'immagine non si
+      muove quando cambi preset:</b> la stessa regione resta sotto l'occhio, ed è l'unico modo di
+      vedere le differenze piccole — se l'immagine si ricentrasse a ogni passo non staresti
+      confrontando niente.</p>
     <p style="margin:0 0 9px" class="hint">Le miniature sono ridotte: servono solo a navigare. Su
       grana, tratto e artefatti decide solo il 1:1 — è il difetto 78, e il rimedio è tuo.</p>
     <p style="margin:0" class="hint"><b>La mia lettura di questi render non è in questa pagina, apposta.</b>
@@ -197,6 +212,8 @@ TEMPLATE = r"""<!doctype html>
 
 <div id="ov">
   <img id="ovimg" alt="">
+  <button class="nav" id="ovprev"><span class="ar">&#8249;</span><span class="to"></span></button>
+  <button class="nav r" id="ovnext"><span class="ar">&#8250;</span><span class="to"></span></button>
   <div id="ovbar">
     <span id="ovlab"></span>
     <button id="ovbase">baseline (B)</button>
@@ -298,9 +315,20 @@ function render() {
 function tally() { const [n, t] = nTotal(); $("#count").textContent = n + " preset annotati su " + t; }
 
 // ---------------------------------------------------------------- 1:1 overlay
+let pos = null;                 // pan offset, KEPT across steps: the same region must stay
+                                // under the eye, otherwise flicking between two doses compares
+                                // nothing and the small differences are exactly what is lost.
 function openOv(items, i, fam) {
   flat = items.map(([d, rel]) => ({ d, rel, fam }));
-  ovi = i; fit = false; $("#ov").classList.add("show"); drawOv();
+  ovi = i; fit = false; pos = null; $("#ov").classList.add("show"); drawOv();
+}
+function step(n) { const j = ovi + n; if (j < 0 || j >= flat.length) return; ovi = j; drawOv(); }
+function arrows() {
+  const lab = k => { const it = flat[k]; return it ? (it.d === "BASE" ? "BASELINE" : it.d) : ""; };
+  $("#ovprev").disabled = ovi <= 0;
+  $("#ovnext").disabled = ovi >= flat.length - 1;
+  $("#ovprev").querySelector(".to").textContent = lab(ovi - 1);
+  $("#ovnext").querySelector(".to").textContent = lab(ovi + 1);
 }
 function drawOv() {
   const it = flat[ovi]; if (!it) return;
@@ -313,6 +341,7 @@ function drawOv() {
   $("#ovnote").disabled = dis;
   $("#ovnote").value = dis ? "" : (notes[nkey(it.fam, it.d)] || "");
   $("#ovnote").placeholder = dis ? "il baseline non si annota" : "cosa sta succedendo qui…";
+  arrows();
 }
 function place() {
   const im = $("#ovimg");
@@ -323,11 +352,14 @@ function place() {
     im.style.left = ((innerWidth - im.naturalWidth * k) / 2) + "px"; im.style.top = "0px";
   } else {
     im.style.width = im.naturalWidth + "px"; im.style.height = "auto";
-    im.style.left = ((innerWidth - im.naturalWidth) / 2) + "px";
-    im.style.top = ((innerHeight - 90 - im.naturalHeight) / 2) + "px";
+    if (pos === null) pos = {left: (innerWidth - im.naturalWidth) / 2,
+                             top: (innerHeight - 90 - im.naturalHeight) / 2};
+    im.style.left = pos.left + "px"; im.style.top = pos.top + "px";
   }
 }
-$("#ovfit").onclick = () => { fit = !fit; place(); };
+$("#ovfit").onclick = () => { fit = !fit; if (!fit) pos = null; place(); };
+$("#ovprev").onclick = () => step(-1);
+$("#ovnext").onclick = () => step(1);
 $("#ovclose").onclick = () => $("#ov").classList.remove("show");
 $("#ovnote").oninput = () => { const it = flat[ovi]; if (it && it.d !== "BASE") {
   notes[nkey(it.fam, it.d)] = $("#ovnote").value; save(); } };
@@ -335,23 +367,38 @@ let baseHeld = null;
 $("#ovbase").onmousedown = () => { baseHeld = $("#ovimg").src; $("#ovimg").src = M.base[P]; };
 $("#ovbase").onmouseup = $("#ovbase").onmouseleave = () => { if (baseHeld) { $("#ovimg").src = baseHeld; baseHeld = null; } };
 
-// drag to pan
+// Drag to pan. Pointer events with capture, and the browser's own image drag suppressed:
+// a plain mousedown/mousemove/mouseup on an <img> starts native HTML5 drag-and-drop, which eats
+// the mouseup, leaves the handler stuck in "down" and makes the image jump on the next click.
 (function () {
-  const ov = $("#ov"); let dx = 0, dy = 0, down = false;
-  ov.addEventListener("mousedown", e => { if (e.target.id !== "ovimg") return;
-    down = true; dx = e.clientX - parseFloat($("#ovimg").style.left || 0);
-    dy = e.clientY - parseFloat($("#ovimg").style.top || 0); $("#ovimg").style.cursor = "grabbing"; });
-  addEventListener("mousemove", e => { if (!down) return;
-    $("#ovimg").style.left = (e.clientX - dx) + "px"; $("#ovimg").style.top = (e.clientY - dy) + "px"; });
-  addEventListener("mouseup", () => { down = false; $("#ovimg").style.cursor = "grab"; });
+  const im = $("#ovimg");
+  im.draggable = false;
+  im.addEventListener("dragstart", e => e.preventDefault());
+  let drag = null;
+  im.addEventListener("pointerdown", e => {
+    if (fit || pos === null) return;
+    e.preventDefault();
+    im.setPointerCapture(e.pointerId);
+    drag = {x: e.clientX - pos.left, y: e.clientY - pos.top};
+    im.style.cursor = "grabbing";
+  });
+  im.addEventListener("pointermove", e => {
+    if (!drag) return;
+    pos = {left: e.clientX - drag.x, top: e.clientY - drag.y};
+    im.style.left = pos.left + "px"; im.style.top = pos.top + "px";
+  });
+  const end = e => { if (!drag) return; drag = null; im.style.cursor = "grab";
+                     try { im.releasePointerCapture(e.pointerId); } catch (_) {} };
+  im.addEventListener("pointerup", end);
+  im.addEventListener("pointercancel", end);
 })();
 
 addEventListener("keydown", e => {
   if (!$("#ov").classList.contains("show")) return;
   if (document.activeElement === $("#ovnote") && e.key !== "Escape") return;
   if (e.key === "Escape") $("#ov").classList.remove("show");
-  else if (e.key === "ArrowLeft" && ovi > 0) { ovi--; drawOv(); }
-  else if (e.key === "ArrowRight" && ovi < flat.length - 1) { ovi++; drawOv(); }
+  else if (e.key === "ArrowLeft") step(-1);
+  else if (e.key === "ArrowRight") step(1);
   else if (e.key.toLowerCase() === "b" && !e.repeat) {
     baseHeld = $("#ovimg").src; $("#ovimg").src = M.base[P]; }
 });
