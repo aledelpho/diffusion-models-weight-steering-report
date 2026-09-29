@@ -160,9 +160,30 @@ they were produced, so they are not over-read:
 
 - they were written **after** the composition verdict had been posted in the conversation, so §8's
   order (look first, verdict second) was not kept;
-- they describe the six slices one by one, and **the union section is empty**. The §8 question —
-  *does the union look like one of the six, like all of them, or like something none of them is?* —
-  **is still unanswered**, and nothing here answers it for him.
+- they describe the six slices one by one and left the union empty; asked the §8 question
+  directly — *does the union look like one of the six, like all of them, or like something none of
+  them is?* — he answered, **also after the verdict**:
+
+> **"Mi sembra l'unione di tutte insieme."**
+
+### 8·0. His answer against the verdict — the disagreement is the result
+
+§8 of the pre-registration: *where the eye and the criterion disagree, that disagreement is the
+result.* They disagree, and three measurements sit on different sides of it:
+
+| | says | status |
+|---|---|---|
+| the pre-registered criterion (23-feature direction and magnitude) | **not** the sum of its parts | confirmatory — but unpassable at ±0.100 (§4, pitfall 89) |
+| fine-grain energy, product of six slices vs union | **the sum of its parts**, within 1–11 % in 12/12 | exploratory, post hoc (§5b) |
+| direction: is the union closer to the sum, or to its best single slice? | **closer to one slice** — sum wins in **7/36** cells, 4/12 seed-averaged; the winning slice is almost always an end, `b6` on the negative arm, `b1` on the positive | exploratory, post hoc (`wo_depth_union_like.py`) |
+
+**A reading that reconciles all three, and that is a hypothesis, not a finding:** the union *is*
+all six together, but the middle four contribute little — §5c showed `b2`…`b5` nearly inert on fine
+grain — so "all six together" and "the two ends together" produce nearly the same picture. The eye
+sees the sum; the direction test, which is dragged by the four middle slices' seed-specific noise
+(§4), prefers a single end. It predicts that **Δ(b1) + Δ(b6) is as close to the union as the full
+sum, or closer**. That prediction is **not tested here**: it goes into the pre-registration of C42,
+before it is looked at.
 
 ### 8a. His words against the measures
 

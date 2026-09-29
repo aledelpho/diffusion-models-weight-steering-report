@@ -28,4 +28,6 @@ pose più dinamiche, faccie più rugose, colori più accesi
 **slice b6 — blocchi 24–27.** Nei valori negativi diventa molto più "grigio/giallino" mentre nei
 positivi i colori sembrano saturarsi di più
 
-**union.** *(no note)*
+**union.** *(no note in the page.)* Asked afterwards the §8 question, he answered, 2026-09-29:
+
+> "Mi sembra l'unione di tutte insieme."
