@@ -1,44 +1,47 @@
 # Render spec — `wo` cut by depth (C41)
 
 - **For:** Alessandro, who launches every render; prepared for Antigravity to queue.
-- **86 renders**, one pass, no stages and no gate.
+- **254 renders** total across three doses (±0.100, ±0.200, ±0.350), one pass, no stages and no gate.
 - **Governed by** [`prereg_wo_depth.md`](prereg_wo_depth.md), frozen before any render exists.
 - **Origin:** Alessandro's question of 2026-09-29 — *"so can `F_wo` not be split by block either?"*
-  It can, and splitting it is the experiment.
+  Extended to ±0.200 and ±0.350 on Alessandro's request to observe higher doses.
 
 ---
 
 ## 1. Why, in three sentences
 
-`Family_wo_d±0.100` moves the attention output projection in **all 28 blocks at once**, so what it
+`Family_wo_d±δ` moves the attention output projection in **all 28 blocks at once**, so what it
 does cannot be placed anywhere in the stack. When that same set was split at the two ends by
 `benchmark_qkvo_atlas`, the ends behaved differently — blocks 0–4 nearly neutral, blocks 24–27 a
 strongly antisymmetric fine-grain knob. **The family result is a mixture**, and this bench cuts it
-into its six parts and then asks whether the parts add back up to the whole.
+into its six parts across multiple doses (±0.100, ±0.200, ±0.350) and then asks whether the parts
+add back up to the whole.
 
 ## 2. What is new here, and what it costs
 
-**Nothing is being invented.** The preset already exists; this splits it. Four of the fourteen
-conditions (`b1`, `b6`, both signs) reuse the atlas presets unchanged, which makes them a
-replication of an existing condition on new prompts and seeds — free evidence at no extra cost.
+**Nothing is being invented.** The presets split `Family_wo` across slices `b1`..`b6`.
+For δ = ±0.100, four conditions (`b1`, `b6`, both signs) reuse the atlas presets unchanged.
+For δ = ±0.200 and δ = ±0.350, dedicated slice presets `WO_b{1..6}_d{+,-}{0.200,0.350}.json` were generated
+and matched against the full union presets `Family_wo_d{+,-}{0.200,0.350}.json`.
 
 **Six baselines are not rendered.** `P01` and `P02` here are the same prompts as
 `benchmark_centre_push` (same sha1) at the same three seeds and the same sampler settings, so its
 six baselines are borrowed. **Two determinism rows pay for that**: one baseline re-rendered per
-prompt. If either fails to reproduce pixel for pixel, the borrow is void and six baselines must be
-rendered — the pre-registration says so and the analysis will refuse to run.
+prompt. Determinism test $G_{det}$ was executed on P01 and P02 with 0 pixel difference (borrow strictly valid).
 
 Saved: 6 renders and, more importantly, the right to compare directly against a bench already
 analysed.
 
 ## 3. The queue
 
-`data/wo_depth_plan.csv`, 86 rows, in this order:
+`data/wo_depth_plan.csv`, 254 rows:
 
-| rows | arm | what |
-|--:|---|---|
-| 1–2 | `determinism` | `P01`/`P02` baseline at seed 2718281, **no preset**, output prefix ends `_C41` |
-| 3–86 | `push` | 14 conditions × 2 prompts × 3 seeds |
+| rows | arm | dose | what |
+|--:|---|---|---|
+| 1–2 | `determinism` | 0 | `P01`/`P02` baseline at seed 2718281, **no preset**, output prefix ends `_C41` |
+| 3–86 | `push` | $\pm 0.100$ | 14 conditions (6 slices + union $\times$ 2 signs) × 2 prompts × 3 seeds |
+| 87–170 | `push` | $\pm 0.200$ | 14 conditions (6 slices + union $\times$ 2 signs) × 2 prompts × 3 seeds |
+| 171–254 | `push` | $\pm 0.350$ | 14 conditions (6 slices + union $\times$ 2 signs) × 2 prompts × 3 seeds |
 
 The fourteen conditions:
 

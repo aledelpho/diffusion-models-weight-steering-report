@@ -71,6 +71,15 @@ EXPECTED_LAYER_COUNTS = {
     "Family_wo_d+0.100.json": 28,
     "Family_wo_d-0.100.json": 28,
 }
+for d in ["0.200", "0.350"]:
+    for sign in ["+", "-"]:
+        EXPECTED_LAYER_COUNTS[f"Family_wo_d{sign}{d}.json"] = 28
+        EXPECTED_LAYER_COUNTS[f"WO_b1_d{sign}{d}.json"] = 5
+        EXPECTED_LAYER_COUNTS[f"WO_b2_d{sign}{d}.json"] = 5
+        EXPECTED_LAYER_COUNTS[f"WO_b3_d{sign}{d}.json"] = 5
+        EXPECTED_LAYER_COUNTS[f"WO_b4_d{sign}{d}.json"] = 5
+        EXPECTED_LAYER_COUNTS[f"WO_b5_d{sign}{d}.json"] = 4
+        EXPECTED_LAYER_COUNTS[f"WO_b6_d{sign}{d}.json"] = 4
 
 
 def check_comfy_online() -> bool:
@@ -93,6 +102,26 @@ def get_queue_counts() -> Tuple[int, int]:
     except Exception as e:
         print(f"Error querying queue: {e}")
         return -1, -1
+
+
+def get_in_queue_prefixes() -> set:
+    try:
+        req = urllib.request.Request(f"{COMFY_HOST}/queue", method="GET")
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            running = data.get("queue_running", [])
+            pending = data.get("queue_pending", [])
+            prefixes = set()
+            for item in running + pending:
+                try:
+                    p = item[2].get("61", {}).get("inputs", {}).get("filename_prefix", "")
+                    if p:
+                        prefixes.add(p)
+                except Exception:
+                    pass
+            return prefixes
+    except Exception:
+        return set()
 
 
 def build_workflow(row: dict) -> dict:
@@ -382,19 +411,25 @@ def main():
         rows = rows[:args.first]
         print(f"Filtered to first {args.first} rows.")
 
+    in_queue_prefixes = get_in_queue_prefixes()
     pending_rows = []
-    existing_rows = []
+    already_done = []
+    already_queued = []
     for r in rows:
         fn = r["expected_filename"]
         target_path = TARGET_DIR / fn
+        prefix = f"{OUTPUT_FOLDER_NAME}/{r['output_prefix']}"
         if target_path.exists() and target_path.stat().st_size > 1000:
-            existing_rows.append(r)
+            already_done.append(r)
+        elif prefix in in_queue_prefixes:
+            already_queued.append(r)
         else:
             pending_rows.append(r)
 
-    print(f"Total target renders: {len(rows)}")
-    print(f"Already rendered:     {len(existing_rows)}")
-    print(f"To be queued:         {len(pending_rows)}")
+    print(f"Total target renders:       {len(rows)}")
+    print(f"Already rendered on disk:   {len(already_done)}")
+    print(f"Currently in ComfyUI queue: {len(already_queued)}")
+    print(f"To be newly queued:         {len(pending_rows)}")
 
     if args.check_only:
         print("\nCheck-only mode. Pending rows:")
@@ -403,7 +438,7 @@ def main():
         return
 
     if not pending_rows:
-        print("All target renders already exist in output folder! Nothing to queue.")
+        print("All target renders already rendered or in queue! Nothing new to queue.")
         return
 
     print(f"\nQueuing {len(pending_rows)} renders to ComfyUI at {COMFY_HOST}...")
