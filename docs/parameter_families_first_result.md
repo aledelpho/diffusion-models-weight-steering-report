@@ -72,8 +72,34 @@ depths, the groups cut vertically by depth across all kinds. So
   nothing about *where* in the stack it broke;
 - nothing in `benchmark_centre_push` or `benchmark_mappa` can be attributed to a **kind** — a group
   moves 13 kinds of tensor at once;
-- and the two can only be crossed by a bench that holds one fixed and varies the other, which no
-  bench in this project has yet done.
+- and the two can only be crossed by a bench that holds one fixed and varies the other.
+
+**Correction, 2026-09-29, a few hours after the paragraph above was committed.** That last line
+originally read *"which no bench in this project has yet done"*. **It is false.** Asked whether
+`F_wo` could be split by block, I looked in `presets/` — which I had not done before asserting the
+gap — and found `Arthemy_QKVO_wo_b1_{pos,neg}` and `Arthemy_QKVO_wo_b6_{pos,neg}`, already rendered
+in `benchmark_qkvo_atlas`. They are **exactly `Family_wo_d+0.100` restricted to one group**: same
+key pattern, same delta 0.1, five tensors for `Block_1` and four for `Block_6`. The cross exists,
+for `wo` at the two ends, on eight style prompts × three seeds, 24 cells per condition.
+
+**And when it was split, the two ends did not behave alike** (`data/retro_qkvo_atlas_summary.csv`):
+
+| condition | coherence ratio | band 0 (1–2 px) | displacement |
+|---|--:|--:|--:|
+| `wo_b1 neg` | 1.0014 | 1.0168 | 0.0814 |
+| `wo_b1 pos` | 1.0047 | 0.9917 | 0.0740 |
+| `wo_b6 neg` | 0.9656 | **0.9102** | 0.0972 |
+| `wo_b6 pos` | 1.0284 | **1.0806** | 0.0813 |
+
+At the front of the stack `wo` is nearly neutral in both arms; at the back it is a **strongly
+antisymmetric fine-grain knob** — 9 % of the finest octave removed one way, 8 % added the other —
+at comparable displacement. **So `F_wo` moving all 28 blocks together is a mixture, and the mixture
+hides an antisymmetry that appears as soon as the family is cut by depth.**
+
+What is still missing is `Block_2`…`Block_5` for `wo`, and — because the atlas uses the eight style
+prompts `S1`…`S8` while the family bench uses `P01`/`P02` — **no render currently allows the whole
+to be compared against the sum of its parts.** That comparison is the same question `C14` asks in
+another context, and it is registered as **C41**.
 
 > **An error found in the repository while answering this.**
 > `docs/model_structures/krea2_architecture_decomposition.md` §3b lists the projector as
