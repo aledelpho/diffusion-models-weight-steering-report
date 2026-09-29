@@ -91,7 +91,7 @@ for `wo` at the two ends, on eight style prompts × three seeds, 24 cells per co
 | `wo_b6 neg` | 0.9656 | **0.9102** | 0.0972 |
 | `wo_b6 pos` | 1.0284 | **1.0806** | 0.0813 |
 
-At the front of the stack `wo` is nearly neutral in both arms; at the back it is a **strongly
+At the front of the stack `wo` is nearly neutral in both arms *(on the atlas's eight style prompts; **on the comic prompts of `benchmark_wo_depth` this does not replicate** — `wo_b1` is as strong as `wo_b6` on `P01`, see `wo_depth_result.md` §5d)*; at the back it is a **strongly
 antisymmetric fine-grain knob** — 9 % of the finest octave removed one way, 8 % added the other —
 at comparable displacement. **So `F_wo` moving all 28 blocks together is a mixture, and the mixture
 hides an antisymmetry that appears as soon as the family is cut by depth.**

@@ -148,7 +148,46 @@ def scan_centre_push(B: Path) -> dict:
                     "tienilo presente."}
 
 
-BENCHES = {"parameter_families": scan_parameter_families, "centre_push": scan_centre_push}
+# ----------------------------------------------------------------- wo_depth
+WD_PAT = re.compile(r"^(P\d\d)_(slice_(b\d)|union)_(pos|neg|d[+-][\d.]+)_krea2_seed(\d+)_")
+WD_BLOCKS = {"b1": "blocchi 0–4", "b2": "blocchi 5–9", "b3": "blocchi 10–14", "b4": "blocchi 15–19",
+             "b5": "blocchi 20–23", "b6": "blocchi 24–27", "union": "tutti i 28 blocchi"}
+
+
+def scan_wo_depth(B: Path) -> dict:
+    idx: dict = {}
+    for p in sorted((B / "renders").glob("*.png")):
+        m = WD_PAT.match(p.name)
+        if not m:
+            continue
+        P, _, g, t, seed = m.groups()
+        g = g or "union"
+        d = 0.1 if t == "pos" else -0.1 if t == "neg" else float(t[1:])
+        idx.setdefault(P, {}).setdefault(seed, {}).setdefault(g, {})[f"{d:+.3f}"] = f"renders/{p.name}"
+    # baselines are BORROWED from benchmark_centre_push (G_det: pixel-identical); served from the
+    # sibling folder, so the page must stay next to it in Text2Img
+    base: dict = {}
+    for r in csv.DictReader(open(DATA / "centre_push_plan.csv", encoding="utf-8")):
+        if r["arm"] == "baseline" and (B.parent / "benchmark_centre_push" / "renders" / r["expected_filename"]).is_file():
+            base.setdefault(r["prompt_id"], {})[r["seed"]] = "../benchmark_centre_push/renders/" + r["expected_filename"]
+    groups = {g: {"title": ("union — " if g == "union" else f"slice {g} — ") + WD_BLOCKS[g],
+                  "meta": ("28 tensori · <code>blocks.0…27.attn.wo.weight</code>" if g == "union" else
+                           f"{4 if g in ('b5','b6') else 5} tensori · <code>attn.wo.weight</code> di {WD_BLOCKS[g]}")}
+              for g in WD_BLOCKS}
+    return {"idx": idx, "base": base, "groups": groups,
+            "order": ["b1", "b2", "b3", "b4", "b5", "b6", "union"], "stats": {},
+            "unit": "la fetta",
+            "title": "wo tagliato per profondità — dal più negativo al più positivo",
+            "sub": "benchmark_wo_depth · sei fette di attn.wo più l'unione, sette dosi con il baseline allo zero",
+            "note": "Il <b>baseline</b> è preso in prestito da <code>benchmark_centre_push</code>: stesso prompt, "
+                    "stesso seme, e la guardia G_det ha verificato che ri-renderizzarlo dà gli stessi pixel. "
+                    "<b>Solo ±0.100 è preregistrato</b>; ±0.200 e ±0.350 sono esplorativi. "
+                    "<b>La domanda della preregistrazione (§8):</b> l'unione somiglia a una delle sei fette, a "
+                    "tutte insieme, o a qualcosa che nessuna delle sei è?"}
+
+
+BENCHES = {"parameter_families": scan_parameter_families, "centre_push": scan_centre_push,
+           "wo_depth": scan_wo_depth}
 
 
 def thumbs(B: Path, files: set[str]) -> None:

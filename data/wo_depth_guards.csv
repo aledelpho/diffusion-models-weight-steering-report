@@ -1,0 +1,6 @@
+guard,pass,detail
+G_det,True,P01:max|d|=0 P02:max|d|=0
+G1,True,254/254
+G3,True,0 identical to baseline []
+G_applied,True,all presets reported the expected count; effect side covered by G3
+G_union,True,6 disjoint slices == union at 6 signed doses
