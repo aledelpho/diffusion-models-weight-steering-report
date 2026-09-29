@@ -1,0 +1,7 @@
+block,label,measure,H1,H2a_own_max,H2a_top,H2b_rank,H4,H5_p,swing,z,strong,lever
+22,vividezza,colorfulness_hs,2,False,sat,21,3,0.42435366565801347,0.040532622484906855,0.24374262217889095,non supportata,non supportata
+23,saturazione,sat,2,False,colorfulness_hs,1,4,0.06299039125126081,-0.42262184221526883,-2.3999928451642276,non supportata,non supportata
+24,contrasto,contrast,2,False,lbp_entropy,18,2,0.05608642565164304,0.023941098473474042,0.28564056452278264,non supportata,non supportata
+25,texture,lbp_entropy,1,False,sat,21,2,0.36144821362212665,0.023931340449963968,0.32437514305813153,non supportata,non supportata
+26,sharpness,fft_high_freq_share,3,False,contrast,3,3,0.4458034718904284,-0.8981267596980923,-2.053778764694606,in parte,non supportata
+27,focus,focus_cv,3,True,focus_cv,1,4,0.129296066252588,-1.160291753641695,-4.076632884594717,SUPPORTATA,non supportata
