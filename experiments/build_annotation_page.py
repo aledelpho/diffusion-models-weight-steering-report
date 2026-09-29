@@ -208,7 +208,7 @@ def scan_single_blocks_atlas(B: Path) -> dict:
             base.setdefault(m.group(1), {})[m.group(2)] = f"renders/{p.name}"
     groups = {f"blk{b:02d}": {"title": f"blk{b:02d}", "meta": f"blocco {b} · nel gruppo {SB_GROUP[b]}"} for b in range(28)}
     return {"idx": idx, "base": base, "groups": groups, "order": [f"blk{b:02d}" for b in range(28)],
-            "stats": {}, "unit": "il blocco",
+            "stats": {}, "unit": "il blocco", "stack": True,
             "title": "Atlante per singolo blocco — −0.350, baseline, +0.350",
             "sub": "benchmark_single_blocks_atlas · 28 blocchi, tre prompt, un solo seme",
             "note": "<b>Un solo seme</b>: parte di quello che vedi in un blocco può essere la traiettoria di quel seme e "
@@ -242,6 +242,8 @@ def main() -> None:
     a = ap.parse_args()
     B = bench_dir("benchmark_" + a.bench)
     cfg = BENCHES[a.bench](B)
+    cfg["bench"] = a.bench
+    cfg.setdefault("stack", False)
 
     files = set()
     for P in cfg["idx"]:
@@ -330,6 +332,23 @@ TEMPLATE = r"""<!doctype html>
   .nav .to{font:600 13px ui-monospace,monospace;color:#cfcfd6;text-align:center;padding:0 6px}
   .nav[disabled]{opacity:.08;cursor:default;background:none}
   #ov.show .nav{display:flex}
+  .nav.u,.nav.dn{left:96px;right:96px;width:auto;height:58px;flex-direction:row;gap:12px}
+  .nav.u{top:0;bottom:auto;background:linear-gradient(180deg,#000a,#0000)}
+  .nav.dn{top:auto;bottom:90px;background:linear-gradient(0deg,#000a,#0000)}
+  .nav.u:hover{background:linear-gradient(180deg,#000c,#0004)}
+  .nav.dn:hover{background:linear-gradient(0deg,#000c,#0004)}
+  .nav.u .ar,.nav.dn .ar{font-size:30px}
+  #ov:not(.grid2) .nav.u,#ov:not(.grid2) .nav.dn{display:none}
+  .sgrid{display:grid;gap:8px;align-items:start;overflow-x:auto;padding:2px 0 6px}
+  .sgrid .plab{font:600 12px ui-monospace,monospace;color:var(--dim);writing-mode:vertical-rl;
+               transform:rotate(180deg);align-self:center;justify-self:center;letter-spacing:.04em}
+  .sgrid .dlab{font:600 13px ui-monospace,monospace;padding:0 2px}
+  .sgrid .cellimg{width:100%;display:block;cursor:zoom-in;border-radius:6px;background:var(--surround)}
+  .sgrid .cellimg.isb{outline:2px solid #3d6b56;outline-offset:-2px}
+  .sgrid textarea{border:1px solid var(--line);border-radius:7px;min-height:74px}
+  .sgrid .nonote{font-size:12px;color:var(--dim);padding:8px 4px}
+  body.stacked .wrap{max-width:1900px}
+  #fams.stackwrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,calc(3*var(--rw,200px) + 80px)),1fr));gap:0 16px;align-items:start}
 </style>
 </head>
 <body>
@@ -356,7 +375,8 @@ TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="bar">
-    <label>prompt <select id="prompt"></select></label>
+    <button id="stack">Prompt impilati</button>
+    <label id="promptlab">prompt <select id="prompt"></select></label>
     <label>seme <select id="seed"></select></label>
     <button id="tstats">Mostra i numeri misurati</button>
     <label>miniature <select id="size"><option value="200">piccole</option><option value="260" selected>medie</option><option value="340">grandi</option></select></label>
@@ -382,6 +402,8 @@ TEMPLATE = r"""<!doctype html>
   <img id="ovimg" alt="">
   <button class="nav" id="ovprev"><span class="ar">&#8249;</span><span class="to"></span></button>
   <button class="nav r" id="ovnext"><span class="ar">&#8250;</span><span class="to"></span></button>
+  <button class="nav u" id="ovup"><span class="ar">&#8963;</span><span class="to"></span></button>
+  <button class="nav dn" id="ovdown"><span class="ar">&#8964;</span><span class="to"></span></button>
   <div id="ovbar">
     <span id="ovlab"></span>
     <button id="ovbase">baseline (B)</button>
@@ -393,16 +415,41 @@ TEMPLATE = r"""<!doctype html>
 
 <script>
 const M = /*__MANIFEST__*/;
-const store = "param_families_notes_v1";
+// One storage key per bench. Until 2026-09-29 every page shared "param_families_notes_v1"; notes
+// already written there for THIS bench's groups are copied over once, never deleted.
+const store = "annot_notes_" + M.bench;
 let notes = {};
 try { notes = JSON.parse(localStorage.getItem(store) || "{}"); } catch (e) { notes = {}; }
+try {
+  const old = JSON.parse(localStorage.getItem("param_families_notes_v1") || "{}");
+  let moved = 0;
+  for (const [k, v] of Object.entries(old)) {
+    if (M.order.includes(k.split("|")[0]) && !(k in notes)) { notes[k] = v; moved++; }
+  }
+  if (moved) localStorage.setItem(store, JSON.stringify(notes));
+} catch (e) {}
 const save = () => { try { localStorage.setItem(store, JSON.stringify(notes)); } catch (e) {} };
 
 const $ = s => document.querySelector(s);
 const thumb = rel => "_thumbs/" + rel.replace(/\//g, "__").replace(/\.png$/, ".jpg");
 const nkey = (fam, dose) => fam + "|" + dose;              // the note belongs to the PRESET
 const fkey = fam => fam + "|__family__";
-let showStats = false, P = "P01", S = "42", flat = [], ovi = -1, fit = false;
+let showStats = false, P = "P01", S = "42", fit = false;
+let stacked = !!M.stack;
+let grid = [], ovr = 0, ovc = 0, ovfam = "";   // overlay: rows = prompts, columns = rungs
+const PROMPTS = Object.keys(M.idx).sort();
+function ladderItems(p, s, fam) {
+  const rungs = ((M.idx[p] || {})[s] || {})[fam]; if (!rungs) return null;
+  const bRel = (M.base[p] || {})[s] || null;
+  const doses = Object.keys(rungs).sort((a, b) => parseFloat(a) - parseFloat(b));
+  const items = []; let ins = false;
+  for (const d of doses) {
+    if (!ins && bRel && parseFloat(d) > 0) { items.push({d: "BASE", rel: bRel}); ins = true; }
+    items.push({d, rel: rungs[d]});
+  }
+  if (!ins && bRel) items.push({d: "BASE", rel: bRel});
+  return {label: p, base: bRel, items};
+}
 
 for (const p of Object.keys(M.idx).sort()) $("#prompt").add(new Option(p, p));
 function seedOpts() {
@@ -454,7 +501,9 @@ function render() {
         <img loading="lazy" src="${thumb(rel)}" alt="">
         ${st && !isB ? `<div class="stats ${showStats ? "" : "hide"}">${st}</div>` : ""}`;
       const im = el.querySelector("img");
-      im.onclick = () => openOv(shown, shown.indexOf(shown.find(x => x[0] === d)), fam);
+      im.onclick = () => { const row = ladderItems(P, S, fam);
+        row.items = row.items.filter(x => hasBase || x.d !== "BASE");
+        openOv([row], 0, row.items.findIndex(x => x.d === d), fam); };
       if (!isB) {
         const ta = document.createElement("textarea");
         ta.placeholder = "cosa sta succedendo qui…";
@@ -480,31 +529,100 @@ function render() {
   if (on) document.querySelectorAll(".ladder").forEach(l => l.classList.add("onerow"));
 }
 
+function renderStacked() {
+  const host = $("#fams"); host.innerHTML = "";
+  for (const fam of M.order) {
+    const rows = PROMPTS.map(p => ladderItems(p, S, fam)).filter(Boolean);
+    if (!rows.length) continue;
+    const info = M.groups[fam];
+    const cols = rows[0].items.map(x => x.d);
+    const card = document.createElement("div"); card.className = "card";
+    card.innerHTML = `<div class="famhead"><div><h2>${info.title}</h2>
+        <p class="sub">${rows.length} prompt uno sotto l'altro · ${cols.length} colonne</p></div>
+        <div class="meta">${info.meta}</div></div>`;
+    const g = document.createElement("div"); g.className = "sgrid";
+    g.style.gridTemplateColumns = `26px repeat(${cols.length}, var(--rw,200px))`;
+    g.appendChild(document.createElement("div"));
+    for (const d of cols) {
+      const h = document.createElement("div"); h.className = "dlab " + (d === "BASE" ? "bas" : parseFloat(d) < 0 ? "neg" : "pos");
+      h.textContent = d === "BASE" ? "BASELINE" : d; g.appendChild(h);
+    }
+    rows.forEach((row, r) => {
+      const pl = document.createElement("div"); pl.className = "plab"; pl.textContent = row.label; g.appendChild(pl);
+      row.items.forEach((it, c) => {
+        const im = document.createElement("img"); im.loading = "lazy"; im.src = thumb(it.rel);
+        im.className = "cellimg" + (it.d === "BASE" ? " isb" : ""); im.title = row.label + " · " + it.d;
+        im.onclick = () => openOv(rows, r, c, fam);
+        g.appendChild(im);
+      });
+    });
+    g.appendChild(document.createElement("div"));
+    for (const d of cols) {
+      if (d === "BASE") { const n = document.createElement("div"); n.className = "nonote"; n.textContent = "il baseline non si annota"; g.appendChild(n); continue; }
+      const ta = document.createElement("textarea"); ta.placeholder = d + ": cosa fa su tutti e tre?";
+      ta.value = notes[nkey(fam, d)] || ""; if (ta.value.trim()) ta.classList.add("filled");
+      ta.oninput = () => { notes[nkey(fam, d)] = ta.value; save(); ta.classList.toggle("filled", !!ta.value.trim()); tally(); };
+      g.appendChild(ta);
+    }
+    card.appendChild(g);
+    const fta = document.createElement("textarea");
+    fta.placeholder = M.unit + " nel suo insieme: fa la stessa cosa sui tre prompt? che cosa compra, e a che prezzo…";
+    fta.style.marginTop = "10px"; fta.style.border = "1px solid var(--line)"; fta.style.borderRadius = "8px";
+    fta.value = notes[fkey(fam)] || "";
+    fta.oninput = () => { notes[fkey(fam)] = fta.value; save(); };
+    card.appendChild(fta);
+    host.appendChild(card);
+  }
+  tally();
+}
+function draw() {
+  $("#stack").classList.toggle("on", stacked);
+  $("#stack").textContent = stacked ? "Prompt impilati ✓" : "Prompt impilati";
+  $("#promptlab").style.display = stacked ? "none" : "";
+  $("#onerow").style.display = stacked ? "none" : "";
+  $("#fams").classList.toggle("stackwrap", stacked);
+  document.body.classList.toggle("stacked", stacked);
+  (stacked ? renderStacked : render)();
+}
+
 function tally() { const [n, t] = nTotal(); $("#count").textContent = n + " preset annotati su " + t; }
 
 // ---------------------------------------------------------------- 1:1 overlay
 let pos = null;                 // pan offset, KEPT across steps: the same region must stay
                                 // under the eye, otherwise flicking between two doses compares
                                 // nothing and the small differences are exactly what is lost.
-function openOv(items, i, fam) {
-  flat = items.map(([d, rel]) => ({ d, rel, fam }));
-  ovi = i; fit = false; pos = null; $("#ov").classList.add("show"); drawOv();
+function openOv(rows, r, c, fam) {
+  grid = rows; ovr = r; ovc = c; ovfam = fam; fit = false; pos = null;
+  $("#ov").classList.toggle("grid2", rows.length > 1);
+  $("#ov").classList.add("show"); drawOv();
 }
-function step(n) { const j = ovi + n; if (j < 0 || j >= flat.length) return; ovi = j; drawOv(); }
+const cur = () => { const row = grid[ovr]; const it = row && row.items[ovc]; return it ? {...it, fam: ovfam} : null; };
+function step(n) { const j = ovc + n; if (j < 0 || j >= grid[ovr].items.length) return; ovc = j; drawOv(); }
+function vstep(n) {                          // another prompt, SAME dose, SAME pan position
+  const r = ovr + n; if (r < 0 || r >= grid.length) return;
+  const d = grid[ovr].items[ovc].d; const c = grid[r].items.findIndex(x => x.d === d);
+  if (c < 0) return; ovr = r; ovc = c; drawOv();
+}
 function arrows() {
-  const lab = k => { const it = flat[k]; return it ? (it.d === "BASE" ? "BASELINE" : it.d) : ""; };
-  $("#ovprev").disabled = ovi <= 0;
-  $("#ovnext").disabled = ovi >= flat.length - 1;
-  $("#ovprev").querySelector(".to").textContent = lab(ovi - 1);
-  $("#ovnext").querySelector(".to").textContent = lab(ovi + 1);
+  const items = grid[ovr].items;
+  const lab = k => { const it = items[k]; return it ? (it.d === "BASE" ? "BASELINE" : it.d) : ""; };
+  $("#ovprev").disabled = ovc <= 0;
+  $("#ovnext").disabled = ovc >= items.length - 1;
+  $("#ovprev").querySelector(".to").textContent = lab(ovc - 1);
+  $("#ovnext").querySelector(".to").textContent = lab(ovc + 1);
+  $("#ovup").disabled = ovr <= 0;
+  $("#ovdown").disabled = ovr >= grid.length - 1;
+  $("#ovup").querySelector(".to").textContent = ovr > 0 ? grid[ovr - 1].label : "";
+  $("#ovdown").querySelector(".to").textContent = ovr < grid.length - 1 ? grid[ovr + 1].label : "";
 }
 function drawOv() {
-  const it = flat[ovi]; if (!it) return;
+  const it = cur(); if (!it) return;
   const im = $("#ovimg");
   im.src = it.rel;
   im.onload = () => place();
   im.onerror = () => { $("#ovlab").textContent += "  — immagine non trovata"; };
-  $("#ovlab").textContent = (it.d === "BASE" ? "BASELINE" : it.fam + "  " + it.d);
+  $("#ovlab").textContent = (grid.length > 1 ? grid[ovr].label + " · " : "") +
+                            (it.d === "BASE" ? "BASELINE" : it.fam + "  " + it.d);
   const dis = it.d === "BASE";
   $("#ovnote").disabled = dis;
   $("#ovnote").value = dis ? "" : (notes[nkey(it.fam, it.d)] || "");
@@ -528,11 +646,13 @@ function place() {
 $("#ovfit").onclick = () => { fit = !fit; if (!fit) pos = null; place(); };
 $("#ovprev").onclick = () => step(-1);
 $("#ovnext").onclick = () => step(1);
+$("#ovup").onclick = () => vstep(-1);
+$("#ovdown").onclick = () => vstep(1);
 $("#ovclose").onclick = () => $("#ov").classList.remove("show");
-$("#ovnote").oninput = () => { const it = flat[ovi]; if (it && it.d !== "BASE") {
+$("#ovnote").oninput = () => { const it = cur(); if (it && it.d !== "BASE") {
   notes[nkey(it.fam, it.d)] = $("#ovnote").value; save(); } };
 let baseHeld = null;
-const baseRel = () => (M.base[P] || {})[S] || null;
+const baseRel = () => (grid[ovr] && grid[ovr].base) || null;     // the baseline OF THIS ROW'S prompt
 $("#ovbase").onmousedown = () => { const b = baseRel(); if (!b) return;
   baseHeld = $("#ovimg").src; $("#ovimg").src = b; };
 $("#ovbase").onmouseup = $("#ovbase").onmouseleave = () => { if (baseHeld) { $("#ovimg").src = baseHeld; baseHeld = null; } };
@@ -569,6 +689,8 @@ addEventListener("keydown", e => {
   if (e.key === "Escape") $("#ov").classList.remove("show");
   else if (e.key === "ArrowLeft") step(-1);
   else if (e.key === "ArrowRight") step(1);
+  else if (e.key === "ArrowUp") { e.preventDefault(); vstep(-1); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); vstep(1); }
   else if (e.key.toLowerCase() === "b" && !e.repeat) {
     const b = baseRel(); if (!b) return;
     baseHeld = $("#ovimg").src; $("#ovimg").src = b; }
@@ -577,8 +699,9 @@ addEventListener("keyup", e => { if (e.key.toLowerCase() === "b" && baseHeld) {
   $("#ovimg").src = baseHeld; baseHeld = null; } });
 
 // ---------------------------------------------------------------- controls
-$("#prompt").onchange = () => { P = $("#prompt").value; seedOpts(); render(); };
-$("#seed").onchange = () => { S = $("#seed").value; render(); };
+$("#prompt").onchange = () => { P = $("#prompt").value; seedOpts(); draw(); };
+$("#seed").onchange = () => { S = $("#seed").value; draw(); };
+$("#stack").onclick = () => { stacked = !stacked; draw(); };
 $("#size").onchange = () => document.documentElement.style.setProperty("--rw", $("#size").value + "px");
 $("#onerow").onclick = () => { const on = !document.querySelector(".ladder").classList.contains("onerow");
   document.querySelectorAll(".ladder").forEach(l => l.classList.toggle("onerow", on));
@@ -586,7 +709,7 @@ $("#onerow").onclick = () => { const on = !document.querySelector(".ladder").cla
 $("#tstats").onclick = () => { showStats = !showStats;
   $("#tstats").classList.toggle("on", showStats);
   $("#tstats").textContent = showStats ? "Nascondi i numeri misurati" : "Mostra i numeri misurati";
-  render(); };
+  draw(); };
 
 $("#exp").onclick = () => {
   let out = "# Appunti sui preset — " + M.sub + "\n\n";
@@ -610,9 +733,11 @@ $("#closeexp").onclick = () => $("#expcard").classList.add("hide");
 $("#copy").onclick = () => { $("#expbox").select(); document.execCommand("copy"); $("#copy").textContent = "copiato"; };
 $("#dl").onclick = () => { const b = new Blob([$("#expbox").value], {type: "text/markdown"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(b);
-  a.download = "appunti_parameter_families.md"; a.click(); };
+  a.download = "appunti_" + M.bench + ".md"; a.click(); };
 
-P = $("#prompt").value; seedOpts(); render();
+P = $("#prompt").value; seedOpts();
+if (stacked) { document.documentElement.style.setProperty("--rw", "200px"); $("#size").value = "200"; }
+draw();
 </script>
 </body>
 </html>
