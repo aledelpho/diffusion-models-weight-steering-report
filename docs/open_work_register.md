@@ -25,6 +25,7 @@ Nothing below is blocked on work. It is blocked on a choice.
 | **A8** | **what the primary of `centre_push` should now say.** The model-eye veto resolved only 5 of 12 pairs and `L` is wrong by eye on named units (`centre_push_eye_veto_result.md` §2). The analyst has changed nothing. | `centre_push_eye_veto_result.md` |
 | **A9** | **whether the tool should be repaired.** If the rule is dimensionality, `ArthemyKrea2PresetLoader` silently drops every 1-D patch while reporting it applied — **165 of 430 tensors**, all of them gains, temperatures and modulation. Repairing it, or making it warn, is a change to the instrument and not the analyst's to make | `parameter_families_first_result.md` §3 |
 | **A10** | **`krea2_architecture_decomposition.md` §3b names a tensor the checkpoint does not contain** — `txtfusion.projector.scale` [12] instead of `txtfusion.projector.weight` [1, 12]. It is the tensor on which `parameter_families_first_result.md` §3 turns, and the document says the opposite of the checkpoint. Repair or declare | verified against `krea2_turbo_bf16_details.json` |
+| **A11** | **the §8 question of `prereg_wo_depth.md` is unanswered**: does the union look like one of the six slices, like all of them, or like something none of them is? Alessandro's notes cover the slices and leave the union empty | `benchmark_wo_depth/presets.html` |
 
 ## B. Costs no renders — the data is already on disk
 

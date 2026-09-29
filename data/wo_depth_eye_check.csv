@@ -1,0 +1,75 @@
+claim,text,prompt,seed,agrees,value
+E1,b1 -0.350 linee piu' spesse,P01,1618033,False,1.0
+E1,b1 -0.350 linee piu' spesse,P01,2718281,False,1.0
+E1,b1 -0.350 linee piu' spesse,P01,3141592,True,1.4285714528998554
+E1,b1 -0.350 linee piu' spesse,P02,1618033,True,1.4285714528998554
+E1,b1 -0.350 linee piu' spesse,P02,2718281,True,1.4285714528998554
+E1,b1 -0.350 linee piu' spesse,P02,3141592,False,1.0
+E2,b1 -0.350 colori meno accentuati,P01,1618033,False,1.1283541147326466
+E2,b1 -0.350 colori meno accentuati,P01,2718281,False,1.1927209883186511
+E2,b1 -0.350 colori meno accentuati,P01,3141592,False,1.2002889221801631
+E2,b1 -0.350 colori meno accentuati,P02,1618033,False,1.1140632710227159
+E2,b1 -0.350 colori meno accentuati,P02,2718281,False,1.159607290515991
+E2,b1 -0.350 colori meno accentuati,P02,3141592,False,1.1830884444862648
+E3,b1 +0.350 linee piu' sottili,P01,1618033,False,1.0
+E3,b1 +0.350 linee piu' sottili,P01,2718281,False,1.0
+E3,b1 +0.350 linee piu' sottili,P01,3141592,True,0.7142857264499277
+E3,b1 +0.350 linee piu' sottili,P02,1618033,False,1.0
+E3,b1 +0.350 linee piu' sottili,P02,2718281,False,1.0
+E3,b1 +0.350 linee piu' sottili,P02,3141592,True,0.699999988079071
+E4,b1 +0.350 colori piu' vibranti,P01,1618033,False,0.9551808190158082
+E4,b1 +0.350 colori piu' vibranti,P01,2718281,False,0.929972550489665
+E4,b1 +0.350 colori piu' vibranti,P01,3141592,True,1.0092356382746455
+E4,b1 +0.350 colori piu' vibranti,P02,1618033,True,1.2167949606456543
+E4,b1 +0.350 colori piu' vibranti,P02,2718281,True,1.288274048087631
+E4,b1 +0.350 colori piu' vibranti,P02,3141592,True,1.0466489176219231
+E5,b1 +0.350 tinte piatte,P01,1618033,False,1.0454614785536454
+E5,b1 +0.350 tinte piatte,P01,2718281,False,1.0462014813483629
+E5,b1 +0.350 tinte piatte,P01,3141592,True,0.9925956498409909
+E5,b1 +0.350 tinte piatte,P02,1618033,False,1.025677528876992
+E5,b1 +0.350 tinte piatte,P02,2718281,False,1.0124854593867667
+E5,b1 +0.350 tinte piatte,P02,3141592,True,0.9973040898673537
+E6,b3 -0.350 tratti spessi,P01,1618033,False,1.0
+E6,b3 -0.350 tratti spessi,P01,2718281,True,1.4285714528998554
+E6,b3 -0.350 tratti spessi,P01,3141592,True,1.4285714528998554
+E6,b3 -0.350 tratti spessi,P02,1618033,True,1.4285714528998554
+E6,b3 -0.350 tratti spessi,P02,2718281,False,1.0
+E6,b3 -0.350 tratti spessi,P02,3141592,False,1.0
+E7,b3 -0.350 colori piatti,P01,1618033,False,1.013555283401528
+E7,b3 -0.350 colori piatti,P01,2718281,False,1.0635468700150474
+E7,b3 -0.350 colori piatti,P01,3141592,False,1.0459866676858884
+E7,b3 -0.350 colori piatti,P02,1618033,True,0.9954165560658809
+E7,b3 -0.350 colori piatti,P02,2718281,True,0.9679172100303552
+E7,b3 -0.350 colori piatti,P02,3141592,True,0.9782136719702044
+E8,b3 +0.350 colori piu' accesi,P01,1618033,True,1.061022108261176
+E8,b3 +0.350 colori piu' accesi,P01,2718281,True,1.093732012997512
+E8,b3 +0.350 colori piu' accesi,P01,3141592,True,1.156066403468308
+E8,b3 +0.350 colori piu' accesi,P02,1618033,True,1.0304152224595484
+E8,b3 +0.350 colori piu' accesi,P02,2718281,True,1.0137124691413169
+E8,b3 +0.350 colori piu' accesi,P02,3141592,False,0.9839718376903364
+E9,b6 -0.350 piu' grigio,P01,1618033,True,0.8555268461372163
+E9,b6 -0.350 piu' grigio,P01,2718281,True,0.854262767119085
+E9,b6 -0.350 piu' grigio,P01,3141592,True,0.8848774449183238
+E9,b6 -0.350 piu' grigio,P02,1618033,True,0.913347291963116
+E9,b6 -0.350 piu' grigio,P02,2718281,True,0.9124850089520061
+E9,b6 -0.350 piu' grigio,P02,3141592,True,0.9233052668888856
+E10,b6 -0.350 piu' giallino,P01,1618033,True,24.412940176752556
+E10,b6 -0.350 piu' giallino,P01,2718281,True,15.155786761611296
+E10,b6 -0.350 piu' giallino,P01,3141592,True,20.624604091449783
+E10,b6 -0.350 piu' giallino,P02,1618033,False,-3.8727872159496997
+E10,b6 -0.350 piu' giallino,P02,2718281,True,-2.1616263212454214
+E10,b6 -0.350 piu' giallino,P02,3141592,True,3.96683652493752
+E11,b6 +0.350 colori si saturano,P01,1618033,True,1.2051786457036153
+E11,b6 +0.350 colori si saturano,P01,2718281,True,1.2390907685138943
+E11,b6 +0.350 colori si saturano,P01,3141592,True,1.2543705851064053
+E11,b6 +0.350 colori si saturano,P02,1618033,True,1.099547344281357
+E11,b6 +0.350 colori si saturano,P02,2718281,True,1.1611947241466722
+E11,b6 +0.350 colori si saturano,P02,3141592,True,1.1112159177463388
+E12,b2 piu' positivo simile al piu' negativo,P01,1618033,False,-0.060633503593550055
+E12,b2 piu' positivo simile al piu' negativo,P01,2718281,True,0.5871653477327465
+E12,b2 piu' positivo simile al piu' negativo,P01,3141592,True,0.7006351141935823
+E12,b2 piu' positivo simile al piu' negativo,P02,1618033,False,-0.3689207742004043
+E12,b2 piu' positivo simile al piu' negativo,P02,2718281,True,0.049574907808912154
+E12,b2 piu' positivo simile al piu' negativo,P02,3141592,True,0.15685925647445045
+E13,clear below unclear,P01,mean,True,-0.7257018234794985
+E13,clear below unclear,P02,mean,False,0.2897683010349878

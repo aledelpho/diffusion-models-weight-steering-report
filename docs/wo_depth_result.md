@@ -155,9 +155,57 @@ statistic after the primary was seen. Band 0 is a single scalar out of five octa
 
 ## 8. The eye
 
-*(Alessandro's answer to §8 of the pre-registration — "does the union look like one of the six, like
-all of them at once, or like something none of them is?" — goes here, verbatim, before anything else
-in this document is revised.)*
+Alessandro's notes are in `data/wo_depth_eye_notes_alessandro.md`, **verbatim**. Two facts about how
+they were produced, so they are not over-read:
+
+- they were written **after** the composition verdict had been posted in the conversation, so §8's
+  order (look first, verdict second) was not kept;
+- they describe the six slices one by one, and **the union section is empty**. The §8 question —
+  *does the union look like one of the six, like all of them, or like something none of them is?* —
+  **is still unanswered**, and nothing here answers it for him.
+
+### 8a. His words against the measures
+
+Before any number was computed, each phrase was mapped to one measure and a predicted sign
+(`docs/wo_depth_eye_mapping.md`, committed `75a1268`). Tested at ±0.350, 6 cells per claim
+(`experiments/wo_depth_eye_check.py` → `data/wo_depth_eye_check.csv`). **E12 and E13 reuse S4's
+statistic, whose values the analyst had already printed: they are not blind.**
+
+| | his words | measure | agrees | per prompt | |
+|---|---|---|--:|---|---|
+| **E9** | b6 −: più grigio | mean saturation | **6/6** | 3/3 · 3/3 | ×0.85–0.92, p = 0.016 |
+| **E11** | b6 +: colori che si saturano | mean saturation | **6/6** | 3/3 · 3/3 | ×1.10–1.25, p = 0.016 |
+| **E10** | b6 −: più giallino | hue, distance to 55° | **5/6** | 3/3 · 2/3 | +15° to +24° on P01 |
+| **E8** | b3 +: colori più accesi | colourfulness | **5/6** | 3/3 · 2/3 | |
+| E4 | b1 +: colori più vibranti | colourfulness | 4/6 | 1/3 · 3/3 | |
+| E12 | b2: il più positivo somiglia al più negativo | cos(Δ₊, Δ₋) > 0 | 4/6 | 2/3 · 2/3 | not blind |
+| E1, E3, E6 | linee / tratti più spessi o più sottili | median stroke width | 3/6, 2/6, 3/6 | | **the measure cannot see it** — see below |
+| E5, E7 | tinte / colori piatti | effective colour count | 2/6, 3/6 | | chance |
+| **E2** | b1 −: **colori meno accentuati** | colourfulness | **0/6** | 0/3 · 0/3 | **the opposite in every cell**, ×1.11–1.20 |
+| E13 | b1, b3, b6 "chiare" more bipolar than b2, b4 "non chiare" | seed-mean cos(Δ₊, Δ₋) | P01 yes, P02 no | | not blind |
+
+Three readings, none of them more than exploratory:
+
+1. **On `b6` his eye and the measures agree completely**: greyer and yellower one way, more saturated
+   the other, in every cell. It is the strongest agreement between his descriptions and a number
+   this project has recorded.
+2. **Line thickness cannot be tested with this measure.** `stroke_width_median_px` takes a handful of
+   discrete values — its ratios here are exactly 1.000, 1.429, 0.714, 0.700 — so it moves in whole
+   pixels or not at all. 3/6 is the measure's resolution, not a verdict on his eye.
+3. **E2 is contradicted, and the likely reason is in his own note.** On `b1` at −0.350 he wrote
+   *colori meno accentuati* **and** *effetto "coriandoli"*. Colourfulness is a per-pixel statistic, and
+   confetti is exactly high-frequency colour speckle: it can raise colourfulness while the colour of
+   the drawing's areas goes down. That is a hypothesis about the measure, not a rescue of the claim —
+   the same failure `L` showed on the eye veto, a statistic reading a regular artefact as "more".
+
+### 8b. A flag on `Block_6` and colour
+
+`chroma_redistribution.md` measured the **whole** `Block_6` group (every tensor) on the leaf prompts:
+frame chroma pos ×1.488, neg ×1.814. The `wo` slice of the same blocks, here: saturation **up on the
+positive arm** (same direction) but **down on the negative arm** (×0.85–0.92, the opposite). Different
+prompts and a different colour measure, so this is not yet a contradiction. If it holds, **`wo` is
+not what makes `Block_6 neg` raise chroma** — some other tensor in those four blocks is, and the
+group's effect is again a mixture.
 
 ## 9. Provenance
 
