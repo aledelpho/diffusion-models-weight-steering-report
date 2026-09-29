@@ -46,6 +46,44 @@ inert state is **120.1 / 255**, `wo` **50.0**, `proj` **32.0** (P01; P02: 141.8 
 **A side effect worth keeping: the bench rendered no baseline, and the inert families are one.**
 Every ratio in §2 is measured against `P01/P02_F_norms_d+1.000_seed42`, which is the untouched model.
 
+## 1b. Where these presets actually land — they cut the model the other way round
+
+Asked on 2026-09-29: do these apply to the whole model, or only to `Block_1`? **Neither.**
+
+| preset | tensors | where | parameters | share of the model |
+|---|--:|---|--:|--:|
+| `F_wo` | 28 | `blocks.0…27.attn.wo.weight` — **one tensor in every one of the 28 blocks** | 1 056 964 608 | **8.2447 %** |
+| `F_io` | 2 | `first.weight` and `last.linear.weight` — **outside the block stack**: the input projection before `blocks.0` and the output projection after `blocks.27` | 786 432 | 0.0061 % |
+| `F_proj` | 1 | `txtfusion.projector.weight` — **outside the backbone**, at the end of the text-fusion pipeline that feeds text embeddings into it | 12 | 1 × 10⁻¹⁰ |
+
+**`F_wo` spans every group**, not one: 5 tensors in `Block_1`, 5 in `Block_2`, 5 in `Block_3`, 5 in
+`Block_4`, 4 in `Block_5`, 4 in `Block_6`. But it is thin at each depth — the backbone holds 364
+tensors, **13 per block**, and `wo` is one of them. It is a *horizontal* slice: a single kind of
+tensor taken at every depth.
+
+**`F_io` and `F_proj` are not in the stack at all.** No block contains them, so they cannot be
+placed on the `Block_1`…`Block_6` axis even in principle.
+
+**This is the consequence that matters.** The families and the block groups are **orthogonal
+decompositions of the same model**: the families cut horizontally by kind of parameter at all
+depths, the groups cut vertically by depth across all kinds. So
+
+- nothing in this bench can be attributed to a **depth** — `F_wo` breaking the line at −0.350 says
+  nothing about *where* in the stack it broke;
+- nothing in `benchmark_centre_push` or `benchmark_mappa` can be attributed to a **kind** — a group
+  moves 13 kinds of tensor at once;
+- and the two can only be crossed by a bench that holds one fixed and varies the other, which no
+  bench in this project has yet done.
+
+> **An error found in the repository while answering this.**
+> `docs/model_structures/krea2_architecture_decomposition.md` §3b lists the projector as
+> `txtfusion.projector.scale`, shape **[12]**. The checkpoint it names — the same
+> `krea2_turbo_bf16.safetensors`, same 430 tensors — contains **`txtfusion.projector.weight`,
+> shape [1, 12]**, and no `.scale` key at all. The preset uses the real name, which is why it works.
+> This is not cosmetic: **§3 below turns on that tensor being two-dimensional**, and a reader going
+> by the architecture document would conclude the exact opposite. Registered as **A10**; the
+> document is not edited here, because it is not mine to rewrite on one tensor.
+
 ## 2. What the three live families actually do
 
 Seed 42, both prompts, against that derived baseline. `L` is structure coherence over the baseline.
