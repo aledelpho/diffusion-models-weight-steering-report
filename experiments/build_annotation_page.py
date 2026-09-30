@@ -217,8 +217,8 @@ def scan_single_blocks_atlas(B: Path) -> dict:
 
 
 # ----------------------------------------------------------------- single_blocks_styles
-SS_PAT = re.compile(r"^(E\d_[a-z_]+?)_blk(\d\d)_(pos|neg)_d([\d.]+)_krea2_seed(\d+)_")
-SS_BASE = re.compile(r"^(E\d_[a-z_]+?)_baseline_krea2_seed(\d+)_")
+SS_PAT = re.compile(r"^([A-Z]\d_[a-z_]+?)_blk(\d\d)_(pos|neg)_d([\d.]+)_krea2_seed(\d+)_")
+SS_BASE = re.compile(r"^([A-Z]\d_[a-z_]+?)_baseline_krea2_seed(\d+)_")
 
 
 def scan_single_blocks_styles(B: Path) -> dict:
@@ -237,9 +237,16 @@ def scan_single_blocks_styles(B: Path) -> dict:
             base.setdefault(m.group(1), {})[m.group(2)] = f"renders/{p.name}"
     groups = {f"blk{b:02d}": {"title": f"blk{b:02d}", "meta": f"blocco {b} · nel gruppo {SB_GROUP[b]}"} for b in range(28)}
     return {"idx": idx, "base": base, "groups": groups, "order": [f"blk{b:02d}" for b in range(28)],
-            "stats": {}, "unit": "il blocco", "stack": True,
-            "title": "Singoli blocchi su otto stili — dose calibrata per blocco",
-            "sub": "benchmark_single_blocks_styles · stesso soggetto, sei stili aperti, una foto seppia, e il cartoon con lo stile in fondo",
+            "stats": {}, "unit": "il blocco", "stack": True, "focus": True,
+            "promptOrder": ["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox",
+                            "C4_stilllife", "E2_watercolor", "E3_oil", "E4_colorpencil",
+                            "E5_childrensbook", "E6_claymation", "E7_sepiaphoto"],
+            "bands": [["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox", "C4_stilllife"],
+                      ["E1_cartoon", "E2_watercolor", "E3_oil", "E4_colorpencil", "E5_childrensbook",
+                       "E6_claymation", "E7_sepiaphoto"]],
+            "bandNames": ["stesso stile (cartoon), soggetti diversi", "stesso soggetto (elfa), stili diversi"],
+            "title": "Singoli blocchi — soggetti e stili",
+            "sub": "benchmark_single_blocks_styles · 28 blocchi, 12 prompt, dose calibrata per blocco, un seme",
             "note": "Le dosi <b>non sono uguali</b> fra blocchi: vengono dalla tua lettura degli artefatti a ±0.350, "
                     "con tetto 0.450. L'etichetta di ogni colonna mostra la dose usata. Confronta <b>E1_cartoon</b> "
                     "con <b>E8_cartoon_styleend</b> (stesse parole, stile in fondo) per vedere se conta la struttura del prompt."}
@@ -378,6 +385,21 @@ TEMPLATE = r"""<!doctype html>
   .sgrid textarea{border:1px solid var(--line);border-radius:7px;min-height:74px}
   .sgrid .nonote{font-size:12px;color:var(--dim);padding:8px 4px}
   body.stacked .wrap{max-width:1900px}
+  .fnav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+  .fnav select{min-width:120px}
+  .fnav .hint{margin-left:6px}
+  .band{margin:0 0 18px}
+  .band h3{font-size:14px;margin:0 0 8px;color:var(--dim);font-weight:600}
+  .fgrid{display:grid;gap:6px;align-items:start}
+  .fgrid .plabel{font:600 11px ui-monospace,monospace;color:var(--dim);text-align:center;overflow:hidden;
+                 text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
+  .fgrid .rlab{font:600 12px ui-monospace,monospace;writing-mode:vertical-rl;transform:rotate(180deg);
+               align-self:center;justify-self:center}
+  .fgrid img{width:100%;display:block;cursor:zoom-in;border-radius:5px;background:var(--surround)}
+  .fgrid img.isb{outline:2px solid #3d6b56;outline-offset:-2px}
+  .fnotes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 0}
+  .fnotes textarea{border:1px solid var(--line);border-radius:8px;min-height:90px}
+  .fnotes .full{grid-column:1 / -1}
   #fams.stackwrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,calc(3*var(--rw,200px) + 80px)),1fr));gap:0 16px;align-items:start}
 </style>
 </head>
@@ -405,6 +427,7 @@ TEMPLATE = r"""<!doctype html>
   </div>
 
   <div class="bar">
+    <button id="focusbtn">Un blocco alla volta</button>
     <button id="stack">Prompt impilati</button>
     <label id="promptlab">prompt <select id="prompt"></select></label>
     <label>seme <select id="seed"></select></label>
@@ -416,6 +439,13 @@ TEMPLATE = r"""<!doctype html>
     <button id="exp">Esporta gli appunti</button>
   </div>
 
+  <div class="fnav" id="fnav" style="display:none">
+    <button id="fprev">&larr; blocco precedente</button>
+    <select id="fsel"></select>
+    <button id="fnext">blocco successivo &rarr;</button>
+    <button id="fcompact">Tutto in una schermata ✓</button>
+    <span class="hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> cambiano blocco (fuori dall'ingrandimento e dalle caselle di testo)</span>
+  </div>
   <div id="fams"></div>
 
   <div class="card hide" id="expcard">
@@ -467,7 +497,8 @@ const fkey = fam => fam + "|__family__";
 let showStats = false, P = "P01", S = "42", fit = false;
 let stacked = !!M.stack;
 let grid = [], ovr = 0, ovc = 0, ovfam = "";   // overlay: rows = prompts, columns = rungs
-const PROMPTS = Object.keys(M.idx).sort();
+const PROMPTS = (M.promptOrder || Object.keys(M.idx).sort()).filter(p => M.idx[p]);
+let focus = !!M.focus, fi = 0, compactF = true;
 function ladderItems(p, s, fam) {
   const rungs = ((M.idx[p] || {})[s] || {})[fam]; if (!rungs) return null;
   const bRel = (M.base[p] || {})[s] || null;
@@ -605,7 +636,84 @@ function renderStacked() {
   }
   tally();
 }
+function renderFocus() {
+  const host = $("#fams"); host.innerHTML = "";
+  const fam = M.order[fi]; const info = M.groups[fam];
+  $("#fsel").value = fam;
+  const card = document.createElement("div"); card.className = "card";
+  card.innerHTML = `<div class="famhead"><div><h2>${info.title}</h2>
+      <p class="sub">${PROMPTS.length} prompt · ogni colonna: −dose in alto, baseline, +dose in basso</p></div>
+      <div class="meta">${info.meta}</div></div>`;
+  const bands = compactF ? [PROMPTS] : (M.bands || [PROMPTS]);
+  const W = Math.max(600, document.querySelector(".wrap").clientWidth - 60);
+  // where the second group starts, to leave a visible gap between the two groups in the single band
+  const sepAt = (compactF && M.bands && M.bands[1]) ? M.bands[1].find(p => !M.bands[0].includes(p)) : null;
+  let first = null;
+  bands.forEach((bp, bi) => {
+    const rows = bp.map(p => ladderItems(p, S, fam)).filter(Boolean);
+    if (!rows.length) return;
+    if (!first) first = rows[0];
+    const band = document.createElement("div"); band.className = "band";
+    if (!compactF && M.bandNames && M.bandNames[bi]) { const h = document.createElement("h3"); h.textContent = M.bandNames[bi]; band.appendChild(h); }
+    if (compactF && M.bandNames) { const h = document.createElement("h3"); h.textContent = M.bandNames[0] + "   |   " + (M.bandNames[1] || ""); band.appendChild(h); }
+    const perRow = compactF ? rows.length : Math.max(1, Math.min(rows.length, Math.floor(W / 150)));
+    for (let start = 0; start < rows.length; start += perRow) {
+      const chunk = rows.slice(start, start + perRow);
+      const g = document.createElement("div"); g.className = "fgrid";
+      let cw = Math.floor((W - 30 - (sepAt ? 14 : 0)) / perRow) - 6;
+      // all three rows (−, baseline, +) must fit in one screen: images are 4:5
+      if (compactF) cw = Math.max(90, Math.min(cw, Math.floor((innerHeight - 190) / 3 / 1.25)));
+      const k = sepAt ? chunk.findIndex(r => r.label === sepAt) : -1;
+      g.style.gridTemplateColumns = k > 0
+        ? `22px repeat(${k}, ${cw}px) 14px repeat(${chunk.length - k}, ${cw}px)`
+        : `22px repeat(${chunk.length}, ${cw}px)`;
+      const spacer = (lab) => { if (k > 0 && lab === sepAt) g.appendChild(document.createElement("div")); };
+      g.appendChild(document.createElement("div"));
+      chunk.forEach(r => { spacer(r.label); const l = document.createElement("div"); l.className = "plabel"; l.textContent = r.label; l.title = r.label; g.appendChild(l); });
+      const cols = chunk[0].items.map(x => x.d);
+      cols.forEach((d, ci) => {
+        const rl = document.createElement("div"); rl.className = "rlab " + (d === "BASE" ? "bas" : parseFloat(d) < 0 ? "neg" : "pos");
+        rl.textContent = d === "BASE" ? "BASE" : d; g.appendChild(rl);
+        chunk.forEach(r => {
+          const it = r.items.find(x => x.d === d); const im = document.createElement("img"); im.loading = "lazy";
+          spacer(r.label);
+          if (it) { im.src = thumb(it.rel); if (it.d === "BASE") im.classList.add("isb"); im.title = r.label + " · " + d;
+                    const all = PROMPTS.map(p => ladderItems(p, S, fam)).filter(Boolean);
+                    im.onclick = () => openOv(all, all.findIndex(x => x.label === r.label), all[all.findIndex(x => x.label === r.label)].items.findIndex(x => x.d === d), fam); }
+          g.appendChild(im);
+        });
+      });
+      band.appendChild(g);
+    }
+    card.appendChild(band);
+  });
+  const nt = document.createElement("div"); nt.className = "fnotes";
+  if (first) first.items.filter(x => x.d !== "BASE").forEach(x => {
+    const ta = document.createElement("textarea");
+    ta.placeholder = x.d + ": cosa fa, su tutti i prompt?";
+    ta.value = notes[nkey(fam, x.d)] || ""; if (ta.value.trim()) ta.classList.add("filled");
+    ta.oninput = () => { notes[nkey(fam, x.d)] = ta.value; save(); ta.classList.toggle("filled", !!ta.value.trim()); tally(); };
+    nt.appendChild(ta);
+  });
+  const fta = document.createElement("textarea"); fta.className = "full";
+  fta.placeholder = "il blocco nel suo insieme: cambia con il soggetto? cambia con lo stile? che nome gli daresti?";
+  fta.value = notes[fkey(fam)] || ""; fta.oninput = () => { notes[fkey(fam)] = fta.value; save(); };
+  nt.appendChild(fta); card.appendChild(nt);
+  host.appendChild(card);
+  tally();
+}
+function goBlock(n) { fi = (fi + n + M.order.length) % M.order.length; renderFocus(); window.scrollTo(0, document.getElementById("fnav").offsetTop - 10); }
+
 function draw() {
+  $("#focusbtn").classList.toggle("on", focus);
+  $("#focusbtn").textContent = focus ? "Un blocco alla volta ✓" : "Un blocco alla volta";
+  $("#fnav").style.display = focus ? "" : "none";
+  if (focus) {
+    $("#stack").style.display = "none"; $("#promptlab").style.display = "none"; $("#onerow").style.display = "none";
+    $("#fams").classList.remove("stackwrap"); document.body.classList.add("stacked");
+    renderFocus(); return;
+  }
+  $("#stack").style.display = "";
   $("#stack").classList.toggle("on", stacked);
   $("#stack").textContent = stacked ? "Prompt impilati ✓" : "Prompt impilati";
   $("#promptlab").style.display = stacked ? "none" : "";
@@ -732,6 +840,21 @@ addEventListener("keyup", e => { if (e.key.toLowerCase() === "b" && baseHeld) {
 $("#prompt").onchange = () => { P = $("#prompt").value; seedOpts(); draw(); };
 $("#seed").onchange = () => { S = $("#seed").value; draw(); };
 $("#stack").onclick = () => { stacked = !stacked; draw(); };
+$("#focusbtn").onclick = () => { focus = !focus; draw(); };
+for (const f of M.order) $("#fsel").add(new Option(M.groups[f].title, f));
+$("#fsel").onchange = () => { fi = M.order.indexOf($("#fsel").value); renderFocus(); };
+$("#fprev").onclick = () => goBlock(-1);
+$("#fcompact").onclick = () => { compactF = !compactF;
+  $("#fcompact").textContent = compactF ? "Tutto in una schermata ✓" : "Tutto in una schermata";
+  renderFocus(); };
+addEventListener("resize", () => { if (focus) renderFocus(); });
+$("#fnext").onclick = () => goBlock(1);
+addEventListener("keydown", e => {
+  if (!focus || $("#ov").classList.contains("show")) return;
+  const a = document.activeElement; if (a && (a.tagName === "TEXTAREA" || a.tagName === "SELECT" || a.tagName === "INPUT")) return;
+  if (e.key === "ArrowLeft") { e.preventDefault(); goBlock(-1); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); goBlock(1); }
+});
 $("#size").onchange = () => document.documentElement.style.setProperty("--rw", $("#size").value + "px");
 $("#onerow").onclick = () => { const on = !document.querySelector(".ladder").classList.contains("onerow");
   document.querySelectorAll(".ladder").forEach(l => l.classList.toggle("onerow", on));
