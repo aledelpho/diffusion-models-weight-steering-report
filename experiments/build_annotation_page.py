@@ -216,8 +216,38 @@ def scan_single_blocks_atlas(B: Path) -> dict:
                     "fabbro, auto e primo piano, è un controllo; se fa cose diverse, dipende dall'immagine."}
 
 
+# ----------------------------------------------------------------- single_blocks_styles
+SS_PAT = re.compile(r"^(E\d_[a-z_]+?)_blk(\d\d)_(pos|neg)_d([\d.]+)_krea2_seed(\d+)_")
+SS_BASE = re.compile(r"^(E\d_[a-z_]+?)_baseline_krea2_seed(\d+)_")
+
+
+def scan_single_blocks_styles(B: Path) -> dict:
+    """Doses differ per block and arm here (calibrated on Alessandro's reading), so every card shows the
+    dose actually used; columns are the negative arm, the baseline and the positive arm."""
+    idx: dict = {}; base: dict = {}
+    for p in sorted((B / "renders").glob("*.png")):
+        m = SS_PAT.match(p.name)
+        if m:
+            P, b, sign, dose, seed = m.groups()
+            v = (-1 if sign == "neg" else 1) * float(dose)
+            idx.setdefault(P, {}).setdefault(seed, {}).setdefault(f"blk{b}", {})[f"{v:+.3f}"] = f"renders/{p.name}"
+            continue
+        m = SS_BASE.match(p.name)
+        if m:
+            base.setdefault(m.group(1), {})[m.group(2)] = f"renders/{p.name}"
+    groups = {f"blk{b:02d}": {"title": f"blk{b:02d}", "meta": f"blocco {b} · nel gruppo {SB_GROUP[b]}"} for b in range(28)}
+    return {"idx": idx, "base": base, "groups": groups, "order": [f"blk{b:02d}" for b in range(28)],
+            "stats": {}, "unit": "il blocco", "stack": True,
+            "title": "Singoli blocchi su otto stili — dose calibrata per blocco",
+            "sub": "benchmark_single_blocks_styles · stesso soggetto, sei stili aperti, una foto seppia, e il cartoon con lo stile in fondo",
+            "note": "Le dosi <b>non sono uguali</b> fra blocchi: vengono dalla tua lettura degli artefatti a ±0.350, "
+                    "con tetto 0.450. L'etichetta di ogni colonna mostra la dose usata. Confronta <b>E1_cartoon</b> "
+                    "con <b>E8_cartoon_styleend</b> (stesse parole, stile in fondo) per vedere se conta la struttura del prompt."}
+
+
 BENCHES = {"parameter_families": scan_parameter_families, "centre_push": scan_centre_push,
-           "wo_depth": scan_wo_depth, "single_blocks_atlas": scan_single_blocks_atlas}
+           "wo_depth": scan_wo_depth, "single_blocks_atlas": scan_single_blocks_atlas,
+           "single_blocks_styles": scan_single_blocks_styles}
 
 
 def thumbs(B: Path, files: set[str]) -> None:
