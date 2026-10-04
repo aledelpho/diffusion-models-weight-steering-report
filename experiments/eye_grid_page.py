@@ -2,7 +2,7 @@
 
 Full-screen overlay keys: left/right = previous/next column, up/down = previous/next row,
 hold SPACE = show the cell's baseline (cell key 'b', default column 0) in place, release = back (flicker compare),
-PageUp/PageDown = previous/next unit, Esc = close. With the overlay closed, left/right change
+PageUp/PageDown = previous/next unit, Esc / click / the close button = close (keys work even if a note box had focus). With the overlay closed, left/right change
 unit. Answers: buttons under each group; in the overlay, keys 1-4 answer question 1 and
 Q/W/E/R question 2 for the group being viewed. Marks live in localStorage and are exported
 as CSV. No measured number is shown, except where a unit's data says so explicitly.
@@ -55,7 +55,7 @@ textarea{width:100%;min-height:44px;background:var(--card);color:var(--fg);borde
 #ov{position:fixed;inset:0;background:#0b0b0b;display:none;flex-direction:column;z-index:5;color:#eee}
 #ov .im{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
 #ov img{max-width:98vw;max-height:100%;object-fit:contain}
-#ov .bar{padding:6px 12px;font-size:13px;display:flex;gap:16px;flex-wrap:wrap;background:#151515}
+#ov .bar{padding:6px 12px;font-size:13px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;background:#151515}#ovx{background:#333;color:#fff;border-color:#555}
 #ov .bar b{color:#fff}#ov .ans{color:#9fd3a8}
 .hint{color:var(--mut);font-size:12px}
 </style></head><body>
@@ -64,7 +64,7 @@ textarea{width:100%;min-height:44px;background:var(--card);color:var(--fg);borde
 <span id="prog" class="hint"></span><button id="exp">Esporta CSV</button>
 <span class="hint">clic = schermo intero · lì: ← → colonne, ↑ ↓ righe, SPAZIO tenuto = base, PagSu/PagGiù = unità, 1–4 e Q–R = risposte, Esc chiude</span></header>
 <main id="m"></main>
-<div id="ov"><div class="bar"><b id="ovt"></b><span id="ovs"></span><span class="ans" id="ova"></span></div><div class="im"><img id="ovi"></div></div>
+<div id="ov"><div class="bar"><button id="ovx" title="chiudi (Esc)">✕ chiudi</button><b id="ovt"></b><span id="ovs"></span><span class="ans" id="ova"></span></div><div class="im"><img id="ovi"></div></div>
 <script>
 const D=__DATA__,Q=__Q__,O0=__OPT__,OP=k=>Q[k][2]||O0,KEY="__KEY__",MIG=__MIGRATE__;
 let M={};try{M=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
@@ -91,14 +91,14 @@ function show(k){i=(k+D.length)%D.length;sel.value=i;const u=D[i];
  u.groups.forEach(g=>g.rows.forEach(r=>r.cells.forEach(c=>{const p=new Image();p.src=c.f})));
  prog();if(!ov)window.scrollTo(0,0)}
 let ov=null,held=false;const OV=document.getElementById("ov");
-function openOv(g,r,c){ov={g,r,c};OV.style.display="flex";paint()}
+function openOv(g,r,c){if(document.activeElement)document.activeElement.blur();ov={g,r,c};OV.style.display="flex";paint()}
 function paint(){ov.c=Math.min(ov.c,D[i].groups[ov.g].cols.length-1);const u=D[i],g=u.groups[ov.g],row=g.rows[ov.r],c=held?(row.cells[ov.c].b||0):ov.c,cell=row.cells[c];
  document.getElementById("ovi").src=cell.f;
  document.getElementById("ovt").textContent=[u.title,g.name,row.label,g.cols[c]].filter(x=>x).join(" · ")+(held?"  [BASE]":"");
  document.getElementById("ovs").textContent=`riga ${ov.r+1}/${g.rows.length} · colonna ${ov.c+1}/${g.cols.length}`;
  const m=mk(u.id,g.id);document.getElementById("ova").textContent=Q.map(([q],k)=>`D${k+1}: ${(OP(k).find(o=>o[0]===m[q])||["","—"])[1]}`).join("   ")}
 function close(){ov=null;OV.style.display="none";show(i)}
-document.addEventListener("keydown",e=>{if(e.target.tagName==="TEXTAREA")return;
+document.addEventListener("keydown",e=>{if(!ov&&e.target.tagName==="TEXTAREA")return;
  if(ov){const u=D[i],g=u.groups[ov.g];
   if(e.key==="Escape")return close();
   if(e.key==="ArrowRight"){ov.c=(ov.c+1)%g.cols.length;e.preventDefault()}
@@ -113,6 +113,7 @@ document.addEventListener("keydown",e=>{if(e.target.tagName==="TEXTAREA")return;
    if(b>=0&&Q[1]&&OP(1)[b]){mk(u.id,g.id)[Q[1][0]]=OP(1)[b][0];save()}}
   paint();return}
  if(e.key==="ArrowLeft")show(i-1);if(e.key==="ArrowRight")show(i+1)});
+document.getElementById("ovx").onclick=()=>close();OV.querySelector(".im").onclick=()=>close();
 document.addEventListener("keyup",e=>{if(e.key===" "&&ov){held=false;paint()}});
 document.getElementById("prev").onclick=()=>show(i-1);document.getElementById("next").onclick=()=>show(i+1);sel.onchange=()=>show(+sel.value);
 document.getElementById("exp").onclick=()=>{const q=s=>'"'+String(s||"").replace(/"/g,'""')+'"';
