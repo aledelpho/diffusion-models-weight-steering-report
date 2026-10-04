@@ -1,0 +1,8 @@
+test,value,verdict
+cells (prompt x seed),16,
+V1 monotone ladder (chroma strictly falls from -0.45 to +0.30),15/16,supported
+V2 median chroma ratio d(-0.30)/d(-0.15),1.76,approximately linear
+T0 cells where the text did not raise chroma,0,
+T0b cells where the text's chroma gain is beyond the blk23 ladder,9,
+T1 blk23 keeps layout better at matched chroma (wins/losses of scored),6/1 of 7,
+T1 median layout_r(blk23 matched) - layout_r(text),0.0819,blk23 better
