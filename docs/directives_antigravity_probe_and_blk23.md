@@ -82,3 +82,23 @@ unless Alessandro extends it in writing.
 Report to Alessandro: files created, counts, the outputs of A4, A5, B3 and B4. Do not
 run `analyze_residual_probe.py` without `--repro`, and do not run
 `analyze_blk23_vs_colorful.py`; Claude does.
+
+## Update 2026-10-04 (later) — run B only, with Claude's script
+
+Section A (residual probe) is **on hold**. Section B steps 1–2 are **replaced**: Claude wrote
+the plan, queue and repro code in `experiments/blk23_colorful.py`, and the plan is already
+committed (`data/blk23_colorful_plan.csv`, 128 rows). Do not write or modify any script.
+
+1. `python experiments/blk23_colorful.py --queue --first 1` — one render (E1_cartoon baseline,
+   seed 2718281). Wait until it exists.
+2. `python experiments/blk23_colorful.py --repro` — it must print `max abs diff 0` for
+   E1_cartoon baseline (other lines will say MISSING at this point; that is expected). If the
+   E1_cartoon baseline line is not 0, **stop** and report.
+3. `python experiments/blk23_colorful.py --queue` — the remaining 127. Wait for the ComfyUI queue
+   to empty by polling `/queue`. Never `monitor_and_shutdown.py`; close nothing.
+4. `python experiments/blk23_colorful.py --repro` — paste the full output. It must end with
+   `REPRO PASS`.
+5. Count: 128 PNG in `Text2Img/benchmark_blk23_colorful`, no `_00002_` files; list any missing.
+6. Write `docs/RENDERS_2026-10-04_blk23_colorful.md` with the commands and the raw outputs of
+   steps 2, 4 and 5. Commit only that file, in Italian. Do not run `analyze_blk23_vs_colorful.py`.
+7. Report to Alessandro and stop.
