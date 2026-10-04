@@ -61,3 +61,16 @@ acceptable (yes / partly / no)? If eye and rules disagree, the disagreement is r
 
 Three families, six subjects, two seeds. The combo is one example, not an optimised preset.
 "Coherent" here means the same *direction of change*, not identical results.
+
+## Amendment 1 (2026-10-04, before any render)
+
+At Alessandro's request four **Style-band** arms are added, at his calibrated doses:
+blk03 +0.40 ("natural light, three-dimensional lighting"), blk06 +0.45 ("more colour, more
+stylised"), blk13 −0.45 ("organic, cute, tidy"), blk17 +0.40 ("subject synthesis, more
+generic"). Renders: 3 × 6 × 2 × 12 = 432 + 1 REPRO = **433**. H1–H3 are unchanged (same
+tested arms, same control). New:
+
+- **H4 — the Style band is less family-coherent than the late blocks** (Claude's prediction,
+  from the exploration: middle blocks ≈ 0.10 against late ≈ 0.38 within the cartoon family).
+  Median W of the four Style arms < median W of the tested arms − 0.10 → supported; ≥ the
+  tested median → refuted; otherwise inconclusive. W > B for each Style arm is reported.

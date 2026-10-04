@@ -1,10 +1,10 @@
 """C49 — presets per prompt family (docs/prereg_prompt_family.md). Written by Claude, 2026-10-04.
 
-  python experiments/prompt_family.py --plan             # data/prompt_family_plan.csv (289 rows)
+  python experiments/prompt_family.py --plan             # data/prompt_family_plan.csv (433 rows)
   python experiments/prompt_family.py --queue --first 1  # the REPRO row only
   python experiments/prompt_family.py --repro            # REPRO must equal the existing C3_fox baseline
   python experiments/prompt_family.py --queue            # the rest (skips files that exist)
-  python experiments/prompt_family.py --count            # 289 files expected
+  python experiments/prompt_family.py --count            # 433 files expected
 
 Output: Text2Img/benchmark_prompt_family/{prompt_id}_{cond}_krea2_seed{seed}_00001_.png
 Workflow identical to blk23_colorful.py (Tuner only on rows with a vector).
@@ -41,6 +41,11 @@ ARMS = {
     "blk27_neg_d0.250": {27: -0.25},
     "blk09_pos_d0.450": {9: 0.45},          # control: a middle block, expected NOT family-coherent
     "combo": {16: 0.20, 20: 0.30, 23: -0.20, 27: -0.10},
+    # Style band (amendment 1, before any render): middle blocks with clear eye definitions
+    "blk03_pos_d0.400": {3: 0.40},
+    "blk06_pos_d0.450": {6: 0.45},
+    "blk13_neg_d0.450": {13: -0.45},
+    "blk17_pos_d0.400": {17: 0.40},
 }
 SETTINGS = {"sampler": "euler_ancestral", "scheduler": "simple", "steps": "9", "cfg": "1.0",
             "denoise": "1.0", "width": "1024", "height": "1280"}
@@ -68,7 +73,7 @@ def make_plan():
                     rows.append({"row": len(rows), "prompt_id": pid, "family": fam, "subject": subj, "seed": seed,
                                  "cond": arm, "vectors_override": vec(d), "prompt_text": f"{prefix} {text}", **SETTINGS,
                                  "output_prefix": op, "expected_filename": f"{op}_00001_.png"})
-    assert len(rows) == 1 + 3 * 6 * 2 * 8, len(rows)
+    assert len(rows) == 1 + 3 * 6 * 2 * len(ARMS), len(rows)
     assert rows[0]["prompt_text"] == f"{FAMILIES['F1cartoon']} {SUBJECTS['fox']}"
     with open(PLAN, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[1])); w.writeheader(); w.writerows(rows)

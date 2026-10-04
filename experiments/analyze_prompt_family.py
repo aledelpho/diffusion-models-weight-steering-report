@@ -18,6 +18,7 @@ D = os.path.join(ROOT, FOLDER)
 FEAT = os.path.join(DATA, "prompt_family_style_features.csv")
 TESTED = ["blk16_pos_d0.300", "blk20_pos_d0.450", "blk23_neg_d0.300", "blk26_pos_d0.150", "blk27_neg_d0.250", "combo"]
 CONTROL = "blk09_pos_d0.450"
+STYLE_BAND = ["blk03_pos_d0.400", "blk06_pos_d0.450", "blk13_neg_d0.450", "blk17_pos_d0.400"]  # amendment 1
 COST = ["fft_high_freq_share", "edge_density", "lbp_entropy", "glcm_contrast"]
 
 
@@ -86,6 +87,10 @@ def test():
          ["H1 median (W - B)", round(med_gap, 4), "supported" if wins >= 5 and med_gap >= 0.10 else "refuted" if wins <= 3 or med_gap < 0.05 else "inconclusive"],
          ["H2 median W on tested arms", round(med_W, 4), "supported" if med_W >= 0.40 else "refuted" if med_W < 0.25 else "inconclusive"],
          ["H3 control blk09 pos W below the tested median", round(C["W_within_family"], 4), "supported" if C["W_within_family"] < med_W else "refuted"],
+         ["H4 style band: median W (03+,06+,13-,17+) vs late tested median W",
+          f"{float(np.median([o['W_within_family'] for o in out if o['arm'] in STYLE_BAND])):.4f} vs {med_W:.4f}",
+          "supported" if float(np.median([o['W_within_family'] for o in out if o['arm'] in STYLE_BAND])) < med_W - 0.10 else "refuted" if float(np.median([o['W_within_family'] for o in out if o['arm'] in STYLE_BAND])) >= med_W else "inconclusive"],
+         ["H4b style band: W > B on", f"{sum(o['W_within_family'] > o['B_between_families'] for o in out if o['arm'] in STYLE_BAND)}/4", ""],
          ["reference: median S_seed on tested arms", round(float(np.median([o["S_seed"] for o in T])), 4), ""],
          ["combo: W / B / S", f"{[o for o in out if o['arm']=='combo'][0]['W_within_family']:.3f} / {[o for o in out if o['arm']=='combo'][0]['B_between_families']:.3f} / {[o for o in out if o['arm']=='combo'][0]['S_seed']:.3f}", ""]]
     with open(os.path.join(DATA, "prompt_family_test.csv"), "w", newline="") as fh:
