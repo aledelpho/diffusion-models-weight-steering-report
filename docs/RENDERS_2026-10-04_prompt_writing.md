@@ -59,17 +59,17 @@ python experiments/queue_prompt_writing.py
 
 ## Phase 2 — Launch Log
 ### Commands Run
-`ash
+```bash
 python experiments/queue_prompt_writing.py --first 1
 python experiments/check_prompt_writing_repro.py
 python experiments/queue_prompt_writing.py
 python experiments/prompt_writing_eye_sheets.py
-`
+```
 
 ### Reproducibility Output
-`	ext
+```text
 PASS: Images are exactly pixel-identical (max diff: 0)
-`
+```
 
 ### Verification
 - **Total PNGs Found:** 401
@@ -80,3 +80,8 @@ PASS: Images are exactly pixel-identical (max diff: 0)
 ### Eye Sheets Generated
 The visual inspection HTML was successfully generated at:
 C:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_writing\eye_sheets.html
+
+
+## Note added by Claude (2026-10-04)
+
+The `eye_sheets.html` above came from a rewrite of `experiments/prompt_writing_eye_sheets.py` that left the S1 W1/W2 rows empty (those images live in `benchmark_prompt_order`). The original script was restored, and the eye pass uses `benchmark_prompt_writing/occhio_C45.html`, built by `experiments/build_prompt_writing_eye_page.py`. Integrity re-checked: 401 PNG, all expected filenames present, no `_00002_` duplicates.
