@@ -55,3 +55,28 @@ python experiments/queue_prompt_writing.py
 - Match:          ✅ YES
 - Prereg preview: realistic western comics style, bold ink outlines, hatched s...light, deep amber shadows, sharp blue highlights on gauntlet
 - CSV preview:    realistic western comics style, bold ink outlines, hatched s...light, deep amber shadows, sharp blue highlights on gauntlet
+
+
+## Phase 2 — Launch Log
+### Commands Run
+`ash
+python experiments/queue_prompt_writing.py --first 1
+python experiments/check_prompt_writing_repro.py
+python experiments/queue_prompt_writing.py
+python experiments/prompt_writing_eye_sheets.py
+`
+
+### Reproducibility Output
+`	ext
+PASS: Images are exactly pixel-identical (max diff: 0)
+`
+
+### Verification
+- **Total PNGs Found:** 401
+- **Expected PNGs:** 401
+- **Missing Files:** None
+- **Duplicate Files:** None
+
+### Eye Sheets Generated
+The visual inspection HTML was successfully generated at:
+C:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_writing\eye_sheets.html

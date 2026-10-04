@@ -162,10 +162,10 @@ def post_prompt(workflow: dict) -> str:
 
 
 def main():
-    # --first N queues only the first N plan rows (row 0 is the REPRO render). Added by Claude 2026-10-04.
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--first", type=int, default=None)
-    first = ap.parse_args().first
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--first", type=int, default=None, help="Only run the first N rows")
+    args = parser.parse_args()
+
     if not TARGET_DIR.exists():
         TARGET_DIR.mkdir(parents=True)
         
@@ -175,8 +175,9 @@ def main():
         for r in reader:
             rows.append(r)
 
-    if first is not None:
-        rows = rows[:first]
+    if args.first is not None:
+        rows = rows[:args.first]
+
     print(f"Total target renders:       {len(rows)}")
 
     print(f"\nQueuing renders to ComfyUI at {COMFY_HOST}...")
