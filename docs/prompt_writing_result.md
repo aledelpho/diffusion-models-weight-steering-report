@@ -33,7 +33,7 @@ completely.
   (`W1_vs_W3_tags`) behave like the other writings. This replicates `prompt_order` on a second
   subject and on writings that change what the text encoder receives.
 - **Subject ≫ writing.** The same arm points in very different directions on the elf and on
-  the canoe (A_subject 0.00–0.52 against A_writing 0.45–0.92 on the scored arms). What the
+  the canoe (A_subject −0.15 to 0.52 against A_writing 0.53–0.92 on the scored arms). What the
   picture contains decides what the block does to it.
 - **The small content change disturbed the effect *less* than rewriting.** A_content_small
   (W1 against C1, identical wording except the changed object) is higher than A_writing on
