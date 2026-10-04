@@ -71,8 +71,11 @@ Style and Details.
   side has one dose only.
 - At 0.30 it is not free of content changes, by eye: a black headband appears (E1
   pos), the outline turns dark red (E1 neg), the rally car's livery changes (pos).
-- Whether it beats writing "colorful / high saturation" in the prompt, at matched
-  chroma, on content drift, has **not** been tested.
+- **Confirmed on fresh renders (C47, `blk23_vs_colorful_result.md`):** monotone on 15/16
+  cells, near-linear (×1.76 from −0.15 to −0.30), and at matched chroma it keeps the
+  layout better than "colorful" in the prompt (6 of 7 scorable cells). But the words
+  reach more saturation than blk23 at −0.45 in 9 of 16 cells: blk23 is the gentler lever,
+  suited to moderate increases; its desaturating side is weaker and less clean.
 
 ## 6. Alessandro's per-block definitions against measurement
 
@@ -93,4 +96,4 @@ crop sided with the eye (`block_groups_and_prompt_order.md` §4).
 | C44 | block groups on two new seeds | `open_work_register.md` |
 | C45 | writing vs content | `prereg_prompt_writing.md` |
 | C46 | is the stable/unstable split visible in the weights? | `prereg_block_weight_structure.md` |
-| C47 | blk23 against "colorful" in the prompt | `open_work_register.md` |
+| C47 | blk23 against "colorful" in the prompt — **done** | `blk23_vs_colorful_result.md` |
