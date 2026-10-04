@@ -121,3 +121,20 @@ arm side by side, both seeds. Alessandro marks each arm *same change across writ
 yes / partly / no* and *same change after the content change: yes / partly / no*,
 before seeing any number. If the eye and the rule disagree, the rule is the suspect
 (pitfall 90) and the disagreement is reported, not resolved by picking one.
+
+## Amendment 1 (2026-10-04, during the eye pass, before any C45 number was computed)
+
+Alessandro reported that on S2 (lotus canoe, a soft painterly baseline) the arms are hard to
+see, and that the first eye page made side-by-side comparison slow. Changes:
+
+- Eye marks are recorded **per arm and per subject**, and each question gets a fourth answer,
+  **"troppo debole"** (too faint to judge). Marks given on the first page (per arm) were copied
+  into both subjects as a starting point, to be revised.
+- No re-render. With the same seeds and doses the images would be identical; raising the dose
+  for S2 only would break the comparison with S1 and the numeric rule, which already excludes
+  arms whose change is smaller than what the writing alone does (`size > size_writing`).
+- A measured fact used to answer him, not a result of the test: the median colour distance of
+  an arm from its baseline is about 10 on S2 against about 20 on S1 (ΔE, 64×80), and no arm
+  image is identical to its baseline on either subject — the Tuner was applied.
+- New page: `experiments/eye_grid_page.py` (full-screen review with arrow keys, SPACE held
+  shows the baseline in place).

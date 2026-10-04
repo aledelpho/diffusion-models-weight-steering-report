@@ -73,3 +73,10 @@ numbers are shown. If eye and T1 disagree, the disagreement is reported.
 One appended phrase per direction; other wordings ("vibrant", "saturated palette", at
 the start of the prompt) may behave differently. E7_sepiaphoto puts the text in
 conflict with the style on purpose.
+
+## Amendment 1 (2026-10-04, after the renders, before any C47 number was computed)
+
+The eye page (`experiments/build_blk23_colorful_eye_page.py`) shows the desaturating side as
+well: for each cell, `txtneg` against blk23 +0.15/+0.30, with the same two questions. The
+decision rules are unchanged; the extra marks are reported, not scored. Renders: 128/128
+present, reproducibility 26/26 pairs identical (`RENDERS_2026-10-04_blk23_colorful.md`).
