@@ -58,6 +58,14 @@ Style and Details.
 - Chroma moves the same way on **23 of 23 prompts in both signs** (no other block
   does this), and chroma is the largest share of what it changes (|Δchroma| / ΔE
   0.34; no other arm above 0.25). Layout r 0.89–0.90.
+- Extended to every image with a blk23 arm (atlas, prompt order, styles, v3, v4;
+  `data/blk23_saturation_all.csv`): CIELAB chroma down on **47 of 47** positive images
+  and up on **36 of 36** negative ones — the most consistent arm of all 56. HSV
+  saturation agrees on 45/47 and 32/36; the six disagreements are images with large
+  dark areas, where HSV saturation is unstable, and a 1:1 crop of one of them
+  (prompt order V2, seed 1234567) shows the negative arm visibly more saturated
+  (greener hair, more orange skin, redder straps) with darker shadows. Second most
+  consistent colour arm: blk21 pos, saturation up 34/36.
 - Doubling the positive dose (0.15 → 0.30) multiplies the chroma loss by 2.2
   (median; 1.6–3.5 over 11 prompts): monotone, somewhat accelerating. The negative
   side has one dose only.
