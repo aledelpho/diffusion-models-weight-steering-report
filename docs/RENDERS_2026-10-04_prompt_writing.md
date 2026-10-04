@@ -13,22 +13,22 @@ This document provides instructions for Alessandro to launch the C45 prompt writ
 Do **NOT** run the full queue immediately. First, we must ensure the aseline matches our previous runs identically.
 
 1. Open ComfyUI and ensure the environment is ready.
-2. We need to run ONLY the first row (the REPRO row). You can manually queue this, or temporarily modify the queue script to only run the first row, but the easiest way is to let the queue script run, wait for the first image, and then stop the script and clear the queue.
+2. Queue only the REPRO row: `python experiments/queue_prompt_writing.py --first 1` (option added by Claude on 2026-10-04; the earlier advice to stop the script and clear the queue is withdrawn, because the script posts every row at once).
 3. Wait for REPRO_V1_Original_baseline_krea2_seed3141592_00001_.png to be generated in the output folder.
 
 ### Step 2: Pixel-by-Pixel Verification
 Run the verification script from the terminal:
-\\\ash
+```bash
 python experiments/check_prompt_writing_repro.py
-\\\
+```
 - If the output is **PASS** (max absolute difference is 0), proceed to Step 3.
 - If the output is **FAIL**, **STOP IMMEDIATELY**. Do not queue the rest of the renders.
 
 ### Step 3: Run the Full Queue
 Once reproducibility is confirmed, queue the rest of the experiment:
-\\\ash
+```bash
 python experiments/queue_prompt_writing.py
-\\\
+```
 *(Note: The script is designed to skip files that already exist on disk, so it will safely skip the REPRO image and continue with the remaining 400.)*
 
 ---
