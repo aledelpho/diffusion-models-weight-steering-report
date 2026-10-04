@@ -59,3 +59,24 @@ texts are fixed in `docs/prereg_prompt_writing.md`; this page says what to build
 
 Stop and report to Alessandro: files created, row count, the self-check output.
 Nothing else.
+
+## Phase 2 — launch (added 2026-10-04, on Alessandro's authorisation)
+
+Alessandro has authorised Antigravity to queue the C45 renders. This replaces hard rule 1
+**for these 401 renders only**. Rules 2–6 still apply. The directive for C47/C48
+(`directives_antigravity_probe_and_blk23.md`) is **on hold**: do not start it until
+Alessandro says so.
+
+1. `python experiments/queue_prompt_writing.py --first 1` (the REPRO row only). Wait until
+   the image exists.
+2. `python experiments/check_prompt_writing_repro.py`. Paste the output. If it is not
+   `PASS`, **stop** and report; queue nothing else.
+3. `python experiments/queue_prompt_writing.py`. Wait for the ComfyUI queue to empty by
+   polling `/queue` (never with `monitor_and_shutdown.py`; close nothing).
+4. Count the files: 401 PNG in `benchmark_prompt_writing` (no `_00002_` duplicates). List any
+   missing expected filename.
+5. `python experiments/prompt_writing_eye_sheets.py` (builds sheets for Alessandro's eye;
+   produces no numbers).
+6. Append to `docs/RENDERS_2026-10-04_prompt_writing.md`: the commands run, the REPRO output,
+   the file count. Commit in Italian. Do **not** run `analyze_prompt_writing.py`.
+7. Report to Alessandro and stop.
