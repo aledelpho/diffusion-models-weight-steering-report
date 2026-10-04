@@ -94,6 +94,6 @@ crop sided with the eye (`block_groups_and_prompt_order.md` §4).
 | id | question | document |
 |---|---|---|
 | C44 | block groups on two new seeds | `open_work_register.md` |
-| C45 | writing vs content | `prereg_prompt_writing.md` |
+| C45 | writing vs content — **done, inconclusive by the rule** | `prompt_writing_result.md` |
 | C46 | is the stable/unstable split visible in the weights? | `prereg_block_weight_structure.md` |
 | C47 | blk23 against "colorful" in the prompt — **done** | `blk23_vs_colorful_result.md` |

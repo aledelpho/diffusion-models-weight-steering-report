@@ -1,0 +1,7 @@
+test,value
+"size_writing (baseline-to-baseline, writings only)",1.1547
+scored arms (size > size_writing),12/24
+median(A_writing - A_seed),-0.0405
+share A_writing > A_subject,1.0
+share A_writing > A_content_small,0.0
+VERDICT,inconclusive
