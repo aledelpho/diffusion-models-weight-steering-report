@@ -68,6 +68,37 @@ characters mixed in.
 and to what was expected. The question named the target look; she was asked which image matched it,
 not to describe what changed.
 
+## 4b. The analyst's look at the cases ArcFace marked (after all numbers; not blind; selected, not random)
+
+Seven base | preset pairs, chosen because ArcFace lost the face or gave the lowest ID_edit: the gnome
+at three seeds (no face found in the preset), the tiefling at two (no face in the baseline at 2645751,
+so that failure is not the preset's), the half-orc at 3605551 (0.63, the lowest) and the dwarf at
+3316624 (0.64). Composites in `Text2Img/benchmark_portraits/inspect/`, viewed at 60%.
+
+- **No deformation.** In none of the seven is the face broken, melted or anatomically wrong; the lost
+  detections on the gnome are not damage. Every pair is recognisably the same character: glasses,
+  ears, beard and robe on the gnome; horns, scarf and yellow jacket on the tiefling.
+- **What the preset does, every time:** flatter skin tones (the gnome's skin turns olive-grey), fewer
+  hatching lines, cleaner contours — the look Alessandro described.
+- **What it removes, and the prompt asked for.** Small surface marks disappear with the hatching: the
+  half-orc's dirt smudges/freckles across the nose (named in the prompt), the gnome's glowing chalk
+  dust on the cheeks (named), the tiefling's embroidered coat pattern. "Clean lines" also means "fewer
+  small details", including requested ones.
+- **What it changes that it should not.** **Expression.** The gnome, prompted "wide-eyed manic
+  curiosity", is wide-eyed and mild in all three baselines and frowning, brows lowered, mouth turned
+  down, in all three presets. The half-orc's "fierce defiant snarl" becomes a closed, glossy-lipped
+  stern face that also looks more idealised — the largest identity drift of the seven, matching its
+  lowest ArcFace score. The tiefling's horns change shape at 3605551 (curled ram horns to blocky
+  upright ones). The dwarf at 3316624 looks the same person to me; there the low score seems to come
+  from the shading.
+- **A hypothesis, not tested:** the preset contains blk08 +0.15, which Alessandro's own guide lists as
+  "less expression and natural poses". It is the first candidate for the lost expressions; scaling
+  blk08 alone on these portraits would test it.
+
+So the blind observer's "same character" and ArcFace's "a little further than a seed" are both right
+on these images: the character is kept; its expression and its smallest prompted details are not
+always.
+
 ## 5. What C52 lets Alessandro say
 
 - **Supported, blind:** a preset he calibrated by eye on four characters gives three characters he
@@ -76,4 +107,6 @@ not to describe what changed.
   set's (0.51 against 0.61, H1–H2).
 - **Measured, not met:** the face moves slightly more than a change of seed (ArcFace 0.74 against
   0.80), while staying far from any other character (0.29).
-- **Open:** the gnome's lost face detections at 1:1; a real identity test with foils.
+- **Seen by the analyst, not tested:** the preset can flatten expressions (the gnome's curiosity,
+  three seeds of three) and removes small prompted marks (dirt, chalk dust).
+- **Open:** a real identity test with foils; whether blk08 + is what removes the expressions.
