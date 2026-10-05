@@ -36,6 +36,8 @@ ROOT = Path(__file__).resolve().parent.parent
 NOTEBOOK = ROOT / "notebook"
 README = ROOT / "README.md"
 INDEX = ROOT / "index.html"
+LINK_PREFIX = "notebook/"
+FLAT_ASSETS = True   # index.html sits at the root, so ../assets/ becomes assets/
 
 BEGIN, END = "<!-- CLAIMS:BEGIN -->", "<!-- CLAIMS:END -->"
 
@@ -56,7 +58,7 @@ SURFACE, INK, INK_2, MUTED, GRID = "#1a1a19", "#ffffff", "#c3c2b7", "#898781", "
 def read_pages() -> list[dict]:
     pages = []
     for path in sorted(NOTEBOOK.glob("*.md")):
-        if path.name.startswith("_") or path.name == "AUTHORING.md":
+        if path.name.startswith("_") or path.name in ("AUTHORING.md", "README.md", "STORY.md"):
             continue
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
@@ -85,7 +87,7 @@ def claims_table(pages: list[dict]) -> str:
         label, _ = STATUS.get(status, ("Open", MUTED))
         stmt = " ".join((c.get("statement") or "").split())
         ev = " ".join((c.get("evidence") or "").split())
-        link = f"notebook/{page['id']}.md{c.get('anchor', '')}"
+        link = f"{LINK_PREFIX}{page['id']}.md{c.get('anchor', '')}"
         out.append(f"| **{label}** | [{stmt}]({link}) | {ev} |")
     out += ["", END]
     return "\n".join(out)
@@ -111,8 +113,10 @@ def render_index(pages: list[dict]) -> str:
         # Rewrite the relative links the markdown files use between themselves.
         src = re.sub(r"\]\((?:\.\./)?(?:notebook/)?(\d\d-[a-z0-9-]+)\.md(#[a-z0-9-]*)?\)",
                      r"](#p-\1\2)", page["_body"])
-        src = src.replace("](../assets/", "](assets/").replace("](../docs/", "](docs/")
+        if FLAT_ASSETS:
+            src = src.replace("](../assets/", "](assets/").replace("](../docs/", "](docs/")
         src = src.replace("](../README.md#what-holds-and-what-does-not)", "](#claims)")
+        src = src.replace("](README.md#what-holds-and-what-does-not)", "](#claims)")
         # il blocco di stato in testa alla pagina serve su GitHub, dove non c'e'
         # la barra generata; qui sarebbe la stessa riga due volte
         src = re.sub(r"^# .+\n+(> .*\n)+", lambda m: m.group(0).split("\n")[0] + "\n\n",
@@ -293,11 +297,21 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true",
                     help="fail if the outputs are out of date instead of writing them")
+    ap.add_argument("--dir", default="notebook",
+                    help="page folder: notebook (exploratory, outputs at the root) or results "
+                         "(final results, outputs inside results/)")
     args = ap.parse_args()
+    global NOTEBOOK, README, INDEX, LINK_PREFIX, FLAT_ASSETS
+    if args.dir != "notebook":
+        NOTEBOOK = ROOT / args.dir
+        README = NOTEBOOK / "README.md"
+        INDEX = NOTEBOOK / "index.html"
+        LINK_PREFIX = ""
+        FLAT_ASSETS = False
 
     pages = read_pages()
     if not pages:
-        print("no pages found under notebook/")
+        print(f"no pages found under {args.dir}/")
         return 1
 
     table = claims_table(pages)

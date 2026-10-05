@@ -551,7 +551,10 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--page", help="validate one page id only")
     ap.add_argument("--strict", action="store_true", help="warnings fail the run")
+    ap.add_argument("--dir", default="notebook", help="page folder: notebook or results")
     args = ap.parse_args()
+    global NOTEBOOK
+    NOTEBOOK = ROOT / args.dir
 
     rep = Report()
     reg = load_registry(rep)
@@ -559,7 +562,7 @@ def main() -> int:
     check_figure_files(reg, rep)
 
     pages = sorted(p for p in NOTEBOOK.glob("*.md")
-                   if not p.name.startswith("_") and p.name not in ("AUTHORING.md", "STORY.md"))
+                   if not p.name.startswith("_") and p.name not in ("AUTHORING.md", "STORY.md", "README.md"))
     if args.page:
         pages = [p for p in pages if p.stem == args.page]
         if not pages:

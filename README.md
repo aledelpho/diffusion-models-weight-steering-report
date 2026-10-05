@@ -1,5 +1,7 @@
 # Weight-Space Steering in Diffusion Models: A Public Lab Notebook
 
+> **Two notebooks.** This page and `notebook/` are the **exploratory** lab notebook: every test run, kept as the base for further work. The confirmed results, written up as a report, are in [`results/`](results/README.md).
+
 > **Scope limit**: Nothing in this notebook reaches outside Krea-2 or outside one narrow corner of image space. All 40 prompts are upper-body or close-up character portraits and all 40 contain the phrases "bold ink outlines" and "hatched shadows". Treat any exploratory effect size here as an upper bound: three consecutive confirmation rounds returned between a third and a half of their exploratory estimates. See [docs/scope.md](docs/scope.md).
 
 ## How to read the table below

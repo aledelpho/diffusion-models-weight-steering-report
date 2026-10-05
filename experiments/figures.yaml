@@ -562,3 +562,40 @@ figures:
       first keeps the ink line; the other two have dissolved the whole picture into a field of
       curled marks, which every displacement statistic in this project scored as a large,
       successful style move.
+
+  # ================================================================ results/ (final results notebook)
+  # ---------------------------------------------------------------- 22-saturation-knob
+
+  - id: F22.1
+    page: 22-saturation-knob
+    kind: contact_sheet
+    builder: results_figures.saturation_ladder_sheet
+    source: data/blk23_colorful_measures.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      On all eight prompts blk23 moves colour the expected way at every rung, while the words
+      "colorful" redraw the cartoon elf and add a cut lemon and a new composition to the still
+      life; under each panel, the measured chroma change.
+
+  - id: F22.2
+    page: 22-saturation-knob
+    kind: ramp
+    builder: results_figures.saturation_dose_response
+    source: data/blk23_colorful_measures.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Chroma change falls monotonically from blk23 -0.45 to +0.30 in 15 of 16 prompt-seed
+      cells, with a median of +3.9 at -0.45 and -3.1 at +0.30.
+
+  - id: F22.3
+    page: 22-saturation-knob
+    kind: paired_bars
+    builder: results_figures.matched_chroma_pairs
+    source: data/blk23_matched_chroma.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Where blk23 reaches the chroma gain of the words "colorful" (7 of 16 cells), it leaves the
+      picture closer to the baseline: layout in 6 of 7, LPIPS in 7 of 7, DINOv2 in 6 of 7.
