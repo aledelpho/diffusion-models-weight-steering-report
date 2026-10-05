@@ -599,3 +599,135 @@ figures:
     alt: >
       Where blk23 reaches the chroma gain of the words "colorful" (7 of 16 cells), it leaves the
       picture closer to the baseline: layout in 6 of 7, LPIPS in 7 of 7, DINOv2 in 6 of 7.
+
+  # ---------------------------------------------------------------- 20-method
+
+  - id: F20.1
+    page: 20-method
+    kind: schema
+    builder: results_figures.edit_schema
+    source: null
+    caption_from: static
+    crop: whole
+    alt: >
+      A single-block edit multiplies the eight reachable 2-D tensors of one of the 28 blocks by the same factor 1 + d; the 1-D tensors stay untouched, and a preset is a vector of 34 such factors.
+
+  # ---------------------------------------------------------------- 21-block-map
+
+  - id: F21.1
+    page: 21-block-map
+    kind: paired_bars
+    builder: results_figures.layout_stability_by_block
+    source: data/block_colour_layout.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Blocks 21 to 27 keep the layout of the picture (layout r around 0.88) while the middle of the stack, worst at block 9 positive, rewrites it.
+
+  - id: F21.2
+    page: 21-block-map
+    kind: diffmap
+    builder: results_figures.residual_overlap_matrix
+    source: data/block_effect_overlap_mean.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Once the change every arm shares is removed, positive arms 08-10 push the same way, 23-26 push the same way, and the early-middle blocks push against the late ones.
+
+  - id: F21.3
+    page: 21-block-map
+    kind: scatter
+    builder: results_figures.weights_vs_stability
+    source: data/block_weight_structure.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The blocks that rewrite the picture most, 08 and 09, have the largest singular value of their MLP gate in the whole stack; the late blocks that keep the layout have the smallest.
+
+  # ---------------------------------------------------------------- 23-prompt-family-presets
+
+  - id: F23.1
+    page: 23-prompt-family-presets
+    kind: contact_sheet
+    builder: results_figures.family_sheet_combo
+    source: data/prompt_family_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The combined late-block preset gives the six cartoon subjects the same flatter, brighter, more saturated look, and changes the oil and photo families in their own, weaker ways.
+
+  - id: F23.2
+    page: 23-prompt-family-presets
+    kind: contact_sheet
+    builder: results_figures.family_sheet_blk09
+    source: data/prompt_family_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Block 9 pushed positive makes the cartoon subjects more three-dimensional and realistic and rearranges the scenes, a change of content more than of rendering.
+
+  - id: F23.3
+    page: 23-prompt-family-presets
+    kind: paired_bars
+    builder: results_figures.family_coherence_by_family
+    source: data/prompt_family_within_by_family.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Late-block presets are coherent across subjects inside a family, most on cartoon (up to 0.80) and least on photographs; middle blocks stay near 0.2 everywhere.
+
+  - id: F23.4
+    page: 23-prompt-family-presets
+    kind: paired_bars
+    builder: results_figures.family_w_b_s
+    source: data/prompt_family_arms.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Every arm is more coherent within a family than between families; for the late blocks the gap is large and coherence reaches about 70 percent of the coherence across seeds.
+
+  # ---------------------------------------------------------------- 24-wording
+
+  - id: F24.1
+    page: 24-wording
+    kind: contact_sheet
+    builder: results_figures.wording_sheet
+    source: data/prompt_writing_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Block 19 pushed positive makes the same change to the elf under all four writings of the prompt and after the gauntlet is changed: the antlers shrink and the pauldron turns to fur.
+
+  - id: F24.2
+    page: 24-wording
+    kind: scatter
+    builder: results_figures.wording_consistency
+    source: data/prompt_writing_arms.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      A block's change is as consistent across writings of the prompt as across seeds, more consistent after a one-object content change, and much less consistent across subjects.
+
+  # ---------------------------------------------------------------- 25-standard-metrics
+
+  - id: F25.1
+    page: 25-standard-metrics
+    kind: scatter
+    builder: results_figures.depth_vs_cost
+    source: data/standard_metrics_summary.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Middle blocks change the content most (DINOv2 0.87-0.88) at no BRISQUE cost, while the late blocks and the combined preset change less and cost up to +9.6 BRISQUE.
+
+  # ---------------------------------------------------------------- 26-what-did-not-work
+
+  - id: F26.1
+    page: 26-what-did-not-work
+    kind: contact_sheet
+    builder: results_figures.destroyed_by_the_statistic
+    source: data/centre_push_units.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.

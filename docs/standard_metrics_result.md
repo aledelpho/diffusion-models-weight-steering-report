@@ -36,7 +36,7 @@ aa8fed1). All numbers: `data/standard_metrics_summary.csv`.
   highest LPIPS, with BRISQUE unchanged or slightly better. The late blocks change less and
   cost more (blk27 −0.25 and the combo +9.6 BRISQUE).
 - **blk09 + lowers prompt adherence most on the blacksmith prompts (−3.8 CLIPScore)**, where the
-  eye saw the woman become a man: the number agrees with the observation.
+  eye saw the woman become a man (at one of the two seeds, oil and photo): the number agrees with the observation.
 - blk26 +0.15: the eye judged its noise unacceptable; BRISQUE (+0.4) and CLIP-IQA do not see it.
   On that point the no-reference metrics are not a substitute for looking.
 

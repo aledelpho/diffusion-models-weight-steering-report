@@ -127,7 +127,313 @@ def matched_chroma_pairs(out: Path) -> Path:
                            f"green = blk23 closer to the baseline · source data/blk23_matched_chroma.csv")
 
 
+
+# ---------------------------------------------------------------- shared helpers
+
+def _sheet(rows, cols, path_fn, caption_fn, out: Path, footer: str, W=150, H=188, LAB=132) -> Path:
+    """Whole-frame contact sheet. rows: [(row_key, row_label)], cols: [(col_key, col_label)].
+    path_fn(row_key, col_key) -> Path; caption_fn(row_key, col_key) -> (text, rgb) or None."""
+    GAP, CAP, HEAD = 2, 18, 26
+    cw = LAB + len(cols) * (W + GAP)
+    chh = HEAD + len(rows) * (H + CAP + GAP) + 22
+    S = Image.new("RGB", (cw, chh), SURF_RGB); d = ImageDraw.Draw(S)
+    for j, (_, lab) in enumerate(cols):
+        d.text((LAB + j * (W + GAP) + 4, 6), lab, fill=INK_RGB, font=font(12, True))
+    for i, (rk, rl) in enumerate(rows):
+        y = HEAD + i * (H + CAP + GAP)
+        d.text((6, y + H // 2 - 8), rl, fill=INK_RGB, font=font(12))
+        for j, (ck, _) in enumerate(cols):
+            p = path_fn(rk, ck)
+            if not p.exists():
+                raise FileNotFoundError(p)
+            x = LAB + j * (W + GAP)
+            S.paste(Image.open(p).convert("RGB").resize((W, H), Image.LANCZOS), (x, y))
+            cap = caption_fn(rk, ck)
+            if cap:
+                d.text((x + 4, y + H + 2), cap[0], fill=cap[1], font=font(11))
+    d.text((6, chh - 18), footer, fill=DIM_RGB, font=font(10))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    S.save(out, "WEBP", quality=86, method=6)
+    return out
+
+
+def _axes(fig, n, k):
+    ax = fig.add_subplot(1, n, k); ax.set_facecolor(SURFACE)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+    for side in ("left", "bottom"):
+        ax.spines[side].set_color(GRID)
+    ax.tick_params(colors=DIM, labelsize=7)
+    return ax
+
+
+def _ramp(i: int, n: int) -> str:
+    """Sequential blue ramp for ordered depth (AUTHORING 4.4)."""
+    t = i / max(n - 1, 1)
+    r, g, b = int(0xb8 - t * (0xb8 - 0x1d)), int(0xd4 - t * (0xd4 - 0x4f)), int(0xf5 - t * (0xf5 - 0x91))
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+# ---------------------------------------------------------------- 20-method
+
+def edit_schema(out: Path) -> Path:
+    """F20.1 — schema, no measured number: 28 blocks, one expanded, the multiplier."""
+    S = Image.new("RGB", (1200, 420), SURF_RGB); d = ImageDraw.Draw(S)
+    d.text((20, 14), "SCHEMA — how a single-block edit is built (no measured values)", fill=DIM_RGB, font=font(13, True))
+    x0, y0, w, h = 40, 70, 36, 60
+    bands = [(0, 1, "Base"), (2, 18, "Style"), (19, 22, "Details"), (23, 27, "Correction")]
+    for b in range(28):
+        x = x0 + b * (w + 4)
+        col = (0x39, 0x87, 0xE5) if b == 23 else (0x3a, 0x3a, 0x38)
+        d.rectangle([x, y0, x + w, y0 + h], fill=col)
+        d.text((x + 8, y0 + h + 6), f"{b:02d}", fill=INK_RGB, font=font(11))
+    for a, z, name in bands:
+        xa, xz = x0 + a * (w + 4), x0 + z * (w + 4) + w
+        d.line([xa, y0 - 12, xz, y0 - 12], fill=DIM_RGB, width=2)
+        d.text((xa, y0 - 32), name, fill=DIM_RGB, font=font(11))
+    d.text((40, 170), "block 23, expanded: 13 tensors, 8 of them 2-D and reachable by the tuner", fill=INK_RGB, font=font(13))
+    tens = ["attn.wq", "attn.wk", "attn.wv", "attn.wo", "attn.gate", "mlp.up", "mlp.gate", "mlp.down"]
+    for k, t in enumerate(tens):
+        x = 40 + k * 140
+        d.rectangle([x, 200, x + 128, 240], outline=(0x39, 0x87, 0xE5), width=2)
+        d.text((x + 10, 212), t, fill=INK_RGB, font=font(12))
+    d.text((40, 262), "every one of them is multiplied by the same factor:   W  ->  (1 + d) · W", fill=INK_RGB, font=font(15, True))
+    d.text((40, 296), "d < 0 weakens the block's contribution, d > 0 strengthens it; d is the 'dose'.", fill=INK_RGB, font=font(12))
+    d.text((40, 322), "The 1-D tensors (norm scales, modulation) are not reachable this way and stay as they are.", fill=INK_RGB, font=font(12))
+    d.text((40, 348), "A preset is a vector of 34 such factors (28 blocks + 6 other sections); a single-block edit sets one.", fill=INK_RGB, font=font(12))
+    d.text((40, 384), "Band names are Alessandro's labels from looking at the renders, not measurements.", fill=DIM_RGB, font=font(11))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    S.save(out, "WEBP", quality=90, method=6)
+    return out
+
+
+# ---------------------------------------------------------------- 21-block-map
+
+def layout_stability_by_block(out: Path) -> Path:
+    """F21.1 — layout r with the baseline per block, both signs, 23 prompts."""
+    rows = list(csv.DictReader(open(DATA / "block_colour_layout.csv")))
+    by = {}
+    for r in rows:
+        b = int(r["block"][3:]); s = "pos" if float(r["dose"]) > 0 else "neg"
+        by.setdefault((b, s), []).append(float(r["layout_r"]))
+    fig, ax = _canvas(7.2, 3.2)
+    for b in range(28):
+        for k, s in enumerate(("neg", "pos")):
+            v = statistics.mean(by[(b, s)])
+            ax.bar(b + (k - 0.5) * 0.38, v, width=0.36, color=_ramp(b, 28), alpha=0.55 if s == "neg" else 1.0)
+    ax.set_ylim(0.4, 1.0); ax.set_xticks(range(0, 28, 3))
+    ax.set_xlabel("block (left bar negative dose, right bar positive)", color=DIM, fontsize=8)
+    ax.set_ylabel("layout r with the baseline", color=DIM, fontsize=8)
+    lo = min(range(28), key=lambda b: statistics.mean(by[(b, "pos")]))
+    ax.annotate(f"blk{lo:02d} +", (lo + 0.2, statistics.mean(by[(lo, "pos")])), textcoords="offset points",
+                xytext=(4, -12), color=INK, fontsize=7.5)
+    ax.set_title("The ends keep the layout; the middle rewrites it", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.88, bottom=0.18)
+    n = len({r["prompt"] for r in rows})
+    return _save(fig, out, f"{n} prompts (styles, v3, v4) · calibrated doses · L-channel correlation at 64x80 · "
+                           f"source data/block_colour_layout.csv")
+
+
+def residual_overlap_matrix(out: Path) -> Path:
+    """F21.2 — residual signed correlation between positive arms (common mode removed)."""
+    rows = list(csv.DictReader(open(DATA / "block_effect_overlap_mean.csv")))
+    import numpy as np
+    M = np.full((28, 28), np.nan)
+    for r in rows:
+        if r["arm_a"].endswith("_pos") and r["arm_b"].endswith("_pos"):
+            a, b = int(r["arm_a"][3:5]), int(r["arm_b"][3:5]); v = float(r["resid_mean"])
+            M[a, b] = M[b, a] = v
+    fig, ax = _canvas(4.6, 4.2)
+    im = ax.imshow(M, cmap="RdBu_r", vmin=-0.4, vmax=0.4)
+    ax.set_xticks(range(0, 28, 3)); ax.set_yticks(range(0, 28, 3))
+    ax.set_title("Positive arms that push the same way\n(after removing the shared part)", color=INK, fontsize=8.5, loc="left")
+    cb = fig.colorbar(im, ax=ax, fraction=0.04); cb.ax.tick_params(colors=DIM, labelsize=7)
+    fig.subplots_adjust(left=0.1, right=0.92, top=0.86, bottom=0.08)
+    return _save(fig, out, "styles bench, 12 prompts · data/block_effect_overlap_mean.csv")
+
+
+def weights_vs_stability(out: Path) -> Path:
+    """F21.3 — largest singular value of mlp.gate per block against layout stability."""
+    W = {int(r["block"]): float(r["mlp.gate.sigma1"]) for r in csv.DictReader(open(DATA / "block_weight_structure.csv"))}
+    lay = {}
+    for r in csv.DictReader(open(DATA / "block_colour_layout.csv")):
+        lay.setdefault(int(r["block"][3:]), []).append(float(r["layout_r"]))
+    fig, ax = _canvas(5.4, 3.4)
+    for b in range(28):
+        y = statistics.mean(lay[b]); ax.scatter(W[b], y, color=_ramp(b, 28), s=22, zorder=3)
+        if b in (8, 9, 23, 26, 27, 0):
+            ax.annotate(f"{b:02d}", (W[b], y), textcoords="offset points", xytext=(4, 3), color=INK, fontsize=7)
+    ax.set_xlabel("largest singular value of mlp.gate", color=DIM, fontsize=8)
+    ax.set_ylabel("layout r with the baseline", color=DIM, fontsize=8)
+    ax.set_title("The blocks that rewrite the picture have the strongest MLP-gate direction", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.13, right=0.97, top=0.88, bottom=0.17)
+    return _save(fig, out, "28 blocks · light = early, dark = late · data/block_weight_structure.csv")
+
+
+# ---------------------------------------------------------------- 23-prompt-family
+
+FAMS = [("F1cartoon", "cartoon"), ("F2oil", "oil"), ("F3photo", "photo")]
+SUBJS = ["blacksmith", "rally", "fox", "stilllife", "fisherman", "lighthouse"]
+
+
+def _family_sheet(arm: str, out: Path, seed: str = "5772156") -> Path:
+    rows = [(s, s) for s in SUBJS]
+    cols = []
+    for f, fl in FAMS:
+        cols += [((f, "baseline"), f"{fl} · base"), ((f, arm), f"{fl} · preset")]
+    p = lambda s, c: IMG / "benchmark_prompt_family" / f"{c[0]}_{s}_{c[1]}_krea2_seed{seed}_00001_.png"
+    return _sheet(rows, cols, p, lambda s, c: None, out,
+                  f"arm {arm} · 6 subjects x 3 families · seed {seed} · whole frames · "
+                  f"source data/prompt_family_plan.csv", W=130, H=163, LAB=92)
+
+
+def family_sheet_combo(out: Path) -> Path:
+    """F23.1 — the combo preset across six subjects and three families."""
+    return _family_sheet("combo", out)
+
+
+def family_sheet_blk09(out: Path) -> Path:
+    """F23.2 — blk09 + across six subjects and three families."""
+    return _family_sheet("blk09_pos_d0.450", out)
+
+
+def family_coherence_by_family(out: Path) -> Path:
+    """F23.3 — within-family coherence W per arm, split by family."""
+    rows = list(csv.DictReader(open(DATA / "prompt_family_within_by_family.csv")))
+    fig, ax = _canvas(7.2, 3.3)
+    n = len(rows); w = 0.26
+    for k, (col, lab) in enumerate((("W_F1cartoon", "cartoon"), ("W_F2oil", "oil"), ("W_F3photo", "photo"))):
+        ax.bar([i + (k - 1) * w for i in range(n)], [float(r[col]) for r in rows], width=w * 0.95, color=CAT[k], label=lab)
+    ax.set_xticks(range(n)); ax.set_xticklabels([r["arm"].replace("_d0.", " .").replace("_pos", " +").replace("_neg", " -") for r in rows],
+                                                 rotation=35, ha="right", fontsize=6.5, color=DIM)
+    ax.axhline(0, color=GRID, lw=0.8)
+    ax.set_ylabel("within-family coherence W", color=DIM, fontsize=8)
+    leg = ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper right")
+    ax.set_title("Late blocks are coherent inside a family — most on cartoon, least on photographs",
+                 color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.08, right=0.99, top=0.88, bottom=0.3)
+    return _save(fig, out, "6 subjects x 2 seeds per family · cosine of 23-feature change vectors · "
+                           "source data/prompt_family_within_by_family.csv")
+
+
+def family_w_b_s(out: Path) -> Path:
+    """F23.4 — W (within family), B (between families), S (seed floor) per arm."""
+    rows = list(csv.DictReader(open(DATA / "prompt_family_arms.csv")))
+    fig, ax = _canvas(7.2, 3.1)
+    for i, r in enumerate(rows):
+        W, B, S = float(r["W_within_family"]), float(r["B_between_families"]), float(r["S_seed"])
+        ax.plot([i, i], [B, W], color=GRID, lw=2, zorder=1)
+        ax.scatter([i], [S], marker="_", s=160, color=DIM, zorder=2)
+        ax.scatter([i], [B], color=CAT[1], s=18, zorder=3)
+        ax.scatter([i], [W], color=CAT[0], s=18, zorder=3)
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels([r["arm"].replace("_d0.", " .").replace("_pos", " +").replace("_neg", " -") for r in rows],
+                       rotation=35, ha="right", fontsize=6.5, color=DIM)
+    ax.set_ylabel("mean cosine", color=DIM, fontsize=8)
+    ax.set_title("blue = within family (W), orange = between families (B), grey tick = across seeds (S)",
+                 color=INK, fontsize=8.5, loc="left")
+    fig.subplots_adjust(left=0.08, right=0.99, top=0.88, bottom=0.3)
+    return _save(fig, out, "18 prompts x 2 seeds · 23 style features · source data/prompt_family_arms.csv")
+
+
+# ---------------------------------------------------------------- 24-wording
+
+def wording_sheet(out: Path) -> Path:
+    """F24.1 — blk19 + on the elf, four writings and the content change, two seeds."""
+    import analyze_prompt_writing as A
+    arm = "blk19_pos_d0.350"
+    labels = ["original", "reordered", "tags", "synonyms", "content changed"]
+    rows = [(pid, lab) for pid, lab in zip(A.WRIT["S1"] + [A.CONTENT["S1"]], labels)]
+    cols = [(("baseline", A.SEEDS[0]), f"base {A.SEEDS[0]}"), ((arm, A.SEEDS[0]), "blk19 +0.35"),
+            (("baseline", A.SEEDS[1]), f"base {A.SEEDS[1]}"), ((arm, A.SEEDS[1]), "blk19 +0.35")]
+    return _sheet(rows, cols, lambda pid, c: Path(A.path(pid, c[0], c[1])), lambda r, c: None, out,
+                  "subject S1 (elf brawler) · whole frames · source data/prompt_writing_plan.csv")
+
+
+def wording_consistency(out: Path) -> Path:
+    """F24.2 — per scored arm: consistency across writings, seeds, content change, subjects."""
+    rows = [r for r in csv.DictReader(open(DATA / "prompt_writing_arms.csv"))]
+    size_w = 1.1547
+    rows = [r for r in rows if float(r["size"]) > size_w]
+    fig, ax = _canvas(7.2, 3.2)
+    keys = [("A_content_small", "one object changed", CAT[2]), ("A_seed", "other seed", DIM),
+            ("A_writing", "other writing", CAT[0]), ("A_subject", "other subject", CAT[1])]
+    for k, (key, lab, col) in enumerate(keys):
+        ax.scatter([i + (k - 1.5) * 0.12 for i in range(len(rows))], [float(r[key]) for r in rows], s=16, color=col, label=lab)
+    ax.set_xticks(range(len(rows)))
+    ax.set_xticklabels([r["arm"].replace("_d0.", " .").replace("_pos", " +").replace("_neg", " -") for r in rows],
+                       rotation=35, ha="right", fontsize=6.5, color=DIM)
+    ax.axhline(0, color=GRID, lw=0.8)
+    ax.set_ylabel("cosine of the block's change", color=DIM, fontsize=8)
+    ax.legend(frameon=False, fontsize=7, labelcolor=INK, ncol=4, loc="lower left")
+    ax.set_title("A block does the same thing whatever the wording; the subject changes it", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.08, right=0.99, top=0.88, bottom=0.3)
+    return _save(fig, out, f"{len(rows)} arms larger than the writing-only change · 2 subjects x 2 seeds · "
+                           f"source data/prompt_writing_arms.csv")
+
+
+# ---------------------------------------------------------------- 25-standard-metrics
+
+def depth_vs_cost(out: Path) -> Path:
+    """F25.1 — per C49 arm: content kept (DINOv2 cosine) against quality cost (delta BRISQUE)."""
+    rows = list(csv.DictReader(open(DATA / "standard_metrics_summary.csv")))
+    dino, bris = {}, {}
+    for r in rows:
+        q = r["quantity"]
+        if r["bench"] == "c49" and q.startswith("Q median dino_cos "):
+            dino[q.split()[-1]] = float(r["value"])
+        if r["bench"] == "c49" and q.startswith("Q median delta brisque "):
+            bris[q.split()[-1]] = float(r["value"])
+    fig, ax = _canvas(5.6, 3.6)
+    for a in dino:
+        late = a.startswith(("blk16", "blk20", "blk23", "blk26", "blk27")) or a == "combo"
+        ax.scatter(dino[a], bris[a], color=CAT[0] if late else CAT[1], s=24, zorder=3)
+        ax.annotate(a.replace("_d0.", " .").replace("_pos", " +").replace("_neg", " -"), (dino[a], bris[a]),
+                    textcoords="offset points", xytext=(4, -10) if a.startswith("blk09") else (4, 3),
+                    color=INK, fontsize=6.5)
+    ax.set_xlim(min(dino.values()) - 0.006, max(dino.values()) + 0.02)
+    ax.axhline(0, color=GRID, lw=0.8)
+    ax.set_xlabel("DINOv2 cosine with the baseline (lower = content changed more)", color=DIM, fontsize=8)
+    ax.set_ylabel("change in BRISQUE (higher = worse)", color=DIM, fontsize=8)
+    ax.set_title("blue = late blocks and combo, orange = middle blocks", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.12, right=0.97, top=0.88, bottom=0.17)
+    return _save(fig, out, "medians over 18 prompts x 2 seeds · source data/standard_metrics_summary.csv")
+
+
+# ---------------------------------------------------------------- 26-what-did-not-work
+
+def destroyed_by_the_statistic(out: Path) -> Path:
+    """F26.1 — the doses a statistic recommended, opened: Block_4 + and Block_1 + on P01, seed 2718281."""
+    units = {(r["group"], r["sign"], r["dose"], r["prompt"]): r for r in csv.DictReader(open(DATA / "centre_push_units.csv"))}
+    doses = ["0.080", "0.200", "0.350", "0.500"]
+    rows = [("Block_4", "Block_4 +"), ("Block_1", "Block_1 +")]
+    cols = [("baseline", "base")] + [(d, f"dose {d}") for d in doses]
+    root = IMG / "benchmark_centre_push" / "renders"
+    def p(g, c):
+        return root / ("P01_baseline_krea2_seed2718281_00001_.png" if c == "baseline"
+                       else f"P01_{g}pos_{c}_krea2_seed2718281_00001_.png")
+    def cap(g, c):
+        if c == "baseline":
+            return None
+        u = units[(g, "pos", c, "P01")]
+        return (f"V {float(u['V']):.2f}  L {float(u['L']):.2f}", INK_RGB)
+    return _sheet(rows, cols, p, cap, out, "P01 · seed 2718281 · V, L = the unit means (3 seeds) the retracted "
+                                           "analysis ranked · data/centre_push_units.csv")
+
+
 BUILDERS = {
+    "F20.1": ("20-method", "edit_schema", edit_schema),
+    "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
+    "F21.2": ("21-block-map", "residual_overlap_matrix", residual_overlap_matrix),
+    "F21.3": ("21-block-map", "weights_vs_stability", weights_vs_stability),
+    "F23.1": ("23-prompt-family-presets", "family_sheet_combo", family_sheet_combo),
+    "F23.2": ("23-prompt-family-presets", "family_sheet_blk09", family_sheet_blk09),
+    "F23.3": ("23-prompt-family-presets", "family_coherence_by_family", family_coherence_by_family),
+    "F23.4": ("23-prompt-family-presets", "family_w_b_s", family_w_b_s),
+    "F24.1": ("24-wording", "wording_sheet", wording_sheet),
+    "F24.2": ("24-wording", "wording_consistency", wording_consistency),
+    "F25.1": ("25-standard-metrics", "depth_vs_cost", depth_vs_cost),
+    "F26.1": ("26-what-did-not-work", "destroyed_by_the_statistic", destroyed_by_the_statistic),
     "F22.1": ("22-saturation-knob", "saturation_ladder_sheet", saturation_ladder_sheet),
     "F22.2": ("22-saturation-knob", "saturation_dose_response", saturation_dose_response),
     "F22.3": ("22-saturation-knob", "matched_chroma_pairs", matched_chroma_pairs),
@@ -135,7 +441,11 @@ BUILDERS = {
 
 
 def main() -> int:
+    import sys
+    only = set(sys.argv[1:])
     for fid, (page, name, fn) in BUILDERS.items():
+        if only and fid not in only:
+            continue
         out = ASSETS / page / f"{fid}_{name}.webp"
         fn(out)
         print("built", out.relative_to(ROOT))

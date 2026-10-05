@@ -81,7 +81,7 @@ eye; the evidence standard used (pre-registration, eye-first, pixel-identical co
   cartoon ≫ oil > photo; eye agrees family by family (`prompt_family_result.md`).
 - Middle blocks: coherent to the eye, not in style statistics nor DINOv2 (H5 refuted); they
   change content most (DINOv2 0.87–0.88) with no BRISQUE cost, and can change identity
-  (blk09 +: blacksmith woman → man, CLIPScore −3.8).
+  (blk09 +: the female blacksmith read as a man at one of two seeds in oil and photo, CLIPScore −3.8 on those prompts).
 - Cost: late blocks and the combo raise BRISQUE (+9.6 for blk27 −0.25 and combo); blk26's noise
   is seen by eye, not by the metrics.
 - Figure: 6 subjects × 3 families for one late block and for blk09.
