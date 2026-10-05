@@ -1,5 +1,9 @@
 # Audit of `docs/semantic_routing_analysis.md` (untracked, not published)
 
+> **2026-10-05.** The audited document, its scripts and its CSV files were deleted, never committed,
+> on Alessandro's decision. This audit is the only record of what they claimed; the retraction is
+> summarised in `results/26-what-did-not-work.md` (Semantic routing).
+
 2026-10-04. The document and its scripts (`experiments/analyze_vector_coherence_aggregated.py`,
 `export_final_csv.py`, `data/krea2_unet_semantic_routing_full*.csv`) appeared in the
 working tree between 2026-10-02 and 2026-10-03, written by another assistant. They are
