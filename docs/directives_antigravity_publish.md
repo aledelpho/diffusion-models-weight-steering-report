@@ -69,3 +69,15 @@ Do not add GitHub Actions, Pages settings or any other file.
 2. The `<SHA>` of step 2.
 3. The full output of the export script (step 3).
 4. The URL of the new repository.
+
+## Updating the results repository (every later round)
+
+1. In the main repository: `git push origin main`, then `git fetch origin` and take the new
+   `<SHA>` exactly as in steps 1–2 (same rules: no `git add`, never `--force`).
+2. Export into a **new, empty** temporary folder:
+   `python experiments\export_results_repo.py --sha <SHA> --out C:\Users\aless\Desktop\_results_export`
+   It must print `PASS`.
+3. In `C:\Users\aless\Desktop\krea2-weight-knobs-results`: delete every tracked file except the
+   `.git` folder (`git rm -r -q .`), copy in the whole content of `_results_export`, then
+   `git add .`, `git commit -m "Update to main repository <SHA short>"`, `git push`.
+4. Delete `_results_export`. Paste back the push output, `<SHA>` and the export output.
