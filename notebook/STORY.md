@@ -4,9 +4,12 @@
 with presets**. A preset is a list of numbers, one per weight tensor, that the tuner multiplies into
 the model. If every preset carries its own recognisable style, presets are a cheap way to make a
 model your own. **The hard problem is control**: choosing which style you get, how strongly, and
-without breaking the picture. Static per-tensor edits like these have barely been studied. The
-nearest prior work trains LoRAs or steers activations
-([prior work](../docs/prior_work_layer_specialisation.md)). So the only way to learn how they behave
+without breaking the picture. The edit itself is **not new**: two ComfyUI tools for Flux already
+scale the base weights of single blocks, by the same mechanism, and one of them already sweeps block
+by block ([block-scaling tools](../docs/prior_work_block_scaling_tools.md)). What they do not do is
+say what each block *does*; the academic work nearest to that trains LoRAs or steers activations
+([prior work](../docs/prior_work_layer_specialisation.md)). So what is open is not the operation but
+its characterisation. So the only way to learn how they behave
 is to experiment, and this page follows those experiments. It is not an argument that any one
 preset is the best.*
 

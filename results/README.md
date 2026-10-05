@@ -75,9 +75,19 @@ training; here the scaling is applied once to the weights of one block of a tran
 
 **Learned controls in weight space.** Concept Sliders train low-rank adaptors that act as attribute
 sliders [6]; weights2weights finds interpretable directions in the space of customised LoRA
-weights [7]; LoRA Block Weight scales a LoRA's effect block by block in practice [8]. The
-difference here is that the base weights themselves are scaled: nothing is learned, and the knob is
-a block, not a learned direction.
+weights [7]; LoRA Block Weight scales a LoRA's effect block by block in practice [8]. Here nothing
+is learned and the knob is a block of the base model, not a learned direction.
+
+**The same edit already exists as a tool.** Scaling the base weights of single blocks, training-free,
+is what two ComfyUI tools for Flux already do: the `FluxBlocksBuster` node [17] gives one multiplier
+per block, and Block Patcher [18] sweeps a list of regular expressions over the block tensors,
+rendering one image per value. Read from their source, both apply exactly the operation studied here
+— `W := W x v` through ComfyUI's `add_patches` with `strength_patch = 0` — and so does the tuner used
+in this report; Block Patcher's regex is in fact finer than our per-block vector, reaching one tensor
+at a time. Neither tool publishes a map, a dose, or a claim about what any block does: their author
+calls them probing tools. **The contribution here is therefore not the edit but its
+characterisation** — a measured per-block map with calibrated doses, pre-registered confirmations,
+and the failures (`docs/prior_work_block_scaling_tools.md`).
 
 **Model and metrics.** Krea-2 is described in its technical report [9]. Image quality and
 similarity are measured with CLIP-IQA [10], BRISQUE [11], CLIPScore [12], LPIPS [13], DISTS [14],
@@ -101,6 +111,8 @@ SSIM [15] and DINOv2 [16] (page 25).
 14. Ding, Ma, Wang, Simoncelli. *Image Quality Assessment: Unifying Structure and Texture Similarity.* IEEE TPAMI 2022. arXiv:2004.07728
 15. Wang, Bovik, Sheikh, Simoncelli. *Image Quality Assessment: From Error Visibility to Structural Similarity.* IEEE TIP 13(4), 2004.
 16. Oquab, Darcet, Moutakanni, Vo, Szafraniec, et al. *DINOv2: Learning Robust Visual Features without Supervision.* arXiv:2304.07193
+17. cubiq. *FluxBlocksBuster+*, node in *ComfyUI_essentials* (software), `conditioning.py`. github.com/cubiq/ComfyUI_essentials
+18. cubiq. *Block_Patcher_ComfyUI — experimental sampler to iterate through blocks weight* (software). github.com/cubiq/Block_Patcher_ComfyUI
 
 ## How to read the table below
 
@@ -131,7 +143,7 @@ page shows its pre-registration, its data and its reservations.
 | **Overturned** | [Pushed to dose 0.500, the macro-block sliders Block_4 and Block_1 move the picture far from the baseline while keeping its line work, and are the best operating points found.](26-what-did-not-work.md#the-best-doses-by-the-statistic) | Published from two statistics, then retracted the next day when the renders were opened: Block_4 + at 0.500 leaves no subject, only a crumpled-stroke texture; Block_1 + at 0.500 is colour confetti. Block_4 + is already broken at 0.350. |
 | **Overturned** | [Structure coherence, a statistic of oriented line work, can rank edits by how much of the drawing they preserve.](26-what-did-not-work.md#a-measure-with-the-sign-wrong) | Pre-registered eye veto: 7 agreements in 9 resolved pairs against a threshold of 8 in 12. Both disagreements are one condition, Block_6 + 0.080, which the statistic scores above its baseline and which I and six blind model observers call broken; Block_1 - 0.500 is the same case. The sign is wrong, not the size. |
 | **Open** | [A provisional, by-eye description of what each of the 28 blocks does in each direction, offered as a starting point for anyone who wants to try the tuner, not as a measured result.](21-block-map.md#a-starting-guide-what-each-block-seems-to-do) | Written by me while looking at the v4 bench (five prompts, one seed) on a page that also showed the 18 prompts of the styles and v3 benches. Where a measurement touches an entry, it agrees on blocks 00, 22, 23 and 27, partly on 01, and the statistic is the suspect on 26. Most Style-band entries have no measurement at all. |
-| **Open** | [The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.](21-block-map.md#what-the-ends-change-and-what-the-middle-changes) | At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; pre-registered, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so "fewer things" holds for kinds of property, not for statistics. |
+| **Open** | [The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.](21-block-map.md#what-the-ends-change-and-what-the-middle-changes) | At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so "fewer things" holds for kinds of property, not for statistics. |
 | **Open** | [Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.](21-block-map.md#where-the-layout-holds) | Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output. |
 | **Open** | [At the same dose, the blocks near the output reach visible artefacts first, while most middle blocks show none; the middle has room before artefacts but drifts toward pictures that are clean and incoherent.](21-block-map.md#how-far-each-block-can-be-pushed) | My artefact labels at dose 0.350, three prompts, one seed: blocks 4 to 11 OK in both directions; positive, strong artefacts on 19, 21, 22, 24 and 25, broken on 26 and 27. Agrees with the pre-registered result that the cost of a push grows toward the output (notebook page 05). The split into hard and soft limits is an observation, not measured. |
 | **Open** | [Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.](21-block-map.md#blocks-that-push-together) | Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered. |

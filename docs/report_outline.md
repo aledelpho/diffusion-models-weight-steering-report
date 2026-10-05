@@ -151,6 +151,7 @@ poses/scenes in one style, middle-block preset on/off; does the identity hold?
 6. Gandikota, Materzyńska, Zhou, Torralba, Bau — *Concept Sliders: LoRA Adaptors for Precise Control in Diffusion Models*, ECCV 2024. arXiv:2311.12092
 7. Dravid, Gandelsman, Wang, Abdal, Wetzstein, Efros, Aberman — *Interpreting the Weight Space of Customized Diffusion Models* (weights2weights), NeurIPS 2024. arXiv:2406.09413
 8. hako-mikan — *sd-webui-lora-block-weight* (software). github.com/hako-mikan/sd-webui-lora-block-weight
+8b. cubiq — *FluxBlocksBuster+* (node in *ComfyUI_essentials*) and *Block_Patcher_ComfyUI* (software): the same per-block base-weight scaling, for Flux. See `prior_work_block_scaling_tools.md`
 9. Lee, Millon, Zhuo, Newton, Filatov, et al. (Krea) — *Krea 2 Technical Report*, 23 June 2026. krea.ai/blog/krea-2-technical-report
 10. Wang, Chan, Loy — *Exploring CLIP for Assessing the Look and Feel of Images*, AAAI 2023. arXiv:2207.12396
 
