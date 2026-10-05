@@ -557,6 +557,19 @@ def blacksmith_identity(out: Path) -> Path:
     T.save(out, "WEBP", quality=86, method=6)
     return out
 
+
+def atlas_ends_and_middle(out: Path) -> Path:
+    """F12.1 — the equal-dose atlas: three prompts, the two ends against two middle blocks."""
+    rows = [("P01_blacksmith", "blacksmith"), ("S1_rally", "rally"), ("F4_closeup", "close-up")]
+    cols = [("baseline", "base"), ("blk00_pos", "blk00 +"), ("blk09_pos", "blk09 +"), ("blk13_pos", "blk13 +"),
+            ("blk25_pos", "blk25 +"), ("blk27_pos", "blk27 +")]
+    root = IMG / "benchmark_single_blocks_atlas" / "renders"
+    p = lambda r, c: root / (f"{r}_baseline_krea2_seed2718281_00001_.png" if c == "baseline"
+                             else f"{r}_{c}_d0.350_krea2_seed2718281_00001_.png")
+    return _sheet(rows, cols, p, lambda r, c: None, out,
+                  "benchmark_single_blocks_atlas · dose 0.350 for every block · seed 2718281 · whole frames · "
+                  "source data/single_blocks_atlas_plan.csv", W=150, H=188, LAB=90)
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -579,6 +592,9 @@ BUILDERS = {
     "F21.6": ("21-block-map", "guide_crown", guide_crown),
     "F22.4": ("22-saturation-knob", "blk23_everywhere", blk23_everywhere),
     "F23.5": ("23-prompt-family-presets", "blacksmith_identity", blacksmith_identity),
+    "F12.1": ("12-single-blocks", "atlas_ends_and_middle", atlas_ends_and_middle),
+    "F12.2": ("12-single-blocks", "sensitivity_map", sensitivity_map),
+    "F13.1": ("13-pushing-harder", "destroyed_by_the_statistic", destroyed_by_the_statistic),
 }
 
 

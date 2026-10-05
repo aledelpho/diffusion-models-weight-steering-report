@@ -93,6 +93,8 @@
 <li><a href="#p-09-style-direction"><span class="dot" style="background:#d03b3b"></span>Eight styles, one direction, and a design that cannot say why</a></li>
 <li><a href="#p-10-all-blocks-clean"><span class="dot" style="background:#898781"></span>All six block groups under matched rotation</a></li>
 <li><a href="#p-11-what-the-numbers-could-not-see"><span class="dot" style="background:#898781"></span>Three times the pictures disagreed with the measurements</a></li>
+<li><a href="#p-12-single-blocks"><span class="dot" style="background:#898781"></span>One block at a time</a></li>
+<li><a href="#p-13-pushing-harder"><span class="dot" style="background:#d03b3b"></span>Pushing harder, cutting finer, and four answers that said no</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
@@ -128,16 +130,21 @@
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">At a displacement matched by construction, the first block group&#x27;s direction is highly consistent across subjects rather than unstable.</a></td><td class="ev">Within-block coherence 0.942 for the first group and 0.977 for the last, in the primary space, on 10 prompts sharing no text with the pilot, measured on recovered pixels. The pilot estimate for the same quantity was 0.65 across 23 features. Removing the HUD moved these two by less than 0.02: the coherence was never the contaminated part.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-09-style-direction--why-the-five-confirmed-cells-do-not-survive">The only amplitude that produced significant cells sits outside the quality range declared for it in advance, in three quarters of its cells.</a></td><td class="ev">The 3-sigma gate was frozen while the render queue was still running and before any feature was extracted. 18 cells of 24 at the double amplitude fall outside it on edge density or on texture entropy, the worst at z = 131.7. That arm&#x27;s displacement was never measured either: its 0.1076 is twice the measured single-dose value, not a second measurement.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-11-what-the-numbers-could-not-see--the-subjects-were-chosen-for-the-property-that-made-the-test-impossible">The generality test for the colour collapse was run on four subjects whose colour prior is unambiguous, where the mechanism predicts nothing to break, so its null is not evidence.</a></td><td class="ev">Undeclared against prototypical-declared: 0.9 to 9.9 degrees for the four subjects, 52.2 degrees for the leaf, in data/prior_ambiguity.csv.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-13-pushing-harder--three-kinds-of-parameter-that-do-nothing">Three of the six kinds of parameter the tuner offers never reach the model: scaling the norm scales, the query-key norms or the modulation layers changes no pixel, at any dose.</a></td><td class="ev">The three families patch disjoint sets of tensors and still give identical renders at a multiplier of 2.0: 6 pairs of 6, maximum difference 0. The modulation family is identical at +0.200 and +1.000 as well.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-the-prompt-asks-for">A block permutation makes an attribute the prompt names and the model normally drops appear in almost every render, while a sign scramble carrying the identical displacement does nothing at all.</a></td><td class="ev">Exploratory, no threshold fixed in advance. 19/20 against 1/20 for the stock model on the same prompt and seeds, and 1/20 for the norm-matched scramble at D = 0.0538.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-02-attribute-emergence--the-attribute-nobody-asked-for">The same family of edits adds and removes a trait the prompt never mentions, in opposite directions depending on which edit is applied.</a></td><td class="ev">Blind-scored, but measured on the renders that produced the observation. Lit headlights 10/35 at baseline, 31/38 under one edit, 0/39 under another. The exact test is at its own floor, p = 0.0312, Holm 0.1875. A pre-registered confirmation on a second corpus was run and could not resolve anything: 9 of its 10 prompts never light a headlight in any condition.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-04-where-in-the-model--the-null-hypothesis-and-how-badly-it-lost">Where an edit lands changes how much the picture moves, and it is not a matter of how far the weights moved. The last block group moves the checkpoint least and the image most.</a></td><td class="ev">Exploratory, one seed per cell, one unsigned metric. The last group displaces 28% less than the largest and moves the image 3.7 times more, at about 15 times the seed noise, 7 of 7 prompts, p at the 2/2^7 floor. Among the four middle groups displacement explains the ordering completely.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-06-the-hatching-axis--the-check-that-was-registered-and-not-recorded">The calibrated preset moves the same measured axis with the opposite sign, so the axis is not a property of block derangement. Whether the measure tracks hatching orientation in this family was never checked.</a></td><td class="ev">Delta -0.370, Holm p 9.2e-5, 16 of 16 prompts and 80 of 80 pairs. But the pre-registration made the preset row conditional on a visual check of one pair, to be recorded before the analysis, and no outcome for that check exists.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-07-chromatic-signatures--three-of-six-and-the-bar-was-four">Whether each individual edit imprints a chromatic direction that survives a change of subject is undecided. Three of six conditions cleared the registered threshold and the threshold was four.</a></td><td class="ev">Pre-registered bar of four of six surviving Holm at 0.05, with three declared ambiguous in advance and not to be rounded up. Observed three: Holm 2.2e-3, 1.1e-2, 2.1e-2, and the fourth at 5.10e-2.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-08-block1-vs-block6--what-this-says-about-the-first-block">Whether the first block group&#x27;s earlier anomaly was instability or position is unresolved. It looks like a participant under matched rotation and it did not replicate under amplitude scaling.</a></td><td class="ev">Amplitude scaling in the pilot put it at the middle groups&#x27; level at both doses. Matched rotation here puts its coherence at 0.949. The two families disagree and the pilot&#x27;s was not displacement-matched.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-13-pushing-harder--six-slices-and-their-union">The output projection cut into six depth slices composes: the union of the slices does what the sum of the slices does.</a></td><td class="ev">Pre-registered at +-0.100: not supported in 4 of 4 prompt-sign combinations (cos 0.57-0.66). But at that dose a slice does not agree with itself across seeds (cos 0.06-0.39), so the criterion of 0.95 could not be met whatever composition does. Exploratory: one fine-grain scalar composes multiplicatively within 1-11 percent in 12 of 12 cells.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">A bidirectional, mirror-image response is the exception rather than the rule.</a></td><td class="ev">Falsified. 17 of 28 blocks are mirror-symmetric within 3σ. The prediction expected fewer than 10.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-05-knob-or-cost--what-i-got-wrong">Blocks at either end of the network respond violently in both directions.</a></td><td class="ev">Falsified. Predicted for the first block and at least three of five tail blocks; found in one of the five.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-06-the-hatching-axis--the-control-that-vanished">The exploratory hatching effect of the norm-matched sign scramble does not survive a fresh corpus. It was the third family of the registered prediction and it is not there.</a></td><td class="ev">Exploratory -0.187 on 18 prompts, 81 pairs of 90. Confirmation +0.020 with the sign reversed, p = 0.67, 5 of 16 prompts and 30 of 80 pairs in the predicted direction.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-09-style-direction--what-the-frozen-criteria-returned">That the direction a weight displacement imprints on the image depends on the style the prompt declares more than it depends on the subject the prompt describes. Tested against criteria frozen before the renders, not supported, and at the usable dose it runs the other way.</a></td><td class="ev">Pre-registered 2026-09-18 at 08:55 with three acceptance criteria. Criterion 1, full confirmation in the complete space and in the texture space, is never met: texture is not significant at either amplitude. At the usable amplitude no cell of 12 is significant and 6 of 12 carry the sign opposite to the prediction, including all four cells of the calibrated preset. The two artefact clauses, criteria 2 and 3, both fire.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--a-groove-or-a-hole">A targeted edit — a block group, a single block or one projection — can move the picture visibly toward what the model already draws while keeping the drawing.</a></td><td class="ev">Pre-registered on 1,224 existing cells: 84 visible units, 53 of them moving away from the model&#x27;s repertoire, 0 groove candidates. The nearest miss, Block_5 positive at 0.120, fell short of visibility by 0.0004 on one prompt.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--can-the-centre-be-pushed-further">At equal visibility, the central block groups keep the drawing better than the two at the ends of the stack, so the centre can be pushed further.</a></td><td class="ev">Pre-registered primary: T = +0.053, p = 0.19 over 495 relabellings, range guard passed — a null, not an inconclusive. Block_5, in the centre, gives way hardest of all.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--the-statistic-with-the-sign-wrong">Structure coherence, the statistic used to tell a kept drawing from a broken one, orders renders the way the eye does.</a></td><td class="ev">Pre-registered eye veto: 7 agreements of 9 resolved pairs against a threshold of 8 in 12. Both disagreements are Block_6 positive at 0.080, scored above its baseline and called broken by Alessandro and six blind model observers. The doses the statistic ranked best, Block_4 and Block_1 positive at 0.500, are destroyed.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--the-53-kb-payload">A 53 KB hand-calibrated weight perturbation shifts the mark style of a 12.8-billion parameter diffusion model coherently and repeatably across seeds.</a></td><td class="ev">On 24 prompts in data/global_aggregation_corrected.csv the preset separates from both controls on the stroke-continuity axis: PC1 -2.532, 95% CI [-2.997, -2.067], dz = -2.30, Holm p = 3e-05 against block derangement, and -2.117, CI [-2.692, -1.542], Holm p = 3e-05 against the sign scramble. Crosshatch entropy moves with it, -1.691 and -0.485, both Holm significant. Exploratory: no threshold was frozen before these were computed.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--direction-not-distance">This is not &quot;the further from the checkpoint, the more the style changes&quot;. Controls at the same Frobenius displacement without the calibrated structure do not reproduce it.</a></td><td class="ev">Both controls carry the identical measured displacement, d_model_relative = 0.05381584 in data/preset_displacements.csv, and both are separated from the preset on the same axis: PC1 -2.532 against block derangement and -2.117 against the sign scramble, Holm p = 3e-05 each, in data/global_aggregation_corrected.csv. Distance is held constant by construction, so what differs is the structure.</td></tr>
@@ -158,6 +165,10 @@
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-10-all-blocks-clean--the-same-angle-is-not-the-same-dose">The output group&#x27;s lead over the input group is not an artefact of rotating every group by the same angle: correcting for the displacement each group actually received widens the lead instead of closing it.</a></td><td class="ev">B6 receives 0.740 of B1&#x27;s displacement at a common angle, so the ratio 5.35 / 4.16 / 4.13 as rendered becomes 7.23 / 5.62 / 5.58 per unit of displacement, in data/sensitivity_by_block.csv.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--the-best-edits-by-displacement-were-the-worst-pictures">Every statistic this project had for ranking an edit measures how far the image moved, and none of them can tell moving toward something from falling apart; the conditions ranked best by displacement are among the worst on it.</a></td><td class="ev">The five conditions recommended on 2026-09-27 rank 75th to 80th of 80 on structure coherence in data/texture_anisotropy.csv; the condition picked by eye ranks 12th, above the median.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-11-what-the-numbers-could-not-see--a-colour-that-was-named-survives-a-colour-that-was-inferred-does-not">A colour stated in the prompt survives every edit measured, while a colour the model has to infer from the object can be removed entirely, leaving the object intact.</a></td><td class="ev">Declared probes never fall below chroma ratio 0.648 in 72 cells; the undeclared one reaches 0.040 and does so in 9 of 20 fresh seeds, against 0 of 20 unedited. data/leaf_collapse_cells.csv, data/colour_chroma_audit.csv.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-12-single-blocks--the-ends-are-recognisable-the-middle-is-not">Pushed by the same amount, a single block does the same recognisable thing on different pictures only at the two ends of the stack; a middle block does something reproducible on one picture and something else on another.</a></td><td class="ev">Criteria fixed before any measurement, on renders that already existed. Positive arms: 5 of 28 blocks recognisable across pictures (0, 1, 25, 26, 27), p = 0.0015 against a permutation threshold of 3; negative: 4 of 28 (0, 8, 20, 27), p = 0.0085. On the same picture at another seed and dose, 9 and 8 of 28, middle blocks included.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-12-single-blocks--two-poles-or-one-direction">For most single blocks, pushing up and pushing down move the picture the same way: the largest thing they do is a shared change, more colour and more grain, not a slider with two ends.</a></td><td class="ev">cos(push up, push down) is negative for blocks 0, 1 and 24 only; saturation rises in 47 of 56 block-sign cells and fine-grain energy in 40, whichever the sign.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-12-single-blocks--the-tail-as-rendering-controls">Blocks 22 to 27 change the subject less than the rest of the stack, and block 27 is a focus control; the other names given to the tail blocks are not borne out as single levers.</a></td><td class="ev">Criteria fixed before any statistic was computed; not blind for blocks 22 and 23. Layout 0.834 for 22-27 against 0.771 for 0-21, exact p = 0.010; block 27 passes every test of its own label (3 of 3 prompts, 4 of 4 replications); block 26 partly; 22, 23, 24 and 25 not under the strong reading, and no label under the lever reading.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-12-single-blocks--style-or-subject">Within one declared style a block&#x27;s change is more alike across subjects than within one subject across styles, mostly in the late blocks.</a></td><td class="ev">Exploratory, one seed: higher on 41 of 56 arms; mean cosine 0.21 against 0.08; late blocks 19-27 at 0.38, middle blocks 03-12 at 0.10. Confirmed afterwards for late-block presets with a pre-registered test (results page 23).</td></tr>
       </tbody>
     </table>
   </section>
@@ -4969,6 +4980,356 @@ their correlation; an isotropic texture summary that reports a decrease while th
 replaced; a base rate taken from the whole corpus for an event conditional on one cell; and choosing
 a test population by the property that makes the effect impossible. They are listed with their
 evidence in <code>docs/open_work_register.md</code> §E.</p>
+</section>
+<section id="p-12-single-blocks">
+<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">2153 renders · 31 prompts · 4 seeds · 2026-10-05</span></p>
+<h1 id="p-12-single-blocks--one-block-at-a-time">One block at a time</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> The six block groups of the tuner kept cutting through whatever
+structure the model had (pages 04, 08, 10). Alessandro's reading of the first single-block renders
+was that he could see "a lot of identifiable controls" in every zone. If single blocks are the
+natural unit, each should do something of its own, recognisably, on any picture.</p>
+<p><strong>What would kill it.</strong> Blocks that are no more recognisable across pictures than chance, or whose
+two directions are mirror images of nothing in particular.</p>
+<p><strong>Where we are.</strong> The two ends of the stack behave like controls; the middle does real but
+picture-dependent things. Most of what a single block does is a change shared by both directions.
+This page is the exploratory ground of the results notebook, where three of its leads were
+confirmed.</p>
+</blockquote>
+<h2 id="p-12-single-blocks--in-two-minutes">In two minutes</h2>
+<p>Five benches pushed one block at a time: an atlas with every block at the same dose, 0.350, on three
+prompts; a styles bench with doses calibrated per block on twelve prompts; two more benches (v3,
+v4) on eleven prompts with comics, crowns and complex scenes; and one prompt in five word orders.</p>
+<p><img alt="At the same dose the end blocks do the same thing on all three pictures — block 0 softens, block 25 adds hatching grain, block 27 dissolves the picture into noise — while blocks 9 and 13 change each picture in its own way." src="assets/12-single-blocks/F12.1_atlas_ends_and_middle.webp" /></p>
+<p>Read the columns. Block 0 softens all three pictures; block 25 lays the same hatching grain over all
+three; block 27 at this dose dissolves all three into noise. Block 9 turns the rally car and polishes
+the close-up; block 13 redraws the faces and changes the light. The ends do one thing; the middle does
+a different thing to each picture.</p>
+<h2 id="p-12-single-blocks--the-verdict">The verdict</h2>
+<p>Single blocks are a better unit than the tuner's groups, but only some of them are knobs. Recognisable
+controls sit at the two ends of the stack — grain, softness, focus, saturation. The middle changes
+content, reproducibly on one picture and differently on another. For most blocks, pushing either way
+mostly adds the same thing, colour and grain. None of this was pre-registered as a hypothesis; three
+of its leads — the saturation knob, presets per style, robustness to wording — were tested afterwards
+in the results notebook.</p>
+<h2 id="p-12-single-blocks--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>The atlas has one seed and three prompts.</strong> Recognisability across pictures is measured on three
+  pairs of pictures per block.</li>
+<li><strong>The tests on the atlas and on the tail were fixed after the renders existed</strong>, before anything
+  was measured; that is weaker than a pre-registration, and the tail test was not blind for blocks 22
+  and 23.</li>
+<li><strong>The doses differ between benches</strong>, and the styles bench used doses chosen by eye.</li>
+<li><strong>64×80 and 23 rendering statistics see layout, colour and texture</strong>, not content. The middle
+  blocks' changes of content are seen mainly by eye.</li>
+</ul>
+<h2 id="p-12-single-blocks--the-data">The data</h2>
+<h3 id="p-12-single-blocks--the-ends-are-recognisable-the-middle-is-not">The ends are recognisable, the middle is not</h3>
+<p>For each pair of prompts, the change of block <em>i</em> on one is compared with the change of every block on
+the other; block <em>i</em> is recognisable if its own change is the closest. Chance is about 1 in 28.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>sign</th>
+<th style="text-align: right;">recognisable</th>
+<th style="text-align: right;">permutation 95th percentile</th>
+<th style="text-align: right;">p</th>
+<th>which</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td style="text-align: right;"><strong>5 / 28</strong></td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.0015</td>
+<td><strong>0, 1, 25, 26, 27</strong></td>
+</tr>
+<tr>
+<td>−</td>
+<td style="text-align: right;"><strong>4 / 28</strong></td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.0085</td>
+<td><strong>0, 8, 20, 27</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>By its own rule the claim passes; by its size it is narrow: 23–24 blocks of 28 are not recognisable
+across pictures. On the same picture at another seed and dose, 9 and 8 of 28 are, several of them in
+the middle (14–22): middle blocks do something reproducible, but what they do depends on the picture
+(<code>docs/single_blocks_atlas_result.md</code>, <code>data/single_blocks_tests.csv</code>).</p>
+<h3 id="p-12-single-blocks--two-poles-or-one-direction">Two poles, or one direction?</h3>
+<p>The cosine between a block's change pushed up and pushed down is negative only for blocks 0, 1 and 24.
+For the other 25 both directions move the picture the same way, and across the 56 block-sign cells
+saturation rises in 47 and fine-grain energy in 40. It is the common mode found earlier on the groups
+(<code>docs/sign_decomposition_result.md</code>), visible one block at a time.</p>
+<h3 id="p-12-single-blocks--how-far-each-block-can-be-pushed">How far each block can be pushed</h3>
+<p><img alt="At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture." src="assets/12-single-blocks/F12.2_sensitivity_map.webp" /></p>
+<p>Alessandro labelled every atlas render by the artefacts he could see
+(<code>data/single_blocks_eye_artifacts_alessandro.csv</code>). The output end breaks first; the middle shows
+nothing at 0.350. His labels set the doses of the later benches: up to 0.45 on the styles bench, 0.55
+in places on v4. The middle has its own, softer limit — a clean picture whose drawing stops making
+sense — which no label or statistic here records (<a href="../results/21-block-map.md#how-far-each-block-can-be-pushed">results page 21</a>).</p>
+<h3 id="p-12-single-blocks--the-tail-as-rendering-controls">The tail as rendering controls</h3>
+<p>Alessandro named blocks 22–27 after what they seemed to control. The test, fixed before any statistic
+was computed, asked of each name whether the block moves its own measure in two directions, more than
+any other measure, and on a replication bench (<code>docs/late_blocks_render_controls_result.md</code>).</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>block</th>
+<th>name</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>27</td>
+<td>focus</td>
+<td><strong>holds</strong> on every test: two poles 3 of 3, own measure the largest, rank 1 of 28, replication 4 of 4</td>
+</tr>
+<tr>
+<td>26</td>
+<td>sharpness</td>
+<td>partly: two poles 3 of 3, but contrast, focus and texture move more</td>
+</tr>
+<tr>
+<td>23</td>
+<td>saturation</td>
+<td>not as a single lever here: colourfulness moves more than mean saturation</td>
+</tr>
+<tr>
+<td>22, 24, 25</td>
+<td>vividness, contrast, texture</td>
+<td>not borne out</td>
+</tr>
+</tbody>
+</table></div>
+<p>What holds for the whole tail is that the subject barely changes: layout 0.834 for blocks 22–27
+against 0.771 for the rest, exact p = 0.010; 23, 25 and 24 are the three most layout-preserving blocks
+of all 28. Block 23 was later confirmed as a saturation knob with its own measure, chroma
+(<a href="../results/22-saturation-knob.md">results page 22</a>).</p>
+<h3 id="p-12-single-blocks--groups-and-word-order">Groups and word order</h3>
+<p>After removing the change every edit shares, neighbouring blocks 08–10, 23–26 and 15–16 pushed up move
+the picture the same way on the styles prompts and again on eleven prompts of v3 and v4; 02–05 does not
+come back. The tuner's macro-block sliders cut through two of these groups. On one prompt in five word
+orders, a block's change is as stable across orders as across seeds (r = 0.92 over 56 arms)
+(<code>docs/block_groups_and_prompt_order.md</code>).</p>
+<h3 id="p-12-single-blocks--style-or-subject">Style or subject</h3>
+<p>On the styles bench, the change a block makes is more alike across five cartoon subjects than across
+seven styles of one subject: on 41 of 56 arms, mean cosine 0.21 against 0.08, mostly in the late blocks
+(0.38) and hardly in the middle (0.10) (<code>docs/style_vs_subject_exploration.md</code>). The confirmatory version
+is <a href="../results/23-prompt-family-presets.md">results page 23</a>.</p>
+<h3 id="p-12-single-blocks--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  scheduler: simple
+  denoise: 1.0
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  mode: Real Value, 34-slot vectors_override, one slot at a time
+prompts:
+  files: [data/single_blocks_atlas_plan.csv, data/single_blocks_styles_plan.csv, data/single_blocks_v3_plan.csv, data/single_blocks_v4_plan.csv, data/prompt_order_experiment_plan_full.csv]
+seeds: [2718281, 3141592, 1618033, 1234567]
+conditions:
+  - name: atlas, every block both signs
+    dose: 0.350
+    measured_D: not measured; the dose is a per-block gain, not a calibrated displacement
+  - name: styles, v3, v4, prompt order
+    dose: calibrated by eye per block and per bench, 0.05 to 0.55
+    measured_D: not measured
+outputs:
+  directories:
+    - benchmark_single_blocks_atlas/renders -- 171, outside the repository
+    - benchmark_single_blocks_styles/renders -- 684
+    - benchmark_single_blocks_v3/renders -- 396
+    - benchmark_single_blocks_v4/renders -- 332
+    - benchmark_prompt_order -- 570
+  manifest: data/single_blocks_atlas_plan.csv
+analysis:
+  documents: [docs/single_blocks_atlas_result.md, docs/late_blocks_render_controls_result.md, docs/block_groups_and_prompt_order.md, docs/style_vs_subject_exploration.md, docs/single_blocks_exploration_synthesis.md]
+  data: [data/single_blocks_tests.csv, data/single_blocks_map.csv, data/single_blocks_measures.csv, data/block_effect_overlap_mean.csv, data/prompt_order_feature_consistency.csv]
+</code></pre>
+<h2 id="p-12-single-blocks--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_single_blocks_atlas (171), benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332), benchmark_prompt_order (570).</li>
+<li><strong>Criteria fixed before measuring:</strong> <code>docs/prereg_single_blocks_identifiability.md</code>,
+  <code>docs/prereg_late_blocks_render_controls.md</code>.</li>
+<li><strong>Observations by eye:</strong> <code>data/single_blocks_eye_artifacts_alessandro.md</code>,
+  <code>data/single_blocks_styles_notes_alessandro.md</code>, <code>data/single_blocks_v4_definitions_alessandro.md</code>.</li>
+<li><strong>Confirmed later:</strong> <a href="../results/21-block-map.md">results page 21</a>,
+  <a href="../results/22-saturation-knob.md">22</a>, <a href="../results/23-prompt-family-presets.md">23</a>,
+  <a href="../results/24-wording.md">24</a>.</li>
+</ul>
+</section>
+<section id="p-13-pushing-harder">
+<p class="status"><span class="pill" style="--c:#d03b3b">Overturned</span><span class="corpus">747 renders · 2 prompts · 6 seeds · pre-registered · 2026-10-05</span></p>
+<h1 id="p-13-pushing-harder--pushing-harder-cutting-finer-and-four-answers-that-said-no">Pushing harder, cutting finer, and four answers that said no</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Two intuitions of Alessandro's, after the broad presets of page 09
+had been refuted: targeted edits "carve a groove" that broad ones cannot, and the centre of the
+model can be pushed much further than the ends before the drawing breaks. Both are about finding
+the room an edit has before it turns into damage.</p>
+<p><strong>What would kill it.</strong> No targeted edit moving visibly toward what the model already draws; the
+centre giving way no later than the ends; a statistic of "kept drawing" that disagrees with the eye.</p>
+<p><strong>Where we are.</strong> All four answers came back no, one of them from a test that could not have said
+yes. The way they failed is the useful part: it is why the next week moved to single blocks and put
+the eye before every number.</p>
+</blockquote>
+<h2 id="p-13-pushing-harder--in-two-minutes">In two minutes</h2>
+<p>Four studies in two days. The tuner was asked which of its six kinds of parameter actually reach the
+model: three do not. A study on renders already on disk asked whether any targeted edit carves a
+groove: none does. A new bench pushed the six block groups to 0.500 to see whether the centre holds
+longer: it does not, and the statistic used to judge "holding" turned out to have the sign wrong. A
+last bench cut the output projection into six depth slices to see whether the parts add up: the
+test could not tell.</p>
+<p><img alt="The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left; at 0.350 Block_4 already flattens the face into a mask." src="assets/13-pushing-harder/F13.1_destroyed_by_the_statistic.webp" /></p>
+<p>The two renders on the right were recommended as the best operating points of the project for one
+day, on two statistics, before anyone opened them. The one in the top row at 0.350 is the other
+kind of failure: the picture is clean, and the face has become a mask.</p>
+<h2 id="p-13-pushing-harder--the-verdict">The verdict</h2>
+<p>Three of the tuner's parameter kinds are dead, and the tool did not say so. No targeted edit carves a
+groove at these doses. The centre of the stack cannot be pushed further than the ends. The statistic
+built to separate a kept drawing from a broken one fails the eye on exactly the units that matter,
+with the sign wrong. The composition of depth slices is undecided, because its pre-registered
+criterion was unpassable. Each of these is a no about groups and broad slices; the single-block work
+of page 12 started from them.</p>
+<h2 id="p-13-pushing-harder--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>The groove study is bounded by its visibility bar.</strong> Most targeted edits never became visible at
+  the doses on disk, so "no groove" means "none visible here".</li>
+<li><strong>The centre push is about six groups of consecutive blocks</strong>, not single blocks; the grouping
+  itself was the problem (<code>Block_5</code> sits in the centre and behaves like an end).</li>
+<li><strong>The eye veto failed its own gate by honest ties</strong>: 7 of 9 is above chance, and three pairs were
+  unjudgeable. The rout is in the two disagreements, not in the count.</li>
+<li><strong>The slices test was unpassable</strong> at ±0.100 (pitfall 89). Its "not supported" carries no
+  information about composition.</li>
+</ul>
+<h2 id="p-13-pushing-harder--the-data">The data</h2>
+<h3 id="p-13-pushing-harder--three-kinds-of-parameter-that-do-nothing">Three kinds of parameter that do nothing</h3>
+<p><code>benchmark_parameter_families</code> scaled one kind of parameter at a time. Norm scales (56 tensors),
+query-key norms (56) and modulation layers (28) patch disjoint sets of tensors, so if any of them had
+an effect the three could not coincide. At a multiplier of 2.0 they coincide on both prompts, 6 pairs
+of 6, maximum difference 0; the modulation family is also identical between +0.200 and +1.000. The
+three kinds that do move are far apart: at +1.000 the mean pixel change against the inert state is
+120 / 255 for the input-output projections, 50 for the attention output projections and 32 for the
+text projector on one prompt (<code>docs/parameter_families_first_result.md</code>). The cross between kinds and
+depths turned out to exist already in the q/k/v/o atlas, which had been claimed missing
+(pitfall 88).</p>
+<h3 id="p-13-pushing-harder--a-groove-or-a-hole">A groove or a hole</h3>
+<p>Alessandro's claim, after broad presets had been shown to move the picture away from what the model
+draws: targeted presets can carve a groove, if pushed hard enough to be visible. The pre-registered
+study measured 1,224 existing cells — groups, <code>blk16</code>, 56 single-block arms, 16 projections
+(<code>docs/groove_or_hole_result.md</code>).</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>visible units</td>
+<td style="text-align: right;"><strong>84</strong></td>
+</tr>
+<tr>
+<td>of which moving away from the repertoire</td>
+<td style="text-align: right;"><strong>53</strong></td>
+</tr>
+<tr>
+<td>groove candidates</td>
+<td style="text-align: right;"><strong>0</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Most targeted edits never became visible at all: all 16 projections stay below the bar. The nearest
+miss was <code>Block_5</code> positive at 0.120: visible on one prompt and short by 0.0004 on the other. Of
+Alessandro's descriptive claims, "the ends break the line" held (27% against 14% of units), "the
+centre moves the picture more" did not — the ends moved it more at all six doses.</p>
+<h3 id="p-13-pushing-harder--can-the-centre-be-pushed-further">Can the centre be pushed further?</h3>
+<p><code>benchmark_centre_push</code> took the six groups to 0.080, 0.200, 0.350 and 0.500 on two prompts and three
+new seeds. The primary — whether, at equal visibility, the central groups keep the drawing better —
+returned T = +0.053, p = 0.19 over 495 relabellings, with the range guard passed: a null. Sorted by
+how fast they give way, the groups do not split by position: <code>Block_5</code>, in the centre, gives way
+hardest; <code>Block_1</code>, at an end, less than five of the eight central arms (<code>docs/centre_push_result.md</code>).</p>
+<h3 id="p-13-pushing-harder--the-statistic-with-the-sign-wrong">The statistic with the sign wrong</h3>
+<p>The bench carried an eye veto, registered before rendering: twelve pairs, and for each Alessandro
+said which render was more broken. He resolved 9 and agreed with structure coherence on 7, below the
+registered 8 of 12. Both disagreements are <code>Block_6</code> positive at 0.080, which the statistic scores
+above its own baseline and which he — and six blind model observers, in both orientations of the
+sheets — called broken (<code>docs/centre_push_eye_veto_result.md</code>). The same day, the two doses the
+statistic ranked best were opened and found destroyed: a regular texture is "line" everywhere, and a
+destroyed picture is far from its baseline. The recommendation was retracted and the bench planned
+to push them further was withdrawn (pitfall 90).</p>
+<h3 id="p-13-pushing-harder--six-slices-and-their-union">Six slices and their union</h3>
+<p><code>benchmark_wo_depth</code> cut the attention output projection into six depth slices and rendered each
+alone and all six together. Pre-registered at ±0.100: the union should equal the sum of the slices
+(cos ≥ 0.95, ratio 0.90–1.10). It fails in all four prompt-sign combinations (cos 0.57–0.66). But at
+that dose a slice at one seed and the same slice at another point in nearly unrelated directions
+(cos 0.06–0.39), and on one prompt the union barely agrees with itself (0.33 and 0.13): the criterion
+was unpassable before a render existed (pitfall 89). Exploratory, at the doses added later: the union
+is more reproducible and more of a single axis than any slice, and one scalar — fine-grain energy —
+composes multiplicatively within 1–11% in 12 of 12 cells (<code>docs/wo_depth_result.md</code>).</p>
+<h3 id="p-13-pushing-harder--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded -- the file is outside the repository
+  text_encoder: qwen3vl_4b_bf16.safetensors
+  vae: qwen_image_vae.safetensors
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  scheduler: simple
+  denoise: 1.0
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2ModelTuner
+  mode: named group inputs Block_1 ... Block_6 (centre push); preset JSON per parameter family or depth slice (families, wo depth)
+prompts:
+  P01: &quot;Western comics style, bold ink outlines, hatched shadows, ... (full text in data/centre_push_plan.csv)&quot;
+  P02: &quot;(full text in data/centre_push_plan.csv)&quot;
+seeds: [2718281, 3141592, 1618033, 42, 777, 1337]
+conditions:
+  - name: centre push, six groups, both signs
+    doses: [0.080, 0.200, 0.350, 0.500]
+    measured_D: not measured in weight space; V is the pixel distance in units of the seed noise of the same prompt, in data/centre_push_units.csv
+  - name: parameter families
+    doses: [0.200, 1.000, and others per family]
+    measured_D: not measured; three families shown inert by pixel identity
+  - name: wo depth slices and union
+    doses: [0.100, 0.200, 0.350, both signs]
+    measured_D: not measured in weight space; slices disjoint, union exact, checked by guard G_union
+outputs:
+  directories:
+    - benchmark_centre_push/renders -- 295, outside the repository
+    - benchmark_wo_depth -- 254
+    - benchmark_parameter_families -- 144 graded + 54 probe
+  manifest: data/centre_push_plan.csv
+analysis:
+  scripts: [experiments/analyze_centre_push.py, experiments/groove_or_hole.py]
+  documents: [docs/parameter_families_first_result.md, docs/groove_or_hole_result.md, docs/centre_push_result.md, docs/centre_push_eye_veto_result.md, docs/wo_depth_result.md]
+</code></pre>
+<h2 id="p-13-pushing-harder--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_centre_push (295), benchmark_wo_depth (254), benchmark_parameter_families (198).</li>
+<li><strong>Pre-registrations:</strong> <code>docs/prereg_centre_push.md</code>, <code>docs/prereg_centre_push_model_eye.md</code>,
+  <code>docs/prereg_groove_or_hole.md</code> with amendments 01 and 02, <code>docs/prereg_wo_depth.md</code>.</li>
+<li><strong>Eye:</strong> <code>data/centre_push_veto_answers.csv</code>, <code>docs/wo_depth_eye_mapping.md</code>.</li>
+<li><strong>Pitfalls:</strong> 88, 89, 90 in <code>docs/_pitfalls_88_da_inserire.md</code> … <code>_90_da_inserire.md</code>.</li>
+<li><strong>In the results notebook:</strong> <a href="../results/26-what-did-not-work.md">page 26</a>.</li>
+</ul>
 </section>
 </main>
 </body>

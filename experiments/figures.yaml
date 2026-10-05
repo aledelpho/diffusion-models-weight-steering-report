@@ -793,3 +793,35 @@ figures:
     crop: whole
     alt: >
       Under blk09 +0.45 the female blacksmith stays a woman at seed 5772156 in all three styles, and at seed 1414213 turns into a man in the oil painting and in the photograph.
+
+  # ---------------------------------------------------------------- 12-single-blocks / 13-pushing-harder
+
+  - id: F12.1
+    page: 12-single-blocks
+    kind: contact_sheet
+    builder: results_figures.atlas_ends_and_middle
+    source: data/single_blocks_atlas_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      At the same dose the end blocks do the same thing on all three pictures — block 0 softens, block 25 adds hatching grain, block 27 dissolves the picture into noise — while blocks 9 and 13 change each picture in its own way.
+
+  - id: F12.2
+    page: 12-single-blocks
+    kind: strip
+    builder: results_figures.sensitivity_map
+    source: data/single_blocks_eye_artifacts_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture.
+
+  - id: F13.1
+    page: 13-pushing-harder
+    kind: contact_sheet
+    builder: results_figures.destroyed_by_the_statistic
+    source: data/centre_push_units.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left; at 0.350 Block_4 already flattens the face into a mask.

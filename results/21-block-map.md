@@ -52,7 +52,7 @@ claims:
       differently on each picture.
     evidence: >
       At one dose for all blocks, a block is recognisable as itself on another picture only at the
-      ends (positive: blocks 0, 1, 25, 26, 27; pre-registered, p = 0.0015). The ends keep the layout
+      ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout
       (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content
       most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of
       them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so "fewer things" holds
