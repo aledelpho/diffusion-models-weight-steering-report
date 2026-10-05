@@ -421,6 +421,142 @@ def destroyed_by_the_statistic(out: Path) -> Path:
                                            "analysis ranked · data/centre_push_units.csv")
 
 
+
+# ---------------------------------------------------------------- story figures (2026-10-05)
+
+def three_knobs(out: Path) -> Path:
+    """F20.2 — one picture, three single-block edits: saturation, realism, softness."""
+    seed = "5772156"
+    cols = [("baseline", "base"), ("blk23_neg_d0.300", "blk23 -0.30"), ("blk09_pos_d0.450", "blk09 +0.45"),
+            ("blk27_neg_d0.250", "blk27 -0.25")]
+    rows = [("F1cartoon_fox", "cartoon fox"), ("F2oil_lighthouse", "oil lighthouse")]
+    p = lambda r, c: IMG / "benchmark_prompt_family" / f"{r}_{c}_krea2_seed{seed}_00001_.png"
+    return _sheet(rows, cols, p, lambda r, c: None, out,
+                  f"seed {seed} · whole frames · one block changed per column · source data/prompt_family_plan.csv",
+                  W=230, H=288, LAB=110)
+
+
+V4_EYE = ["OK", "VWA", "WA", "SA", "VSA", "BROKEN"]
+
+
+def sensitivity_map(out: Path) -> Path:
+    """F21.4 — artefact onset by eye at dose +-0.350, every block and sign."""
+    rows = list(csv.DictReader(open(DATA / "single_blocks_eye_artifacts_alessandro.csv")))
+    lab = {(int(r["block"]), r["sign"]): r["label_verbatim"].split(" ")[0] for r in rows}
+    import matplotlib.colors as mcolors
+    cmap = ["#2a3b2e", "#3f5a3a", "#8a7a2c", "#b0602a", "#b8402c", "#c42a2a"]
+    fig, ax = _canvas(7.4, 2.2)
+    for b in range(28):
+        for k, sgn in enumerate(("neg", "pos")):
+            L = lab[(b, sgn)]
+            ax.add_patch(__import__("matplotlib.patches", fromlist=["Rectangle"]).Rectangle(
+                (b - 0.46, 1 - k - 0.42), 0.92, 0.84, color=cmap[V4_EYE.index(L)]))
+            ax.text(b, 1 - k, "" if L == "OK" else ("BRK" if L == "BROKEN" else L), ha="center", va="center",
+                    color=INK, fontsize=5.6)
+    ax.set_xlim(-0.6, 27.6); ax.set_ylim(-0.6, 1.6)
+    ax.set_yticks([1, 0]); ax.set_yticklabels(["negative", "positive"], color=DIM, fontsize=7.5)
+    ax.set_xticks(range(0, 28, 3)); ax.set_xlabel("block", color=DIM, fontsize=8)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.set_title("At the same dose the middle of the stack shows no artefact; the output end breaks first",
+                 color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.1, right=0.99, top=0.82, bottom=0.25)
+    return _save(fig, out, "dose 0.350 · 3 prompts · 1 seed · eye labels, blank = OK, then VWA, WA, SA, BRK = BROKEN · "
+                           "source data/single_blocks_eye_artifacts_alessandro.csv")
+
+
+def _v4_dose(block: int, sign: str) -> str:
+    for r in csv.DictReader(open(DATA / "single_blocks_v4_plan.csv", encoding="utf-8-sig")):
+        if r["block_idx"] and int(r["block_idx"]) == block and r["sign"] == sign:
+            return f"{abs(float(r['dose'])):.3f}"
+    raise KeyError((block, sign))
+
+
+def _guide(prompt: str, out: Path) -> Path:
+    W, H, GAP, CAP = 104, 130, 2, 16
+    PAIR = 2 * W + GAP + 14
+    per_row, LAB = 7, 8
+    seed = "1234567"
+    root = IMG / "benchmark_single_blocks_v4" / "renders"
+    nrows = 1 + 28 // per_row
+    cw = LAB + per_row * PAIR
+    chh = 26 + nrows * (H + CAP + 20) + 22
+    S = Image.new("RGB", (cw, chh), SURF_RGB); d = ImageDraw.Draw(S)
+    d.text((LAB, 6), f"{prompt.replace('_', ' ')} · each pair: block pushed negative | positive", fill=INK_RGB,
+           font=font(12, True))
+    y0 = 26
+    S.paste(Image.open(root / f"{prompt}_baseline_krea2_seed{seed}_00001_.png").convert("RGB").resize((W, H), Image.LANCZOS),
+            (LAB, y0 + 16))
+    d.text((LAB, y0), "baseline", fill=INK_RGB, font=font(11, True))
+    bands = [(0, 1, "Base"), (2, 18, "Style"), (19, 22, "Details"), (23, 27, "Correction")]
+    for b in range(28):
+        r, c = 1 + b // per_row, b % per_row
+        x = LAB + c * PAIR; y = y0 + r * (H + CAP + 20)
+        band = next(n for a, z, n in bands if a <= b <= z)
+        dn, dp = _v4_dose(b, "neg"), _v4_dose(b, "pos")
+        d.text((x, y), f"blk{b:02d} · {band}", fill=INK_RGB, font=font(11, True))
+        for k, (sgn, dose) in enumerate((("neg", dn), ("pos", dp))):
+            f = root / f"{prompt}_blk{b:02d}_{sgn}_d{dose}_krea2_seed{seed}_00001_.png"
+            if not f.exists():
+                raise FileNotFoundError(f)
+            S.paste(Image.open(f).convert("RGB").resize((W, H), Image.LANCZOS), (x + k * (W + GAP), y + 16))
+            d.text((x + k * (W + GAP) + 3, y + 16 + H + 1), ("-" if sgn == "neg" else "+") + dose.rstrip("0"),
+                   fill=NEG if sgn == "neg" else POS, font=font(10))
+    d.text((6, chh - 18), f"benchmark_single_blocks_v4 · seed {seed} · doses of the v4 plan · whole frames · "
+                          f"source data/single_blocks_v4_plan.csv", fill=DIM_RGB, font=font(10))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    S.save(out, "WEBP", quality=86, method=6)
+    return out
+
+
+def guide_comic(out: Path) -> Path:
+    """F21.5 — every block, both signs, on the comic page of v4."""
+    return _guide("P5_comic_panels", out)
+
+
+def guide_crown(out: Path) -> Path:
+    """F21.6 — every block, both signs, on the crown seen from above."""
+    return _guide("P1_crown_topdown", out)
+
+
+def blk23_everywhere(out: Path) -> Path:
+    """F22.4 — blk23 at its two strongest doses on all eight prompts."""
+    rows = [("b23_m0.450", "blk23 -0.45"), ("baseline", "base"), ("b23_p0.300", "blk23 +0.30")]
+    cols = [(pid, pid.split("_", 1)[1]) for pid in C47_SEED_A]
+    m = _measures_c47()
+    p = lambda r, c: IMG / "benchmark_blk23_colorful" / f"{c}_{r}_krea2_seed{C47_SEED_A[c]}_00001_.png"
+    def cap(r, c):
+        if r == "baseline":
+            return None
+        dc = float(m[(c, C47_SEED_A[c], r)]["d_chroma"])
+        return (f"chroma {dc:+.1f}", POS if dc > 0 else NEG)
+    return _sheet(rows, cols, p, cap, out, "8 prompts · original seed of each · whole frames · "
+                                           "source data/blk23_colorful_measures.csv", W=128, H=160, LAB=96)
+
+
+def blacksmith_identity(out: Path) -> Path:
+    """F23.5 — the blacksmith under blk09 +0.45, both seeds, three families."""
+    rows = [("5772156", "seed 5772156"), ("1414213", "seed 1414213")]
+    cols = []
+    for f, fl in FAMS:
+        cols += [((f, "baseline"), f"{fl} · base"), ((f, "blk09_pos_d0.450"), f"{fl} · blk09 +")]
+    p = lambda s, c: IMG / "benchmark_prompt_family" / f"{c[0]}_blacksmith_{c[1]}_krea2_seed{s}_00001_.png"
+    _sheet(rows, cols, p, lambda s, c: None, out,
+           "blacksmith prompt · blk09 +0.45 · rows 1-2 whole frames, row 3 the face at seed 1414213 enlarged · "
+           "source data/prompt_family_plan.csv", W=150, H=188, LAB=100)
+    S = Image.open(out).convert("RGB")
+    W, GAP, LAB = 150, 2, 100
+    band = Image.new("RGB", (S.width, W + 30), SURF_RGB); d = ImageDraw.Draw(band)
+    d.text((6, W // 2), "face, 1414213", fill=INK_RGB, font=font(12))
+    for j, c in enumerate(cols):
+        im = Image.open(p("1414213", c[0])).convert("RGB").crop((250, 150, 800, 700)).resize((W, W), Image.LANCZOS)
+        band.paste(im, (LAB + j * (W + GAP), 4))
+    top = S.crop((0, 0, S.width, S.height - 22)); foot = S.crop((0, S.height - 22, S.width, S.height))
+    T = Image.new("RGB", (S.width, top.height + band.height + foot.height), SURF_RGB)
+    T.paste(top, (0, 0)); T.paste(band, (0, top.height)); T.paste(foot, (0, top.height + band.height))
+    T.save(out, "WEBP", quality=86, method=6)
+    return out
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -437,6 +573,12 @@ BUILDERS = {
     "F22.1": ("22-saturation-knob", "saturation_ladder_sheet", saturation_ladder_sheet),
     "F22.2": ("22-saturation-knob", "saturation_dose_response", saturation_dose_response),
     "F22.3": ("22-saturation-knob", "matched_chroma_pairs", matched_chroma_pairs),
+    "F20.2": ("20-method", "three_knobs", three_knobs),
+    "F21.4": ("21-block-map", "sensitivity_map", sensitivity_map),
+    "F21.5": ("21-block-map", "guide_comic", guide_comic),
+    "F21.6": ("21-block-map", "guide_crown", guide_crown),
+    "F22.4": ("22-saturation-knob", "blk23_everywhere", blk23_everywhere),
+    "F23.5": ("23-prompt-family-presets", "blacksmith_identity", blacksmith_identity),
 }
 
 

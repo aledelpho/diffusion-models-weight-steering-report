@@ -9,8 +9,8 @@ supersedes: []
 pitfalls: [64, 87, 90]
 
 corpus:
-  renders: 1412
-  prompts: 23
+  renders: 1583
+  prompts: 26
   seeds: [2718281, 3141592, 1618033, 1234567]
 
 claims:
@@ -44,6 +44,32 @@ claims:
       threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and
       0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.
     anchor: "#what-the-weights-show"
+  - id: ends-change-properties-middle-changes-content
+    status: open
+    statement: >
+      The blocks at the two ends of the stack change properties of the picture — colour, grain,
+      sharpness — in the same way on every picture; the middle blocks change what is depicted, and
+      differently on each picture.
+    evidence: >
+      At one dose for all blocks, a block is recognisable as itself on another picture only at the
+      ends (positive: blocks 0, 1, 25, 26, 27; pre-registered, p = 0.0015). The ends keep the layout
+      (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content
+      most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of
+      them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so "fewer things" holds
+      for kinds of property, not for statistics.
+    anchor: "#what-the-ends-change-and-what-the-middle-changes"
+  - id: output-end-breaks-first
+    status: open
+    statement: >
+      At the same dose, the blocks near the output reach visible artefacts first, while most middle
+      blocks show none; the middle has room before artefacts but drifts toward pictures that are
+      clean and incoherent.
+    evidence: >
+      My artefact labels at dose 0.350, three prompts, one seed: blocks 4 to 11 OK in both
+      directions; positive, strong artefacts on 19, 21, 22, 24 and 25, broken on 26 and 27. Agrees with the
+      pre-registered result that the cost of a push grows toward the output (notebook page 05). The
+      split into hard and soft limits is an observation, not measured.
+    anchor: "#how-far-each-block-can-be-pushed"
   - id: by-eye-guide-to-each-block
     status: open
     statement: >
@@ -59,7 +85,7 @@ claims:
 
 # A map of the 28 blocks
 
-> **Open** · 1412 renders · exploratory map, one pre-registered test on the weights
+> **Open** · 1583 renders · exploratory map, one pre-registered test on the weights
 > [← all results](README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** If knobs live in the weights, they should live in particular
@@ -133,6 +159,29 @@ notebook: [every push costs fine texture and the cost grows toward the output](.
 and [two places pushed the same distance move the picture in distinguishable directions](../notebook/08-block1-vs-block6.md)
 — position, not only distance, decides what an edit does.
 
+### What the ends change, and what the middle changes
+
+A separate bench pushed every block by the same amount, 0.350, on three prompts, so that blocks
+can be compared at equal dose. The test asked, before measuring, whether a block's change on one
+picture is recognisable as that block's change on another. On the positive side only five blocks
+are: 0, 1, 25, 26 and 27 — the two ends of the stack (p = 0.0015; on the negative side 0, 8, 20 and
+27). Everywhere else, a block does something reproducible on the same picture but something
+different on another (`docs/single_blocks_atlas_result.md`, `data/single_blocks_tests.csv`).
+
+Put together with the layout above and with DINOv2 on page 25, the picture is consistent: the ends
+act on **properties of the image** — colour, grain, sharpness, softness — and act the same way
+whatever is depicted; the middle acts on **what is depicted** — viewpoint, shape, identity,
+realism — and how it does so depends on the picture. The two sheets in the guide below show it
+directly: the crown stays the same crown under blocks 21 to 27 and becomes another object under
+many middle blocks.
+
+One measure does not fit the simple wording "the ends change fewer things". Counting how many of 29
+rendering statistics an edit moves at once (the participation ratio of the change, at dose 0.350),
+the ends move more of them, not fewer: median 9.6 for blocks 21–27 and 10.1 for 00–01, against 7.5
+for 05–14 (`data/block_change_breadth.csv`). Grain and sharpness move many texture statistics
+together. The ends change fewer *kinds* of property, through many statistics; the middle changes
+content, which rendering statistics only partly see.
+
 ### Blocks that push together
 
 For each pair of arms on the same prompt, the change each makes to the picture is correlated
@@ -178,6 +227,34 @@ through almost one direction (stable rank of the attention output 26 and 13 agai
 elsewhere), which is one mechanical reading of a knob. Block 23, the saturation knob of page 22,
 does not stand out on any of the 40 values.
 
+### How far each block can be pushed
+
+At the same dose, blocks do not break at the same point. I labelled every edit of the equal-dose
+bench by the artefacts I could see, from OK to BROKEN
+(`data/single_blocks_eye_artifacts_alessandro.csv`).
+
+![At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture.](../assets/21-block-map/F21.4_sensitivity_map.webp)
+
+The output end is the most sensitive: pushed positive, blocks 19, 21, 22, 24 and 25 show strong
+artefacts at 0.350 and blocks 26 and 27 destroy the picture; their negative side is safer. This matches a
+pre-registered result of the exploratory notebook — [the cost of a push grows toward the output, and
+the tail is rectified](../notebook/05-knob-or-cost.md): positive pushes wreck it, negative ones barely
+move it. The middle, from block 4 to 11, shows no artefact at this dose in either direction. These
+labels became the starting doses of the later benches: up to 0.45–0.55 in the middle, 0.05–0.15
+on the positive side of blocks 26 and 27.
+
+Two kinds of limit show up, and the labels above see only the first:
+
+* **a hard limit** — artefacts anyone recognises: grain, noise, a mosaic of colour cells, a broken
+  frame. It arrives first at the output end;
+* **a soft limit** — a picture that stays clean and well rendered but whose drawing has stopped
+  making sense: faces flattened into masks, anatomy undone, objects fused or deformed. It is the
+  limit of the middle blocks, and the harder one to see, because nothing in the picture looks like
+  an error. Page 26 shows one example on a macro-block (faces turned into masks at 0.350).
+
+The soft limit is my observation, not a measurement; no statistic in this project detects it, and
+page 26 shows how statistics can read such a picture as an improvement.
+
 ### A starting guide: what each block seems to do
 
 > **Read this as a map drawn by hand, not a measurement.** I wrote it while looking at the v4
@@ -186,6 +263,13 @@ does not stand out on any of the 40 values.
 > blocks do many other things. It is provisional and meant to be expanded and corrected. Its use
 > is practical: where to start, roughly where "style" begins, and what to expect from each
 > block in each direction.
+
+The same guide in pictures, on two of the v4 prompts: each pair is the block pushed negative and
+positive, at the doses below.
+
+![Every block pushed in both directions on a crown seen from above: from block 21 onward the crown stays the same object, while middle blocks turn it into an open ring, a side view or another crown.](../assets/21-block-map/F21.6_guide_crown.webp)
+
+![Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves.](../assets/21-block-map/F21.5_guide_comic.webp)
 
 Doses are those of the v4 bench (`data/block_colour_layout.csv`, rows `v4`); they are where
 these effects were seen, not safe defaults, and page 23 shows that doses chosen on single images
@@ -265,19 +349,20 @@ conditions:
     dose: calibrated by eye per block and per bench
     measured_D: not measured
 outputs:
-  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4]
+  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4, benchmark_single_blocks_atlas]
   manifest: no single committed manifest for all three benches; data/block_colour_layout.csv lists every measured image
 analysis:
   scripts:
     - experiments/block_colour_layout.py        # 9b9aea19f1d6f43920cf0cc832d4be23063815d3290723cc4dd7e3bc27147de1
     - experiments/block_effect_overlap.py       # 29853a9f70e6f86987c119d0f74112517cf56e92a3754cb6cf212ca32c4ae188
     - experiments/block_weight_structure.py     # 1df6cc4b4cedf27e99efba52f19cf7318b7a5572f228e53abcd17e900e405645
-  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv
+    - experiments/block_change_breadth.py       # 564ed1578c1c6db997e489241d3cb1991f7ef5859de50c153e15b218bec575b1
+  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv, data/block_change_breadth.csv
 ```
 
 ## Provenance
 
-* **Renders.** benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332).
+* **Renders.** benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332), benchmark_single_blocks_atlas (171).
 * **Pre-registration (weights only):** `docs/prereg_block_weight_structure.md`, committed before
   any weight was read.
 * **Result documents:** `docs/block_groups_and_prompt_order.md`,

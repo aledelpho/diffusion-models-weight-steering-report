@@ -103,6 +103,8 @@ LPIPS and DINOv2 cosine are interpolated at the same point.
 
 ### Direction and proportion
 
+![On all eight prompts blk23 -0.45 adds colour and blk23 +0.30 removes it while the picture stays the same picture.](../assets/22-saturation-knob/F22.4_blk23_everywhere.webp)
+
 ![Chroma change falls monotonically from blk23 -0.45 to +0.30 in 15 of 16 prompt-seed cells, with a median of +3.9 at -0.45 and -3.1 at +0.30.](../assets/22-saturation-knob/F22.2_saturation_dose_response.webp)
 
 | test | registered threshold | result |

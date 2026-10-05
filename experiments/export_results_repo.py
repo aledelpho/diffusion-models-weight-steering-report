@@ -51,7 +51,7 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
 
     blob = f"{MAIN}/blob/{sha}/"
-    pages = sorted(p for p in RESULTS.glob("2*.md"))
+    pages = sorted(p for p in RESULTS.glob("2*.md")) + [RESULTS / "STORY.md"]
     data_needed: set[str] = set()
     errors: list[str] = []
 
@@ -75,7 +75,7 @@ def main() -> int:
         data_needed |= set(re.findall(r"data/[\w./-]+\.(?:csv|md|npz|jsonl)", t))
         (out / p.name).write_text(rewrite(t), encoding="utf-8")
         page_assets = ROOT / "assets" / p.stem
-        if page_assets.exists():
+        if page_assets.exists() and not (out / "assets" / p.stem).exists():
             shutil.copytree(page_assets, out / "assets" / p.stem)
 
     for d in sorted(data_needed):

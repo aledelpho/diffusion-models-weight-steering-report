@@ -164,8 +164,11 @@ The middle blocks' coherence remains an observation by eye.
 
 ### A change of identity
 
+![Under blk09 +0.45 the female blacksmith stays a woman at seed 5772156 in all three styles, and at seed 1414213 turns into a man in the oil painting and in the photograph.](../assets/23-prompt-family-presets/F23.5_blacksmith_identity.webp)
+
 At seed 1414213 blk09 + turns the female blacksmith into a man in the oil and photo families;
-at seed 5772156 — the seed of the sheet above — she stays a woman in all three. The edit moves
+at seed 5772156 — the seed of the sheet above — she stays a woman in all three. In the cartoon
+family the same edit turns the drawing into a three-dimensional render and keeps the woman. The edit moves
 the picture toward the more common reading of the words: "blacksmith" toward a man. CLIPScore on
 the six blacksmith prompts falls by 3.8 under blk09 +, the largest drop of any arm
 (`data/standard_metrics_summary.csv`). One subject, two seeds: this is an observation with a

@@ -62,6 +62,11 @@ reaches those eight. An edit in this report is one number per block: the block's
 are multiplied by 1 + d, where d is the signed dose. Nothing is trained, nothing is added at
 inference, and a preset is just a vector of such numbers.
 
+![One picture, one block changed at a time: blk23 -0.30 makes it more saturated, blk09 +0.45 more three-dimensional and changes the scene, blk27 -0.25 softer and flatter.](../assets/20-method/F20.2_three_knobs.webp)
+
+Three blocks, three different kinds of change: colour, what is depicted, softness. The rest of
+this report asks how far such a change can be trusted to be the same on another picture.
+
 ![A single-block edit multiplies the eight reachable 2-D tensors of one of the 28 blocks by the same factor 1 + d; the 1-D tensors stay untouched, and a preset is a vector of 34 such factors.](../assets/20-method/F20.1_edit_schema.webp)
 
 The same sampling is used throughout: euler_ancestral, simple scheduler, 9 steps, CFG 1.0,

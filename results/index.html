@@ -125,6 +125,8 @@
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--semantic-routing">The difference between how consistent an edit&#x27;s CLIP direction is on one prompt and on many prompts separates blocks that route meaning from blocks that filter structure.</a></td><td class="ev">Audit of an unpublished analysis: no script computes its p-values; doses are mixed under one key; the measure tracks how alike the images are; its second-ranked semantic router, blk26 +, lays the same mosaic of colour cells over any content.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--where-the-layout-holds">Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.</a></td><td class="ev">Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--blocks-that-push-together">Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.</a></td><td class="ev">Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--what-the-ends-change-and-what-the-middle-changes">The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.</a></td><td class="ev">At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; pre-registered, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so &quot;fewer things&quot; holds for kinds of property, not for statistics.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--how-far-each-block-can-be-pushed">At the same dose, the blocks near the output reach visible artefacts first, while most middle blocks show none; the middle has room before artefacts but drifts toward pictures that are clean and incoherent.</a></td><td class="ev">My artefact labels at dose 0.350, three prompts, one seed: blocks 4 to 11 OK in both directions; positive, strong artefacts on 19, 21, 22, 24 and 25, broken on 26 and 27. Agrees with the pre-registered result that the cost of a push grows toward the output (notebook page 05). The split into hard and soft limits is an observation, not measured.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--a-starting-guide-what-each-block-seems-to-do">A provisional, by-eye description of what each of the 28 blocks does in each direction, offered as a starting point for anyone who wants to try the tuner, not as a measured result.</a></td><td class="ev">Written by me while looking at the v4 bench (five prompts, one seed) on a page that also showed the 18 prompts of the styles and v3 benches. Where a measurement touches an entry, it agrees on blocks 00, 22, 23 and 27, partly on 01, and the statistic is the suspect on 26. Most Style-band entries have no measurement at all.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--family-by-family">Late-block presets are most coherent on cartoon prompts, less on oil paintings and least on photographs, where the eye found no common look for two of the arms.</a></td><td class="ev">Split by family after the test, descriptive: up to 0.80 on cartoon, 0.28-0.71 on oil, 0.12-0.53 on photographs; the eye said no common look for blk20 and blk23 on photographs, where the numbers are 0.29 and 0.12.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--the-middle-blocks-the-eye-against-the-numbers">Middle blocks also give a family a recognisable common change, but it is a change of what is depicted, and no measure used here sees it.</a></td><td class="ev">Eye, deposited before the numbers: a common look in 8 of 12 Style-band cells and 2 of 3 blk09 cells. Style features: within-family coherence 0.06-0.17. DINOv2: 0.007, refuted as a substitute (page 25).</td></tr>
@@ -154,6 +156,9 @@ tensors; eight of them are 2-D matrices (attention projections and the MLP), and
 reaches those eight. An edit in this report is one number per block: the block's eight matrices
 are multiplied by 1 + d, where d is the signed dose. Nothing is trained, nothing is added at
 inference, and a preset is just a vector of such numbers.</p>
+<p><img alt="One picture, one block changed at a time: blk23 -0.30 makes it more saturated, blk09 +0.45 more three-dimensional and changes the scene, blk27 -0.25 softer and flatter." src="../assets/20-method/F20.2_three_knobs.webp" /></p>
+<p>Three blocks, three different kinds of change: colour, what is depicted, softness. The rest of
+this report asks how far such a change can be trusted to be the same on another picture.</p>
 <p><img alt="A single-block edit multiplies the eight reachable 2-D tensors of one of the 28 blocks by the same factor 1 + d; the 1-D tensors stay untouched, and a preset is a vector of 34 such factors." src="../assets/20-method/F20.1_edit_schema.webp" /></p>
 <p>The same sampling is used throughout: euler_ancestral, simple scheduler, 9 steps, CFG 1.0,
 1024×1280. Every result in this folder went through the same sequence: an observation by eye on
@@ -294,7 +299,7 @@ analysis:
 </ul>
 </section>
 <section id="p-21-block-map">
-<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">1412 renders · 23 prompts · 4 seeds · 2026-10-05</span></p>
+<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">1583 renders · 26 prompts · 4 seeds · 2026-10-05</span></p>
 <h1 id="p-21-block-map--a-map-of-the-28-blocks">A map of the 28 blocks</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> If knobs live in the weights, they should live in particular
@@ -374,6 +379,25 @@ of all (0.55, 0.46, 0.51). This agrees with two pre-registered results of the ex
 notebook: <a href="#p-21-block-map--p-05-knob-or-cost">every push costs fine texture and the cost grows toward the output</a>,
 and <a href="#p-21-block-map--p-08-block1-vs-block6">two places pushed the same distance move the picture in distinguishable directions</a>
 — position, not only distance, decides what an edit does.</p>
+<h3 id="p-21-block-map--what-the-ends-change-and-what-the-middle-changes">What the ends change, and what the middle changes</h3>
+<p>A separate bench pushed every block by the same amount, 0.350, on three prompts, so that blocks
+can be compared at equal dose. The test asked, before measuring, whether a block's change on one
+picture is recognisable as that block's change on another. On the positive side only five blocks
+are: 0, 1, 25, 26 and 27 — the two ends of the stack (p = 0.0015; on the negative side 0, 8, 20 and
+27). Everywhere else, a block does something reproducible on the same picture but something
+different on another (<code>docs/single_blocks_atlas_result.md</code>, <code>data/single_blocks_tests.csv</code>).</p>
+<p>Put together with the layout above and with DINOv2 on page 25, the picture is consistent: the ends
+act on <strong>properties of the image</strong> — colour, grain, sharpness, softness — and act the same way
+whatever is depicted; the middle acts on <strong>what is depicted</strong> — viewpoint, shape, identity,
+realism — and how it does so depends on the picture. The two sheets in the guide below show it
+directly: the crown stays the same crown under blocks 21 to 27 and becomes another object under
+many middle blocks.</p>
+<p>One measure does not fit the simple wording "the ends change fewer things". Counting how many of 29
+rendering statistics an edit moves at once (the participation ratio of the change, at dose 0.350),
+the ends move more of them, not fewer: median 9.6 for blocks 21–27 and 10.1 for 00–01, against 7.5
+for 05–14 (<code>data/block_change_breadth.csv</code>). Grain and sharpness move many texture statistics
+together. The ends change fewer <em>kinds</em> of property, through many statistics; the middle changes
+content, which rendering statistics only partly see.</p>
 <h3 id="p-21-block-map--blocks-that-push-together">Blocks that push together</h3>
 <p>For each pair of arms on the same prompt, the change each makes to the picture is correlated
 pixel by pixel after removing the prompt's common mode — the part of the change that every edit
@@ -459,6 +483,29 @@ in their MLP gate in the stack (σ₁ 113 and 130 against 34–97 elsewhere). Bl
 through almost one direction (stable rank of the attention output 26 and 13 against 100–260
 elsewhere), which is one mechanical reading of a knob. Block 23, the saturation knob of page 22,
 does not stand out on any of the 40 values.</p>
+<h3 id="p-21-block-map--how-far-each-block-can-be-pushed">How far each block can be pushed</h3>
+<p>At the same dose, blocks do not break at the same point. I labelled every edit of the equal-dose
+bench by the artefacts I could see, from OK to BROKEN
+(<code>data/single_blocks_eye_artifacts_alessandro.csv</code>).</p>
+<p><img alt="At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture." src="../assets/21-block-map/F21.4_sensitivity_map.webp" /></p>
+<p>The output end is the most sensitive: pushed positive, blocks 19, 21, 22, 24 and 25 show strong
+artefacts at 0.350 and blocks 26 and 27 destroy the picture; their negative side is safer. This matches a
+pre-registered result of the exploratory notebook — <a href="#p-21-block-map--p-05-knob-or-cost">the cost of a push grows toward the output, and
+the tail is rectified</a>: positive pushes wreck it, negative ones barely
+move it. The middle, from block 4 to 11, shows no artefact at this dose in either direction. These
+labels became the starting doses of the later benches: up to 0.45–0.55 in the middle, 0.05–0.15
+on the positive side of blocks 26 and 27.</p>
+<p>Two kinds of limit show up, and the labels above see only the first:</p>
+<ul>
+<li><strong>a hard limit</strong> — artefacts anyone recognises: grain, noise, a mosaic of colour cells, a broken
+  frame. It arrives first at the output end;</li>
+<li><strong>a soft limit</strong> — a picture that stays clean and well rendered but whose drawing has stopped
+  making sense: faces flattened into masks, anatomy undone, objects fused or deformed. It is the
+  limit of the middle blocks, and the harder one to see, because nothing in the picture looks like
+  an error. Page 26 shows one example on a macro-block (faces turned into masks at 0.350).</li>
+</ul>
+<p>The soft limit is my observation, not a measurement; no statistic in this project detects it, and
+page 26 shows how statistics can read such a picture as an improvement.</p>
 <h3 id="p-21-block-map--a-starting-guide-what-each-block-seems-to-do">A starting guide: what each block seems to do</h3>
 <blockquote>
 <p><strong>Read this as a map drawn by hand, not a measurement.</strong> I wrote it while looking at the v4
@@ -468,6 +515,10 @@ blocks do many other things. It is provisional and meant to be expanded and corr
 is practical: where to start, roughly where "style" begins, and what to expect from each
 block in each direction.</p>
 </blockquote>
+<p>The same guide in pictures, on two of the v4 prompts: each pair is the block pushed negative and
+positive, at the doses below.</p>
+<p><img alt="Every block pushed in both directions on a crown seen from above: from block 21 onward the crown stays the same object, while middle blocks turn it into an open ring, a side view or another crown." src="../assets/21-block-map/F21.6_guide_crown.webp" /></p>
+<p><img alt="Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves." src="../assets/21-block-map/F21.5_guide_comic.webp" /></p>
 <p>Doses are those of the v4 bench (<code>data/block_colour_layout.csv</code>, rows <code>v4</code>); they are where
 these effects were seen, not safe defaults, and page 23 shows that doses chosen on single images
 can be too strong for a preset.</p>
@@ -711,18 +762,19 @@ conditions:
     dose: calibrated by eye per block and per bench
     measured_D: not measured
 outputs:
-  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4]
+  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4, benchmark_single_blocks_atlas]
   manifest: no single committed manifest for all three benches; data/block_colour_layout.csv lists every measured image
 analysis:
   scripts:
     - experiments/block_colour_layout.py        # 9b9aea19f1d6f43920cf0cc832d4be23063815d3290723cc4dd7e3bc27147de1
     - experiments/block_effect_overlap.py       # 29853a9f70e6f86987c119d0f74112517cf56e92a3754cb6cf212ca32c4ae188
     - experiments/block_weight_structure.py     # 1df6cc4b4cedf27e99efba52f19cf7318b7a5572f228e53abcd17e900e405645
-  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv
+    - experiments/block_change_breadth.py       # 564ed1578c1c6db997e489241d3cb1991f7ef5859de50c153e15b218bec575b1
+  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv, data/block_change_breadth.csv
 </code></pre>
 <h2 id="p-21-block-map--provenance">Provenance</h2>
 <ul>
-<li><strong>Renders.</strong> benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332).</li>
+<li><strong>Renders.</strong> benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332), benchmark_single_blocks_atlas (171).</li>
 <li><strong>Pre-registration (weights only):</strong> <code>docs/prereg_block_weight_structure.md</code>, committed before
   any weight was read.</li>
 <li><strong>Result documents:</strong> <code>docs/block_groups_and_prompt_order.md</code>,
@@ -783,6 +835,7 @@ mean chroma change, and layout r, the correlation of the lightness channel with 
 The words are matched to the ladder by linear interpolation of chroma between rungs; layout r,
 LPIPS and DINOv2 cosine are interpolated at the same point.</p>
 <h3 id="p-22-saturation-knob--direction-and-proportion">Direction and proportion</h3>
+<p><img alt="On all eight prompts blk23 -0.45 adds colour and blk23 +0.30 removes it while the picture stays the same picture." src="../assets/22-saturation-knob/F22.4_blk23_everywhere.webp" /></p>
 <p><img alt="Chroma change falls monotonically from blk23 -0.45 to +0.30 in 15 of 16 prompt-seed cells, with a median of +3.9 at -0.45 and -3.1 at +0.30." src="../assets/22-saturation-knob/F22.2_saturation_dose_response.webp" /></p>
 <div class="tablewrap"><table>
 <thead>
@@ -1067,8 +1120,10 @@ for a content measure, DINOv2, was tried with a pre-registered threshold and fai
 "more realistic" points in a different direction for a fox and for a car in a content embedding.
 The middle blocks' coherence remains an observation by eye.</p>
 <h3 id="p-23-prompt-family-presets--a-change-of-identity">A change of identity</h3>
+<p><img alt="Under blk09 +0.45 the female blacksmith stays a woman at seed 5772156 in all three styles, and at seed 1414213 turns into a man in the oil painting and in the photograph." src="../assets/23-prompt-family-presets/F23.5_blacksmith_identity.webp" /></p>
 <p>At seed 1414213 blk09 + turns the female blacksmith into a man in the oil and photo families;
-at seed 5772156 — the seed of the sheet above — she stays a woman in all three. The edit moves
+at seed 5772156 — the seed of the sheet above — she stays a woman in all three. In the cartoon
+family the same edit turns the drawing into a three-dimensional render and keeps the woman. The edit moves
 the picture toward the more common reading of the words: "blacksmith" toward a man. CLIPScore on
 the six blacksmith prompts falls by 3.8 under blk09 +, the largest drop of any arm
 (<code>data/standard_metrics_summary.csv</code>). One subject, two seeds: this is an observation with a

@@ -731,3 +731,65 @@ figures:
     crop: whole
     alt: >
       The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.
+
+  # ---------------------------------------------------------------- story figures (2026-10-05)
+
+  - id: F20.2
+    page: 20-method
+    kind: contact_sheet
+    builder: results_figures.three_knobs
+    source: data/prompt_family_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      One picture, one block changed at a time: blk23 -0.30 makes it more saturated, blk09 +0.45 more three-dimensional and changes the scene, blk27 -0.25 softer and flatter.
+
+  - id: F21.4
+    page: 21-block-map
+    kind: strip
+    builder: results_figures.sensitivity_map
+    source: data/single_blocks_eye_artifacts_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture.
+
+  - id: F21.5
+    page: 21-block-map
+    kind: contact_sheet
+    builder: results_figures.guide_comic
+    source: data/single_blocks_v4_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves.
+
+  - id: F21.6
+    page: 21-block-map
+    kind: contact_sheet
+    builder: results_figures.guide_crown
+    source: data/single_blocks_v4_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Every block pushed in both directions on a crown seen from above: from block 21 onward the crown stays the same object, while middle blocks turn it into an open ring, a side view or another crown.
+
+  - id: F22.4
+    page: 22-saturation-knob
+    kind: contact_sheet
+    builder: results_figures.blk23_everywhere
+    source: data/blk23_colorful_measures.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      On all eight prompts blk23 -0.45 adds colour and blk23 +0.30 removes it while the picture stays the same picture.
+
+  - id: F23.5
+    page: 23-prompt-family-presets
+    kind: contact_sheet
+    builder: results_figures.blacksmith_identity
+    source: data/prompt_family_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Under blk09 +0.45 the female blacksmith stays a woman at seed 5772156 in all three styles, and at seed 1414213 turns into a man in the oil painting and in the photograph.
