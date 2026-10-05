@@ -368,11 +368,44 @@ scan_single_blocks_v3 = scan_single_blocks_unified
 scan_single_blocks_v4 = scan_single_blocks_unified
 
 
+
+# ----------------------------------------------------------------- portraits (2026-10-05, Claude)
+PT_PAT = re.compile(r"^([A-Z]\d_[a-z_]+?)_blk(\d\d)_(pos|neg)_d([\d.]+)_krea2_seed(\d+)_")
+PT_BASE = re.compile(r"^([A-Z]\d_[a-z_]+?)_baseline_krea2_seed(\d+)_")
+
+
+def scan_portraits(B: Path) -> dict:
+    idx: dict = {}; base: dict = {}
+    rel = "../benchmark_portraits/renders/"
+    for p in sorted((B / "renders").glob("*.png")):
+        if p.name.startswith("REPRO_"):
+            continue
+        m = PT_PAT.match(p.name)
+        if m:
+            P, b, sign, dose, seed = m.groups()
+            v = (-1 if sign == "neg" else 1) * float(dose)
+            idx.setdefault(P, {}).setdefault(seed, {}).setdefault(f"blk{b}", {})[f"{v:+.3f}"] = rel + p.name
+            continue
+        m = PT_BASE.match(p.name)
+        if m:
+            base.setdefault(m.group(1), {})[m.group(2)] = rel + p.name
+    zone = lambda b: "Base" if b <= 1 else "Style" if b <= 18 else "Details" if b <= 22 else "Correction"
+    groups = {f"blk{b:02d}": {"title": f"blk{b:02d} · {zone(b)}", "meta": f"blocco {b} · dosi della v4"} for b in range(28)}
+    return {"idx": idx, "base": base, "groups": groups, "order": [f"blk{b:02d}" for b in range(28)],
+            "stats": {}, "unit": "il blocco", "stack": True, "focus": True,
+            "title": "Ritratti — ogni blocco sui quattro personaggi di calibrazione",
+            "sub": "benchmark_portraits · 28 blocchi × 2 segni alle dosi della v4 · nano, elfo, mezzorco, gnomo · due semi",
+            "note": "<b>Questa è la pagina su cui calibri il preset.</b> Halfling, dragonborn e tiefling non sono qui "
+                    "apposta: serviranno a verificare il preset su personaggi che non hai visto. Quando il preset è "
+                    "deciso, va scritto e committato prima di qualunque render della fase C "
+                    "(<code>docs/prereg_portrait_preset.md</code>)."}
+
 BENCHES = {"parameter_families": scan_parameter_families, "centre_push": scan_centre_push,
            "wo_depth": scan_wo_depth, "single_blocks_atlas": scan_single_blocks_atlas,
            "single_blocks_styles": scan_single_blocks_styles,
            "single_blocks_v3": scan_single_blocks_v3,
-           "single_blocks_v4": scan_single_blocks_v4}
+           "single_blocks_v4": scan_single_blocks_v4,
+           "portraits": scan_portraits}
 
 
 def thumbs(B: Path, files: set[str]) -> None:
@@ -426,6 +459,10 @@ def main() -> None:
             .replace("__TITLE__", cfg["title"])
             .replace("__SUB__", cfg["sub"])
             .replace("__NOTE__", cfg["note"]))
+    if a.bench == "portraits":
+        html = html.replace('const store = "annot_notes_single_blocks_v3";', 'const store = "annot_notes_portraits";')
+        html = html.replace('localStorage.getItem("annot_notes_single_blocks_styles")', 'localStorage.getItem("annot_notes_portraits_none")')
+        html = html.replace('localStorage.setItem("annot_notes_single_blocks_styles"', 'localStorage.setItem("annot_notes_portraits_none"')
     (B / "presets.html").write_text(html, encoding="utf-8")
     print(f"  presets.html -> {B}")
 
