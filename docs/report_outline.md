@@ -115,6 +115,22 @@ run; "clean-up later" not tested.
 Anima; lower-dose presets and a clean-up pass; a character-consistency test for middle blocks
 (below); the residual-stream probe.
 
+## Notebook pages: which enter the report (decided 2026-10-05)
+
+| page | status | edit type | in the report |
+|---|---|---|---|
+| 00 the bench | holds | — | **§3 Method**: tuner is identity at zero, renders reproduce bit-for-bit across restarts |
+| 05 knob or cost | holds, pre-reg. | per-block sign | **§4 and §6**: every push costs fine texture and the cost grows toward the output (r = −0.66 with depth); blk00 is an inverted knob. Agrees with C50 (late blocks cost most) and with Alessandro's blk00 definition |
+| 08 Block_1 vs Block_6 | holds, pre-reg. | matched-distance rotations | **§4**: two places pushed the same distance move the image in distinguishable directions — position, not distance |
+| 03 what ends up in the picture | holds, pre-reg. | block derangement | **§3 (blinding)** and **appendix A**: subject enlargement replicates on 10 new styles; hashed filenames do not blind an expert eye — the measured reason the eye pass is declared non-blind |
+| 06 hatching axis | holds, pre-reg. | block derangement | **appendix A**: the sign of the displacement decides crossed vs parallel hatching, 16/16 prompts |
+| 09 style direction | **overturned**, pre-reg. | calibrated whole-stack preset, derangement | **§6 and §9, must be discussed**: an earlier pre-registered test found that a whole-stack preset's direction does *not* follow the style more than the subject. C49 found the opposite for single late blocks. Different edits and designs; the report states both and does not claim to reconcile them |
+| 11 what the numbers could not see | open | various | **§9**: displacement statistics cannot tell steering from damage (why eye-first); undeclared colours are the fragile route (9/20 vs 0/20) as an open lead |
+| 01 mark style | open, exploratory | 53 KB preset | **§1**, one paragraph: where the project started |
+| 02 attribute emergence | ambiguous | permutation | **§11 outlook** only: 19/20 vs 1/20, unreplicated |
+| 07 chromatic signatures | ambiguous | various | one line in §5 at most (small effect, +0.057 vs +0.023) |
+| 04 where in the model, 10 all blocks clean | ambiguous / open | block groups, rotations | **left out**: superseded by the single-block atlas |
+
 ## Open question raised by Alessandro (2026-10-05), for §6/§11
 
 *Middle blocks (e.g. blk09) are the most valuable: they change the image more deeply, in ways
