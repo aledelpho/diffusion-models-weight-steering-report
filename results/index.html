@@ -81,7 +81,14 @@
 <nav>
   <h2>Experiments</h2>
   <ul>
+<li><a href="#p-20-method"><span class="dot" style="background:#0ca30c"></span>The edit, the instrument, and what a result had to pass</a></li>
+<li><a href="#p-21-block-map"><span class="dot" style="background:#898781"></span>A map of the 28 blocks</a></li>
 <li><a href="#p-22-saturation-knob"><span class="dot" style="background:#0ca30c"></span>One block that turns saturation up and down</a></li>
+<li><a href="#p-23-prompt-family-presets"><span class="dot" style="background:#0ca30c"></span>One preset for a whole family of prompts</a></li>
+<li><a href="#p-24-wording"><span class="dot" style="background:#fab219"></span>Does the way a prompt is written change what a block does?</a></li>
+<li><a href="#p-25-standard-metrics"><span class="dot" style="background:#d03b3b"></span>What the standard metrics see, and what they miss</a></li>
+<li><a href="#p-26-what-did-not-work"><span class="dot" style="background:#d03b3b"></span>What did not work, and the limits of everything else</a></li>
+<li><a href="#p-27-other-edits"><span class="dot" style="background:#fab219"></span>Appendix A: other kinds of edit</a></li>
   </ul>
   <h2>Elsewhere</h2>
   <ul>
@@ -101,12 +108,400 @@
     <table>
       <thead><tr><th></th><th>Claim</th><th>What it rests on</th></tr></thead>
       <tbody>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-20-method--the-same-render-twice">The tuner adds nothing of its own at zero, and a render made again days later, in another session and another bench, is the same file pixel for pixel; differences between conditions are therefore the edit and not the pipeline.</a></td><td class="ev">Integrity checks with a pass/fail criterion fixed before the value. Tuner in the graph at zero against no tuner: maximum channel difference 0 on 15 cells (notebook page 00). Before each confirmatory bench of this report, the rows that already existed on older benches were rendered again: 1 of 1 on the wording bench, 26 of 26 on the saturation bench, 1 of 1 on the prompt-family bench, all at maximum difference 0.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-20-method--why-the-eye-pass-is-declared-open">Hashed filenames do not hide the condition from an observer who knows the edits, so every eye pass in this report is declared as made with the condition known.</a></td><td class="ev">Pre-registered in notebook page 03: four-way forced choice, 17 of 20 and 12 of 20 correct against a 25 percent chance level; 12 of 20 joint hits against a threshold of 5.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-22-saturation-knob--direction-and-proportion">Scaling block 23 alone moves the saturation of a Krea-2 picture in one direction, monotonically with the dose and roughly in proportion to it.</a></td><td class="ev">Pre-registered. Chroma falls strictly from -0.45 to +0.30 in 15 of 16 prompt-seed cells (threshold 14); doubling the dose from -0.15 to -0.30 multiplies the gain by 1.76 (window 1.6-2.4). On every older render with a blk23 arm, 83 of 83 move chroma the expected way.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-22-saturation-knob--against-the-words">Where blk23 reaches the same saturation gain as adding &quot;colorful, vivid highly saturated colors&quot; to the prompt, it leaves the rest of the picture closer to the original than the words do.</a></td><td class="ev">Pre-registered on layout r: 6 of 7 scorable cells, median +0.08. Confirmed afterwards with standard metrics: LPIPS 7 of 7, DINOv2 6 of 7. The comparison is possible in 7 of 16 cells only: in the other 9 the words add more saturation than blk23 at its strongest tested dose.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-23-prompt-family-presets--coherence-inside-a-family">A preset built from late blocks changes different subjects written in the same style in a common direction, clearly more than it does across styles.</a></td><td class="ev">Pre-registered (C49), all four rules supported. Within-family coherence above between-family coherence on 6 of 6 tested arms, median gap +0.19 (threshold 0.10); median within-family coherence 0.53 (threshold 0.40), about 70 percent of the coherence the same arm has across two seeds of one prompt (0.76). Middle-block arms 0.16 (H3, H4).</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-27-other-edits--the-hatching-axis">Reordering whole blocks inside the checkpoint crosses the hatching strokes when pushed one way and runs them parallel when pushed the other, and the sign decides which.</a></td><td class="ev">Pre-registered in notebook page 06, on 16 prompts sharing nothing with the corpus of the observation: 16 of 16 prompts and 79 of 80 image pairs in the predicted direction, Holm p 9.2e-5 at the permutation floor.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-27-other-edits--the-subject-grows">A block-reordering edit makes the subject take more of the frame, more so at the higher dose, on styles that did not exist when the prediction was frozen.</a></td><td class="ev">Pre-registered in notebook page 03: geometric mean area ratio 1.234 across 10 new styles, 9 of 10 above 1, Holm-corrected p 0.018 to 0.035. Whether the structure or the size of the edit causes it is open: the control that separates them was not rendered.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-21-block-map--what-the-weights-show">How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.</a></td><td class="ev">Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-24-wording--the-registered-rule">Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block&#x27;s effect no more than changing the seed does, while changing the subject changes it a great deal.</a></td><td class="ev">Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-27-other-edits--a-curiosity-attributes-that-appear">A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.</a></td><td class="ev">Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-25-standard-metrics--a-content-embedding-does-not-see-it">The family-coherent change the eye saw on the middle blocks is a change of content that a content embedding, DINOv2, would record.</a></td><td class="ev">Pre-registered (H5): supported if the median within-family coherence of the five middle arms on DINOv2 changes reached the style-feature value plus 0.10 (0.26). It is 0.007, below the style-feature value 0.159: refuted. In DINOv2 space no arm is family-coherent (all W at most 0.06).</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--the-best-doses-by-the-statistic">Pushed to dose 0.500, the macro-block sliders Block_4 and Block_1 move the picture far from the baseline while keeping its line work, and are the best operating points found.</a></td><td class="ev">Published from two statistics, then retracted the next day when the renders were opened: Block_4 + at 0.500 leaves no subject, only a crumpled-stroke texture; Block_1 + at 0.500 is colour confetti. Block_4 + is already broken at 0.350.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--a-measure-with-the-sign-wrong">Structure coherence, a statistic of oriented line work, can rank edits by how much of the drawing they preserve.</a></td><td class="ev">Pre-registered eye veto: 7 agreements in 9 resolved pairs against a threshold of 8 in 12. Both disagreements are one condition, Block_6 + 0.080, which the statistic scores above its baseline and which I and six blind model observers call broken; Block_1 - 0.500 is the same case. The sign is wrong, not the size.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--the-centre-is-not-special">The central macro-blocks give way under a push in a different way from the two at the ends of the stack.</a></td><td class="ev">Pre-registered primary of the centre-push bench: T = +0.053, p = 0.19 over 495 relabellings, with the range guard passed, so a null and not an inconclusive. Block_5 sits in the centre and gives way hardest of all.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--semantic-routing">The difference between how consistent an edit&#x27;s CLIP direction is on one prompt and on many prompts separates blocks that route meaning from blocks that filter structure.</a></td><td class="ev">Audit of an unpublished analysis: no script computes its p-values; doses are mixed under one key; the measure tracks how alike the images are; its second-ranked semantic router, blk26 +, lays the same mosaic of colour cells over any content.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--where-the-layout-holds">Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.</a></td><td class="ev">Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--blocks-that-push-together">Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.</a></td><td class="ev">Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--family-by-family">Late-block presets are most coherent on cartoon prompts, less on oil paintings and least on photographs, where the eye found no common look for two of the arms.</a></td><td class="ev">Split by family after the test, descriptive: up to 0.80 on cartoon, 0.28-0.71 on oil, 0.12-0.53 on photographs; the eye said no common look for blk20 and blk23 on photographs, where the numbers are 0.29 and 0.12.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--the-middle-blocks-the-eye-against-the-numbers">Middle blocks also give a family a recognisable common change, but it is a change of what is depicted, and no measure used here sees it.</a></td><td class="ev">Eye, deposited before the numbers: a common look in 8 of 12 Style-band cells and 2 of 3 blk09 cells. Style features: within-family coherence 0.06-0.17. DINOv2: 0.007, refuted as a substitute (page 25).</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--a-change-of-identity">Block 9 pushed positive can change the identity of a subject, turning the female blacksmith into a man, and it does so at one seed and not at the other.</a></td><td class="ev">Eye notes on the oil and photo families at seed 1414213; at seed 5772156 she stays a woman in all three families. CLIPScore on the blacksmith prompts drops by 3.8, the largest drop of any arm. Two seeds, one subject.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-24-wording--word-order">For an identical vocabulary, the order of the words changes the pose and framing of the picture but not what a block does to it.</a></td><td class="ev">Exploratory, one prompt in five orders, two seeds, 56 arms. Consistency across orders tracks consistency across seeds (r = 0.92) and is on average 0.06 higher; median 0.69 on the 43 arms larger than the reordering itself. Baselines of different orders differ by Delta E 16-31.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-25-standard-metrics--depth-against-cost">Middle-block edits change the content of the picture more than late-block edits and cost nothing measurable in image quality, while late blocks change less and cost more.</a></td><td class="ev">Pre-specified descriptive measurement, no decision threshold. DINOv2 similarity to the baseline 0.87 and 0.88 for blk17 + and blk09 +, against 0.90-0.96 for the late arms; BRISQUE -0.5 and -0.3 for those two, +9.6 for blk27 -0.25 and for the combo.</td></tr>
       </tbody>
     </table>
   </section>
 
+<section id="p-20-method">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">28 renders · 10 prompts · 4 seeds · 2026-10-05</span></p>
+<h1 id="p-20-method--the-edit-the-instrument-and-what-a-result-had-to-pass">The edit, the instrument, and what a result had to pass</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Before asking whether a block of weights is a knob, I need to
+know that the edit does only what I say it does, that the same render comes out twice, and
+that my own eye — the main instrument of this project — is described honestly.</p>
+<p><strong>What would kill it.</strong> A tuner that changes the picture at zero, a re-render that differs by
+a single pixel value, or an eye pass presented as blind when it was not.</p>
+<p><strong>Where we are.</strong> The pipeline is deterministic and the tuner is inert at zero, checked again
+before every confirmatory bench. The eye is not blind and is declared as such; every image it
+judged is published.</p>
+</blockquote>
+<h2 id="p-20-method--in-two-minutes">In two minutes</h2>
+<p>Krea-2 is a diffusion transformer with 28 single-stream blocks. Each block holds 13 weight
+tensors; eight of them are 2-D matrices (attention projections and the MLP), and the tuner
+reaches those eight. An edit in this report is one number per block: the block's eight matrices
+are multiplied by 1 + d, where d is the signed dose. Nothing is trained, nothing is added at
+inference, and a preset is just a vector of such numbers.</p>
+<p><img alt="A single-block edit multiplies the eight reachable 2-D tensors of one of the 28 blocks by the same factor 1 + d; the 1-D tensors stay untouched, and a preset is a vector of 34 such factors." src="../assets/20-method/F20.1_edit_schema.webp" /></p>
+<p>The same sampling is used throughout: euler_ancestral, simple scheduler, 9 steps, CFG 1.0,
+1024×1280. Every result in this folder went through the same sequence: an observation by eye on
+an exploratory bench, a claim written down, a pre-registration with its decision rule and its
+scoring code committed, a reproduction check, the renders, my eye pass deposited in the
+repository, and only then the numbers.</p>
+<h2 id="p-20-method--the-verdict">The verdict</h2>
+<p>The instrument does what it says. With the tuner in the graph and every gain at zero the render
+is the render without the tuner, bit for bit; renders reproduce exactly across restarts and
+across benches, and that was checked again, on 28 images, before each of the three confirmatory
+benches in this report. The eye pass that every result here leans on is not blind, and is
+reported as made by one observer who knew the conditions.</p>
+<h2 id="p-20-method--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>Determinism is checked on one machine and one software stack.</strong> Another GPU, driver or
+  ComfyUI version may not reproduce these files bit for bit; the effects should survive that,
+  the exact pixels may not.</li>
+<li><strong>The model file's hash is not recorded.</strong> It sits outside the repository.</li>
+<li><strong>The tuner's version is not recorded</strong> in the reproducibility blocks; it is a separate
+  repository.</li>
+<li><strong>Doses were calibrated by eye, per block, on single images.</strong> They are not calibrated
+  displacements, and page 23 shows that some of them are too strong for a preset.</li>
+</ul>
+<h2 id="p-20-method--the-data">The data</h2>
+<h3 id="p-20-method--the-edit">The edit</h3>
+<p>The tuner node (<code>ArthemyKrea2ModelTuner</code>, Real Value mode, preceded by <code>ArthemyKrea2ResetPatcher</code>)
+takes a 34-slot vector; slot <em>k</em> is the dose of block <em>k</em> for k = 0 … 27. Only the 2-D tensors
+are scaled: the 1-D norm scales are never reached, so they cannot carry an effect
+(<code>docs/normscales_never_applied.md</code>). Doses are small — between 0.075 and 0.45 in this report —
+and differ by block, because a block near the output breaks at a dose a middle block barely
+feels (<code>docs/RENDERS_2026-09-30_single_blocks_styles.md</code>).</p>
+<h3 id="p-20-method--the-same-render-twice">The same render twice</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>check</th>
+<th>where</th>
+<th>result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tuner at zero against no tuner</td>
+<td>notebook page 00, 15 cells, 3 prompts</td>
+<td>max channel difference <strong>0</strong></td>
+</tr>
+<tr>
+<td>same render across a restart</td>
+<td>notebook page 00</td>
+<td>max channel difference <strong>0</strong></td>
+</tr>
+<tr>
+<td>wording bench, first row against the prompt-order baseline</td>
+<td><code>benchmark_prompt_writing</code></td>
+<td><strong>1 / 1</strong> identical</td>
+</tr>
+<tr>
+<td>saturation bench, rows already on older benches</td>
+<td><code>benchmark_blk23_colorful</code></td>
+<td><strong>26 / 26</strong> identical</td>
+</tr>
+<tr>
+<td>prompt-family bench, first row against the styles baseline</td>
+<td><code>benchmark_prompt_family</code></td>
+<td><strong>1 / 1</strong> identical</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each reproduction row was queued alone first and compared before the rest of the bench was
+allowed to run. The outputs of the checks are in the render notes listed under Provenance.</p>
+<h3 id="p-20-method--why-the-eye-pass-is-declared-open">Why the eye pass is declared open</h3>
+<p>In notebook page 03, a pre-registered round asked me to tell which edit produced an image whose
+filename was a hash. I was right 17 times in 20 on one condition and 12 in 20 on the other,
+against 5 in 20 by chance. Hiding names does not hide an edit with a visible signature from
+someone who has looked at hundreds of them. So every eye pass in this report is declared as
+made with the condition known, it is deposited in <code>data/</code> before the numbers are computed, and
+all the images are published so that anyone can repeat it.</p>
+<h3 id="p-20-method--the-measures">The measures</h3>
+<ul>
+<li><strong>Style features</strong> — 23 statistics of texture, edges and colour per image
+  (<code>experiments/style_features.py</code>); an arm's effect is its vector of changes from the
+  baseline.</li>
+<li><strong>Colour and layout</strong> — CIELAB at 64×80: mean chroma change, and layout r, the correlation of
+  the lightness channel with the baseline.</li>
+<li><strong>Standard metrics</strong> — BRISQUE, CLIP-IQA, CLIPScore, LPIPS, DISTS, SSIM and DINOv2 cosine
+  (page 25).</li>
+</ul>
+<p>When a statistic and the eye disagree, the statistic is suspected first: twice in this project a
+statistic ranked destroyed images as the best (page 26).</p>
+<h3 id="p-20-method--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value, driven by a 34-slot vectors_override
+prompts:
+  files: [data/prompt_writing_plan.csv, data/blk23_colorful_plan.csv, data/prompt_family_plan.csv]
+  ids: [V1_Original, E1_cartoon, E3_oil, E7_sepiaphoto, C2_rally, C3_fox, C4_stilllife, P3_archerforest, P4_selfie, REPRO_C3_fox]
+seeds: [3141592, 2718281, 1618033, 4669201]
+conditions:
+  - name: repro_baseline
+    dose: 0
+    measured_D: 0 (no edit)
+  - name: repro_b23
+    dose: &quot;-0.300, +0.150, +0.300 on block 23&quot;
+    measured_D: not measured; the dose is a per-block gain, not a calibrated displacement
+outputs:
+  folders: [benchmark_prompt_writing, benchmark_blk23_colorful, benchmark_prompt_family]
+  manifest: data/prompt_writing_plan.csv, data/blk23_colorful_plan.csv, data/prompt_family_plan.csv
+analysis:
+  scripts:
+    - experiments/check_prompt_writing_repro.py  # 170a82a27b99ef708b314890096f01bf0d21c14e7c4c27b4ed866a83deca28c7
+    - experiments/blk23_colorful.py --repro      # cbfc0f8354fdc869d400b7d45c698f6828e1dd04835def28f4ecd9da09154924
+    - experiments/prompt_family.py --repro       # 67fc54ec7a5fdce93dd86ea0190378f230bfcfac00e731843a2d2e4d4c69b427
+  criterion: maximum absolute pixel difference 0
+</code></pre>
+<h2 id="p-20-method--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_prompt_writing (1), benchmark_blk23_colorful (26), benchmark_prompt_family (1).</li>
+<li><strong>Check outputs:</strong> <code>docs/RENDERS_2026-10-04_prompt_writing.md</code>,
+  <code>docs/RENDERS_2026-10-04_blk23_colorful.md</code>, <code>docs/RENDERS_2026-10-04_prompt_family.md</code>.</li>
+<li><strong>Earlier integrity checks:</strong> <a href="#p-20-method--p-00-the-bench">notebook page 00</a> (tuner at zero,
+  determinism, noise floor); <a href="#p-20-method--p-03-what-ends-up-in-the-picture">notebook page 03</a>
+  (the blinding round).</li>
+<li><strong>Model structure:</strong> <code>docs/model_structures/</code>, <code>docs/normscales_never_applied.md</code>.</li>
+</ul>
+</section>
+<section id="p-21-block-map">
+<p class="status"><span class="pill" style="--c:#898781">Open</span><span class="corpus">1412 renders · 23 prompts · 4 seeds · 2026-10-05</span></p>
+<h1 id="p-21-block-map--a-map-of-the-28-blocks">A map of the 28 blocks</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> If knobs live in the weights, they should live in particular
+places. I pushed every block on its own, in both directions, on 23 prompts, and wrote down
+what each one does, so that the confirmatory tests on the other pages had somewhere to aim.</p>
+<p><strong>What would kill it.</strong> A stack where every block does a bit of everything, with no region
+that behaves differently from the others and nothing that comes back on a second set of
+prompts.</p>
+<p><strong>Where we are.</strong> The two ends behave like controls on the surface of the picture; the middle
+rewrites what is depicted. A few groups of neighbouring blocks push the same way on a second
+set of prompts. This page is a map, not a test: only the weights claim was pre-registered,
+and it passed by a thin margin.</p>
+</blockquote>
+<h2 id="p-21-block-map--in-two-minutes">In two minutes</h2>
+<p>The atlas behind this page is three benches — 12 prompts in eight styles, 6 prompts at two
+seeds, 5 prompts with comic pages and crowns seen from above — with every block pushed on its own
+in both directions at a dose I calibrated by eye. Looking at the sheets, the stack sorts itself
+into four bands: Base (00–01, grain and detail), Style (02–18, light, form, abstraction), Details
+(19–22) and Correction (23–27: saturation, sharpness, grain). My block-by-block definitions are
+in <code>data/single_blocks_v4_definitions_alessandro.md</code>.</p>
+<p><img alt="Blocks 21 to 27 keep the layout of the picture (layout r around 0.88) while the middle of the stack, worst at block 9 positive, rewrites it." src="../assets/21-block-map/F21.1_layout_stability_by_block.webp" /></p>
+<p>What the eye saw first was a split between blocks that redraw and blocks that re-shoot. Blocks
+02–07 pushed positive keep frame, pose and props and redraw the subject (a younger face, a
+cleaner line, smoke over the forge). Blocks 08–09 pushed positive change the picture itself: a
+crown seen from above turns to a side view, the blacksmith becomes a photograph, the selfie
+changes identity.</p>
+<h2 id="p-21-block-map--the-verdict">The verdict</h2>
+<p>The ends of the stack are where a single block behaves like a surface control: the layout stays,
+and colour, grain or sharpness move. The middle is where single blocks change content — viewpoint,
+identity, medium — and are least predictable. A few groups of neighbouring blocks push in the
+same direction on a second set of prompts. The split between stable and unstable blocks is
+partly visible in the weights themselves, but that result is marginal.</p>
+<h2 id="p-21-block-map--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>This is a map, drawn after looking.</strong> The bands are my reading of the sheets; only the
+  weights test (C46) was frozen before the data.</li>
+<li><strong>The doses differ by block and by bench.</strong> A block that looks stable may have been pushed less.</li>
+<li><strong>64×80 sees layout and colour, not grain.</strong> The groups say nothing about blocks 00, 01, 21, 26
+  and 27, whose effects are fine texture.</li>
+<li><strong>The replication of the groups is weak.</strong> Second set of prompts, other seeds and doses, but
+  the groups were chosen after seeing the first set and the measure was the same.</li>
+<li><strong>The weights result rests on n = 28</strong> and one checkpoint, and a single block can flip it.</li>
+</ul>
+<h2 id="p-21-block-map--the-data">The data</h2>
+<h3 id="p-21-block-map--where-the-layout-holds">Where the layout holds</h3>
+<p>Layout r is the correlation of the lightness channel with the baseline at 64×80 (1 = the same
+composition), averaged over 23 prompts and both signs (<code>data/block_colour_layout.csv</code>):</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>blocks</th>
+<th>00–01</th>
+<th>02–04</th>
+<th>05–14</th>
+<th>15–20</th>
+<th>21–27</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>layout r</td>
+<td>0.75</td>
+<td>0.75</td>
+<td>0.65</td>
+<td>0.73</td>
+<td>0.88</td>
+</tr>
+</tbody>
+</table></div>
+<p>The bands hold at the two ends and blur in the middle; the sharpest break is at the Correction
+end, not between Style and Details. Positive pushes of blocks 08, 09 and 10 are the least stable
+of all (0.55, 0.46, 0.51). This agrees with two pre-registered results of the exploratory
+notebook: <a href="#p-21-block-map--p-05-knob-or-cost">every push costs fine texture and the cost grows toward the output</a>,
+and <a href="#p-21-block-map--p-08-block1-vs-block6">two places pushed the same distance move the picture in distinguishable directions</a>
+— position, not only distance, decides what an edit does.</p>
+<h3 id="p-21-block-map--blocks-that-push-together">Blocks that push together</h3>
+<p>For each pair of arms on the same prompt, the change each makes to the picture is correlated
+pixel by pixel after removing the prompt's common mode — the part of the change that every edit
+shares, simply because any edit moves the picture away from that particular baseline. Before
+removal the two signs of one block correlate positively on 27 of 28 blocks; after it, negatively
+on 25 of 28.</p>
+<p><img alt="Once the change every arm shares is removed, positive arms 08-10 push the same way, 23-26 push the same way, and the early-middle blocks push against the late ones." src="../assets/21-block-map/F21.2_residual_overlap_matrix.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>group</th>
+<th>styles, 12 prompts</th>
+<th>other benches, 11 prompts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>08 · 09 · 10, positive</td>
+<td>+0.24 to +0.27</td>
+<td>+0.15 to +0.23</td>
+</tr>
+<tr>
+<td>23 · 24 · 25 · 26, positive</td>
+<td>+0.21 to +0.51</td>
+<td>+0.23 to +0.37</td>
+</tr>
+<tr>
+<td>15 · 16, positive</td>
+<td>+0.17</td>
+<td>+0.21</td>
+</tr>
+<tr>
+<td>02 · 03 · 04 · 05, positive</td>
+<td>+0.19 to +0.23</td>
+<td>+0.01 to +0.14 — <strong>does not come back</strong></td>
+</tr>
+<tr>
+<td>block 05 against block 24, positive</td>
+<td>−0.23</td>
+<td>−0.22</td>
+</tr>
+</tbody>
+</table></div>
+<p>Negative arms 22–27 form one group as well (most pairs +0.19 to +0.54). Blocks 25 and 26 are
+the exceptions where both signs push the same way even after removal — the two blocks I had
+already marked as damaging in both directions. The tuner's six macro-block sliders (<code>Block_1</code> …
+<code>Block_6</code>, each a run of consecutive blocks) cut across two of these groups: 08–10 straddles
+<code>Block_2</code>/<code>Block_3</code> and 23–26 straddles <code>Block_5</code>/<code>Block_6</code>. A single block is the finer lever.</p>
+<h3 id="p-21-block-map--what-the-weights-show">What the weights show</h3>
+<p>A pre-registered test (C46) asked whether any of 34 statistics of a block's weight matrices
+tracks how much the block rewrites the picture, beyond what depth alone explains. The
+analyst's registered prediction was that depth would explain everything; it failed.</p>
+<p><img alt="The blocks that rewrite the picture most, 08 and 09, have the largest singular value of their MLP gate in the whole stack; the late blocks that keep the layout have the smallest." src="../assets/21-block-map/F21.3_weights_vs_stability.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>statistic</th>
+<th>ρ raw</th>
+<th>ρ with depth removed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mlp.down.sigma1</code></td>
+<td>−0.41</td>
+<td><strong>−0.615</strong></td>
+</tr>
+<tr>
+<td><code>mlp.gate.stable_rank</code></td>
+<td>+0.53</td>
+<td><strong>+0.613</strong></td>
+</tr>
+<tr>
+<td><code>mlp.down.stable_rank</code></td>
+<td>−0.36</td>
+<td><strong>+0.585</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Three statistics pass the Bonferroni threshold of 0.57; leaving one block out keeps them between
+0.50 and 0.70. Two readings are worth recording. Blocks 08–09 have the strongest single direction
+in their MLP gate in the stack (σ₁ 113 and 130 against 34–97 elsewhere). Blocks 26–27 write
+through almost one direction (stable rank of the attention output 26 and 13 against 100–260
+elsewhere), which is one mechanical reading of a knob. Block 23, the saturation knob of page 22,
+does not stand out on any of the 40 values.</p>
+<h3 id="p-21-block-map--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value, driven by a 34-slot vectors_override (one block at a time)
+prompts:
+  measured_on: data/block_colour_layout.csv (12 styles prompts, 6 v3 prompts, 5 v4 prompts)
+seeds: [2718281, 3141592, 1618033, 1234567]
+conditions:
+  - name: single block, negative dose, each of 28 blocks
+    dose: calibrated by eye per block and per bench
+    measured_D: not measured; the dose is a per-block gain, not a calibrated displacement
+  - name: single block, positive dose, each of 28 blocks
+    dose: calibrated by eye per block and per bench
+    measured_D: not measured
+outputs:
+  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4]
+  manifest: no single committed manifest for all three benches; data/block_colour_layout.csv lists every measured image
+analysis:
+  scripts:
+    - experiments/block_colour_layout.py        # 9b9aea19f1d6f43920cf0cc832d4be23063815d3290723cc4dd7e3bc27147de1
+    - experiments/block_effect_overlap.py       # 29853a9f70e6f86987c119d0f74112517cf56e92a3754cb6cf212ca32c4ae188
+    - experiments/block_weight_structure.py     # 1df6cc4b4cedf27e99efba52f19cf7318b7a5572f228e53abcd17e900e405645
+  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv
+</code></pre>
+<h2 id="p-21-block-map--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332).</li>
+<li><strong>Pre-registration (weights only):</strong> <code>docs/prereg_block_weight_structure.md</code>, committed before
+  any weight was read.</li>
+<li><strong>Result documents:</strong> <code>docs/block_groups_and_prompt_order.md</code>,
+  <code>docs/single_blocks_exploration_synthesis.md</code>, <code>docs/block_weight_structure_result.md</code>.</li>
+<li><strong>Observations:</strong> <code>data/single_blocks_v4_definitions_alessandro.md</code>.</li>
+</ul>
+</section>
 <section id="p-22-saturation-knob">
 <p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">128 renders · 8 prompts · 4 seeds · pre-registered · 2026-10-04</span></p>
 <h1 id="p-22-saturation-knob--one-block-that-turns-saturation-up-and-down">One block that turns saturation up and down</h1>
@@ -282,6 +677,902 @@ analysis:
   <code>data/blk23_saturation_all.csv</code>, <code>data/standard_metrics_c47.csv</code>.</li>
 <li><strong>Exploratory history:</strong> the knob was first noticed on the single-block benches
   (<code>docs/single_blocks_exploration_synthesis.md</code> §5).</li>
+</ul>
+</section>
+<section id="p-23-prompt-family-presets">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">433 renders · 18 prompts · 2 seeds · pre-registered · 2026-10-05</span></p>
+<h1 id="p-23-prompt-family-presets--one-preset-for-a-whole-family-of-prompts">One preset for a whole family of prompts</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> If I settle on a way of writing prompts — "Cartoon style
+illustration." followed by whatever I need — can one preset give everything I write that way
+a common look, whatever the subject? That is what a knob would be good for in practice.</p>
+<p><strong>What would kill it.</strong> A preset whose change is no more alike across the subjects of one
+family than across different families, or too weak to be of use.</p>
+<p><strong>Where we are.</strong> For late blocks it works: strongly on cartoon, less on oil, weakly on
+photographs. Middle blocks do something more interesting that no measure here can see, and
+they can change who is in the picture. The doses I calibrated on single images are too
+strong for a preset.</p>
+</blockquote>
+<h2 id="p-23-prompt-family-presets--in-two-minutes">In two minutes</h2>
+<p>Three families — "Cartoon style illustration.", "Oil painting.", "Photograph." — each followed
+by the same six subjects: a blacksmith, a rally car, a fox, a still life, a fisherman, a
+lighthouse. Two seeds each. Eleven edits: five late blocks at my calibrated doses, a combined
+preset of four of them at lower doses, block 9 as a pre-declared control, and four middle
+blocks added at my request before any render.</p>
+<p><img alt="The combined late-block preset gives the six cartoon subjects the same flatter, brighter, more saturated look, and changes the oil and photo families in their own, weaker ways." src="../assets/23-prompt-family-presets/F23.1_family_sheet_combo.webp" /></p>
+<p>Read the cartoon columns first: six different subjects and one recognisable change — flatter
+fills, brighter colour, cleaner outlines. In the oil and photo columns the same preset does
+something milder, and different from what it does to cartoons.</p>
+<h2 id="p-23-prompt-family-presets--the-verdict">The verdict</h2>
+<p>Late-block presets are coherent inside a family: on all six tested arms the change is more alike
+across the subjects of one family than across families, and inside a family it keeps about 70%
+of the agreement it has across two seeds of one prompt. Coherence is strongest on cartoon and
+weakest on photographs. Middle blocks give a common change that I see and no measure here
+records, and block 9 can change a subject's identity. At these doses the late blocks cost
+visible noise; "clean it up afterwards" was not tested.</p>
+<h2 id="p-23-prompt-family-presets--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>"Coherent" means the same direction of change, measured on 23 style statistics.</strong> Not
+  identical results, and not a measure of how good the look is.</li>
+<li><strong>Three families, six subjects, two seeds.</strong> Other styles, especially other photographic ones,
+  may behave differently.</li>
+<li><strong>The by-family split was computed after the test.</strong> The ranking cartoon &gt; oil &gt; photo is
+  descriptive.</li>
+<li><strong>The eye pass is mine and not blind</strong> (page 20). It was deposited before the numbers, and
+  all images are published.</li>
+<li><strong>The combo is one example</strong>, not an optimised preset.</li>
+</ul>
+<h2 id="p-23-prompt-family-presets--the-data">The data</h2>
+<h3 id="p-23-prompt-family-presets--coherence-inside-a-family">Coherence inside a family</h3>
+<p>For each arm, each image's change from its own baseline is a vector of 23 standardised style
+features. W is the mean cosine between the changes of different subjects in the same family; B
+between prompts of different families; S between the two seeds of one prompt (the ceiling).</p>
+<p><img alt="Every arm is more coherent within a family than between families; for the late blocks the gap is large and coherence reaches about 70 percent of the coherence across seeds." src="../assets/23-prompt-family-presets/F23.4_family_w_b_s.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>rule</th>
+<th>threshold</th>
+<th>result</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H1 the family matters</td>
+<td>W &gt; B on ≥ 5 of 6, median W − B ≥ 0.10</td>
+<td>6 of 6, <strong>+0.19</strong></td>
+<td>supported</td>
+</tr>
+<tr>
+<td>H2 coherence is usable</td>
+<td>median W ≥ 0.40</td>
+<td><strong>0.53</strong></td>
+<td>supported</td>
+</tr>
+<tr>
+<td>H3 blk09 + below the tested median</td>
+<td>W &lt; 0.53</td>
+<td><strong>0.16</strong></td>
+<td>supported</td>
+</tr>
+<tr>
+<td>H4 the Style band is less coherent</td>
+<td>median W &lt; 0.53 − 0.10</td>
+<td><strong>0.16</strong></td>
+<td>supported</td>
+</tr>
+</tbody>
+</table></div>
+<p>The combo: W 0.53, B 0.26, S 0.75 (<code>data/prompt_family_test.csv</code>, <code>data/prompt_family_arms.csv</code>).</p>
+<h3 id="p-23-prompt-family-presets--family-by-family">Family by family</h3>
+<p><img alt="Late-block presets are coherent across subjects inside a family, most on cartoon (up to 0.80) and least on photographs; middle blocks stay near 0.2 everywhere." src="../assets/23-prompt-family-presets/F23.3_family_coherence_by_family.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>arm</th>
+<th>cartoon</th>
+<th>oil</th>
+<th>photo</th>
+<th>eye: common look? (cartoon / oil / photo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blk16 +0.30</td>
+<td>0.79</td>
+<td>0.34</td>
+<td>0.14</td>
+<td>yes / yes / partly</td>
+</tr>
+<tr>
+<td>blk20 +0.45</td>
+<td>0.80</td>
+<td>0.55</td>
+<td>0.29</td>
+<td>yes / yes / <strong>no</strong></td>
+</tr>
+<tr>
+<td>blk23 −0.30</td>
+<td>0.55</td>
+<td>0.28</td>
+<td>0.12</td>
+<td>yes / yes / <strong>no</strong></td>
+</tr>
+<tr>
+<td>blk26 +0.15</td>
+<td>0.65</td>
+<td>0.71</td>
+<td>0.53</td>
+<td>yes / yes / yes</td>
+</tr>
+<tr>
+<td>blk27 −0.25</td>
+<td>0.56</td>
+<td>0.59</td>
+<td>0.42</td>
+<td>yes / yes / yes</td>
+</tr>
+<tr>
+<td>combo</td>
+<td>0.76</td>
+<td>0.36</td>
+<td>0.48</td>
+<td>yes / yes / yes</td>
+</tr>
+</tbody>
+</table></div>
+<p>Where I saw no common look, the numbers are among the lowest. This agrees with what the
+exploratory benches kept suggesting: photographic style is the hardest to steer.</p>
+<h3 id="p-23-prompt-family-presets--the-middle-blocks-the-eye-against-the-numbers">The middle blocks: the eye against the numbers</h3>
+<p>The four Style-band arms and the blk09 control sit at W 0.06–0.17, barely above B. My eye pass
+said the opposite in most cells: a common, recognisable change in 8 of 12 Style-band cells and in
+2 of 3 blk09 cells. What I wrote down is a change of content: blk09 + "raises realism coherently
+in all", and on photographs it "idealises instead of making more realistic"; blk17 + reads as
+"focus on the subject". In the sheet below (seed 5772156) the cartoon rally car becomes a
+three-dimensional render.</p>
+<p><img alt="Block 9 pushed positive makes the cartoon subjects more three-dimensional and realistic and rearranges the scenes, a change of content more than of rendering." src="../assets/23-prompt-family-presets/F23.2_family_sheet_blk09.webp" /></p>
+<p>The 23 style features measure how a picture is rendered — texture, edges, colour. H3 and H4 are
+supported as statements about rendering statistics; they do not show that middle blocks lack a
+family-coherent effect, only that their effect is not a rendering effect. The obvious candidate
+for a content measure, DINOv2, was tried with a pre-registered threshold and failed (page 25):
+"more realistic" points in a different direction for a fox and for a car in a content embedding.
+The middle blocks' coherence remains an observation by eye.</p>
+<h3 id="p-23-prompt-family-presets--a-change-of-identity">A change of identity</h3>
+<p>At seed 1414213 blk09 + turns the female blacksmith into a man in the oil and photo families;
+at seed 5772156 — the seed of the sheet above — she stays a woman in all three. The edit moves
+the picture toward the more common reading of the words: "blacksmith" toward a man. CLIPScore on
+the six blacksmith prompts falls by 3.8 under blk09 +, the largest drop of any arm
+(<code>data/standard_metrics_summary.csv</code>). One subject, two seeds: this is an observation with a
+number that agrees, not a test.</p>
+<h3 id="p-23-prompt-family-presets--the-cost">The cost</h3>
+<p>By eye, blk26 +0.15 and blk27 −0.25 are not acceptable in any family — a uniform patina of noise
+— and the combo is acceptable only in part in two families. BRISQUE agrees on blk27 and the combo
+(+9.6) and does not see blk26 (+0.4, page 25). The doses I had calibrated on single images are
+too strong for a preset applied across a family. Whether a clean-up pass can remove the cost
+without removing the look is untested.</p>
+<h3 id="p-23-prompt-family-presets--against-an-earlier-overturned-result">Against an earlier overturned result</h3>
+<p><a href="#p-23-prompt-family-presets--p-09-style-direction">Notebook page 09</a> tested, with criteria frozen in advance,
+whether the direction a weight edit imprints depends on the declared style more than on the
+subject, and it was overturned: at the usable dose 6 of 12 cells carried the opposite sign. This
+page finds that, for single late blocks, the change is more alike within a style than across
+styles. The two are not the same experiment — a calibrated whole-stack preset and block
+derangements there, single late blocks here; eight styles sharing one scene there, three styles
+crossed with six subjects here — and this page does not claim to reconcile them. A reader should
+keep both.</p>
+<h3 id="p-23-prompt-family-presets--an-open-question-middle-blocks-for-a-series-of-assets">An open question: middle blocks for a series of assets</h3>
+<p>Middle blocks are the ones I find most valuable: they change the picture more deeply than a
+retouch could, which is what a series of assets with a fixed prompt structure and style would
+want. What the data say so far: a deeper change at no measured quality cost (page 25); a common
+change inside a family, seen by eye only; but the least predictable blocks, able to change a
+subject's identity — a risk for a series whose characters must stay the same. The test that would
+decide it (C51, not run): fixed characters across poses and scenes in one style, with a
+middle-block preset on and off; does the identity hold?</p>
+<h3 id="p-23-prompt-family-presets--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value, driven by a 34-slot vectors_override
+prompts:
+  file: data/prompt_family_plan.csv
+  families: [F1cartoon, F2oil, F3photo]
+  subjects: [blacksmith, rally, fox, stilllife, fisherman, lighthouse]
+seeds: [5772156, 1414213]
+conditions:
+  - name: blk16_pos_d0.300
+    measured_D: not measured; the dose is a per-block gain, not a calibrated displacement
+  - name: blk20_pos_d0.450
+    measured_D: not measured
+  - name: blk23_neg_d0.300
+    measured_D: not measured
+  - name: blk26_pos_d0.150
+    measured_D: not measured
+  - name: blk27_neg_d0.250
+    measured_D: not measured
+  - name: combo
+    dose: blk16 +0.20, blk20 +0.30, blk23 -0.20, blk27 -0.10
+    measured_D: not measured
+  - name: blk09_pos_d0.450
+    measured_D: not measured
+  - name: blk03_pos_d0.400
+    measured_D: not measured
+  - name: blk06_pos_d0.450
+    measured_D: not measured
+  - name: blk13_neg_d0.450
+    measured_D: not measured
+  - name: blk17_pos_d0.400
+    measured_D: not measured
+outputs:
+  folder: benchmark_prompt_family
+  manifest: data/prompt_family_plan.csv
+analysis:
+  script: experiments/analyze_prompt_family.py
+  sha256: 8518e7c0a5b7014496999bfc89f285f55bb92c23a84e9dd2db73896c9419330b
+  produces: data/prompt_family_style_features.csv, data/prompt_family_arms.csv, data/prompt_family_test.csv, data/prompt_family_within_by_family.csv
+</code></pre>
+<h2 id="p-23-prompt-family-presets--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_prompt_family (433).</li>
+<li><strong>Pre-registration:</strong> <code>docs/prereg_prompt_family.md</code>, with amendment 1 (four Style-band arms and
+  H4), both before any render.</li>
+<li><strong>Result documents:</strong> <code>docs/prompt_family_result.md</code>, <code>docs/standard_metrics_result.md</code>.</li>
+<li><strong>Eye pass:</strong> <code>data/prompt_family_eye_alessandro.csv</code>, deposited before the scoring ran.</li>
+<li><strong>Exploratory basis:</strong> <code>docs/style_vs_subject_exploration.md</code>.</li>
+</ul>
+</section>
+<section id="p-24-wording">
+<p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">971 renders · 13 prompts · 2 seeds · pre-registered · 2026-10-05</span></p>
+<h1 id="p-24-wording--does-the-way-a-prompt-is-written-change-what-a-block-does">Does the way a prompt is written change what a block does?</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> A knob is useful only if it does the same thing however I happen
+to write the prompt. My claim: moving the weights gives similar results when the prompt
+describes the same content; the structure of the text matters less than the content.</p>
+<p><strong>What would kill it.</strong> A block whose change depends on the wording as much as on the subject,
+or more than on the seed.</p>
+<p><strong>Where we are.</strong> The first half holds by eye and by the numbers: rewriting matters about as much
+as the seed and far less than the subject. The registered verdict is still inconclusive,
+because a small change of content disturbed a block's effect even less than rewriting did — the
+opposite of what the design assumed.</p>
+</blockquote>
+<h2 id="p-24-wording--in-two-minutes">In two minutes</h2>
+<p>Two subjects — an elf brawler in a comic style, a woman asleep in a canoe on a lotus pond — each
+written four ways with the same facts (original, reordered, a pure tag list, prose with
+synonyms), plus one version with a single object changed (the elf's gauntlet; the sleeper turned
+into an old bearded man). Twelve blocks in both directions, two seeds.</p>
+<p><img alt="Block 19 pushed positive makes the same change to the elf under all four writings of the prompt and after the gauntlet is changed: the antlers shrink and the pauldron turns to fur." src="../assets/24-wording/F24.1_wording_sheet.webp" /></p>
+<p>The baselines differ from row to row: each writing gives a different pose and framing. The edit
+does not: under every writing and after the gauntlet change, blk19 + turns the gold pauldron into
+a straw-like fur, and the antlers shrink or disappear in most frames.</p>
+<h2 id="p-24-wording--the-verdict">The verdict</h2>
+<p>By eye the claim holds on every arm: same change across the four writings and after the content
+change. By the numbers, writing behaves like the seed and the subject dominates. The registered
+verdict is inconclusive, not supported, because its third condition failed on all twelve arms:
+changing one object in the prompt disturbed a block's effect less than rewriting it. Stated
+plainly: the text's structure matters about as much as the seed, less than the subject, and more
+than a one-object change of content.</p>
+<h2 id="p-24-wording--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>Two subjects, one seed pair.</strong> On the canoe the arms are about half as strong as on the elf,
+  and only 12 of 24 arms are larger than what rewriting alone does to the baseline.</li>
+<li><strong>The style features are partly sensitive to layout.</strong> How close two edits look depends partly
+  on how close the two pictures were to start with; the one-object change kept the layout best,
+  which favours it. This does not explain the subject result.</li>
+<li><strong>The canoe content change kept two words of the original.</strong> The "old bearded man" prompt
+  still reads "one arm bends above her head … across her torso", a leftover of the edit.</li>
+<li><strong>The eye pass is mine and not blind</strong> (page 20).</li>
+</ul>
+<h2 id="p-24-wording--the-data">The data</h2>
+<h3 id="p-24-wording--how-it-was-measured">How it was measured</h3>
+<p>Each image is reduced to 23 style features; an arm's effect on a prompt is its vector of feature
+changes from the same prompt's baseline. A is the mean cosine between two such vectors:
+A_writing across writings of the same subject, A_seed across seeds, A_content_small between the
+original and the one-object change, A_subject between the two subjects. Only arms whose change is
+larger than what rewriting does to the baseline (size &gt; 1.15) are scored.</p>
+<p><img alt="A block's change is as consistent across writings of the prompt as across seeds, more consistent after a one-object content change, and much less consistent across subjects." src="../assets/24-wording/F24.2_wording_consistency.webp" /></p>
+<h3 id="p-24-wording--the-registered-rule">The registered rule</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>condition</th>
+<th>needed</th>
+<th>result</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>median (A_writing − A_seed)</td>
+<td>≥ −0.10</td>
+<td><strong>−0.04</strong></td>
+<td>met</td>
+</tr>
+<tr>
+<td>A_writing &gt; A_subject</td>
+<td>≥ 75% of arms</td>
+<td><strong>12 of 12</strong></td>
+<td>met</td>
+</tr>
+<tr>
+<td>A_writing &gt; A_content_small</td>
+<td>≥ 60% of arms</td>
+<td><strong>0 of 12</strong></td>
+<td>not met</td>
+</tr>
+</tbody>
+</table></div>
+<p>Scored arms: blk00 ±, blk09 −, blk12 +, blk13 +, blk15 +, blk17 ±, blk19 +, blk23 +, blk27 ±. On
+them A_writing runs 0.53–0.92 and A_subject −0.15 to 0.52: what the picture contains decides what
+a block does to it. A tag list against the original behaves like the other rewrites. The third
+condition failed because the one-object change kept the picture (layout r of its baseline with
+the original 0.68–0.76) while rewriting moved pose and framing (0.48–0.76). The design assumed the
+opposite ordering. The same ordering appears in DINOv2 space (page 25): A_content_small 0.29 &gt;
+A_seed 0.22 &gt; A_writing 0.16 ≫ A_subject 0.02.</p>
+<h3 id="p-24-wording--word-order">Word order</h3>
+<p>Before C45, an exploratory bench rendered one prompt in five word orders, two seeds, 56 arms.
+By eye, blk19 + shrinks or removes the antlers and turns the pauldron to fur in 10 of 10 renders,
+blk26 + lays the same mosaic of colour cells over the frame in 10 of 10, and blk17 + slims the
+collar and simplifies the figure in 5 of 5 orders at one seed. With the same features:
+consistency across orders tracks consistency across seeds (r = 0.92 over 56 arms) and is on
+average 0.06 higher. Every arm with low consistency is among those whose change is smaller than
+the reordering itself. The order does change the picture — baselines differ by ΔE 16–31, as much
+as most edits — but it changes the frame, not the character, and not what a block does to it.</p>
+<h3 id="p-24-wording--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value, driven by a 34-slot vectors_override
+prompts:
+  file: data/prompt_writing_plan.csv
+  ids: [S1_W3_tags, S1_W4_synonyms, S1_C1_flamegauntlet, S2_W1_original, S2_W2_reordered, S2_W3_tags, S2_W4_synonyms, S2_C1_oldman]
+  reused: S1_W1 and S1_W2 are V1_Original and V5_Inverse of benchmark_prompt_order
+seeds: [3141592, 1234567]
+conditions:
+  - name: blocks 00, 02, 05, 08, 09, 12, 13, 15, 17, 19, 23 at -0.35 and +0.35 (blk00 -0.25 / +0.30)
+    measured_D: not measured; the dose is a per-block gain, not a calibrated displacement
+  - name: blk27_neg_d0.075, blk27_pos_d0.100
+    measured_D: not measured
+outputs:
+  folders: [benchmark_prompt_writing, benchmark_prompt_order]
+  manifest: data/prompt_writing_plan.csv
+analysis:
+  scripts:
+    - experiments/analyze_prompt_writing.py             # 4f7034db6a713f82c7135b64062586b4277db29afb4f53c6ee6eeb697dccc468
+    - experiments/prompt_order_feature_consistency.py   # 3a62edb33adf9d6afd161e24a6e04eeeaa2cc667b40ba3ce6a4ed5803ec0f23e
+  produces: data/prompt_writing_arms.csv, data/prompt_writing_test.csv, data/prompt_order_feature_consistency.csv
+</code></pre>
+<h2 id="p-24-wording--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_prompt_writing (401), benchmark_prompt_order (570).</li>
+<li><strong>Pre-registration:</strong> <code>docs/prereg_prompt_writing.md</code>, with amendment 1; scoring code
+  committed before any render.</li>
+<li><strong>Result documents:</strong> <code>docs/prompt_writing_result.md</code>, <code>docs/block_groups_and_prompt_order.md</code>
+  §3 (word order, exploratory).</li>
+<li><strong>Eye pass:</strong> <code>data/prompt_writing_eye_alessandro.csv</code>, deposited before the test ran.</li>
+<li><strong>Data:</strong> <code>data/prompt_writing_style_features.csv</code>, <code>data/prompt_writing_arms.csv</code>,
+  <code>data/prompt_writing_test.csv</code>, <code>data/prompt_order_feature_consistency.csv</code>,
+  <code>data/prompt_order_baselines.csv</code>.</li>
+</ul>
+</section>
+<section id="p-25-standard-metrics">
+<p class="status"><span class="pill" style="--c:#d03b3b">Overturned</span><span class="corpus">962 renders · 35 prompts · 7 seeds · pre-registered · 2026-10-05</span></p>
+<h1 id="p-25-standard-metrics--what-the-standard-metrics-see-and-what-they-miss">What the standard metrics see, and what they miss</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> The results on the other pages rest on my eye and on statistics
+written for this project. A reader will ask what the usual metrics say: image quality, prompt
+adherence, perceptual distance, content similarity. I wanted them on the same images, decided
+before they were computed.</p>
+<p><strong>What would kill it.</strong> Standard metrics that contradict the published verdicts — or that see,
+without my eye, what only my eye had seen.</p>
+<p><strong>Where we are.</strong> They confirm the saturation knob against the words and put a price on each
+preset. They do not see what the middle blocks do across a family: the one prediction I made
+about them failed.</p>
+</blockquote>
+<h2 id="p-25-standard-metrics--in-two-minutes">In two minutes</h2>
+<p>No new renders: BRISQUE and CLIP-IQA (quality without a reference), CLIPScore (adherence to the
+prompt), LPIPS, DISTS and SSIM (distance from the baseline), and DINOv2 cosine (same content as
+the baseline) were computed on every image of the three confirmatory benches — wording,
+saturation, prompt family — under a plan written before any of them was run.</p>
+<p><img alt="Middle blocks change the content most (DINOv2 0.87-0.88) at no BRISQUE cost, while the late blocks and the combined preset change less and cost up to +9.6 BRISQUE." src="../assets/25-standard-metrics/F25.1_depth_vs_cost.webp" /></p>
+<p>Read the figure as two corners. Bottom right: the middle blocks, which move the content most and
+leave BRISQUE where it was. Top left: the late blocks and the combined preset, which keep the
+content and raise BRISQUE.</p>
+<h2 id="p-25-standard-metrics--the-verdict">The verdict</h2>
+<p>On the saturation knob the standard metrics agree with the published verdict: at the same colour
+gain, block 23 stays closer to the original than the words "colorful" (LPIPS 7 of 7, DINOv2 6 of
+7). On the prompt-family presets they put a price on each arm: the late blocks and the combo cost
+up to +9.6 BRISQUE, the middle blocks nothing measurable, while changing the content most. The
+pre-registered prediction that DINOv2 would see the middle blocks' family-coherent change is
+refuted: it is an observation by eye that no metric here reproduces.</p>
+<h2 id="p-25-standard-metrics--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>No-reference quality metrics miss what the eye calls noise.</strong> blk26 +0.15 was judged not
+  acceptable in every family by eye and costs +0.4 BRISQUE. A low BRISQUE is not evidence of a
+  clean picture.</li>
+<li><strong>"No measured cost" is not "no cost".</strong> It means these two metrics did not move.</li>
+<li><strong>The depth-against-cost reading is descriptive.</strong> It was pre-specified as a measurement, with
+  no rule that could fail.</li>
+<li><strong>CLIPScore on the saturation bench is not comparable across conditions.</strong> It was computed
+  against each image's own prompt, which for the word conditions includes the added words — a
+  defect of the plan, recorded and not interpreted.</li>
+<li><strong>DINOv2 is one content embedding.</strong> Another may see what this one does not.</li>
+</ul>
+<h2 id="p-25-standard-metrics--the-data">The data</h2>
+<h3 id="p-25-standard-metrics--the-saturation-knob-again">The saturation knob, again</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>measure</th>
+<th>blk23 closer to the original than "colorful" at the same chroma gain</th>
+<th>median difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LPIPS</td>
+<td><strong>7 of 7</strong> scorable cells</td>
+<td>−0.10</td>
+</tr>
+<tr>
+<td>DINOv2 cosine</td>
+<td><strong>6 of 7</strong></td>
+<td>+0.019</td>
+</tr>
+<tr>
+<td>layout r (page 22, pre-registered)</td>
+<td>6 of 7</td>
+<td>+0.08</td>
+</tr>
+</tbody>
+</table></div>
+<p>Quality: BRISQUE moves by −0.95 for "colorful", +0.87 for blk23 −0.45 and −3.7 for blk23 +0.30;
+CLIP-IQA by at most 0.02 anywhere. The full comparison is on <a href="#p-25-standard-metrics--p-22-saturation-knob">page 22</a>.</p>
+<h3 id="p-25-standard-metrics--depth-against-cost">Depth against cost</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>arm</th>
+<th>ΔBRISQUE (higher = worse)</th>
+<th>LPIPS to base</th>
+<th>DINOv2 cosine to base</th>
+<th>ΔCLIPScore, blacksmith</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blk23 −0.30</td>
+<td>+3.4</td>
+<td>0.27</td>
+<td><strong>0.96</strong></td>
+<td>−0.9</td>
+</tr>
+<tr>
+<td>blk26 +0.15</td>
+<td>+0.4</td>
+<td>0.38</td>
+<td>0.92</td>
+<td>−0.2</td>
+</tr>
+<tr>
+<td>blk16 +0.30</td>
+<td>+3.3</td>
+<td>0.45</td>
+<td>0.92</td>
+<td>−1.2</td>
+</tr>
+<tr>
+<td>blk20 +0.45</td>
+<td>+5.3</td>
+<td>0.46</td>
+<td>0.92</td>
+<td>−1.9</td>
+</tr>
+<tr>
+<td>blk27 −0.25</td>
+<td><strong>+9.6</strong></td>
+<td>0.46</td>
+<td>0.93</td>
+<td>−2.2</td>
+</tr>
+<tr>
+<td>combo</td>
+<td><strong>+9.6</strong></td>
+<td>0.49</td>
+<td>0.90</td>
+<td>−3.0</td>
+</tr>
+<tr>
+<td>blk13 −0.45</td>
+<td>−0.2</td>
+<td>0.43</td>
+<td>0.95</td>
+<td>−0.2</td>
+</tr>
+<tr>
+<td>blk03 +0.40</td>
+<td>+1.7</td>
+<td>0.45</td>
+<td>0.93</td>
+<td>−1.1</td>
+</tr>
+<tr>
+<td>blk06 +0.45</td>
+<td>+0.8</td>
+<td>0.49</td>
+<td>0.91</td>
+<td>−1.0</td>
+</tr>
+<tr>
+<td>blk17 +0.40</td>
+<td>−0.5</td>
+<td>0.50</td>
+<td><strong>0.87</strong></td>
+<td>−2.4</td>
+</tr>
+<tr>
+<td>blk09 +0.45</td>
+<td>−0.3</td>
+<td><strong>0.53</strong></td>
+<td><strong>0.88</strong></td>
+<td><strong>−3.8</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Medians over 36 images per arm (<code>data/standard_metrics_summary.csv</code>). Not every middle block goes
+deep: blk13 − stays at 0.95, close to the late blocks. The two that do, blk09 + and blk17 +, are
+also the two that lower adherence most on the blacksmith prompts — where blk09 + turned the woman
+into a man at one of the two seeds (<a href="#p-25-standard-metrics--p-23-prompt-family-presets#a-change-of-identity">page 23</a>).</p>
+<h3 id="p-25-standard-metrics--a-content-embedding-does-not-see-it">A content embedding does not see it</h3>
+<p>H5 asked whether the middle blocks' common change, seen by eye inside each family, would show up
+as coherence of DINOv2-embedding changes. Median within-family coherence of the five middle arms:
+<strong>0.007</strong> against 0.159 on the style features and a threshold of 0.259. Refuted. In DINOv2 space
+no arm is family-coherent, late blocks included (all W ≤ 0.06): the same change, "more realistic",
+points one way for a fox and another way for a car in an embedding built around content.</p>
+<h3 id="p-25-standard-metrics--wording-in-dinov2-space">Wording, in DINOv2 space</h3>
+<p>A_content_small 0.29 &gt; A_seed 0.22 &gt; A_writing 0.16 ≫ A_subject 0.02: the same ordering as the
+style features on <a href="#p-25-standard-metrics--p-24-wording">page 24</a>. The subject dominates; rewriting behaves like the seed.</p>
+<h3 id="p-25-standard-metrics--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value, driven by a 34-slot vectors_override
+prompts:
+  files: [data/prompt_writing_plan.csv, data/blk23_colorful_plan.csv, data/prompt_family_plan.csv]
+seeds: [2718281, 3141592, 1618033, 4669201, 5772156, 1414213, 1234567]
+conditions:
+  - name: every condition of the three benches, as listed on pages 22, 23 and 24
+    measured_D: not measured; the doses are per-block gains, not calibrated displacements
+outputs:
+  folders: [benchmark_prompt_writing, benchmark_blk23_colorful, benchmark_prompt_family]
+  manifest: data/standard_metrics_c45.csv, data/standard_metrics_c47.csv, data/standard_metrics_c49.csv
+analysis:
+  scripts:
+    - experiments/standard_metrics.py           # 744fc3854a7b6a6be4b3ca95cacd54f2337d3ba3521119eb82d0936a3195c245 (GPU, piq + open_clip + DINOv2 ViT-B/14)
+    - experiments/analyze_standard_metrics.py   # eb36aa06bca4a9db9a4537cb3a30e34a29975ed4b9c3af13d587322bfa83d08c
+  produces: data/standard_metrics_summary.csv
+</code></pre>
+<h2 id="p-25-standard-metrics--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_prompt_writing (401), benchmark_blk23_colorful (128), benchmark_prompt_family (433).</li>
+<li><strong>Pre-registration:</strong> <code>docs/prereg_standard_metrics.md</code>, written before any of the metrics was
+  computed on these images; H5's wording was fixed in it before the run.</li>
+<li><strong>Result document:</strong> <code>docs/standard_metrics_result.md</code>.</li>
+<li><strong>Data:</strong> <code>data/standard_metrics_c45.csv</code>, <code>data/standard_metrics_c47.csv</code>,
+  <code>data/standard_metrics_c49.csv</code>, <code>data/standard_metrics_summary.csv</code>.</li>
+<li><strong>Run notes:</strong> <code>docs/RENDERS_2026-10-05_standard_metrics.md</code>.</li>
+</ul>
+</section>
+<section id="p-26-what-did-not-work">
+<p class="status"><span class="pill" style="--c:#d03b3b">Overturned</span><span class="corpus">295 renders · 2 prompts · 3 seeds · 2026-10-05</span></p>
+<h1 id="p-26-what-did-not-work--what-did-not-work-and-the-limits-of-everything-else">What did not work, and the limits of everything else</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> A report that shows only what held invites the reader to wonder
+what was left out. This page collects the claims this project made and then lost, how they were
+lost, and what the remaining pages cannot say.</p>
+<p><strong>What would kill it.</strong> A retraction stated more softly than the claim was, or a limit the
+other pages hide.</p>
+<p><strong>Where we are.</strong> Four claims are withdrawn here. Every one of them was made from a statistic
+and undone by opening the images. That pattern is why every confirmatory page of this report
+puts the eye pass first.</p>
+</blockquote>
+<h2 id="p-26-what-did-not-work--in-two-minutes">In two minutes</h2>
+<p>On 2026-09-28 the analysis of the centre-push bench, written by the assistant I work with,
+recommended two edits as the best operating points of the project: the macro-block sliders
+<code>Block_4</code> and <code>Block_1</code> pushed to 0.500. Two statistics said they moved the picture far (V,
+distance from the baseline in units of seed noise) while keeping its line work (L, structure
+coherence). Nobody had opened those renders. I had been saying the images were breaking; the
+analysis kept answering with numbers.</p>
+<p><img alt="The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left." src="../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp" /></p>
+<p>Opened at my prompting the next day, both are destroyed. A destroyed picture is far from its baseline, so V is high; and a
+regular texture is oriented line everywhere, so L is high too. High V with high L meant "destroyed
+into a regular texture". The bench proposed to push them further was withdrawn.</p>
+<h2 id="p-26-what-did-not-work--the-verdict">The verdict</h2>
+<p>Four claims are overturned: that strong pushes of two macro-blocks keep the drawing; that the
+structure-coherence statistic can tell damage from steering; that the centre of the stack gives
+way differently from its ends; and that a CLIP-based delta separates "semantic" from "structural"
+blocks. The common cause is a statistic read without the images. Every result that survives in
+this report was scored after an eye pass deposited in advance — which makes that eye, a single
+observer who knows the conditions, the largest limit of the report.</p>
+<h2 id="p-26-what-did-not-work--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>The retractions rest on the same eye</strong> whose limits are listed below. For the eye veto, six
+  blind model observers agreed with me on every pair both could resolve.</li>
+<li><strong>Some of these statistics may be repairable.</strong> Structure coherence at a smaller window might
+  flip the two units it gets wrong; that has not been run.</li>
+<li><strong>The centre-push null concerns macro-blocks</strong>, groups of consecutive blocks, not single blocks.</li>
+</ul>
+<h2 id="p-26-what-did-not-work--the-data">The data</h2>
+<h3 id="p-26-what-did-not-work--the-best-doses-by-the-statistic">The best doses by the statistic</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>macro-block, positive</th>
+<th>V at 0.500</th>
+<th>L at 0.500</th>
+<th>what the render shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Block_4</code></td>
+<td>3.28</td>
+<td>1.204</td>
+<td>no subject; crumpled-paper texture of dense black strokes</td>
+</tr>
+<tr>
+<td><code>Block_1</code></td>
+<td>3.84</td>
+<td>1.058</td>
+<td>no subject; colour confetti</td>
+</tr>
+</tbody>
+</table></div>
+<p>Arm means over prompts and seeds (<code>docs/centre_push_result.md</code> §4); the figure shows the unit
+means of one prompt (<code>data/centre_push_units.csv</code>). At 0.350, <code>Block_4</code> + already flattens faces
+into masks; <code>Block_1</code> + at 0.350 on this prompt and seed keeps the blacksmith intact, framed
+closer. The retraction is in <code>docs/centre_push_result.md</code> §4, where the original table is kept and
+struck through.</p>
+<h3 id="p-26-what-did-not-work--a-measure-with-the-sign-wrong">A measure with the sign wrong</h3>
+<p>The centre-push bench had a pre-registered eye veto: twelve pairs of renders, and for each I said
+which was more broken. I resolved 9 and agreed with L on 7, below the registered 8 of 12, so the
+label "L not validated by eye" applies. Seven of nine is not a rout. The rout is in the two
+disagreements: both are <code>Block_6</code> + 0.080, which L scores above its own baseline and which I, and
+six blind model observers in both orientations of the sheets, call broken. <code>Block_1</code> − 0.500 is
+the same case (L 1.02–1.03, broken in both pairs). A statistic that says a picture gained
+structure on the condition three independent looks call damaged has the sign wrong.</p>
+<h3 id="p-26-what-did-not-work--the-centre-is-not-special">The centre is not special</h3>
+<p>The bench's primary asked whether the four central macro-blocks give way under a push differently
+from the two at the ends. T = +0.053, p = 0.19; the range guard passed, so this is a null.
+<code>Block_5</code>, in the centre, gives way hardest of all; <code>Block_1</code>, at an end, less than five of the
+eight central arms. A post hoc reclassification of <code>Block_5</code> as an end gives p = 0.02 and is
+recorded as such, not as the verdict. The single-block map on <a href="#p-26-what-did-not-work--p-21-block-map">page 21</a> shows why
+macro-blocks were the wrong unit: they cut across the groups that push together.</p>
+<h3 id="p-26-what-did-not-work--semantic-routing">Semantic routing</h3>
+<p>An analysis written by another assistant, never published, ranked 56 single-block arms by the
+difference between how consistent an arm's CLIP-embedding change is across ten images of one
+prompt and across 26 images of different prompts, and read a large difference as a "semantic
+router". The audit (<code>docs/semantic_routing_audit.md</code>) found:</p>
+<ul>
+<li>no script in the repository computes the p-values it quotes, and its survivor count is 12 in
+  the text and 16 in the summary;</li>
+<li>doses are not part of the key, so different doses of one arm are mixed or silently dropped;</li>
+<li>the difference measures how alike the images are: ten renders of one character against 26
+  different scenes; every visible edit is expected to score positive;</li>
+<li>its second-ranked "semantic router", blk26 +, lays the same mosaic of colour cells over any
+  content, white background included — the least semantic effect in the set.</li>
+</ul>
+<p>What survives is each column on its own: for a fixed content most arms move the CLIP embedding
+the same way whatever the word order (<a href="#p-26-what-did-not-work--p-24-wording#word-order">page 24</a>), and the arms most
+stable across 26 different scenes are grain, blur and texture.</p>
+<h3 id="p-26-what-did-not-work--what-the-numbers-could-not-see">What the numbers could not see</h3>
+<p><a href="#p-26-what-did-not-work--p-11-what-the-numbers-could-not-see">Notebook page 11</a> records three more cases.
+Five conditions recommended from displacement statistics ranked 75th to 80th of 80 on structure
+coherence; the condition picked by eye ranked 12th. An edit removed all colour from a leaf while
+leaving the leaf intact, in 9 of 20 fresh seeds and 0 of 20 controls, and never when the prompt
+named a colour — an open lead on which colours an edit can reach. A generality test for that
+effect was run on subjects whose colour was never in doubt, so its null meant nothing.</p>
+<p>The style-direction result of <a href="#p-26-what-did-not-work--p-09-style-direction">notebook page 09</a> is also
+overturned; it is discussed beside the result it seems to contradict, on
+<a href="#p-26-what-did-not-work--p-23-prompt-family-presets#against-an-earlier-overturned-result">page 23</a>.</p>
+<h3 id="p-26-what-did-not-work--lessons-kept-as-rules">Lessons kept as rules</h3>
+<ul>
+<li><strong>No sentence about how a render looks without opening it</strong> at 1:1. When the eye and a statistic
+  disagree, the statistic is the suspect (pitfall 90).</li>
+<li><strong>A distance from the baseline cannot tell steering from damage.</strong> A destroyed image is far.</li>
+<li><strong>Before claiming that something has not been done, search for it</strong> (pitfalls 87, 88).</li>
+<li><strong>Before fixing a threshold on the agreement of two measured things, measure how well each agrees
+  with itself</strong> (pitfall 89).</li>
+</ul>
+<h3 id="p-26-what-did-not-work--limits-of-this-report">Limits of this report</h3>
+<ul>
+<li><strong>One model.</strong> Krea-2 only; whether any of this transfers to another architecture is untested.</li>
+<li><strong>One observer, who knows the conditions.</strong> Every eye pass is mine; hashed names do not blind me
+  (page 20). All images are published so that the eye pass can be repeated.</li>
+<li><strong>Small confirmatory samples.</strong> 16 to 40 cells per test; seven cells for the matched comparison
+  of page 22.</li>
+<li><strong>Doses calibrated on single images.</strong> Some are too strong for a preset (page 23).</li>
+<li><strong>One test is inconclusive by its own rule</strong> (page 24); the weights result is marginal
+  (page 21); the middle blocks' coherence is seen by eye only (pages 23, 25).</li>
+<li><strong>Not run:</strong> a forward-pass measurement of each block's write into the residual stream; a
+  clean-up pass after a preset; the character-consistency test proposed on page 23.</li>
+</ul>
+<h3 id="p-26-what-did-not-work--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+tuner:
+  node: ArthemyKrea2ModelTuner
+  version: not recorded — the tuner is a separate repository
+  mode: macro-block group gains Block_1 … Block_6
+prompts:
+  file: data/centre_push_plan.csv
+  ids: [P01, P02]
+seeds: [2718281, 3141592, 1618033]
+conditions:
+  - name: Block_1 … Block_6, both signs, doses 0.080, 0.200, 0.350, 0.500
+    measured_D: not measured; V is reported in units of the seed noise of the same prompt
+outputs:
+  folder: benchmark_centre_push/renders
+  manifest: data/centre_push_plan.csv
+analysis:
+  script: experiments/analyze_centre_push.py
+  sha256: 53e00f1353f070aa35be907fe4503b6c715528b962980786ced4d810b5d3ee6a
+  produces: data/centre_push_units.csv, data/centre_push_tests.csv, data/centre_push_veto_result.csv
+</code></pre>
+<h2 id="p-26-what-did-not-work--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> benchmark_centre_push (295).</li>
+<li><strong>Pre-registrations:</strong> <code>docs/prereg_centre_push.md</code>, <code>docs/prereg_centre_push_model_eye.md</code>.</li>
+<li><strong>Result documents and retractions:</strong> <code>docs/centre_push_result.md</code> §4,
+  <code>docs/centre_push_eye_veto_result.md</code>, <code>docs/semantic_routing_audit.md</code>.</li>
+<li><strong>Pitfalls:</strong> <code>docs/errors_log.md</code>, <code>docs/_pitfalls_88_da_inserire.md</code>,
+  <code>docs/_pitfalls_89_da_inserire.md</code>, <code>docs/_pitfalls_90_da_inserire.md</code>.</li>
+<li><strong>Related notebook pages:</strong> <a href="#p-26-what-did-not-work--p-09-style-direction">09</a>,
+  <a href="#p-26-what-did-not-work--p-11-what-the-numbers-could-not-see">11</a>.</li>
+</ul>
+</section>
+<section id="p-27-other-edits">
+<p class="status"><span class="pill" style="--c:#fab219">Ambiguous</span><span class="corpus">1730 renders · 54 prompts · 2026-10-05</span></p>
+<h1 id="p-27-other-edits--appendix-a-other-kinds-of-edit">Appendix A: other kinds of edit</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Before single blocks, this project edited the weights in other
+ways: reordering whole blocks inside the checkpoint, permuting them, scrambling signs. Some of
+those results passed pre-registered tests, and one produced an observation worth keeping.</p>
+<p><strong>What would kill it.</strong> Nothing new is tested here. The appendix only reports, with their
+status, results that live in the exploratory notebook.</p>
+<p><strong>Where we are.</strong> Two pre-registered results hold for block reordering. One observation —
+attributes appearing that the model normally leaves out — is kept as a curiosity, with its
+weaknesses stated.</p>
+</blockquote>
+<h2 id="p-27-other-edits--in-two-minutes">In two minutes</h2>
+<p>These edits are not single-block scaling. A block derangement swaps the weights of whole blocks
+with one another, scaled by a dose; a permutation reorders them; a sign scramble flips signs so
+that the weights move exactly as far without any structure. They are reported here because two
+of their results are pre-registered and replicated, and because one of them tells something about
+what a weight edit can bring into a picture. The full pages, with figures, data and
+reproducibility blocks, are in the exploratory notebook.</p>
+<h2 id="p-27-other-edits--the-verdict">The verdict</h2>
+<p>Block derangement has two confirmed effects: the sign of the edit decides whether hatching strokes
+cross or run parallel (16 of 16 prompts), and the edit enlarges the subject in the frame (9 of 10
+new styles). A permutation brought out an attribute the prompt asked for and the model usually
+leaves out, in 19 of 20 seeds; it is an observation, not a result, and is boxed as such below.</p>
+<h2 id="p-27-other-edits--why-i-might-be-wrong">Why I might be wrong</h2>
+<ul>
+<li><strong>These are a different family of edits</strong> from the rest of the report. Nothing here says
+  anything about single blocks.</li>
+<li><strong>The hatching measure was not checked against the calibrated preset</strong>, which moves it the
+  other way; for that preset the measure may not track hatching at all (notebook page 06).</li>
+<li><strong>The enlargement may be a matter of size, not structure.</strong> The scramble at equal distance was
+  not rendered.</li>
+<li><strong>The attribute observation was scored by me, with the condition visible,</strong> on one prompt family.</li>
+</ul>
+<h2 id="p-27-other-edits--the-data">The data</h2>
+<h3 id="p-27-other-edits--the-hatching-axis">The hatching axis</h3>
+<p>In a comic-style corpus, block derangement pushed positive crossed the hatching strokes and pushed
+negative ran them parallel. A pre-registered test on 16 new prompts confirmed the sign: crosshatch
+entropy +0.288, 16 of 16 prompts, 79 of 80 pairs. The same test overturned the third family of the
+prediction — the sign scramble's exploratory effect did not come back (5 of 16 prompts). Full page:
+<a href="#p-27-other-edits--p-06-the-hatching-axis">notebook page 06</a>.</p>
+<h3 id="p-27-other-edits--the-subject-grows">The subject grows</h3>
+<p>Pre-registered on ten styles that did not exist when the prediction was frozen: under block
+derangement at double dose the subject's area grows by a geometric mean of 1.234, in 9 of 10
+styles, with all three predicted signs correct. The same round measured the blinding of the eye
+pass and found it failed (<a href="#p-27-other-edits--p-20-method#why-the-eye-pass-is-declared-open">page 20</a>). Full page:
+<a href="#p-27-other-edits--p-03-what-ends-up-in-the-picture">notebook page 03</a>.</p>
+<h3 id="p-27-other-edits--a-curiosity-attributes-that-appear">A curiosity: attributes that appear</h3>
+<blockquote>
+<p><strong>Observed, not established.</strong> A prompt asked for "small barnacle-like clusters studding one
+earlobe". The stock model drew them in 1 of 20 seeds; a block permutation drew them in 19 of 20;
+a sign scramble moving the weights exactly as far (D = 0.0538) drew them in 1 of 20. On a
+separate corpus — a rally car in a jungle, eight drawing styles, no lights named in the prompt —
+lit headlights went from 10 of 35 at baseline to 31 of 38 under one edit and to 0 of 39 under
+another.</p>
+<p><strong>Its weaknesses.</strong> A different kind of edit from the rest of this report. The barnacle round
+was scored by me with the condition visible. The headlights were scored blind, but on the very
+renders that produced the observation; the exact test is at its floor (p = 0.031, Holm 0.19).
+The pre-registered confirmation on a second corpus could not decide anything: 9 of its 10
+prompts never lit a headlight in any condition. One prompt family; the test of generality was
+designed and never run.</p>
+</blockquote>
+<p>What makes it worth keeping is the control: the same distance in weight space, without structure,
+does nothing. How the weights move mattered, not how far. Full page:
+<a href="#p-27-other-edits--p-02-attribute-emergence">notebook page 02</a>.</p>
+<h3 id="p-27-other-edits--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  source: each notebook page's own reproducibility block (pages 02, 03, 06)
+tuner:
+  node: ArthemyKrea2PresetLoader (preset JSON files in presets/)
+  version: recorded per page in the notebook
+  mode: preset_json
+prompts:
+  source: notebook pages 02, 03 and 06
+seeds: as recorded on each notebook page
+conditions:
+  - name: block derangement, block permutation, sign scramble, calibrated preset
+    measured_D: recorded per condition on each notebook page (for example 0.0538 for the norm-matched scramble)
+outputs:
+  source: notebook pages 02, 03 and 06
+analysis:
+  source: notebook pages 02, 03 and 06
+</code></pre>
+<h2 id="p-27-other-edits--provenance">Provenance</h2>
+<ul>
+<li><strong>Renders.</strong> notebook page 02 (920), notebook page 03 (250), notebook page 06 (560).</li>
+<li><strong>Pre-registrations:</strong> <code>docs/prereg_hatching_axis_stage7.md</code> (page 06),
+  <code>docs/prereg_stage12_ingrandimento.md</code> (page 03); <code>docs/prereg_attribute_emergence_stage7.md</code>
+  (page 02, the generality test that was never run).</li>
+<li><strong>Pages:</strong> <a href="#p-27-other-edits--p-02-attribute-emergence">02</a>,
+  <a href="#p-27-other-edits--p-03-what-ends-up-in-the-picture">03</a>, <a href="#p-27-other-edits--p-06-the-hatching-axis">06</a>.</li>
 </ul>
 </section>
 </main>
