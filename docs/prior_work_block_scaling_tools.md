@@ -33,7 +33,13 @@ Both are by the same author. `ComfyUI_essentials` has been in "maintenance only"
 | `Block_Patcher_ComfyUI` | **2024-09-20** (`508b893`) | 2024-09-22 |
 | Arthemy Live Model & CLIP Tuner, Civitai article 25091 (Alessandro) | **2026-01-18** | — |
 
-So cubiq's two tools precede the Arthemy tuner by about sixteen months. They are Flux-only; the
+So cubiq's two tools precede the Arthemy tuner by about sixteen months.
+
+**Independent development.** Alessandro reports (personal communication with the author, Matt3o /
+cubiq, October 2026) that neither knew of the other's work: the two tools and the Arthemy tuner
+were arrived at independently. This is recorded as stated; a reader cannot verify it from the
+repository. It changes the attribution — convergence, not derivation — and not the priority, which
+is a matter of publication date. They are Flux-only; the
 Arthemy tuner was first published for SDXL, Illustrious and NAI (U-Net, with named functional
 areas and a CLIP tuner), and later ported to Krea-2. Whether an equivalent base-weight block scaler
 for SDXL U-Nets existed before January 2026 has not been checked.

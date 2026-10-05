@@ -79,7 +79,8 @@ weights [7]; LoRA Block Weight scales a LoRA's effect block by block in practice
 is learned and the knob is a block of the base model, not a learned direction.
 
 **The same edit already exists as a tool.** Scaling the base weights of single blocks, training-free,
-is what two ComfyUI tools for Flux already do: the `FluxBlocksBuster` node [17] gives one multiplier
+is what two ComfyUI tools for Flux, published in September 2024 and developed independently of the
+tuner used here, already do: the `FluxBlocksBuster` node [17] gives one multiplier
 per block, and Block Patcher [18] sweeps a list of regular expressions over the block tensors,
 rendering one image per value. Read from their source, both apply exactly the operation studied here
 — `W := W x v` through ComfyUI's `add_patches` with `strength_patch = 0` — and so does the tuner used
