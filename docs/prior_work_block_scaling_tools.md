@@ -23,8 +23,20 @@ false, and two published claims in the repository had to be corrected (§5).
 | model | Flux only ("Support other models than Flux" is still an open TODO) | Flux only |
 
 Both are by the same author. `ComfyUI_essentials` has been in "maintenance only" mode since
-2025-04-14 by its own README. Exact creation dates could not be read: the GitHub API is not
-reachable from this session (403). Both necessarily postdate Flux (August 2024).
+2025-04-14 by its own README.
+
+**Dates, from the git history** (both repositories cloned on 2026-10-05):
+
+| | first commit | last commit |
+|---|---|---|
+| `FluxBlocksBuster` (first appearance in `ComfyUI_essentials`, `git log -S`) | **2024-09-07** (`b581fab`) | — |
+| `Block_Patcher_ComfyUI` | **2024-09-20** (`508b893`) | 2024-09-22 |
+| Arthemy Live Model & CLIP Tuner, Civitai article 25091 (Alessandro) | **2026-01-18** | — |
+
+So cubiq's two tools precede the Arthemy tuner by about sixteen months. They are Flux-only; the
+Arthemy tuner was first published for SDXL, Illustrious and NAI (U-Net, with named functional
+areas and a CLIP tuner), and later ported to Krea-2. Whether an equivalent base-weight block scaler
+for SDXL U-Nets existed before January 2026 has not been checked.
 
 ## 2. The mechanism is the same as ours — verified line by line
 
@@ -116,8 +128,6 @@ repository was making, and a safer one.
 
 - It did not run either tool: neither is installed here, and Flux is not on this machine. Every
   statement above is about source code, not behaviour observed.
-- It did not establish release dates (GitHub API unreachable from this session), only that both
-  postdate Flux.
 - It did not search for other tools of the same kind. `sd-webui-lora-block-weight` (reference 8)
   weights a *LoRA* per block and is a different operation; whether an equivalent base-weight block
   scaler exists for SD1.5/SDXL was not checked, and probably should be before publication.
