@@ -51,9 +51,12 @@ and any preset can be written down in one line.
 What that buys in practice is shown best by the last test. I looked at what every block does to
 four drawn characters, wrote a preset of ten small numbers aiming at *a more American-comic look,
 flat colours and clean lines*, froze it, and applied it to seven characters at four new seeds.
-Three of them had never been rendered while I tuned it:
+Three of them had never been rendered while I tuned it. Here they are, base above and preset below:
 
-![Seven characters, base above and preset below at one seed: each stays recognisably the same character, and the preset row has cleaner outlines and less shading on the faces; the first three were never seen while the preset was tuned.](../assets/28-portrait-preset/F28.1_portrait_preset_sheet.webp)
+> **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
+> before looking at the pictures below if you can.
+
+![The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.](../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp)
 
 Someone who had never seen the project, shown each pair side by side without knowing which was
 which, picked the preset as the closer match to that description every time, 56 times out of 56.

@@ -90,6 +90,13 @@ def main() -> int:
         (out / d).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, out / d)
 
+    # The public blind test: a standalone page, served by GitHub Pages from the results repository.
+    tt = RESULTS / "try-the-test.html"
+    if tt.exists():
+        (out / tt.name).write_text(tt.read_text(encoding="utf-8").replace('"../assets/', '"assets/'), encoding="utf-8")
+        # Serve files as they are: no Jekyll build, which could choke on a page and break the site.
+        (out / ".nojekyll").write_text("", encoding="utf-8")
+
     shutil.copy2(ROOT / "LICENSE", out / "LICENSE")
 
     # README: the main repo's results/README.md, with a provenance header.

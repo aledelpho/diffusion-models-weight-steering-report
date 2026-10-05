@@ -61,7 +61,8 @@ git remote add origin https://github.com/aledelpho/<REPO_NAME>.git
 git push -u origin main
 ```
 
-Do not add GitHub Actions, Pages settings or any other file.
+Do not add GitHub Actions or any other file. (GitHub Pages: see step 5 of the update section, and
+only that.)
 
 ## Step 5 — paste back to Claude
 
@@ -81,3 +82,11 @@ Do not add GitHub Actions, Pages settings or any other file.
    `.git` folder (`git rm -r -q .`), copy in the whole content of `_results_export`, then
    `git add .`, `git commit -m "Update to main repository <SHA short>"`, `git push`.
 4. Delete `_results_export`. Paste back the push output, `<SHA>` and the export output.
+5. **Once only — GitHub Pages for the public blind test** (authorised by Alessandro on 2026-10-05,
+   for `try-the-test.html`). In the results repository on GitHub: Settings → Pages → Build and
+   deployment → Source: *Deploy from a branch*, Branch: `main`, folder `/ (root)`, Save. No
+   Actions, no custom domain, no theme. The export already writes an empty `.nojekyll`, so the files
+   are served as they are. After a minute, open
+   https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html, click "No, start the
+   test" and check that the first two portraits appear. Paste back whether they do. Do not answer
+   the test.

@@ -138,7 +138,10 @@ aiming at *a more American-comic look leaning toward animation: flat colours and
 froze it, and only then rendered seven characters at four new seeds, with and without it. The
 halfling, the dragonborn and the tiefling had never been rendered while I tuned.
 
-![Seven characters, base above and preset below at one seed: each stays recognisably the same character, and the preset row has cleaner outlines and less shading on the faces; the first three were never seen while the preset was tuned.](../assets/28-portrait-preset/F28.1_portrait_preset_sheet.webp)
+> **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
+> before looking at the pictures below if you can.
+
+![The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.](../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp)
 
 By the numbers, the preset changes the three new characters in a common direction about as
 coherently as the four it was tuned on (0.51 against 0.61). But I made it, and I knew which image
@@ -160,6 +163,10 @@ further than a new seed moves it (0.80) — so the rule I had set, "no more chan
 failed. Looking at the worst cases, nothing is deformed, but the preset can take things the prompt
 asked for: a gnome prompted with wide-eyed curiosity frowns at all three seeds, a half-orc's snarl
 turns into a stern closed face, dirt smudges and chalk dust disappear with the hatching.
+And a shape the prompt described can drift: the tiefling was asked for short horns swept flat, and a
+fancy jacket.
+
+![The held-out tiefling at all four test seeds: at every seed the preset flattens the skin, turns the patterned yellow jacket plain, and makes the horns larger and heavier, where the prompt asked for short horns swept flat against the hair.](../assets/28-portrait-preset/F28.5_portrait_one_character_four_seeds.webp)
 
 → [page 28](28-portrait-preset.md) · the look carries over **holds** · the blind observer **holds** ·
 face no more changed than by a seed **overturned** · flattened expressions **open**

@@ -857,3 +857,23 @@ figures:
     crop: whole
     alt: >
       One blind sheet as the observer saw it: the held-out halfling with the preset on the left and the base on the right; she chose the left.
+
+  - id: F28.4
+    page: 28-portrait-preset
+    kind: contact_sheet
+    builder: results_figures.portrait_held_out_large
+    source: data/portraits_preset_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.
+
+  - id: F28.5
+    page: 28-portrait-preset
+    kind: contact_sheet
+    builder: results_figures.portrait_one_character_four_seeds
+    source: data/portraits_preset_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The held-out tiefling at all four test seeds: at every seed the preset flattens the skin, turns the patterned yellow jacket plain, and makes the horns larger and heavier, where the prompt asked for short horns swept flat against the hair.

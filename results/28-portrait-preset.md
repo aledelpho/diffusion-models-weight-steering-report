@@ -78,6 +78,9 @@ claims:
 
 ## In two minutes
 
+> **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
+> before looking at the pictures below if you can.
+
 Seven character portraits written in one template ("Western comics style, close-up portrait,
 frontal view.", then the character). On four of them I looked at every single block pushed both
 ways (457 renders) and wrote a preset by eye: ten blocks, doses between 0.05 and 0.35. What I
@@ -91,6 +94,8 @@ characters rendered at four new seeds, with and without it.
 The three columns marked *new* are the test: the halfling, the dragonborn and the tiefling were
 written into the plan but never rendered while I was tuning. Then someone who had never seen the
 project looked at the pairs without knowing which side carried the preset.
+
+![The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.](../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp)
 
 ## The verdict
 
@@ -189,6 +194,12 @@ three seeds, the tiefling at two, the half-orc and the dwarf at one. Not blind, 
 * **Small prompted details go with the hatching**: the half-orc's dirt smudges across the nose,
   the gnome's glowing chalk dust, the tiefling's embroidered coat. "Clean lines" also means fewer
   small marks, including requested ones.
+* **Prompted shapes can drift.** The tiefling is prompted with "short curling horns swept flat
+  against cropped silver hair" and a "yellow fancy jacket"; at all four seeds the preset makes the
+  horns larger and heavier and the jacket plain:
+
+![The held-out tiefling at all four test seeds: at every seed the preset flattens the skin, turns the patterned yellow jacket plain, and makes the horns larger and heavier, where the prompt asked for short horns swept flat against the hair.](../assets/28-portrait-preset/F28.5_portrait_one_character_four_seeds.webp)
+
 * **Expressions can go flat.** The gnome is prompted "wide-eyed manic curiosity": wide-eyed and
   mild in all three bases, frowning in all three presets. The half-orc's "fierce defiant snarl"
   becomes a closed, stern face — the largest drift of the seven, and its lowest ArcFace score.
@@ -252,3 +263,5 @@ analysis:
 * **Eye pass:** `data/portrait_preset_eye_alessandro.csv`, deposited before any number.
 * **Phase A plan:** 457 rows written by `experiments/portraits.py` (`--plan`), committed beside the
   other bench plans.
+* **Public version of the blind test:** `experiments/build_try_the_test.py` builds the page from 14
+  pairs at seeds 3605551 and 4123105. Answers shared through it are kept apart from this result.

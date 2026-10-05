@@ -640,6 +640,24 @@ def portrait_blind_and_faces(out: Path) -> Path:
                            "source data/portrait_preset_blind_answers_human.csv, data/portrait_preset_faces.csv")
 
 
+def portrait_held_out_large(out: Path) -> Path:
+    """F28.4 — the three held-out characters, large, base above and preset below, one seed."""
+    rows = [("baseline", "base"), ("preset", "preset")]
+    cols = [c for c in PORTRAIT_CHARS if c[1].endswith("new")]
+    return _sheet(rows, cols, lambda r, c: _phase_c(c, r, "3316624"), lambda r, c: None, out,
+                  "benchmark_portraits/phase_c · seed 3316624 · the three characters never rendered while the preset "
+                  "was tuned · whole frames · source data/portraits_preset_plan.csv", W=400, H=500, LAB=64)
+
+
+def portrait_one_character_four_seeds(out: Path) -> Path:
+    """F28.5 — one held-out character, the tiefling, at all four test seeds, base above and preset below."""
+    rows = [("baseline", "base"), ("preset", "preset")]
+    cols = [(s, f"seed {s}") for s in ("2645751", "3316624", "3605551", "4123105")]
+    return _sheet(rows, cols, lambda r, c: _phase_c("T7_tiefling_bard", r, c), lambda r, c: None, out,
+                  "benchmark_portraits/phase_c · T7_tiefling_bard (held out) · all four test seeds · whole frames · "
+                  "source data/portraits_preset_plan.csv", W=320, H=400, LAB=64)
+
+
 def portrait_blind_sheet(out: Path) -> Path:
     """F28.3 — one blind sheet exactly as the observer saw it (held-out halfling), with the key below."""
     sheet = "sheet_8250"
@@ -688,6 +706,8 @@ BUILDERS = {
     "F28.1": ("28-portrait-preset", "portrait_preset_sheet", portrait_preset_sheet),
     "F28.2": ("28-portrait-preset", "portrait_blind_and_faces", portrait_blind_and_faces),
     "F28.3": ("28-portrait-preset", "portrait_blind_sheet", portrait_blind_sheet),
+    "F28.4": ("28-portrait-preset", "portrait_held_out_large", portrait_held_out_large),
+    "F28.5": ("28-portrait-preset", "portrait_one_character_four_seeds", portrait_one_character_four_seeds),
 }
 
 
