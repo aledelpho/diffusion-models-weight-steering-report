@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-experiments/monitor_single_blocks_styles.py
-==========================================
-Monitors progress of benchmark_single_blocks_styles renders.
+experiments/monitor_single_blocks_v3.py
+=======================================
+Monitors progress of benchmark_single_blocks_v3 renders (171 total).
 Logs progress every 10 generations with real-time ETA calculation based on rolling speed.
 Does NOT shut down or close the machine.
 """
@@ -16,11 +16,11 @@ from pathlib import Path
 
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
 COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
-RENDERS_DIR = COMFY_OUTPUT_ROOT / "benchmark_single_blocks_styles" / "renders"
-TOTAL_EXPECTED = 684
+RENDERS_DIR = COMFY_OUTPUT_ROOT / "benchmark_single_blocks_v3" / "renders"
+TOTAL_EXPECTED = 342
 POLL_INTERVAL_SEC = 5
 
-LOG_FILE = Path(r"c:\Users\aless\Desktop\comfyui-pilot\single_blocks_styles_progress.log")
+LOG_FILE = Path(r"c:\Users\aless\Desktop\comfyui-pilot\single_blocks_v3_progress.log")
 
 
 def log(msg: str):
@@ -66,7 +66,7 @@ def get_recent_speed(default_sec=32.8):
 
 def main():
     log("=" * 76)
-    log(f"  AVVIO MONITOR SINGLE-BLOCK ATLAS ({TOTAL_EXPECTED} render totali)")
+    log(f"  AVVIO MONITOR SINGLE-BLOCK V3 ({TOTAL_EXPECTED} render totali)")
     log(f"  Directory monitorata: {RENDERS_DIR}")
     log(f"  Log impostato a scaglioni di 10 generazioni")
     log("=" * 76)

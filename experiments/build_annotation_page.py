@@ -31,7 +31,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 ROOTS = [Path("/sessions/rcw-01fzmivsryy2r8cd26detdrb/mnt"),
-         Path("C:/StabilityMatrix-win-x64/Data/Images/Text2Img")]
+         Path("C:/StabilityMatrix-win-x64/Data/Images/Text2Img"),
+         Path("C:/StabilityMatrix-win-x64/Data/Packages/ComfyUI/output")]
 
 
 def bench_dir(name: str) -> Path:
@@ -221,56 +222,183 @@ SS_PAT = re.compile(r"^([A-Z]\d_[a-z_]+?)_blk(\d\d)_(pos|neg)_d([\d.]+)_krea2_se
 SS_BASE = re.compile(r"^([A-Z]\d_[a-z_]+?)_baseline_krea2_seed(\d+)_")
 
 
-def scan_single_blocks_styles(B: Path) -> dict:
-    """Doses differ per block and arm here (calibrated on Alessandro's reading), so every card shows the
-    dose actually used; columns are the negative arm, the baseline and the positive arm."""
+def load_alessandro_notes() -> dict:
+    notes_file = DATA / "single_blocks_styles_notes_alessandro.md"
+    if not notes_file.is_file():
+        return {}
+    txt = notes_file.read_text(encoding="utf-8")
+    res = {}
+    current_blk = None
+    for line in txt.splitlines():
+        line_s = line.strip()
+        if line_s.startswith("## blk"):
+            current_blk = line_s.split()[1]
+        elif current_blk:
+            if line_s.startswith("**-") and "—" in line_s:
+                parts = line_s.split("—", 1)
+                d = parts[0].replace("*", "").strip()
+                t = parts[1].strip()
+                if t and t != "_(nessun appunto)_":
+                    res[f"{current_blk}|neg"] = f"[{d}]: {t}"
+            elif line_s.startswith("**+") and "—" in line_s:
+                parts = line_s.split("—", 1)
+                d = parts[0].replace("*", "").strip()
+                t = parts[1].strip()
+                if t and t != "_(nessun appunto)_":
+                    res[f"{current_blk}|pos"] = f"[{d}]: {t}"
+            elif "Il blocco nel suo insieme" in line_s and "—" in line_s:
+                parts = line_s.split("—", 1)
+                t = parts[1].strip()
+                if t and t != "_(nessun appunto)_":
+                    res[f"{current_blk}|__family__"] = t
+    return res
+
+
+def scan_single_blocks_unified(B: Path) -> dict:
+    """Unified scan for single_blocks_v3 and single_blocks_styles with multi-series support."""
     idx: dict = {}; base: dict = {}
-    for p in sorted((B / "renders").glob("*.png")):
-        m = SS_PAT.match(p.name)
-        if m:
-            P, b, sign, dose, seed = m.groups()
-            v = (-1 if sign == "neg" else 1) * float(dose)
-            idx.setdefault(P, {}).setdefault(seed, {}).setdefault(f"blk{b}", {})[f"{v:+.3f}"] = f"renders/{p.name}"
-            continue
-        m = SS_BASE.match(p.name)
-        if m:
-            base.setdefault(m.group(1), {})[m.group(2)] = f"renders/{p.name}"
-    groups = {f"blk{b:02d}": {"title": f"blk{b:02d}", "meta": f"blocco {b} · nel gruppo {SB_GROUP[b]}"} for b in range(28)}
+    
+    # Identify sibling folders
+    v3_dir = B.parent / "benchmark_single_blocks_v3"
+    styles_dir = B.parent / "benchmark_single_blocks_styles"
+    v4_dir = B.parent / "benchmark_single_blocks_v4"
+    
+    # Helper to scan a specific bench directory
+    def scan_bench_dir(tgt_dir: Path, rel_base: str):
+        if not (tgt_dir / "renders").is_dir(): return
+        rel_prefix = f"../{rel_base}/renders/"
+        for p in sorted((tgt_dir / "renders").glob("*.png")):
+            m = SS_PAT.match(p.name)
+            if m:
+                P, b, sign, dose, seed = m.groups()
+                v = (-1 if sign == "neg" else 1) * float(dose)
+                idx.setdefault(P, {}).setdefault(seed, {}).setdefault(f"blk{b}", {})[f"{v:+.3f}"] = f"{rel_prefix}{p.name}"
+                continue
+            m = SS_BASE.match(p.name)
+            if m:
+                base.setdefault(m.group(1), {})[m.group(2)] = f"{rel_prefix}{p.name}"
+
+    scan_bench_dir(v3_dir, "benchmark_single_blocks_v3")
+    scan_bench_dir(styles_dir, "benchmark_single_blocks_styles")
+    scan_bench_dir(v4_dir, "benchmark_single_blocks_v4")
+
+    def get_zone_name(b: int) -> str:
+        if 0 <= b <= 1: return "Base"
+        if 2 <= b <= 18: return "Style"
+        if 19 <= b <= 22: return "Details"
+        if 23 <= b <= 27: return "Correction"
+        return ""
+
+    groups = {f"blk{b:02d}": {"title": f"blk{b:02d} · {get_zone_name(b)}", "meta": f"blocco {b} · nel gruppo {SB_GROUP[b]}"} for b in range(28)}
+
+    raw_notes = load_alessandro_notes()
+    default_notes = {}
+    for blk_name in groups:
+        for P in idx:
+            for s in idx[P]:
+                for d in idx[P][s].get(blk_name, {}):
+                    if float(d) < 0 and f"{blk_name}|neg" in raw_notes:
+                        default_notes[f"{blk_name}|{d}"] = raw_notes[f"{blk_name}|neg"]
+                    elif float(d) > 0 and f"{blk_name}|pos" in raw_notes:
+                        default_notes[f"{blk_name}|{d}"] = raw_notes[f"{blk_name}|pos"]
+        if f"{blk_name}|__family__" in raw_notes:
+            default_notes[f"{blk_name}|__family__"] = raw_notes[f"{blk_name}|__family__"]
+
+    series = [
+        {
+            "id": "v4",
+            "name": "Serie V4 (Camera e Materiali)",
+            "shortName": "V4 (5 prompt)",
+            "prompts": ["P1_crown_topdown", "P2_crown_bottomup", "P3_crown_rusted", "P4_crown_glass", "P5_comic_panels"],
+            "bands": [["P1_crown_topdown", "P2_crown_bottomup"], ["P3_crown_rusted", "P4_crown_glass"], ["P5_comic_panels"]],
+            "bandNames": ["Camera (Alto vs Basso)", "Materiali (Ferro vs Vetro)", "Layout Multiplo (Fumetto)"]
+        },
+        {
+            "id": "v3",
+            "name": "Serie V3 (6 soggetti complessi)",
+            "shortName": "V3 (6 soggetti)",
+            "prompts": ["P1_elfbrawler", "P2_lotuscanoe", "P3_archerforest", "P4_selfie", "P5_gingervampire", "P6_ghostgirl"],
+            "bands": [["P1_elfbrawler", "P2_lotuscanoe", "P3_archerforest"],
+                      ["P4_selfie", "P5_gingervampire", "P6_ghostgirl"]],
+            "bandNames": ["Serie 1 · seed 3141592 (Comics, Canoa, Cacciatrice)",
+                          "Serie 2 · seed 1618033 (Selfie, Vampira, Fantasma)"]
+        },
+        {
+            "id": "styles_cartoon",
+            "name": "Cartoon (6 soggetti diversi)",
+            "shortName": "Cartoon (6 soggetti)",
+            "prompts": ["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox", "C4_stilllife"],
+            "bands": [["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox", "C4_stilllife"]],
+            "bandNames": ["Stesso stile cartoon, 6 soggetti diversi · seed 2718281"]
+        },
+        {
+            "id": "styles_art",
+            "name": "Stili Elfa (7 stili artistici)",
+            "shortName": "Stili (7 stili elfa)",
+            "prompts": ["E1_cartoon", "E2_watercolor", "E3_oil", "E4_colorpencil", "E5_childrensbook", "E6_claymation", "E7_sepiaphoto"],
+            "bands": [["E1_cartoon", "E2_watercolor", "E3_oil", "E4_colorpencil", "E5_childrensbook", "E6_claymation", "E7_sepiaphoto"]],
+            "bandNames": ["Stesso soggetto (elfa urlante), 7 stili diversi · seed 2718281"]
+        },
+        {
+            "id": "styles_all",
+            "name": "Tutti gli stili (12 prompt)",
+            "shortName": "Styles (12 prompt)",
+            "prompts": ["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox", "C4_stilllife",
+                        "E2_watercolor", "E3_oil", "E4_colorpencil", "E5_childrensbook", "E6_claymation", "E7_sepiaphoto"],
+            "bands": [["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox", "C4_stilllife"],
+                      ["E1_cartoon", "E2_watercolor", "E3_oil", "E4_colorpencil", "E5_childrensbook", "E6_claymation", "E7_sepiaphoto"]],
+            "bandNames": ["Stesso stile (cartoon), soggetti diversi", "Stesso soggetto (elfa), stili diversi"]
+        }
+    ]
+
     return {"idx": idx, "base": base, "groups": groups, "order": [f"blk{b:02d}" for b in range(28)],
             "stats": {}, "unit": "il blocco", "stack": True, "focus": True,
-            "promptOrder": ["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox",
-                            "C4_stilllife", "E2_watercolor", "E3_oil", "E4_colorpencil",
-                            "E5_childrensbook", "E6_claymation", "E7_sepiaphoto"],
-            "bands": [["E1_cartoon", "E8_cartoon_styleend", "C1_blacksmith", "C2_rally", "C3_fox", "C4_stilllife"],
-                      ["E1_cartoon", "E2_watercolor", "E3_oil", "E4_colorpencil", "E5_childrensbook",
-                       "E6_claymation", "E7_sepiaphoto"]],
-            "bandNames": ["stesso stile (cartoon), soggetti diversi", "stesso soggetto (elfa), stili diversi"],
-            "title": "Singoli blocchi — soggetti e stili",
-            "sub": "benchmark_single_blocks_styles · 28 blocchi, 12 prompt, dose calibrata per blocco, un seme",
-            "note": "Le dosi <b>non sono uguali</b> fra blocchi: vengono dalla tua lettura degli artefatti a ±0.350, "
-                    "con tetto 0.450. L'etichetta di ogni colonna mostra la dose usata. Confronta <b>E1_cartoon</b> "
-                    "con <b>E8_cartoon_styleend</b> (stesse parole, stile in fondo) per vedere se conta la struttura del prompt."}
+            "series": series,
+            "promptOrder": series[0]["prompts"],
+            "bands": series[0]["bands"],
+            "bandNames": series[0]["bandNames"],
+            "defaultNotes": default_notes,
+            "title": "Singoli blocchi — Soggetti e stili a confronto",
+            "sub": "benchmark_single_blocks_v3 + styles + v4 · 28 blocchi, 23 prompt complessivi, serie intercambiabili con un clic",
+            "note": "Usa il pulsante <b>Serie</b> nella toolbar (o premi il tasto <code>S</code>) per alternare istantaneamente fra le nuove variazioni v4, i soggetti complessi di v3, e gli stili."}
+
+
+scan_single_blocks_styles = scan_single_blocks_unified
+scan_single_blocks_v3 = scan_single_blocks_unified
+scan_single_blocks_v4 = scan_single_blocks_unified
 
 
 BENCHES = {"parameter_families": scan_parameter_families, "centre_push": scan_centre_push,
            "wo_depth": scan_wo_depth, "single_blocks_atlas": scan_single_blocks_atlas,
-           "single_blocks_styles": scan_single_blocks_styles}
+           "single_blocks_styles": scan_single_blocks_styles,
+           "single_blocks_v3": scan_single_blocks_v3,
+           "single_blocks_v4": scan_single_blocks_v4}
 
 
 def thumbs(B: Path, files: set[str]) -> None:
     from PIL import Image
-    out = B / "_thumbs"
-    out.mkdir(exist_ok=True)
     n = 0
     for rel in sorted(files):
-        dst = out / (rel.replace("/", "__").rsplit(".", 1)[0] + ".jpg")
+        if not rel.startswith("../"):
+            continue
+        parts = rel.split("/")
+        bench_dir_name = parts[1]
+        native_dir = B.parent / bench_dir_name
+        out = native_dir / "_thumbs"
+        out.mkdir(exist_ok=True)
+        
+        clean = "renders/" + parts[-1]
+        dst = out / (clean.replace("/", "__").rsplit(".", 1)[0] + ".jpg")
         if dst.exists():
             continue
-        im = Image.open(B / rel).convert("RGB")
+        src = native_dir / "renders" / parts[-1]
+        if not src.is_file():
+            continue
+        im = Image.open(src).convert("RGB")
         im.thumbnail((360, 360 * im.height // im.width), Image.LANCZOS)
         im.save(dst, quality=86)
         n += 1
-    print(f"  {n} nuove miniature ({len(files)} in totale) -> {out}")
+    print(f"  {n} nuove miniature ({len(files)} in totale)")
 
 
 def main() -> None:
@@ -300,6 +428,18 @@ def main() -> None:
             .replace("__NOTE__", cfg["note"]))
     (B / "presets.html").write_text(html, encoding="utf-8")
     print(f"  presets.html -> {B}")
+
+    if a.bench in ("single_blocks_v3", "single_blocks_styles", "single_blocks_v4"):
+        for other_name in ("benchmark_single_blocks_v3", "benchmark_single_blocks_styles", "benchmark_single_blocks_v4"):
+            if other_name == "benchmark_" + a.bench:
+                continue
+            try:
+                other_dir = bench_dir(other_name)
+                (other_dir / "presets.html").write_text(html, encoding="utf-8")
+                print(f"  presets.html (mirror) -> {other_dir}")
+            except Exception as e:
+                pass
+
     for P in sorted(cfg["idx"]):
         for s in sorted(cfg["idx"][P]):
             print(f"    {P} seme {s}: " + ", ".join(
@@ -331,6 +471,10 @@ TEMPLATE = r"""<!doctype html>
                 border-radius:8px;padding:8px 14px;cursor:pointer}
   button:hover{background:#383842}
   button.on{background:#3d4a44;border-color:#4caf7d}
+  #seriesbtn{background:#233240;border-color:#356088;color:#d0e6ff;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+  #seriesbtn:hover{background:#2b3f54;border-color:#4884bb}
+  #seriesbtn b{color:#64b5f6}
+  .series-tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:12px;background:#2d3748;color:#a0aec0;margin-left:6px;font-weight:normal}
   .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 18px}
   .bar .grow{flex:1}
   .ladder{display:flex;gap:10px;flex-wrap:wrap;padding:4px 0 10px;align-items:flex-start}
@@ -429,6 +573,8 @@ TEMPLATE = r"""<!doctype html>
   <div class="bar">
     <button id="focusbtn">Un blocco alla volta</button>
     <button id="stack">Prompt impilati</button>
+    <button id="seriesbtn" title="Passa alla serie successiva di prompt (scorciatoia da tastiera: tasto S)">Serie: <b id="seriesname">V3 (6 soggetti)</b> ⟳</button>
+    <label id="serieslab">serie <select id="series"></select></label>
     <label id="promptlab">prompt <select id="prompt"></select></label>
     <label>seme <select id="seed"></select></label>
     <button id="tstats">Mostra i numeri misurati</button>
@@ -477,9 +623,20 @@ TEMPLATE = r"""<!doctype html>
 const M = /*__MANIFEST__*/;
 // One storage key per bench. Until 2026-09-29 every page shared "param_families_notes_v1"; notes
 // already written there for THIS bench's groups are copied over once, never deleted.
-const store = "annot_notes_" + M.bench;
+const store = "annot_notes_single_blocks_v3";
 let notes = {};
 try { notes = JSON.parse(localStorage.getItem(store) || "{}"); } catch (e) { notes = {}; }
+try {
+  const oldStyles = JSON.parse(localStorage.getItem("annot_notes_single_blocks_styles") || "{}");
+  for (const [k, v] of Object.entries(oldStyles)) {
+    if (!notes[k] && v) notes[k] = v;
+  }
+} catch (e) {}
+if (M.defaultNotes) {
+  for (const [k, v] of Object.entries(M.defaultNotes)) {
+    if (!notes[k]) notes[k] = v;
+  }
+}
 try {
   const old = JSON.parse(localStorage.getItem("param_families_notes_v1") || "{}");
   let moved = 0;
@@ -488,20 +645,41 @@ try {
   }
   if (moved) localStorage.setItem(store, JSON.stringify(notes));
 } catch (e) {}
-const save = () => { try { localStorage.setItem(store, JSON.stringify(notes)); } catch (e) {} };
+const save = () => {
+  try {
+    localStorage.setItem(store, JSON.stringify(notes));
+    localStorage.setItem("annot_notes_single_blocks_styles", JSON.stringify(notes));
+  } catch (e) {}
+};
 
 const $ = s => document.querySelector(s);
-const thumb = rel => "_thumbs/" + rel.replace(/\//g, "__").replace(/\.png$/, ".jpg");
+function resolveRel(rel) {
+  return rel || "";
+}
+
+const thumb = rel => {
+  if (!rel) return "";
+  return rel.replace("/renders/", "/_thumbs/renders__").replace(/\.png$/, ".jpg");
+};
+
 const nkey = (fam, dose) => fam + "|" + dose;              // the note belongs to the PRESET
 const fkey = fam => fam + "|__family__";
-let showStats = false, P = "P01", S = "42", fit = false;
+let showStats = false, fit = false;
 let stacked = !!M.stack;
 let grid = [], ovr = 0, ovc = 0, ovfam = "";   // overlay: rows = prompts, columns = rungs
-const PROMPTS = (M.promptOrder || Object.keys(M.idx).sort()).filter(p => M.idx[p]);
 let focus = !!M.focus, fi = 0, compactF = true;
+
+let curSeriesIdx = 0;
+const hasSeries = !!(M.series && M.series.length);
+let curSeries = hasSeries ? M.series[0] : null;
+let PROMPTS = curSeries ? curSeries.prompts.filter(p => M.idx[p]) : ((M.promptOrder || Object.keys(M.idx).sort()).filter(p => M.idx[p]));
+let P = PROMPTS[0] || "P1_elfbrawler", S = "3141592";
+
 function ladderItems(p, s, fam) {
-  const rungs = ((M.idx[p] || {})[s] || {})[fam]; if (!rungs) return null;
-  const bRel = (M.base[p] || {})[s] || null;
+  const pSeeds = Object.keys(M.idx[p] || {});
+  const actualSeed = (s && pSeeds.includes(s)) ? s : pSeeds[0];
+  const rungs = ((M.idx[p] || {})[actualSeed] || {})[fam]; if (!rungs) return null;
+  const bRel = (M.base[p] || {})[actualSeed] || null;
   const doses = Object.keys(rungs).sort((a, b) => parseFloat(a) - parseFloat(b));
   const items = []; let ins = false;
   for (const d of doses) {
@@ -509,15 +687,36 @@ function ladderItems(p, s, fam) {
     items.push({d, rel: rungs[d]});
   }
   if (!ins && bRel) items.push({d: "BASE", rel: bRel});
-  return {label: p, base: bRel, items};
+  return {label: p, base: bRel, items, seed: actualSeed};
 }
 
-for (const p of Object.keys(M.idx).sort()) $("#prompt").add(new Option(p, p));
+function updatePromptOpts() {
+  $("#prompt").innerHTML = "";
+  for (const p of PROMPTS) $("#prompt").add(new Option(p, p));
+  if (!PROMPTS.includes(P)) P = PROMPTS[0];
+  $("#prompt").value = P;
+}
+
 function seedOpts() {
   $("#seed").innerHTML = "";
-  for (const s of Object.keys(M.idx[P]).sort((a, b) => a - b)) $("#seed").add(new Option("seed " + s, s));
-  if (!M.idx[P][S]) S = Object.keys(M.idx[P]).sort((a, b) => a - b)[0];
+  const sList = Object.keys(M.idx[P] || {}).sort((a, b) => a - b);
+  for (const s of sList) $("#seed").add(new Option("seed " + s, s));
+  if (!(M.idx[P] || {})[S]) S = sList[0] || S;
   $("#seed").value = S;
+}
+
+function setSeries(idx) {
+  if (!hasSeries) return;
+  curSeriesIdx = (idx + M.series.length) % M.series.length;
+  curSeries = M.series[curSeriesIdx];
+  PROMPTS = curSeries.prompts.filter(p => M.idx[p]);
+  M.bands = curSeries.bands;
+  M.bandNames = curSeries.bandNames;
+  $("#seriesname").textContent = curSeries.shortName || curSeries.name;
+  $("#series").value = curSeriesIdx;
+  updatePromptOpts();
+  seedOpts();
+  draw();
 }
 
 function nTotal() {
@@ -568,10 +767,16 @@ function render() {
       if (!isB) {
         const ta = document.createElement("textarea");
         ta.placeholder = "cosa sta succedendo qui…";
-        ta.value = notes[nkey(fam, d)] || "";
-        if (ta.value.trim()) ta.classList.add("filled");
-        ta.oninput = () => { notes[nkey(fam, d)] = ta.value; save();
-                             ta.classList.toggle("filled", !!ta.value.trim()); tally(); };
+        const armKey = fam + "|" + (parseFloat(d) < 0 ? "neg" : "pos");
+        const val = notes[nkey(fam, d)] || notes[armKey] || "";
+        ta.value = val;
+        if (val.trim()) ta.classList.add("filled");
+        ta.oninput = () => {
+          notes[nkey(fam, d)] = ta.value;
+          notes[armKey] = ta.value;
+          save();
+          ta.classList.toggle("filled", !!ta.value.trim()); tally();
+        };
         el.appendChild(ta);
       }
       lad.appendChild(el);
@@ -598,7 +803,8 @@ function renderStacked() {
     const info = M.groups[fam];
     const cols = rows[0].items.map(x => x.d);
     const card = document.createElement("div"); card.className = "card";
-    card.innerHTML = `<div class="famhead"><div><h2>${info.title}</h2>
+    const seriesDesc = curSeries ? ` · <span class="series-tag">${curSeries.name}</span>` : "";
+    card.innerHTML = `<div class="famhead"><div><h2>${info.title}${seriesDesc}</h2>
         <p class="sub">${rows.length} prompt uno sotto l'altro · ${cols.length} colonne</p></div>
         <div class="meta">${info.meta}</div></div>`;
     const g = document.createElement("div"); g.className = "sgrid";
@@ -620,14 +826,20 @@ function renderStacked() {
     g.appendChild(document.createElement("div"));
     for (const d of cols) {
       if (d === "BASE") { const n = document.createElement("div"); n.className = "nonote"; n.textContent = "il baseline non si annota"; g.appendChild(n); continue; }
-      const ta = document.createElement("textarea"); ta.placeholder = d + ": cosa fa su tutti e tre?";
-      ta.value = notes[nkey(fam, d)] || ""; if (ta.value.trim()) ta.classList.add("filled");
-      ta.oninput = () => { notes[nkey(fam, d)] = ta.value; save(); ta.classList.toggle("filled", !!ta.value.trim()); tally(); };
+      const ta = document.createElement("textarea"); ta.placeholder = d + ": cosa fa su tutti i prompt?";
+      const armKey = fam + "|" + (parseFloat(d) < 0 ? "neg" : "pos");
+      const val = notes[nkey(fam, d)] || notes[armKey] || "";
+      ta.value = val; if (val.trim()) ta.classList.add("filled");
+      ta.oninput = () => {
+        notes[nkey(fam, d)] = ta.value;
+        notes[armKey] = ta.value;
+        save(); ta.classList.toggle("filled", !!ta.value.trim()); tally();
+      };
       g.appendChild(ta);
     }
     card.appendChild(g);
     const fta = document.createElement("textarea");
-    fta.placeholder = M.unit + " nel suo insieme: fa la stessa cosa sui tre prompt? che cosa compra, e a che prezzo…";
+    fta.placeholder = M.unit + " nel suo insieme: fa la stessa cosa sui prompt? che cosa compra, e a che prezzo…";
     fta.style.marginTop = "10px"; fta.style.border = "1px solid var(--line)"; fta.style.borderRadius = "8px";
     fta.value = notes[fkey(fam)] || "";
     fta.oninput = () => { notes[fkey(fam)] = fta.value; save(); };
@@ -641,7 +853,8 @@ function renderFocus() {
   const fam = M.order[fi]; const info = M.groups[fam];
   $("#fsel").value = fam;
   const card = document.createElement("div"); card.className = "card";
-  card.innerHTML = `<div class="famhead"><div><h2>${info.title}</h2>
+  const seriesDesc = curSeries ? ` · <span class="series-tag">${curSeries.name}</span>` : "";
+  card.innerHTML = `<div class="famhead"><div><h2>${info.title}${seriesDesc}</h2>
       <p class="sub">${PROMPTS.length} prompt · ogni colonna: −dose in alto, baseline, +dose in basso</p></div>
       <div class="meta">${info.meta}</div></div>`;
   const bands = compactF ? [PROMPTS] : (M.bands || [PROMPTS]);
@@ -655,7 +868,11 @@ function renderFocus() {
     if (!first) first = rows[0];
     const band = document.createElement("div"); band.className = "band";
     if (!compactF && M.bandNames && M.bandNames[bi]) { const h = document.createElement("h3"); h.textContent = M.bandNames[bi]; band.appendChild(h); }
-    if (compactF && M.bandNames) { const h = document.createElement("h3"); h.textContent = M.bandNames[0] + "   |   " + (M.bandNames[1] || ""); band.appendChild(h); }
+    if (compactF && M.bandNames) {
+      const h = document.createElement("h3");
+      h.textContent = M.bandNames.length > 1 ? (M.bandNames[0] + "   |   " + (M.bandNames[1] || "")) : M.bandNames[0];
+      band.appendChild(h);
+    }
     const perRow = compactF ? rows.length : Math.max(1, Math.min(rows.length, Math.floor(W / 150)));
     for (let start = 0; start < rows.length; start += perRow) {
       const chunk = rows.slice(start, start + perRow);
@@ -691,8 +908,14 @@ function renderFocus() {
   if (first) first.items.filter(x => x.d !== "BASE").forEach(x => {
     const ta = document.createElement("textarea");
     ta.placeholder = x.d + ": cosa fa, su tutti i prompt?";
-    ta.value = notes[nkey(fam, x.d)] || ""; if (ta.value.trim()) ta.classList.add("filled");
-    ta.oninput = () => { notes[nkey(fam, x.d)] = ta.value; save(); ta.classList.toggle("filled", !!ta.value.trim()); tally(); };
+    const armKey = fam + "|" + (parseFloat(x.d) < 0 ? "neg" : "pos");
+    const val = notes[nkey(fam, x.d)] || notes[armKey] || "";
+    ta.value = val; if (val.trim()) ta.classList.add("filled");
+    ta.oninput = () => {
+      notes[nkey(fam, x.d)] = ta.value;
+      notes[armKey] = ta.value;
+      save(); ta.classList.toggle("filled", !!ta.value.trim()); tally();
+    };
     nt.appendChild(ta);
   });
   const fta = document.createElement("textarea"); fta.className = "full";
@@ -756,14 +979,15 @@ function arrows() {
 function drawOv() {
   const it = cur(); if (!it) return;
   const im = $("#ovimg");
-  im.src = it.rel;
+  im.src = resolveRel(it.rel);
   im.onload = () => place();
   im.onerror = () => { $("#ovlab").textContent += "  — immagine non trovata"; };
   $("#ovlab").textContent = (grid.length > 1 ? grid[ovr].label + " · " : "") +
                             (it.d === "BASE" ? "BASELINE" : it.fam + "  " + it.d);
   const dis = it.d === "BASE";
   $("#ovnote").disabled = dis;
-  $("#ovnote").value = dis ? "" : (notes[nkey(it.fam, it.d)] || "");
+  const armKey = it.fam + "|" + (parseFloat(it.d) < 0 ? "neg" : "pos");
+  $("#ovnote").value = dis ? "" : (notes[nkey(it.fam, it.d)] || notes[armKey] || "");
   $("#ovnote").placeholder = dis ? "il baseline non si annota" : "cosa sta succedendo qui…";
   arrows();
 }
@@ -787,12 +1011,18 @@ $("#ovnext").onclick = () => step(1);
 $("#ovup").onclick = () => vstep(-1);
 $("#ovdown").onclick = () => vstep(1);
 $("#ovclose").onclick = () => $("#ov").classList.remove("show");
-$("#ovnote").oninput = () => { const it = cur(); if (it && it.d !== "BASE") {
-  notes[nkey(it.fam, it.d)] = $("#ovnote").value; save(); } };
+$("#ovnote").oninput = () => {
+  const it = cur();
+  if (it && it.d !== "BASE") {
+    notes[nkey(it.fam, it.d)] = $("#ovnote").value;
+    notes[it.fam + "|" + (parseFloat(it.d) < 0 ? "neg" : "pos")] = $("#ovnote").value;
+    save();
+  }
+};
 let baseHeld = null;
 const baseRel = () => (grid[ovr] && grid[ovr].base) || null;     // the baseline OF THIS ROW'S prompt
 $("#ovbase").onmousedown = () => { const b = baseRel(); if (!b) return;
-  baseHeld = $("#ovimg").src; $("#ovimg").src = b; };
+  baseHeld = $("#ovimg").src; $("#ovimg").src = resolveRel(b); };
 $("#ovbase").onmouseup = $("#ovbase").onmouseleave = () => { if (baseHeld) { $("#ovimg").src = baseHeld; baseHeld = null; } };
 
 // Drag to pan. Pointer events with capture, and the browser's own image drag suppressed:
@@ -831,7 +1061,7 @@ addEventListener("keydown", e => {
   else if (e.key === "ArrowDown") { e.preventDefault(); vstep(1); }
   else if (e.key.toLowerCase() === "b" && !e.repeat) {
     const b = baseRel(); if (!b) return;
-    baseHeld = $("#ovimg").src; $("#ovimg").src = b; }
+    baseHeld = $("#ovimg").src; $("#ovimg").src = resolveRel(b); }
 });
 addEventListener("keyup", e => { if (e.key.toLowerCase() === "b" && baseHeld) {
   $("#ovimg").src = baseHeld; baseHeld = null; } });
@@ -850,8 +1080,15 @@ $("#fcompact").onclick = () => { compactF = !compactF;
 addEventListener("resize", () => { if (focus) renderFocus(); });
 $("#fnext").onclick = () => goBlock(1);
 addEventListener("keydown", e => {
-  if (!focus || $("#ov").classList.contains("show")) return;
   const a = document.activeElement; if (a && (a.tagName === "TEXTAREA" || a.tagName === "SELECT" || a.tagName === "INPUT")) return;
+  if (!$("#ov").classList.contains("show")) {
+    if (e.key.toLowerCase() === "s") {
+      e.preventDefault();
+      setSeries(curSeriesIdx + 1);
+      return;
+    }
+  }
+  if (!focus || $("#ov").classList.contains("show")) return;
   if (e.key === "ArrowLeft") { e.preventDefault(); goBlock(-1); }
   else if (e.key === "ArrowRight") { e.preventDefault(); goBlock(1); }
 });
@@ -873,7 +1110,8 @@ $("#exp").onclick = () => {
     for (const p of Object.keys(M.idx)) for (const s of Object.keys(M.idx[p]))
       for (const d of Object.keys((M.idx[p][s] || {})[fam] || {})) seen.add(d);
     for (const d of [...seen].sort((a, b) => parseFloat(a) - parseFloat(b))) {
-      const t = (notes[nkey(fam, d)] || "").trim();
+      const armKey = fam + "|" + (parseFloat(d) < 0 ? "neg" : "pos");
+      const t = (notes[nkey(fam, d)] || notes[armKey] || "").trim();
       out += `**${d}** — ${t || "_(nessun appunto)_"}\n\n`;
     }
     const f = (notes[fkey(fam)] || "").trim();
@@ -888,7 +1126,17 @@ $("#dl").onclick = () => { const b = new Blob([$("#expbox").value], {type: "text
   const a = document.createElement("a"); a.href = URL.createObjectURL(b);
   a.download = "appunti_" + M.bench + ".md"; a.click(); };
 
-P = $("#prompt").value; seedOpts();
+if (hasSeries) {
+  $("#seriesbtn").onclick = () => setSeries(curSeriesIdx + 1);
+  M.series.forEach((s, i) => $("#series").add(new Option(s.name, i)));
+  $("#series").onchange = () => setSeries(parseInt($("#series").value, 10));
+  $("#seriesname").textContent = curSeries.shortName || curSeries.name;
+} else {
+  $("#seriesbtn").style.display = "none";
+  $("#serieslab").style.display = "none";
+}
+updatePromptOpts();
+seedOpts();
 if (stacked) { document.documentElement.style.setProperty("--rw", "200px"); $("#size").value = "200"; }
 draw();
 </script>

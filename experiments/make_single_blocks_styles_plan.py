@@ -28,6 +28,10 @@ PROMPTS = [
     ("E6_claymation", "Claymation, stop-motion style. " + SUBJECT),
     ("E7_sepiaphoto", "Vintage sepia photograph. " + SUBJECT),
     ("E8_cartoon_styleend", SUBJECT + " Cartoon style illustration."),
+    ("C1_blacksmith", "Cartoon style illustration. medium wide shot, static centred composition, eye-level camera, subject centred and filling the middle third of the frame. A blacksmith woman stands behind a heavy oak workbench, facing the viewer, both hands resting flat on the wood. She has coarse dark curls tied back, weathered brown skin, a leather apron over a coarse linen shirt, and a polished steel gauntlet on her left forearm. On the bench lie a hammered copper bowl, a coil of frayed rope, and three rough granite offcuts. Behind her on the left a forge fire glows with a warm orange to deep red gradient, and thin smoke rises against a flat dark stone wall on the right. Cold blue window light falls from the upper left across the steel."),
+    ("C2_rally", "Cartoon style illustration. a yellow and blue rally car cruising in a deep jungle, uneven street, daylight, lush plants, humidity, reflective ponds."),
+    ("C3_fox", "Cartoon style illustration. a red fox sitting in fresh snow at the edge of a birch forest, facing the viewer, bushy tail curled around its paws, clear winter morning light."),
+    ("C4_stilllife", "Cartoon style illustration. a still life on a wooden kitchen table: a white ceramic teapot, two lemons and a glass of water, soft window light from the left, plain wall behind."),
 ]
 SET = dict(mode="Real Value", sampler="euler_ancestral", scheduler="simple", steps=9, cfg=1.0,
            denoise=1.0, width=1024, height=1280)
