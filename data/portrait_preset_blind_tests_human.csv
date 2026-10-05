@@ -1,0 +1,12 @@
+test,value,verdict
+position gate: pairs where both sets name the same side,0/28,pass
+held_out original: preset chosen,12/12 (p = 0.0002),
+held_out original: same character YES,12/12,
+held_out mirrored: preset chosen,12/12 (p = 0.0002),
+held_out mirrored: same character YES,12/12,
+H4 look visible blind (>= 9/12 both sets; <= 6 either),12,supported
+H5 character kept (>= 9/12 both sets; <= 6 either),12,supported
+calibration original: preset chosen,16/16 (p = 0.0000),
+calibration original: same character YES,16/16,
+calibration mirrored: preset chosen,16/16 (p = 0.0000),
+calibration mirrored: same character YES,16/16,

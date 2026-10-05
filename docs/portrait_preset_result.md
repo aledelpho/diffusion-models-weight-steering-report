@@ -1,4 +1,4 @@
-# C52 result — the portrait preset carries over to unseen characters; the face moves a little more than a change of seed
+# C52 result — the portrait preset carries over to unseen characters, and a blind observer sees it 56 times in 56; the face moves a little more than a change of seed
 
 2026-10-05. Pre-registration `prereg_portrait_preset.md` (+ amendments 1 and 2). Preset frozen in
 `4da5117`; plan, scoring code and self-test committed in `7805d84`, before any phase C render.
@@ -44,7 +44,36 @@ would almost certainly read position again (cost ≈ 5 M tokens). The registered
 its diagnostic tally in `data/portrait_preset_blind_tests_model_obs1_diagnostic.csv`. A model
 instance reading two drawings at once did not separate them; this says nothing yet about the preset.
 
-## 4. Pending
+## 4. Blind forced choice — amendment 2 (human observer)
 
-Amendment 2: the human blind observer (`data/portrait_preset_blind_answers_human.csv`, not yet
-received). It is the only blind judgement of the look and of identity in this test.
+Alessandro's partner, who had not seen the project, answered all 56 sheets with Alessandro out of the
+room (`data/portrait_preset_blind_answers_human.csv`, tally `data/portrait_preset_blind_tests_human.csv`).
+
+| | original set | mirrored set | verdict |
+|---|---|---|---|
+| position gate: same side on both versions of a pair | 0 of 28 | | pass |
+| **H4** preset chosen as "more American comic / animation", held out | **12/12** (p = 0.0002) | **12/12** | **supported** |
+| **H5** "same character", held out | 12/12 | 12/12 | supported — see caveat |
+| calibration (reported, not decisive): preset chosen | 16/16 | 16/16 | |
+
+She picked the preset in **56 of 56 sheets**, every character 8 of 8, and named LEFT exactly 28
+times: she read the pictures, not the position, and never contradicted herself on a mirrored pair.
+
+**Caveat on H5.** No sheet showed two *different* characters, so "YES" on every sheet could not have
+been wrong: the identity question had no foil and cannot discriminate. H5 passes by its rule, but
+the evidence on identity is ArcFace (§2), not this. A future identity test needs pairs of different
+characters mixed in.
+
+**Other limits.** One observer, close to the author, though blind to which image carried the preset
+and to what was expected. The question named the target look; she was asked which image matched it,
+not to describe what changed.
+
+## 5. What C52 lets Alessandro say
+
+- **Supported, blind:** a preset he calibrated by eye on four characters gives three characters he
+  never saw the look he described — chosen in 24 of 24 held-out comparisons by an observer who did not
+  know which image carried it — and the change is as coherent across them as across the calibration
+  set's (0.51 against 0.61, H1–H2).
+- **Measured, not met:** the face moves slightly more than a change of seed (ArcFace 0.74 against
+  0.80), while staying far from any other character (0.29).
+- **Open:** the gnome's lost face detections at 1:1; a real identity test with foils.
