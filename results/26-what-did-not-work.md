@@ -188,6 +188,8 @@ overturned; it is discussed beside the result it seems to contradict, on
 * **Small confirmatory samples.** 16 to 40 cells per test; seven cells for the matched comparison
   of page 22.
 * **Doses calibrated on single images.** Some are too strong for a preset (page 23).
+* **The guide to each block on page 21 is provisional.** One observer, a few prompts, one dose per
+  direction; most of its Style-band entries are unmeasured and it is meant to be expanded.
 * **One test is inconclusive by its own rule** (page 24); the weights result is marginal
   (page 21); the middle blocks' coherence is seen by eye only (pages 23, 25).
 * **Not run:** a forward-pass measurement of each block's write into the residual stream; a

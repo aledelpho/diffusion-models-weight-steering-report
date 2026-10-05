@@ -44,6 +44,17 @@ claims:
       threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and
       0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.
     anchor: "#what-the-weights-show"
+  - id: by-eye-guide-to-each-block
+    status: open
+    statement: >
+      A provisional, by-eye description of what each of the 28 blocks does in each direction,
+      offered as a starting point for anyone who wants to try the tuner, not as a measured result.
+    evidence: >
+      Written by me while looking at the v4 bench (five prompts, one seed) on a page that also
+      showed the 18 prompts of the styles and v3 benches. Where a measurement touches an entry,
+      it agrees on blocks 00, 22, 23 and 27, partly on 01, and the statistic is the suspect on 26.
+      Most Style-band entries have no measurement at all.
+    anchor: "#a-starting-guide-what-each-block-seems-to-do"
 ---
 
 # A map of the 28 blocks
@@ -99,6 +110,10 @@ partly visible in the weights themselves, but that result is marginal.
 * **The replication of the groups is weak.** Second set of prompts, other seeds and doses, but
   the groups were chosen after seeing the first set and the measure was the same.
 * **The weights result rests on n = 28** and one checkpoint, and a single block can flip it.
+* **The guide to each block is one observer's shorthand.** It was written from a few prompts, at
+  one dose per direction, by someone who knew which block he was looking at. Several entries are
+  simplifications, some will turn out to be wrong, and the effect of many Style-band blocks
+  changes with the prompt.
 
 ## The data
 
@@ -163,6 +178,62 @@ through almost one direction (stable rank of the attention output 26 and 13 agai
 elsewhere), which is one mechanical reading of a knob. Block 23, the saturation knob of page 22,
 does not stand out on any of the 40 values.
 
+### A starting guide: what each block seems to do
+
+> **Read this as a map drawn by hand, not a measurement.** I wrote it while looking at the v4
+> bench — four crowns and one comic page at seed 1234567 — on a page that also showed the 18
+> prompts of the styles and v3 benches. Each entry is the change I found most evident; Style-band
+> blocks do many other things. It is provisional and meant to be expanded and corrected. Its use
+> is practical: where to start, roughly where "style" begins, and what to expect from each
+> block in each direction.
+
+Doses are those of the v4 bench (`data/block_colour_layout.csv`, rows `v4`); they are where
+these effects were seen, not safe defaults, and page 23 shows that doses chosen on single images
+can be too strong for a preset.
+
+| block | dose − / + | negative | positive |
+|---|---|---|---|
+| **Base** | | | |
+| 00 | −0.20 / +0.25 | more grain, detail, colour variety, colour confetti | soft and hazy: less grain, detail and colour variety |
+| 01 | −0.40 / +0.25 | softer colours, subtle textures | patchy colour, flat tints, more grain and detail (the opposite of 00) |
+| **Style** | | | |
+| 02 | −0.45 / +0.40 | fine textures and micro-detail; less camera control | flat fills, toward close-up, more camera control, colour blocks |
+| 03 | −0.55 / +0.40 | less natural, less three-dimensional light | natural, three-dimensional light (changes a lot with the prompt) |
+| 04 | −0.55 / +0.55 | fine-grained detail, less abstraction | coarse, merged detail; simplification and abstraction |
+| 05 | −0.55 / +0.55 | darker, dirtier, messier | brighter, cleaner |
+| 06 | −0.55 / +0.55 | more volume, more organic; fewer colours, less stylisation | more colour, more stylised and artificial; less volume |
+| 07 | −0.55 / +0.55 | elements blend less (less concept bleeding), fewer deformations | elements blend more (more concept bleeding), more deformations |
+| 08 | −0.55 / +0.55 | more expression and natural poses; less texture realism, less flattening | more texture realism, deformation and flattening; less expression |
+| 09 | −0.55 / +0.55 | less realism of volumes and materials | more realism of volumes and materials |
+| 10 | −0.45 / +0.45 | more expression (varies with the prompt) | less expression |
+| 11 | −0.45 / +0.45 | more camera control, style emphasised; less deformation | more deformation and abstraction; camera control and style lost |
+| 12 | −0.45 / +0.40 | more camera control, perspective, imperfections; less deformation | more deformation; less camera control, perspective, imperfections |
+| 13 | −0.45 / +0.40 | organic | geometric |
+| 14 | −0.55 / +0.40 | details more distinct; less colour contrast, less texture depth | more colour contrast and texture depth; details less distinct |
+| 15 | −0.45 / +0.40 | more depth (light, shadow, reflections, translucency), more realistic detail | less depth (simplified, flattened subjects), less realistic detail |
+| 16 | −0.45 / +0.30 | more complex textures, more detail, less abstraction | muffled textures, fewer details, more abstraction |
+| 17 | −0.45 / +0.40 | less synthesis: less stylised, closer to the prompt | more synthesis: simpler, further from the prompt |
+| 18 | −0.45 / +0.30 | more depth and volume | less depth and volume |
+| **Details** | | | |
+| 19 | −0.45 / +0.25 | subjects shaped by form, more complex detail | subjects shaped by light, less complex detail |
+| 20 | −0.55 / +0.45 | parts of the subject blend together | parts of the subject separate, more distinct in colour |
+| 21 | −0.45 / +0.25 | finer grain of detail and imperfection | coarser, accentuated grain of detail and imperfection |
+| 22 | −0.45 / +0.25 | sharpens and flattens textures | blurs and softens textures (borders on Correction) |
+| **Correction** | | | |
+| 23 | −0.30 / +0.30 | more saturation | less saturation (page 22) |
+| 24 | −0.40 / +0.20 | more colour contrast (flatter, more distinct colours), harsher textures | less colour contrast (softer, more complex colours), gentler textures |
+| 25 | −0.45 / +0.25 | less colour blur | more colour blur (damaging in both directions on other benches) |
+| 26 | −0.25 / +0.15 | fewer fine textures | more fine texture, adds grain |
+| 27 | −0.25 / +0.05 | blurs and darkens | adds grain and lightens, like an aggressive sharpen filter |
+
+Where a measurement touches an entry (`docs/block_groups_and_prompt_order.md` §4, on the
+prompt-order images): the statistics agree on 00, 22, 23 and 27; on 01 "opposite of 00" holds for
+grain and detail but not for the whole effect; on 26 the spectral statistic says the opposite, and
+a 1:1 crop sides with the description — what reads as grain is a mosaic of colour cells. On page
+23, blk09 + raised realism by eye on every family, as the guide says; blk17 + read on photographs
+as "focus on the subject", which the guide does not anticipate. The other Style-band entries have
+not been measured.
+
 ### Reproducing this
 
 ```yaml
@@ -211,4 +282,4 @@ analysis:
   any weight was read.
 * **Result documents:** `docs/block_groups_and_prompt_order.md`,
   `docs/single_blocks_exploration_synthesis.md`, `docs/block_weight_structure_result.md`.
-* **Observations:** `data/single_blocks_v4_definitions_alessandro.md`.
+* **Observations:** `data/single_blocks_v4_definitions_alessandro.md` (the original, in Italian, of the guide to each block).

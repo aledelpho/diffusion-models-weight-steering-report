@@ -125,6 +125,7 @@
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--semantic-routing">The difference between how consistent an edit&#x27;s CLIP direction is on one prompt and on many prompts separates blocks that route meaning from blocks that filter structure.</a></td><td class="ev">Audit of an unpublished analysis: no script computes its p-values; doses are mixed under one key; the measure tracks how alike the images are; its second-ranked semantic router, blk26 +, lays the same mosaic of colour cells over any content.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--where-the-layout-holds">Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.</a></td><td class="ev">Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--blocks-that-push-together">Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.</a></td><td class="ev">Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--a-starting-guide-what-each-block-seems-to-do">A provisional, by-eye description of what each of the 28 blocks does in each direction, offered as a starting point for anyone who wants to try the tuner, not as a measured result.</a></td><td class="ev">Written by me while looking at the v4 bench (five prompts, one seed) on a page that also showed the 18 prompts of the styles and v3 benches. Where a measurement touches an entry, it agrees on blocks 00, 22, 23 and 27, partly on 01, and the statistic is the suspect on 26. Most Style-band entries have no measurement at all.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--family-by-family">Late-block presets are most coherent on cartoon prompts, less on oil paintings and least on photographs, where the eye found no common look for two of the arms.</a></td><td class="ev">Split by family after the test, descriptive: up to 0.80 on cartoon, 0.28-0.71 on oil, 0.12-0.53 on photographs; the eye said no common look for blk20 and blk23 on photographs, where the numbers are 0.29 and 0.12.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--the-middle-blocks-the-eye-against-the-numbers">Middle blocks also give a family a recognisable common change, but it is a change of what is depicted, and no measure used here sees it.</a></td><td class="ev">Eye, deposited before the numbers: a common look in 8 of 12 Style-band cells and 2 of 3 blk09 cells. Style features: within-family coherence 0.06-0.17. DINOv2: 0.007, refuted as a substitute (page 25).</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--a-change-of-identity">Block 9 pushed positive can change the identity of a subject, turning the female blacksmith into a man, and it does so at one seed and not at the other.</a></td><td class="ev">Eye notes on the oil and photo families at seed 1414213; at seed 5772156 she stays a woman in all three families. CLIPScore on the blacksmith prompts drops by 3.8, the largest drop of any arm. Two seeds, one subject.</td></tr>
@@ -336,6 +337,10 @@ partly visible in the weights themselves, but that result is marginal.</p>
 <li><strong>The replication of the groups is weak.</strong> Second set of prompts, other seeds and doses, but
   the groups were chosen after seeing the first set and the measure was the same.</li>
 <li><strong>The weights result rests on n = 28</strong> and one checkpoint, and a single block can flip it.</li>
+<li><strong>The guide to each block is one observer's shorthand.</strong> It was written from a few prompts, at
+  one dose per direction, by someone who knew which block he was looking at. Several entries are
+  simplifications, some will turn out to be wrong, and the effect of many Style-band blocks
+  changes with the prompt.</li>
 </ul>
 <h2 id="p-21-block-map--the-data">The data</h2>
 <h3 id="p-21-block-map--where-the-layout-holds">Where the layout holds</h3>
@@ -454,6 +459,229 @@ in their MLP gate in the stack (σ₁ 113 and 130 against 34–97 elsewhere). Bl
 through almost one direction (stable rank of the attention output 26 and 13 against 100–260
 elsewhere), which is one mechanical reading of a knob. Block 23, the saturation knob of page 22,
 does not stand out on any of the 40 values.</p>
+<h3 id="p-21-block-map--a-starting-guide-what-each-block-seems-to-do">A starting guide: what each block seems to do</h3>
+<blockquote>
+<p><strong>Read this as a map drawn by hand, not a measurement.</strong> I wrote it while looking at the v4
+bench — four crowns and one comic page at seed 1234567 — on a page that also showed the 18
+prompts of the styles and v3 benches. Each entry is the change I found most evident; Style-band
+blocks do many other things. It is provisional and meant to be expanded and corrected. Its use
+is practical: where to start, roughly where "style" begins, and what to expect from each
+block in each direction.</p>
+</blockquote>
+<p>Doses are those of the v4 bench (<code>data/block_colour_layout.csv</code>, rows <code>v4</code>); they are where
+these effects were seen, not safe defaults, and page 23 shows that doses chosen on single images
+can be too strong for a preset.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>block</th>
+<th>dose − / +</th>
+<th>negative</th>
+<th>positive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Base</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>00</td>
+<td>−0.20 / +0.25</td>
+<td>more grain, detail, colour variety, colour confetti</td>
+<td>soft and hazy: less grain, detail and colour variety</td>
+</tr>
+<tr>
+<td>01</td>
+<td>−0.40 / +0.25</td>
+<td>softer colours, subtle textures</td>
+<td>patchy colour, flat tints, more grain and detail (the opposite of 00)</td>
+</tr>
+<tr>
+<td><strong>Style</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>02</td>
+<td>−0.45 / +0.40</td>
+<td>fine textures and micro-detail; less camera control</td>
+<td>flat fills, toward close-up, more camera control, colour blocks</td>
+</tr>
+<tr>
+<td>03</td>
+<td>−0.55 / +0.40</td>
+<td>less natural, less three-dimensional light</td>
+<td>natural, three-dimensional light (changes a lot with the prompt)</td>
+</tr>
+<tr>
+<td>04</td>
+<td>−0.55 / +0.55</td>
+<td>fine-grained detail, less abstraction</td>
+<td>coarse, merged detail; simplification and abstraction</td>
+</tr>
+<tr>
+<td>05</td>
+<td>−0.55 / +0.55</td>
+<td>darker, dirtier, messier</td>
+<td>brighter, cleaner</td>
+</tr>
+<tr>
+<td>06</td>
+<td>−0.55 / +0.55</td>
+<td>more volume, more organic; fewer colours, less stylisation</td>
+<td>more colour, more stylised and artificial; less volume</td>
+</tr>
+<tr>
+<td>07</td>
+<td>−0.55 / +0.55</td>
+<td>elements blend less (less concept bleeding), fewer deformations</td>
+<td>elements blend more (more concept bleeding), more deformations</td>
+</tr>
+<tr>
+<td>08</td>
+<td>−0.55 / +0.55</td>
+<td>more expression and natural poses; less texture realism, less flattening</td>
+<td>more texture realism, deformation and flattening; less expression</td>
+</tr>
+<tr>
+<td>09</td>
+<td>−0.55 / +0.55</td>
+<td>less realism of volumes and materials</td>
+<td>more realism of volumes and materials</td>
+</tr>
+<tr>
+<td>10</td>
+<td>−0.45 / +0.45</td>
+<td>more expression (varies with the prompt)</td>
+<td>less expression</td>
+</tr>
+<tr>
+<td>11</td>
+<td>−0.45 / +0.45</td>
+<td>more camera control, style emphasised; less deformation</td>
+<td>more deformation and abstraction; camera control and style lost</td>
+</tr>
+<tr>
+<td>12</td>
+<td>−0.45 / +0.40</td>
+<td>more camera control, perspective, imperfections; less deformation</td>
+<td>more deformation; less camera control, perspective, imperfections</td>
+</tr>
+<tr>
+<td>13</td>
+<td>−0.45 / +0.40</td>
+<td>organic</td>
+<td>geometric</td>
+</tr>
+<tr>
+<td>14</td>
+<td>−0.55 / +0.40</td>
+<td>details more distinct; less colour contrast, less texture depth</td>
+<td>more colour contrast and texture depth; details less distinct</td>
+</tr>
+<tr>
+<td>15</td>
+<td>−0.45 / +0.40</td>
+<td>more depth (light, shadow, reflections, translucency), more realistic detail</td>
+<td>less depth (simplified, flattened subjects), less realistic detail</td>
+</tr>
+<tr>
+<td>16</td>
+<td>−0.45 / +0.30</td>
+<td>more complex textures, more detail, less abstraction</td>
+<td>muffled textures, fewer details, more abstraction</td>
+</tr>
+<tr>
+<td>17</td>
+<td>−0.45 / +0.40</td>
+<td>less synthesis: less stylised, closer to the prompt</td>
+<td>more synthesis: simpler, further from the prompt</td>
+</tr>
+<tr>
+<td>18</td>
+<td>−0.45 / +0.30</td>
+<td>more depth and volume</td>
+<td>less depth and volume</td>
+</tr>
+<tr>
+<td><strong>Details</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>19</td>
+<td>−0.45 / +0.25</td>
+<td>subjects shaped by form, more complex detail</td>
+<td>subjects shaped by light, less complex detail</td>
+</tr>
+<tr>
+<td>20</td>
+<td>−0.55 / +0.45</td>
+<td>parts of the subject blend together</td>
+<td>parts of the subject separate, more distinct in colour</td>
+</tr>
+<tr>
+<td>21</td>
+<td>−0.45 / +0.25</td>
+<td>finer grain of detail and imperfection</td>
+<td>coarser, accentuated grain of detail and imperfection</td>
+</tr>
+<tr>
+<td>22</td>
+<td>−0.45 / +0.25</td>
+<td>sharpens and flattens textures</td>
+<td>blurs and softens textures (borders on Correction)</td>
+</tr>
+<tr>
+<td><strong>Correction</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>23</td>
+<td>−0.30 / +0.30</td>
+<td>more saturation</td>
+<td>less saturation (page 22)</td>
+</tr>
+<tr>
+<td>24</td>
+<td>−0.40 / +0.20</td>
+<td>more colour contrast (flatter, more distinct colours), harsher textures</td>
+<td>less colour contrast (softer, more complex colours), gentler textures</td>
+</tr>
+<tr>
+<td>25</td>
+<td>−0.45 / +0.25</td>
+<td>less colour blur</td>
+<td>more colour blur (damaging in both directions on other benches)</td>
+</tr>
+<tr>
+<td>26</td>
+<td>−0.25 / +0.15</td>
+<td>fewer fine textures</td>
+<td>more fine texture, adds grain</td>
+</tr>
+<tr>
+<td>27</td>
+<td>−0.25 / +0.05</td>
+<td>blurs and darkens</td>
+<td>adds grain and lightens, like an aggressive sharpen filter</td>
+</tr>
+</tbody>
+</table></div>
+<p>Where a measurement touches an entry (<code>docs/block_groups_and_prompt_order.md</code> §4, on the
+prompt-order images): the statistics agree on 00, 22, 23 and 27; on 01 "opposite of 00" holds for
+grain and detail but not for the whole effect; on 26 the spectral statistic says the opposite, and
+a 1:1 crop sides with the description — what reads as grain is a mosaic of colour cells. On page
+23, blk09 + raised realism by eye on every family, as the guide says; blk17 + read on photographs
+as "focus on the subject", which the guide does not anticipate. The other Style-band entries have
+not been measured.</p>
 <h3 id="p-21-block-map--reproducing-this">Reproducing this</h3>
 <pre><code class="language-yaml">model:
   checkpoint: krea2_turbo_bf16.safetensors
@@ -499,7 +727,7 @@ analysis:
   any weight was read.</li>
 <li><strong>Result documents:</strong> <code>docs/block_groups_and_prompt_order.md</code>,
   <code>docs/single_blocks_exploration_synthesis.md</code>, <code>docs/block_weight_structure_result.md</code>.</li>
-<li><strong>Observations:</strong> <code>data/single_blocks_v4_definitions_alessandro.md</code>.</li>
+<li><strong>Observations:</strong> <code>data/single_blocks_v4_definitions_alessandro.md</code> (the original, in Italian, of the guide to each block).</li>
 </ul>
 </section>
 <section id="p-22-saturation-knob">
@@ -1429,6 +1657,8 @@ overturned; it is discussed beside the result it seems to contradict, on
 <li><strong>Small confirmatory samples.</strong> 16 to 40 cells per test; seven cells for the matched comparison
   of page 22.</li>
 <li><strong>Doses calibrated on single images.</strong> Some are too strong for a preset (page 23).</li>
+<li><strong>The guide to each block on page 21 is provisional.</strong> One observer, a few prompts, one dose per
+  direction; most of its Style-band entries are unmeasured and it is meant to be expanded.</li>
 <li><strong>One test is inconclusive by its own rule</strong> (page 24); the weights result is marginal
   (page 21); the middle blocks' coherence is seen by eye only (pages 23, 25).</li>
 <li><strong>Not run:</strong> a forward-pass measurement of each block's write into the residual stream; a
