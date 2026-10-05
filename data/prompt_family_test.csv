@@ -1,0 +1,9 @@
+test,value,verdict
+H1 W > B on tested arms,6/6,
+H1 median (W - B),0.1903,supported
+H2 median W on tested arms,0.5294,supported
+H3 control blk09 pos W below the tested median,0.1589,supported
+"H4 style band: median W (03+,06+,13-,17+) vs late tested median W",0.1559 vs 0.5294,supported
+H4b style band: W > B on,4/4,
+reference: median S_seed on tested arms,0.7606,
+combo: W / B / S,0.535 / 0.256 / 0.755,

@@ -97,3 +97,4 @@ crop sided with the eye (`block_groups_and_prompt_order.md` §4).
 | C45 | writing vs content — **done, inconclusive by the rule** | `prompt_writing_result.md` |
 | C46 | is the stable/unstable split visible in the weights? | `prereg_block_weight_structure.md` |
 | C47 | blk23 against "colorful" in the prompt — **done** | `blk23_vs_colorful_result.md` |
+| C49 | presets per prompt family — **done, H1–H4 supported** | `prompt_family_result.md` |
