@@ -1,0 +1,71 @@
+# Directive for Antigravity — push the main repository, then publish the results repository
+
+2026-10-05. Written by Claude for Alessandro. **No renders. Do not shut down or close anything.
+Do not use `monitor_and_shutdown.py`.** If any step fails, stop and paste the output; do not
+improvise a workaround (no force push, no rewriting history, no deleting files).
+
+## Step 1 — push the main repository as it is
+
+Only what is already committed goes online. Uncommitted files stay where they are.
+
+```powershell
+cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report
+git status --short
+git push origin main
+```
+
+- Do **not** run `git add` of any kind before pushing (no `git add .`, no `git add -A`). The
+  untracked files and the four modified files (`data/single_blocks_styles_plan.csv`,
+  `experiments/build_annotation_page.py`, `experiments/make_single_blocks_styles_plan.py`,
+  `experiments/monitor_single_blocks_styles.py`) are **not** part of this push; deciding about
+  them is Alessandro's.
+- If the push is rejected (non-fast-forward, size limit, anything): stop and paste the output.
+  **Never** `--force`.
+- If `.git/index.lock` or `HEAD.lock` exist and git refuses to run, delete only those lock files.
+
+## Step 2 — record the commit the results will point to
+
+```powershell
+git fetch origin
+git rev-parse HEAD
+git rev-parse origin/main
+```
+
+The two shas must be identical. That full 40-character sha is `<SHA>` below.
+
+## Step 3 — build the results repository folder
+
+```powershell
+python experiments\export_results_repo.py --sha <SHA> --out C:\Users\aless\Desktop\<REPO_NAME>
+```
+
+It must end with `PASS -- every link and image resolves ...`. If it prints any `ERROR`, stop and
+paste the output. Do not edit the exported files by hand; do not add files to the folder.
+
+## Step 4 — create the repository on GitHub and push it
+
+Name and visibility are Alessandro's choice (suggested name: `krea2-weight-knobs-results`).
+
+```powershell
+cd C:\Users\aless\Desktop\<REPO_NAME>
+git init -b main
+git add .
+git commit -m "Results: single-block weight scaling in Krea-2 (pages 20-27), linked to the main repository at <SHA short>"
+```
+
+Create the empty repository on GitHub (no README, no licence, no .gitignore — the folder already
+has them), then:
+
+```powershell
+git remote add origin https://github.com/aledelpho/<REPO_NAME>.git
+git push -u origin main
+```
+
+Do not add GitHub Actions, Pages settings or any other file.
+
+## Step 5 — paste back to Claude
+
+1. The output of `git push origin main` (step 1).
+2. The `<SHA>` of step 2.
+3. The full output of the export script (step 3).
+4. The URL of the new repository.
