@@ -570,6 +570,96 @@ def atlas_ends_and_middle(out: Path) -> Path:
                   "benchmark_single_blocks_atlas · dose 0.350 for every block · seed 2718281 · whole frames · "
                   "source data/single_blocks_atlas_plan.csv", W=150, H=188, LAB=90)
 
+# ---------------------------------------------------------------- 28-portrait-preset
+
+PORTRAIT_CHARS = [("H3_halfling_druid", "halfling · new"), ("R6_dragonborn_cleric", "dragonborn · new"),
+                  ("T7_tiefling_bard", "tiefling · new"), ("D1_dwarf_paladin", "dwarf"),
+                  ("E2_elf_rogue", "elf"), ("O4_halforc_fighter", "half-orc"), ("G5_gnome_wizard", "gnome")]
+
+
+def _phase_c(char: str, cond: str, seed: str) -> Path:
+    return IMG / "benchmark_portraits" / "phase_c" / f"{char}_{cond}_krea2_seed{seed}_00001_.png"
+
+
+def portrait_preset_sheet(out: Path) -> Path:
+    """F28.1 — the frozen portrait preset on all seven characters at one seed; the first three never seen."""
+    rows = [("baseline", "base"), ("preset", "preset")]
+    return _sheet(rows, PORTRAIT_CHARS, lambda r, c: _phase_c(c, r, "2645751"), lambda r, c: None, out,
+                  "benchmark_portraits/phase_c · seed 2645751 · preset presets/portrait_preset_alessandro.json · "
+                  "'new' = held out, never seen while the preset was tuned · whole frames · "
+                  "source data/portraits_preset_plan.csv", W=176, H=220, LAB=62)
+
+
+def portrait_blind_and_faces(out: Path) -> Path:
+    """F28.2 — left: the blind observer's choices; right: ArcFace similarity by kind of pair."""
+    import itertools
+    import numpy as np
+    key = {r["sheet"]: r for r in csv.DictReader(open(DATA / "portrait_preset_blind_key.csv"))}
+    ans = list(csv.DictReader(open(DATA / "portrait_preset_blind_answers_human.csv")))
+    cells = {}
+    for a in ans:
+        k = key[a["sheet"]]
+        c = cells.setdefault((k["group"], k["set"]), [0, 0])
+        c[0] += a["q1"] == k["preset_side"]; c[1] += 1
+    faces = [r for r in csv.DictReader(open(DATA / "portrait_preset_faces.csv")) if r["detected"] == "1"]
+    emb = {(r["char"], r["cond"], r["seed"]): np.array([float(x) for x in r["emb"].split()]) for r in faces}
+    cos = lambda u, v: float(u @ v / (np.linalg.norm(u) * np.linalg.norm(v)))
+    base = [k for k in emb if k[1] == "baseline"]
+    same, other = [], []
+    for a, b in itertools.combinations(base, 2):
+        (same if a[0] == b[0] else other).append(cos(emb[a], emb[b]))
+    edit = [cos(emb[k], emb[(k[0], "preset", k[2])]) for k in base if (k[0], "preset", k[2]) in emb]
+    import matplotlib.pyplot as plt
+    fig = plt.figure(figsize=(8.4, 3.5), dpi=150); fig.patch.set_facecolor(SURFACE)
+    ax = _axes(fig, 2, 1)
+    order = [("held_out", "original"), ("held_out", "mirrored"), ("calibration", "original"), ("calibration", "mirrored")]
+    labs = ["held out\noriginal", "held out\nmirrored", "calibration\noriginal", "calibration\nmirrored"]
+    for i, o in enumerate(order):
+        hit, n = cells[o]
+        ax.bar(i, hit / n, color=CAT[0] if o[0] == "held_out" else CAT[2], width=0.62)
+        ax.text(i, hit / n + 0.03, f"{hit}/{n}", ha="center", color=INK, fontsize=8)
+    ax.axhline(0.5, color=DIM, lw=0.8, ls="--"); ax.text(3.45, 0.52, "chance", color=DIM, fontsize=7, ha="right")
+    ax.set_xticks(range(4)); ax.set_xticklabels(labs, color=DIM, fontsize=7); ax.set_ylim(0, 1.15)
+    ax.set_ylabel("share of sheets where the preset was chosen", color=DIM, fontsize=7.5)
+    ax.set_title("blind observer: which looks more American comic / animation?", color=INK, fontsize=8.5, loc="left")
+    ax = _axes(fig, 2, 2)
+    groups = [(same, "same character,\nanother seed"), (edit, "base vs preset,\nsame seed"),
+              (other, "different\ncharacters")]
+    rng = np.random.default_rng(0)
+    for i, (v, lab) in enumerate(groups):
+        ax.scatter(i + rng.uniform(-0.18, 0.18, len(v)), v, s=6, color=[CAT[0], CAT[1], DIM][i], alpha=0.7, lw=0)
+        m = statistics.mean(v)
+        ax.plot([i - 0.28, i + 0.28], [m, m], color=INK, lw=1.4)
+        ax.text(i + 0.31, m, f"{m:.2f}\n(n={len(v)})", color=INK, fontsize=7, va="center")
+    ax.set_xticks(range(3)); ax.set_xticklabels([g[1] for g in groups], color=DIM, fontsize=7)
+    ax.set_xlim(-0.5, 2.9); ax.set_ylim(-0.1, 1.0)
+    ax.set_ylabel("ArcFace cosine similarity of the face", color=DIM, fontsize=7.5)
+    ax.set_title("the preset moves the face a little more than a seed does", color=INK, fontsize=8.5, loc="left")
+    fig.subplots_adjust(left=0.07, right=0.98, top=0.88, bottom=0.2, wspace=0.28)
+    return _save(fig, out, "left: 56 sheets, one observer blind to condition · right: faces ArcFace detected, lines = means · "
+                           "source data/portrait_preset_blind_answers_human.csv, data/portrait_preset_faces.csv")
+
+
+def portrait_blind_sheet(out: Path) -> Path:
+    """F28.3 — one blind sheet exactly as the observer saw it (held-out halfling), with the key below."""
+    sheet = "sheet_8250"
+    k = {r["sheet"]: r for r in csv.DictReader(open(DATA / "portrait_preset_blind_key.csv"))}[sheet]
+    a = {r["sheet"]: r for r in csv.DictReader(open(DATA / "portrait_preset_blind_answers_human.csv"))}[sheet]
+    im = Image.open(IMG / "benchmark_portraits" / "blind" / f"{sheet}.png").convert("RGB")
+    im = im.resize((im.width * 3 // 4, im.height * 3 // 4), Image.LANCZOS)
+    M = 12                                   # dark margin: the sheet's own grey header stays inside
+    S = Image.new("RGB", (im.width + 2 * M, im.height + 46 + M), SURF_RGB); S.paste(im, (M, M))
+    d = ImageDraw.Draw(S); im_h = im.height + M
+    d.text((6, im_h + 6), f"key, revealed after all answers: preset on the {k['preset_side']} · "
+           f"{k['char']} · seed {k['seed']} · {k['set']} set · her answer: {a['q1']}, same character: {a['q2']}",
+           fill=INK_RGB, font=font(11))
+    d.text((6, im_h + 26), f"{sheet} as shown · source data/portrait_preset_blind_key.csv, "
+           "data/portrait_preset_blind_answers_human.csv", fill=DIM_RGB, font=font(10))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    S.save(out, "WEBP", quality=88, method=6)
+    return out
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -595,6 +685,9 @@ BUILDERS = {
     "F12.1": ("12-single-blocks", "atlas_ends_and_middle", atlas_ends_and_middle),
     "F12.2": ("12-single-blocks", "sensitivity_map", sensitivity_map),
     "F13.1": ("13-pushing-harder", "destroyed_by_the_statistic", destroyed_by_the_statistic),
+    "F28.1": ("28-portrait-preset", "portrait_preset_sheet", portrait_preset_sheet),
+    "F28.2": ("28-portrait-preset", "portrait_blind_and_faces", portrait_blind_and_faces),
+    "F28.3": ("28-portrait-preset", "portrait_blind_sheet", portrait_blind_sheet),
 }
 
 

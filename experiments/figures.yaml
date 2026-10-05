@@ -825,3 +825,35 @@ figures:
     crop: whole
     alt: >
       The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left; at 0.350 Block_4 already flattens the face into a mask.
+
+  # ---------------------------------------------------------------- 28-portrait-preset
+
+  - id: F28.1
+    page: 28-portrait-preset
+    kind: contact_sheet
+    builder: results_figures.portrait_preset_sheet
+    source: data/portraits_preset_plan.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Seven characters, base above and preset below at one seed: each stays recognisably the same character, and the preset row has cleaner outlines and less shading on the faces; the first three were never seen while the preset was tuned.
+
+  - id: F28.2
+    page: 28-portrait-preset
+    kind: strip
+    builder: results_figures.portrait_blind_and_faces
+    source: data/portrait_preset_blind_answers_human.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Left: the preset was chosen on every sheet, held-out and calibration, original and mirrored. Right: ArcFace similarity of the face is 0.80 for the same character at another seed, 0.74 for base against preset, 0.29 for different characters.
+
+  - id: F28.3
+    page: 28-portrait-preset
+    kind: contact_sheet
+    builder: results_figures.portrait_blind_sheet
+    source: data/portrait_preset_blind_key.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      One blind sheet as the observer saw it: the held-out halfling with the preset on the left and the base on the right; she chose the left.

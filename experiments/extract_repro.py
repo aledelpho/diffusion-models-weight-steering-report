@@ -101,6 +101,10 @@ EVIDENCE: dict[str, dict] = {
                  "all_blocks_clean_v2_palette_features.csv"],
         "manifest": None,
     },
+    "28-portrait-preset": {
+        "dims": ["portraits_preset_plan.csv", "portraits_atlas_plan.csv"],
+        "manifest": "portraits_preset_plan.csv",
+    },
 }
 
 MANIFEST_FIELDS = {"sampler": ["sampler"], "steps": ["steps"], "cfg": ["cfg"]}

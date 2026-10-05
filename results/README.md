@@ -28,11 +28,16 @@ coherence 0.53 against 0.26 between families and 0.76 across seeds, strongest on
 weakest on photographs, at a visible cost in noise at the doses used. **Middle blocks change
 content most** (DINOv2 similarity 0.87–0.88) at no measured quality cost and look
 family-coherent to the eye, but no metric we tried records that coherence, and one of them can
-change a subject's identity. Rewriting a prompt changes what a block does about as much as
+change a subject's identity. **A preset written by eye from the block map carries over to new
+pictures:** calibrated on four character portraits and frozen, it gave three characters it had
+never seen the look its author had described, about as coherently as on the four (0.51 against
+0.61), and an observer blind to the condition chose it as the closer match in 56 of 56
+comparisons; each character stays recognisable, though the face moves slightly more than under a
+change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
 inconclusive by its own rule. We also report four claims that were made from statistics and
-withdrawn after the images were opened, and the limits of a study rated by a single observer who
-knew the conditions.
+withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
+single observer who knew the conditions — all except the portrait test, which was judged blind.
 
 ## Introduction
 
@@ -42,6 +47,18 @@ already there, in the base weights, at the granularity of a block. The edit is t
 possible one: the eight weight matrices of a block are multiplied by one number, and a preset is a
 vector of such numbers. Nothing is trained, nothing runs at inference beyond the patched weights,
 and any preset can be written down in one line.
+
+What that buys in practice is shown best by the last test. I looked at what every block does to
+four drawn characters, wrote a preset of ten small numbers aiming at *a more American-comic look,
+flat colours and clean lines*, froze it, and applied it to seven characters at four new seeds.
+Three of them had never been rendered while I tuned it:
+
+![Seven characters, base above and preset below at one seed: each stays recognisably the same character, and the preset row has cleaner outlines and less shading on the faces; the first three were never seen while the preset was tuned.](../assets/28-portrait-preset/F28.1_portrait_preset_sheet.webp)
+
+Someone who had never seen the project, shown each pair side by side without knowing which was
+which, picked the preset as the closer match to that description every time, 56 times out of 56.
+The characters stay themselves, but not untouched: the face moves a little more than a change of
+seed would move it, and a prompted expression can turn into a frown ([page 28](28-portrait-preset.md)).
 
 The project started with hand-calibrated presets over the whole stack
 ([notebook page 01](../notebook/01-mark-style.md)) and an exploratory notebook of tests on
@@ -55,6 +72,8 @@ same way on every prompt tried. The pages below report what survived confirmatio
 * presets for a family of prompts ([23](23-prompt-family-presets.md));
 * robustness to how the prompt is written ([24](24-wording.md));
 * standard metrics on the same images ([25](25-standard-metrics.md));
+* a preset made by eye from the map, tested blind on characters it never saw
+  ([28](28-portrait-preset.md));
 * what did not work, and the limits ([26](26-what-did-not-work.md)); other kinds of edit
   ([27](27-other-edits.md)).
 
@@ -135,6 +154,8 @@ page shows its pre-registration, its data and its reservations.
 | **Holds** | [A preset built from late blocks changes different subjects written in the same style in a common direction, clearly more than it does across styles.](23-prompt-family-presets.md#coherence-inside-a-family) | Pre-registered (C49), all four rules supported. Within-family coherence above between-family coherence on 6 of 6 tested arms, median gap +0.19 (threshold 0.10); median within-family coherence 0.53 (threshold 0.40), about 70 percent of the coherence the same arm has across two seeds of one prompt (0.76). Middle-block arms 0.16 (H3, H4). |
 | **Holds** | [A block-reordering edit makes the subject take more of the frame, more so at the higher dose, on styles that did not exist when the prediction was frozen.](27-other-edits.md#the-subject-grows) | Pre-registered in notebook page 03: geometric mean area ratio 1.234 across 10 new styles, 9 of 10 above 1, Holm-corrected p 0.018 to 0.035. Whether the structure or the size of the edit causes it is open: the control that separates them was not rendered. |
 | **Holds** | [Reordering whole blocks inside the checkpoint crosses the hatching strokes when pushed one way and runs them parallel when pushed the other, and the sign decides which.](27-other-edits.md#the-hatching-axis) | Pre-registered in notebook page 06, on 16 prompts sharing nothing with the corpus of the observation: 16 of 16 prompts and 79 of 80 image pairs in the predicted direction, Holm p 9.2e-5 at the permutation floor. |
+| **Holds** | [An observer who did not know which image carried the preset chose it as the one closer to the look its author described, on every sheet.](28-portrait-preset.md#a-blind-observer) | Pre-registered amendment 2 (H4): 56 of 56 sheets, held-out characters 12/12 on the original and 12/12 on the mirrored set (p = 0.0002 each); she named LEFT exactly 28 times and never the same side on both versions of a pair (position check 0/28). One observer. |
+| **Holds** | [A preset calibrated by eye on four character portraits changes three characters it never saw in a common direction, about as coherently as it changes the four it was tuned on.](28-portrait-preset.md#the-look-carries-over) | Pre-registered (C52), preset frozen before any test render. Median coherence across the held-out characters 0.51 (threshold 0.40), against 0.61 on the calibration characters (allowed gap 0.15); the preset agrees with itself across seeds at 0.78 (H1, H2). |
 | **Ambiguous** | [How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.](21-block-map.md#what-the-weights-show) | Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint. |
 | **Ambiguous** | [Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block's effect no more than changing the seed does, while changing the subject changes it a great deal.](24-wording.md#the-registered-rule) | Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms. |
 | **Ambiguous** | [A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.](27-other-edits.md#a-curiosity-attributes-that-appear) | Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run. |
@@ -143,6 +164,7 @@ page shows its pre-registration, its data and its reservations.
 | **Overturned** | [The difference between how consistent an edit's CLIP direction is on one prompt and on many prompts separates blocks that route meaning from blocks that filter structure.](26-what-did-not-work.md#semantic-routing) | Audit of an unpublished analysis: no script computes its p-values; doses are mixed under one key; the measure tracks how alike the images are; its second-ranked semantic router, blk26 +, lays the same mosaic of colour cells over any content. |
 | **Overturned** | [Pushed to dose 0.500, the macro-block sliders Block_4 and Block_1 move the picture far from the baseline while keeping its line work, and are the best operating points found.](26-what-did-not-work.md#the-best-doses-by-the-statistic) | Published from two statistics, then retracted the next day when the renders were opened: Block_4 + at 0.500 leaves no subject, only a crumpled-stroke texture; Block_1 + at 0.500 is colour confetti. Block_4 + is already broken at 0.350. |
 | **Overturned** | [Structure coherence, a statistic of oriented line work, can rank edits by how much of the drawing they preserve.](26-what-did-not-work.md#a-measure-with-the-sign-wrong) | Pre-registered eye veto: 7 agreements in 9 resolved pairs against a threshold of 8 in 12. Both disagreements are one condition, Block_6 + 0.080, which the statistic scores above its baseline and which I and six blind model observers call broken; Block_1 - 0.500 is the same case. The sign is wrong, not the size. |
+| **Overturned** | [The preset changes a character's face no more than changing the seed does.](28-portrait-preset.md#the-face) | Pre-registered (H3), refuted: on both eligible held-out characters the face under the preset is less similar to the base (ArcFace 0.75 and 0.74) than the base is to itself at another seed (0.82 and 0.75). Described after the test: 0.74 on average against 0.80 for a seed change and 0.29 for two different characters. |
 | **Open** | [A provisional, by-eye description of what each of the 28 blocks does in each direction, offered as a starting point for anyone who wants to try the tuner, not as a measured result.](21-block-map.md#a-starting-guide-what-each-block-seems-to-do) | Written by me while looking at the v4 bench (five prompts, one seed) on a page that also showed the 18 prompts of the styles and v3 benches. Where a measurement touches an entry, it agrees on blocks 00, 22, 23 and 27, partly on 01, and the statistic is the suspect on 26. Most Style-band entries have no measurement at all. |
 | **Open** | [The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.](21-block-map.md#what-the-ends-change-and-what-the-middle-changes) | At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so "fewer things" holds for kinds of property, not for statistics. |
 | **Open** | [Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.](21-block-map.md#where-the-layout-holds) | Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output. |
@@ -153,6 +175,7 @@ page shows its pre-registration, its data and its reservations.
 | **Open** | [Middle blocks also give a family a recognisable common change, but it is a change of what is depicted, and no measure used here sees it.](23-prompt-family-presets.md#the-middle-blocks-the-eye-against-the-numbers) | Eye, deposited before the numbers: a common look in 8 of 12 Style-band cells and 2 of 3 blk09 cells. Style features: within-family coherence 0.06-0.17. DINOv2: 0.007, refuted as a substitute (page 25). |
 | **Open** | [For an identical vocabulary, the order of the words changes the pose and framing of the picture but not what a block does to it.](24-wording.md#word-order) | Exploratory, one prompt in five orders, two seeds, 56 arms. Consistency across orders tracks consistency across seeds (r = 0.92) and is on average 0.06 higher; median 0.69 on the 43 arms larger than the reordering itself. Baselines of different orders differ by Delta E 16-31. |
 | **Open** | [Middle-block edits change the content of the picture more than late-block edits and cost nothing measurable in image quality, while late blocks change less and cost more.](25-standard-metrics.md#depth-against-cost) | Pre-specified descriptive measurement, no decision threshold. DINOv2 similarity to the baseline 0.87 and 0.88 for blk17 + and blk09 +, against 0.90-0.96 for the late arms; BRISQUE -0.5 and -0.3 for those two, +9.6 for blk27 -0.25 and for the combo. |
+| **Open** | [The portrait preset can flatten an expression the prompt asks for and remove small details the prompt names, while keeping the character recognisable.](28-portrait-preset.md#what-the-preset-takes-away) | Analyst's look after all numbers, not blind, on seven pairs selected because ArcFace marked them: the gnome's prompted wide-eyed curiosity becomes a frown at three seeds of three; the half-orc's snarl becomes a stern closed face; prompted dirt smudges and chalk dust vanish. No deformation in any of the seven. Untested; block 8 (+0.15) is the first suspect. |
 
 <!-- CLAIMS:END -->
 
@@ -168,6 +191,7 @@ page shows its pre-registration, its data and its reservations.
 | [25 · What the standard metrics see, and what they miss](25-standard-metrics.md) | What do the usual metrics say about the same images? |
 | [26 · What did not work, and the limits of everything else](26-what-did-not-work.md) | Which claims were lost, how, and what this report cannot say? |
 | [27 · Appendix A: other kinds of edit](27-other-edits.md) | What did block reordering and permutation show? |
+| [28 · A preset made by eye, tested blind on characters it never saw](28-portrait-preset.md) | Can someone build a preset from the map that works on new pictures? |
 
 Structure, sources and the list of notebook pages that enter the report:
 `docs/report_outline.md`.

@@ -130,7 +130,43 @@ the same, that is the risk to test next.
 
 ---
 
-## 6 · Does it matter how I write the prompt?
+## 6 · Can I make my own preset, and does it work on new pictures?
+
+The map is only worth something if someone can use it. So I tried, on character portraits: I
+looked at what every block does to four drawn characters, then wrote a preset of ten small numbers
+aiming at *a more American-comic look leaning toward animation: flat colours and clean lines*. I
+froze it, and only then rendered seven characters at four new seeds, with and without it. The
+halfling, the dragonborn and the tiefling had never been rendered while I tuned.
+
+![Seven characters, base above and preset below at one seed: each stays recognisably the same character, and the preset row has cleaner outlines and less shading on the faces; the first three were never seen while the preset was tuned.](../assets/28-portrait-preset/F28.1_portrait_preset_sheet.webp)
+
+By the numbers, the preset changes the three new characters in a common direction about as
+coherently as the four it was tuned on (0.51 against 0.61). But I made it, and I knew which image
+was which, so the real test was someone else's eye. My partner, who had never seen the project,
+went through 56 sheets like this one with me out of the room: two versions of one character, in
+random order, every pair shown twice with the sides swapped. The question: which one looks more
+American comic, more animation?
+
+![One blind sheet as the observer saw it: the held-out halfling with the preset on the left and the base on the right; she chose the left.](../assets/28-portrait-preset/F28.3_portrait_blind_sheet.webp)
+
+She picked the preset 56 times out of 56, and named left exactly half the time: she was reading the
+pictures, not the side.
+
+![Left: the preset was chosen on every sheet, held-out and calibration, original and mirrored. Right: ArcFace similarity of the face is 0.80 for the same character at another seed, 0.74 for base against preset, 0.29 for different characters.](../assets/28-portrait-preset/F28.2_portrait_blind_and_faces.webp)
+
+Does the character stay the same? Mostly. A face-recognition network says each face under the
+preset is far closer to its own base (0.74) than to any other character (0.29), but a little
+further than a new seed moves it (0.80) — so the rule I had set, "no more change than a seed",
+failed. Looking at the worst cases, nothing is deformed, but the preset can take things the prompt
+asked for: a gnome prompted with wide-eyed curiosity frowns at all three seeds, a half-orc's snarl
+turns into a stern closed face, dirt smudges and chalk dust disappear with the hatching.
+
+→ [page 28](28-portrait-preset.md) · the look carries over **holds** · the blind observer **holds** ·
+face no more changed than by a seed **overturned** · flattened expressions **open**
+
+---
+
+## 7 · Does it matter how I write the prompt?
 
 The same content written four ways — original, reordered, as a list of tags, with synonyms.
 
@@ -145,7 +181,7 @@ content disturbed the block even less than rewriting did — the opposite of wha
 
 ---
 
-## 7 · What do standard metrics see?
+## 8 · What do standard metrics see?
 
 ![Middle blocks change the content most (DINOv2 0.87-0.88) at no BRISQUE cost, while the late blocks and the combined preset change less and cost up to +9.6 BRISQUE.](../assets/25-standard-metrics/F25.1_depth_vs_cost.webp)
 
@@ -158,7 +194,7 @@ middle blocks give a style. We predicted a content metric would see the second; 
 
 ---
 
-## 8 · What fooled us
+## 9 · What fooled us
 
 ![The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.](../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp)
 
@@ -172,7 +208,7 @@ and undone by looking. That is why every test in this report puts the eye first.
 
 ---
 
-## 9 · Where to start, and what is not known
+## 10 · Where to start, and what is not known
 
 To try the tuner, start from the map: the end blocks for colour, grain and softness, safe at small
 doses; the middle blocks for deeper changes, with care. A block-by-block guide, written by eye and
@@ -180,10 +216,13 @@ meant to be corrected, is on [page 21](21-block-map.md#a-starting-guide-what-eac
 
 ![Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves.](../assets/21-block-map/F21.5_guide_comic.webp)
 
-Not known yet: whether middle blocks can keep a character's identity across a series; whether the
-noise of a preset can be cleaned afterwards without losing its look; how much each block writes
-into the model's internal signal; and whether any of this carries over to another model. All of it
-is one model, one observer, and samples of 16 to 40 cases per test.
+Not known yet: whether a preset can keep a character's expression as well as its identity (the
+portrait preset kept who they were, not always how they looked at you); whether a blind observer
+would still say "same character" when some sheets show two different ones; whether the noise of a
+preset can be cleaned afterwards without losing its look; how much each block writes into the
+model's internal signal; and whether any of this carries over to another model. All of it is one
+model, mostly one observer who knew the conditions — one blind observer for the portraits — and
+samples of 16 to 56 cases per test.
 
 Other kinds of edit — reordering whole blocks, for instance — are in [appendix A](27-other-edits.md),
 and every experiment that led here is in the [exploratory notebook](../notebook/).

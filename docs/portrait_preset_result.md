@@ -24,8 +24,8 @@ Data: `data/portrait_preset_tests.csv`, `data/portrait_preset_measures.csv`.
 - **Per character:** ID_edit 0.75 vs ID_seed 0.82 (halfling); 0.74 vs 0.75 (dragonborn). The
   calibration characters show the same pattern (0.71 vs 0.79, 0.83 vs 0.86, 0.76 vs 0.79). The
   preset moves the face a little more than changing the seed does, on every character measured.
-- **Descriptive, after the test (not a rule):** ArcFace does discriminate these drawn faces. Over all
-  detected baselines, same character at another seed 0.80 (39 pairs); **different characters 0.29**
+- **Descriptive, after the test (not a rule):** ArcFace does discriminate these drawn faces. Means over
+  all detected baselines (medians 0.80, 0.27 and 0.75), same character at another seed 0.80 (39 pairs); **different characters 0.29**
   (312 pairs, max 0.68); baseline vs preset, same seed, 0.74 (23 pairs). The preset keeps the face far
   closer to itself than to any other character, and slightly further than a seed change. The rule
   asked for "no more change than a seed" and the prompts are specific enough that the seed barely

@@ -606,8 +606,14 @@ subject; inconclusive by its own rule. → [results 24](../results/24-wording.md
 **Standard metrics** confirm the colour knob, put a price on the late blocks, and do not see the middle
 blocks' common look. → [results 25](../results/25-standard-metrics.md)
 
-> **Where XI leaves us.** One confirmed knob, one confirmed kind of preset, and a map of where to look
-> for more. The middle blocks — the deepest changes — are the least predictable and the least measured.
+**A preset made by eye, tested blind.** Ten blocks chosen by eye on four drawn characters, frozen, then
+applied to three characters never seen: as coherent there as on the four (0.51 against 0.61), and
+chosen as the described look in 56 of 56 sheets by an observer blind to the condition. The face moves a
+little more than a seed moves it (ArcFace 0.74 against 0.80), and prompted expressions can go flat.
+→ [results 28](../results/28-portrait-preset.md) — **holds** / **overturned** (face) / **open** (expressions)
+
+> **Where XI leaves us.** One confirmed knob, one confirmed kind of preset, one preset built by eye that
+> carried over to new characters under a blind eye, and a map of where to look for more. The middle blocks — the deepest changes — are the least predictable and the least measured.
 
 ---
 
