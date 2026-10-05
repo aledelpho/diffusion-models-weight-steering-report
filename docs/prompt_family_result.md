@@ -39,7 +39,7 @@ with the earlier observation that photographic style is the hardest to steer.
 
 ## 3. The eye disagrees on the middle blocks
 
-Numbers: the Style arms and the blk09 control have W 0.06–0.17 — barely above B. Eye: 9 of
+Numbers: the Style arms and the blk09 control have W 0.06–0.17 — barely above B. Eye: 8 of
 12 Style-arm cells and 2 of 3 blk09 cells marked **yes, a common recognisable look**. His notes
 say what the look is: blk09 + "raises realism coherently in all" (cartoon blacksmith becomes a
 3-D render), and turns the female blacksmith into a man in all three families; on photographs it
