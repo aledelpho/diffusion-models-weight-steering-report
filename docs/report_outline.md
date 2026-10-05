@@ -144,17 +144,17 @@ poses/scenes in one style, middle-block preset on/off; does the identity hold?
 ## References
 
 1. Frenkel, Vinker, Shamir, Cohen-Or — *Implicit Style-Content Separation using B-LoRA*, ECCV 2024. arXiv:2403.14572
-2. Surkov, Wendler, Terekhov, Deschenaux, West, Gulcehre — *Unpacking SDXL Turbo: Interpreting Text-to-Image Models with Sparse Autoencoders*. arXiv:2410.22366
-3. Avrahami, Patashnik, Fried, Nemchinov, Aberman, Lischinski, Cohen-Or — *Stable Flow: Vital Layers for Training-Free Image Editing*. arXiv:2411.14430
-4. *FluxSpace: Disentangled Semantic Editing in Rectified Flow Transformers*. arXiv:2412.09611
+2. Surkov, Wendler, Mari, Terekhov, Deschenaux, West, Gulcehre, Bau — *One-Step is Enough: Sparse Autoencoders for Text-to-Image Diffusion Models* (v1: *Unpacking SDXL Turbo…*). arXiv:2410.22366
+3. Avrahami, Patashnik, Fried, Nemchinov, Aberman, Lischinski, Cohen-Or — *Stable Flow: Vital Layers for Training-Free Image Editing*, CVPR 2025. arXiv:2411.14430
+4. Dalva, Venkatesh, Yanardag — *FluxSpace: Disentangled Semantic Editing in Rectified Flow Transformers*. arXiv:2412.09611
 5. Si, Huang, Jiang, Liu — *FreeU: Free Lunch in Diffusion U-Net*, CVPR 2024. arXiv:2309.11497
 6. Gandikota, Materzyńska, Zhou, Torralba, Bau — *Concept Sliders: LoRA Adaptors for Precise Control in Diffusion Models*, ECCV 2024. arXiv:2311.12092
 7. Dravid, Gandelsman, Wang, Abdal, Wetzstein, Efros, Aberman — *Interpreting the Weight Space of Customized Diffusion Models* (weights2weights), NeurIPS 2024. arXiv:2406.09413
 8. hako-mikan — *sd-webui-lora-block-weight* (software). github.com/hako-mikan/sd-webui-lora-block-weight
-9. Krea — *Krea 2 Technical Report*, 2026. krea.ai/blog/krea-2-technical-report
+9. Lee, Millon, Zhuo, Newton, Filatov, et al. (Krea) — *Krea 2 Technical Report*, 23 June 2026. krea.ai/blog/krea-2-technical-report
 10. Wang, Chan, Loy — *Exploring CLIP for Assessing the Look and Feel of Images*, AAAI 2023. arXiv:2207.12396
 
-Author lists for 5 and 7 checked on 2026-10-05 against the project pages (chenyangsi.top/FreeU,
-snap-research.github.io/weights2weights); the others were read from the paper pages the same day.
-The metric references 11-16 in `results/README.md` were added from memory and should be checked
-before submission.
+All references (here and in `results/README.md`, 1-16) checked on 2026-10-05 against the project
+pages, publisher pages or paper headers. Corrections made that day: reference 2 has a new title and
+two more authors in its current arXiv version; Stable Flow appeared at CVPR 2025; FluxSpace and the
+Krea 2 report now carry their authors.

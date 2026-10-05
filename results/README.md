@@ -83,21 +83,21 @@ SSIM [15] and DINOv2 [16] (page 25).
 ### References
 
 1. Frenkel, Vinker, Shamir, Cohen-Or. *Implicit Style-Content Separation using B-LoRA.* ECCV 2024. arXiv:2403.14572
-2. Surkov, Wendler, Terekhov, Deschenaux, West, Gulcehre. *Unpacking SDXL Turbo: Interpreting Text-to-Image Models with Sparse Autoencoders.* arXiv:2410.22366
-3. Avrahami, Patashnik, Fried, Nemchinov, Aberman, Lischinski, Cohen-Or. *Stable Flow: Vital Layers for Training-Free Image Editing.* arXiv:2411.14430
-4. *FluxSpace: Disentangled Semantic Editing in Rectified Flow Transformers.* arXiv:2412.09611
+2. Surkov, Wendler, Mari, Terekhov, Deschenaux, West, Gulcehre, Bau. *One-Step is Enough: Sparse Autoencoders for Text-to-Image Diffusion Models* (first version titled *Unpacking SDXL Turbo: Interpreting Text-to-Image Models with Sparse Autoencoders*). arXiv:2410.22366
+3. Avrahami, Patashnik, Fried, Nemchinov, Aberman, Lischinski, Cohen-Or. *Stable Flow: Vital Layers for Training-Free Image Editing.* CVPR 2025. arXiv:2411.14430
+4. Dalva, Venkatesh, Yanardag. *FluxSpace: Disentangled Semantic Editing in Rectified Flow Transformers.* arXiv:2412.09611
 5. Si, Huang, Jiang, Liu. *FreeU: Free Lunch in Diffusion U-Net.* CVPR 2024. arXiv:2309.11497
 6. Gandikota, Materzyńska, Zhou, Torralba, Bau. *Concept Sliders: LoRA Adaptors for Precise Control in Diffusion Models.* ECCV 2024. arXiv:2311.12092
 7. Dravid, Gandelsman, Wang, Abdal, Wetzstein, Efros, Aberman. *Interpreting the Weight Space of Customized Diffusion Models.* NeurIPS 2024. arXiv:2406.09413
 8. hako-mikan. *sd-webui-lora-block-weight* (software). github.com/hako-mikan/sd-webui-lora-block-weight
-9. Krea. *Krea 2 Technical Report*, 2026. krea.ai/blog/krea-2-technical-report
+9. Lee, Millon, Zhuo, Newton, Filatov, et al. (Krea). *Krea 2 Technical Report*, 23 June 2026. krea.ai/blog/krea-2-technical-report
 10. Wang, Chan, Loy. *Exploring CLIP for Assessing the Look and Feel of Images.* AAAI 2023. arXiv:2207.12396
 11. Mittal, Moorthy, Bovik. *No-Reference Image Quality Assessment in the Spatial Domain.* IEEE TIP 2012.
 12. Hessel, Holtzman, Forbes, Le Bras, Choi. *CLIPScore: A Reference-free Evaluation Metric for Image Captioning.* EMNLP 2021. arXiv:2104.08718
 13. Zhang, Isola, Efros, Shechtman, Wang. *The Unreasonable Effectiveness of Deep Features as a Perceptual Metric.* CVPR 2018. arXiv:1801.03924
-14. Ding, Ma, Wang, Simoncelli. *Image Quality Assessment: Unifying Structure and Texture Similarity.* IEEE TPAMI 2020. arXiv:2004.07728
-15. Wang, Bovik, Sheikh, Simoncelli. *Image Quality Assessment: From Error Visibility to Structural Similarity.* IEEE TIP 2004.
-16. Oquab et al. *DINOv2: Learning Robust Visual Features without Supervision.* arXiv:2304.07193
+14. Ding, Ma, Wang, Simoncelli. *Image Quality Assessment: Unifying Structure and Texture Similarity.* IEEE TPAMI 2022. arXiv:2004.07728
+15. Wang, Bovik, Sheikh, Simoncelli. *Image Quality Assessment: From Error Visibility to Structural Similarity.* IEEE TIP 13(4), 2004.
+16. Oquab, Darcet, Moutakanni, Vo, Szafraniec, et al. *DINOv2: Learning Robust Visual Features without Supervision.* arXiv:2304.07193
 
 ## How to read the table below
 
