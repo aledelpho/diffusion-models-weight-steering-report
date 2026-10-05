@@ -58,6 +58,7 @@ def main() -> int:
     def rewrite(text: str) -> str:
         # Markdown links/images to the notebook and to assets.
         text = re.sub(r"\]\(\.\./notebook/([^)]+)\)", lambda m: f"]({blob}notebook/{m.group(1)})", text)
+        text = text.replace("](../notebook/)", f"]({MAIN}/tree/{sha}/notebook)")
         text = text.replace("](../assets/", "](assets/")
         # Inline-code paths into docs/ and experiments/ become pinned links.
         def code_link(m):
@@ -93,7 +94,7 @@ def main() -> int:
 
     # README: the main repo's results/README.md, with a provenance header.
     readme = (RESULTS / "README.md").read_text(encoding="utf-8")
-    readme = rewrite(readme).replace("[`../notebook/`](../notebook/)", f"[`notebook/`]({MAIN}/tree/{sha}/notebook)")
+    readme = rewrite(readme).replace("[`../notebook/`](", "[`notebook/`](")
     readme = readme.replace("this folder holds only", "this repository holds only")
     header = (
         "> **Where this comes from.** This repository holds the final results of the project. "

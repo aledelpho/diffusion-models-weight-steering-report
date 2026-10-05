@@ -7,6 +7,98 @@
 > and stays the record of every test run; this folder holds only the results that were
 > confirmed, or that the report needs in order to be honest about what was not.
 
+## Abstract
+
+Does a text-to-image diffusion transformer hold controllable "knobs" in its own weights —
+directions that do one thing, consistently across prompts, seeds and wordings, and can be reached
+without training? We study Krea-2, a diffusion transformer with 28 single-stream blocks, edited by
+multiplying the weight matrices of one block by 1 + d. An exploratory atlas of 1,412 renders (23
+prompts, every block in both directions) produced claims that were then frozen and tested on new
+benches, each pre-registered with its decision rule and scoring code, opened by a pixel-identical
+reproduction check, and scored only after an eye pass had been deposited. **Block 23 is a
+saturation knob:** chroma moves monotonically with the dose in 15 of 16 prompt-seed cells, roughly
+in proportion to it (doubling the dose multiplies the gain by 1.76), and at the same colour gain it
+disturbs the rest of the picture less than adding "colorful" to the prompt (layout 6 of 7 cells,
+LPIPS 7 of 7, DINOv2 6 of 7) — although in 9 of 16 cells the words reach further. **Presets built
+from late blocks are coherent inside a family of prompts** written in one style: within-family
+coherence 0.53 against 0.26 between families and 0.76 across seeds, strongest on cartoon and
+weakest on photographs, at a visible cost in noise at the doses used. **Middle blocks change
+content most** (DINOv2 similarity 0.87–0.88) at no measured quality cost and look
+family-coherent to the eye, but no metric we tried records that coherence, and one of them can
+change a subject's identity. Rewriting a prompt changes what a block does about as much as
+changing the seed, and far less than changing the subject; the pre-registered test of this is
+inconclusive by its own rule. We also report four claims that were made from statistics and
+withdrawn after the images were opened, and the limits of a study rated by a single observer who
+knew the conditions.
+
+## Introduction
+
+The usual ways to steer a diffusion model add something to it: a trained adapter, a learned
+direction, a hook on the activations at inference. This project asks whether some control is
+already there, in the base weights, at the granularity of a block. The edit is the simplest
+possible one: the eight weight matrices of a block are multiplied by one number, and a preset is a
+vector of such numbers. Nothing is trained, nothing runs at inference beyond the patched weights,
+and any preset can be written down in one line.
+
+The project started with hand-calibrated presets over the whole stack
+([notebook page 01](../notebook/01-mark-style.md)) and an exploratory notebook of tests on
+permutations, rotations and block groups ([notebook](../notebook/)). Single blocks turned out to be
+the more useful unit: they are finer than the tuner's macro-blocks, and some of them behave the
+same way on every prompt tried. The pages below report what survived confirmation:
+
+* the edit and the instrument, including what the eye pass is and is not ([20](20-method.md));
+* a map of the 28 blocks, and a provisional guide to what each one does ([21](21-block-map.md));
+* one knob, saturation, confirmed ([22](22-saturation-knob.md));
+* presets for a family of prompts ([23](23-prompt-family-presets.md));
+* robustness to how the prompt is written ([24](24-wording.md));
+* standard metrics on the same images ([25](25-standard-metrics.md));
+* what did not work, and the limits ([26](26-what-did-not-work.md)); other kinds of edit
+  ([27](27-other-edits.md)).
+
+## Related work
+
+**Layer and block specialisation.** B-LoRA finds two blocks of SDXL that separate content from
+style [1]. Sparse autoencoders on SDXL Turbo find blocks specialised in composition, local detail,
+and colour, illumination and style [2]. Stable Flow finds that the layers that matter for editing
+in diffusion transformers are scattered through the stack, detecting them by bypassing layers and
+measuring the DINOv2 change [3]; FluxSpace edits attributes through the representations of
+transformer blocks in rectified-flow models [4]. Our map agrees that blocks specialise in a
+diffusion transformer and that the specialisation is not contiguous (page 21), but works on the
+weights rather than on activations.
+
+**Training-free re-weighting.** FreeU rescales backbone and skip features of a U-Net at inference
+to change output quality [5]. It is the closest precedent for scaling part of a network without
+training; here the scaling is applied once to the weights of one block of a transformer.
+
+**Learned controls in weight space.** Concept Sliders train low-rank adaptors that act as attribute
+sliders [6]; weights2weights finds interpretable directions in the space of customised LoRA
+weights [7]; LoRA Block Weight scales a LoRA's effect block by block in practice [8]. The
+difference here is that the base weights themselves are scaled: nothing is learned, and the knob is
+a block, not a learned direction.
+
+**Model and metrics.** Krea-2 is described in its technical report [9]. Image quality and
+similarity are measured with CLIP-IQA [10], BRISQUE [11], CLIPScore [12], LPIPS [13], DISTS [14],
+SSIM [15] and DINOv2 [16] (page 25).
+
+### References
+
+1. Frenkel, Vinker, Shamir, Cohen-Or. *Implicit Style-Content Separation using B-LoRA.* ECCV 2024. arXiv:2403.14572
+2. Surkov, Wendler, Terekhov, Deschenaux, West, Gulcehre. *Unpacking SDXL Turbo: Interpreting Text-to-Image Models with Sparse Autoencoders.* arXiv:2410.22366
+3. Avrahami, Patashnik, Fried, Nemchinov, Aberman, Lischinski, Cohen-Or. *Stable Flow: Vital Layers for Training-Free Image Editing.* arXiv:2411.14430
+4. *FluxSpace: Disentangled Semantic Editing in Rectified Flow Transformers.* arXiv:2412.09611
+5. Si, Huang, Jiang, Liu. *FreeU: Free Lunch in Diffusion U-Net.* CVPR 2024. arXiv:2309.11497
+6. Gandikota, Materzyńska, Zhou, Torralba, Bau. *Concept Sliders: LoRA Adaptors for Precise Control in Diffusion Models.* ECCV 2024. arXiv:2311.12092
+7. Dravid, Gandelsman, Wang, Abdal, Wetzstein, Efros, Aberman. *Interpreting the Weight Space of Customized Diffusion Models.* NeurIPS 2024. arXiv:2406.09413
+8. hako-mikan. *sd-webui-lora-block-weight* (software). github.com/hako-mikan/sd-webui-lora-block-weight
+9. Krea. *Krea 2 Technical Report*, 2026. krea.ai/blog/krea-2-technical-report
+10. Wang, Chan, Loy. *Exploring CLIP for Assessing the Look and Feel of Images.* AAAI 2023. arXiv:2207.12396
+11. Mittal, Moorthy, Bovik. *No-Reference Image Quality Assessment in the Spatial Domain.* IEEE TIP 2012.
+12. Hessel, Holtzman, Forbes, Le Bras, Choi. *CLIPScore: A Reference-free Evaluation Metric for Image Captioning.* EMNLP 2021. arXiv:2104.08718
+13. Zhang, Isola, Efros, Shechtman, Wang. *The Unreasonable Effectiveness of Deep Features as a Perceptual Metric.* CVPR 2018. arXiv:1801.03924
+14. Ding, Ma, Wang, Simoncelli. *Image Quality Assessment: Unifying Structure and Texture Similarity.* IEEE TPAMI 2020. arXiv:2004.07728
+15. Wang, Bovik, Sheikh, Simoncelli. *Image Quality Assessment: From Error Visibility to Structural Similarity.* IEEE TIP 2004.
+16. Oquab et al. *DINOv2: Learning Robust Visual Features without Supervision.* arXiv:2304.07193
+
 ## How to read the table below
 
 The four words mean what they mean in the exploratory notebook: **Holds** passed a criterion
