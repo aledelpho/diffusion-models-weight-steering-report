@@ -1,0 +1,13 @@
+test,value,verdict
+G_S median S (>= 0.50 to inform H1-H2),0.7794,pass
+H1 median W_held (>= 0.40 / < 0.25),0.5071,supported
+H2 median W_held vs median W_cal (>= W_cal-0.15 / < W_cal-0.30),0.5071 vs 0.6137,supported
+H3 eligible held-out characters,H3_halfling_druid R6_dragonborn_cleric,
+H3 median ID_edit over eligible (>= 0.50) and per-character ID_edit > ID_seed,0.7433,refuted
+identity D1_dwarf_paladin,ID_edit median 0.7069 vs ID_seed 0.7949,calibration
+identity E2_elf_rogue,ID_edit median 0.8339 vs ID_seed 0.8640,calibration
+identity O4_halforc_fighter,ID_edit median 0.7569 vs ID_seed 0.7945,calibration
+identity G5_gnome_wizard,not eligible (face not found in all 8),calibration
+identity H3_halfling_druid,ID_edit median 0.7548 vs ID_seed 0.8162,held out
+identity R6_dragonborn_cleric,ID_edit median 0.7425 vs ID_seed 0.7508,held out
+identity T7_tiefling_bard,not eligible (face not found in all 8),held out
