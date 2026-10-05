@@ -94,3 +94,43 @@ and H1–H2 are reported as *uninformative*, not as refuted.
 - ArcFace is trained on photographs of human faces; on comic drawings its similarities are lower and
   less reliable, which is why its rule is relative to ID_seed and why the eye is asked first.
 - One style (Western comics, white background). Nothing here says the preset works in another style.
+
+## Amendment 1 (2026-10-05) — a blind forced choice, added after the measurements existed and before anyone read them
+
+**Timing, stated exactly.** Written after Antigravity computed `data/portrait_preset_style_features.csv`
+and `data/portrait_preset_faces.csv` (step 4 of the directive), and before `--test` was run. Neither the
+analyst nor Alessandro has opened either file or seen any W, S or ID value. Alessandro's eye pass is
+committed (`c285253`, all "yes"). The reason for the amendment is that pass: the rater built the
+preset and, by his own account, could not stop seeing the pattern he had calibrated. The new test
+does not use the measured files at all, so its outcome cannot have been shaped by them.
+
+**Material.** The 28 phase C pairs (7 characters × 4 seeds), baseline and preset side by side at the
+same size, left/right assigned at random (`numpy.random.default_rng(52)`), one sheet per pair. The key
+is written to `data/portrait_preset_blind_key.csv` and committed **before** any observer is run. A
+second set of sheets with every pair mirrored is the position control.
+
+**Observers.** Model observers, as in the centre-push eye veto: each is a fresh model instance that
+receives only one sheet and the questions below, never the repository, the preset, the description
+of the hypothesis or which side is which. Three observers per sheet on the original set (M), three
+on the mirrored set (M').
+
+**Questions, verbatim.**
+1. "Which of the two portraits looks more like an American comic leaning toward animation — flatter
+   colours and cleaner lines? Answer LEFT or RIGHT."
+2. "Do the two portraits show the same character (the same person, even if drawn differently)? Answer
+   YES or NO."
+
+**Rules.** Per sheet, the majority of three.
+
+- **Position gate.** If, on the mirrored set, the majority names the same *side* as on the original
+  set in more than 75% of pairs, the observers are reading position, not content: H4 and H5 are void.
+- **H4 — the look is visible to someone who was not told what to look for.** On the 12 held-out pairs,
+  the preset is chosen in ≥ 9 of 12 on the original set **and** on the mirrored set → supported; in ≤ 6
+  of 12 on either → refuted; otherwise inconclusive. Exact one-sided binomial p against 1/2 reported.
+- **H5 — the character is kept.** "YES" in ≥ 9 of the 12 held-out pairs on both sets → supported; ≤ 6
+  of 12 on either → refuted; otherwise inconclusive.
+- Calibration pairs (16) are reported alongside and decide nothing.
+- Human observers who have not seen the project may answer the same sheets later; their answers are
+  reported, not scored, unless a further amendment registers them first.
+
+**Code.** `experiments/portrait_preset_blind.py` (sheets, key, tally), committed with this amendment.
