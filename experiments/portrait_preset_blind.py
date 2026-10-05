@@ -119,12 +119,21 @@ function show(){const s=O[i];$("#im").src=s+".png";const a=A[s]||{};
 document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>{const s=O[i];A[s]=A[s]||{};A[s][b.dataset.q]=b.dataset.v;
  try{localStorage.setItem(K,JSON.stringify(A))}catch(e){};show();if(A[s].q1&&A[s].q2&&i<O.length-1)setTimeout(()=>{i++;show()},250)});
 $("#prev").onclick=()=>{if(i>0){i--;show()}};$("#next").onclick=()=>{if(i<O.length-1){i++;show()}};
-$("#exp").onclick=()=>{let t="sheet,observer,q1,q2\n";O.forEach(s=>{const a=A[s]||{};t+=`${s},human1,${a.q1||""},${a.q2||""}\n`});
+$("#exp").onclick=()=>{let t="sheet,observer,q1,q2\\n";O.forEach(s=>{const a=A[s]||{};t+=`${s},human1,${a.q1||""},${a.q2||""}\\n`});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="portrait_preset_blind_answers_human.csv";l.click()};
 show();
 </script></body></html>"""
+    # Images are embedded as JPEG data URIs, so the page works wherever it is opened (2026-10-05 fix:
+    # the first version loaded sheet_XXXX.png by relative path and showed nothing on Alessandro's machine).
+    import base64, io
+    from PIL import Image
+    imgs = {}
+    for sid in order:
+        b = io.BytesIO(); Image.open(os.path.join(OUT, sid + ".png")).convert("RGB").save(b, "JPEG", quality=88)
+        imgs[sid] = "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
+    html = html.replace('$("#im").src=s+".png"', '$("#im").src=IMG[s]').replace("const O=__ORDER__;", "const O=__ORDER__;const IMG=__IMG__;")
     with open(os.path.join(OUT, "test.html"), "w", encoding="utf-8") as fh:
-        fh.write(html.replace("__ORDER__", json.dumps(order)))
+        fh.write(html.replace("__ORDER__", json.dumps(order)).replace("__IMG__", json.dumps(imgs)))
     print("page", len(order), "sheets ->", os.path.join(OUT, "test.html"))
 
 if __name__ == "__main__":
