@@ -134,3 +134,13 @@ on the mirrored set (M').
   reported, not scored, unless a further amendment registers them first.
 
 **Code.** `experiments/portrait_preset_blind.py` (sheets, key, tally), committed with this amendment.
+
+## Amendment 2 (2026-10-05) — a human blind observer, registered before she answers
+
+Alessandro's partner, who has not seen the project, the preset or its description, answers the same
+56 sheets of amendment 1, one at a time in a fixed random order (`numpy.random.default_rng(5252)`), on
+a page that shows only the sheet and the two questions (in Italian, same meaning). Alessandro leaves
+the room while she answers. Her answers (`data/portrait_preset_blind_answers_human.csv`) are scored
+with the **same rules as amendment 1** — position gate, H4 and H5 on the 12 held-out pairs, both sets —
+with one observer in place of a majority of three. Model observers (amendment 1) are run as well and
+reported separately; where the two disagree, both are reported and neither overrides the other.
