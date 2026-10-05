@@ -10,7 +10,14 @@ Phase A — every single block, both signs, at the v4 doses, on four calibration
 
 Output: Text2Img/benchmark_portraits/renders/{char}_{cond}_krea2_seed{seed}_00001_.png
 Workflow: blk23_colorful.workflow (the Tuner node only on rows with a vector).
-Phase C is NOT in this file yet: its plan is generated only after the preset is frozen.
+Phase C — the frozen preset (presets/portrait_preset_alessandro.json, commit 4da5117) on all seven
+characters, four new seeds, baseline and preset:
+  python experiments/portraits.py --plan-c             # data/portraits_preset_plan.csv (57 rows)
+  python experiments/portraits.py --queue-c --first 1  # the REPRO row only
+  python experiments/portraits.py --repro-c            # REPRO must equal the phase A baseline
+  python experiments/portraits.py --queue-c            # the rest
+  python experiments/portraits.py --count-c            # 57 files expected
+Output: Text2Img/benchmark_portraits/phase_c/{char}_{cond}_krea2_seed{seed}_00001_.png
 """
 import argparse, csv, json, os, urllib.request
 from pathlib import Path
@@ -93,10 +100,10 @@ def make_plan():
     print("[D1_dwarf_paladin]", text(CALIBRATION["D1_dwarf_paladin"]))
 
 
-def _wf(r):
+def _wf(r, folder=None):
     r = dict(r)
     wf = workflow(r)
-    wf["61"]["inputs"]["filename_prefix"] = f"{FOLDER}/{r['output_prefix']}"
+    wf["61"]["inputs"]["filename_prefix"] = f"{folder or FOLDER}/{r['output_prefix']}"
     return wf
 
 
@@ -132,9 +139,75 @@ def count():
     print("expected", len(rows), "missing", len(miss), miss[:5], "duplicates", len(dup))
 
 
+
+# ----------------------------------------------------------------- phase C
+PLAN_C = REPO / "data" / "portraits_preset_plan.csv"
+FOLDER_C = "benchmark_portraits/phase_c"
+PRESET = REPO / "presets" / "portrait_preset_alessandro.json"
+
+
+def preset_vector() -> str:
+    v = json.load(open(PRESET, encoding="utf-8"))["vectors_override"]
+    assert len(v) == 34 and any(v)
+    return ",".join(f"{a:.3f}" for a in v)
+
+
+def make_plan_c():
+    ch0, s0 = "D1_dwarf_paladin", SEEDS_A[0]
+    rows = [{"row": 0, "char": f"REPRO_{ch0}", "set": "", "seed": s0, "cond": "baseline", "vectors_override": "",
+             "prompt_text": text(CALIBRATION[ch0]), **SETTINGS,
+             "output_prefix": f"REPRO_{ch0}_baseline_krea2_seed{s0}",
+             "expected_filename": f"REPRO_{ch0}_baseline_krea2_seed{s0}_00001_.png"}]
+    vp = preset_vector()
+    for group, chars in (("calibration", CALIBRATION), ("held_out", HELD_OUT)):
+        for ch, body in chars.items():
+            for seed in SEEDS_C:
+                for cond, vo in (("baseline", ""), ("preset", vp)):
+                    op = f"{ch}_{cond}_krea2_seed{seed}"
+                    rows.append({"row": len(rows), "char": ch, "set": group, "seed": seed, "cond": cond,
+                                 "vectors_override": vo, "prompt_text": text(body), **SETTINGS,
+                                 "output_prefix": op, "expected_filename": f"{op}_00001_.png"})
+    assert len(rows) == 1 + 7 * 4 * 2, len(rows)
+    with open(PLAN_C, "w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+    print("phase C plan rows:", len(rows), "| preset", vp)
+
+
+def queue_c(first):
+    rows = list(csv.DictReader(open(PLAN_C, encoding="utf-8")))
+    rows = rows[:first] if first else rows
+    n = 0
+    for r in rows:
+        if (IMG_ROOT / FOLDER_C / r["expected_filename"]).exists():
+            continue
+        req = urllib.request.Request(f"{COMFY}/prompt", data=json.dumps({"prompt": _wf(r, FOLDER_C)}).encode(),
+                                     headers={"Content-Type": "application/json"})
+        urllib.request.urlopen(req, timeout=10).read()
+        n += 1
+    print("queued", n, "of", len(rows))
+
+
+def repro_c():
+    import numpy as np
+    from PIL import Image
+    ch0, s0 = "D1_dwarf_paladin", SEEDS_A[0]
+    new = IMG_ROOT / FOLDER_C / f"REPRO_{ch0}_baseline_krea2_seed{s0}_00001_.png"
+    ref = IMG_ROOT / FOLDER / f"{ch0}_baseline_krea2_seed{s0}_00001_.png"
+    a = np.asarray(Image.open(new).convert("RGB"), dtype=np.int16); b = np.asarray(Image.open(ref).convert("RGB"), dtype=np.int16)
+    mx = int(np.abs(a - b).max()) if a.shape == b.shape else -1
+    print("REPRO", "PASS" if mx == 0 else "FAIL", "max abs diff", mx)
+
+
+def count_c():
+    rows = list(csv.DictReader(open(PLAN_C, encoding="utf-8")))
+    d = IMG_ROOT / FOLDER_C
+    miss = [r["expected_filename"] for r in rows if not (d / r["expected_filename"]).exists()]
+    dup = [f for f in os.listdir(d) if "_00002_" in f] if d.exists() else []
+    print("expected", len(rows), "missing", len(miss), miss[:5], "duplicates", len(dup))
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for f in ("plan", "queue", "repro", "count"):
+    for f in ("plan", "queue", "repro", "count", "plan-c", "queue-c", "repro-c", "count-c"):
         ap.add_argument(f"--{f}", action="store_true")
     ap.add_argument("--first", type=int, default=0)
     a = ap.parse_args()
@@ -142,3 +215,7 @@ if __name__ == "__main__":
     if a.queue: queue(a.first)
     if a.repro: repro()
     if a.count: count()
+    if a.plan_c: make_plan_c()
+    if a.queue_c: queue_c(a.first)
+    if a.repro_c: repro_c()
+    if a.count_c: count_c()
