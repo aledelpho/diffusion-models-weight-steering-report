@@ -40,7 +40,8 @@ stands as "not decided"; what follows is descriptive.
 * **Pushed negative, cutting the MLP makes the picture cleaner, not noisier:** the noisiest image was
   the baseline or the attention-only one, never the MLP-only one. Consistent with the thesis read the
   other way (less MLP, less noise).
-* **The attention alone desaturates cleanly.** At +1.0: chroma −4.25 against −4.46 for the whole block,
+* **The attention alone desaturates while keeping the picture** (not uniformly across hues: see the
+  addendum). At +1.0: chroma −4.25 against −4.46 for the whole block,
   with layout r 0.80 against 0.36 (the whole block destroys the picture).
 * **But the colour is not only in the attention.** Pushed negative (more colour), the MLP alone adds
   more chroma than the attention alone (median +2.8 against +1.8 at −0.45; +3.6 against +3.0 at −1.0),
@@ -53,3 +54,23 @@ A noise measure that agrees with the eye first: validate candidates (multi-scale
 estimate, BRISQUE) against these 64 blind labels, exploratory; then a fresh pre-registered bench at new
 seeds with the measure chosen before. The decomposition itself — attention desaturates cleanly at +1.0,
 the MLP degrades — is the lead to confirm.
+
+## Addendum (2026-10-06, after the result) — the attention's desaturation is not uniform across hues
+
+Alessandro, looking at the images: "clean" is too strong; greens and light blues seem to stay lit more
+than other hues. Measured on the 16 cells, descriptive (`data/blk23_split_hue_profile.csv`; CIELAB at
+256×320, seven hue bins on the hue angle, pixels with chroma > 6; images are regenerated, so these are
+distributions per hue, not pixel-to-pixel changes):
+
+* **How strongly each hue is desaturated, where it stays coloured** (median ratio of mean chroma
+  within the hue, attention alone at +1.0): red 0.73, orange 0.74, green 0.76, blue 0.76, yellow 0.81,
+  cyan 0.82. Nearly even: cool hues keep slightly more in 10 of 15 cells, median +0.03.
+* **How much of each hue stays coloured at all** (median ratio of the share of pixels in the hue,
+  attention alone at +1.0): **red 0.28**, cyan 0.46, orange 0.63, blue 0.65, yellow 1.09, **green 1.25**.
+  Reds lose most of their coloured area; green holds, and even grows.
+
+So the attention's desaturation is uneven in *which hues survive* rather than in how much each is
+dimmed: reds drop out first, greens and yellows remain. Light blues are mixed (cyan loses area, keeps
+intensity). Caveat: some of the "green" gained may be neutral greys taking a slight green cast as they
+lose colour; this was not separated. At +0.30 the pattern is weaker (red area 0.55, the others
+0.83–1.10).
