@@ -1134,13 +1134,18 @@ the one that changes content least, needs 0.08. Pushed positive, the thresholds 
 hood is as likely to be lowered as completed. Across the eight block-and-sign pairs the threshold
 falls as the block's content change at equal dose rises (Spearman −0.60), as I expected; but the
 direction of the push matters more than the block. One seed, one ridge.</p>
+<p>How common is the ridge itself? Thirty more baselines of this prompt, at thirty new seeds, produced
+no half-formed hood at all (C57): over the 32 seeds now rendered it appears once, so the state is
+rare, and the ladder above stands on a single case. The four predictions I had written for a second
+seed were never tested.</p>
 <p>The half-formed hood is an unstable state of one seed, and any displacement of the weights, however
 small, sends the sampler (<code>euler_ancestral</code>, which adds noise at every step) down a slightly different
 path that lands on one side of the ridge. Two things follow. Every edit in this report carries this
 re-draw of the unstable details along with its intended effect, which is part of what a slider on the
 finished image does not do. And a claim that an edit <em>fixes</em> a detail, made on one seed, needs other
-edits of the same seed as its control. Data: <code>data/hood_tally_alessandro.csv</code>; details in
-<code>docs/hood_watershed_result.md</code>.</p>
+edits of the same seed as its control. Data: <code>data/hood_tally_alessandro.csv</code>, <code>data/hood_threshold_tally.csv</code>,
+<code>data/hood_scout_seeds.csv</code>; details in <code>docs/hood_watershed_result.md</code>,
+<code>docs/hood_threshold_result.md</code>, <code>docs/hood_second_ridge_result.md</code>.</p>
 <h3 id="p-22-saturation-knob--the-controls">The controls</h3>
 <p>Every image of the 26 conditions that already existed on older benches at the original seed
 was re-rendered and came out pixel-identical (<code>docs/RENDERS_2026-10-04_blk23_colorful.md</code>).</p>

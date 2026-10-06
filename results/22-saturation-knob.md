@@ -218,13 +218,19 @@ hood is as likely to be lowered as completed. Across the eight block-and-sign pa
 falls as the block's content change at equal dose rises (Spearman −0.60), as I expected; but the
 direction of the push matters more than the block. One seed, one ridge.
 
+How common is the ridge itself? Thirty more baselines of this prompt, at thirty new seeds, produced
+no half-formed hood at all (C57): over the 32 seeds now rendered it appears once, so the state is
+rare, and the ladder above stands on a single case. The four predictions I had written for a second
+seed were never tested.
+
 The half-formed hood is an unstable state of one seed, and any displacement of the weights, however
 small, sends the sampler (`euler_ancestral`, which adds noise at every step) down a slightly different
 path that lands on one side of the ridge. Two things follow. Every edit in this report carries this
 re-draw of the unstable details along with its intended effect, which is part of what a slider on the
 finished image does not do. And a claim that an edit *fixes* a detail, made on one seed, needs other
-edits of the same seed as its control. Data: `data/hood_tally_alessandro.csv`; details in
-`docs/hood_watershed_result.md`.
+edits of the same seed as its control. Data: `data/hood_tally_alessandro.csv`, `data/hood_threshold_tally.csv`,
+`data/hood_scout_seeds.csv`; details in `docs/hood_watershed_result.md`,
+`docs/hood_threshold_result.md`, `docs/hood_second_ridge_result.md`.
 
 ### The controls
 
