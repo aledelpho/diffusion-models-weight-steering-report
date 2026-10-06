@@ -266,6 +266,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--what-the-ends-change-and-what-the-middle-changes">The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.</a></td><td class="ev">At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so &quot;fewer things&quot; holds for kinds of property, not for statistics.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--how-far-each-block-can-be-pushed">At the same dose, the blocks near the output reach visible artefacts first, while most middle blocks show none; the middle has room before artefacts but drifts toward pictures that are clean and incoherent.</a></td><td class="ev">My artefact labels at dose 0.350, three prompts, one seed: blocks 4 to 11 OK in both directions; positive, strong artefacts on 19, 21, 22, 24 and 25, broken on 26 and 27. Agrees with the pre-registered result that the cost of a push grows toward the output (notebook page 05). The split into hard and soft limits is an observation, not measured.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--a-starting-guide-what-each-block-seems-to-do">A provisional, by-eye description of what each of the 28 blocks does in each direction, offered as a starting point for anyone who wants to try the tuner, not as a measured result.</a></td><td class="ev">Written by me while looking at the v4 bench (five prompts, one seed) on a page that also showed the 18 prompts of the styles and v3 benches. Where a measurement touches an entry, it agrees on blocks 00, 22, 23 and 27, partly on 01, and the statistic is the suspect on 26. Most Style-band entries have no measurement at all.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-22-saturation-knob--against-a-slider-in-post-production">Against a saturation slider applied to the finished image, block 23 is not a cleaner way to change colour: it also regenerates the picture and changes its lightness contrast. Adding colour it may look more natural than the slider; removing colour the slider looks more natural.</a></td><td class="ev">C53, no new render; slider matched in chroma gain. Layout r 1.00 for the slider against 0.87 and 0.85 for blk23 (16 of 16 cells). Blind forced choice, one observer who knew the renders but not the side: adding colour blk23 chosen 12/16 and 11/16 (rule: 12 on both, not met); removing colour 1/16 and 4/16 (slider). The block also repairs shapes (a half-formed hood), so the choice mixes colour with content. The primary blind observer has not answered yet.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--family-by-family">Late-block presets are most coherent on cartoon prompts, less on oil paintings and least on photographs, where the eye found no common look for two of the arms.</a></td><td class="ev">Split by family after the test, descriptive: up to 0.80 on cartoon, 0.28-0.71 on oil, 0.12-0.53 on photographs; the eye said no common look for blk20 and blk23 on photographs, where the numbers are 0.29 and 0.12.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--the-middle-blocks-the-eye-against-the-numbers">Middle blocks also give a family a recognisable common change, but it is a change of what is depicted, and no measure used here sees it.</a></td><td class="ev">Eye, deposited before the numbers: a common look in 8 of 12 Style-band cells and 2 of 3 blk09 cells. Style features: within-family coherence 0.06-0.17. DINOv2: 0.007, refuted as a substitute (page 25).</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-23-prompt-family-presets--a-change-of-identity">Block 9 pushed positive can change the identity of a subject, turning the female blacksmith into a man, and it does so at one seed and not at the other.</a></td><td class="ev">Eye notes on the oil and photo families at seed 1414213; at seed 5772156 she stays a woman in all three families. CLIPScore on the blacksmith prompts drops by 3.8, the largest drop of any arm. Two seeds, one subject.</td></tr>
@@ -952,7 +953,8 @@ more of everything else.</p>
 At the same colour gain it disturbs the picture less than the words, on every standard metric
 tried. It is a gentle knob — on 9 of 16 cells the words reach more colour than the block at its
 strongest tested dose — and its desaturating side is weaker and less clean than its saturating
-one.</p>
+one. Against a
+saturation slider applied afterwards it is not the cleaner tool: it also regenerates the picture.</p>
 <h2 id="p-22-saturation-knob--why-i-might-be-wrong">Why I might be wrong</h2>
 <ul>
 <li><strong>One observer, not blind.</strong> The eye pass is mine, and I knew which column was which. All 128
@@ -964,6 +966,9 @@ one.</p>
   coarse.</li>
 <li><strong>One wording per direction.</strong> Other phrasings, or the words at the start of the prompt, may
   behave differently.</li>
+<li><strong>A saturation slider is the cleaner tool for colour alone.</strong> Against a slider applied
+  afterwards (C53) the block regenerates the picture and changes its contrast; its case rests on
+  whether the result looks more natural, which one observer so far found only when adding colour.</li>
 <li><strong>The desaturating side has side effects</strong> I marked by eye on 8 of 16 cells: softening, and on
   the selfie a skin that turns greenish.</li>
 </ul>
@@ -1030,6 +1035,54 @@ which of the two changed the content more with colour ignored, said the words in
 blk23 in 2, equal in 5 (<code>data/blk23_colorful_eye_alessandro.csv</code>, deposited before the numbers).</p>
 <p>No measured quality cost: BRISQUE moves by +0.9 for blk23 −0.45 and −0.95 for the words;
 CLIP-IQA by at most 0.02 (<code>data/standard_metrics_summary.csv</code>).</p>
+<h3 id="p-22-saturation-knob--against-a-slider-in-post-production">Against a slider in post-production</h3>
+<p>A reader asked for the comparison that matters in practice: not the words, but the baseline with
+its saturation raised or lowered afterwards. No new render was needed. Each baseline was passed
+through an ordinary saturation slider, with the strength chosen so that its colour change equals
+that of the blk23 image it is compared with (C53, <code>docs/prereg_blk23_vs_postproc.md</code>).</p>
+<p><img alt="On every prompt the slider keeps the baseline exactly and only moves colour, while blk23 -0.45 adds colour with deeper shadows and blk23 +0.30 removes it with a softer, hazier picture; the words change the picture most." src="../assets/22-saturation-knob/F22.5_blk23_against_slider.webp" /></p>
+<p>What was expected, and written down before measuring, holds: the slider leaves the layout of the
+picture untouched (layout r 1.00) and the block does not (0.87 adding colour, 0.85 removing it),
+in 16 of 16 cells. Block 23 is not a cleaner way to change saturation than a slider: it changes
+colour <strong>and</strong> regenerates the picture, raising lightness contrast when it adds colour (+0.9 in
+the standard deviation of L) and lowering it when it removes colour (−0.6). That is the softening
+my eye had marked on the desaturating side.</p>
+<p>Which looks more natural is the question a slider cannot answer for itself. In a blind forced
+choice of 64 sheets — each pair twice with the sides swapped — I answered without knowing which
+side was which, though I had seen these renders before:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>original</th>
+<th>mirrored</th>
+<th>rule (≥ 12 of 16 on both)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>adding colour: blk23 −0.45 more natural</td>
+<td>12/16</td>
+<td>11/16</td>
+<td>not met — no difference shown</td>
+</tr>
+<tr>
+<td>removing colour: blk23 +0.30 more natural</td>
+<td>1/16</td>
+<td>4/16</td>
+<td>the slider looks more natural</td>
+</tr>
+</tbody>
+</table></div>
+<p>The position check passed (the same side on both versions in 4 of 32 pairs). But the comparison
+cannot isolate colour: block 23 regenerates the picture, and sometimes repairs a shape the baseline
+left half-formed — the archer's hood, torn between the hood and the long hair of the prompt. I
+recognised the blk23 images and was drawn to them for that repair, even where the baseline's
+colours looked better to me. This is the
+diagnostic observer; the primary one, who has not seen the project, has not answered yet. LPIPS
+and DINOv2 for this comparison are pending. Data: <code>data/blk23_postproc_match.csv</code>,
+<code>data/blk23_postproc_measures.csv</code>, <code>data/blk23_postproc_blind_tests_alessandro.csv</code>; details in
+<code>docs/blk23_postproc_result.md</code>.</p>
 <h3 id="p-22-saturation-knob--the-controls">The controls</h3>
 <p>Every image of the 26 conditions that already existed on older benches at the original seed
 was re-rendered and came out pixel-identical (<code>docs/RENDERS_2026-10-04_blk23_colorful.md</code>).</p>

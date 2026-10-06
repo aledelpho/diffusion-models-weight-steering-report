@@ -678,6 +678,23 @@ def portrait_blind_sheet(out: Path) -> Path:
     return out
 
 
+def blk23_against_slider(out: Path) -> Path:
+    """F22.5 — C53: blk23 against a saturation slider applied to the baseline, matched in chroma gain."""
+    rows = [(k, k.split("_", 1)[1]) for k in C47_SEED_A]
+    cols = [("baseline", "base"), ("slider+", "slider +"), ("b23_m0.450", "blk23 -0.45"), ("txtpos", "\"colorful\""),
+            ("slider-", "slider -"), ("b23_p0.300", "blk23 +0.30"), ("txtneg", "\"muted\"")]
+    root = IMG / "benchmark_blk23_colorful"
+    def path(r, c):
+        s = C47_SEED_A[r]
+        if c.startswith("slider"):
+            t = "b23_m0.450" if c.endswith("+") else "b23_p0.300"
+            return root / "postproc" / f"{r}_slider_{t}_seed{s}.png"
+        return root / f"{r}_{c}_krea2_seed{s}_00001_.png"
+    return _sheet(rows, cols, path, lambda r, c: None, out,
+                  "C47 renders · slider = saturation of the baseline, matched in chroma to the blk23 image beside it · "
+                  "whole frames · source data/blk23_postproc_match.csv", W=150, H=188, LAB=96)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -707,6 +724,7 @@ BUILDERS = {
     "F28.2": ("28-portrait-preset", "portrait_blind_and_faces", portrait_blind_and_faces),
     "F28.3": ("28-portrait-preset", "portrait_blind_sheet", portrait_blind_sheet),
     "F28.4": ("28-portrait-preset", "portrait_held_out_large", portrait_held_out_large),
+    "F22.5": ("22-saturation-knob", "blk23_against_slider", blk23_against_slider),
     "F28.5": ("28-portrait-preset", "portrait_one_character_four_seeds", portrait_one_character_four_seeds),
 }
 

@@ -877,3 +877,13 @@ figures:
     crop: whole
     alt: >
       The held-out tiefling at all four test seeds: at every seed the preset flattens the skin, turns the patterned yellow jacket plain, and makes the horns larger and heavier, where the prompt asked for short horns swept flat against the hair.
+
+  - id: F22.5
+    page: 22-saturation-knob
+    kind: contact_sheet
+    builder: results_figures.blk23_against_slider
+    source: data/blk23_postproc_match.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      On every prompt the slider keeps the baseline exactly and only moves colour, while blk23 -0.45 adds colour with deeper shadows and blk23 +0.30 removes it with a softer, hazier picture; the words change the picture most.

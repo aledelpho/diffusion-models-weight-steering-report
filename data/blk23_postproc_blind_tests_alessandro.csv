@@ -1,0 +1,12 @@
+test,value,verdict
+position gate (q1): pairs where both sets name the same side,4/32,pass
+S original: blk23 chosen on q1,12/16 (p = 0.0384),
+S original: blk23 chosen on q2,11/16 (p = 0.1051),
+S mirrored: blk23 chosen on q1,11/16 (p = 0.1051),
+S mirrored: blk23 chosen on q2,11/16 (p = 0.1051),
+H1 adding colour (>= 12/16 both sets; <= 4/16 either),11,no difference shown
+D original: blk23 chosen on q1,1/16 (p = 1.0000),
+D original: blk23 chosen on q2,1/16 (p = 1.0000),
+D mirrored: blk23 chosen on q1,4/16 (p = 0.9894),
+D mirrored: blk23 chosen on q2,4/16 (p = 0.9894),
+H2 removing colour (>= 12/16 both sets; <= 4/16 either),1,slider more natural

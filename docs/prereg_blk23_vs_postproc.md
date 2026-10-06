@@ -86,3 +86,13 @@ not touched. Any change to a claim's status is Alessandro's decision.
 `experiments/blk23_vs_postproc.py`: `--build` (post-processed images and matching table),
 `--sheets` (blind sheets and key), `--page` (blind page), `--tally` (Part A), `--measure` (Part B).
 Committed with this document, before `--sheets` is shown to anyone.
+
+## Amendment 1 — 2026-10-06, after observer A, before observer B
+
+Observer A reported (see `docs/blk23_postproc_result.md`) that block 23 sometimes repairs a shape
+the baseline left half-formed, and that this drew his choice. The comparison therefore mixes colour
+with content. For observer B only, the page opens with one sentence before the first sheet:
+"Le due immagini possono differire anche in piccoli dettagli o forme: ignora queste differenze e
+giudica solo i colori." The sheets, their order, the questions and the rules are unchanged.
+The verdict of Part A will be reported together with this confound whatever it is; it cannot be read
+as a judgement on colour alone. Page: `blind_pp/test_B.html`, built by `--page --observer-b`.

@@ -35,6 +35,19 @@ claims:
       standard metrics: LPIPS 7 of 7, DINOv2 6 of 7. The comparison is possible in 7 of 16 cells
       only: in the other 9 the words add more saturation than blk23 at its strongest tested dose.
     anchor: "#against-the-words"
+  - id: blk23-against-a-saturation-slider
+    status: open
+    statement: >
+      Against a saturation slider applied to the finished image, block 23 is not a cleaner way to
+      change colour: it also regenerates the picture and changes its lightness contrast. Adding
+      colour it may look more natural than the slider; removing colour the slider looks more natural.
+    evidence: >
+      C53, no new render; slider matched in chroma gain. Layout r 1.00 for the slider against 0.87
+      and 0.85 for blk23 (16 of 16 cells). Blind forced choice, one observer who knew the renders but
+      not the side: adding colour blk23 chosen 12/16 and 11/16 (rule: 12 on both, not met); removing
+      colour 1/16 and 4/16 (slider). The block also repairs shapes (a half-formed hood), so the
+      choice mixes colour with content. The primary blind observer has not answered yet.
+    anchor: "#against-a-slider-in-post-production"
 ---
 
 # One block that turns saturation up and down
@@ -76,7 +89,8 @@ Block 23 is a saturation knob: monotone on 15 of 16 cells and roughly proportion
 At the same colour gain it disturbs the picture less than the words, on every standard metric
 tried. It is a gentle knob — on 9 of 16 cells the words reach more colour than the block at its
 strongest tested dose — and its desaturating side is weaker and less clean than its saturating
-one.
+one. Against a
+saturation slider applied afterwards it is not the cleaner tool: it also regenerates the picture.
 
 ## Why I might be wrong
 
@@ -89,6 +103,9 @@ one.
   coarse.
 * **One wording per direction.** Other phrasings, or the words at the start of the prompt, may
   behave differently.
+* **A saturation slider is the cleaner tool for colour alone.** Against a slider applied
+  afterwards (C53) the block regenerates the picture and changes its contrast; its case rests on
+  whether the result looks more natural, which one observer so far found only when adding colour.
 * **The desaturating side has side effects** I marked by eye on 8 of 16 cells: softening, and on
   the selfie a skin that turns greenish.
 
@@ -133,6 +150,41 @@ blk23 in 2, equal in 5 (`data/blk23_colorful_eye_alessandro.csv`, deposited befo
 
 No measured quality cost: BRISQUE moves by +0.9 for blk23 −0.45 and −0.95 for the words;
 CLIP-IQA by at most 0.02 (`data/standard_metrics_summary.csv`).
+
+### Against a slider in post-production
+
+A reader asked for the comparison that matters in practice: not the words, but the baseline with
+its saturation raised or lowered afterwards. No new render was needed. Each baseline was passed
+through an ordinary saturation slider, with the strength chosen so that its colour change equals
+that of the blk23 image it is compared with (C53, `docs/prereg_blk23_vs_postproc.md`).
+
+![On every prompt the slider keeps the baseline exactly and only moves colour, while blk23 -0.45 adds colour with deeper shadows and blk23 +0.30 removes it with a softer, hazier picture; the words change the picture most.](../assets/22-saturation-knob/F22.5_blk23_against_slider.webp)
+
+What was expected, and written down before measuring, holds: the slider leaves the layout of the
+picture untouched (layout r 1.00) and the block does not (0.87 adding colour, 0.85 removing it),
+in 16 of 16 cells. Block 23 is not a cleaner way to change saturation than a slider: it changes
+colour **and** regenerates the picture, raising lightness contrast when it adds colour (+0.9 in
+the standard deviation of L) and lowering it when it removes colour (−0.6). That is the softening
+my eye had marked on the desaturating side.
+
+Which looks more natural is the question a slider cannot answer for itself. In a blind forced
+choice of 64 sheets — each pair twice with the sides swapped — I answered without knowing which
+side was which, though I had seen these renders before:
+
+| | original | mirrored | rule (≥ 12 of 16 on both) |
+|---|---|---|---|
+| adding colour: blk23 −0.45 more natural | 12/16 | 11/16 | not met — no difference shown |
+| removing colour: blk23 +0.30 more natural | 1/16 | 4/16 | the slider looks more natural |
+
+The position check passed (the same side on both versions in 4 of 32 pairs). But the comparison
+cannot isolate colour: block 23 regenerates the picture, and sometimes repairs a shape the baseline
+left half-formed — the archer's hood, torn between the hood and the long hair of the prompt. I
+recognised the blk23 images and was drawn to them for that repair, even where the baseline's
+colours looked better to me. This is the
+diagnostic observer; the primary one, who has not seen the project, has not answered yet. LPIPS
+and DINOv2 for this comparison are pending. Data: `data/blk23_postproc_match.csv`,
+`data/blk23_postproc_measures.csv`, `data/blk23_postproc_blind_tests_alessandro.csv`; details in
+`docs/blk23_postproc_result.md`.
 
 ### The controls
 

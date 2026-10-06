@@ -157,7 +157,7 @@ def sheets():
     print("sheets", len(rows), "->", BLIND)
 
 
-def page():
+def page(observer_b=False):
     import base64, io
     rng = np.random.default_rng(5353)
     sh = sorted(f[:-4] for f in os.listdir(BLIND) if f.startswith("sheet_") and f.endswith(".png"))
@@ -167,9 +167,15 @@ def page():
         b = io.BytesIO(); Image.open(os.path.join(BLIND, sid + ".png")).convert("RGB").save(b, "JPEG", quality=88)
         imgs[sid] = "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
     html = PAGE.replace("__ORDER__", json.dumps(order)).replace("__IMG__", json.dumps(imgs))
-    with open(os.path.join(BLIND, "test.html"), "w", encoding="utf-8") as fh:
+    name = "test.html"
+    if observer_b:   # amendment 1: one instruction, nothing else changes
+        html = html.replace('<div id="n"></div>', '<p style="margin:10px auto;max-width:60em;color:#fc6">Le due immagini possono '
+                            'differire anche in piccoli dettagli o forme: ignora queste differenze e giudica solo i colori.</p><div id="n"></div>')
+        html = html.replace("cieco_blk23_pp_v1", "cieco_blk23_pp_B").replace("blk23_postproc_blind_answers.csv", "blk23_postproc_blind_answers_B.csv")
+        name = "test_B.html"
+    with open(os.path.join(BLIND, name), "w", encoding="utf-8") as fh:
         fh.write(html)
-    print("page", len(order), "sheets ->", os.path.join(BLIND, "test.html"))
+    print("page", len(order), "sheets ->", os.path.join(BLIND, name))
 
 
 PAGE = r"""<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Confronto</title>
@@ -294,12 +300,12 @@ def measure(deep=False):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for f in ("build", "sheets", "page", "tally", "measure", "deep"):
+    for f in ("build", "sheets", "page", "tally", "measure", "deep", "observer-b"):
         ap.add_argument(f"--{f}", action="store_true")
     ap.add_argument("--answers"); ap.add_argument("--tag"); ap.add_argument("--prompt")
     a = ap.parse_args()
     if a.build: build(a.prompt)
     if a.sheets: sheets()
-    if a.page: page()
+    if a.page: page(a.observer_b)
     if a.tally: tally(a.answers, a.tag)
     if a.measure: measure(a.deep)
