@@ -98,10 +98,11 @@ def match(base, method, target_dc, c0):
     return mid, d
 
 
-def build():
+def build(only=None):
+    """only: one prompt id (the build is long; it can run one prompt at a time and merges the table)."""
     os.makedirs(PP, exist_ok=True)
     rows = []
-    for p in PROMPTS:
+    for p in ([only] if only else PROMPTS):
         for s in SEEDS[p]:
             base = Image.open(src(p, "baseline", s)).convert("RGB")
             c0 = mean_chroma(base)
@@ -116,6 +117,9 @@ def build():
                                  "achieved_d_chroma": "" if got is None else round(got, 4),
                                  "reachable": int(f is not None)})
             print(p, s, flush=True)
+    if only and os.path.exists(MATCH):
+        rows = [r for r in csv.DictReader(open(MATCH)) if r["prompt"] != only] + rows
+        rows.sort(key=lambda r: (PROMPTS.index(r["prompt"]), r["seed"], TARGETS.index(r["target"]), METHODS.index(r["method"])))
     with open(MATCH, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print("match table", len(rows), "rows ->", MATCH)
@@ -292,9 +296,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     for f in ("build", "sheets", "page", "tally", "measure", "deep"):
         ap.add_argument(f"--{f}", action="store_true")
-    ap.add_argument("--answers"); ap.add_argument("--tag")
+    ap.add_argument("--answers"); ap.add_argument("--tag"); ap.add_argument("--prompt")
     a = ap.parse_args()
-    if a.build: build()
+    if a.build: build(a.prompt)
     if a.sheets: sheets()
     if a.page: page()
     if a.tally: tally(a.answers, a.tag)
