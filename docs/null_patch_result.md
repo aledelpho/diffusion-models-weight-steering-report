@@ -15,7 +15,9 @@
 between conditions in this report are the change of the weights, not the node.
 
 **Descriptive.** A 1e-4 change of the float32 norm scales and modulation of one block does not reach
-the pixels (likely below the precision at which they are used). The smallest change the bf16
+the pixels. *Corrected 2026-10-06:* not because of precision — these parameters never reach the model
+at any dose (notebook page 13; a ×3 on block 23's norm scales is also pixel-identical,
+`docs/inside_block23_exploration.md`). The smallest change the bf16
 matrices can take — one rounding step on every weight of one block — redraws the image slightly
 almost everywhere. **The hood (C54 labels), Alessandro, blind to which image was which:** *a metà* on all five
 (`data/null_patch_hood_labels_alessandro.csv`; given in chat as one answer for the five, not through

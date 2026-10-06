@@ -37,7 +37,7 @@ claims:
       multiplied by 1.0001 (no weight changes after rounding; the tuner reported 8 layers patched):
       maximum channel difference 0 against a baseline re-rendered in the same session, itself
       identical to the C47 baseline. Block 27 at +0.0001, which changes only its float32 scales, is
-      also identical. One step of bf16 rounding (block 27 at ±0.004) changes 87-88% of the pixels.
+      also identical, as those parameters never reach the model (notebook page 13). One step of bf16 rounding (block 27 at ±0.004) changes 87-88% of the pixels.
     anchor: "#the-same-render-twice"
   - id: eye-pass-is-not-blind
     status: holds
