@@ -17,5 +17,9 @@ between conditions in this report are the change of the weights, not the node.
 **Descriptive.** A 1e-4 change of the float32 norm scales and modulation of one block does not reach
 the pixels (likely below the precision at which they are used). The smallest change the bf16
 matrices can take — one rounding step on every weight of one block — redraws the image slightly
-almost everywhere. The hood at this seed (C54): pending Alessandro's blind labels
-(`hood_test.html`, key `data/null_patch_page_key.csv`).
+almost everywhere. **The hood (C54 labels), Alessandro, blind to which image was which:** *a metà* on all five
+(`data/null_patch_hood_labels_alessandro.csv`; given in chat as one answer for the five, not through
+the page export). One bf16 step on every weight of block 27, in either direction, redraws 87-88% of
+the pixels and does **not** tip the hood. In C54 the smallest edits were blk27 +0.05 (still half)
+and blk27 −0.075 (complete): the watershed needs more than the minimum displacement, somewhere
+between one rounding step and a few percent.

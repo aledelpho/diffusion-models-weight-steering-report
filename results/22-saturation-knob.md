@@ -204,6 +204,11 @@ four lower it, one is unclear. The expectation I wrote down first, that the midd
 it more often than the end blocks, did not hold (21 of 23 against 17 of 22). At seed 4669201, where
 the baseline hood is whole, none of the seven edits broke it.
 
+How small can the push be? The smallest change the weights of a block can take — one rounding step
+on every weight of block 27, in either direction (C55, page 20) — redraws 87% of the pixels slightly
+and leaves the hood half-formed, as blk27 +0.05 does; blk27 −0.075 completes it. The ridge is
+narrow, but not infinitely so.
+
 The half-formed hood is an unstable state of one seed, and any displacement of the weights, however
 small, sends the sampler (`euler_ancestral`, which adds noise at every step) down a slightly different
 path that lands on one side of the ridge. Two things follow. Every edit in this report carries this
