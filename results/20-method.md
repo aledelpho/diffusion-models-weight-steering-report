@@ -9,7 +9,7 @@ supersedes: []
 pitfalls: [78, 87, 90]
 
 corpus:
-  renders: 28
+  renders: 33
   prompts: 10
   seeds: [3141592, 2718281, 1618033, 4669201]
 
@@ -27,6 +27,18 @@ claims:
       were rendered again: 1 of 1 on the wording bench, 26 of 26 on the saturation bench, 1 of 1
       on the prompt-family bench, all at maximum difference 0.
     anchor: "#the-same-render-twice"
+  - id: active-tuner-is-clean
+    status: holds
+    statement: >
+      With the tuner active, a patch that leaves every weight unchanged gives the same image pixel
+      for pixel: the node and ComfyUI's patch path add nothing beyond the multiplication itself.
+    evidence: >
+      Pre-registered (C55), decisive rule fixed before the renders. Block 27's eight bf16 matrices
+      multiplied by 1.0001 (no weight changes after rounding; the tuner reported 8 layers patched):
+      maximum channel difference 0 against a baseline re-rendered in the same session, itself
+      identical to the C47 baseline. Block 27 at +0.0001, which changes only its float32 scales, is
+      also identical. One step of bf16 rounding (block 27 at ±0.004) changes 87-88% of the pixels.
+    anchor: "#the-same-render-twice"
   - id: eye-pass-is-not-blind
     status: holds
     statement: >
@@ -40,7 +52,7 @@ claims:
 
 # The edit, the instrument, and what a result had to pass
 
-> **Holds** · 28 renders · integrity checks, criteria fixed before the values
+> **Holds** · 33 renders · integrity checks, criteria fixed before the values
 > [← all results](README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Before asking whether a block of weights is a knob, I need to
@@ -114,9 +126,23 @@ feels (`docs/RENDERS_2026-09-30_single_blocks_styles.md`).
 | wording bench, first row against the prompt-order baseline | `benchmark_prompt_writing` | **1 / 1** identical |
 | saturation bench, rows already on older benches | `benchmark_blk23_colorful` | **26 / 26** identical |
 | prompt-family bench, first row against the styles baseline | `benchmark_prompt_family` | **1 / 1** identical |
+| **tuner active, no weight changed** (block 27 matrices x1.0001) against no tuner | `benchmark_null_patch` | max channel difference **0** |
+| tuner active, block 27 at +0.0001 (float32 scales only) | `benchmark_null_patch` | max channel difference **0** |
+| tuner active, block 27 at +0.004 / −0.004 (every weight one bf16 step) | `benchmark_null_patch` | 87% / 88% of pixels differ (mean 2.3 / 2.1 of 255) |
 
 Each reproduction row was queued alone first and compared before the rest of the bench was
 allowed to run. The outputs of the checks are in the render notes listed under Provenance.
+
+The first row only shows that the tuner is clean when it is switched off: at zero it adds no patch
+at all. Whether it stays clean when switched *on* was a question Alessandro raised on 2026-10-06,
+and the C55 rows answer it (`docs/prereg_null_patch.md`). Read from the code, an active patch is
+`W × (1 + d)` computed in float32 and rounded back to bfloat16, on the patched tensors only; a
+multiplier of 1.0001 rounds every bf16 weight of block 27 back to itself. With the node active on
+that patch the image is the same file pixel for pixel. The node is a clean multiplier. The last row
+shows the other side: the smallest change the matrices can take, one rounding step on every weight
+of one block, already redraws the picture slightly almost everywhere. Every edit in this report,
+however small, therefore re-draws the image along a nearby path; page 22 shows what that does to an
+unstable detail.
 
 ### Why the eye pass is declared open
 
@@ -184,7 +210,7 @@ analysis:
 
 ## Provenance
 
-* **Renders.** benchmark_prompt_writing (1), benchmark_blk23_colorful (26), benchmark_prompt_family (1).
+* **Renders.** benchmark_prompt_writing (1), benchmark_blk23_colorful (26), benchmark_prompt_family (1), benchmark_null_patch (5).
 * **Check outputs:** `docs/RENDERS_2026-10-04_prompt_writing.md`,
   `docs/RENDERS_2026-10-04_blk23_colorful.md`, `docs/RENDERS_2026-10-04_prompt_family.md`.
 * **Earlier integrity checks:** [notebook page 00](../notebook/00-the-bench.md) (tuner at zero,

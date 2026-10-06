@@ -244,6 +244,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
       <thead><tr><th></th><th>Claim</th><th>What it rests on</th></tr></thead>
       <tbody>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-20-method--the-same-render-twice">The tuner adds nothing of its own at zero, and a render made again days later, in another session and another bench, is the same file pixel for pixel; differences between conditions are therefore the edit and not the pipeline.</a></td><td class="ev">Integrity checks with a pass/fail criterion fixed before the value. Tuner in the graph at zero against no tuner: maximum channel difference 0 on 15 cells (notebook page 00). Before each confirmatory bench of this report, the rows that already existed on older benches were rendered again: 1 of 1 on the wording bench, 26 of 26 on the saturation bench, 1 of 1 on the prompt-family bench, all at maximum difference 0.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-20-method--the-same-render-twice">With the tuner active, a patch that leaves every weight unchanged gives the same image pixel for pixel: the node and ComfyUI&#x27;s patch path add nothing beyond the multiplication itself.</a></td><td class="ev">Pre-registered (C55), decisive rule fixed before the renders. Block 27&#x27;s eight bf16 matrices multiplied by 1.0001 (no weight changes after rounding; the tuner reported 8 layers patched): maximum channel difference 0 against a baseline re-rendered in the same session, itself identical to the C47 baseline. Block 27 at +0.0001, which changes only its float32 scales, is also identical. One step of bf16 rounding (block 27 at ±0.004) changes 87-88% of the pixels.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-20-method--why-the-eye-pass-is-declared-open">Hashed filenames do not hide the condition from an observer who knows the edits, so every eye pass in this report is declared as made with the condition known.</a></td><td class="ev">Pre-registered in notebook page 03: four-way forced choice, 17 of 20 and 12 of 20 correct against a 25 percent chance level; 12 of 20 joint hits against a threshold of 5.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-22-saturation-knob--direction-and-proportion">Scaling block 23 alone moves the saturation of a Krea-2 picture in one direction, monotonically with the dose and roughly in proportion to it.</a></td><td class="ev">Pre-registered. Chroma falls strictly from -0.45 to +0.30 in 15 of 16 prompt-seed cells (threshold 14); doubling the dose from -0.15 to -0.30 multiplies the gain by 1.76 (window 1.6-2.4). On every older render with a blk23 arm, 83 of 83 move chroma the expected way.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-22-saturation-knob--against-the-words">Where blk23 reaches the same saturation gain as adding &quot;colorful, vivid highly saturated colors&quot; to the prompt, it leaves the rest of the picture closer to the original than the words do.</a></td><td class="ev">Pre-registered on layout r: 6 of 7 scorable cells, median +0.08. Confirmed afterwards with standard metrics: LPIPS 7 of 7, DINOv2 6 of 7. The comparison is possible in 7 of 16 cells only: in the other 9 the words add more saturation than blk23 at its strongest tested dose.</td></tr>
@@ -278,7 +279,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
   </section>
 
 <section id="p-20-method">
-<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">28 renders · 10 prompts · 4 seeds · 2026-10-05</span></p>
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">33 renders · 10 prompts · 4 seeds · 2026-10-05</span></p>
 <h1 id="p-20-method--the-edit-the-instrument-and-what-a-result-had-to-pass">The edit, the instrument, and what a result had to pass</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> Before asking whether a block of weights is a knob, I need to
@@ -365,10 +366,35 @@ feels (<code>docs/RENDERS_2026-09-30_single_blocks_styles.md</code>).</p>
 <td><code>benchmark_prompt_family</code></td>
 <td><strong>1 / 1</strong> identical</td>
 </tr>
+<tr>
+<td><strong>tuner active, no weight changed</strong> (block 27 matrices x1.0001) against no tuner</td>
+<td><code>benchmark_null_patch</code></td>
+<td>max channel difference <strong>0</strong></td>
+</tr>
+<tr>
+<td>tuner active, block 27 at +0.0001 (float32 scales only)</td>
+<td><code>benchmark_null_patch</code></td>
+<td>max channel difference <strong>0</strong></td>
+</tr>
+<tr>
+<td>tuner active, block 27 at +0.004 / −0.004 (every weight one bf16 step)</td>
+<td><code>benchmark_null_patch</code></td>
+<td>87% / 88% of pixels differ (mean 2.3 / 2.1 of 255)</td>
+</tr>
 </tbody>
 </table></div>
 <p>Each reproduction row was queued alone first and compared before the rest of the bench was
 allowed to run. The outputs of the checks are in the render notes listed under Provenance.</p>
+<p>The first row only shows that the tuner is clean when it is switched off: at zero it adds no patch
+at all. Whether it stays clean when switched <em>on</em> was a question Alessandro raised on 2026-10-06,
+and the C55 rows answer it (<code>docs/prereg_null_patch.md</code>). Read from the code, an active patch is
+<code>W × (1 + d)</code> computed in float32 and rounded back to bfloat16, on the patched tensors only; a
+multiplier of 1.0001 rounds every bf16 weight of block 27 back to itself. With the node active on
+that patch the image is the same file pixel for pixel. The node is a clean multiplier. The last row
+shows the other side: the smallest change the matrices can take, one rounding step on every weight
+of one block, already redraws the picture slightly almost everywhere. Every edit in this report,
+however small, therefore re-draws the image along a nearby path; page 22 shows what that does to an
+unstable detail.</p>
 <h3 id="p-20-method--why-the-eye-pass-is-declared-open">Why the eye pass is declared open</h3>
 <p>In notebook page 03, a pre-registered round asked me to tell which edit produced an image whose
 filename was a hash. I was right 17 times in 20 on one condition and 12 in 20 on the other,
@@ -429,7 +455,7 @@ analysis:
 </code></pre>
 <h2 id="p-20-method--provenance">Provenance</h2>
 <ul>
-<li><strong>Renders.</strong> benchmark_prompt_writing (1), benchmark_blk23_colorful (26), benchmark_prompt_family (1).</li>
+<li><strong>Renders.</strong> benchmark_prompt_writing (1), benchmark_blk23_colorful (26), benchmark_prompt_family (1), benchmark_null_patch (5).</li>
 <li><strong>Check outputs:</strong> <code>docs/RENDERS_2026-10-04_prompt_writing.md</code>,
   <code>docs/RENDERS_2026-10-04_blk23_colorful.md</code>, <code>docs/RENDERS_2026-10-04_prompt_family.md</code>.</li>
 <li><strong>Earlier integrity checks:</strong> <a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/blob/main/notebook/00-the-bench.md">notebook page 00</a> (tuner at zero,
