@@ -206,8 +206,17 @@ the baseline hood is whole, none of the seven edits broke it.
 
 How small can the push be? The smallest change the weights of a block can take — one rounding step
 on every weight of block 27, in either direction (C55, page 20) — redraws 87% of the pixels slightly
-and leaves the hood half-formed, as blk27 +0.05 does; blk27 −0.075 completes it. The ridge is
-narrow, but not infinitely so.
+and leaves the hood half-formed. A dose ladder on four blocks, one per band (C56, 40 renders, labelled
+blind, 7 of 8 repeats consistent), finds a threshold, and a step: below it the hood stays
+half-formed, above it it never comes back.
+
+![Pushed negative, blocks 10, 00 and 20 complete the hood from dose 0.02 and block 23 from 0.08; pushed positive, block 10 lowers it at 0.04 and completes it at 0.16, block 00 completes it at 0.08, block 23 lowers it at 0.08 and block 20 leaves it half-formed up to 0.16.](../assets/22-saturation-knob/F22.7_hood_threshold.webp)
+
+Nothing moves at 0.01. Pushed negative, three of the four blocks complete the hood at 0.02; block 23,
+the one that changes content least, needs 0.08. Pushed positive, the thresholds are higher and the
+hood is as likely to be lowered as completed. Across the eight block-and-sign pairs the threshold
+falls as the block's content change at equal dose rises (Spearman −0.60), as I expected; but the
+direction of the push matters more than the block. One seed, one ridge.
 
 The half-formed hood is an unstable state of one seed, and any displacement of the weights, however
 small, sends the sampler (`euler_ancestral`, which adds noise at every step) down a slightly different

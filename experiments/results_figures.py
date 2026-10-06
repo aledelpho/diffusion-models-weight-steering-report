@@ -716,6 +716,35 @@ def hood_watershed(out: Path) -> Path:
     return out
 
 
+def hood_threshold(out: Path) -> Path:
+    """F22.7 — C56: the hood label along a dose ladder, four blocks, both signs, one seed."""
+    import matplotlib.patches as mpatches
+    rows = list(csv.DictReader(open(DATA / "hood_threshold_tally.csv", encoding="utf-8")))
+    col = {"a metà": "#4a4a46", "completo (in testa)": CAT[0], "abbassato": CAT[1], "assente": "#c42a2a", "non riesco a dirlo": GRID}
+    name = {"a metà": "half-formed", "completo (in testa)": "complete, on the head", "abbassato": "lowered", "assente": "absent",
+            "non riesco a dirlo": "unclear"}
+    lines = [(b, s) for b in ("blk10", "blk00", "blk20", "blk23") for s in ("-", "+")]
+    band = {"blk00": "Base", "blk10": "Style", "blk20": "Details", "blk23": "Correction"}
+    doses = sorted({float(r["dose"]) for r in rows})
+    fig, ax = _canvas(6.4, 3.4)
+    for i, (b, s) in enumerate(lines):
+        for j, d in enumerate(doses):
+            lab = next(r["label"] for r in rows if r["block"] == b and r["sign"] == s and float(r["dose"]) == d)
+            ax.add_patch(mpatches.Rectangle((j - 0.45, len(lines) - 1 - i - 0.4), 0.9, 0.8, color=col[lab]))
+    ax.set_xlim(-0.6, len(doses) - 0.4); ax.set_ylim(-0.6, len(lines) - 0.4)
+    ax.set_xticks(range(len(doses))); ax.set_xticklabels([f"{d:g}" for d in doses], color=DIM, fontsize=7.5)
+    ax.set_yticks(range(len(lines))); ax.set_yticklabels([f"{b} {s} ({band[b]})" for b, s in reversed(lines)], color=DIM, fontsize=7.5)
+    ax.set_xlabel("dose (absolute value)", color=DIM, fontsize=8)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    used = [l for l in col if any(r["label"] == l for r in rows)]
+    ax.legend(handles=[mpatches.Patch(color=col[l], label=name[l]) for l in used], loc="upper left", bbox_to_anchor=(1.0, 1.0),
+              frameon=False, fontsize=7, labelcolor=INK)
+    ax.set_title("Pushed negative, three of four blocks complete the hood at 0.02", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.22, right=0.72, top=0.88, bottom=0.17)
+    return _save(fig, out, "archer, seed 3141592 · Alessandro's blind labels · baseline half-formed · source data/hood_threshold_tally.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -747,6 +776,7 @@ BUILDERS = {
     "F28.4": ("28-portrait-preset", "portrait_held_out_large", portrait_held_out_large),
     "F22.5": ("22-saturation-knob", "blk23_against_slider", blk23_against_slider),
     "F22.6": ("22-saturation-knob", "hood_watershed", hood_watershed),
+    "F22.7": ("22-saturation-knob", "hood_threshold", hood_threshold),
     "F28.5": ("28-portrait-preset", "portrait_one_character_four_seeds", portrait_one_character_four_seeds),
 }
 

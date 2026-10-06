@@ -1,0 +1,41 @@
+block,sign,dose,label
+blk00,-,0.010,a metà
+blk00,-,0.020,completo (in testa)
+blk00,-,0.040,completo (in testa)
+blk00,-,0.080,completo (in testa)
+blk00,-,0.160,completo (in testa)
+blk00,+,0.010,a metà
+blk00,+,0.020,a metà
+blk00,+,0.040,a metà
+blk00,+,0.080,completo (in testa)
+blk00,+,0.160,completo (in testa)
+blk10,-,0.010,a metà
+blk10,-,0.020,completo (in testa)
+blk10,-,0.040,completo (in testa)
+blk10,-,0.080,completo (in testa)
+blk10,-,0.160,completo (in testa)
+blk10,+,0.010,a metà
+blk10,+,0.020,a metà
+blk10,+,0.040,abbassato
+blk10,+,0.080,abbassato
+blk10,+,0.160,completo (in testa)
+blk20,-,0.010,a metà
+blk20,-,0.020,completo (in testa)
+blk20,-,0.040,completo (in testa)
+blk20,-,0.080,completo (in testa)
+blk20,-,0.160,completo (in testa)
+blk20,+,0.010,a metà
+blk20,+,0.020,a metà
+blk20,+,0.040,a metà
+blk20,+,0.080,a metà
+blk20,+,0.160,a metà
+blk23,-,0.010,a metà
+blk23,-,0.020,a metà
+blk23,-,0.040,a metà
+blk23,-,0.080,completo (in testa)
+blk23,-,0.160,completo (in testa)
+blk23,+,0.010,a metà
+blk23,+,0.020,a metà
+blk23,+,0.040,a metà
+blk23,+,0.080,abbassato
+blk23,+,0.160,abbassato
