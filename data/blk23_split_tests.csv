@@ -1,0 +1,37 @@
+test,value,verdict
+m0.450 gate: W adds noise (>= 10/16),9/16,"VOID for H1, H2, H4"
+m0.450 H1 MLP noisier than attention (>= 12/16),14/16,void
+m0.450 H2 MLP closer to the whole block's noise (>= 12/16),9/16,void
+m0.450 H3 attention carries the colour (>= 12/16),7/16,not supported
+m0.450 H4 attention: colour with less noise than the whole (>= 12/16),14/16,void
+m0.450 THESIS (H1 and H3),,not decided
+"m0.450 median dN / dC / layout r, W",+0.026 / +3.894 / +0.873,
+"m0.450 median dN / dC / layout r, A",-0.043 / +1.765 / +0.897,
+"m0.450 median dN / dC / layout r, M",+0.102 / +2.831 / +0.915,
+p0.300 gate: W adds noise (>= 10/16),0/16,"VOID for H1, H2, H4"
+p0.300 H1 MLP noisier than attention (>= 12/16),0/16,void
+p0.300 H2 MLP closer to the whole block's noise (>= 12/16),14/16,void
+p0.300 H3 attention carries the colour (>= 12/16),14/16,supported
+p0.300 H4 attention: colour with less noise than the whole (>= 12/16),0/16,void
+p0.300 THESIS (H1 and H3),,not decided
+"p0.300 median dN / dC / layout r, W",-0.106 / -3.084 / +0.854,
+"p0.300 median dN / dC / layout r, A",+0.012 / -1.878 / +0.923,
+"p0.300 median dN / dC / layout r, M",-0.090 / -1.602 / +0.899,
+m1.000 gate: W adds noise (>= 10/16),8/16,"VOID for H1, H2, H4"
+m1.000 H1 MLP noisier than attention (>= 12/16),14/16,void
+m1.000 H2 MLP closer to the whole block's noise (>= 12/16),7/16,void
+m1.000 H3 attention carries the colour (>= 12/16),7/16,not supported
+m1.000 H4 attention: colour with less noise than the whole (>= 12/16),13/16,void
+m1.000 THESIS (H1 and H3),,not decided
+"m1.000 median dN / dC / layout r, W",+0.003 / +4.803 / +0.813,
+"m1.000 median dN / dC / layout r, A",-0.059 / +2.981 / +0.872,
+"m1.000 median dN / dC / layout r, M",+0.078 / +3.598 / +0.876,
+p1.000 gate: W adds noise (>= 10/16),4/16,"VOID for H1, H2, H4"
+p1.000 H1 MLP noisier than attention (>= 12/16),7/16,void
+p1.000 H2 MLP closer to the whole block's noise (>= 12/16),10/16,void
+p1.000 H3 attention carries the colour (>= 12/16),7/16,not supported
+p1.000 H4 attention: colour with less noise than the whole (>= 12/16),3/16,void
+p1.000 THESIS (H1 and H3),,not decided
+"p1.000 median dN / dC / layout r, W",-0.299 / -4.458 / +0.360,
+"p1.000 median dN / dC / layout r, A",+0.075 / -4.252 / +0.798,
+"p1.000 median dN / dC / layout r, M",-0.001 / -3.615 / +0.665,
