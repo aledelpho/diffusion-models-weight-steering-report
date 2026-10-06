@@ -1,0 +1,79 @@
+item,seed,cond,sign,dose,label,second_label,vs_baseline
+h218,3141592,baseline,,,a metà,a metà,
+h899,3141592,blk00,+,0.250,completo (in testa),,completes
+h777,3141592,blk00,-,0.200,completo (in testa),,completes
+h340,3141592,blk01,+,0.250,completo (in testa),,completes
+h379,3141592,blk01,-,0.400,completo (in testa),,completes
+h810,3141592,blk02,+,0.400,completo (in testa),,completes
+h566,3141592,blk02,-,0.450,a metà,a metà,unchanged
+h151,3141592,blk03,+,0.400,completo (in testa),,completes
+h816,3141592,blk03,-,0.300,completo (in testa),,completes
+h748,3141592,blk03,-,0.550,completo (in testa),,completes
+h888,3141592,blk04,+,0.550,completo (in testa),,completes
+h648,3141592,blk04,-,0.300,completo (in testa),,completes
+h108,3141592,blk04,-,0.550,completo (in testa),,completes
+h309,3141592,blk05,+,0.550,completo (in testa),,completes
+h248,3141592,blk05,-,0.550,a metà,,unchanged
+h418,3141592,blk06,+,0.550,completo (in testa),completo (in testa),completes
+h414,3141592,blk06,-,0.550,completo (in testa),completo (in testa),completes
+h284,3141592,blk07,+,0.300,completo (in testa),,completes
+h454,3141592,blk07,+,0.550,completo (in testa),,completes
+h533,3141592,blk07,-,0.550,completo (in testa),completo (in testa),completes
+h778,3141592,blk08,+,0.550,completo (in testa),,completes
+h269,3141592,blk08,-,0.300,completo (in testa),,completes
+h653,3141592,blk08,-,0.550,completo (in testa),,completes
+h845,3141592,blk09,+,0.550,completo (in testa),,completes
+h124,3141592,blk09,-,0.550,completo (in testa),,completes
+h651,3141592,blk10,+,0.450,completo (in testa),,completes
+h563,3141592,blk10,-,0.450,completo (in testa),,completes
+h517,3141592,blk11,+,0.250,completo (in testa),,completes
+h485,3141592,blk11,+,0.450,completo (in testa),,completes
+h361,3141592,blk11,-,0.450,completo (in testa),completo (in testa),completes
+h889,3141592,blk12,+,0.400,completo (in testa),,completes
+h530,3141592,blk12,-,0.450,completo (in testa),,completes
+h494,3141592,blk13,+,0.400,completo (in testa),,completes
+h668,3141592,blk13,-,0.450,abbassato,abbassato,lowers
+h159,3141592,blk14,+,0.400,completo (in testa),,completes
+h230,3141592,blk14,-,0.550,completo (in testa),,completes
+h767,3141592,blk15,+,0.400,completo (in testa),,completes
+h148,3141592,blk15,-,0.450,abbassato,,lowers
+h811,3141592,blk16,+,0.300,completo (in testa),,completes
+h558,3141592,blk16,-,0.450,completo (in testa),completo (in testa),completes
+h516,3141592,blk17,+,0.250,completo (in testa),,completes
+h222,3141592,blk17,+,0.400,abbassato,,lowers
+h316,3141592,blk17,-,0.450,completo (in testa),,completes
+h715,3141592,blk18,+,0.200,completo (in testa),completo (in testa),completes
+h480,3141592,blk18,+,0.300,completo (in testa),,completes
+h231,3141592,blk18,-,0.450,completo (in testa),,completes
+h104,3141592,blk19,+,0.250,completo (in testa),,completes
+h354,3141592,blk19,-,0.450,completo (in testa),,completes
+h469,3141592,blk20,+,0.450,completo (in testa),,completes
+h193,3141592,blk20,-,0.550,completo (in testa),,completes
+h686,3141592,blk21,+,0.250,a metà,a metà,unchanged
+h233,3141592,blk21,-,0.450,completo (in testa),,completes
+h525,3141592,blk22,+,0.250,a metà,,unchanged
+h259,3141592,blk22,-,0.450,completo (in testa),,completes
+h335,3141592,blk23,+,0.150,abbassato,,lowers
+h543,3141592,blk23,+,0.300,completo (in testa),,completes
+h612,3141592,blk23,-,0.150,completo (in testa),,completes
+h482,3141592,blk23,-,0.300,completo (in testa),,completes
+h986,3141592,blk23,-,0.450,completo (in testa),,completes
+h753,3141592,blk24,+,0.200,completo (in testa),,completes
+h194,3141592,blk24,-,0.400,completo (in testa),completo (in testa),completes
+h843,3141592,blk25,+,0.250,completo (in testa),,completes
+h901,3141592,blk25,-,0.450,completo (in testa),,completes
+h794,3141592,blk26,+,0.150,completo (in testa),,completes
+h199,3141592,blk26,-,0.250,completo (in testa),,completes
+h905,3141592,blk27,+,0.050,a metà,a metà,unchanged
+h417,3141592,blk27,-,0.075,completo (in testa),,completes
+h143,3141592,blk27,-,0.250,non riesco a dirlo,,unclear
+h628,3141592,txtneg,,,a metà,,unchanged
+h206,3141592,txtpos,,,completo (in testa),,completes
+h397,4669201,baseline,,,completo (in testa),,
+h919,4669201,blk23,+,0.150,completo (in testa),,unchanged
+h224,4669201,blk23,+,0.300,completo (in testa),,unchanged
+h395,4669201,blk23,-,0.150,completo (in testa),,unchanged
+h460,4669201,blk23,-,0.300,completo (in testa),,unchanged
+h524,4669201,blk23,-,0.450,completo (in testa),,unchanged
+h565,4669201,txtneg,,,completo (in testa),,unchanged
+h768,4669201,txtpos,,,completo (in testa),,unchanged
