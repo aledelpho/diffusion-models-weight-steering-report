@@ -45,3 +45,13 @@ as an agreement check only.
   surface properties.
 
 Code: `experiments/hood_watershed.py` (`--page`, `--tally --answers <csv>`). Key: `data/hood_key.csv`.
+
+## Amendment 1 — 2026-10-06, before any label
+
+Alessandro, looking at the first images, noted that a hood can be whole but lowered: the girl's head
+and hair are fully uncovered and the hood lies behind it. "Completo" would hide that case, which is
+another way out of the watershed (the hair wins, the hood survives). The labels become: *completo
+(in testa)* / *abbassato* / *a metà* / *assente* / *non riesco a dirlo*. In the tally, *abbassato*
+is its own outcome: at seed 3141592 an edit **lowers** the hood; at seed 4669201 too. Everything else
+is unchanged; the page is rebuilt with the same items and order, and any answers given to the first
+version are discarded.

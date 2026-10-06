@@ -14,7 +14,8 @@ if not os.path.isdir(ROOT):
     ROOT = os.path.expanduser("~/mnt")
 OUT = os.path.join(ROOT, "benchmark_single_blocks_v3", "hood")
 KEY = os.path.join(DATA, "hood_key.csv")
-LABELS = ["completo", "a metà", "assente", "non riesco a dirlo"]
+# amendment 1 (2026-10-06, before any label): "abbassato" = a whole hood lowered off the head, head and hair uncovered
+LABELS = ["completo (in testa)", "abbassato", "a metà", "assente", "non riesco a dirlo"]
 
 
 def condition(name):
@@ -88,7 +89,7 @@ button.on{background:#3b6e4f;border-color:#6c6}#n{color:#aaa;margin-top:6px}</st
 <div>Il cappuccio è&hellip;<br><span id="b"></span></div>
 <div><button id="prev">&larr; indietro</button><button id="next">avanti &rarr;</button><button id="exp">Fine: scarica le risposte</button></div>
 <script>
-const S=__SLOTS__,IMG=__IMG__,L=__LABELS__,K="cappuccio_v1";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+const S=__SLOTS__,IMG=__IMG__,L=__LABELS__,K="cappuccio_v2";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
 let i=0;const $=s=>document.querySelector(s);
 $("#b").innerHTML=L.map(l=>`<button data-v="${l}">${l}</button>`).join("");
 function show(){const id=S[i].split("#")[0];$("#w").src=IMG[id][0];$("#c").src=IMG[id][1];
@@ -119,10 +120,17 @@ def tally(answers, tag):
         b = base[k["seed"]]
         verdict = ""
         if k["cond"] != "baseline":
-            if b == "a metà":
-                verdict = "completes" if lab == "completo" else "removes" if lab == "assente" else "unchanged" if lab == "a metà" else "unclear"
-            elif b == "completo":
-                verdict = "breaks" if lab in ("a metà", "assente") else "unchanged" if lab == "completo" else "unclear"
+            C = "completo (in testa)"
+            if lab == b:
+                verdict = "unchanged"
+            elif lab == "non riesco a dirlo" or b == "non riesco a dirlo":
+                verdict = "unclear"
+            elif b == "a metà":
+                verdict = {C: "completes", "abbassato": "lowers", "assente": "removes"}[lab]
+            elif b == C:
+                verdict = {"abbassato": "lowers", "a metà": "breaks", "assente": "removes"}[lab]
+            else:
+                verdict = f"{b} -> {lab}"
         out.append({**{x: k[x] for x in ("item", "seed", "cond", "sign", "dose")}, "label": lab,
                     "second_label": by[it][1] if len(by[it]) > 1 else "", "vs_baseline": verdict})
     out.sort(key=lambda r: (r["seed"], r["cond"], r["sign"], r["dose"]))
