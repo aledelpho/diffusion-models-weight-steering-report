@@ -695,6 +695,27 @@ def blk23_against_slider(out: Path) -> Path:
                   "whole frames · source data/blk23_postproc_match.csv", W=150, H=188, LAB=96)
 
 
+def hood_watershed(out: Path) -> Path:
+    """F22.6 — C54: the archer's half-formed hood at seed 3141592 and what a few edits do to it."""
+    cols = [("baseline", "base: half"), ("blk27_neg_d0.075", "blk27 -0.075"), ("blk09_pos_d0.550", "blk09 +0.55"),
+            ("b23_m0.450", "blk23 -0.45"), ("txtpos", "\"colorful\""), ("blk21_pos_d0.250", "blk21 +0.25"),
+            ("blk13_neg_d0.450", "blk13 -0.45")]
+    lab = {c[0]: "" for c in cols}
+    lab.update({"blk27_neg_d0.075": "complete", "blk09_pos_d0.550": "complete", "b23_m0.450": "complete",
+                "txtpos": "complete", "blk21_pos_d0.250": "still half", "blk13_neg_d0.450": "lowered"})
+    tally = {(r["cond"], r["sign"], r["dose"]): r["label"] for r in csv.DictReader(open(DATA / "hood_tally_alessandro.csv", encoding="utf-8"))
+             if r["seed"] == "3141592"}
+    def path(r, c):
+        if c in ("b23_m0.450", "txtpos"):
+            return IMG / "benchmark_blk23_colorful" / f"P3_archerforest_{c}_krea2_seed3141592_00001_.png"
+        return IMG / "benchmark_single_blocks_v3" / "renders" / f"P3_archerforest_{c}_krea2_seed3141592_00001_.png"
+    _sheet([("frame", "")], cols, path, lambda r, c: (lab[c], DIM_RGB) if lab[c] else None, out,
+           "archer, seed 3141592 · whole frames · label = Alessandro's blind label · source data/hood_tally_alessandro.csv",
+           W=200, H=250, LAB=8)
+    assert tally[("blk21", "+", "0.250")] == "a metà" and tally[("blk13", "-", "0.450")] == "abbassato"
+    return out
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -725,6 +746,7 @@ BUILDERS = {
     "F28.3": ("28-portrait-preset", "portrait_blind_sheet", portrait_blind_sheet),
     "F28.4": ("28-portrait-preset", "portrait_held_out_large", portrait_held_out_large),
     "F22.5": ("22-saturation-knob", "blk23_against_slider", blk23_against_slider),
+    "F22.6": ("22-saturation-knob", "hood_watershed", hood_watershed),
     "F28.5": ("28-portrait-preset", "portrait_one_character_four_seeds", portrait_one_character_four_seeds),
 }
 

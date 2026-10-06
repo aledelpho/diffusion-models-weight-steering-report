@@ -887,3 +887,14 @@ figures:
     crop: whole
     alt: >
       On every prompt the slider keeps the baseline exactly and only moves colour, while blk23 -0.45 adds colour with deeper shadows and blk23 +0.30 removes it with a softer, hazier picture; the words change the picture most.
+
+  - id: F22.6
+    page: 22-saturation-knob
+    kind: contact_sheet
+    builder: results_figures.hood_watershed
+    source: data/hood_tally_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      On the archer at seed 3141592 the baseline hood is half-formed; blk27 -0.075, blk09 +0.55, blk23 -0.45 and the words "colorful" all complete it, blk21 +0.25 leaves it half-formed and blk13 -0.45 lowers it.
+

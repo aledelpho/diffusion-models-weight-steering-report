@@ -186,6 +186,32 @@ and DINOv2 for this comparison are pending. Data: `data/blk23_postproc_match.csv
 `data/blk23_postproc_measures.csv`, `data/blk23_postproc_blind_tests_alessandro.csv`; details in
 `docs/blk23_postproc_result.md`.
 
+### A curiosity: the hood that almost any edit completes
+
+In the comparison with the slider I found myself drawn to some blk23 images for a reason that had
+nothing to do with colour: on the archer at seed 3141592 the baseline draws the hood only halfway — a
+grey fragment on one side, hair on the other. The prompt asks for "a dark grey hood obscuring some of
+her hair" and "brown hair", and the model finishes neither: a *watershed*, a point where the picture is
+balanced between two requests. Block 23 completed the hood. So I labelled, blind to the condition, all
+78 renders of this prompt that already existed (C54, exploratory; my labels agreed with themselves on
+12 of 12 repeats, and with Claude's independent labels on 74 of 78).
+
+![On the archer at seed 3141592 the baseline hood is half-formed; blk27 -0.075, blk09 +0.55, blk23 -0.45 and the words "colorful" all complete it, blk21 +0.25 leaves it half-formed and blk13 -0.45 lowers it.](../assets/22-saturation-knob/F22.6_hood_watershed.webp)
+
+Block 23 is not special here. Of 69 edits of that seed, **58 complete the hood** — blocks from 00 to
+27, both signs, a dose as small as blk27 −0.075, and the words "colorful". Six leave it half-formed,
+four lower it, one is unclear. The expectation I wrote down first, that the middle blocks would change
+it more often than the end blocks, did not hold (21 of 23 against 17 of 22). At seed 4669201, where
+the baseline hood is whole, none of the seven edits broke it.
+
+The half-formed hood is an unstable state of one seed, and any displacement of the weights, however
+small, sends the sampler (`euler_ancestral`, which adds noise at every step) down a slightly different
+path that lands on one side of the ridge. Two things follow. Every edit in this report carries this
+re-draw of the unstable details along with its intended effect, which is part of what a slider on the
+finished image does not do. And a claim that an edit *fixes* a detail, made on one seed, needs other
+edits of the same seed as its control. Data: `data/hood_tally_alessandro.csv`; details in
+`docs/hood_watershed_result.md`.
+
 ### The controls
 
 Every image of the 26 conditions that already existed on older benches at the original seed
