@@ -74,3 +74,36 @@ dimmed: reds drop out first, greens and yellows remain. Light blues are mixed (c
 intensity). Caveat: some of the "green" gained may be neutral greys taking a slight green cast as they
 lose colour; this was not separated. At +0.30 the pattern is weaker (red area 0.55, the others
 0.83–1.10).
+
+## Addendum 2 (2026-10-06) — the fine-texture cost of notebook page 05, split
+
+Question (Alessandro): does the "cost" that page 05 found in every block push — fine texture lost in
+either direction, the common mode — remain when only the attention is moved? Same measure as page 05:
+HF = std(gray − GaussianBlur(gray, σ = 1.5)), r± = HF±/HF_base, **common mode c = √(r⁺ r⁻)** (the cost;
+below 1 = texture lost whichever way you push), swing s = r⁺/r⁻ (the steering). Descriptive, after the
+fact, on the C58 renders (`data/blk23_split_common_mode.csv`). The C47 doses are asymmetric (+0.30 /
+−0.45), so their common mode is an approximation of page 05's symmetric one; ±1.0 is symmetric.
+
+| block 23 | r⁺ | r⁻ | common mode | cells below 1 |
+|---|---|---|---|---|
+| page 05, whole block, ±0.20 (6 renders per arm) | 0.864 | 1.035 | 0.945 | — |
+| **whole block**, +0.30 / −0.45 | 0.866 | 1.065 | **0.933** | 11 / 16 |
+| **attention only**, +0.30 / −0.45 | 1.051 | 0.943 | **0.991** | 10 / 16 |
+| **MLP only**, +0.30 / −0.45 | 0.807 | 1.161 | **0.967** | 11 / 16 |
+| whole block, ±1.0 | 1.449 | 0.989 | 1.195 | 2 / 16 |
+| attention only, ±1.0 | 1.243 | 0.897 | 1.057 | 3 / 16 |
+| MLP only, ±1.0 | 0.525 | 1.222 | 0.788 | 12 / 16 |
+
+* **At the bench doses the cost reproduces for the whole block** (0.933, against 0.945 on page 05)
+  and **almost vanishes for the attention alone** (0.991: about 1% of fine texture instead of about
+  7%); the attention's common mode is closer to 1 than the whole block's in 12 of 16 cells. The MLP
+  alone keeps about half of it (0.967).
+* **The MLP is the texture knob of block 23**: pushed up it smooths (r⁺ 0.81, 0.53 at +1.0), pushed down
+  it etches (r⁻ 1.16, 1.22) — a strong swing, the same direction as the whole block's. The attention's
+  swing on texture is small and the other way (r⁺ 1.05, r⁻ 0.94).
+* **At ±1.0 the measure changes meaning**: the whole block's confetti adds high-frequency energy
+  (r⁺ 1.45), so its "common mode" rises above 1; that is destruction, not texture gained.
+
+So the cost page 05 treated as unavoidable in a block push is, for block 23 at these doses, mostly not
+in the attention: it comes from the MLP and from moving both together. One block, one measure of fine
+texture, not pre-registered; whether the same split holds for other blocks is open.
