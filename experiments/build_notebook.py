@@ -111,8 +111,13 @@ def render_index(pages: list[dict]) -> str:
                    f'{html.escape(page.get("title", pid))}</a></li>')
         md.reset()
         # Rewrite the relative links the markdown files use between themselves.
-        src = re.sub(r"\]\((?:\.\./)?(?:notebook/)?(\d\d-[a-z0-9-]+)\.md(#[a-z0-9-]*)?\)",
-                     r"](#p-\1\2)", page["_body"])
+        src = page["_body"]
+        if not FLAT_ASSETS:
+            # results pages: a link into the exploratory notebook leaves this site
+            src = re.sub(r"\]\(\.\./notebook/([^)]*)\)",
+                         lambda m: f"]({MAIN_BLOB}notebook/{m.group(1)})" if m.group(1) else f"]({MAIN_TREE}notebook)", src)
+        src = re.sub(r"\]\((?:\.\./)?(?:notebook/)?(\d\d-[a-z0-9-]+)\.md#([a-z0-9-]+)\)", r"](#p-\1--\2)", src)
+        src = re.sub(r"\]\((?:\.\./)?(?:notebook/)?(\d\d-[a-z0-9-]+)\.md\)", r"](#p-\1)", src)
         if FLAT_ASSETS:
             src = src.replace("](../assets/", "](assets/").replace("](../docs/", "](docs/")
         src = src.replace("](../README.md#what-holds-and-what-does-not)", "](#claims)")
@@ -126,7 +131,8 @@ def render_index(pages: list[dict]) -> str:
         # "The verdict"...). In un documento unico collidono, quindi ogni id e
         # ogni ancora interna si prefissano con la pagina.
         html_body = re.sub(r'id="([^"]+)"', rf'id="{pid}--\1"', html_body)
-        html_body = re.sub(r'href="#([^"]+)"', rf'href="#{pid}--\1"', html_body)
+        # links to another page ("#p-...") and to the claims table stay as they are
+        html_body = re.sub(r'href="#(?!p-\d|claims)([^"]+)"', rf'href="#{pid}--\1"', html_body)
         # il rimando all'indice e' l'unica ancora che esce dalla pagina
         html_body = html_body.replace(f'href="#{pid}--claims"', 'href="#claims"')
         html_body = html_body.replace("<table>", '<div class="tablewrap"><table>')\
@@ -152,6 +158,74 @@ def render_index(pages: list[dict]) -> str:
 
     return TEMPLATE.format(surface=SURFACE, ink=INK, ink2=INK_2, muted=MUTED, grid=GRID,
                            nav="\n".join(nav), claims=claim_rows, body="\n".join(body))
+
+
+# ---------------------------------------------------------------- results site
+# The results folder publishes two pages on GitHub Pages: index.html (introduction from
+# README.md, then the claims table and every page) and story.html (STORY.md). Without this
+# the site showed the pages only, and the introduction a reader is meant to start from was
+# visible on GitHub and nowhere else.
+
+MAIN_BLOB = "https://github.com/aledelpho/diffusion-models-weight-steering-report/blob/main/"
+MAIN_TREE = "https://github.com/aledelpho/diffusion-models-weight-steering-report/tree/main/"
+TEST_PUBLIC = "https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html"
+
+
+def _site_links(src: str, page_href: str) -> str:
+    """Markdown links of results/*.md rewritten for the two generated HTML pages."""
+    src = re.sub(r"\]\((\d\d-[a-z0-9-]+)\.md#([a-z0-9-]+)\)", rf"]({page_href}#p-\1--\2)", src)
+    src = re.sub(r"\]\((\d\d-[a-z0-9-]+)\.md\)", rf"]({page_href}#p-\1)", src)
+    src = re.sub(r"\]\(README\.md#[a-z0-9-]+\)", f"]({page_href}#claims)", src)
+    src = src.replace("](STORY.md)", "](story.html)").replace("](README.md)", f"]({page_href or 'index.html'})")
+    src = src.replace("](../notebook/)", f"]({MAIN_TREE}notebook)")
+    src = re.sub(r"\]\(\.\./notebook/([^)]+)\)", rf"]({MAIN_BLOB}notebook/\1)", src)
+    src = src.replace(f"]({TEST_PUBLIC})", "](try-the-test.html)")
+    return src
+
+
+def _md_html(src: str) -> str:
+    import markdown
+    out = markdown.markdown(src, extensions=["tables", "fenced_code", "attr_list"])
+    return out.replace("<table>", '<div class="tablewrap"><table>').replace("</table>", "</table></div>")
+
+
+def results_site(index: str, pages: list[dict]) -> tuple[str, str]:
+    readme = (NOTEBOOK / "README.md").read_text(encoding="utf-8")
+    intro_md = readme.split("\n## How to read the table below", 1)[0]
+    intro_md = intro_md.replace("[`../notebook/`](../notebook/)", "[the exploratory notebook](../notebook/)")
+    intro = _md_html(_site_links(intro_md, ""))
+    intro = re.sub(r'<h2>', '<h2 class="intro">', intro)
+    old_head = re.search(r"  <h1>Weight-Space Steering in Diffusion Models</h1>\n  <p class=\"corpus\">.*?</p>\n",
+                         index, re.S).group(0)
+    index = index.replace(old_head, f'  <section id="intro">\n{intro}\n  </section>\n')
+    elsewhere_old = re.search(r"  <h2>Elsewhere</h2>\n  <ul>\n.*?</ul>\n", index, re.S).group(0)
+    elsewhere = ("  <h2>Start here</h2>\n  <ul>\n"
+                 '    <li><a href="story.html">The story, with pictures</a></li>\n'
+                 '    <li><a href="#intro">Abstract and introduction</a></li>\n'
+                 '    <li><a href="try-the-test.html">Try the blind test</a></li>\n'
+                 '    <li><a href="#claims">What holds, what does not</a></li>\n'
+                 "  </ul>\n  <h2>Elsewhere</h2>\n  <ul>\n"
+                 f'    <li><a href="{MAIN_TREE}notebook">The exploratory notebook</a></li>\n'
+                 f'    <li><a href="{MAIN_BLOB}docs/scope.md">Scope and ladder</a></li>\n'
+                 f'    <li><a href="{MAIN_BLOB}docs/errors_log.md">The pitfalls checklist</a></li>\n'
+                 f'    <li><a href="{MAIN_TREE}data">Measurement files</a></li>\n'
+                 "  </ul>\n")
+    index = index.replace(elsewhere_old, elsewhere)
+    index = index.replace("<h2>Experiments</h2>", "<h2>Results</h2>", 1)
+    index = index.replace("<title>Weight-Space Steering in Diffusion Models — Lab Notebook</title>",
+                          "<title>Knobs inside the weights — results</title>")
+    index = index.replace(f"]({TEST_PUBLIC})", "](try-the-test.html)").replace(
+        f'href="{TEST_PUBLIC}"', 'href="try-the-test.html"')
+
+    story_md = (NOTEBOOK / "STORY.md").read_text(encoding="utf-8")
+    story = _md_html(_site_links(story_md, "index.html"))
+    story = story.replace(f'href="{TEST_PUBLIC}"', 'href="try-the-test.html"')
+    nav_story = re.sub(r'href="#(p-[^"]+)"', r'href="index.html#\1"', index.split("<nav>", 1)[1].split("</nav>", 1)[0])
+    nav_story = nav_story.replace('href="#intro"', 'href="index.html#intro"').replace('href="#claims"', 'href="index.html#claims"')
+    head = index.split("<nav>", 1)[0].replace("<title>Knobs inside the weights — results</title>",
+                                               "<title>The story — knobs inside the weights</title>")
+    story_page = f"{head}<nav>{nav_story}</nav>\n<main>\n<section id=\"story\">\n{story}\n</section>\n</main>\n</body>\n</html>\n"
+    return index, story_page
 
 
 def _claim_target(page, claim):
@@ -209,7 +283,9 @@ TEMPLATE = """<!DOCTYPE html>
            color: var(--ink-2); text-decoration: none; font-size: .9rem; }}
   nav a:hover {{ color: var(--ink); }}
   .dot {{ width: .5rem; height: .5rem; border-radius: 50%; flex: none; }}
-  main {{ padding: 3rem 2rem 6rem; max-width: calc(var(--measure) + 4rem); min-width: 0; }}
+  main {{ padding: 3rem 2rem 6rem; max-width: 64rem; min-width: 0; }}
+  /* text keeps its reading measure; figures may use the whole column */
+  h1, h2, h3, h4, blockquote, pre {{ max-width: var(--measure); }}
   h1 {{ font-size: 2rem; line-height: 1.2; margin: 0 0 .5rem; }}
   h2 {{ font-size: 1.35rem; margin: 2.5rem 0 .75rem; }}
   h3 {{ font-size: 1.05rem; margin: 2rem 0 .5rem; color: var(--ink-2); }}
@@ -317,6 +393,13 @@ def main() -> int:
     table = claims_table(pages)
     index = render_index(pages)
     stale = []
+    if args.dir == "results":
+        index, story_page = results_site(index, pages)
+        story_file = NOTEBOOK / "story.html"
+        if not story_file.exists() or story_file.read_text(encoding="utf-8") != story_page:
+            stale.append("story.html")
+            if not args.check:
+                story_file.write_text(story_page, encoding="utf-8")
 
     if README.exists():
         text = README.read_text(encoding="utf-8")

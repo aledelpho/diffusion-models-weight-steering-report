@@ -29,7 +29,9 @@
            color: var(--ink-2); text-decoration: none; font-size: .9rem; }
   nav a:hover { color: var(--ink); }
   .dot { width: .5rem; height: .5rem; border-radius: 50%; flex: none; }
-  main { padding: 3rem 2rem 6rem; max-width: calc(var(--measure) + 4rem); min-width: 0; }
+  main { padding: 3rem 2rem 6rem; max-width: 64rem; min-width: 0; }
+  /* text keeps its reading measure; figures may use the whole column */
+  h1, h2, h3, h4, blockquote, pre { max-width: var(--measure); }
   h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 .5rem; }
   h2 { font-size: 1.35rem; margin: 2.5rem 0 .75rem; }
   h3 { font-size: 1.05rem; margin: 2rem 0 .5rem; color: var(--ink-2); }
@@ -822,7 +824,7 @@ An unrun design is not a weaker result; it is no result.</p>
 knew which image came from which arm. Hashing the filenames would not have fixed it either: on a
 separate corpus the same observer picked these conditions out of a four-way line-up at 17 of 20
 and 12 of 20 against a 25% chance level, which is pitfall 34 and is measured on
-<a href="#p-02-attribute-emergence--p-03-what-ends-up-in-the-picture#the-annotator-is-the-instrument">what ends up in the picture</a>. With 18 discordant seeds to 0 the headline will not
+<a href="#p-03-what-ends-up-in-the-picture--the-annotator-is-the-instrument">what ends up in the picture</a>. With 18 discordant seeds to 0 the headline will not
 flip, but the intermediate cells are exactly where a borderline call moves a number: the
 DiT-only arm at 12/19 and the 0.50 dose point at 5/6 scorable are the two that a biased eye
 could have made.</p>
@@ -1981,7 +1983,7 @@ brightness and noise did not hide the conditions from the person who characteris
 <p>This is uncomfortable to publish and it is the most useful measurement on this page, because it
 applies backwards: every scoring round in this notebook before this one had assumed a blinding
 it never tested, including the barnacles on
-<a href="#p-03-what-ends-up-in-the-picture--p-02-attribute-emergence#why-i-might-be-wrong">the previous page</a>.</p>
+<a href="#p-02-attribute-emergence--why-i-might-be-wrong">the previous page</a>.</p>
 <h3 id="p-03-what-ends-up-in-the-picture--where-the-blinding-held">Where the blinding held</h3>
 <p>Two independent arguments say the failed blinding does not produce the size result, and the
 first is the stronger.</p>
@@ -2058,7 +2060,7 @@ informative prompt and a floor of 2/2¹ = 1.0. The subject sentence pins <code>g
 sky</code>, and a bright daylight scene is one where the trait cannot move. That was decidable from
 the prompt before rendering, and the pre-registration treated the second hypothesis as
 travelling with the corpus for free. The round is written up on
-<a href="#p-03-what-ends-up-in-the-picture--p-02-attribute-emergence#the-confirmation-that-was-run-and-could-not-answer">what the edit puts in the picture</a>.</p>
+<a href="#p-02-attribute-emergence--the-confirmation-that-was-run-and-could-not-answer">what the edit puts in the picture</a>.</p>
 <p>An arm that was rendered and not examined is not a spare, and a hypothesis attached to a corpus
 that cannot express it is not a test.</p>
 <p>More importantly for the claim itself: no sign-scrambled edit at the identical displacement was
@@ -2216,7 +2218,7 @@ almost nothing downstream left to absorb it, and first and last groups behave un
 in nearly every transformer.</p>
 <p>The page earns its place by what it set up rather than by what it settled. The follow-up is
 fully specified because of it, and it has since been run:
-<a href="#p-04-where-in-the-model--p-08-block1-vs-block6">the first group against the last</a> is the pre-registered version of the
+<a href="#p-08-block1-vs-block6">the first group against the last</a> is the pre-registered version of the
 question this page could only pose.</p>
 <h2 id="p-04-where-in-the-model--why-i-might-be-wrong">Why I might be wrong</h2>
 <p><strong>This is not a confirmatory page, and one contrast on it was frozen anyway.</strong> The
@@ -2565,7 +2567,7 @@ sweep), <code>data/pilot_macro.csv</code> (the amplitude sweep),
 (the signed feature spaces), <code>data/pilot_rotation_direction_tests.csv</code> (the direction tests),
 <code>data/pilot_rotations_directions.csv</code>, and <code>data/pilot_rotations_position.csv</code>, derived here on
 2026-09-21.</p>
-<p><strong>What came out of it.</strong> <a href="#p-04-where-in-the-model--p-08-block1-vs-block6">The first group against the last</a> is the
+<p><strong>What came out of it.</strong> <a href="#p-08-block1-vs-block6">The first group against the last</a> is the
 pre-registered follow-up this page specified: one primary test on the antisymmetric component in
 texture space, ten prompts for a floor of 0.00195 with room for twenty-five tests, three seeds a
 cell, displacement matched by construction, nine sampling steps, and a sign-scrambled control at
@@ -2875,7 +2877,7 @@ carry no information about blocks. The control that settles it: replacing a bloc
 change does not lower the cosine (0.430 against 0.427). Recorded as pitfall 60.</p>
 <p>Single blocks at ±0.200 sit above that ceiling, which is why this page stands: mean correlation
 with their own baseline <strong>0.664</strong>, against a ceiling of <strong>0.496</strong> measured on the same corpus
-(<a href="#p-05-knob-or-cost--p-00-the-bench#the-data">the bench</a>). But the margin is not uniform, and the honest version
+(<a href="#p-00-the-bench--the-data">the bench</a>). But the margin is not uniform, and the honest version
 of that sentence has a second half: across the 56 individual renders the range runs
 <strong>0.493 to 0.789</strong>, so the weakest single render sits <em>at</em> the ceiling rather than above it.
 The result here rests on cell means, which is where the margin lives; a claim about any single
@@ -3503,7 +3505,7 @@ way round.</p>
 <tr>
 <th></th>
 <th>colour, here</th>
-<th>texture, on <a href="#p-07-chromatic-signatures--p-06-the-hatching-axis">the hatching axis</a></th>
+<th>texture, on <a href="#p-06-the-hatching-axis">the hatching axis</a></th>
 </tr>
 </thead>
 <tbody>
@@ -3650,7 +3652,7 @@ the intended one (cos 0.985 at 0.0035, 0.955 at 0.0018). No dose satisfies both 
 confirmation was stopped rather than a gate loosened after it failed. See
 <code>docs/prereg_rotations_block1_vs_block6_emendamento_v4.md</code>. The recovery makes that re-render
 unnecessary for <em>this</em> page: the clean pixels of the registered dose already existed.</p>
-<p><strong>The direction I'm chasing.</strong> <a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could ask whether
+<p><strong>The direction I'm chasing.</strong> <a href="#p-04-where-in-the-model">The pilot sweep</a> could ask whether
 position matters but couldn't answer it. This is the version built to settle it: two block
 groups pushed exactly the same distance by construction, one hypothesis, formula and
 thresholds frozen before a single image existed.</p>
@@ -3666,7 +3668,7 @@ made the <em>control</em> look stronger than it is, so for two days I thought th
 contaminated when it was only understated.</p>
 </blockquote>
 <h2 id="p-08-block1-vs-block6--in-two-minutes">In two minutes</h2>
-<p><a href="#p-08-block1-vs-block6--p-04-where-in-the-model">The pilot sweep</a> could pose the question and not answer it: does it
+<p><a href="#p-04-where-in-the-model">The pilot sweep</a> could pose the question and not answer it: does it
 matter <em>where</em> you push, or only how far? Its metric was an unsigned distance, its cells had one
 seed, and nothing was matched. This is the version written to settle it — one hypothesis, no
 alternatives, thresholds and formula frozen before a single image existed.</p>
@@ -3994,7 +3996,7 @@ may have measured is the scene.</p>
 <h2 id="p-09-style-direction--in-two-minutes">In two minutes</h2>
 <p>The quantity is a cosine. Take one perturbation, hold it fixed, and ask how much the eight
 style prompts agree with each other about the direction it moves the picture in. Do the same
-for the eighteen subject prompts of <a href="#p-09-style-direction--p-07-chromatic-signatures">the chromatic corpus</a>. The
+for the eighteen subject prompts of <a href="#p-07-chromatic-signatures">the chromatic corpus</a>. The
 registered prediction was that styles would agree <strong>less</strong> — that is what "the direction
 depends on the declared style" means when you write it down as a number. So the statistic is
 subject coherence minus style coherence, and the prediction asked for it to come out positive.</p>
@@ -4284,7 +4286,7 @@ licenses.</p>
 <p><strong>Measurement files.</strong> The five listed above, plus <code>data/style_features_stage9.csv</code> and
 <code>data/palette_features_stage9.csv</code> for the features themselves.</p>
 <p><strong>What the page inherits from elsewhere.</strong> The subject corpus is the one
-<a href="#p-09-style-direction--p-07-chromatic-signatures">page 07</a> is built on, and the attenuation problem is the one
+<a href="#p-07-chromatic-signatures">page 07</a> is built on, and the attenuation problem is the one
 recorded there as pitfall 36. The centring conflict between the two analysis scripts is
 pitfall 37 and it means the coherences here cannot be compared with the +0.057 and +0.120
 published for that corpus.</p>
