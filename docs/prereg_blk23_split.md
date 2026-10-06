@@ -63,3 +63,18 @@ saturated colours?". Deposited before `--measure` runs; reported beside the numb
 He has seen B and W before; A and M are new to him.
 
 Code: `experiments/blk23_split.py`.
+
+## Amendment 1 — 2026-10-06, before any render of this bench
+
+At Alessandro's request two stronger doses are added, **−1.0 and +1.0**, keeping −0.45 and +0.30.
+In Real Value they are ×0 (the matrices are zeroed: −1.0 on A removes block 23's attention, on M its
+MLP, on W the whole block's contribution) and ×2. The whole block W is not in C47 at these doses, so
+it is rendered here through the block vector (`whole_m1.000`, `whole_p1.000`).
+
+* Renders: W, A, M × ±1.0 × 16 cells = 96 more; two more SPLIT = WHOLE checks (all eight matrices
+  through `granular_json` against W at −1.0 and +1.0, same cell). Total 165 (7 in the check phase).
+* Gate, hypotheses and thresholds are unchanged and applied **to each of the four doses separately**.
+  The thesis is reported per dose; −0.45 keeps its role as the dose the thesis was first stated for,
+  and −1.0 / +1.0 are reported beside it with the same rules. A thesis that holds at ±1.0 and not at
+  −0.45 is reported as exactly that.
+* Eye pass: 64 sheets (16 cells × 4 doses), 6 shown twice, same two questions.

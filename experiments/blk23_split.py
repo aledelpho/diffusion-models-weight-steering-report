@@ -1,11 +1,11 @@
 """C58 — block 23 split into its attention and its MLP (docs/prereg_blk23_split.md). Written 2026-10-06.
 
-  python blk23_split.py --plan              # data/blk23_split_plan.csv (3 checks + 64)
-  python blk23_split.py --queue --checks    # the 3 check renders only
+  python blk23_split.py --plan              # data/blk23_split_plan.csv (7 check-phase rows + 158)
+  python blk23_split.py --queue --checks    # the check-phase renders only
   python blk23_split.py --check             # REPRO and SPLIT = WHOLE, pixel for pixel
   python blk23_split.py --queue             # the 64
-  python blk23_split.py --count             # expected 67 missing 0
-  python blk23_split.py --page              # blind eye page (32 sheets + 4 repeats) + data/blk23_split_eye_key.csv
+  python blk23_split.py --count             # expected 165 missing 0
+  python blk23_split.py --page              # blind eye page (64 sheets + 6 repeats) + data/blk23_split_eye_key.csv
   python blk23_split.py --measure           # after the eye pass: data/blk23_split_measures.csv + data/blk23_split_tests.csv
 
 Renders: Text2Img/benchmark_blk23_split/{prompt}_{cond}_krea2_seed{seed}_00001_.png
@@ -24,7 +24,9 @@ EYEKEY = DATA / "blk23_split_eye_key.csv"
 FOLDER = "benchmark_blk23_split"
 ATTN = ["attn.wq", "attn.wk", "attn.wv", "attn.gate", "attn.wo"]
 MLP = ["mlp.gate", "mlp.up", "mlp.down"]
-DOSES = [("m0.450", -0.45), ("p0.300", 0.30)]
+DOSES_C47 = [("m0.450", -0.45), ("p0.300", 0.30)]          # whole block already in C47
+DOSES_HI = [("m1.000", -1.0), ("p1.000", 1.0)]             # amendment 1: whole block rendered here
+DOSES = DOSES_C47 + DOSES_HI
 ZERO = ",".join(["0.0"] * 34)
 CHECK_CELL = ("E1_cartoon", "2718281")
 
@@ -44,23 +46,28 @@ def cells():
 
 def make_plan():
     rows = []
-    def add(pid, seed, b, cond, vo, g):
+    def add(pid, seed, b, cond, vo, g, phase):
         prefix = f"{pid}_{cond}_krea2_seed{seed}"
-        rows.append({"row": len(rows), "prompt_id": pid, "seed": seed, "cond": cond, "vectors_override": vo, "granular_json": g,
-                     "prompt_text": b["prompt_text"], "output_prefix": prefix, "expected_filename": f"{prefix}_00001_.png",
+        rows.append({"row": len(rows), "phase": phase, "prompt_id": pid, "seed": seed, "cond": cond, "vectors_override": vo,
+                     "granular_json": g, "prompt_text": b["prompt_text"], "output_prefix": prefix,
+                     "expected_filename": f"{prefix}_00001_.png",
                      **{k: b[k] for k in ("sampler", "scheduler", "steps", "cfg", "denoise", "width", "height")}})
     cs = cells()
     b0 = next(b for p, s, b in cs if (p, s) == CHECK_CELL)
-    add(*CHECK_CELL, b0, "CHK_whole_m0.450", vec23(-0.45), "")
+    add(*CHECK_CELL, b0, "CHK_whole_m0.450", vec23(-0.45), "", "check")
+    for tag, d in DOSES_HI:
+        add(*CHECK_CELL, b0, f"whole_{tag}", vec23(d), "", "check")
     for tag, d in DOSES:
-        add(*CHECK_CELL, b0, f"CHK_all8_{tag}", ZERO, gj(ATTN + MLP, d))
+        add(*CHECK_CELL, b0, f"CHK_all8_{tag}", ZERO, gj(ATTN + MLP, d), "check")
     for pid, seed, b in cs:
         for tag, d in DOSES:
-            add(pid, seed, b, f"attn_{tag}", ZERO, gj(ATTN, d))
-            add(pid, seed, b, f"mlp_{tag}", ZERO, gj(MLP, d))
+            if tag in dict(DOSES_HI) and (pid, seed) != CHECK_CELL:
+                add(pid, seed, b, f"whole_{tag}", vec23(d), "", "main")
+            add(pid, seed, b, f"attn_{tag}", ZERO, gj(ATTN, d), "main")
+            add(pid, seed, b, f"mlp_{tag}", ZERO, gj(MLP, d), "main")
     with open(PLAN, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
-    print("plan rows:", len(rows))
+    print("plan rows:", len(rows), "(check:", sum(r["phase"] == "check" for r in rows), ")")
 
 
 def workflow(r):
@@ -74,7 +81,7 @@ def workflow(r):
 def queue(checks_only):
     n = 0
     for r in csv.DictReader(open(PLAN, encoding="utf-8")):
-        if checks_only and not r["cond"].startswith("CHK"):
+        if checks_only and r["phase"] != "check":
             continue
         if (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists():
             continue
@@ -100,6 +107,11 @@ def split_file(pid, seed, cond):
     return c47.IMG_ROOT / FOLDER / f"{pid}_{cond}_krea2_seed{seed}_00001_.png"
 
 
+def whole_file(pid, seed, tag):
+    """The whole block: the C47 render at -0.45 / +0.30, the one rendered here at -1.0 / +1.0."""
+    return c47_file(pid, seed, f"b23_{tag}") if tag in dict(DOSES_C47) else split_file(pid, seed, f"whole_{tag}")
+
+
 def check():
     import numpy as np
     p, s = CHECK_CELL
@@ -107,8 +119,8 @@ def check():
     d = int(np.abs(_img(split_file(p, s, "CHK_whole_m0.450")) - _img(c47_file(p, s, "b23_m0.450"))).max())
     res.append(("REPRO whole -0.45 (vector) vs C47", d))
     for tag, _ in DOSES:
-        d = int(np.abs(_img(split_file(p, s, f"CHK_all8_{tag}")) - _img(c47_file(p, s, f"b23_{tag}"))).max())
-        res.append((f"SPLIT=WHOLE all eight (granular) {tag} vs C47 whole block", d))
+        d = int(np.abs(_img(split_file(p, s, f"CHK_all8_{tag}")) - _img(whole_file(p, s, tag))).max())
+        res.append((f"SPLIT=WHOLE all eight (granular) {tag} vs whole block (vector)", d))
     for name, d in res:
         print(f"{name}: max abs diff {d}")
     print("CHECK", "PASS" if all(d == 0 for _, d in res) else "FAIL - stop the bench")
@@ -127,7 +139,7 @@ def page():
     sheets = []
     for pid, seed, _ in cells():
         for tag, _ in DOSES:
-            paths = {"B": c47_file(pid, seed, "baseline"), "W": c47_file(pid, seed, f"b23_{tag}"),
+            paths = {"B": c47_file(pid, seed, "baseline"), "W": whole_file(pid, seed, tag),
                      "A": split_file(pid, seed, f"attn_{tag}"), "M": split_file(pid, seed, f"mlp_{tag}")}
             order = list(rng.permutation(["B", "W", "A", "M"]))
             sheets.append({"pid": pid, "seed": seed, "dose": tag, "order": order, "paths": paths})
@@ -135,7 +147,7 @@ def page():
     for sh, i in zip(sheets, ids):
         sh["id"] = f"s{i}"
     show = [sh["id"] for sh in sheets]; rng.shuffle(show)
-    rep = list(rng.choice(show, 4, replace=False))
+    rep = list(rng.choice(show, 6, replace=False))
     for x in rep:
         show.insert(int(rng.integers(len(show) // 3, len(show) + 1)), x)
     try:
@@ -211,7 +223,7 @@ def measure():
     for pid, seed, _ in cells():
         nB, cB, lB, eB = feats(c47_file(pid, seed, "baseline"))
         for tag, _ in DOSES:
-            for arm, path in (("W", c47_file(pid, seed, f"b23_{tag}")), ("A", split_file(pid, seed, f"attn_{tag}")),
+            for arm, path in (("W", whole_file(pid, seed, tag)), ("A", split_file(pid, seed, f"attn_{tag}")),
                               ("M", split_file(pid, seed, f"mlp_{tag}"))):
                 n, c, l, e = feats(path)
                 rows.append({"prompt": pid, "seed": seed, "dose": tag, "arm": arm, "dN": round(n - nB, 4),
