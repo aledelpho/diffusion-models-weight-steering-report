@@ -72,3 +72,12 @@ Alessandro judged the preference question ("quale preferisci per questo stile") 
 focus on artefacts. The question is removed from the page and **P3 is dropped**; it will not be reported.
 P1, P2, P4 and the gate are unchanged. The pairs, the sides and the order are unchanged (same rng 61;
 `data/comic_form_eye_key.csv` identical, md5 49ce666c…). No label had been given when the page was rebuilt.
+
+## Amendment 2 (2026-10-07, labels in, before any count)
+
+Alessandro left "how much the picture changed" empty on 16 showings where, in his words, the artefacts
+destroyed the image so completely that the question could not be answered. Not foreseen. Fixed before
+counting: for P2 the primary analysis **excludes** empty answers (each edit's mean over its answered
+pairs); as a sensitivity check, empty answers are scored **molto** (2), the value least favourable to P2
+since nearly all empties are on heavily damaged pairs. Both are reported. P1, P4 and the gate are not
+affected.
