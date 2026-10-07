@@ -66,3 +66,26 @@ a change detector, not a noise detector. Neither scalar can replace the eye on t
 * Many sheets judged clean were also judged better than the baseline on the comic (blocks 8 MLP + and
   whole +, 9 attention + and whole +, 13 whole −, 18 MLP −, 2 whole −; block 1 attention + too, with a
   blur on the car). Not a protocol measure; noted for a later test.
+
+## Addendum (2026-10-07, post hoc): praised sheets change more than noisy ones
+
+Alessandro's remark after the test: the sheets he praised for the comic change the image a lot without
+spoiling it, while the ones spoiled by retino, grain or blotches often change it less. Post hoc check on
+`data/split_atlas_eye_praise_vs_layout.csv` (praise = a note containing bell-, capolavoro, migliore,
+ottimo, fighissim-; layout r = mean over the three prompts, C47 metric):
+
+| group | sheets | median layout r |
+|---|---|---|
+| praised | 10 | 0.74 |
+| noise ≥ medio, no structural class | 18 | 0.87 |
+| noise lieve only | 12 | 0.86 |
+| clean | 93 | 0.85 |
+| structural classes (poster, sostituito, morbido, tratteggio, piatto) | 35 | 0.75 |
+
+Praised vs noisy: Mann–Whitney p = 0.004. The praised sheets sit in blocks 1–19 (8 MLP +, 8 whole +,
+9 attention +, 9 whole +, 17 whole +, 19 MLP +, 1 attention +, 2 whole −, 13 whole −, 18 MLP −); the noise in
+blocks 22–27. By eye (`sheets/bello_*.jpg`): the praised edits redraw the face (pose, angle, line weight),
+move the light (block 1 attention +: hard blue cel light; block 20 whole +: rim light) or flatten the
+shading into cleaner cel colour (block 19 MLP +), with clean line throughout. Reading: the early and
+middle blocks rewrite form and light and keep the surface; the late blocks keep the form and damage the
+surface. Post hoc, ten sheets chosen by free-text notes, one observer: a lead, not a claim.
