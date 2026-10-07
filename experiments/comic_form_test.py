@@ -190,6 +190,77 @@ PAGE = (PAGE.replace("__DA__", _btn("dA", ["nessuno", "lieve", "medio", "forte"]
         .replace("__DB__", _btn("dB", ["nessuno", "lieve", "medio", "forte"])).replace("__CH__", _btn("ch", ["poco", "medio", "molto"])))
 
 
+def measure():
+    """P1: layout r (C47 metric: correlation of CIELAB L at 64x80) of each edit with its baseline."""
+    import numpy as np
+    from PIL import Image
+    from blk23_vs_postproc import lab_small
+    L = lambda p: lab_small(Image.open(p).convert("RGB"))[..., 0].ravel()
+    out = []
+    for r in csv.DictReader(open(PLAN, encoding="utf-8")):
+        if r["group"] not in ("form", "surface"):
+            continue
+        a, b = L(f(r["prompt_id"], r["seed"], r["cond"])), L(f(r["prompt_id"], r["seed"], "baseline"))
+        out.append({"prompt": r["prompt_id"], "seed": r["seed"], "cond": r["cond"], "group": r["group"],
+                    "layout_r": round(float(np.corrcoef(a, b)[0, 1]), 4)})
+    with open(DATA / "comic_form_layout.csv", "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(out[0])); w.writeheader(); w.writerows(out)
+    print(len(out), "edits measured")
+
+
+def tally():
+    import numpy as np, pandas as pd
+    from scipy.stats import mannwhitneyu, fisher_exact
+    k = pd.read_csv(KEY); a = pd.read_csv(LABELS); lay = pd.read_csv(DATA / "comic_form_layout.csv")
+    a["pair"] = a.slot.str.split("#").str[0]
+    D = {"nessuno": 0, "lieve": 1, "medio": 2, "forte": 3}; C = {"poco": 0, "medio": 1, "molto": 2}
+    a = a.merge(k, on="pair")
+    a["d_edit"] = np.where(a.left == "edit", a.damage_A.map(D), a.damage_B.map(D))
+    a["d_base"] = np.where(a.left == "edit", a.damage_B.map(D), a.damage_A.map(D))
+    a["ch"] = a.change.map(C)
+    first = a.drop_duplicates("pair", keep="first"); sec = a[a.duplicated("pair", keep="first")]
+    m = first.set_index("pair").loc[sec.pair]; s = sec.set_index("pair")
+    agree = float(np.mean((m.d_edit.values >= 2) == (s.d_edit.values >= 2)) * 0.5 + np.mean((m.d_base.values >= 2) == (s.d_base.values >= 2)) * 0.5)
+    agree_edit = float(np.mean((m.d_edit.values >= 2) == (s.d_edit.values >= 2)))
+    ch_agree = float(np.mean(m.ch.fillna(-1).values == s.ch.fillna(-1).values))
+    print(f"GATE presence agreement damage>=medio: edit side {agree_edit:.2f}, both sides {agree:.2f} (n={len(sec)}); change exact agreement {ch_agree:.2f}")
+    res = {"gate_edit": agree_edit, "gate_both": agree}
+    per = lay.groupby(["cond", "group"]).layout_r.mean().reset_index()
+    F, S = per[per.group == "form"].layout_r, per[per.group == "surface"].layout_r
+    p1 = mannwhitneyu(F, S, alternative="less").pvalue
+    print(f"P1 layout r per edit: FORM median {F.median():.3f} mean {F.mean():.3f}; SURFACE median {S.median():.3f} mean {S.mean():.3f}; one-sided MWU p = {p1:.4g}")
+    for lab, fill in (("primary (empties excluded)", None), ("sensitivity (empties = molto)", 2)):
+        x = first.copy(); x["chs"] = x.ch if fill is None else x.ch.fillna(fill)
+        e = x.groupby(["cond", "group"]).chs.mean().reset_index().dropna()
+        Fe, Se = e[e.group == "form"].chs, e[e.group == "surface"].chs
+        print(f"P2 {lab}: FORM mean {Fe.mean():.2f} (n={len(Fe)}), SURFACE mean {Se.mean():.2f} (n={len(Se)}); one-sided MWU p = {mannwhitneyu(Fe, Se, alternative='greater').pvalue:.4g}")
+    print("empty change answers by group:", first[first.ch.isna()].group.value_counts().to_dict())
+    base_hits = int((first.d_base >= 2).sum()); n = len(first)
+    for g in ("surface", "form"):
+        x = first[first.group == g]; hits = int((x.d_edit >= 2).sum()); nn = len(x)
+        bh = int((x.d_base >= 2).sum())
+        print(f"P4 {g}: edit damage>=medio {hits}/{nn} = {hits/nn:.3f}; baseline side in the same pairs {bh}/{nn} = {bh/nn:.3f}")
+        if g == "surface":
+            print("   Fisher one-sided p =", f"{fisher_exact([[hits, nn - hits], [bh, nn - bh]], alternative='greater')[1]:.3g}")
+        else:
+            p_e, p_b = hits / nn, bh / nn
+            l1, u1 = confint_wilson(hits, nn); l2, u2 = confint_wilson(bh, nn)
+            d = p_e - p_b
+            lo = d - np.sqrt((p_e - l1) ** 2 + (u2 - p_b) ** 2); hi = d + np.sqrt((u1 - p_e) ** 2 + (p_b - l2) ** 2)
+            print(f"   difference {d:.3f}, Newcombe 95% [{lo:.3f}, {hi:.3f}] -> {'NO DETECTABLE COST' if hi < 0.10 else ('COST' if lo > 0 else 'cost not excluded')}")
+    print("baseline sides overall damage>=medio:", base_hits, "/", n)
+    first.to_csv(DATA / "comic_form_eye_tally_alessandro.csv", index=False)
+    print(first.groupby(["group", "cond"]).agg(dmg_edit=("d_edit", "mean"), dmg_ge2=("d_edit", lambda v: int((v >= 2).sum())), change=("ch", "mean")).round(2).to_string())
+
+
+def confint_wilson(k, n, z=1.959964):
+    p = k / n; den = 1 + z * z / n; c = (p + z * z / (2 * n)) / den; h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den
+    return c - h, c + h
+
+
+import numpy as np
+
+
 def count():
     rows = list(csv.DictReader(open(PLAN, encoding="utf-8")))
     miss = [r["expected_filename"] for r in rows if not (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
@@ -198,7 +269,7 @@ def count():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "checks", "check", "count", "page"):
+    for x in ("plan", "queue", "checks", "check", "count", "page", "measure", "tally"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--img-root")
     a = ap.parse_args()
@@ -208,3 +279,5 @@ if __name__ == "__main__":
     if a.check: check()
     if a.count: count()
     if a.page: page()
+    if a.measure: measure()
+    if a.tally: tally()
