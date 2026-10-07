@@ -62,3 +62,12 @@ one baseline. For each cell, G₁ = geometric mean of c over blocks 1–22, G₂
 * Undecided: reported as such; no change.
 * Limits written now: one dose; four prompts; the eye test has one observer; HF is page 05's measure of
   fine-texture loss and does not see added noise (C59), which is why the eye is required for an overturn.
+
+## Amendment 1 (2026-10-07, before any render)
+
+Found while sizing the test: in C59 (±0.35, same HF) the cell-level mean of log c over blocks 1–22 was
+**above** 0 (+0.018 to +0.020 for attention, MLP and whole), i.e. fine texture *added* in both directions,
+not lost. The rules above had no outcome for that case. Added: if the 95% interval of mean log G₁ lies
+entirely **above** 0, the outcome is **"no loss; common-mode gain"** — page 05's wording ("costs fine
+texture") is contradicted for blocks 1–22 at this dose, but a symmetric effect exists; whether the gained
+high frequency is visible damage is left to the eye test. Nothing else changes.
