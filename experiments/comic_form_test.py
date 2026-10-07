@@ -110,6 +110,87 @@ def check():
     print("CHECK", "PASS" if a == 0 and b == 0 else "FAIL - stop")
 
 
+KEY = DATA / "comic_form_eye_key.csv"
+LABELS = DATA / "comic_form_eye_alessandro.csv"
+
+
+def f(pid, seed, cond):
+    return c47.IMG_ROOT / FOLDER / f"{pid}_{cond}_krea2_seed{seed}_00001_.png"
+
+
+def page():
+    """Blind pairs: edit vs its baseline, side random (rng 61), 180 pairs + 15 repeats."""
+    import numpy as np
+    from PIL import Image
+    rng = np.random.default_rng(61)
+    out = c47.IMG_ROOT / FOLDER / "eye_test"; out.mkdir(exist_ok=True)
+    rows = [r for r in csv.DictReader(open(PLAN, encoding="utf-8")) if r["group"] in ("form", "surface")]
+    ids = rng.permutation(np.arange(1000, 9999))[: len(rows)]
+    pairs = []
+    for r, i in zip(rows, ids):
+        left = rng.choice(["edit", "base"])
+        pairs.append({"id": f"p{i}", "prompt": r["prompt_id"], "seed": r["seed"], "cond": r["cond"], "group": r["group"], "left": left})
+    show = [p["id"] for p in pairs]; rng.shuffle(show)
+    rep = list(rng.choice(show, 15, replace=False))
+    for x in rep:
+        show.insert(int(rng.integers(len(show) // 3, len(show) + 1)), x)
+    for p in pairs:
+        dst = out / f"{p['id']}.jpg"
+        if dst.exists():
+            continue
+        e, b = f(p["prompt"], p["seed"], p["cond"]), f(p["prompt"], p["seed"], "baseline")
+        L, R = (e, b) if p["left"] == "edit" else (b, e)
+        S = Image.new("RGB", (2 * 1024 + 12, 1280), (30, 30, 30))
+        S.paste(Image.open(L).convert("RGB"), (0, 0)); S.paste(Image.open(R).convert("RGB"), (1036, 0))
+        S.save(dst, "JPEG", quality=92, subsampling=0)
+    with open(KEY, "w", newline="") as fh:
+        w = csv.writer(fh); w.writerow(["pair", "prompt", "seed", "cond", "group", "left", "repeated"])
+        for p in pairs:
+            w.writerow([p["id"], p["prompt"], p["seed"], p["cond"], p["group"], p["left"], int(p["id"] in rep)])
+    slots = [f"{x}#{k}" for k, x in enumerate(show)]
+    (out / "eye_test.html").write_text(PAGE.replace("__SLOTS__", json.dumps(slots)), encoding="utf-8")
+    print(len(pairs), "pairs,", len(slots), "showings ->", out / "eye_test.html")
+
+
+PAGE = r"""<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Fumetto: A contro B</title>
+<style>
+body{margin:0;background:#1d1d1f;color:#eee;font:15px system-ui,sans-serif}
+#wrap{display:flex;gap:12px;padding:8px;box-sizing:border-box;height:100vh}
+#view{flex:1;overflow:auto;background:#000;border-radius:8px;cursor:zoom-in;position:relative}
+#view.zoom{cursor:zoom-out}#view img{width:100%;display:block}#view.zoom img{width:auto;max-width:none}
+#lab{display:flex;justify-content:space-around;font-weight:700;font-size:20px;padding:4px;background:#000;position:sticky;top:0}
+#side{width:360px;overflow:auto;background:#2a2a2d;border-radius:8px;padding:12px;box-sizing:border-box}
+.q{border-top:1px solid #444;padding:8px 0}.q b{display:block;margin-bottom:4px}
+button{font:14px system-ui;padding:6px 11px;margin:2px;border-radius:7px;border:1px solid #666;background:#333;color:#eee;cursor:pointer}
+button.on{background:#3b6e4f;border-color:#6c6}#n{color:#aaa;margin-bottom:6px}small{color:#aaa}
+</style></head><body><div id="wrap"><div id="view"><div id="lab"><span>A</span><span>B</span></div><img id="im"></div>
+<div id="side"><div id="n"></div><small>Clic sull'immagine: zoom 100%. Degrado = grana, chiazze, retino, collasso.</small>
+<div class="q"><b>Quale preferisci per questo stile?</b>__P__</div>
+<div class="q"><b>Degrado di superficie in A</b>__DA__</div>
+<div class="q"><b>Degrado di superficie in B</b>__DB__</div>
+<div class="q"><b>Quanto &egrave; cambiata l'immagine tra A e B?</b>__CH__</div>
+<div class="q"><button id="prev">&larr;</button><button id="next">&rarr;</button><button id="exp">Scarica le risposte</button></div></div></div>
+<script>
+const S=__SLOTS__,K="comic_form_eye_v1",Q=["pref","dA","dB","ch"];let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
+function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
+const done=a=>a&&Q.every(q=>a[q]);
+function show(){const a=A[S[i]]||{};$("#im").src=S[i].split("#")[0]+".jpg";
+ $("#n").textContent=`coppia ${i+1} di ${S.length} · completate ${S.filter(s=>done(A[s])).length}`;
+ document.querySelectorAll("button[data-q]").forEach(b=>b.classList.toggle("on",a[b.dataset.q]===b.dataset.v));save()}
+document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>{const s=S[i];A[s]=A[s]||{};A[s][b.dataset.q]=b.dataset.v;show();
+ if(done(A[s])&&i<S.length-1)setTimeout(()=>{i++;show();$("#view").scrollTo(0,0)},300)});
+$("#prev").onclick=()=>{if(i>0){i--;show()}};$("#next").onclick=()=>{if(i<S.length-1){i++;show()}};
+$("#view").onclick=()=>$("#view").classList.toggle("zoom");
+$("#exp").onclick=()=>{let t="slot,pref,damage_A,damage_B,change\n";S.forEach(s=>{const a=A[s]||{};t+=[s,a.pref||"",a.dA||"",a.dB||"",a.ch||""].join(",")+"\n"});
+ const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="comic_form_eye_alessandro.csv";l.click()};
+show();
+</script></body></html>"""
+_btn = lambda q, vals: "".join(f'<button data-q="{q}" data-v="{v}">{v}</button>' for v in vals)
+PAGE = (PAGE.replace("__P__", _btn("pref", ["A", "B", "uguale"])).replace("__DA__", _btn("dA", ["nessuno", "lieve", "medio", "forte"]))
+        .replace("__DB__", _btn("dB", ["nessuno", "lieve", "medio", "forte"])).replace("__CH__", _btn("ch", ["poco", "medio", "molto"])))
+
+
 def count():
     rows = list(csv.DictReader(open(PLAN, encoding="utf-8")))
     miss = [r["expected_filename"] for r in rows if not (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
@@ -118,7 +199,7 @@ def count():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "checks", "check", "count"):
+    for x in ("plan", "queue", "checks", "check", "count", "page"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--img-root")
     a = ap.parse_args()
@@ -127,3 +208,4 @@ if __name__ == "__main__":
     if a.queue: queue(a.checks)
     if a.check: check()
     if a.count: count()
+    if a.page: page()
