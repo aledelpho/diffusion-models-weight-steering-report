@@ -19,6 +19,10 @@ pass is mine and is not blind; nothing here is a registered verdict.
 
 ## 1. Block 0: each half alone breaks the picture; the whole block does not
 
+> **Corrected 2026-10-07 by the blind eye pass (`docs/split_atlas_eye_result.md`):** the whole block at
+> −0.35 keeps the composition but is heavily mottled at full resolution (chiazze forte). The halves
+> compensate for content, not for texture.
+
 At −0.35, attention alone turns every image into a posterised, saturated scene or a field of colour
 blocks (rally), and the MLP alone replaces the content (a faceless figure, a giant eye, an abstract
 helmet shape): 9 of 9 cells for each half, by eye. The whole block at −0.35 keeps the picture in 3 of 3
@@ -33,6 +37,10 @@ the first block, so scaling one alone breaks a balance that scaling both preserv
 block exists at one seed only.
 
 ## 2. The late noise is not always the MLP's
+
+> **Retracted 2026-10-07 by the blind eye pass (`docs/split_atlas_eye_result.md`):** read from thumbnails.
+> At full resolution the MLP of block 26 at + carries grain and the attention of block 27 at + clear
+> mottling. On the blind labels the MLP is the noisier half in 13 of 19 cells, the attention in 2.
 
 At +0.35 (eye; 6 of the 9 cells looked at for blocks 21–27, all consistent):
 

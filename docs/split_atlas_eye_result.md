@@ -64,4 +64,5 @@ a change detector, not a noise detector. Neither scalar can replace the eye on t
   illustrations get softening or posterisation (8 notes); colour shifts towards green-yellow on the car
   (blocks 11 whole +, 12 MLP +).
 * Many sheets judged clean were also judged better than the baseline on the comic (blocks 8 MLP + and
-  whole +, 9, 13 whole −, 18 MLP −, 1 attention +). Not a protocol measure; noted for a later test.
+  whole +, 9 attention + and whole +, 13 whole −, 18 MLP −, 2 whole −; block 1 attention + too, with a
+  blur on the car). Not a protocol measure; noted for a later test.
