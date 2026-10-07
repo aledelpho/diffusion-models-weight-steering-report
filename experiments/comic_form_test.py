@@ -165,13 +165,12 @@ button{font:14px system-ui;padding:6px 11px;margin:2px;border-radius:7px;border:
 button.on{background:#3b6e4f;border-color:#6c6}#n{color:#aaa;margin-bottom:6px}small{color:#aaa}
 </style></head><body><div id="wrap"><div id="view"><div id="lab"><span>A</span><span>B</span></div><img id="im"></div>
 <div id="side"><div id="n"></div><small>Clic sull'immagine: zoom 100%. Degrado = grana, chiazze, retino, collasso.</small>
-<div class="q"><b>Quale preferisci per questo stile?</b>__P__</div>
 <div class="q"><b>Degrado di superficie in A</b>__DA__</div>
 <div class="q"><b>Degrado di superficie in B</b>__DB__</div>
 <div class="q"><b>Quanto &egrave; cambiata l'immagine tra A e B?</b>__CH__</div>
 <div class="q"><button id="prev">&larr;</button><button id="next">&rarr;</button><button id="exp">Scarica le risposte</button></div></div></div>
 <script>
-const S=__SLOTS__,K="comic_form_eye_v1",Q=["pref","dA","dB","ch"];let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+const S=__SLOTS__,K="comic_form_eye_v1",Q=["dA","dB","ch"];let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
 let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
 function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
 const done=a=>a&&Q.every(q=>a[q]);
@@ -182,12 +181,12 @@ document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>{const s=S[
  if(done(A[s])&&i<S.length-1)setTimeout(()=>{i++;show();$("#view").scrollTo(0,0)},300)});
 $("#prev").onclick=()=>{if(i>0){i--;show()}};$("#next").onclick=()=>{if(i<S.length-1){i++;show()}};
 $("#view").onclick=()=>$("#view").classList.toggle("zoom");
-$("#exp").onclick=()=>{let t="slot,pref,damage_A,damage_B,change\n";S.forEach(s=>{const a=A[s]||{};t+=[s,a.pref||"",a.dA||"",a.dB||"",a.ch||""].join(",")+"\n"});
+$("#exp").onclick=()=>{let t="slot,damage_A,damage_B,change\n";S.forEach(s=>{const a=A[s]||{};t+=[s,a.dA||"",a.dB||"",a.ch||""].join(",")+"\n"});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="comic_form_eye_alessandro.csv";l.click()};
 show();
 </script></body></html>"""
 _btn = lambda q, vals: "".join(f'<button data-q="{q}" data-v="{v}">{v}</button>' for v in vals)
-PAGE = (PAGE.replace("__P__", _btn("pref", ["A", "B", "uguale"])).replace("__DA__", _btn("dA", ["nessuno", "lieve", "medio", "forte"]))
+PAGE = (PAGE.replace("__DA__", _btn("dA", ["nessuno", "lieve", "medio", "forte"]))
         .replace("__DB__", _btn("dB", ["nessuno", "lieve", "medio", "forte"])).replace("__CH__", _btn("ch", ["poco", "medio", "molto"])))
 
 

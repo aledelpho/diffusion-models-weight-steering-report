@@ -65,3 +65,10 @@ Mann–Whitney, α = 0.05.
   stays Alessandro's decision.
 * Limits written now: the FORM set was chosen on the eye of the same observer who will judge; new prompts
   and seeds guard against overfitting to images, not against the observer's taste. One observer.
+
+## Amendment 1 (2026-10-07, after the renders, before any label)
+
+Alessandro judged the preference question ("quale preferisci per questo stile") too subjective and asked to
+focus on artefacts. The question is removed from the page and **P3 is dropped**; it will not be reported.
+P1, P2, P4 and the gate are unchanged. The pairs, the sides and the order are unchanged (same rng 61;
+`data/comic_form_eye_key.csv` identical, md5 49ce666c…). No label had been given when the page was rebuilt.
