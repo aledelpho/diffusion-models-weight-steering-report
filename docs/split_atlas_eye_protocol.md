@@ -46,3 +46,14 @@ the sheet never says which block or part it is.
    noisy for all three prompts unless "non in tutti e tre" is ticked, in which case it is left out.
 
 Labels: `data/split_atlas_eye_alessandro.csv`, committed as downloaded before `--tally` runs.
+
+## Amendment 1 (2026-10-07, test under way)
+
+Alessandro met a sheet he could not place: clean lines, some fine grain, but mainly a violent
+flattening of volumes and shading. A ninth class was added, `piatto` (flattening: volumes and shading
+pressed into flat fields, colours not necessarily more saturated), with the same three intensities. It is
+distinct from `poster` (saturated flat tints, coloured outlines, mosaic) and from `morbido` (lost line and
+detail). Sheets labelled before the amendment did not offer it; Alessandro may go back to them. In the
+report, `piatto` is counted only with that caveat, and its self-agreement is computed only on repeats
+whose first showing came after the amendment if that can be told apart, otherwise reported as is. The key
+and the order of the sheets are unchanged (same rng; `data/split_atlas_eye_key.csv` identical).

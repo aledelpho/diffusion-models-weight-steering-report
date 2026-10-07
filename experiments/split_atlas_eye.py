@@ -23,7 +23,8 @@ CATS = [("chiazze", "Rumore a chiazze", "macchie multicolori di qualche decina d
         ("poster", "Posterizzazione / blocchi di colore", "tinte piatte e sature, contorni a colori, fino al mosaico"),
         ("sostituito", "Contenuto sostituito / astratto", "il soggetto diventa un'altra cosa o una forma astratta"),
         ("morbido", "Ammorbidimento / sfocatura", "si perdono linea e dettaglio, lo sfondo si sfoca"),
-        ("tratteggio", "Tratteggio accentuato", "linee incise, texture pi&ugrave; dura e marcata")]
+        ("tratteggio", "Tratteggio accentuato", "linee incise, texture pi&ugrave; dura e marcata"),
+        ("piatto", "Appiattimento", "volumi e sfumature schiacciati in campiture piatte, colori non per forza pi&ugrave; saturi (aggiunta il 2026-10-07 a test iniziato)")]
 EXAMPLES = ["chiazze", "grana", "collasso", "retino", "poster", "sostituito"]
 
 
