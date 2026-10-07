@@ -63,7 +63,11 @@ one baseline. For each cell, G₁ = geometric mean of c over blocks 1–22, G₂
 * Limits written now: one dose; four prompts; the eye test has one observer; HF is page 05's measure of
   fine-texture loss and does not see added noise (C59), which is why the eye is required for an overturn.
 
-## Amendment 1 (2026-10-07, before any render)
+## Amendment 1 (2026-10-07, renders under way, nothing measured)
+
+Correction to the commit message of `850040a`, which said "before any render": when this was written, 18 of
+913 renders existed (the check, which passed, the 16 baselines and one edit). No HF or other measure had been
+computed on any of them, and none has been looked at.
 
 Found while sizing the test: in C59 (±0.35, same HF) the cell-level mean of log c over blocks 1–22 was
 **above** 0 (+0.018 to +0.020 for attention, MLP and whole), i.e. fine texture *added* in both directions,
