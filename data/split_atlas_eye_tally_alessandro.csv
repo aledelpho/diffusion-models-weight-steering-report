@@ -1,0 +1,169 @@
+slot,none,chiazze,grana,collasso,retino,poster,sostituito,morbido,tratteggio,piatto,partial,note,sheet,block,part,sign,repeated,lab,cond
+s2299#0,1,0,0,0,0,0,0,0,0,0,0,,s2299,4,whole,neg,1,.,whole-
+s6640#1,1,0,0,0,0,0,0,0,0,0,0,,s6640,4,attn,neg,0,.,attn-
+s4841#2,1,0,0,0,0,0,0,0,0,0,0,,s4841,8,attn,neg,0,.,attn-
+s3313#3,1,0,0,0,0,0,0,0,0,0,0,Sulla macchina sta iniziando a succedere però qualcosa che non riesco a riconoscere.,s3313,15,attn,pos,0,.,attn+
+s1214#4,1,0,0,0,0,0,0,0,0,0,0,,s1214,5,whole,neg,0,.,whole-
+s2483#5,1,0,0,0,0,0,0,0,0,0,0,Particolarmente pulito,s2483,20,attn,pos,0,.,attn+
+s6234#6,1,0,0,0,0,0,0,0,0,0,0,Molto bello sul fumetto.,s6234,9,attn,pos,0,.,attn+
+s4066#7,0,2,1,0,1,0,0,1,0,0,1,"Sono indeciso tra ""Rumore a chiazze"" e ""Ammorbidimento / sfocatura"" dato che a questo livello potrebbero essere quasi intercambiabili. Retino distinguibile solo nella macchina da rally",s4066,26,mlp,neg,0,CH2 GR1 RE1 MO1*,mlp-
+s9707#8,1,0,0,0,0,0,0,0,0,0,0,,s9707,18,attn,neg,0,.,attn-
+s8284#9,1,0,0,0,0,0,0,0,0,0,0,,s8284,13,attn,pos,0,.,attn+
+s8465#10,1,0,0,0,0,0,0,0,0,0,0,,s8465,7,attn,pos,0,.,attn+
+s8877#11,1,0,0,0,0,0,0,0,0,0,0, ,s8877,8,whole,neg,0,.,whole-
+s3165#12,1,0,0,0,0,0,0,0,0,0,0,,s3165,5,whole,pos,0,.,whole+
+s8211#13,1,0,0,0,0,0,0,0,0,0,0,"Toni più freddi nel fumetto, retino appena visibile sulla macchina da rally",s8211,22,attn,pos,0,.,attn+
+s1172#14,0,0,1,0,0,0,0,0,0,0,1,La macchina da rally non sembra intaccata. grana MOLTO lieve comunque sul comics.,s1172,19,whole,neg,1,GR1*,whole-
+s3742#15,0,0,0,0,3,0,0,3,0,0,0,,s3742,27,mlp,neg,0,RE3 MO3,mlp-
+s4180#16,0,0,0,0,0,3,0,0,0,2,0,"Non è un collasso al rumore, ma ci sta andando MOLTO vicino. sono tutte inutilizzabili.",s4180,21,whole,pos,0,PO3 PI2,whole+
+s1492#17,1,0,0,0,0,0,0,0,0,0,0,,s1492,12,attn,neg,0,.,attn-
+s4858#18,1,0,0,0,0,0,0,0,0,0,0,"C'è una lieve patina chiara sulla macchina da rally, ma potrebbe essere solo una resa più accentuata della polvere e delle luci.",s4858,15,whole,neg,0,.,whole-
+s7779#19,1,0,0,0,0,0,0,0,0,0,0,,s7779,14,attn,neg,0,.,attn-
+s4178#20,1,0,0,0,0,0,0,0,0,0,0,,s4178,3,whole,neg,1,.,whole-
+s9968#21,1,0,0,0,0,0,0,0,0,0,0,,s9968,9,mlp,pos,0,.,mlp+
+s1204#22,0,0,1,0,0,0,0,0,0,0,0,Una patina di grana estremamente leggera.,s1204,20,attn,neg,0,GR1,attn-
+s3899#23,0,0,0,0,0,0,0,0,2,2,1,La macchina da rally non sembra influenzata nello stesso modo,s3899,16,mlp,pos,0,TR2 PI2*,mlp+
+s7824#24,0,0,0,0,2,0,0,2,0,0,0,"Sfocatura sui fumetti, retino sulla macchina",s7824,0,whole,pos,0,RE2 MO2,whole+
+s2351#25,0,1,0,0,0,0,0,0,0,0,0,Leggerissimo.,s2351,23,attn,neg,1,CH1,attn-
+s6395#26,0,0,0,0,0,0,0,0,0,1,0,"Bellissimo per il fumetto, le forme sono più ""grezze"", con meno dettagli, ma le linee restano pulite.",s6395,19,mlp,pos,0,PI1,mlp+
+s3658#27,1,0,0,0,0,0,0,0,0,0,0,,s3658,14,mlp,neg,0,.,mlp-
+s6162#28,1,0,0,0,0,0,0,0,0,0,0,,s6162,8,mlp,neg,0,.,mlp-
+s8823#29,0,0,0,3,0,0,0,0,0,0,0,,s8823,26,whole,pos,0,CO3,whole+
+s5063#30,1,0,0,0,0,0,0,0,0,0,0,,s5063,11,mlp,neg,1,.,mlp-
+s1710#31,0,0,0,0,0,0,1,0,0,2,0,"La macchina sembra essersi tinta di ""verdastro"". C'è una deformazione delle figure nel fumetto e una del colore sul fotografico",s1710,11,whole,pos,0,SO1 PI2,whole+
+s1971#32,1,0,0,0,0,0,0,0,0,0,0,,s1971,1,attn,neg,0,.,attn-
+s2123#33,1,0,0,0,0,0,0,0,0,0,0,,s2123,4,mlp,neg,0,.,mlp-
+s2061#34,0,0,0,2,0,0,0,0,0,0,0,,s2061,27,whole,pos,0,CO2,whole+
+s5622#35,1,0,0,0,0,0,0,0,0,0,0,,s5622,3,whole,pos,0,.,whole+
+s2280#36,1,0,0,0,0,0,0,0,0,0,0,,s2280,14,attn,pos,1,.,attn+
+s2419#37,0,0,0,0,1,0,0,1,0,0,1,"Molto lieve sfocatura sui fumetti, retino leggermente visibile sulla macchina.",s2419,25,whole,neg,0,RE1 MO1*,whole-
+s3756#38,1,0,0,0,0,0,0,0,0,0,0,,s3756,9,mlp,neg,0,.,mlp-
+s9642#39,1,0,0,0,0,0,0,0,0,0,0,,s9642,11,attn,neg,1,.,attn-
+s2998#40,1,0,0,0,0,0,0,0,0,0,0,,s2998,14,whole,neg,0,.,whole-
+s2662#41,0,0,0,0,0,1,0,0,0,0,1,L'effetto non è visibile sulla macchina - ma in tutti e tre i colori si sono scuriti. ,s2662,15,mlp,pos,0,PO1*,mlp+
+s4768#42,0,0,0,0,0,1,2,0,0,0,0,,s4768,14,whole,pos,0,PO1 SO2,whole+
+s8103#43,0,0,1,0,0,0,0,0,0,0,0,"dettagli più fini nel fumetto, perdita di dettagli e colori nella macchina. Molto lieve comunque.",s8103,1,whole,neg,0,GR1,whole-
+s4495#44,0,0,0,0,0,1,0,0,0,0,0,,s4495,19,attn,pos,0,PO1,attn+
+s2782#45,0,0,0,0,0,1,0,0,1,0,0,Il tratteggio marcato e i contrasti più forti hanno aggiunto una griglia più grossa alla macchina da rally.,s2782,4,whole,pos,0,PO1 TR1,whole+
+s5167#46,1,0,0,0,0,0,0,0,0,0,0,,s5167,24,mlp,neg,0,.,mlp-
+s8619#47,0,0,3,0,0,0,0,0,0,0,0,,s8619,25,mlp,pos,0,GR3,mlp+
+s1388#48,1,0,0,0,0,0,0,0,0,0,0,,s1388,15,attn,neg,0,.,attn-
+s6974#49,1,0,0,0,0,0,0,0,0,0,0,,s6974,5,mlp,pos,0,.,mlp+
+s3369#50,1,0,0,0,0,0,0,0,0,0,0,,s3369,16,attn,neg,0,.,attn-
+s5348#51,0,1,0,0,0,0,0,0,0,0,1,non visibile sulla macchina.,s5348,4,mlp,pos,0,CH1*,mlp+
+s8585#52,0,0,0,0,0,2,0,0,0,0,0,"Noto che quando aumenta la posterizzazione sulle immagini, sembra aumentare il contrasto sulla macchina.",s8585,21,attn,pos,0,PO2,attn+
+s6295#53,1,0,0,0,0,0,0,0,0,0,0,,s6295,12,attn,pos,0,.,attn+
+s5974#54,1,0,0,0,0,0,0,0,0,0,0,,s5974,2,mlp,pos,0,.,mlp+
+s8017#55,0,0,0,0,0,1,0,0,0,0,1,"quasi esclusivamente sul fumetto - ma non di difetto, le linee restano molto pulite nonostante la forte posterizzazione dei colori.",s8017,18,whole,neg,0,PO1*,whole-
+s7265#56,1,0,0,0,0,0,0,0,0,0,0,colori leggermente più caldi in tutte e tre. LEGGERMENTE.,s7265,3,mlp,neg,0,.,mlp-
+s3062#57,0,0,3,0,0,0,0,0,0,0,0,,s3062,24,mlp,pos,0,GR3,mlp+
+s5571#58,1,0,0,0,0,0,0,0,0,0,0,,s5571,10,attn,pos,0,.,attn+
+s5533#59,1,0,0,0,0,0,0,0,0,0,1,,s5533,15,mlp,neg,0,.*,mlp-
+s8250#60,1,0,0,0,0,0,0,0,0,0,0,,s8250,21,mlp,neg,0,.,mlp-
+s9793#62,1,0,0,0,0,0,0,0,0,0,0,,s9793,2,attn,neg,1,.,attn-
+s9930#63,1,0,0,0,0,0,0,0,0,0,0,,s9930,6,attn,neg,0,.,attn-
+s7996#64,0,0,0,0,0,1,1,0,0,0,0,"Sul fumetto, forte ma non rovina l'immagine, al limite. Si traduce sulla macchina come forte illuminazione e contrasto.",s7996,14,mlp,pos,0,PO1 SO1,mlp+
+s4986#65,0,0,0,0,1,0,0,0,0,0,1,Lievissimo retino visibile sulla macchina,s4986,20,mlp,neg,1,RE1*,mlp-
+s2088#66,0,0,0,0,0,1,1,0,0,0,0,,s2088,12,whole,pos,0,PO1 SO1,whole+
+s3345#67,1,0,0,0,0,0,0,0,0,0,0,persino meglio del baseline sul fumetto e sulle tinte piatte.,s3345,22,whole,neg,0,.,whole-
+s8825#68,0,0,0,0,0,0,3,0,0,0,0,,s8825,13,whole,pos,0,SO3,whole+
+s9962#69,0,0,0,2,0,0,0,0,0,0,0,,s9962,27,attn,pos,0,CO2,attn+
+s9983#70,0,0,2,0,0,0,0,0,0,0,0,,s9983,26,mlp,pos,0,GR2,mlp+
+s7143#71,1,0,0,0,0,0,0,0,0,0,0,Colori più vivaci.,s7143,4,attn,pos,0,.,attn+
+s6517#72,0,1,0,0,0,0,0,0,0,0,1,"Rumore estremamente lieve, ma più visibile sulla macchina.",s6517,6,mlp,neg,0,CH1*,mlp-
+s7246#73,0,0,2,0,0,0,0,0,0,0,0,,s7246,22,mlp,pos,0,GR2,mlp+
+s8530#74,1,0,0,0,0,0,0,0,0,0,0,,s8530,13,attn,neg,0,.,attn-
+s8754#75,1,0,0,0,0,0,0,0,0,0,0,"Ipotesi: Sarà il Blk_23? abbassa la saturazione, ma lo fa specialmente sul fumetto.",s8754,23,attn,pos,0,.,attn+
+s3866#76,1,0,0,0,0,0,0,0,0,0,0,,s3866,17,attn,neg,0,.,attn-
+s8616#77,0,3,0,0,0,0,0,0,0,0,0,,s8616,0,whole,neg,0,CH3,whole-
+s6185#78,0,0,1,0,0,0,0,0,0,0,1,"solo ed esclusivamente sulla macchina. E si vedono ""spaccature"" come se fosse una vecchia fotografia. Potrebbe non essere grana, ma legato alla natura fotografica dell'intervento. Da investigare, forse.",s6185,16,whole,neg,0,GR1*,whole-
+s8501#79,1,0,0,0,0,0,0,0,0,0,0,Più colori.,s8501,23,mlp,neg,0,.,mlp-
+s3412#80,0,0,0,0,3,0,0,2,0,0,0,,s3412,27,whole,neg,0,RE3 MO2,whole-
+s4993#81,1,0,0,0,0,0,0,0,0,0,0,,s4993,12,whole,neg,0,.,whole-
+s6782#82,1,0,0,0,0,0,0,0,0,0,0,,s6782,17,attn,pos,1,.,attn+
+s9138#83,0,0,0,0,0,2,0,0,0,0,0,"Da aggiungere, leggero retino sulla macchina. L'effetto sul fumetto è molto forte, ma non ""male"" nella resa finale.",s9138,20,whole,pos,0,PO2,whole+
+s2893#84,1,0,0,0,0,0,0,0,0,0,0,,s2893,1,mlp,neg,0,.,mlp-
+s9395#86,1,0,0,0,0,0,0,0,0,0,0,,s9395,19,mlp,neg,0,.,mlp-
+s2418#87,1,0,0,0,0,0,0,0,0,0,0,"Bellissimo sul fumetto, tratteggi marcati e contrasti forti, ma piacevoli.",s2418,13,whole,neg,0,.,whole-
+s1230#88,1,0,0,0,0,0,0,0,0,0,0,"Sembrano cambiare le luci, oltre a tante altre cose.",s1230,20,mlp,pos,0,.,mlp+
+s2643#89,0,0,0,0,2,0,0,0,0,0,1,Retino visibile ma solo sulla macchina. saturazione più elevata.,s2643,25,attn,pos,0,RE2*,attn+
+s3662#90,0,0,3,0,0,0,0,0,0,0,0,,s3662,25,whole,pos,0,GR3,whole+
+s7804#91,0,0,2,0,0,0,0,0,0,0,0,,s7804,25,attn,neg,0,GR2,attn-
+s6848#93,1,0,0,0,0,0,0,0,0,0,0,,s6848,5,attn,pos,0,.,attn+
+s4511#94,0,0,1,0,0,0,0,0,0,0,0,"Si scolorisce anche, ma potrebbe essere l'effetto della patina di grana sopra alle immagini.",s4511,26,attn,neg,0,GR1,attn-
+s8870#95,0,0,0,0,0,1,0,0,0,0,0,,s8870,25,mlp,neg,1,PO1,mlp-
+s6281#97,0,0,0,0,0,0,0,0,0,0,0,Molto bello sul fumetto.,s6281,2,whole,neg,0,.,whole-
+s5173#98,0,0,0,0,0,2,3,0,0,0,1,Retino visibile sulla macchina.,s5173,19,whole,pos,0,PO2 SO3*,whole+
+s6719#99,1,0,0,0,0,0,0,0,0,0,0,leggerissimo retino sulla macchina. Contrasti molto marcati e ombre pulite sul fumetto. Ottimo per il fumetto.,s6719,18,mlp,neg,0,.,mlp-
+s7601#100,0,0,1,0,0,1,0,0,0,0,0,"Entrambi MOLTO lievi, aumenta parecchio la saturazione.",s7601,24,attn,pos,1,GR1 PO1,attn+
+s1053#101,1,0,0,0,0,0,0,0,0,0,0,,s1053,9,attn,neg,0,.,attn-
+s5604#102,0,2,0,0,0,0,0,0,0,0,0,,s5604,24,whole,pos,1,CH2,whole+
+s6991#103,0,0,0,0,1,0,0,0,2,0,0,"linee ""bruciate"" nel fumetto",s6991,26,whole,neg,0,RE1 TR2,whole-
+s9522#104,0,0,0,0,1,0,0,0,0,0,0,,s9522,21,whole,neg,0,RE1,whole-
+s5867#105,0,2,0,2,0,0,0,0,0,0,0,,s5867,27,mlp,pos,0,CH2 CO2,mlp+
+s2510#106,1,0,0,0,0,0,0,0,0,0,0,,s2510,17,mlp,neg,0,.,mlp-
+s2169#108,1,0,0,0,0,0,0,0,0,0,0,,s2169,5,mlp,neg,0,.,mlp-
+s9276#109,1,0,0,0,0,0,0,0,0,0,1,"Cambia UN SACCO la forma dei contenuti, ma la qualità resta molto alta. ",s9276,7,whole,pos,0,.*,whole+
+s8206#110,1,0,0,0,0,0,0,0,0,0,0,,s8206,10,mlp,pos,1,.,mlp+
+s4068#111,1,0,0,0,0,0,0,0,0,0,0,,s4068,5,attn,neg,1,.,attn-
+s3335#112,1,0,0,0,0,0,0,0,0,0,0,Leggera perdita di colori caldi sulla macchina.,s3335,16,attn,pos,0,.,attn+
+s7156#113,1,0,0,0,0,0,0,0,0,0,1,Non di difetto. La posterizzazione non si vede sulla macchina. ,s7156,11,mlp,pos,0,.*,mlp+
+s4686#114,1,0,0,0,0,0,0,0,0,0,0,,s4686,2,whole,pos,0,.,whole+
+s2149#116,0,0,1,0,0,0,0,0,0,2,1,Retino visibile solo sulla macchina.,s2149,18,whole,pos,0,GR1 PI2*,whole+
+s5523#117,0,0,2,0,0,0,0,0,0,0,0,,s5523,20,whole,neg,0,GR2,whole-
+s1286#118,1,0,0,0,0,0,0,0,0,0,0,,s1286,6,whole,neg,1,.,whole-
+s4011#119,1,0,0,0,0,0,0,0,0,0,0,"Colori alterati sulla macchina. ""giallo più verdastro""",s4011,12,mlp,pos,0,.,mlp+
+s3406#120,0,0,0,0,0,0,0,2,0,0,1,Sfocatura solo sulla macchina. Colori e contrasti fighissimi sul fumetto. forse il migliore sino ad ora per il comics.,s3406,1,attn,pos,0,MO2*,attn+
+s8473#121,1,0,0,0,0,0,0,0,0,0,0,,s8473,6,whole,pos,0,.,whole+
+s2208#122,1,0,0,0,0,0,0,0,0,0,0,,s2208,2,mlp,neg,0,.,mlp-
+s2581#124,1,0,0,0,0,0,0,0,0,0,0,,s2581,9,whole,neg,0,.,whole-
+s7301#125,1,0,0,0,0,0,0,0,0,0,0,,s7301,8,attn,pos,0,.,attn+
+s3244#126,0,0,0,0,2,0,0,0,0,0,0,,s3244,27,attn,neg,0,RE2,attn-
+s5732#128,0,0,0,0,1,0,1,0,0,0,1,"Le figure sono molto belle, ma c'è un chiaro retino solo sulla macchina e degli elementi visibilmente deformati.",s5732,17,whole,pos,0,RE1 SO1*,whole+
+s8862#129,1,0,0,0,0,0,0,0,0,0,0,Capolavoro sul fumetto!,s8862,8,whole,pos,1,.,whole+
+s8306#130,1,0,0,0,0,0,0,0,0,0,0,Anche questo molto bello sul fumetto.     ,s8306,8,mlp,pos,0,.,mlp+
+s7032#132,1,0,0,0,0,0,0,0,0,0,0,,s7032,7,mlp,neg,1,.,mlp-
+s6485#133,1,0,0,0,0,0,0,0,0,0,0,,s6485,19,attn,neg,0,.,attn-
+s9373#135,0,0,1,0,0,0,0,0,0,0,0,Lievissimi problemi di grana.,s9373,6,mlp,pos,0,GR1,mlp+
+s4850#136,1,0,0,0,0,0,0,0,0,0,0,,s4850,11,whole,neg,0,.,whole-
+s4458#137,1,0,0,0,0,0,0,0,0,0,0,,s4458,7,attn,neg,1,.,attn-
+s8707#138,1,0,0,0,0,0,0,0,0,0,0,,s8707,11,attn,pos,0,.,attn+
+s2324#140,1,0,0,0,0,0,0,0,0,0,0,Bellissimo sul fumetto - sharp e molto realistico. La macchina da Rally però è stata resa un po' più generica. (Che sia davvero quello ad essere legato al maggiore realismo dei fumetti? Perché sono facce più generiche?),s2324,9,whole,pos,0,.,whole+
+s9467#141,1,0,0,0,0,0,0,0,0,0,0,,s9467,18,attn,pos,1,.,attn+
+s5700#142,0,0,1,0,0,0,1,0,0,0,1,"La fabbra sembra sopravvissuta incolume, ma le altre due hanno deformazioni evidenti.",s5700,13,mlp,pos,0,GR1 SO1*,mlp+
+s2298#143,1,0,0,0,0,0,0,0,0,0,0,,s2298,17,whole,neg,0,.,whole-
+s9725#144,1,0,0,0,0,0,0,0,0,0,0,,s9725,3,mlp,pos,0,.,mlp+
+s3427#145,1,0,0,0,0,0,0,0,0,0,0,,s3427,23,whole,neg,0,.,whole-
+s8239#147,0,0,1,0,0,0,0,0,0,0,0,,s8239,16,mlp,neg,0,GR1,mlp-
+s3734#148,1,0,0,0,0,0,0,0,0,0,0,,s3734,10,whole,neg,0,.,whole-
+s5669#149,0,0,0,0,0,0,0,0,0,0,0,"meno glow, quasi più sharp del baseline. Forse però il mio occhio sta venendo ingannato da un lievissimo retino che da la percezione di un aumento della ""sharpness"".",s5669,21,attn,neg,0,.,attn-
+s3178#150,0,0,1,0,2,0,0,1,0,0,0,,s3178,23,whole,pos,0,GR1 RE2 MO1,whole+
+s6335#151,0,0,2,0,2,0,0,2,0,0,0,,s6335,0,mlp,pos,0,GR2 RE2 MO2,mlp+
+s1371#152,0,2,0,0,0,2,0,0,0,1,0,,s1371,1,whole,pos,0,CH2 PO2 PI1,whole+
+s8647#153,0,0,0,0,0,0,3,0,0,3,0,,s8647,16,whole,pos,0,SO3 PI3,whole+
+s5470#154,0,1,0,0,0,0,1,0,0,0,0,,s5470,18,mlp,pos,0,CH1 SO1,mlp+
+s8427#157,1,0,0,0,0,0,0,0,0,0,0,Sta succedendo qualcosa ai colori.,s8427,10,mlp,neg,0,.,mlp-
+s9611#158,0,0,0,0,0,0,2,0,0,3,0,,s9611,15,whole,pos,0,SO2 PI3,whole+
+s4220#160,1,0,0,0,0,0,0,0,0,0,0,,s4220,10,attn,neg,0,.,attn-
+s2189#162,0,0,2,0,0,0,2,0,0,0,0,,s2189,0,attn,pos,0,GR2 SO2,attn+
+s9720#163,1,0,0,0,0,0,0,0,0,0,0,,s9720,13,mlp,neg,0,.,mlp-
+s1936#165,1,0,0,0,0,0,0,0,0,0,0,,s1936,3,attn,neg,0,.,attn-
+s6771#166,0,0,0,0,3,0,3,0,0,0,0,Delirio.,s6771,0,mlp,neg,0,RE3 SO3,mlp-
+s3280#167,1,0,0,0,0,0,0,0,0,0,0,,s3280,2,attn,pos,0,.,attn+
+s5049#168,1,0,0,0,0,0,0,0,0,0,0,,s5049,3,attn,pos,0,.,attn+
+s6762#169,1,0,0,0,0,0,0,0,0,0,0,,s6762,22,mlp,neg,0,.,mlp-
+s9397#170,1,0,0,0,0,0,0,0,0,0,0,,s9397,12,mlp,neg,0,.,mlp-
+s3115#171,0,0,0,0,0,3,0,0,0,0,0,LSD,s3115,0,attn,neg,0,PO3,attn-
+s3971#172,1,0,0,0,0,0,0,0,0,0,0,,s3971,7,whole,neg,0,.,whole-
+s7524#173,0,0,0,0,0,0,1,0,0,1,1,"La macchina pare essersela scampata, il contenuto cambia molto ma non è violenta come le altre. I fumetti sono molto estremi ma possono essere salvati riducendo di poco il peso. ",s7524,10,whole,pos,0,SO1 PI1*,whole+
+s5777#175,0,0,2,0,0,0,0,0,0,0,0,,s5777,23,mlp,pos,0,GR2,mlp+
+s8233#176,1,0,0,0,0,0,0,0,0,0,0,,s8233,1,mlp,pos,0,.,mlp+
+s5185#177,1,0,0,0,0,0,0,0,0,0,0,,s5185,21,mlp,pos,0,.,mlp+
+s9419#178,1,0,0,0,0,0,0,0,0,0,0,,s9419,6,attn,pos,0,.,attn+
+s2008#179,1,0,0,0,0,0,0,0,0,0,0,Tratti molto caotici nel fumetto.,s2008,17,mlp,pos,0,.,mlp+
+s1738#181,0,0,0,0,0,0,0,1,0,0,0," Leggera sfumatura dei colori, e retino sulla macchina. MOLTO leggero.",s1738,22,attn,neg,0,MO1,attn-
+s4636#182,1,0,0,0,0,0,0,0,0,0,0,,s4636,24,attn,neg,0,.,attn-
+s1623#183,1,0,0,0,0,0,0,0,0,0,0,,s1623,7,mlp,pos,0,.,mlp+
+s3479#184,0,2,0,2,0,0,0,0,0,0,0,,s3479,26,attn,pos,0,CH2 CO2,attn+
+s6916#186,0,0,3,0,0,0,0,0,0,0,0,,s6916,22,whole,pos,0,GR3,whole+
+s2533#187,1,0,0,0,0,0,0,0,0,0,0,,s2533,24,whole,neg,0,.,whole-
