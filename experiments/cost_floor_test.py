@@ -118,9 +118,43 @@ def measure():
     print(len(out), "block-cells measured")
 
 
+def verdicts():
+    """The rules of docs/prereg_cost_floor.md (+ amendment 1), applied literally."""
+    import numpy as np, pandas as pd
+    from scipy import stats
+    m = pd.read_csv(DATA / "cost_floor_measures.csv"); m["l"] = np.log(m.common_mode)
+    cell = lambda d, lo, hi: d[d.block.between(lo, hi)].groupby(["prompt", "family", "seed"]).l.mean().reset_index()
+    g1, g2 = cell(m, 1, 22), cell(m, 23, 27)
+    def ci(x, conf):
+        n = len(x); se = x.std(ddof=1) / np.sqrt(n); t = stats.t.ppf(0.5 + conf / 2, n - 1)
+        return x.mean() - t * se, x.mean() + t * se
+    out = []
+    t = stats.ttest_1samp(g2.l, 0, alternative="less")
+    gate = (t.pvalue < 0.05) and (np.exp(g2.l.mean()) < 0.97)
+    out.append(f"GATE blocks 23-27: mean G2 = {np.exp(g2.l.mean()):.4f}, one-sided p = {t.pvalue:.3g} -> {'PASS' if gate else 'FAIL'}")
+    def h1(x, lab):
+        l90, u90 = ci(x, 0.90); l95, u95 = ci(x, 0.95)
+        if l90 >= np.log(0.99) and u90 <= np.log(1.01) and l95 <= 0 <= u95: v = "NO COST"
+        elif u95 < 0: v = "COST REPLICATED"
+        elif l95 > 0: v = "NO LOSS; COMMON-MODE GAIN"
+        else: v = "UNDECIDED"
+        out.append(f"H1 {lab}: n={len(x)} mean G1 = {np.exp(x.mean()):.4f}; 90% [{np.exp(l90):.4f}, {np.exp(u90):.4f}]; 95% [{np.exp(l95):.4f}, {np.exp(u95):.4f}] -> {v}")
+    h1(g1.l, "all cells (primary)")
+    h1(g1[g1.family == "comic"].l, "comic")
+    h1(g1[g1.family == "photo"].l, "photo")
+    w = stats.ttest_ind(g1[g1.family == "comic"].l, g1[g1.family == "photo"].l, equal_var=False)
+    out.append(f"comic - photo in mean log G1: {g1[g1.family=='comic'].l.mean() - g1[g1.family=='photo'].l.mean():+.4f}, Welch p = {w.pvalue:.3g}")
+    pb = m.groupby("block").l.agg(["mean", "std", "count"]).reset_index()
+    pb["c"] = np.exp(pb["mean"]); tq = stats.t.ppf(0.975, 15)
+    pb["lo"] = np.exp(pb["mean"] - tq * pb["std"] / 4); pb["hi"] = np.exp(pb["mean"] + tq * pb["std"] / 4)
+    pb[["block", "c", "lo", "hi"]].round(4).to_csv(DATA / "cost_floor_per_block.csv", index=False)
+    g1.assign(G1=np.exp(g1.l)).drop(columns="l").to_csv(DATA / "cost_floor_cells_G1.csv", index=False)
+    print("\n".join(out)); print(pb[["block", "c", "lo", "hi"]].round(4).to_string(index=False))
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "checks", "check", "count", "measure"):
+    for x in ("plan", "queue", "checks", "check", "count", "measure", "verdicts"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--img-root")
     a = ap.parse_args()
@@ -130,3 +164,4 @@ if __name__ == "__main__":
     if a.check: check()
     if a.count: count()
     if a.measure: measure()
+    if a.verdicts: verdicts()
