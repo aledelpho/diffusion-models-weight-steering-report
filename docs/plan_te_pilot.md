@@ -57,6 +57,12 @@ Every render except the repro check is shown once beside the baseline (left, fix
 * **24 traits read off the prompt** — character (9), clothes (6), pose and framing (4), scene (2), style (3) —
   each starting at *present*, to be set to **absent / present / amplified** against the baseline;
 * two shortcuts: *identical to the original*, and *turned into text / lettering* (sets every trait absent);
+* **gauntlet arm against the original**: same arm / the other arm / ambiguous, halfway (added 2026-10-11,
+  still before the page and any label). The prompt does not say which arm wears the gauntlet, so the arm is a
+  binary choice the text leaves open. Alessandro saw renders where the hands cross with the gauntlet between
+  them. The question is whether such hybrids sit where the arm flips along the dose or layer axis (a
+  symmetry-breaking reading, cf. Raya & Ambrogioni 2023; Sclocchi, Favero, Wyart 2024) or appear scattered,
+  which would point to ordinary limb errors instead. Default *same arm*; left empty for *turned into text*;
 * **overall style**: unchanged / changed, with a free field for how;
 * **surface against the original**: cleaner / as the original / worse slight / medium / strong (the
   relative scale Alessandro adopted in C63, fixed here in advance);
@@ -64,5 +70,6 @@ Every render except the repro check is shown once beside the baseline (left, fix
 
 The key `data/te_pilot_eye_key.csv` is committed when the page is built, before any label. What will be read
 from it is descriptive: which layers and halves remove, amplify or keep each trait, at which dose; where the
-"text" outcome starts and stops; whether surface damage appears at all (E4); and self-agreement on the repeats.
+"text" outcome starts and stops; where the gauntlet changes arm and whether ambiguous poses border those
+flips; whether surface damage appears at all (E4); and self-agreement on the repeats.
 Code: `experiments/te_pilot.py --page`.

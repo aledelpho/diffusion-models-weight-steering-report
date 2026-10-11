@@ -196,6 +196,7 @@ textarea{width:100%;box-sizing:border-box;background:#222;color:#eee;border:1px 
 <div id="side"><div id="n"></div><small>Ogni tratto parte da "presente": cambia solo ciò che è diverso dall'originale. Clic sulle immagini: zoom 100%.</small>
 <div class="q"><button class="big" id="same">Identica all'originale</button> <button class="big" id="text">Diventata testo / scritte</button></div>
 <div id="traits"></div>
+<div class="g">Braccio del guanto (rispetto all'originale)</div><div><button data-q="braccio" data-v="stesso">stesso braccio</button><button data-q="braccio" data-v="altro">l'altro braccio</button><button data-q="braccio" data-v="ambiguo">ambiguo / a metà strada</button></div>
 <div class="g">Stile complessivo</div><div><button data-q="stile" data-v="inalterato">inalterato</button><button data-q="stile" data-v="cambiato">cambiato</button></div>
 <textarea id="stilenote" rows="2" placeholder="se cambiato: come?"></textarea>
 <div class="g">Superficie rispetto all'originale</div><div>__DMG__</div>
@@ -211,19 +212,19 @@ function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setIt
 function show(){const a=A[S[i]]||{t:{}};$("#im").src=S[i].split("#")[0]+".jpg";
  $("#n").textContent=`immagine ${i+1} di ${S.length} · completate ${S.filter(s=>A[s]&&A[s].touched).length}`;
  document.querySelectorAll("button[data-t]").forEach(b=>b.classList.toggle("on",(a.t[b.dataset.t]||"P")===b.dataset.v));
- document.querySelectorAll("button[data-q]").forEach(b=>b.classList.toggle("on",a[b.dataset.q]===b.dataset.v));
+ document.querySelectorAll("button[data-q]").forEach(b=>b.classList.toggle("on",(a[b.dataset.q]||(b.dataset.q==="braccio"&&!a.text?"stesso":""))===b.dataset.v));
  $("#same").classList.toggle("on",!!a.same);$("#text").classList.toggle("on",!!a.text);
  $("#stilenote").value=a.stilenote||"";$("#note").value=a.note||"";save()}
 document.querySelectorAll("button[data-t]").forEach(b=>b.onclick=()=>{const a=cur();a.t[b.dataset.t]=b.dataset.v;a.same=false;a.touched=true;show()});
-document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>{const a=cur();a[b.dataset.q]=b.dataset.v;a.touched=true;if(b.dataset.q==="stile"||b.dataset.q==="dmg")a.same=false;show()});
-$("#same").onclick=()=>{const a=cur();a.same=!a.same;if(a.same){a.t={};a.text=false;a.stile="inalterato";a.dmg="come";}a.touched=true;show();if(a.same&&i<S.length-1){i++;show()}};
+document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>{const a=cur();a[b.dataset.q]=b.dataset.v;a.touched=true;if(b.dataset.q!=="braccio"||b.dataset.v!=="stesso")a.same=false;show()});
+$("#same").onclick=()=>{const a=cur();a.same=!a.same;if(a.same){a.t={};a.text=false;a.stile="inalterato";a.dmg="come";a.braccio="stesso";}a.touched=true;show();if(a.same&&i<S.length-1){i++;show()}};
 $("#text").onclick=()=>{const a=cur();a.text=!a.text;if(a.text){T.forEach(([,id])=>a.t[id]="A");a.same=false}a.touched=true;show()};
 $("#stilenote").oninput=e=>{const a=cur();a.stilenote=e.target.value;a.touched=true;save()};$("#note").oninput=e=>{const a=cur();a.note=e.target.value;a.touched=true;save()};
 $("#prev").onclick=()=>{if(i>0){i--;show()}};$("#next").onclick=()=>{const a=cur();a.touched=true;if(i<S.length-1){i++;show()}};
 $("#view").onclick=()=>$("#view").classList.toggle("zoom");
 const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
-$("#exp").onclick=()=>{let t="slot,touched,same,text,"+T.map(x=>x[1]).join(",")+",stile,stilenote,dmg,note\n";
- S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.same?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||"P"),a.stile||"",q(a.stilenote),a.dmg||"",q(a.note)].join(",")+"\n"});
+$("#exp").onclick=()=>{let t="slot,touched,same,text,"+T.map(x=>x[1]).join(",")+",braccio,stile,stilenote,dmg,note\n";
+ S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.same?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||"P"),a.braccio||(a.text?"":"stesso"),a.stile||"",q(a.stilenote),a.dmg||"",q(a.note)].join(",")+"\n"});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_pilot_eye_alessandro.csv";l.click()};
 show();
 </script></body></html>""".replace("__DMG__", "".join(f'<button data-q="dmg" data-v="{v}">{l}</button>' for v, l in
