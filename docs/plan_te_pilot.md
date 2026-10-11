@@ -47,3 +47,22 @@ the sub-block structure of the Arthemy Krea2 Tuner (`ArthemyKrea2CLIPTuner`, gra
 Calibration: a dose per layer and half that changes the picture without breaking it, and a map of which layers
 change what, to choose the units and doses of a proper atlas (more prompts and seeds, blind eye pass). Nothing
 here is a claim.
+
+## Eye pass (added 2026-10-11, before the page is built and before any label)
+
+Designed with Alessandro, who expects the text encoder to change content and style more than the DiT does.
+Every render except the repro check is shown once beside the baseline (left, fixed), in shuffled order (rng
+64) behind an anonymous id, with 20 unannounced repeats; the condition is hidden. Per render:
+
+* **24 traits read off the prompt** — character (9), clothes (6), pose and framing (4), scene (2), style (3) —
+  each starting at *present*, to be set to **absent / present / amplified** against the baseline;
+* two shortcuts: *identical to the original*, and *turned into text / lettering* (sets every trait absent);
+* **overall style**: unchanged / changed, with a free field for how;
+* **surface against the original**: cleaner / as the original / worse slight / medium / strong (the
+  relative scale Alessandro adopted in C63, fixed here in advance);
+* a free field.
+
+The key `data/te_pilot_eye_key.csv` is committed when the page is built, before any label. What will be read
+from it is descriptive: which layers and halves remove, amplify or keep each trait, at which dose; where the
+"text" outcome starts and stops; whether surface damage appears at all (E4); and self-agreement on the repeats.
+Code: `experiments/te_pilot.py --page`.

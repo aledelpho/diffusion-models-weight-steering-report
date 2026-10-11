@@ -124,6 +124,112 @@ def check():
           "/", "visual tower inert" if res["null_visual"] == 0 else "visual tower CHANGES the image")
 
 
+KEY = DATA / "te_pilot_eye_key.csv"
+LABELS = DATA / "te_pilot_eye_alessandro.csv"
+TRAITS = [  # (group, id, label) — from the prompt of P1_elfbrawler, in the order it describes them
+    ("Personaggio", "donna", "donna, giovane adulta"), ("Personaggio", "elfa", "elfa: orecchie a punta"),
+    ("Personaggio", "corna", "piccole corna chiare"), ("Personaggio", "capelli", "capelli verdi arruffati, punte turchesi"),
+    ("Personaggio", "sopracciglia", "sopracciglia verdi spesse"), ("Personaggio", "benda", "benda su un occhio"),
+    ("Personaggio", "occhio", "occhio verde brillante"), ("Personaggio", "pelle", "pelle abbronzata"),
+    ("Personaggio", "espressione", "sorriso spavaldo, espressione compiaciuta"),
+    ("Abiti", "giacca", "giacca blu scuro con collo di pelliccia"), ("Abiti", "spallaccio", "spallaccio dorato effetto legno"),
+    ("Abiti", "uniforme", "uniforme nera"), ("Abiti", "cinghie", "cinghie di cuoio marrone"),
+    ("Abiti", "guanto", "guanto d'arme argentato"), ("Abiti", "elettricita", "elettricità blu sul guanto"),
+    ("Posa", "pugno", "pugno mostrato allo spettatore"), ("Posa", "sguardo", "sguardo verso la sua sinistra"),
+    ("Posa", "dallalto", "vista dall'alto, prospettiva forte"), ("Posa", "inquadratura", "mezzo busto, primo piano sul guanto"),
+    ("Scena", "sfondo", "sfondo bianco piatto"), ("Scena", "luce", "luce calda, ombre ambra, riflessi blu"),
+    ("Stile", "fumetto", "fumetto western realistico"), ("Stile", "inchiostro", "contorni a inchiostro marcati"),
+    ("Stile", "tratteggio", "ombre tratteggiate")]
+
+
+def page(out_dir=None, write_key=True):
+    """Exploratory eye page: baseline (left, fixed) against one edit (right); every render once, shuffled (rng 64),
+    20 repeats; condition hidden behind an anonymous id."""
+    import shutil
+    rng = np.random.default_rng(64)
+    out = Path(out_dir) if out_dir else c47.IMG_ROOT / FOLDER / "eye_test"; out.mkdir(parents=True, exist_ok=True)
+    rows = [r for r in csv.DictReader(open(PLAN, encoding="utf-8")) if r["cond"] != "CHK_repro_baseline"
+            and (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
+    ids = rng.permutation(np.arange(1000, 9999))[: len(rows)]
+    items = [{"id": f"t{i}", **{k: r[k] for k in ("cond", "unit", "part", "dose", "phase")}, "file": r["expected_filename"]} for r, i in zip(rows, ids)]
+    show = [x["id"] for x in items]; rng.shuffle(show)
+    rep = list(rng.choice(show, min(20, len(show)), replace=False))
+    for x in rep:
+        show.insert(int(rng.integers(len(show) // 3, len(show) + 1)), x)
+    from PIL import Image
+    for x in items:
+        dst = out / f"{x['id']}.jpg"
+        if not dst.exists():
+            Image.open(c47.IMG_ROOT / FOLDER / x["file"]).convert("RGB").save(dst, "JPEG", quality=92, subsampling=0)
+    b = out / "base.jpg"
+    if not b.exists():
+        Image.open(f("baseline", "benchmark_comic_form")).convert("RGB").save(b, "JPEG", quality=92, subsampling=0)
+    if write_key:
+        with open(KEY, "w", newline="") as fh:
+            w = csv.writer(fh); w.writerow(["item", "cond", "unit", "part", "dose", "phase", "repeated"])
+            for x in items:
+                w.writerow([x["id"], x["cond"], x["unit"], x["part"], x["dose"], x["phase"], int(x["id"] in rep)])
+    slots = [f"{s}#{k}" for k, s in enumerate(show)]
+    html = TE_PAGE.replace("__SLOTS__", json.dumps(slots)).replace("__TRAITS__", json.dumps(TRAITS, ensure_ascii=False))
+    (out / "eye_test.html").write_text(html, encoding="utf-8")
+    print(len(items), "renders,", len(slots), "showings ->", out / "eye_test.html")
+
+
+TE_PAGE = r"""<!doctype html><html lang="it"><head><meta charset="utf-8"><title>C64: tratti del prompt</title>
+<style>
+body{margin:0;background:#1d1d1f;color:#eee;font:14px system-ui,sans-serif}
+#wrap{display:flex;gap:10px;padding:8px;box-sizing:border-box;height:100vh}
+#view{flex:1;display:flex;gap:6px;overflow:auto;background:#000;border-radius:8px;cursor:zoom-in}
+#view.zoom{cursor:zoom-out}#view figure{margin:0;flex:1;min-width:0}#view.zoom figure{flex:none}
+#view img{width:100%;display:block}#view.zoom img{width:auto}
+figcaption{position:sticky;top:0;background:#000c;padding:3px 8px;font-weight:700}
+#side{width:470px;overflow:auto;background:#2a2a2d;border-radius:8px;padding:10px;box-sizing:border-box}
+.g{color:#9ab;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:10px 0 2px}
+.t{display:flex;align-items:center;gap:4px;padding:1px 0}.t span{flex:1;font-size:13px}
+button{font:13px system-ui;padding:3px 7px;border-radius:6px;border:1px solid #555;background:#333;color:#ddd;cursor:pointer}
+button.on.A{background:#7a2e2e;border-color:#c55}button.on.P{background:#2f4f3a;border-color:#6a8}button.on.X{background:#2e4a7a;border-color:#69c}
+button.on.q{background:#3b6e4f;border-color:#6c6}.big{padding:6px 12px}
+textarea{width:100%;box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
+#n{color:#aaa}small{color:#999}
+</style></head><body><div id="wrap">
+<div id="view"><figure><figcaption>ORIGINALE</figcaption><img src="base.jpg"></figure><figure><figcaption>MODIFICA</figcaption><img id="im"></figure></div>
+<div id="side"><div id="n"></div><small>Ogni tratto parte da "presente": cambia solo ciò che è diverso dall'originale. Clic sulle immagini: zoom 100%.</small>
+<div class="q"><button class="big" id="same">Identica all'originale</button> <button class="big" id="text">Diventata testo / scritte</button></div>
+<div id="traits"></div>
+<div class="g">Stile complessivo</div><div><button data-q="stile" data-v="inalterato">inalterato</button><button data-q="stile" data-v="cambiato">cambiato</button></div>
+<textarea id="stilenote" rows="2" placeholder="se cambiato: come?"></textarea>
+<div class="g">Superficie rispetto all'originale</div><div>__DMG__</div>
+<div class="g">Altro (libero)</div><textarea id="note" rows="2"></textarea>
+<div style="margin-top:8px"><button id="prev">&larr;</button><button id="next">avanti &rarr;</button> <button id="exp">Scarica le risposte</button></div></div></div>
+<script>
+const S=__SLOTS__,T=__TRAITS__,K="te_pilot_eye_v1";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
+let g="";$("#traits").innerHTML=T.map(([gr,id,lab])=>{let h=gr!==g?`<div class="g">${gr}</div>`:"";g=gr;
+ return h+`<div class="t"><span>${lab}</span>`+[["A","assente"],["P","presente"],["X","amplificato"]].map(([v,l])=>`<button class="${v}" data-t="${id}" data-v="${v}">${l}</button>`).join("")+`</div>`}).join("");
+function cur(){const s=S[i];if(!A[s])A[s]={t:{},touched:false};return A[s]}
+function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
+function show(){const a=A[S[i]]||{t:{}};$("#im").src=S[i].split("#")[0]+".jpg";
+ $("#n").textContent=`immagine ${i+1} di ${S.length} · completate ${S.filter(s=>A[s]&&A[s].touched).length}`;
+ document.querySelectorAll("button[data-t]").forEach(b=>b.classList.toggle("on",(a.t[b.dataset.t]||"P")===b.dataset.v));
+ document.querySelectorAll("button[data-q]").forEach(b=>b.classList.toggle("on",a[b.dataset.q]===b.dataset.v));
+ $("#same").classList.toggle("on",!!a.same);$("#text").classList.toggle("on",!!a.text);
+ $("#stilenote").value=a.stilenote||"";$("#note").value=a.note||"";save()}
+document.querySelectorAll("button[data-t]").forEach(b=>b.onclick=()=>{const a=cur();a.t[b.dataset.t]=b.dataset.v;a.same=false;a.touched=true;show()});
+document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>{const a=cur();a[b.dataset.q]=b.dataset.v;a.touched=true;if(b.dataset.q==="stile"||b.dataset.q==="dmg")a.same=false;show()});
+$("#same").onclick=()=>{const a=cur();a.same=!a.same;if(a.same){a.t={};a.text=false;a.stile="inalterato";a.dmg="come";}a.touched=true;show();if(a.same&&i<S.length-1){i++;show()}};
+$("#text").onclick=()=>{const a=cur();a.text=!a.text;if(a.text){T.forEach(([,id])=>a.t[id]="A");a.same=false}a.touched=true;show()};
+$("#stilenote").oninput=e=>{const a=cur();a.stilenote=e.target.value;a.touched=true;save()};$("#note").oninput=e=>{const a=cur();a.note=e.target.value;a.touched=true;save()};
+$("#prev").onclick=()=>{if(i>0){i--;show()}};$("#next").onclick=()=>{const a=cur();a.touched=true;if(i<S.length-1){i++;show()}};
+$("#view").onclick=()=>$("#view").classList.toggle("zoom");
+const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
+$("#exp").onclick=()=>{let t="slot,touched,same,text,"+T.map(x=>x[1]).join(",")+",stile,stilenote,dmg,note\n";
+ S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.same?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||"P"),a.stile||"",q(a.stilenote),a.dmg||"",q(a.note)].join(",")+"\n"});
+ const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_pilot_eye_alessandro.csv";l.click()};
+show();
+</script></body></html>""".replace("__DMG__", "".join(f'<button data-q="dmg" data-v="{v}">{l}</button>' for v, l in
+    [("pulito", "più pulita"), ("come", "come l'originale"), ("lieve", "peggio: lieve"), ("medio", "medio"), ("forte", "forte")]))
+
+
 def count():
     rows = list(csv.DictReader(open(PLAN, encoding="utf-8")))
     miss = [r["expected_filename"] for r in rows if not (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
@@ -132,7 +238,7 @@ def count():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "checks", "check", "count"):
+    for x in ("plan", "queue", "checks", "check", "count", "page"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--img-root")
     a = ap.parse_args()
@@ -141,3 +247,4 @@ if __name__ == "__main__":
     if a.queue: queue(a.checks)
     if a.check: check()
     if a.count: count()
+    if a.page: page()
