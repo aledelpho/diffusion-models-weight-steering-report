@@ -2,19 +2,26 @@
 Written 2026-10-11, before any render. Renders authorised by Alessandro.
 
   python te_characters.py --plan            # data/te_characters_plan.csv (the 20 edits are chosen by rule from C64 phase 1)
-  python te_characters.py --queue --first 1 # the reproduction render only
-  python te_characters.py --repro           # must print REPRO PASS max abs diff 0
+  python te_characters.py --queue --first 2 # the two reproduction renders only (characters, word order)
+  python te_characters.py --repro           # must print REPRO PASS max abs diff 0 twice
   python te_characters.py --queue           # everything else
   python te_characters.py --count           # expected N missing 0
   python te_characters.py --features        # data/te_characters_style_features.csv (23 style statistics)
   python te_characters.py --faces           # data/te_characters_faces.csv (ArcFace buffalo_l, BRISQUE, CLIP-IQA; GPU PC)
   python te_characters.py --page            # eye page + data/te_characters_eye_key.csv (key committed before labels)
+  python te_characters.py --night [--shutdown]  # wait for ComfyUI's queue to empty, then count, repro, page, log; then power off
   python te_characters.py --test            # the decision rules (Claude runs it)
   python te_characters.py --selftest        # the rules on synthetic data
 
 Characters, prompt frame and baselines are those of C52 (experiments/portraits.py, benchmark_portraits/phase_c):
 seven Western-comics portraits, seeds 2645751 and 3316624. The baselines are reused, after one render through
 this script's workflow reproduces one of them pixel for pixel.
+
+Part B (word order): the same 20 edits on P1_elfbrawler in the five word orders of the DiT test
+(benchmark_prompt_order, seeds 3141592 and 1234567), with that test's baselines reused after one reproduction.
+
+Part C (style family): the first calibration character (D1) rewritten as a realistic watercolour, same edits, same
+two seeds; its baselines are rendered here.
 """
 import argparse, csv, itertools, json, os, sys, urllib.request
 from pathlib import Path
@@ -31,6 +38,16 @@ FACES = DATA / "te_characters_faces.csv"
 KEY = DATA / "te_characters_eye_key.csv"
 LABELS = DATA / "te_characters_eye_alessandro.csv"
 RESULT = DATA / "te_characters_tests.csv"
+ORDER_FOLDER = "benchmark_prompt_order"
+ORDERS = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
+ORDER_SEEDS = ["3141592", "1234567"]
+ORDER_FEAT = DATA / "te_order_style_features.csv"
+ORDER_RESULT = DATA / "te_order_tests.csv"
+LOG = HERE.parent / "docs" / "RENDERS_2026-10-11_te_characters.md"
+WC = "D1W_dwarf_paladin_watercolor"     # part C
+WC_OF = "D1_dwarf_paladin"
+WC_HEAD = "Realistic watercolor painting, close-up portrait, frontal view."
+WC_RESULT = DATA / "te_watercolor_tests.csv"
 FOLDER = "benchmark_te_characters"
 BASE_FOLDER = P.FOLDER_C
 CHARS = list(P.CALIBRATION) + list(P.HELD_OUT)
@@ -50,8 +67,22 @@ def select_edits():
     return sorted(out)
 
 
-def path(ch, cond, seed):
+def order_prompts():
+    out = {}
+    for r in csv.DictReader(open(DATA / "prompt_order_experiment_plan_seed2.csv", encoding="utf-8-sig")):
+        out.setdefault(r["prompt_id"], r["prompt"])
+    assert set(out) == set(ORDERS), list(out)
+    return out
+
+
+def order_path(v, cond, seed):
     if cond == "baseline":
+        return c47.IMG_ROOT / ORDER_FOLDER / f"{v}_baseline_krea2_seed{seed}_00001_.png"
+    return c47.IMG_ROOT / FOLDER / f"{v}_{cond}_krea2_seed{seed}_00001_.png"
+
+
+def path(ch, cond, seed):
+    if cond == "baseline" and ch != WC:
         return c47.IMG_ROOT / BASE_FOLDER / f"{ch}_baseline_krea2_seed{seed}_00001_.png"
     return c47.IMG_ROOT / FOLDER / f"{ch}_{cond}_krea2_seed{seed}_00001_.png"
 
@@ -59,19 +90,32 @@ def path(ch, cond, seed):
 def make_plan():
     edits = select_edits()
     rows = []
+    OP = order_prompts()
     def add(ch, seed, cond, te_json, phase, unit="", part="", dose=0.0):
         prefix = f"{ch}_{cond}_krea2_seed{seed}"
+        text = (OP[ch] if ch in OP else f"{WC_HEAD}\n{P.CALIBRATION[WC_OF]} {P.TAIL}" if ch == WC
+                else P.text({**P.CALIBRATION, **P.HELD_OUT}[ch]))
         rows.append({"row": len(rows), "phase": phase, "char": ch, "seed": seed, "cond": cond, "unit": unit, "part": part,
                      "dose": dose, "te_granular_json": te_json, "vectors_override": "",
-                     "prompt_text": P.text({**P.CALIBRATION, **P.HELD_OUT}[ch]), "output_prefix": prefix,
+                     "prompt_text": text, "output_prefix": prefix,
                      "expected_filename": f"{prefix}_00001_.png", **P.SETTINGS})
     add(CHARS[0], SEEDS[0], "REPRO_baseline", "", "check")
+    add(ORDERS[0], ORDER_SEEDS[0], "REPRO_baseline", "", "check")
     for ch in CHARS:
         add(ch, SEEDS[0], "CHK_null_L35_both_p1.00", TP.gj_te(35, TP.ATTN + TP.MLP, 1.0), "check", "L35", "both", 1.0)
     for L, part, d, cond in edits:
         for ch in CHARS:
             for seed in SEEDS:
                 add(ch, seed, cond, TP.gj_te(L, PARTS[part], d), "main", f"L{L:02d}", part, d)
+    for seed in SEEDS:
+        add(WC, seed, "baseline", "", "watercolor")
+    for L, part, d, cond in edits:
+        for seed in SEEDS:
+            add(WC, seed, cond, TP.gj_te(L, PARTS[part], d), "watercolor", f"L{L:02d}", part, d)
+    for L, part, d, cond in edits:
+        for v in ORDERS:
+            for seed in ORDER_SEEDS:
+                add(v, seed, cond, TP.gj_te(L, PARTS[part], d), "order", f"L{L:02d}", part, d)
     with open(PLAN, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print("edits:", len(edits), [e[3] for e in edits])
@@ -106,22 +150,31 @@ def _im(p):
     return np.asarray(Image.open(p).convert("RGB"), dtype=np.int16)
 
 
+def _base(r):
+    return order_path(r["char"], "baseline", r["seed"]) if r["char"] in ORDERS else path(r["char"], "baseline", r["seed"])
+
+
 def repro():
-    r = plan()[0]
-    d = int(np.abs(_im(c47.IMG_ROOT / FOLDER / r["expected_filename"]) - _im(path(r["char"], "baseline", r["seed"]))).max())
-    print("REPRO", "PASS" if d == 0 else "FAIL - stop", "max abs diff", d)
+    ok = True
+    for r in plan()[:2]:
+        d = int(np.abs(_im(c47.IMG_ROOT / FOLDER / r["expected_filename"]) - _im(_base(r))).max())
+        ok &= d == 0
+        print("REPRO", r["char"], "PASS" if d == 0 else "FAIL - stop", "max abs diff", d)
     nulls = [r for r in plan() if r["cond"].startswith("CHK_null")]
     have = [r for r in nulls if (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
     if have:
         dn = [int(np.abs(_im(c47.IMG_ROOT / FOLDER / r["expected_filename"]) - _im(path(r["char"], "baseline", r["seed"]))).max()) for r in have]
         print("null L35 (reported):", len(have), "renders, max abs diff", dn)
+    return ok
 
 
 def count():
     rows = plan()
     miss = [r["expected_filename"] for r in rows if not (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
     base_miss = [str(path(c, "baseline", s)) for c in CHARS for s in ID_SEEDS if not path(c, "baseline", s).exists()]
+    base_miss += [str(order_path(v, "baseline", s)) for v in ORDERS for s in ORDER_SEEDS if not order_path(v, "baseline", s).exists()]
     print("expected", len(rows), "missing", len(miss), miss[:5], "| reused baselines missing", len(base_miss))
+    return len(miss) == 0
 
 
 def main_conds():
@@ -134,25 +187,30 @@ def main_conds():
 
 # ---------------------------------------------------------------- measurement
 def features():
+    _features(FEAT, [(c, "baseline", s) for c in CHARS + [WC] for s in SEEDS] + [(c, k, s) for k in main_conds() for c in CHARS + [WC] for s in SEEDS], path)
+    _features(ORDER_FEAT, [(v, "baseline", s) for v in ORDERS for s in ORDER_SEEDS] +
+              [(v, k, s) for k in main_conds() for v in ORDERS for s in ORDER_SEEDS], order_path)
+
+
+def _features(out, items, pathf):
     from style_features import extract_all_features
     done = set()
-    if FEAT.exists():
-        done = {(r["char"], r["cond"], r["seed"]) for r in csv.DictReader(open(FEAT))}
-    items = [(c, "baseline", s) for c in CHARS for s in SEEDS] + [(c, k, s) for k in main_conds() for c in CHARS for s in SEEDS]
-    new = not FEAT.exists()
-    with open(FEAT, "a", newline="") as fh:
+    if out.exists():
+        done = {(r["char"], r["cond"], r["seed"]) for r in csv.DictReader(open(out))}
+    new = not out.exists()
+    with open(out, "a", newline="") as fh:
         w = None
         for ch, cond, seed in items:
             if (ch, cond, seed) in done:
                 continue
-            f = extract_all_features(str(path(ch, cond, seed)))
+            f = extract_all_features(str(pathf(ch, cond, seed)))
             row = {"char": ch, "cond": cond, "seed": seed, **{k: v for k, v in f.items() if k not in ("file", "width_px", "height_px")}}
             if w is None:
                 w = csv.DictWriter(fh, fieldnames=list(row))
                 if new:
                     w.writeheader()
             w.writerow(row); fh.flush()
-    print("features ok")
+    print("features ok", out.name)
 
 
 def faces():
@@ -235,7 +293,24 @@ def test():
         w = csv.DictWriter(fh, fieldnames=list(per[0])); w.writeheader(); w.writerows(per)
     for p in per:
         print(p)
-    print(tot)
+    print("H1", tot)
+    Fo = {(r["char"], r["cond"], r["seed"]): np.array([float(v) for k, v in r.items() if k not in ("char", "cond", "seed")])
+          for r in csv.DictReader(open(ORDER_FEAT))}
+    dit = list(csv.DictReader(open(DATA / "prompt_order_feature_consistency.csv")))
+    perB, totB = order_rules(Fo, main_conds(), dit)
+    with open(ORDER_RESULT, "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(perB[0])); w.writeheader(); w.writerows(perB)
+    for p in perB:
+        print(p)
+    print("H2", totB)
+    perC, totC = watercolor_rules(F, main_conds())
+    with open(WC_RESULT, "w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(perC[0])); w.writeheader(); w.writerows(perC)
+    for p in perC:
+        print(p)
+    print("H3", totC)
+    for k, v in predictions(per, Fo, main_conds(), list(csv.DictReader(open(FACES)))).items():
+        print(k, v)
 
 
 def selftest():
@@ -255,6 +330,160 @@ def selftest():
     assert per[0]["verdict"] == "coherent" and per[1]["verdict"] in ("incoherent", "uninformative"), per
     assert per[0]["id_kept"] == 7, per
     print("selftest ok", per, tot)
+    # part B: an edit whose change ignores the order versus one that follows it
+    orders, oseeds = ["o1", "o2", "o3", "o4", "o5"], ["s1", "s2"]
+    Fo = {}
+    for o in orders:
+        for s in oseeds:
+            Fo[(o, "baseline", s)] = rng.normal(size=23)
+    stable, perord = rng.normal(size=23) * 3, {o: rng.normal(size=23) * 3 for o in orders}
+    for o in orders:
+        for s in oseeds:
+            Fo[(o, "stable", s)] = Fo[(o, "baseline", s)] + stable + rng.normal(size=23) * 0.3
+            Fo[(o, "orderdep", s)] = Fo[(o, "baseline", s)] + perord[o] + rng.normal(size=23) * 0.3
+    dit = [{"arm": f"a{i}", "size": "3", "cos_order": "0.8", "cos_seed": "0.75"} for i in range(10)] + [{"arm": "REORDER_ONLY", "size": "1.1"}]
+    perB, totB = order_rules(Fo, ["stable", "orderdep"], dit, orders, oseeds)
+    assert perB[0]["cos_order"] > 0.9 and perB[1]["cos_order"] < 0.5 and perB[1]["cos_seed"] > 0.9, perB
+    assert participation_ratio([np.eye(5)[i] for i in range(5)]) > participation_ratio([np.ones(5) * i for i in range(5)])
+    print("selftest B ok", perB, totB)
+    # part C: watercolour change unrelated to the comic one, while comic characters agree
+    for s in seeds:
+        F[("w", "baseline", s)] = rng.normal(size=23)
+        F[("w", "same", s)] = F[("w", "baseline", s)] + rng.normal(size=23) * 3
+    perC, totC = watercolor_rules(F, ["same"] * 6, chars, seeds, "w", "c0")
+    assert perC[0]["cos_across_character"] > 0.9 and perC[0]["cos_across_style"] < 0.6, perC
+    print("selftest C ok", perC[0], totC)
+
+
+# ---------------------------------------------------------------- part B and the predictions (fixed in the pre-registration)
+def order_rules(F, conds, dit, orders=ORDERS, seeds=ORDER_SEEDS):
+    """F[(v, cond, seed)] -> 23-vector (cond 'baseline' for the reused baselines). dit: rows of
+    data/prompt_order_feature_consistency.csv (the DiT arms). Same definitions as prompt_order_feature_consistency.py."""
+    B = np.array([F[(v, "baseline", s)] for v in orders for s in seeds])
+    sd = B.std(axis=0, ddof=1); sd[sd == 0] = 1
+    reorder = float(np.mean([np.abs((F[(a, "baseline", s)] - F[(b, "baseline", s)]) / sd).mean()
+                             for s in seeds for a, b in itertools.combinations(orders, 2)]))
+    per = []
+    for k in conds:
+        dF = {(v, s): (F[(v, k, s)] - F[(v, "baseline", s)]) / sd for v in orders for s in seeds}
+        co = float(np.mean([cos(dF[(a, s)], dF[(b, s)]) for s in seeds for a, b in itertools.combinations(orders, 2)]))
+        cs = float(np.mean([cos(dF[(v, seeds[0])], dF[(v, seeds[1])]) for v in orders]))
+        size = float(np.mean([np.abs(x).mean() for x in dF.values()]))
+        per.append({"cond": k, "size": round(size, 3), "cos_order": round(co, 3), "cos_seed": round(cs, 3),
+                    "d": round(co - cs, 3), "above_reorder": int(size > reorder)})
+    te = [p["d"] for p in per if p["above_reorder"]]
+    dit_rows = [r for r in dit if r["arm"] != "REORDER_ONLY"]
+    dit_reorder = float(next(r["size"] for r in dit if r["arm"] == "REORDER_ONLY"))
+    dd = [float(r["cos_order"]) - float(r["cos_seed"]) for r in dit_rows if float(r["size"]) > dit_reorder]
+    out = {"reorder_size_te": round(reorder, 3), "n_te": len(te), "n_dit": len(dd),
+           "median_d_te": round(float(np.median(te)), 3) if te else None, "median_d_dit": round(float(np.median(dd)), 3),
+           "median_cos_order_te": round(float(np.median([p["cos_order"] for p in per if p["above_reorder"]])), 3) if te else None,
+           "median_cos_order_dit": round(float(np.median([float(r["cos_order"]) for r in dit_rows if float(r["size"]) > dit_reorder])), 3)}
+    if len(te) < 5:
+        out["H2"] = "uninformative (fewer than 5 edits larger than the reordering itself)"
+    else:
+        from scipy.stats import mannwhitneyu
+        pv = float(mannwhitneyu(te, dd, alternative="less").pvalue)
+        out["p_mwu"] = round(pv, 4)
+        out["H2"] = ("supported" if out["median_d_te"] <= out["median_d_dit"] - 0.10 and pv < 0.05
+                     else "refuted" if out["median_d_te"] >= out["median_d_dit"] else "inconclusive")
+    return per, out
+
+
+def watercolor_rules(F, conds, chars=CHARS, seeds=SEEDS, wc=WC, of=WC_OF):
+    """Per edit: cos between the change on the watercolour D1 and on the comic D1 (same seed), against the change on
+    the comic D1 and on each other comic character (same seed). Scale: SD of the comic baselines, for both families."""
+    B = np.array([F[(c, "baseline", s)] for c in chars for s in seeds])
+    sd = B.std(axis=0, ddof=1); sd[sd == 0] = 1
+    dF = lambda c, k, s: (F[(c, k, s)] - F[(c, "baseline", s)]) / sd
+    per = []
+    for k in conds:
+        x_style = float(np.mean([cos(dF(wc, k, s), dF(of, k, s)) for s in seeds]))
+        x_char = float(np.mean([cos(dF(c, k, s), dF(of, k, s)) for s in seeds for c in chars if c != of]))
+        per.append({"cond": k, "cos_across_style": round(x_style, 3), "cos_across_character": round(x_char, 3),
+                    "size_watercolor": round(float(np.mean([np.abs(dF(wc, k, s)).mean() for s in seeds])), 3),
+                    "size_comic_D1": round(float(np.mean([np.abs(dF(of, k, s)).mean() for s in seeds])), 3)})
+    a, b = np.median([p["cos_across_style"] for p in per]), np.median([p["cos_across_character"] for p in per])
+    from scipy.stats import wilcoxon
+    diffs = [p["cos_across_style"] - p["cos_across_character"] for p in per]
+    pv = float(wilcoxon(diffs, alternative="less").pvalue) if any(diffs) else 1.0
+    H3 = "supported" if a <= b - 0.10 and pv < 0.05 else "refuted" if a >= b else "inconclusive"
+    return per, {"median_cos_across_style": round(float(a), 3), "median_cos_across_character": round(float(b), 3),
+                 "p_wilcoxon": round(pv, 4), "H3": H3}
+
+
+def participation_ratio(V):
+    V = np.asarray(V, float); V = V - V.mean(axis=0)
+    ev = np.clip(np.linalg.eigvalsh(V @ V.T), 0, None)
+    return float(ev.sum() ** 2 / (ev ** 2).sum()) if ev.sum() > 0 else 0.0
+
+
+def predictions(per_char, Fo, conds, faces_rows):
+    """Alessandro's three predictions (2026-10-11), each read as holds / fails; none decides H1 or H2."""
+    out = {}
+    W = [p["median_W"] for p in per_char if p["verdict"] != "uninformative"]
+    mw = float(np.median(W)) if W else float("nan")
+    out["P1_coherence_like_dit"] = f"median W {mw:.3f} vs C52 0.51 -> " + ("holds" if 0.41 <= mw <= 0.61 else "fails")
+    # P2: quality less degraded than the C52 DiT preset, same characters and seeds
+    q = {(r["char"], r["cond"], r["seed"]): (float(r["brisque"]), float(r["clipiqa"])) for r in faces_rows}
+    qc = {(r["char"], r["cond"], r["seed"]): (float(r["brisque"]), float(r["clipiqa"]))
+          for r in csv.DictReader(open(DATA / "portrait_preset_faces.csv"))}
+    te_b = np.median([np.median([q[(c, k, s)][0] - q[(c, "baseline", s)][0] for c in CHARS for s in SEEDS]) for k in conds])
+    te_c = np.median([np.median([q[(c, k, s)][1] - q[(c, "baseline", s)][1] for c in CHARS for s in SEEDS]) for k in conds])
+    dit_b = np.median([qc[(c, "preset", s)][0] - qc[(c, "baseline", s)][0] for c in CHARS for s in SEEDS])
+    dit_c = np.median([qc[(c, "preset", s)][1] - qc[(c, "baseline", s)][1] for c in CHARS for s in SEEDS])
+    out["P2_quality_less_degraded"] = (f"dBRISQUE te {te_b:+.2f} vs preset {dit_b:+.2f}; dCLIP-IQA te {te_c:+.4f} vs preset {dit_c:+.4f} -> "
+                                       + ("holds" if te_b < dit_b and te_c > dit_c else "fails"))
+    # P3: a wider spread of styles than the DiT single blocks, same prompt (V1) and seeds, 20 largest DiT arms
+    rows = list(csv.DictReader(open(DATA / "prompt_order_style_features.csv")))
+    feats = [k for k in rows[0] if k not in ("file", "width_px", "height_px")]
+    import re
+    BASE = re.compile(r"^V1_Original_baseline_krea2_seed(\d+)_"); ARM = re.compile(r"^V1_Original_(blk\d\d_(?:pos|neg))_d[\d.]+_krea2_seed(\d+)_")
+    Bd, Ad = {}, {}
+    for r in rows:
+        v = np.array([float(r[k]) for k in feats])
+        m = BASE.match(r["file"])
+        if m: Bd[m[1]] = v; continue
+        m = ARM.match(r["file"])
+        if m: Ad[(m[1], m[2])] = v
+    sd = np.array([Fo[(o, "baseline", s)] for o in ORDERS for s in ORDER_SEEDS]).std(axis=0, ddof=1); sd[sd == 0] = 1
+    arms = sorted({a for a, _ in Ad})
+    dit = {a: np.mean([(Ad[(a, s)] - Bd[s]) / sd for s in ORDER_SEEDS], axis=0) for a in arms if all((a, s) in Ad for s in ORDER_SEEDS)}
+    top = sorted(dit, key=lambda a: -np.abs(dit[a]).mean())[:len(conds)]
+    te = [np.mean([(Fo[("V1_Original", k, s)] - Fo[("V1_Original", "baseline", s)]) / sd for s in ORDER_SEEDS], axis=0) for k in conds]
+    pr_te, pr_dit = participation_ratio(te), participation_ratio([dit[a] for a in top])
+    out["P3_wider_style_spread"] = f"participation ratio te {pr_te:.2f} vs DiT top-{len(top)} {pr_dit:.2f} -> " + ("holds" if pr_te > pr_dit else "fails")
+    return out
+
+
+def night(shutdown):
+    """For an unattended run: wait until ComfyUI's queue has been empty for three checks a minute apart, then run
+    --count, --repro and --page, write the log for Claude, and (with --shutdown) power the PC off after 5 minutes.
+    The shutdown can be cancelled from a terminal with `shutdown /a`. Nothing else is run."""
+    import io, time, contextlib, subprocess, datetime
+    empty = 0
+    while empty < 3:
+        try:
+            with urllib.request.urlopen(f"{c47.COMFY}/queue", timeout=10) as resp:
+                q = json.loads(resp.read())
+            empty = empty + 1 if not q.get("queue_running") and not q.get("queue_pending") else 0
+        except Exception as e:
+            print("queue check failed:", e); empty = 0
+        time.sleep(60)
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        print("night run finished", datetime.datetime.now().isoformat(timespec="seconds"))
+        for name, fn in (("--count", count), ("--repro", repro), ("--page", page)):
+            print(f"\n$ python te_characters.py {name}")
+            try:
+                fn()
+            except Exception as e:
+                print("ERROR", type(e).__name__, e)
+    LOG.write_text("# C65 renders — unattended night run\n\n```\n" + buf.getvalue() + "```\n", encoding="utf-8")
+    print(buf.getvalue()); print("log ->", LOG)
+    if shutdown:
+        subprocess.run(["shutdown", "/s", "/t", "300", "/c", "C65 finished: power off in 5 minutes (cancel: shutdown /a)"])
+        print("shutdown scheduled in 5 minutes")
 
 
 # ---------------------------------------------------------------- eye page: one sheet per edit x seed
@@ -335,7 +564,7 @@ show();
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "repro", "count", "features", "faces", "page", "test", "selftest"):
+    for x in ("plan", "queue", "repro", "count", "features", "faces", "page", "test", "selftest", "night", "shutdown"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--first", type=int, default=0)
     ap.add_argument("--img-root")
@@ -350,3 +579,4 @@ if __name__ == "__main__":
     if a.page: page()
     if a.test: test()
     if a.selftest: selftest()
+    if a.night: night(a.shutdown)

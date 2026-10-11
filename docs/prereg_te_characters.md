@@ -28,9 +28,20 @@ a property of the edit or of that one picture is not known.
   L28 MLP+. The DiT-side text slots are excluded (they are not text-encoder edits). The selection reuses the
   C64 labels, so these are edits that changed one picture strongly by construction; the test is whether they
   do the same to others.
-* **Renders:** 1 reproduction (D1 baseline through this workflow, must equal the phase C baseline pixel for
-  pixel) + 7 nulls (layer 35, never read, at +1.00, one per character, seed 2645751) + 20 edits × 7 characters
-  × 2 seeds = **288**.
+* **Renders, part A:** 1 reproduction (D1 baseline through this workflow, must equal the phase C baseline pixel
+  for pixel) + 7 nulls (layer 35, never read, at +1.00, one per character, seed 2645751) + 20 edits × 7
+  characters × 2 seeds = **288**.
+* **Part B — word order** (added before any render, Alessandro: *the order of the words should change the
+  text encoder's effect more visibly than the model's*). The same 20 edits on P1_elfbrawler in the five word
+  orders of the DiT test (`benchmark_prompt_order`, V1 Original, V2 SubjectFirst, V3 BGFirst, V4 ActionFirst,
+  V5 Inverse; seeds 3141592 and 1234567). That test's baselines are reused after one reproduction (V1, 3141592).
+  **201** renders.
+* **Part C — style family** (added before any render, Alessandro: *a character of the same family written as a
+  realistic watercolour will change style very differently, and the text encoder will behave differently for
+  the same edits*). The first calibration character, D1, with the frame `Realistic watercolor painting,
+  close-up portrait, frontal view.` instead of `Western comics style, …`, same text, same two seeds; 2 baselines
+  + 20 edits × 2 seeds = **42** renders. The character was fixed by position in the list, not chosen.
+* **Total: 531 renders.**
 
 ## Order
 
@@ -64,6 +75,36 @@ per character and seed.
 * **Eye, reported against H1, no decision:** per edit, the two sheets' answers to "same direction".
 * **Cost, reported:** BRISQUE and CLIP-IQA edit − baseline per edit.
 
+**Part B rules** (definitions of `prompt_order_feature_consistency.py`, the DiT test of 2026-10-04). Per edit:
+dF in each order and seed, scaled by the SD over the 10 baselines; *cos_order* = mean cosine of dF between
+different orders, same seed (20 pairs); *cos_seed* = mean cosine between the two seeds, same order (5 pairs);
+*size* = mean |dF|. Only edits whose size exceeds the change made by reordering alone enter, as for the 43 DiT
+arms. d = cos_order − cos_seed (how much more the order disturbs the edit than the seed does).
+
+* **H2 — word order changes a text-encoder edit more than a DiT edit.** Median d over the text-encoder edits
+  ≤ median d over the DiT arms − 0.10, with a one-sided Mann–Whitney p < 0.05 → *supported*; median d (text
+  encoder) ≥ median d (DiT) → *refuted*; otherwise *inconclusive*. Fewer than 5 edits above the reordering size →
+  *uninformative*. Reported alongside: median cos_order of both (DiT: 0.69).
+
+**Part C rules.** Scale: SD of the 14 comic baselines, for both families. Per edit, *across style* = mean
+cosine (over the two seeds) between dF on the watercolour D1 and dF on the comic D1; *across character* = mean
+cosine between dF on the comic D1 and dF on each of the other six comic characters, same seed.
+
+* **H3 — the style family changes what an edit does more than the character does.** Median *across style* ≤
+  median *across character* − 0.10, with a one-sided Wilcoxon signed-rank p < 0.05 over the 20 edits →
+  *supported*; median *across style* ≥ median *across character* → *refuted*; otherwise *inconclusive*.
+  Reported alongside: the size of each edit on the watercolour against the comic D1.
+
+**Alessandro's predictions (2026-10-11), each read as holds / fails, deciding nothing:**
+
+* **P1** — as coherent as the DiT preset: median W over the informative edits within 0.41–0.61 (C52: 0.51).
+* **P2** — less quality loss than the DiT preset: median over edits of the median BRISQUE change is lower, and of
+  the CLIP-IQA change higher, than the C52 preset's on the same characters and seeds.
+* **P3** — a wider spread of styles than the DiT blocks: on P1_elfbrawler (order V1, both seeds), the
+  participation ratio of the 20 edits' mean dF is larger than that of the 20 largest DiT single-block arms of
+  the order test. The edits were selected for changing style, so this comparison favours them; it is reported
+  as such.
+
 ## Known limits
 
 * One prompt frame and style (Western comics close-up portraits), two seeds, one observer who knows the C64
@@ -71,4 +112,7 @@ per character and seed.
 * The 23 statistics measure colour, contrast, edges and texture; a change of genre (e.g. "anime") that keeps
   those statistics similar can look coherent to the eye and not to W, or the reverse. Both are reported.
 * Dose ±1.00 only. Nothing here says what happens at lower doses.
+* Part B rests on one prompt; the DiT reference arms are single DiT blocks at their own doses, not the same
+  edits. Part C rests on one character and two seeds.
+* Parts B and C are measured only (no eye page); the grid viewer can show them afterwards.
 * The edits were selected on one picture where they changed style; regression to the mean is expected.
