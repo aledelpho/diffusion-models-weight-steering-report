@@ -100,6 +100,40 @@ def check():
     print("CHECK", "PASS" if a == 0 else "FAIL - stop")
 
 
+def page():
+    """Blind pairs as in C60: edit vs its baseline, side random (rng 63), 96 pairs + 10 repeats."""
+    from PIL import Image
+    import comic_form_test as cf
+    rng = np.random.default_rng(63)
+    out = c47.IMG_ROOT / FOLDER / "eye_test"; out.mkdir(exist_ok=True)
+    rows = [r for r in csv.DictReader(open(PLAN, encoding="utf-8")) if r["group"] in ("clean", "control")]
+    ids = rng.permutation(np.arange(1000, 9999))[: len(rows)]
+    pairs = [{"id": f"q{i}", "prompt": r["prompt_id"], "seed": r["seed"], "cond": r["cond"], "group": r["group"],
+              "left": rng.choice(["edit", "base"])} for r, i in zip(rows, ids)]
+    show = [p["id"] for p in pairs]; rng.shuffle(show)
+    rep = list(rng.choice(show, 10, replace=False))
+    for x in rep:
+        show.insert(int(rng.integers(len(show) // 3, len(show) + 1)), x)
+    for p in pairs:
+        dst = out / f"{p['id']}.jpg"
+        if dst.exists():
+            continue
+        e, b = f(p["prompt"], p["seed"], p["cond"]), f(p["prompt"], p["seed"], "baseline")
+        L, R = (e, b) if p["left"] == "edit" else (b, e)
+        S = Image.new("RGB", (2 * 1024 + 12, 1280), (30, 30, 30))
+        S.paste(Image.open(L).convert("RGB"), (0, 0)); S.paste(Image.open(R).convert("RGB"), (1036, 0))
+        S.save(dst, "JPEG", quality=92, subsampling=0)
+    with open(KEY, "w", newline="") as fh:
+        w = csv.writer(fh); w.writerow(["pair", "prompt", "seed", "cond", "group", "left", "repeated"])
+        for p in pairs:
+            w.writerow([p["id"], p["prompt"], p["seed"], p["cond"], p["group"], p["left"], int(p["id"] in rep)])
+    slots = [f"{x}#{k}" for k, x in enumerate(show)]
+    html = cf.PAGE.replace("comic_form_eye_v1", "clean_six_eye_v1").replace("comic_form_eye_alessandro.csv", "clean_six_eye_alessandro.csv")
+    html = html.replace("<title>Fumetto: A contro B</title>", "<title>C63: A contro B</title>")
+    (out / "eye_test.html").write_text(html.replace("__SLOTS__", json.dumps(slots)), encoding="utf-8")
+    print(len(pairs), "pairs,", len(slots), "showings ->", out / "eye_test.html")
+
+
 def count():
     rows = list(csv.DictReader(open(PLAN, encoding="utf-8")))
     miss = [r["expected_filename"] for r in rows if not (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
@@ -108,7 +142,7 @@ def count():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "checks", "check", "count"):
+    for x in ("plan", "queue", "checks", "check", "count", "page"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--img-root")
     a = ap.parse_args()
@@ -117,3 +151,4 @@ if __name__ == "__main__":
     if a.queue: queue(a.checks)
     if a.check: check()
     if a.count: count()
+    if a.page: page()
