@@ -188,7 +188,7 @@ figcaption{position:sticky;top:0;background:#000c;padding:3px 8px;font-weight:70
 .t{display:flex;align-items:center;gap:4px;padding:1px 0}.t span{flex:1;font-size:13px}
 button{font:13px system-ui;padding:3px 7px;border-radius:6px;border:1px solid #555;background:#333;color:#ddd;cursor:pointer}
 button.on.A{background:#7a2e2e;border-color:#c55}button.on.P{background:#2f4f3a;border-color:#6a8}button.on.X{background:#2e4a7a;border-color:#69c}
-button.on.q{background:#3b6e4f;border-color:#6c6}.big{padding:6px 12px}
+button.on.q,button[data-q].on,#same.on,#text.on{background:#3b6e4f;border-color:#6c6;color:#fff}.big{padding:6px 12px}
 textarea{width:100%;box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
 #n{color:#aaa}small{color:#999}
 </style></head><body><div id="wrap">
