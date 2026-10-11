@@ -131,8 +131,10 @@ repeated showing was "slight" against "none". Only medium and stronger count as 
 
 **The measures do not see the noise.** The fine-texture measure of page 05, the noise estimator of
 C58 and a band-pass measure all failed against the eye on the noise that matters. As a size of
-change, the same measures rank the eye's noise only moderately (AUC 0.75-0.81). Every noise
-statement on this page rests on the eye.
+change, the same measures rank the eye's noise only moderately (AUC 0.75-0.81). A pre-registered
+search for a better one (C62, eight candidates chosen on C59 and tested on C60) found none: the best
+remained the size of the fine-texture change, AUC 0.79 on the test set, below its 0.85 bar
+(`docs/noise_metric_result.md`). Every noise statement on this page rests on the eye.
 
 **One dose, illustration-heavy.** All tests use ±0.35, except C61 at ±0.20. Six of seven prompts
 are drawn; the only photographs are in C61, where they behaved differently.
