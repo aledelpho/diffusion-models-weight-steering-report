@@ -92,6 +92,7 @@
 <li><a href="#p-26-what-did-not-work"><span class="dot" style="background:#d03b3b"></span>What did not work, and the limits of everything else</a></li>
 <li><a href="#p-27-other-edits"><span class="dot" style="background:#fab219"></span>Appendix A: other kinds of edit</a></li>
 <li><a href="#p-28-portrait-preset"><span class="dot" style="background:#0ca30c"></span>A preset made by eye, tested blind on characters it never saw</a></li>
+<li><a href="#p-29-inside-the-block"><span class="dot" style="background:#0ca30c"></span>Inside a block — attention, MLP, and what an edit costs</a></li>
   </ul>
   <h2>Start here</h2>
   <ul>
@@ -143,7 +144,7 @@ pictures:</strong> calibrated on four character portraits and frozen, it gave th
 never seen the look its author had described, about as coherently as on the four (0.51 against
 0.61), and an observer blind to the condition chose it as the closer match in 56 of 56
 comparisons; each character stays recognisable, though the face moves slightly more than under a
-change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. Rewriting a prompt changes what a block does about as much as
+change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
 inconclusive by its own rule. We also report four claims that were made from statistics and
 withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
@@ -182,6 +183,8 @@ same way on every prompt tried. The pages below report what survived confirmatio
 <li>standard metrics on the same images (<a href="#p-25-standard-metrics">25</a>);</li>
 <li>a preset made by eye from the map, tested blind on characters it never saw
   (<a href="#p-28-portrait-preset">28</a>);</li>
+<li>inside a block: attention against MLP, where the noise sits, and what a middle-block edit costs
+  (<a href="#p-29-inside-the-block">29</a>);</li>
 <li>what did not work, and the limits (<a href="#p-26-what-did-not-work">26</a>); other kinds of edit
   (<a href="#p-27-other-edits">27</a>).</li>
 </ul>
@@ -253,9 +256,12 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-27-other-edits--the-subject-grows">A block-reordering edit makes the subject take more of the frame, more so at the higher dose, on styles that did not exist when the prediction was frozen.</a></td><td class="ev">Pre-registered in notebook page 03: geometric mean area ratio 1.234 across 10 new styles, 9 of 10 above 1, Holm-corrected p 0.018 to 0.035. Whether the structure or the size of the edit causes it is open: the control that separates them was not rendered.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-28-portrait-preset--the-look-carries-over">A preset calibrated by eye on four character portraits changes three characters it never saw in a common direction, about as coherently as it changes the four it was tuned on.</a></td><td class="ev">Pre-registered (C52), preset frozen before any test render. Median coherence across the held-out characters 0.51 (threshold 0.40), against 0.61 on the calibration characters (allowed gap 0.15); the preset agrees with itself across seeds at 0.78 (H1, H2).</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-28-portrait-preset--a-blind-observer">An observer who did not know which image carried the preset chose it as the one closer to the look its author described, on every sheet.</a></td><td class="ev">Pre-registered amendment 2 (H4): 56 of 56 sheets, held-out characters 12/12 on the original and 12/12 on the mirrored set (p = 0.0002 each); she named LEFT exactly 28 times and never the same side on both versions of a pair (position check 0/28). One observer.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-29-inside-the-block--form-against-surface">On comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 at the same dose, and damage its surface far less often.</a></td><td class="ev">Pre-registered (C60), new prompts and seeds, blind pairs. Layout r per edit: median 0.72 against 0.84, one-sided Mann-Whitney p = 0.007. Change seen by eye: 1.59 against 0.47 on a 0-2 scale, p = 0.0002 (0.002 with unanswered pairs scored as the most change). Damage of medium or stronger on the edited side: 17 of 90 pairs against 71 of 90; baseline sides 0 of 180.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-29-inside-the-block--what-the-middle-costs">Even the middle-block edits chosen because they looked clean carry a visible surface cost on new prompts; the cost is concentrated in a few edits and depends on the prompt.</a></td><td class="ev">Pre-registered (C60) P4: edited-side damage of medium or stronger 0.19 against 0 on the baseline side, Newcombe 95% [0.11, 0.28], above the 0.10 bound for &quot;no detectable cost&quot;. Four of the ten edits carry all of it (block 19 MLP + 8 of 9 pairs); six are at 0 of 9. Self-agreement on 15 repeats: 1.00.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-21-block-map--what-the-weights-show">How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.</a></td><td class="ev">Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-24-wording--the-registered-rule">Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block&#x27;s effect no more than changing the seed does, while changing the subject changes it a great deal.</a></td><td class="ev">Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-27-other-edits--a-curiosity-attributes-that-appear">A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.</a></td><td class="ev">Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-29-inside-the-block--the-cost-of-a-push-revisited">The fine-texture cost per block measured in notebook page 05 replicates on new seeds for its own two comic prompts, but does not extend as measured to photographs.</a></td><td class="ev">Pre-registered attempt to overturn page 05 (C61): the gate failed (blocks 23-27, G = 0.989, p = 0.26) and the primary was undecided, so by its own rule nothing is decided. On P01 and P02, four new seeds: blocks 1-22 0.989 (page 05: 0.989), blocks 23-27 0.934 (0.932). On two photographs the tail turns into a gain (0.989 overall, block 27 at 1.27).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-25-standard-metrics--a-content-embedding-does-not-see-it">The family-coherent change the eye saw on the middle blocks is a change of content that a content embedding, DINOv2, would record.</a></td><td class="ev">Pre-registered (H5): supported if the median within-family coherence of the five middle arms on DINOv2 changes reached the style-feature value plus 0.10 (0.26). It is 0.007, below the style-feature value 0.159: refuted. In DINOv2 space no arm is family-coherent (all W at most 0.06).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--the-best-doses-by-the-statistic">Pushed to dose 0.500, the macro-block sliders Block_4 and Block_1 move the picture far from the baseline while keeping its line work, and are the best operating points found.</a></td><td class="ev">Published from two statistics, then retracted the next day when the renders were opened: Block_4 + at 0.500 leaves no subject, only a crumpled-stroke texture; Block_1 + at 0.500 is colour confetti. Block_4 + is already broken at 0.350.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--a-measure-with-the-sign-wrong">Structure coherence, a statistic of oriented line work, can rank edits by how much of the drawing they preserve.</a></td><td class="ev">Pre-registered eye veto: 7 agreements in 9 resolved pairs against a threshold of 8 in 12. Both disagreements are one condition, Block_6 + 0.080, which the statistic scores above its baseline and which I and six blind model observers call broken; Block_1 - 0.500 is the same case. The sign is wrong, not the size.</td></tr>
@@ -274,6 +280,8 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-24-wording--word-order">For an identical vocabulary, the order of the words changes the pose and framing of the picture but not what a block does to it.</a></td><td class="ev">Exploratory, one prompt in five orders, two seeds, 56 arms. Consistency across orders tracks consistency across seeds (r = 0.92) and is on average 0.06 higher; median 0.69 on the 43 arms larger than the reordering itself. Baselines of different orders differ by Delta E 16-31.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-25-standard-metrics--depth-against-cost">Middle-block edits change the content of the picture more than late-block edits and cost nothing measurable in image quality, while late blocks change less and cost more.</a></td><td class="ev">Pre-specified descriptive measurement, no decision threshold. DINOv2 similarity to the baseline 0.87 and 0.88 for blk17 + and blk09 +, against 0.90-0.96 for the late arms; BRISQUE -0.5 and -0.3 for those two, +9.6 for blk27 -0.25 and for the combo.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-28-portrait-preset--what-the-preset-takes-away">The portrait preset can flatten an expression the prompt asks for and remove small details the prompt names, while keeping the character recognisable.</a></td><td class="ev">Analyst&#x27;s look after all numbers, not blind, on seven pairs selected because ArcFace marked them: the gnome&#x27;s prompted wide-eyed curiosity becomes a frown at three seeds of three; the half-orc&#x27;s snarl becomes a stern closed face; prompted dirt smudges and chalk dust vanish. No deformation in any of the seven. Untested; block 8 (+0.15) is the first suspect.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-29-inside-the-block--where-the-noise-sits">Pushed at the same dose, the MLP half of a block is noisier than its attention half in most blocks; the attention adds noise only at the very end of the stack.</a></td><td class="ev">Blind eye pass on the split atlas (C59), one seed, three prompts, one observer: of 19 block-sign cells with noise in either half, the MLP is noisier in 13, the attention in 2, tied in 4 (at medium or stronger: 7, 1, 3). Protocol fixed before the labels, no decision rule. The pre-registered measure of C58 could not decide.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-29-inside-the-block--the-first-block">In the first block the two halves compensate each other: either half lowered alone destroys the picture, while the whole block lowered by the same amount keeps its composition, though not its surface.</a></td><td class="ev">C59 at -0.35: attention alone and MLP alone break the image in 9 of 9 cells each by eye; the whole block keeps the layout in 3 of 3 cells (layout r 0.69-0.80 against 0.05-0.36) but is labelled strong blotches blind. The whole block exists at one seed only.</td></tr>
       </tbody>
     </table>
   </section>
@@ -2369,6 +2377,183 @@ analysis:
   other bench plans.</li>
 <li><strong>Public version of the blind test:</strong> <code>experiments/build_try_the_test.py</code> builds the page from 14
   pairs at seeds 3605551 and 4123105. Answers shared through it are kept apart from this result.</li>
+</ul>
+</section>
+<section id="p-29-inside-the-block">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">2120 renders · 7 prompts · 10 seeds · pre-registered · 2026-10-08</span></p>
+<h1 id="p-29-inside-the-block--inside-a-block-attention-mlp-and-what-an-edit-costs">Inside a block — attention, MLP, and what an edit costs</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Every block of Krea-2 has two halves, an attention and an MLP,
+and until now we had only ever scaled them together. If the knobs live at a finer grain than
+the block, the halves should do different things, and the noise that comes with a push might
+belong to one of them.</p>
+<p><strong>What would kill it.</strong> The two halves doing the same thing, or the noise following the dose
+rather than the half; and, for the practical claim, middle-block edits costing as much as late
+ones once they are tried on pictures they were not chosen on.</p>
+<p><strong>Where we are.</strong> The halves differ, and an eye blind to the condition puts the noise mostly in
+the MLP. Middle-block edits reshape a drawing and spare its surface far more than late ones do,
+pre-registered on new prompts. But they are not free: a few of them pay on new pictures.</p>
+</blockquote>
+<h2 id="p-29-inside-the-block--in-two-minutes">In two minutes</h2>
+<p>Each block of the model has an attention part (five matrices) and an MLP part (three). An atlas
+(C59) scaled each half alone, in both directions, for all 28 blocks, on three prompts and three
+seeds: 1016 renders. The person who knows the images best then labelled every block, half and
+direction blind, choosing among nine kinds of artefact and three strengths.</p>
+<p>Noise lives mostly in the MLP. The attention joins it only in the last three blocks. The first
+block is the strangest: either half alone wrecks the picture, while both together keep its
+composition.</p>
+<p>The labels also showed that the edits praised as "good for the comic" were the ones that changed
+the picture most, and they sat in the middle of the stack. A pre-registered test on new prompts and
+seeds (C60) confirmed it: middle-block edits change more and damage less. They still cost something,
+in four of ten edits.</p>
+<p>A third test (C61) tried to overturn the older claim that every push costs fine texture. It
+could not: on its own comic prompts the old numbers came back almost to the third decimal.</p>
+<p><img alt="Block 0 at -0.35 is wrecked by its attention alone and by its MLP alone but keeps its composition as a whole block, with strong blotches; at block 23 the attention is clean and the MLP grainy; at blocks 26 and 27 both halves are noisy and the whole block is worst." src="../assets/29-inside-the-block/F29.1_split_atlas_eye_sheet.webp" /></p>
+<h2 id="p-29-inside-the-block--the-verdict">The verdict</h2>
+<p><strong>Holds</strong> for the practical claim, pre-registered (C60): on comic and cartoon prompts, edits to
+blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of
+pairs against 79%. <strong>Holds</strong> that this is not free either: by the rule fixed before the labels, the
+middle edits carry a detectable cost. <strong>Open</strong> for where the noise sits (blind, but without a
+decision rule) and for the first block. <strong>Ambiguous</strong> for the cost of a push: page 05 replicates
+on its own prompts, the test as a whole did not decide.</p>
+<h2 id="p-29-inside-the-block--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>One observer.</strong> Every eye label is Alessandro's. He was blind to the condition, and his
+self-agreement on the damage threshold was 1.00 on the 15 repeats of C60, but his eye is also the
+one that chose the middle-block edits in C59. New prompts and seeds guard against fitting the
+images, not against fitting a taste.</p>
+<p><strong>"Slight" does not reproduce.</strong> In both eye passes every disagreement between a first and a
+repeated showing was "slight" against "none". Only medium and stronger count as damage here.</p>
+<p><strong>The measures do not see the noise.</strong> The fine-texture measure of page 05, the noise estimator of
+C58 and a band-pass measure all failed against the eye on the noise that matters. As a size of
+change, the same measures rank the eye's noise only moderately (AUC 0.75-0.81). Every noise
+statement on this page rests on the eye.</p>
+<p><strong>One dose, illustration-heavy.</strong> All tests use ±0.35, except C61 at ±0.20. Six of seven prompts
+are drawn; the only photographs are in C61, where they behaved differently.</p>
+<h2 id="p-29-inside-the-block--the-data">The data</h2>
+<h3 id="p-29-inside-the-block--where-the-noise-sits">Where the noise sits</h3>
+<p>The split atlas pushed the attention (wq, wk, wv, gate, wo) or the MLP (gate, up, down) of one
+block by ±0.35, through <code>granular_json</code>. Both checks passed to the pixel: the atlas baseline
+reproduced, and all eight matrices through the granular path equalled the whole block through the
+vector. Alessandro labelled 168 sheets at seed 2718281, one per block, half and sign, each showing
+the same edit on the three prompts, plus 20 unannounced repeats.</p>
+<p>68 of 168 sheets carry an artefact and 46 carry noise (blotches, grain, collapse or a regular
+screen). Blocks 2, 3, 5 and 7 to 9 are clean in all six conditions. Among the 19 block-sign cells
+where either half is noisy, the MLP is noisier in 13, the attention in 2, with 4 ties. At blocks 26
+and 27 pushed positive both halves are noisy and the whole block is worse than either. A first
+reading of mine from small thumbnails had put the block-26 noise in the attention alone; at full
+resolution both halves carry it, and that reading was withdrawn (<code>docs/split_atlas_eye_result.md</code>).</p>
+<h3 id="p-29-inside-the-block--the-first-block">The first block</h3>
+<p>At -0.35 the attention alone posterises every picture into flat saturated colour, and on the rally
+into a mosaic. The MLP alone replaces the subject. Both happen in 9 of 9 cells. Lowered together,
+the composition holds (layout r 0.69-0.80), but at full resolution the surface is covered in
+blotches. The two halves compensate each other for content, not for texture.</p>
+<h3 id="p-29-inside-the-block--form-against-surface">Form against surface</h3>
+<p>The labels suggested, after the fact, that the sheets praised for the comic changed the picture
+more than the noisy ones (layout r 0.74 against 0.87). C60 tested it on three new prompts (two
+comics, one cartoon) and three new seeds. It used ten middle-block edits chosen by rule, the praised
+sheets, and ten late-block edits drawn at random from the noisy ones. 191 renders; 180 blind pairs
+of edit and baseline with the side random, plus 15 repeats.</p>
+<p><img alt="On the elf at a new seed, edits to blocks 8, 9 and 18 redraw pose and light with no damage or slight, block 19 MLP + costs medium damage, and every late-block edit costs medium or strong." src="../assets/29-inside-the-block/F29.2_comic_form_sheet.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>middle edits (blocks 1-19)</th>
+<th>late edits (blocks 20-27)</th>
+<th>test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>layout r with the baseline, median per edit</td>
+<td>0.721</td>
+<td>0.837</td>
+<td>p = 0.007</td>
+</tr>
+<tr>
+<td>change seen by eye, 0-2</td>
+<td>1.59</td>
+<td>0.47</td>
+<td>p = 0.0002</td>
+</tr>
+<tr>
+<td>damage medium or stronger, edited side</td>
+<td>17 / 90</td>
+<td>71 / 90</td>
+<td>baseline sides 0 / 180</td>
+</tr>
+</tbody>
+</table></div>
+<p>A preference question was dropped before any label, at Alessandro's request, as too subjective.</p>
+<h3 id="p-29-inside-the-block--what-the-middle-costs">What the middle costs</h3>
+<p>The middle edits are not free. By the rule fixed before the labels, a cost is present: 0.19 against
+0, Newcombe 95% [0.11, 0.28]. It sits in four edits, all at medium: block 19 MLP + in 8 of 9 pairs,
+block 1 attention + and block 17 whole + in 4 of 9, block 13 whole - in 1 of 9. Six edits are at 0 of 9.
+At 100% the damage is not the late blocks' grain: flat areas such as a sky break into patches or
+rectangles. Block 19 MLP + was clean on the prompts it was chosen on and is the most damaged here,
+so the cost depends on the prompt.</p>
+<h3 id="p-29-inside-the-block--the-cost-of-a-push-revisited">The cost of a push, revisited</h3>
+<p>Notebook page 05 found, pre-registered, that pushing any block costs fine texture, more toward the
+output. C61 tried to overturn the general wording. It pushed every whole block by ±0.20, page 05's
+dose and path, on its two comic prompts and two photographs, at four new seeds: 913 renders. The
+first render matched page 05's own file to the pixel. By its own rules the test decided nothing. The
+gate, which required the bench to see the late-block cost, failed (0.989, p = 0.26). The primary,
+blocks 1-22, was undecided (0.996, 95% [0.981, 1.011]).</p>
+<p><img alt="Per block, the fine-texture common mode on four new seeds follows page 05 almost exactly on the two comic prompts, while on two photographs the last blocks gain high frequency instead of losing it." src="../assets/29-inside-the-block/F29.3_cost_floor_by_block.webp" /></p>
+<p>The figure shows why. On the comic prompts both of page 05's numbers come back: 0.989 for blocks
+1-22 and 0.934 for 23-27, against 0.989 and 0.932. On the photographs the last blocks add high
+frequency instead (block 27: 1.27), which this measure counts as a gain. Page 05 stands on its own
+ground, and its "any block" is untested beyond it. Including block 27 in the gate, a block page 05
+itself called an outlier, was a weakness of the design.</p>
+<h3 id="p-29-inside-the-block--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  version: not recorded — the tuner is a separate repository
+  mode: Real Value; halves through granular_json (blocks.B.attn.{wq,wk,wv,gate,wo}, blocks.B.mlp.{gate,up,down}), whole blocks through the 34-slot vectors_override in C61
+prompts:
+  files: [data/split_atlas_plan.csv, data/comic_form_plan.csv, data/cost_floor_plan.csv]
+  ids: [P01_blacksmith, F4_closeup, S1_rally, P02, P1_elfbrawler, F1cartoon_fisherman, P4_selfie]
+seeds: [2718281, 3141592, 4669201, 1618033, 1414213, 2236067, 1259921, 1732050, 2645751, 3162277]
+conditions:
+  - name: attention or MLP of block B, +-0.35 (C59, C60)
+    dose: 0.350
+    measured_D: not measured; the dose is a per-matrix gain, not a calibrated displacement
+  - name: whole block B, +-0.20 (C61)
+    dose: 0.200
+    measured_D: not measured
+outputs:
+  folders: [benchmark_split_atlas, benchmark_comic_form, benchmark_cost_floor]
+  manifests: [data/split_atlas_plan.csv, data/comic_form_plan.csv, data/cost_floor_plan.csv]
+analysis:
+  scripts: [experiments/split_atlas.py, experiments/split_atlas_eye.py, experiments/comic_form_test.py, experiments/cost_floor_test.py]
+  produces: data/split_atlas_measures.csv, data/split_atlas_eye_tally_alessandro.csv, data/comic_form_eye_tally_alessandro.csv, data/comic_form_layout.csv, data/cost_floor_measures.csv
+</code></pre>
+<h2 id="p-29-inside-the-block--provenance">Provenance</h2>
+<ul>
+<li>Renders: split atlas C59 (1016), comic form C60 (191), cost floor C61 (913).</li>
+<li><strong>Pre-registrations:</strong> <code>docs/prereg_comic_form_test.md</code> (+ amendments 1 and 2),
+  <code>docs/prereg_cost_floor.md</code> (+ amendment 1), <code>docs/split_atlas_eye_protocol.md</code> (+ amendment 1);
+  the atlas plan <code>docs/plan_split_atlas.md</code>; the earlier block-23 split <code>docs/prereg_blk23_split.md</code>.</li>
+<li><strong>Result documents:</strong> <code>docs/split_atlas_result.md</code>, <code>docs/split_atlas_eye_result.md</code>,
+  <code>docs/comic_form_result.md</code>, <code>docs/cost_floor_result.md</code>, <code>docs/blk23_split_result.md</code>.</li>
+<li><strong>Data:</strong> <code>data/split_atlas_eye_alessandro.csv</code>, <code>data/split_atlas_eye_key.csv</code>,
+  <code>data/comic_form_eye_alessandro.csv</code>, <code>data/comic_form_eye_key.csv</code>, <code>data/comic_form_layout.csv</code>,
+  <code>data/cost_floor_measures.csv</code>, <code>data/cost_floor_cells_G1.csv</code>, <code>data/punto7_blocks.csv</code>.</li>
+<li><strong>Labels and keys</strong> were committed in the order the protocols require: key before labels, labels
+  as downloaded before any count.</li>
 </ul>
 </section>
 </main>

@@ -21,7 +21,7 @@ claims:
     statement: >
       Pushing any block costs fine texture, in either direction, and the cost grows the
       closer the block sits to the output.
-    evidence: "Pre-registered. Mean common mode 0.978, 23 of 28 blocks below 1, r = -0.659 against block index, 11-14σ."
+    evidence: "Pre-registered. Mean common mode 0.978, 23 of 28 blocks below 1, r = -0.659 against block index, 11-14σ. Replicated on four new seeds for P01 and P02 (C61, 2026-10-08): 0.989 for blocks 1-22, 0.934 for 23-27; on two photographic prompts the attempt decided nothing and the tail gained high frequency instead (results page 29)."
     anchor: "#the-common-mode-is-friction-not-a-knob"
   - id: first-block-is-an-inverted-knob
     status: holds
@@ -232,6 +232,16 @@ the image is lost — but the mechanism sits downstream of the weights, and so d
 One dose only. On the norm-matched bench at D = 0.050, across three prompts, the common mode is
 1.004 for scaling and 0.997 for rotation: **at that displacement there is no cost at all**. The
 toll is not a flat tax, it has a threshold, and where the threshold falls is not yet measured.
+
+#### Replicated on new seeds, and its limit (2026-10-08)
+
+A pre-registered attempt to overturn the general wording of this claim (C61,
+`docs/prereg_cost_floor.md`, results page 29) pushed every block by ±0.200 on P01 and P02 at
+four new seeds, and on two photographic prompts. On P01 and P02 both numbers of this page came
+back: 0.989 for blocks 1-22 (here 0.989) and 0.934 for blocks 23-27 (here 0.932). On the
+photographs the measure decided nothing for blocks 1-22, and the last blocks *gained* high
+frequency (block 27: 1.27). The claim's status is unchanged; its "any block" rests on two comic
+prompts. Result: `docs/cost_floor_result.md`.
 
 #### The first block runs backwards
 

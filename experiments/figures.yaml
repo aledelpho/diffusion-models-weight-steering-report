@@ -908,3 +908,40 @@ figures:
     alt: >
       Pushed negative, blocks 10, 00 and 20 complete the hood from dose 0.02 and block 23 from 0.08; pushed positive, block 10 lowers it at 0.04 and completes it at 0.16, block 00 completes it at 0.08, block 23 lowers it at 0.08 and block 20 leaves it half-formed up to 0.16.
 
+  - id: F29.1
+    page: 29-inside-the-block
+    kind: contact_sheet
+    builder: results_figures.split_atlas_eye_sheet
+    source: data/split_atlas_eye_tally_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: 'Block 0 at -0.35 is wrecked by its attention alone and by its MLP alone but keeps
+      its composition as a whole block, with strong blotches; at block 23 the attention is
+      clean and the MLP grainy; at blocks 26 and 27 both halves are noisy and the whole block
+      is worst.
+
+      '
+  - id: F29.2
+    page: 29-inside-the-block
+    kind: strip
+    builder: results_figures.comic_form_sheet
+    source: data/comic_form_eye_tally_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: 'On the elf at a new seed, edits to blocks 8, 9 and 18 redraw pose and light with
+      no damage or slight, block 19 MLP + costs medium damage, and every late-block edit
+      costs medium or strong.
+
+      '
+  - id: F29.3
+    page: 29-inside-the-block
+    kind: scatter
+    builder: results_figures.cost_floor_by_block
+    source: data/cost_floor_measures.csv
+    caption_from: source
+    crop: whole
+    alt: 'Per block, the fine-texture common mode on four new seeds follows page 05 almost
+      exactly on the two comic prompts, while on two photographs the last blocks gain high
+      frequency instead of losing it.
+
+      '

@@ -745,6 +745,84 @@ def hood_threshold(out: Path) -> Path:
     return _save(fig, out, "archer, seed 3141592 · Alessandro's blind labels · baseline half-formed · source data/hood_threshold_tally.csv")
 
 
+# ---------------------------------------------------------------- page 29 (C59-C61)
+EYE_CLASS_EN = {"chiazze": "blotches", "grana": "grain", "collasso": "collapse", "retino": "screen", "poster": "posterised",
+                "sostituito": "replaced", "morbido": "soft", "tratteggio": "hatching", "piatto": "flat"}
+LEVEL_EN = {1: "slight", 2: "medium", 3: "strong"}
+
+
+def _img(rel: str) -> Path:
+    """Render path on Windows, or on the VM mount where newer benches sit under Text2Img/."""
+    p = IMG / rel
+    return p if p.exists() or IMG.name == "Text2Img" else IMG / "Text2Img" / rel
+
+
+def split_atlas_eye_sheet(out: Path) -> Path:
+    """F29.1 — C59 at seed 2718281, blacksmith: attention, MLP and whole block side by side on four
+    block x sign cells. Caption: Alessandro's blind label for that sheet (strongest class)."""
+    tal = {(int(r["block"]), r["part"], r["sign"]): r for r in csv.DictReader(open(DATA / "split_atlas_eye_tally_alessandro.csv", encoding="utf-8"))}
+    rows = [((0, "neg"), "blk00 −0.35"), ((23, "pos"), "blk23 +0.35"), ((26, "pos"), "blk26 +0.35"), ((27, "pos"), "blk27 +0.35")]
+    cols = [("base", "base"), ("attn", "attention only"), ("mlp", "MLP only"), ("whole", "whole block")]
+    def path(r, c):
+        (b, s) = r
+        if c == "base":
+            return _img("benchmark_single_blocks_atlas/renders/P01_blacksmith_baseline_krea2_seed2718281_00001_.png")
+        if c == "whole":
+            return _img(f"benchmark_single_blocks_atlas/renders/P01_blacksmith_blk{b:02d}_{s}_d0.350_krea2_seed2718281_00001_.png")
+        return _img(f"benchmark_split_atlas/P01_blacksmith_blk{b:02d}_{c}_{s}_d0.350_krea2_seed2718281_00001_.png")
+    def cap(r, c):
+        if c == "base":
+            return None
+        row = tal[(r[0], c, r[1])]
+        hits = sorted(((int(row[k]), EYE_CLASS_EN[k]) for k in EYE_CLASS_EN if int(row[k]) > 0), reverse=True)
+        if not hits:
+            return ("clean", DIM_RGB)
+        lv, nm = hits[0]
+        return (f"{nm}, {LEVEL_EN[lv]}" + (" +" if len(hits) > 1 else ""), NEG if lv >= 2 else DIM_RGB)
+    return _sheet(rows, cols, path, cap, out,
+                  "C59 · blacksmith, seed 2718281 · whole frames · label = strongest class in Alessandro's blind label for the "
+                  "sheet (three prompts) · source data/split_atlas_eye_tally_alessandro.csv", W=170, H=212, LAB=96)
+
+
+def comic_form_sheet(out: Path) -> Path:
+    """F29.2 — C60: the green-haired elf at seed 1618033, baseline, four FORM edits and four SURFACE edits.
+    Caption: Alessandro's blind damage label on the edited side."""
+    tal = {(r["prompt"], r["seed"], r["cond"]): r for r in csv.DictReader(open(DATA / "comic_form_eye_tally_alessandro.csv", encoding="utf-8"))}
+    cols = [("baseline", "base"), ("blk08_whole_pos_d0.350", "blk08 whole +"), ("blk09_attn_pos_d0.350", "blk09 attn +"),
+            ("blk18_mlp_neg_d0.350", "blk18 MLP −"), ("blk19_mlp_pos_d0.350", "blk19 MLP +"),
+            ("blk22_mlp_pos_d0.350", "blk22 MLP +"), ("blk26_mlp_pos_d0.350", "blk26 MLP +"),
+            ("blk27_attn_pos_d0.350", "blk27 attn +"), ("blk27_mlp_pos_d0.350", "blk27 MLP +")]
+    dl = {0: "no damage", 1: "slight", 2: "medium", 3: "strong"}
+    def cap(r, c):
+        if c == "baseline":
+            return None
+        v = int(float(tal[("P1_elfbrawler", "1618033", c)]["d_edit"]))
+        return (dl[v], NEG if v >= 2 else DIM_RGB)
+    return _sheet([("elf", "")], cols, lambda r, c: _img(f"benchmark_comic_form/P1_elfbrawler_{c}_krea2_seed1618033_00001_.png"),
+                  cap, out, "C60 · elf brawler, seed 1618033 · first four edits: FORM set (blocks 1-19), last four: SURFACE set (blocks 20-27) · "
+                  "label = Alessandro's blind damage label on the edited side · source data/comic_form_eye_tally_alessandro.csv",
+                  W=150, H=188, LAB=8)
+
+
+def cost_floor_by_block(out: Path) -> Path:
+    """F29.3 — C61: page 05's common mode per block, comic and photographic prompts apart, with page 05's own values."""
+    import math
+    rows = list(csv.DictReader(open(DATA / "cost_floor_measures.csv", encoding="utf-8")))
+    p05 = {int(r["block"]): float(r["common_mode"]) for r in csv.DictReader(open(DATA / "punto7_blocks.csv", encoding="utf-8"))}
+    fig, ax = _canvas(6.4, 3.4)
+    for fam, colr, lab in (("comic", CAT[0], "C61, comic (P01, P02; 8 cells)"), ("photo", CAT[1], "C61, photographic (rally, selfie; 8 cells)")):
+        ys = [math.exp(statistics.mean(math.log(float(r["common_mode"])) for r in rows if r["family"] == fam and int(r["block"]) == b)) for b in range(28)]
+        ax.plot(range(28), ys, "o-", color=colr, ms=3, lw=1.2, label=lab)
+    ax.plot(range(28), [p05[b] for b in range(28)], "--", color=DIM, lw=1, label="page 05 (P01, P02; 6 cells)")
+    ax.axhline(1.0, color=GRID, lw=0.8)
+    ax.set_xlabel("block", color=DIM, fontsize=8); ax.set_ylabel("common mode c (below 1 = fine texture lost)", color=DIM, fontsize=7.5)
+    ax.set_ylim(0.85, 1.35)
+    ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper left")
+    ax.set_title("On comics the page 05 profile replicates; on photographs the tail turns into a gain", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.88, bottom=0.17)
+    return _save(fig, out, "geometric mean over cells · HF = std(gray - blur 1.5) · source data/cost_floor_measures.csv, data/punto7_blocks.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -778,6 +856,9 @@ BUILDERS = {
     "F22.6": ("22-saturation-knob", "hood_watershed", hood_watershed),
     "F22.7": ("22-saturation-knob", "hood_threshold", hood_threshold),
     "F28.5": ("28-portrait-preset", "portrait_one_character_four_seeds", portrait_one_character_four_seeds),
+    "F29.1": ("29-inside-the-block", "split_atlas_eye_sheet", split_atlas_eye_sheet),
+    "F29.2": ("29-inside-the-block", "comic_form_sheet", comic_form_sheet),
+    "F29.3": ("29-inside-the-block", "cost_floor_by_block", cost_floor_by_block),
 }
 
 
