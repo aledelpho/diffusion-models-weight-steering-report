@@ -165,6 +165,13 @@ into a mosaic. The MLP alone replaces the subject. Both happen in 9 of 9 cells. 
 the composition holds (layout r 0.69-0.80), but at full resolution the surface is covered in
 blotches. The two halves compensate each other for content, not for texture.
 
+The damage also changes kind. Unbalanced, the block breaks the picture at the level of content and colour:
+the attention alone pushes chroma up by 13 to 68 points and streaks the surface with rainbow fringes, the MLP
+alone smooths it into a painted, screen-textured surface and replaces the subject. Balanced, it keeps the
+content and the colour (chroma within 2 points) and pays in blotches. One way to read it, not tested: in the
+first block the two halves write large, partly opposite contributions, so lowering one alone leaves the
+other uncompensated, while lowering both keeps the balance but thins the fine detail the block adds.
+
 ### Form against surface
 
 The labels suggested, after the fact, that the sheets praised for the comic changed the picture
