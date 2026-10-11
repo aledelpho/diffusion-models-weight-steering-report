@@ -46,3 +46,22 @@ No new claim. Page 29's claim `chosen-middle-edits-are-not-free` stands as it is
 as a test that could not decide the stronger statement. Practical reading, not a claim: block 2 whole −, block 8
 MLP +, block 9 whole + and block 18 MLP − are 0 of 21 pairs damaged across C60 and C63 combined — the strongest
 candidates for a comic preset; block 9 attention + is the one to drop.
+
+## Note added after the labels (2026-10-11): the observer's scale moved between C60 and C63
+
+Alessandro reported, after sending the labels, that in this test he used the damage scale relative to the
+baseline: "none" kept for images that looked **cleaner than the baseline**, the baseline itself raised to
+"slight". The labels show the scale was used consistently within C63 (baseline sides "slight" in 35, 35 and 34
+of the three thirds of the sequence; "none" twice) and differently from C60, where baselines were mostly "none".
+Consequences:
+
+* The verdict is unaffected in kind: the gates and H use only medium and above, and the control edits were
+  medium or strong in 24 of 24. But medium in C63 means "visibly worse than an original already read as
+  slightly grainy", which is not the same threshold as in C60; the two tests' damage rates are not directly
+  comparable.
+* The "less damaged than the baseline" lead above is in fact a labelled judgment: **15 of 72**
+  clean-edit pairs were rated cleaner than their baseline — by edit: blk02_whole_neg 2, blk08_mlp_pos 3, blk08_whole_pos 2, blk09_attn_pos 0, blk09_whole_pos 3, blk18_mlp_neg 5.
+  This was not a pre-registered category; it is reported as observed.
+* Alessandro's reading of why: several of the chosen styles carry print grain or pencil outlines in the
+  baseline itself, so "clean" is ambiguous there. His proposal for any further test: flat-colour or vector-style
+  illustration, where a clean baseline is unambiguous.
