@@ -68,6 +68,8 @@ Every render except the repro check is shown once beside the baseline (left, fix
   relative scale Alessandro adopted in C63, fixed here in advance);
 * a free field.
 
+Interface change (2026-10-11, after the key, before any label; same order, same key, same export): at about 120 s per render the pass would take some 16 hours, so the page now shows the edit alone and swaps in the baseline while the space bar is held (flicker comparison; side by side stays one key away), and every answer has a key: one letter per trait, digits for arm, style and surface, 0 for identical, y for text.
+
 The key `data/te_pilot_eye_key.csv` is committed when the page is built, before any label. What will be read
 from it is descriptive: which layers and halves remove, amplify or keep each trait, at which dose; where the
 "text" outcome starts and stops; where the gauntlet changes arm and whether ambiguous poses border those
