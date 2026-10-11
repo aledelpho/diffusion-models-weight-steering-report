@@ -275,8 +275,8 @@ LABELS1 = DATA / "te_pilot_eye_alessandro_phase1.csv"
 def page_phase1():
     """Phase 1 of the eye pass (2026-10-11): only the renders at dose +-1.00 (chosen by dose, before looking), plus the
     six checks, in a new shuffle (rng 65) with 10 unannounced repeats. Same anonymous ids and jpgs as the full page, so
-    the page lives beside it in eye_test/. A quick verdict first (how much it changed, style, arm, surface); the 24
-    traits are an optional detail at the bottom, and the export records whether they were looked at."""
+    the page lives beside it in eye_test/. Basic questions only: how much it changed, style, gauntlet arm, surface,
+    free note (the 24 traits were dropped, 2026-10-11, before any phase-1 label)."""
     rng = np.random.default_rng(65)
     key = list(csv.DictReader(open(KEY, encoding="utf-8")))
     items = [r for r in key if r["repeated"] in ("0", "1") and r["dose"] in ("1.0", "-1.0")]
@@ -316,13 +316,12 @@ button{font:13px system-ui;padding:3px 7px;border-radius:6px;border:1px solid #5
 button.on{background:#2f4f3a;border-color:#6a8;color:#fff}button.on.A{background:#7a2e2e;border-color:#c55}button.on.X{background:#2e4a7a;border-color:#69c}
 textarea{box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
 .r.txt{align-items:stretch;flex-direction:column}.r.txt textarea{width:100%}
-#det{opacity:.75}#det.seen{opacity:1}
 kbd{font:12px ui-monospace,monospace;background:#444;border:1px solid #666;border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#fff}
 </style></head><body><div id="wrap">
 <div id="view" class="single"><figure id="fb"><figcaption>ORIGINALE</figcaption><img src="base.jpg"></figure><figure id="fe"><figcaption id="cap">MODIFICA</figcaption><img id="im"></figure></div>
 <div id="side"><div id="n"></div>
 <div id="help"><kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>spazio</kbd> tieni premuto = originale · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro<br>
-Rispondi alle prime righe e premi Invio. I tratti in fondo sono <b>facoltativi</b>: scendi lì solo se vuoi annotare cosa è cambiato.</div>
+Un'immagine uguale all'originale: basta <kbd>Invio</kbd>.</div>
 <div id="rows"></div>
 <div style="margin-top:8px"><button id="prev">&larr; indietro</button><button id="next">avanti &rarr;</button> <button id="lay">affiancate / una sola</button> <button id="exp">Scarica le risposte</button></div></div></div>
 <script>
@@ -343,11 +342,9 @@ const R=[{k:"entita",g:"Giudizio rapido",lab:"quanto è cambiata rispetto all'or
  {k:"braccio",g:"",lab:"braccio del guanto",o:[["stesso","stesso"],["altro","l'altro"],["ambiguo","ambiguo / a metà"]],d:"stesso"},
  {k:"dmg",g:"",lab:"superficie",o:[["pulito","più pulita"],["come","come l'originale"],["lieve","peggio: lieve"],["medio","medio"],["forte","forte"]],d:"come"},
  {k:"note",g:"",lab:"altro (libero)",txt:1}];
-const FIRST_T=R.length;let gp="";
-T.forEach(([gr,id,lab])=>{R.push({k:"t."+id,g:gr!==gp?"Dettaglio tratti (facoltativo) · "+gr:"",lab:lab+(BA.includes(id)?" <small>(assente nell'originale)</small>":""),o:TR,d:TD(id)});gp=gr});
 let c=0;
-$("#rows").innerHTML=R.map((r,j)=>(j===FIRST_T?'<div id="det">':"")+(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r txt" id="r${j}"><span>${r.lab}</span><textarea rows="2" data-j="${j}"></textarea></div>`:
- `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+`</div>`)).join("")+"</div>";
+$("#rows").innerHTML=R.map((r,j)=>(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r txt" id="r${j}"><span>${r.lab}</span><textarea rows="2" data-j="${j}"></textarea></div>`:
+ `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+`</div>`)).join("");
 function cur(){const s=S[i];if(!A[s])A[s]={t:{},touched:false};return A[s]}
 function ent(a){return a.entita||(a.text?"testo":(a.imported?"":"nessuna"))}
 function get(a,r){if(r.k==="entita")return ent(a);if(r.k.startsWith("t."))return a.t[r.k.slice(2)]||TD(r.k.slice(2));
@@ -363,8 +360,8 @@ function show(){const a=A[S[i]]||{t:{}};
  R.forEach((r,j)=>{const el=$("#r"+j);el.classList.toggle("cur",j===c);
   if(r.txt){const ta=el.querySelector("textarea");if(document.activeElement!==ta)ta.value=a[r.k]||"";return}
   const v=get(a,r);el.classList.toggle("chg",v!==r.d&&v!=="");el.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))});
- $("#det").classList.toggle("seen",!!a.tv);save()}
-function move(d){c=Math.max(0,Math.min(R.length-1,c+d));if(c>=FIRST_T){const a=cur();a.tv=true;a.touched=true}show();$("#r"+c).scrollIntoView({block:"nearest"})}
+ save()}
+function move(d){c=Math.max(0,Math.min(R.length-1,c+d));show();$("#r"+c).scrollIntoView({block:"nearest"})}
 function step(d){const r=R[c];if(r.txt){if(d>0)$("#r"+c+" textarea").focus();return}
  const vs=r.o.map(x=>x[0]);let k=vs.indexOf(get(cur(),r));if(k<0)k=vs.indexOf(r.d);k=Math.max(0,Math.min(vs.length-1,k+d));set(r,vs[k])}
 function next(){const a=cur();a.touched=true;if(i<S.length-1){i++;c=0;show();$("#side").scrollTop=0}}
@@ -385,8 +382,8 @@ addEventListener("keydown",e=>{
 });
 addEventListener("keyup",e=>{if(e.key===" ")base(false)});
 const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
-$("#exp").onclick=()=>{let t="slot,touched,entita,text,tratti_visti,imported,"+T.map(x=>x[1]).join(",")+",braccio,stile,stilenote,dmg,note\n";
- S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.touched?ent(a):"",a.text?1:0,a.tv?1:0,a.imported?1:0,...T.map(x=>a.t[x[1]]||TD(x[1])),a.braccio||(a.text?"":"stesso"),a.stile||"inalterato",q(a.stilenote),a.dmg||"come",q(a.note)].join(",")+"\n"});
+$("#exp").onclick=()=>{let t="slot,touched,entita,text,imported,braccio,stile,stilenote,dmg,note\n";
+ S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.touched?ent(a):"",a.text?1:0,a.imported?1:0,a.braccio||(a.text?"":"stesso"),a.stile||"inalterato",q(a.stilenote),a.dmg||"come",q(a.note)].join(",")+"\n"});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_pilot_eye_alessandro_phase1.csv";l.click()};
 show();
 </script></body></html>"""
