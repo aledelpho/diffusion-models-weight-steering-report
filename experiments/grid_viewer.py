@@ -256,6 +256,14 @@ def build_split():
 # ---------------------------------------------------------------- grids: text-encoder pilot (C64)
 def _te_labels():
     """Badge per render from the C64 eye labels, once they exist: text / arm / number of traits changed."""
+    if (DATA / "te_pilot_phase1_joined.csv").exists():  # phase 1 (doses +-1.00): quick verdict per render
+        out = {}
+        for r in rd("te_pilot_phase1_joined.csv"):
+            bits = [r["entita"]] + (["stile cambiato"] if r["stile"] == "cambiato" else []) + \
+                   ([f"braccio: {r['braccio']}"] if r["braccio"] in ("altro", "ambiguo") else []) + \
+                   ([f"sup: {r['dmg']}"] if r["dmg"] not in ("come", "") else [])
+            out[r["cond"]] = (" · ".join(bits), (r["stilenote"] + " " + r["note"]).strip())
+        return out
     lab = DATA / "te_pilot_eye_alessandro.csv"
     if not lab.exists():
         return {}
@@ -305,7 +313,7 @@ def build_te_pilot():
     layers = sorted({u for (u, p, _) in by if p == "attn"})
     note = ("Elfa P1, seed 1618033. Modifica dei pesi del text encoder Qwen3-VL x(1+d), via ArthemyKrea2CLIPTuner. "
             "Krea-2 legge l'ingresso dei layer 2, 5, ..., 35: una modifica al layer L arriva a tutte le letture dopo L. "
-            "FARE PRIMA IL TEST A OCCHIO: questa pagina mostra le condizioni in chiaro.")
+            "Etichette: il tuo test a occhio fase 1 (solo dosi ±1.00); passa il mouse sulla cella per la nota.")
     grids = [
         {"id": "te_attn", "title": "C64 · attention (q, k, v, o) per layer", "note": note,
          "cols": cols, "rows": [{"label": u, "cells": mk(u, "attn")} for u in layers]},
