@@ -6,6 +6,8 @@ Written 2026-10-11, before any render. Exploratory; one prompt, one seed. Render
   python te_pilot.py --check           # gates; nothing else runs unless they pass
   python te_pilot.py --queue           # everything else
   python te_pilot.py --count           # expected N missing 0
+  python te_pilot.py --page            # full eye page (all doses) + data/te_pilot_eye_key.csv
+  python te_pilot.py --page1           # eye page, phase 1: doses +-1.00 only + data/te_pilot_eye_key_phase1.csv
   python te_pilot.py --measure         # data/te_pilot_measures.csv (after the renders)
   python te_pilot.py --sheets          # contact sheets in Text2Img/benchmark_te_pilot/sheets
 
@@ -264,6 +266,132 @@ show();
 </script></body></html>"""
 
 
+
+# ---------------------------------------------------------------- eye pass, phase 1 (doses +-1.00 only)
+KEY1 = DATA / "te_pilot_eye_key_phase1.csv"
+LABELS1 = DATA / "te_pilot_eye_alessandro_phase1.csv"
+
+
+def page_phase1():
+    """Phase 1 of the eye pass (2026-10-11): only the renders at dose +-1.00 (chosen by dose, before looking), plus the
+    six checks, in a new shuffle (rng 65) with 10 unannounced repeats. Same anonymous ids and jpgs as the full page, so
+    the page lives beside it in eye_test/. A quick verdict first (how much it changed, style, arm, surface); the 24
+    traits are an optional detail at the bottom, and the export records whether they were looked at."""
+    rng = np.random.default_rng(65)
+    key = list(csv.DictReader(open(KEY, encoding="utf-8")))
+    items = [r for r in key if r["repeated"] in ("0", "1") and r["dose"] in ("1.0", "-1.0")]
+    items = list({r["item"]: r for r in items}.values())
+    show = [r["item"] for r in items]; rng.shuffle(show)
+    rep = list(rng.choice(show, 10, replace=False))
+    for x in rep:
+        show.insert(int(rng.integers(len(show) // 3, len(show) + 1)), x)
+    with open(KEY1, "w", newline="") as fh:
+        w = csv.writer(fh); w.writerow(["item", "cond", "unit", "part", "dose", "phase", "repeated"])
+        for r in items:
+            w.writerow([r["item"], r["cond"], r["unit"], r["part"], r["dose"], r["phase"], int(r["item"] in rep)])
+    slots = [f"{s}#{k}" for k, s in enumerate(show)]
+    out = c47.IMG_ROOT / FOLDER / "eye_test"
+    html = (TE_PAGE1.replace("__SLOTS__", json.dumps(slots)).replace("__TRAITS__", json.dumps(TRAITS, ensure_ascii=False))
+            .replace("__BASEABS__", json.dumps(BASE_ABSENT)))
+    (out / "eye_test_fase1.html").write_text(html, encoding="utf-8")
+    print(len(items), "renders,", len(slots), "showings ->", out / "eye_test_fase1.html")
+
+
+TE_PAGE1 = r"""<!doctype html><html lang="it"><head><meta charset="utf-8"><title>C64 fase 1: dosi forti</title>
+<style>
+body{margin:0;background:#1d1d1f;color:#eee;font:14px system-ui,sans-serif}
+#wrap{display:flex;gap:10px;padding:8px;box-sizing:border-box;height:100vh}
+#view{flex:1;display:flex;gap:6px;overflow:auto;background:#000;border-radius:8px;cursor:zoom-in}
+#view.zoom{cursor:zoom-out}#view figure{margin:0;flex:1;min-width:0}#view.zoom figure{flex:none}
+#view img{width:100%;display:block}#view.zoom img{width:auto}#view.single #fb{display:none}
+figcaption{position:sticky;top:0;background:#000c;padding:3px 8px;font-weight:700;z-index:2}
+#fe.isbase figcaption{background:#8a2b2b}
+#side{width:480px;overflow:auto;background:#2a2a2d;border-radius:8px;padding:10px;box-sizing:border-box}
+#n{color:#aaa}#help{font-size:12px;color:#bbb;margin:4px 0 6px}
+.g{color:#9ab;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:8px 0 2px}
+.r{display:flex;align-items:center;gap:4px;padding:2px 4px;border-radius:6px;border:2px solid transparent;flex-wrap:wrap}
+.r>span{flex:1;font-size:13px;min-width:130px}.r.chg>span{color:#ffd27a}
+.r.cur{border-color:#ffcc55;background:#3a3524}
+button{font:13px system-ui;padding:3px 7px;border-radius:6px;border:1px solid #555;background:#333;color:#ddd;cursor:pointer}
+button.on{background:#2f4f3a;border-color:#6a8;color:#fff}button.on.A{background:#7a2e2e;border-color:#c55}button.on.X{background:#2e4a7a;border-color:#69c}
+textarea{box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
+.r.txt{align-items:stretch;flex-direction:column}.r.txt textarea{width:100%}
+#det{opacity:.75}#det.seen{opacity:1}
+kbd{font:12px ui-monospace,monospace;background:#444;border:1px solid #666;border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#fff}
+</style></head><body><div id="wrap">
+<div id="view" class="single"><figure id="fb"><figcaption>ORIGINALE</figcaption><img src="base.jpg"></figure><figure id="fe"><figcaption id="cap">MODIFICA</figcaption><img id="im"></figure></div>
+<div id="side"><div id="n"></div>
+<div id="help"><kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>spazio</kbd> tieni premuto = originale · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro<br>
+Rispondi alle prime righe e premi Invio. I tratti in fondo sono <b>facoltativi</b>: scendi lì solo se vuoi annotare cosa è cambiato.</div>
+<div id="rows"></div>
+<div style="margin-top:8px"><button id="prev">&larr; indietro</button><button id="next">avanti &rarr;</button> <button id="lay">affiancate / una sola</button> <button id="exp">Scarica le risposte</button></div></div></div>
+<script>
+const S=__SLOTS__,T=__TRAITS__,BA=__BASEABS__,K="te_pilot_eye_fase1";const TD=id=>BA.includes(id)?"A":"P";
+let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+// one-off import of answers already given on the full page (first showings only), same anonymous ids
+try{if(!localStorage.getItem(K+"_imp")){const O=JSON.parse(localStorage.getItem("te_pilot_eye_v1")||"{}");const first={};
+ Object.keys(O).sort((x,y)=>+x.split("#")[1]-+y.split("#")[1]).forEach(s=>{const id=s.split("#")[0];if(!(id in first))first[id]=O[s]});
+ const done=new Set();S.forEach(s=>{const id=s.split("#")[0];const o=first[id];if(o&&o.touched&&!done.has(id)&&!A[s]){
+  const a=JSON.parse(JSON.stringify(o));a.tv=true;a.imported=true;BA.forEach(t=>{if(!(t in a.t))a.t[t]="P"});
+  a.entita=a.text?"testo":(a.same?"nessuna":"");A[s]=a;done.add(id)}});
+ localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_imp","1")}}catch(e){}
+let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
+const TR=[["A","assente"],["P","presente"],["X","amplificato"]];
+const R=[{k:"entita",g:"Giudizio rapido",lab:"quanto è cambiata rispetto all'originale",o:[["nessuna","nessuna"],["lieve","lieve"],["media","media"],["forte","forte"],["testo","diventata testo"]],d:"nessuna"},
+ {k:"stile",g:"",lab:"stile complessivo",o:[["inalterato","inalterato"],["cambiato","cambiato"]],d:"inalterato"},
+ {k:"stilenote",g:"",lab:"se lo stile è cambiato: come?",txt:1},
+ {k:"braccio",g:"",lab:"braccio del guanto",o:[["stesso","stesso"],["altro","l'altro"],["ambiguo","ambiguo / a metà"]],d:"stesso"},
+ {k:"dmg",g:"",lab:"superficie",o:[["pulito","più pulita"],["come","come l'originale"],["lieve","peggio: lieve"],["medio","medio"],["forte","forte"]],d:"come"},
+ {k:"note",g:"",lab:"altro (libero)",txt:1}];
+const FIRST_T=R.length;let gp="";
+T.forEach(([gr,id,lab])=>{R.push({k:"t."+id,g:gr!==gp?"Dettaglio tratti (facoltativo) · "+gr:"",lab:lab+(BA.includes(id)?" <small>(assente nell'originale)</small>":""),o:TR,d:TD(id)});gp=gr});
+let c=0;
+$("#rows").innerHTML=R.map((r,j)=>(j===FIRST_T?'<div id="det">':"")+(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r txt" id="r${j}"><span>${r.lab}</span><textarea rows="2" data-j="${j}"></textarea></div>`:
+ `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+`</div>`)).join("")+"</div>";
+function cur(){const s=S[i];if(!A[s])A[s]={t:{},touched:false};return A[s]}
+function ent(a){return a.entita||(a.text?"testo":(a.imported?"":"nessuna"))}
+function get(a,r){if(r.k==="entita")return ent(a);if(r.k.startsWith("t."))return a.t[r.k.slice(2)]||TD(r.k.slice(2));
+ if(r.k==="braccio")return a.braccio||(a.text?"":"stesso");return a[r.k]||r.d}
+function set(r,v){const a=cur();a.touched=true;
+ if(r.k==="entita"){a.entita=v;const was=a.text;a.text=v==="testo";if(a.text&&!was)T.forEach(([,id])=>a.t[id]="A");if(!a.text&&was)a.t={}}
+ else if(r.k.startsWith("t.")){a.t[r.k.slice(2)]=v;a.tv=true}else a[r.k]=v;show()}
+function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
+const PRE=new Image();
+function show(){const a=A[S[i]]||{t:{}};
+ if($("#im").dataset.s!==S[i]){$("#im").dataset.s=S[i];$("#im").src=S[i].split("#")[0]+".jpg";if(i<S.length-1)PRE.src=S[i+1].split("#")[0]+".jpg"}
+ $("#n").textContent=`immagine ${i+1} di ${S.length} · completate ${S.filter(s=>A[s]&&A[s].touched).length}`+(a.imported?" · (risposta ripresa dalla pagina completa)":"");
+ R.forEach((r,j)=>{const el=$("#r"+j);el.classList.toggle("cur",j===c);
+  if(r.txt){const ta=el.querySelector("textarea");if(document.activeElement!==ta)ta.value=a[r.k]||"";return}
+  const v=get(a,r);el.classList.toggle("chg",v!==r.d&&v!=="");el.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))});
+ $("#det").classList.toggle("seen",!!a.tv);save()}
+function move(d){c=Math.max(0,Math.min(R.length-1,c+d));if(c>=FIRST_T){const a=cur();a.tv=true;a.touched=true}show();$("#r"+c).scrollIntoView({block:"nearest"})}
+function step(d){const r=R[c];if(r.txt){if(d>0)$("#r"+c+" textarea").focus();return}
+ const vs=r.o.map(x=>x[0]);let k=vs.indexOf(get(cur(),r));if(k<0)k=vs.indexOf(r.d);k=Math.max(0,Math.min(vs.length-1,k+d));set(r,vs[k])}
+function next(){const a=cur();a.touched=true;if(i<S.length-1){i++;c=0;show();$("#side").scrollTop=0}}
+function prev(){if(i>0){i--;c=0;show();$("#side").scrollTop=0}}
+function base(on){$("#im").src=on?"base.jpg":S[i].split("#")[0]+".jpg";$("#fe").classList.toggle("isbase",on);$("#cap").textContent=on?"ORIGINALE":"MODIFICA"}
+document.querySelectorAll("button[data-j]").forEach(b=>b.onclick=()=>{c=+b.dataset.j;set(R[c],b.dataset.v)});
+document.querySelectorAll("textarea").forEach(t=>{t.onfocus=()=>{c=+t.dataset.j;show()};t.oninput=()=>{const a=cur();a[R[+t.dataset.j].k]=t.value;a.touched=true;save()}});
+$("#prev").onclick=prev;$("#next").onclick=next;$("#lay").onclick=()=>$("#view").classList.toggle("single");
+$("#view").onclick=()=>$("#view").classList.toggle("zoom");
+addEventListener("keydown",e=>{
+ if(e.target.tagName==="TEXTAREA"){if(e.key==="Escape"||e.key==="ArrowUp"&&!e.target.value.includes("\n")||e.key==="ArrowDown"&&!e.target.value.includes("\n")){e.preventDefault();e.target.blur();if(e.key!=="Escape")move(e.key==="ArrowDown"?1:-1)}return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key===" "){e.preventDefault();if(!e.repeat)base(true);return}
+ if(e.key==="ArrowDown"){e.preventDefault();move(1)}else if(e.key==="ArrowUp"){e.preventDefault();move(-1)}
+ else if(e.key==="ArrowRight"){e.preventDefault();step(1)}else if(e.key==="ArrowLeft"){e.preventDefault();step(-1)}
+ else if(e.key==="Enter"){e.preventDefault();next()}else if(e.key==="Backspace"){e.preventDefault();prev()}
+ else if(e.key.toLowerCase()==="z")$("#view").classList.toggle("zoom");
+});
+addEventListener("keyup",e=>{if(e.key===" ")base(false)});
+const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
+$("#exp").onclick=()=>{let t="slot,touched,entita,text,tratti_visti,imported,"+T.map(x=>x[1]).join(",")+",braccio,stile,stilenote,dmg,note\n";
+ S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.touched?ent(a):"",a.text?1:0,a.tv?1:0,a.imported?1:0,...T.map(x=>a.t[x[1]]||TD(x[1])),a.braccio||(a.text?"":"stesso"),a.stile||"inalterato",q(a.stilenote),a.dmg||"come",q(a.note)].join(",")+"\n"});
+ const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_pilot_eye_alessandro_phase1.csv";l.click()};
+show();
+</script></body></html>"""
+
+
 def count():
     rows = list(csv.DictReader(open(PLAN, encoding="utf-8")))
     miss = [r["expected_filename"] for r in rows if not (c47.IMG_ROOT / FOLDER / r["expected_filename"]).exists()]
@@ -272,7 +400,7 @@ def count():
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "checks", "check", "count", "page"):
+    for x in ("plan", "queue", "checks", "check", "count", "page", "page1"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--img-root")
     a = ap.parse_args()
@@ -282,3 +410,4 @@ if __name__ == "__main__":
     if a.check: check()
     if a.count: count()
     if a.page: page()
+    if a.page1: page_phase1()
