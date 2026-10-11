@@ -141,6 +141,9 @@ TRAITS = [  # (group, id, label) — from the prompt of P1_elfbrawler, in the or
     ("Stile", "fumetto", "fumetto western realistico"), ("Stile", "inchiostro", "contorni a inchiostro marcati"),
     ("Stile", "tratteggio", "ombre tratteggiate")]
 
+# Traits the baseline itself does not show (Alessandro, 2026-10-11): their starting value is "absent".
+BASE_ABSENT = ["espressione", "sguardo"]
+
 
 def page(out_dir=None, write_key=True):
     """Exploratory eye page: baseline (left, fixed) against one edit (right); every render once, shuffled (rng 64),
@@ -170,7 +173,7 @@ def page(out_dir=None, write_key=True):
             for x in items:
                 w.writerow([x["id"], x["cond"], x["unit"], x["part"], x["dose"], x["phase"], int(x["id"] in rep)])
     slots = [f"{s}#{k}" for k, s in enumerate(show)]
-    html = TE_PAGE.replace("__SLOTS__", json.dumps(slots)).replace("__TRAITS__", json.dumps(TRAITS, ensure_ascii=False))
+    html = TE_PAGE.replace("__SLOTS__", json.dumps(slots)).replace("__TRAITS__", json.dumps(TRAITS, ensure_ascii=False)).replace("__BASEABS__", json.dumps(BASE_ABSENT))
     (out / "eye_test.html").write_text(html, encoding="utf-8")
     print(len(items), "renders,", len(slots), "showings ->", out / "eye_test.html")
 
@@ -205,9 +208,10 @@ Tutto parte da "nulla è cambiato": tocca solo ciò che vedi diverso. Nelle note
 <script>
 const S=__SLOTS__,T=__TRAITS__,K="te_pilot_eye_v1";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
 let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
-const TR=[["A","assente"],["P","presente"],["X","amplificato"]];
+const TR=[["A","assente"],["P","presente"],["X","amplificato"]];const BA=__BASEABS__;const TD=id=>BA.includes(id)?"A":"P";
+if(!localStorage.getItem(K+"_mig1")){for(const s in A){const a=A[s];if(a&&a.touched&&!a.text){a.t=a.t||{};BA.forEach(id=>{if(!(id in a.t))a.t[id]="P"})}}try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_mig1","1")}catch(e){}}
 const R=[{k:"text",g:"",lab:"diventata testo / scritte",o:[["no","no"],["si","sì"]],d:"no"}];
-let gp="";T.forEach(([gr,id,lab])=>{R.push({k:"t."+id,g:gr!==gp?gr:"",lab,o:TR,d:"P"});gp=gr});
+let gp="";T.forEach(([gr,id,lab])=>{R.push({k:"t."+id,g:gr!==gp?gr:"",lab:lab+(BA.includes(id)?" <small>(assente nell'originale)</small>":""),o:TR,d:TD(id)});gp=gr});
 R.push({k:"braccio",g:"Posa del guanto",lab:"braccio del guanto rispetto all'originale",o:[["stesso","stesso"],["altro","l'altro"],["ambiguo","ambiguo / a metà"]],d:"stesso"});
 R.push({k:"stile",g:"Insieme",lab:"stile complessivo",o:[["inalterato","inalterato"],["cambiato","cambiato"]],d:"inalterato"});
 R.push({k:"stilenote",g:"",lab:"se lo stile è cambiato: come?",txt:1});
@@ -217,10 +221,10 @@ let c=0;
 $("#rows").innerHTML=R.map((r,j)=>(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r txt" id="r${j}"><span>${r.lab}</span><textarea rows="2" data-j="${j}"></textarea></div>`:
  `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+`</div>`)).join("");
 function cur(){const s=S[i];if(!A[s])A[s]={t:{},touched:false};return A[s]}
-function get(a,r){if(r.k==="text")return a.text?"si":"no";if(r.k.startsWith("t."))return a.t[r.k.slice(2)]||"P";
+function get(a,r){if(r.k==="text")return a.text?"si":"no";if(r.k.startsWith("t."))return a.t[r.k.slice(2)]||TD(r.k.slice(2));
  if(r.k==="braccio")return a.braccio||(a.text?"":"stesso");return a[r.k]||r.d}
 function set(r,v){const a=cur();a.touched=true;a.same=false;
- if(r.k==="text"){a.text=v==="si";if(a.text)T.forEach(([,id])=>a.t[id]="A");else T.forEach(([,id])=>{if(a.t[id]==="A")delete a.t[id]})}
+ if(r.k==="text"){a.text=v==="si";if(a.text)T.forEach(([,id])=>a.t[id]="A");else T.forEach(([,id])=>{if(a.t[id]==="A"&&TD(id)==="P")delete a.t[id]})}
  else if(r.k.startsWith("t."))a.t[r.k.slice(2)]=v;else a[r.k]=v;show()}
 function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
 const PRE=new Image();
@@ -252,9 +256,9 @@ addEventListener("keydown",e=>{
 });
 addEventListener("keyup",e=>{if(e.key===" ")base(false)});
 const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
-function isSame(a){return !!a.same||(a.touched&&!a.text&&T.every(([,id])=>(a.t[id]||"P")==="P")&&(a.braccio||"stesso")==="stesso"&&(a.stile||"inalterato")==="inalterato"&&(a.dmg||"come")==="come")}
+function isSame(a){return !!a.same||(a.touched&&!a.text&&T.every(([,id])=>(a.t[id]||TD(id))===TD(id))&&(a.braccio||"stesso")==="stesso"&&(a.stile||"inalterato")==="inalterato"&&(a.dmg||"come")==="come")}
 $("#exp").onclick=()=>{let t="slot,touched,same,text,"+T.map(x=>x[1]).join(",")+",braccio,stile,stilenote,dmg,note\n";
- S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,isSame(a)?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||"P"),a.braccio||(a.text?"":"stesso"),a.stile||"inalterato",q(a.stilenote),a.dmg||"come",q(a.note)].join(",")+"\n"});
+ S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,isSame(a)?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||TD(x[1])),a.braccio||(a.text?"":"stesso"),a.stile||"inalterato",q(a.stilenote),a.dmg||"come",q(a.note)].join(",")+"\n"});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_pilot_eye_alessandro.csv";l.click()};
 show();
 </script></body></html>"""
