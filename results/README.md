@@ -114,6 +114,15 @@ calls them probing tools. **The contribution here is therefore not the edit but 
 characterisation** — a measured per-block map with calibrated doses, pre-registered confirmations,
 and the failures (`docs/prior_work_block_scaling_tools.md`).
 
+**Learned per-block scaling.** Calibri calibrates a diffusion transformer with about a hundred
+scaling coefficients — one per block, or one per attention and MLP layer, or one per gate — found by
+an evolutionary search against a reward, and reports that the calibrated FLUX, SD-3.5 and Qwen-Image
+models are better than the originals [19]. It is the closest published work to this report: the same
+kind of edit, a multiplier on part of a block, but searched by a reward model rather than mapped by eye.
+Scaling the output projection of an attention or an MLP, as our edits do among others, is close to
+scaling that layer's output, which is what Calibri tunes. Calibri does not analyse attention against
+MLP or early against late blocks; page 29 does, and finds that they differ.
+
 **Model and metrics.** Krea-2 is described in its technical report [9]. Image quality and
 similarity are measured with CLIP-IQA [10], BRISQUE [11], CLIPScore [12], LPIPS [13], DISTS [14],
 SSIM [15] and DINOv2 [16] (page 25).
@@ -138,6 +147,7 @@ SSIM [15] and DINOv2 [16] (page 25).
 16. Oquab, Darcet, Moutakanni, Vo, Szafraniec, et al. *DINOv2: Learning Robust Visual Features without Supervision.* arXiv:2304.07193
 17. cubiq. *FluxBlocksBuster+*, node in *ComfyUI_essentials* (software), `conditioning.py`. github.com/cubiq/ComfyUI_essentials
 18. cubiq. *Block_Patcher_ComfyUI — experimental sampler to iterate through blocks weight* (software). github.com/cubiq/Block_Patcher_ComfyUI
+19. Tokhchukov, Mirzoeva, Kuznetsov, Sobolev. *Calibri: Enhancing Diffusion Transformers via Parameter-Efficient Calibration.* arXiv:2603.24800, 2026.
 
 ## How to read the table below
 
