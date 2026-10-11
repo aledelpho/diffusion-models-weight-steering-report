@@ -179,99 +179,85 @@ TE_PAGE = r"""<!doctype html><html lang="it"><head><meta charset="utf-8"><title>
 <style>
 body{margin:0;background:#1d1d1f;color:#eee;font:14px system-ui,sans-serif}
 #wrap{display:flex;gap:10px;padding:8px;box-sizing:border-box;height:100vh}
-#view{flex:1;display:flex;gap:6px;overflow:auto;background:#000;border-radius:8px;cursor:zoom-in;position:relative}
-#view.zoom{cursor:zoom-out}#view figure{margin:0;flex:1;min-width:0;position:relative}#view.zoom figure{flex:none}
-#view img{width:100%;display:block}#view.zoom img{width:auto}
-#view.single #fb{display:none}
+#view{flex:1;display:flex;gap:6px;overflow:auto;background:#000;border-radius:8px;cursor:zoom-in}
+#view.zoom{cursor:zoom-out}#view figure{margin:0;flex:1;min-width:0}#view.zoom figure{flex:none}
+#view img{width:100%;display:block}#view.zoom img{width:auto}#view.single #fb{display:none}
 figcaption{position:sticky;top:0;background:#000c;padding:3px 8px;font-weight:700;z-index:2}
 #fe.isbase figcaption{background:#8a2b2b}
-#side{width:470px;overflow:auto;background:#2a2a2d;border-radius:8px;padding:10px;box-sizing:border-box}
-.g{color:#9ab;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:9px 0 2px}
-.t{display:flex;align-items:center;gap:4px;padding:1px 0;border-radius:5px}.t span{flex:1;font-size:13px}
-.t.chg{background:#3a3320}
-kbd{display:inline-block;min-width:15px;text-align:center;font:12px ui-monospace,monospace;background:#444;border:1px solid #666;border-bottom-width:2px;border-radius:4px;padding:0 3px;margin-right:6px;color:#fff}
+#side{width:480px;overflow:auto;background:#2a2a2d;border-radius:8px;padding:10px;box-sizing:border-box}
+#n{color:#aaa}#help{font-size:12px;color:#bbb;margin:4px 0 6px}
+.g{color:#9ab;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:8px 0 2px}
+.r{display:flex;align-items:center;gap:4px;padding:2px 4px;border-radius:6px;border:2px solid transparent}
+.r>span{flex:1;font-size:13px}.r.chg>span{color:#ffd27a}
+.r.cur{border-color:#ffcc55;background:#3a3524}
 button{font:13px system-ui;padding:3px 7px;border-radius:6px;border:1px solid #555;background:#333;color:#ddd;cursor:pointer}
-button.on.A{background:#7a2e2e;border-color:#c55;color:#fff}button.on.P{background:#2f4f3a;border-color:#6a8}button.on.X{background:#2e4a7a;border-color:#69c;color:#fff}
-button.on.q,button[data-q].on,#same.on,#text.on{background:#3b6e4f;border-color:#6c6;color:#fff}.big{padding:6px 12px}
-textarea{width:100%;box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
-#n{color:#aaa}small{color:#999}#keys{font-size:12px;color:#bbb;line-height:1.7;margin:6px 0 2px;border:1px solid #444;border-radius:6px;padding:4px 6px}
-#flash{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#000d;border:1px solid #666;border-radius:8px;padding:5px 12px;display:none;z-index:9}
+button.on{background:#2f4f3a;border-color:#6a8;color:#fff}button.on.A{background:#7a2e2e;border-color:#c55}button.on.X{background:#2e4a7a;border-color:#69c}
+textarea{flex:1;box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
+.r.txt{align-items:stretch;flex-direction:column}.r.txt textarea{width:100%}
+kbd{font:12px ui-monospace,monospace;background:#444;border:1px solid #666;border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#fff}
 </style></head><body><div id="wrap">
 <div id="view" class="single"><figure id="fb"><figcaption>ORIGINALE</figcaption><img src="base.jpg"></figure><figure id="fe"><figcaption id="cap">MODIFICA</figcaption><img id="im"></figure></div>
 <div id="side"><div id="n"></div>
-<div id="keys"><kbd>spazio</kbd>tieni premuto = vedi l'originale al posto della modifica ·
- <kbd>a</kbd>…<kbd>x</kbd> tratto: presente → assente → amplificato · <kbd>0</kbd> identica (e avanti) · <kbd>y</kbd> diventata testo<br>
- braccio <kbd>1</kbd>stesso <kbd>2</kbd>l'altro <kbd>3</kbd>ambiguo · <kbd>4</kbd> stile inalterato/cambiato ·
- superficie <kbd>5</kbd>più pulita <kbd>6</kbd>come <kbd>7</kbd>lieve <kbd>8</kbd>medio <kbd>9</kbd>forte<br>
- <kbd>Invio</kbd> o <kbd>→</kbd> avanti · <kbd>←</kbd> indietro · <kbd>z</kbd> zoom 100% · <kbd>-</kbd> affiancate / una sola · <kbd>.</kbd> scrivi nota (<kbd>Esc</kbd> per uscire)</div>
-<small>Ogni tratto parte da "presente": tocca solo ciò che cambia. I tratti cambiati si evidenziano.</small>
-<div class="q"><button class="big" id="same"><kbd>0</kbd>Identica all'originale</button> <button class="big" id="text"><kbd>y</kbd>Diventata testo / scritte</button></div>
-<div id="traits"></div>
-<div class="g">Braccio del guanto (rispetto all'originale)</div><div><button data-q="braccio" data-v="stesso"><kbd>1</kbd>stesso braccio</button><button data-q="braccio" data-v="altro"><kbd>2</kbd>l'altro braccio</button><button data-q="braccio" data-v="ambiguo"><kbd>3</kbd>ambiguo / a metà strada</button></div>
-<div class="g">Stile complessivo</div><div><button data-q="stile" data-v="inalterato">inalterato</button><button data-q="stile" data-v="cambiato">cambiato</button> <small><kbd>4</kbd>alterna</small></div>
-<textarea id="stilenote" rows="2" placeholder="se cambiato: come?"></textarea>
-<div class="g">Superficie rispetto all'originale</div><div>__DMG__</div>
-<div class="g">Altro (libero) <small><kbd>.</kbd></small></div><textarea id="note" rows="2"></textarea>
-<div style="margin-top:8px"><button id="prev">&larr;</button><button id="next">avanti &rarr;</button> <button id="exp">Scarica le risposte</button></div></div></div>
-<div id="flash"></div>
+<div id="help"><kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>spazio</kbd> tieni premuto = originale · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro<br>
+Tutto parte da "nulla è cambiato": tocca solo ciò che vedi diverso. Nelle note, <kbd>→</kbd> per scrivere, <kbd>Esc</kbd> per uscire.</div>
+<div id="rows"></div>
+<div style="margin-top:8px"><button id="prev">&larr; indietro</button><button id="next">avanti &rarr;</button> <button id="lay">affiancate / una sola</button> <button id="exp">Scarica le risposte</button></div></div></div>
 <script>
 const S=__SLOTS__,T=__TRAITS__,K="te_pilot_eye_v1";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
 let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
-const L="abcdefghijklmnopqrstuvwx";const KEY={};T.forEach(([,id],k)=>KEY[L[k]]=id);
-let g="";$("#traits").innerHTML=T.map(([gr,id,lab],k)=>{let h=gr!==g?`<div class="g">${gr}</div>`:"";g=gr;
- return h+`<div class="t" id="row_${id}"><span><kbd>${L[k]}</kbd>${lab}</span>`+[["A","assente"],["P","presente"],["X","amplificato"]].map(([v,l])=>`<button class="${v}" data-t="${id}" data-v="${v}">${l}</button>`).join("")+`</div>`}).join("");
+const TR=[["A","assente"],["P","presente"],["X","amplificato"]];
+const R=[{k:"text",g:"",lab:"diventata testo / scritte",o:[["no","no"],["si","sì"]],d:"no"}];
+let gp="";T.forEach(([gr,id,lab])=>{R.push({k:"t."+id,g:gr!==gp?gr:"",lab,o:TR,d:"P"});gp=gr});
+R.push({k:"braccio",g:"Posa del guanto",lab:"braccio del guanto rispetto all'originale",o:[["stesso","stesso"],["altro","l'altro"],["ambiguo","ambiguo / a metà"]],d:"stesso"});
+R.push({k:"stile",g:"Insieme",lab:"stile complessivo",o:[["inalterato","inalterato"],["cambiato","cambiato"]],d:"inalterato"});
+R.push({k:"stilenote",g:"",lab:"se lo stile è cambiato: come?",txt:1});
+R.push({k:"dmg",g:"",lab:"superficie rispetto all'originale",o:[["pulito","più pulita"],["come","come l'originale"],["lieve","peggio: lieve"],["medio","medio"],["forte","forte"]],d:"come"});
+R.push({k:"note",g:"",lab:"altro (libero)",txt:1});
+let c=0;
+$("#rows").innerHTML=R.map((r,j)=>(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r txt" id="r${j}"><span>${r.lab}</span><textarea rows="2" data-j="${j}"></textarea></div>`:
+ `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+`</div>`)).join("");
 function cur(){const s=S[i];if(!A[s])A[s]={t:{},touched:false};return A[s]}
+function get(a,r){if(r.k==="text")return a.text?"si":"no";if(r.k.startsWith("t."))return a.t[r.k.slice(2)]||"P";
+ if(r.k==="braccio")return a.braccio||(a.text?"":"stesso");return a[r.k]||r.d}
+function set(r,v){const a=cur();a.touched=true;a.same=false;
+ if(r.k==="text"){a.text=v==="si";if(a.text)T.forEach(([,id])=>a.t[id]="A");else T.forEach(([,id])=>{if(a.t[id]==="A")delete a.t[id]})}
+ else if(r.k.startsWith("t."))a.t[r.k.slice(2)]=v;else a[r.k]=v;show()}
 function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
-function flash(t){const f=$("#flash");f.textContent=t;f.style.display="block";clearTimeout(flash.h);flash.h=setTimeout(()=>f.style.display="none",700)}
 const PRE=new Image();
-function show(){const a=A[S[i]]||{t:{}};$("#im").src=S[i].split("#")[0]+".jpg";$("#fe").classList.remove("isbase");$("#cap").textContent="MODIFICA";
- if(i<S.length-1)PRE.src=S[i+1].split("#")[0]+".jpg";
+function show(){const a=A[S[i]]||{t:{}};
+ if($("#im").dataset.s!==S[i]){$("#im").dataset.s=S[i];$("#im").src=S[i].split("#")[0]+".jpg";if(i<S.length-1)PRE.src=S[i+1].split("#")[0]+".jpg"}
  $("#n").textContent=`immagine ${i+1} di ${S.length} · completate ${S.filter(s=>A[s]&&A[s].touched).length}`;
- document.querySelectorAll("button[data-t]").forEach(b=>b.classList.toggle("on",(a.t[b.dataset.t]||"P")===b.dataset.v));
- T.forEach(([,id])=>$("#row_"+id).classList.toggle("chg",(a.t[id]||"P")!=="P"));
- document.querySelectorAll("button[data-q]").forEach(b=>b.classList.toggle("on",(a[b.dataset.q]||(b.dataset.q==="braccio"&&!a.text?"stesso":""))===b.dataset.v));
- $("#same").classList.toggle("on",!!a.same);$("#text").classList.toggle("on",!!a.text);
- $("#stilenote").value=a.stilenote||"";$("#note").value=a.note||"";save()}
-function setT(id,v){const a=cur();a.t[id]=v;a.same=false;a.touched=true;show()}
-function setQ(q,v){const a=cur();a[q]=v;a.touched=true;if(q!=="braccio"||v!=="stesso")a.same=false;show()}
-function doSame(){const a=cur();a.same=!a.same;if(a.same){a.t={};a.text=false;a.stile="inalterato";a.dmg="come";a.braccio="stesso";}a.touched=true;show();if(a.same&&i<S.length-1){i++;show()}}
-function doText(){const a=cur();a.text=!a.text;if(a.text){T.forEach(([,id])=>a.t[id]="A");a.same=false}a.touched=true;show()}
-function next(){const a=cur();a.touched=true;if(i<S.length-1){i++;show()}else{save();flash("ultima immagine")}}
-function prev(){if(i>0){i--;show()}}
-document.querySelectorAll("button[data-t]").forEach(b=>b.onclick=()=>setT(b.dataset.t,b.dataset.v));
-document.querySelectorAll("button[data-q]").forEach(b=>b.onclick=()=>setQ(b.dataset.q,b.dataset.v));
-$("#same").onclick=doSame;$("#text").onclick=doText;
-$("#stilenote").oninput=e=>{const a=cur();a.stilenote=e.target.value;a.touched=true;save()};$("#note").oninput=e=>{const a=cur();a.note=e.target.value;a.touched=true;save()};
-$("#prev").onclick=prev;$("#next").onclick=next;
-$("#view").onclick=()=>$("#view").classList.toggle("zoom");
+ R.forEach((r,j)=>{const el=$("#r"+j);el.classList.toggle("cur",j===c);
+  if(r.txt){const ta=el.querySelector("textarea");if(document.activeElement!==ta)ta.value=a[r.k]||"";return}
+  const v=get(a,r);el.classList.toggle("chg",v!==r.d&&v!=="");el.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))});
+ save()}
+function move(d){c=Math.max(0,Math.min(R.length-1,c+d));show();$("#r"+c).scrollIntoView({block:"nearest"})}
+function step(d){const r=R[c];if(r.txt){if(d>0)$("#r"+c+" textarea").focus();return}
+ const vs=r.o.map(x=>x[0]);let k=vs.indexOf(get(cur(),r));if(k<0)k=vs.indexOf(r.d);k=Math.max(0,Math.min(vs.length-1,k+d));set(r,vs[k])}
+function next(){const a=cur();a.touched=true;if(i<S.length-1){i++;c=0;show();$("#side").scrollTop=0}}
+function prev(){if(i>0){i--;c=0;show();$("#side").scrollTop=0}}
 function base(on){$("#im").src=on?"base.jpg":S[i].split("#")[0]+".jpg";$("#fe").classList.toggle("isbase",on);$("#cap").textContent=on?"ORIGINALE":"MODIFICA"}
-const DMG={"5":"pulito","6":"come","7":"lieve","8":"medio","9":"forte"},ARM={"1":"stesso","2":"altro","3":"ambiguo"},CYC={P:"A",A:"X",X:"P"},NAME={A:"assente",P:"presente",X:"amplificato"};
+document.querySelectorAll("button[data-j]").forEach(b=>b.onclick=()=>{c=+b.dataset.j;set(R[c],b.dataset.v)});
+document.querySelectorAll("textarea").forEach(t=>{t.onfocus=()=>{c=+t.dataset.j;show()};t.oninput=()=>{const a=cur();a[R[+t.dataset.j].k]=t.value;a.touched=true;save()}});
+$("#prev").onclick=prev;$("#next").onclick=next;$("#lay").onclick=()=>$("#view").classList.toggle("single");
+$("#view").onclick=()=>$("#view").classList.toggle("zoom");
 addEventListener("keydown",e=>{
- if(e.target.tagName==="TEXTAREA"){if(e.key==="Escape")e.target.blur();return}
+ if(e.target.tagName==="TEXTAREA"){if(e.key==="Escape"||e.key==="ArrowUp"&&!e.target.value.includes("\n")||e.key==="ArrowDown"&&!e.target.value.includes("\n")){e.preventDefault();e.target.blur();if(e.key!=="Escape")move(e.key==="ArrowDown"?1:-1)}return}
  if(e.ctrlKey||e.metaKey||e.altKey)return;
- const k=e.key.toLowerCase();
- if(k===" "){e.preventDefault();if(!e.repeat)base(true);return}
- if(k==="enter"||e.key==="ArrowRight"){e.preventDefault();next();return}
- if(e.key==="ArrowLeft"){e.preventDefault();prev();return}
- if(k==="0"){doSame();flash("identica");return}
- if(k==="y"){doText();flash("testo / scritte");return}
- if(k==="z"){$("#view").classList.toggle("zoom");return}
- if(k==="-"){$("#view").classList.toggle("single");return}
- if(k==="."){e.preventDefault();$("#note").focus();return}
- if(ARM[k]){setQ("braccio",ARM[k]);flash("braccio: "+ARM[k]);return}
- if(k==="4"){e.preventDefault();const a=cur();setQ("stile",a.stile==="cambiato"?"inalterato":"cambiato");flash("stile: "+cur().stile);if(cur().stile==="cambiato")$("#stilenote").focus();return}
- if(DMG[k]){setQ("dmg",DMG[k]);flash("superficie: "+DMG[k]);return}
- if(KEY[k]){const id=KEY[k],v=CYC[cur().t[id]||"P"];setT(id,v);flash(T.find(x=>x[1]===id)[2]+": "+NAME[v]);
-   $("#row_"+id).scrollIntoView({block:"nearest"});return}
+ if(e.key===" "){e.preventDefault();if(!e.repeat)base(true);return}
+ if(e.key==="ArrowDown"){e.preventDefault();move(1)}else if(e.key==="ArrowUp"){e.preventDefault();move(-1)}
+ else if(e.key==="ArrowRight"){e.preventDefault();step(1)}else if(e.key==="ArrowLeft"){e.preventDefault();step(-1)}
+ else if(e.key==="Enter"){e.preventDefault();next()}else if(e.key==="Backspace"){e.preventDefault();prev()}
+ else if(e.key.toLowerCase()==="z")$("#view").classList.toggle("zoom");
 });
 addEventListener("keyup",e=>{if(e.key===" ")base(false)});
 const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
+function isSame(a){return !!a.same||(a.touched&&!a.text&&T.every(([,id])=>(a.t[id]||"P")==="P")&&(a.braccio||"stesso")==="stesso"&&(a.stile||"inalterato")==="inalterato"&&(a.dmg||"come")==="come")}
 $("#exp").onclick=()=>{let t="slot,touched,same,text,"+T.map(x=>x[1]).join(",")+",braccio,stile,stilenote,dmg,note\n";
- S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,a.same?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||"P"),a.braccio||(a.text?"":"stesso"),a.stile||"",q(a.stilenote),a.dmg||"",q(a.note)].join(",")+"\n"});
+ S.forEach(s=>{const a=A[s]||{t:{}};t+=[s,a.touched?1:0,isSame(a)?1:0,a.text?1:0,...T.map(x=>a.t[x[1]]||"P"),a.braccio||(a.text?"":"stesso"),a.stile||"inalterato",q(a.stilenote),a.dmg||"come",q(a.note)].join(",")+"\n"});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_pilot_eye_alessandro.csv";l.click()};
 show();
-</script></body></html>""".replace("__DMG__", "".join(f'<button data-q="dmg" data-v="{v}"><kbd>{k}</kbd>{l}</button>' for k, v, l in
-    [("5", "pulito", "più pulita"), ("6", "come", "come l'originale"), ("7", "lieve", "peggio: lieve"), ("8", "medio", "medio"), ("9", "forte", "forte")]))
+</script></body></html>"""
 
 
 def count():
