@@ -34,7 +34,9 @@ claims:
       Pre-registered (C60) P4: edited-side damage of medium or stronger 0.19 against 0 on the
       baseline side, Newcombe 95% [0.11, 0.28], above the 0.10 bound for "no detectable cost".
       Four of the ten edits carry all of it (block 19 MLP + 8 of 9 pairs); six are at 0 of 9.
-      Self-agreement on 15 repeats: 1.00.
+      Self-agreement on 15 repeats: 1.00. A follow-up on the six clean edits (C63, four new illustration
+      prompts, 72 pairs) could not decide whether they are free: 4 of 72 damaged against 0, Newcombe
+      [-0.005, 0.134], three of the four from block 9 attention +.
     anchor: "#what-the-middle-costs"
   - id: noise-sits-mostly-in-the-mlp
     status: open
@@ -189,6 +191,13 @@ block 1 attention + and block 17 whole + in 4 of 9, block 13 whole - in 1 of 9. 
 At 100% the damage is not the late blocks' grain: flat areas such as a sky break into patches or
 rectangles. Block 19 MLP + was clean on the prompts it was chosen on and is the most damaged here,
 so the cost depends on the prompt.
+
+A follow-up (C63, `docs/clean_six_result.md`) put the six edits that came out clean on four new
+illustration prompts at three new seeds, 72 blind pairs, with two late-block edits as a positive control
+(damaged in 24 of 24). Four of the 72 were damaged against none of their baselines, three of them from
+block 9 attention +: too few pairs to call the six free (the interval reaches 13%) or costly (it reaches
+below zero). Block 2 whole −, block 8 MLP +, block 9 whole + and block 18 MLP − are at 0 of 21 damaged
+pairs across the two tests.
 
 ### The cost of a push, revisited
 
