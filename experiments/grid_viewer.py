@@ -10,8 +10,8 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|all] [--img-root PATH] [--budget 160] [--workers 2]
-      -> <img-root>/_grid_viewer/{ranger,split_atlas}.html  (+ cache/ with previews and difference maps)
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|all] [--img-root PATH] [--budget 160] [--workers 2]
+      -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
 and show "non pronto" for cells not processed yet.
@@ -252,7 +252,80 @@ def build_split():
     return {"title": "Atlante diviso (C59)", "grids": grids}
 
 
-SETS = {"ranger": build_ranger, "split_atlas": build_split}
+
+# ---------------------------------------------------------------- grids: text-encoder pilot (C64)
+def _te_labels():
+    """Badge per render from the C64 eye labels, once they exist: text / arm / number of traits changed."""
+    lab = DATA / "te_pilot_eye_alessandro.csv"
+    if not lab.exists():
+        return {}
+    key = {r["item"]: r for r in rd("te_pilot_eye_key.csv")}
+    out = {}
+    for r in rd("te_pilot_eye_alessandro.csv"):
+        item = r["slot"].split("#")[0]
+        if item not in key or item in out:  # first showing only
+            continue
+        traits = [k for k in r if k not in ("slot", "touched", "same", "text", "braccio", "stile", "stilenote", "dmg", "note")]
+        changed = [k for k in traits if r[k] != "P"]
+        bits = []
+        if r.get("text") == "1":
+            bits.append("TESTO")
+        else:
+            if changed:
+                bits.append(f"{len(changed)} tratti")
+            if r.get("braccio") in ("altro", "ambiguo"):
+                bits.append("braccio: " + r["braccio"])
+            if r.get("dmg") not in ("", "come", None):
+                bits.append("sup: " + r["dmg"])
+        note = ", ".join(f"{k}={r[k]}" for k in changed) + (f" · {r['note']}" if r.get("note") else "")
+        out[key[item]["cond"]] = (" · ".join(bits), note)
+    return out
+
+
+def build_te_pilot():
+    F = "benchmark_te_pilot"
+    plan = rd("te_pilot_plan.csv")
+    by = {(r["unit"], r["part"], r["dose"]): r for r in plan if r["phase"] == "main"}
+    base = f"{F}/" + next(r["expected_filename"] for r in plan if r["cond"] == "CHK_repro_baseline")
+    labs = _te_labels()
+    doses = ["-1.0", "-0.35", "-0.1", "0", "0.1", "0.35", "1.0"]
+    cols = ["−1.00", "−0.35", "−0.10", "base", "+0.10", "+0.35", "+1.00"]
+
+    def mk(unit, part):
+        cells = []
+        for d, c in zip(doses, cols):
+            if d == "0":
+                cells.append(cell(base, base, "0"))
+                continue
+            r = by.get((unit, part, d))
+            lab = labs.get(r["cond"], ("", "")) if r else ("", "")
+            cells.append(cell(f"{F}/{r['expected_filename']}", base, c, *lab) if r else None)
+        return cells
+
+    layers = sorted({u for (u, p, _) in by if p == "attn"})
+    note = ("Elfa P1, seed 1618033. Modifica dei pesi del text encoder Qwen3-VL x(1+d), via ArthemyKrea2CLIPTuner. "
+            "Krea-2 legge l'ingresso dei layer 2, 5, ..., 35: una modifica al layer L arriva a tutte le letture dopo L. "
+            "FARE PRIMA IL TEST A OCCHIO: questa pagina mostra le condizioni in chiaro.")
+    grids = [
+        {"id": "te_attn", "title": "C64 · attention (q, k, v, o) per layer", "note": note,
+         "cols": cols, "rows": [{"label": u, "cells": mk(u, "attn")} for u in layers]},
+        {"id": "te_mlp", "title": "C64 · MLP (gate, up, down) per layer", "note": note,
+         "cols": cols, "rows": [{"label": u, "cells": mk(u, "mlp")} for u in layers]},
+        {"id": "te_both", "title": "C64 · attention e MLP alternate per layer", "note": note + " Righe alternate: attn, MLP.",
+         "cols": cols, "rows": [x for u in layers for x in ({"label": f"{u} attn", "cells": mk(u, "attn")},
+                                                              {"label": f"{u} MLP", "cells": mk(u, "mlp")})]},
+        {"id": "te_slots", "title": "C64 · slot di testo del DiT (vettore)", "note": "Gli slot 28-33 del DiT che lavorano sul testo, per confronto.",
+         "cols": cols, "rows": [{"label": u, "cells": mk(u, "slot")} for u in sorted({u for (u, p, _) in by if p == "slot"})]},
+    ]
+    chk = [r for r in plan if r["phase"] == "check" and r["cond"] != "CHK_repro_baseline"]
+    grids.append({"id": "te_checks", "title": "C64 · controlli", "note": "Nulli attesi: L35 (mai letto) e torre visiva. "
+                  "Attivo atteso: L02 MLP. q+k: previsione di nullità falsificata (circa 10/255).",
+                  "cols": ["base"] + [r["cond"].replace("CHK_", "") for r in chk],
+                  "rows": [{"label": "controlli", "cells": [cell(base, base, "0")] + [cell(f"{F}/{r['expected_filename']}", base, r["dose"]) for r in chk]}]})
+    return {"title": "Text encoder (C64)", "grids": grids}
+
+
+SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot}
 
 
 # ---------------------------------------------------------------- build
