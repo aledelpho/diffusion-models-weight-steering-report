@@ -183,6 +183,8 @@ of edit and baseline with the side random, plus 15 repeats.
 
 A preference question was dropped before any label, at Alessandro's request, as too subjective.
 
+![The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the MLP of block 27 pushed up keeps the same picture and covers it in blotches.](../assets/29-inside-the-block/F29.4_form_surface_large.webp)
+
 ### What the middle costs
 
 The middle edits are not free. By the rule fixed before the labels, a cost is present: 0.19 against

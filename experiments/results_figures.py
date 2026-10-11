@@ -823,6 +823,22 @@ def cost_floor_by_block(out: Path) -> Path:
     return _save(fig, out, "geometric mean over cells · HF = std(gray - blur 1.5) · source data/cost_floor_measures.csv, data/punto7_blocks.csv")
 
 
+def form_surface_large(out: Path) -> Path:
+    """F29.4 — C60, large: the elf at seed 1618033, base, a middle-block edit and a late-block edit, whole frames.
+    Caption: Alessandro's blind damage label on the edited side."""
+    tal = {(r["prompt"], r["seed"], r["cond"]): r for r in csv.DictReader(open(DATA / "comic_form_eye_tally_alessandro.csv", encoding="utf-8"))}
+    cols = [("baseline", "the original"), ("blk08_whole_pos_d0.350", "block 8 +0.35 (middle)"), ("blk27_mlp_pos_d0.350", "block 27 MLP +0.35 (end)")]
+    dl = {0: "no damage", 1: "slight damage", 2: "medium damage", 3: "strong damage"}
+    def cap(r, c):
+        if c == "baseline":
+            return None
+        v = int(float(tal[("P1_elfbrawler", "1618033", c)]["d_edit"]))
+        return (dl[v], NEG if v >= 2 else DIM_RGB)
+    return _sheet([("elf", "")], cols, lambda r, c: _img(f"benchmark_comic_form/P1_elfbrawler_{c}_krea2_seed1618033_00001_.png"),
+                  cap, out, "C60 · elf brawler, seed 1618033 · whole frames · label = Alessandro's blind damage label · "
+                  "source data/comic_form_eye_tally_alessandro.csv", W=420, H=525, LAB=8)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -859,6 +875,7 @@ BUILDERS = {
     "F29.1": ("29-inside-the-block", "split_atlas_eye_sheet", split_atlas_eye_sheet),
     "F29.2": ("29-inside-the-block", "comic_form_sheet", comic_form_sheet),
     "F29.3": ("29-inside-the-block", "cost_floor_by_block", cost_floor_by_block),
+    "F29.4": ("29-inside-the-block", "form_surface_large", form_surface_large),
 }
 
 

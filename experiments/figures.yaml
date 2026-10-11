@@ -945,3 +945,13 @@ figures:
       frequency instead of losing it.
 
       '
+  - id: F29.4
+    page: 29-inside-the-block
+    kind: strip
+    builder: results_figures.form_surface_large
+    source: data/comic_form_eye_tally_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the
+      MLP of block 27 pushed up keeps the same picture and covers it in blotches.

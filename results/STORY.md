@@ -201,7 +201,52 @@ middle blocks give a style. We predicted a content metric would see the second; 
 
 ---
 
-## 9 · What fooled us
+## 9 · What is inside one block?
+
+Every block is made of two parts that work one after the other. The **attention** lets each patch of
+the picture look at the others and at the prompt; the **MLP** then reworks each patch on its own. Until
+now I had always pushed both together. So I pulled them apart: every block, attention alone and MLP
+alone, both directions, on three pictures — a thousand renders. Then I looked at them without knowing
+which was which, and wrote down for each one what kind of damage I saw, if any, and how strong.
+
+![Block 0 at -0.35 is wrecked by its attention alone and by its MLP alone but keeps its composition as a whole block, with strong blotches; at block 23 the attention is clean and the MLP grainy; at blocks 26 and 27 both halves are noisy and the whole block is worst.](../assets/29-inside-the-block/F29.1_split_atlas_eye_sheet.webp)
+
+Most of the noise comes from the MLP. Comparing the two halves of the same block, the MLP was the
+noisier one in 13 cases, the attention in 2, with 4 ties. The attention joins in only in the very last
+blocks. The first block is the odd
+one out: either half alone wrecks the picture, while both together keep its composition — though not
+a clean surface.
+
+Going through those labels, I noticed something else. The edits I had marked as "beautiful for the
+comic" were the ones that changed the drawing the *most*: a new pose, a different light, cleaner
+shading. And they all came from the middle of the stack. The noisy ones, from the end, changed the
+drawing much less. They just dirtied it.
+
+![The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the MLP of block 27 pushed up keeps the same picture and covers it in blotches.](../assets/29-inside-the-block/F29.4_form_surface_large.webp)
+
+So I tested it properly: ten middle edits and ten end edits, chosen by a fixed rule, on three new
+pictures and three new seeds, 180 pairs judged blind. The middle edits changed the picture more, by
+the numbers and by eye, and damaged its surface in 19% of the pairs against 79% for the end edits.
+But 19% is not zero. Four of the ten middle edits paid a price on the new pictures — patches in a flat
+sky, rectangles in a background. A follow-up on the six that stayed clean could not decide whether
+they are really free: 4 damaged pairs out of 72, too few to tell.
+
+Last, the old claim that *every* push costs a little fine texture. I tried to overturn it on its own
+ground, with new seeds. On its two comic prompts it came back almost to the third decimal. On two
+photographs it did not: there the last blocks add fine detail instead of removing it.
+
+![Per block, the fine-texture common mode on four new seeds follows page 05 almost exactly on the two comic prompts, while on two photographs the last blocks gain high frequency instead of losing it.](../assets/29-inside-the-block/F29.3_cost_floor_by_block.webp)
+
+One honest limit runs through all of this: no measure we have sees the noise the way an eye does. We
+tried eight, tested blind against my labels, and none was good enough. Every statement here about
+noise rests on one pair of eyes — mine.
+
+→ [page 29](29-inside-the-block.md) · middle edits change more and damage less **holds** · and are not
+free **holds** · the noise lives in the MLP **open** · the cost of every push **ambiguous**
+
+---
+
+## 10 · What fooled us
 
 ![The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.](../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp)
 
@@ -215,15 +260,18 @@ and undone by looking. That is why every test in this report puts the eye first.
 
 ---
 
-## 10 · Where to start, and what is not known
+## 11 · Where to start, and what is not known
 
 To try the tuner, start from the map: the end blocks for colour, grain and softness, safe at small
-doses; the middle blocks for deeper changes, with care. A block-by-block guide, written by eye and
+doses; the middle blocks for deeper changes, with care. If the end blocks bring noise, try their
+attention alone before giving up on them: most of the noise is in the MLP. A block-by-block guide, written by eye and
 meant to be corrected, is on [page 21](21-block-map.md#a-starting-guide-what-each-block-seems-to-do).
 
 ![Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves.](../assets/21-block-map/F21.5_guide_comic.webp)
 
-Not known yet: whether a preset can keep a character's expression as well as its identity (the
+Not known yet: whether the clean middle edits are truly free; whether a measure can ever replace the
+eye on noise; what the text encoder, the other half of the model, can do — that work has just started;
+whether a preset can keep a character's expression as well as its identity (the
 portrait preset kept who they were, not always how they looked at you); whether a blind observer
 would still say "same character" when some sheets show two different ones; whether the noise of a
 preset can be cleaned afterwards without losing its look; how much each block writes into the

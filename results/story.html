@@ -249,7 +249,40 @@ measurable. But they do not see two things my eye saw — the noise of block 26,
 middle blocks give a style. We predicted a content metric would see the second; it did not.</p>
 <p>→ <a href="index.html#p-25-standard-metrics">page 25</a> · prediction <strong>overturned</strong></p>
 <hr />
-<h2>9 · What fooled us</h2>
+<h2>9 · What is inside one block?</h2>
+<p>Every block is made of two parts that work one after the other. The <strong>attention</strong> lets each patch of
+the picture look at the others and at the prompt; the <strong>MLP</strong> then reworks each patch on its own. Until
+now I had always pushed both together. So I pulled them apart: every block, attention alone and MLP
+alone, both directions, on three pictures — a thousand renders. Then I looked at them without knowing
+which was which, and wrote down for each one what kind of damage I saw, if any, and how strong.</p>
+<p><img alt="Block 0 at -0.35 is wrecked by its attention alone and by its MLP alone but keeps its composition as a whole block, with strong blotches; at block 23 the attention is clean and the MLP grainy; at blocks 26 and 27 both halves are noisy and the whole block is worst." src="../assets/29-inside-the-block/F29.1_split_atlas_eye_sheet.webp" /></p>
+<p>Most of the noise comes from the MLP. Comparing the two halves of the same block, the MLP was the
+noisier one in 13 cases, the attention in 2, with 4 ties. The attention joins in only in the very last
+blocks. The first block is the odd
+one out: either half alone wrecks the picture, while both together keep its composition — though not
+a clean surface.</p>
+<p>Going through those labels, I noticed something else. The edits I had marked as "beautiful for the
+comic" were the ones that changed the drawing the <em>most</em>: a new pose, a different light, cleaner
+shading. And they all came from the middle of the stack. The noisy ones, from the end, changed the
+drawing much less. They just dirtied it.</p>
+<p><img alt="The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the MLP of block 27 pushed up keeps the same picture and covers it in blotches." src="../assets/29-inside-the-block/F29.4_form_surface_large.webp" /></p>
+<p>So I tested it properly: ten middle edits and ten end edits, chosen by a fixed rule, on three new
+pictures and three new seeds, 180 pairs judged blind. The middle edits changed the picture more, by
+the numbers and by eye, and damaged its surface in 19% of the pairs against 79% for the end edits.
+But 19% is not zero. Four of the ten middle edits paid a price on the new pictures — patches in a flat
+sky, rectangles in a background. A follow-up on the six that stayed clean could not decide whether
+they are really free: 4 damaged pairs out of 72, too few to tell.</p>
+<p>Last, the old claim that <em>every</em> push costs a little fine texture. I tried to overturn it on its own
+ground, with new seeds. On its two comic prompts it came back almost to the third decimal. On two
+photographs it did not: there the last blocks add fine detail instead of removing it.</p>
+<p><img alt="Per block, the fine-texture common mode on four new seeds follows page 05 almost exactly on the two comic prompts, while on two photographs the last blocks gain high frequency instead of losing it." src="../assets/29-inside-the-block/F29.3_cost_floor_by_block.webp" /></p>
+<p>One honest limit runs through all of this: no measure we have sees the noise the way an eye does. We
+tried eight, tested blind against my labels, and none was good enough. Every statement here about
+noise rests on one pair of eyes — mine.</p>
+<p>→ <a href="index.html#p-29-inside-the-block">page 29</a> · middle edits change more and damage less <strong>holds</strong> · and are not
+free <strong>holds</strong> · the noise lives in the MLP <strong>open</strong> · the cost of every push <strong>ambiguous</strong></p>
+<hr />
+<h2>10 · What fooled us</h2>
 <p><img alt="The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left." src="../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp" /></p>
 <p>Two statistics once ranked these the best edits of the project: they moved the picture far and
 "kept the line". Nobody had opened them. A destroyed picture is far from the original, and a regular
@@ -258,12 +291,15 @@ of section 3. Four claims of this project were withdrawn this way, every one mad
 and undone by looking. That is why every test in this report puts the eye first.</p>
 <p>→ <a href="index.html#p-26-what-did-not-work">page 26</a> · <strong>overturned</strong>, with the limits of the whole report</p>
 <hr />
-<h2>10 · Where to start, and what is not known</h2>
+<h2>11 · Where to start, and what is not known</h2>
 <p>To try the tuner, start from the map: the end blocks for colour, grain and softness, safe at small
-doses; the middle blocks for deeper changes, with care. A block-by-block guide, written by eye and
+doses; the middle blocks for deeper changes, with care. If the end blocks bring noise, try their
+attention alone before giving up on them: most of the noise is in the MLP. A block-by-block guide, written by eye and
 meant to be corrected, is on <a href="index.html#p-21-block-map--a-starting-guide-what-each-block-seems-to-do">page 21</a>.</p>
 <p><img alt="Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves." src="../assets/21-block-map/F21.5_guide_comic.webp" /></p>
-<p>Not known yet: whether a preset can keep a character's expression as well as its identity (the
+<p>Not known yet: whether the clean middle edits are truly free; whether a measure can ever replace the
+eye on noise; what the text encoder, the other half of the model, can do — that work has just started;
+whether a preset can keep a character's expression as well as its identity (the
 portrait preset kept who they were, not always how they looked at you); whether a blind observer
 would still say "same character" when some sheets show two different ones; whether the noise of a
 preset can be cleaned afterwards without losing its look; how much each block writes into the
