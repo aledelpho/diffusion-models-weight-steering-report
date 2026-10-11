@@ -2464,6 +2464,11 @@ alone smooths it into a painted, screen-textured surface and replaces the subjec
 content and the colour (chroma within 2 points) and pays in blotches. One way to read it, not tested: in the
 first block the two halves write large, partly opposite contributions, so lowering one alone leaves the
 other uncompensated, while lowering both keeps the balance but thins the fine detail the block adds.</p>
+<p>Searched across the whole atlas (seed 2718281, where the whole block exists), this is unique to the first
+block lowered: in 3 of 3 prompts there, and in only 5 other cells of the remaining 165. Everywhere else the
+rule runs the other way: in 125 of 168 cells the whole block changes the composition <em>more</em> than either
+half alone. Block 0 raised does not compensate either. A milder echo exists for colour at block 24 raised,
+where the attention adds chroma (+2.1) and the MLP removes it (−1.6) and the whole block moves it little (−0.2).</p>
 <h3 id="p-29-inside-the-block--form-against-surface">Form against surface</h3>
 <p>The labels suggested, after the fact, that the sheets praised for the comic changed the picture
 more than the noisy ones (layout r 0.74 against 0.87). C60 tested it on three new prompts (two
