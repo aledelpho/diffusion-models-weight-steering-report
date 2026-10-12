@@ -37,11 +37,17 @@ Size of each edit's push against the size of the "comics → anime" swap, on the
 
 * **The anime pull is not a text-like move.** An edit that ends in anime does not move the conditioning toward what
   "anime style" would write. Its push is far larger than a change of style word, and nearly orthogonal to it.
-* **One explanation fits C67 G3/G3d, C69, C70 and C71, but has not been tested:** the edits move the conditioning off
+* **One explanation is compatible with most of C67–C71, but has not been tested:** the edits move the conditioning off
   the region that normal prompts occupy. The further off it goes, the less the DiT can use the text, and the more it
   falls back on its own default for "illustration", which for this model is anime.
-  * This would explain why the *size* of the push predicts the switch (G3d ρ 0.80) while its *direction* does not.
-  * It would also explain why negative doses, which are smaller pushes in this set, do not switch.
+  * This would explain why the *size* of the push predicts the change (G3d ρ 0.80) while its *direction* does not.
+* **There are clear exceptions to that explanation:**
+  * **L28 MLP+** has the largest push (247, ratio 24) and never leaves Western comics. It does change the rendering
+    strongly (intensity 3 in all orders).
+  * **L10 attention+** (126) does not switch.
+  * **L12 attention+** (81) switches 4 of 5 to anime.
+  * **L04 MLP−** (98, negative dose) does not switch.
+  * So size alone does not decide *whether* the genre changes. It tracks *how much* the image changes.
 * **Cartoon (R1, ρ 0.52) is the only sign of a direction effect.** It is reported, not tested, and cartoon counts are
   small (at most 3 per edit).
 
