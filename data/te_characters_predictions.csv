@@ -1,0 +1,4 @@
+prediction,result
+P1_coherence_like_dit,median W 0.206 vs C52 0.51 -> fails
+P2_quality_less_degraded,dBRISQUE te -1.52 vs preset +8.09; dCLIP-IQA te -0.0009 vs preset -0.0374 -> holds
+P3_wider_style_spread,participation ratio te 4.11 vs DiT top-20 3.49 -> holds
