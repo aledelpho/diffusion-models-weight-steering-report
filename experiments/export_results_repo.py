@@ -51,7 +51,7 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
 
     blob = f"{MAIN}/blob/{sha}/"
-    pages = sorted(p for p in RESULTS.glob("2*.md")) + [RESULTS / "STORY.md"]
+    pages = sorted(p for p in RESULTS.glob("[0-9][0-9]-*.md")) + [RESULTS / "STORY.md"]
     data_needed: set[str] = set()
     errors: list[str] = []
 
