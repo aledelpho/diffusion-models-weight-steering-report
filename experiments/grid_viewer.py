@@ -10,7 +10,7 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|all] [--img-root PATH] [--budget 160] [--workers 2]
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|te_default|te_words|all] [--img-root PATH] [--budget 160] [--workers 2]
       -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
@@ -423,7 +423,70 @@ def build_te_genre_dose():
     return {"title": "Intensità del cambio di stile (C70)", "grids": grids, "notes_file": "te_genre_dose_alessandro.csv"}
 
 
-SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre, "te_genre_dose": build_te_genre_dose}
+GENRES_C72 = ["fumetto", "anime", "cartoon", "realist", "pittura", "altro", "rotto"]
+C72_EDITS = ["L05_mlp_p1.00", "L06_mlp_p1.00", "L28_mlp_p1.00"]
+
+
+def build_te_default():
+    """C72 blocks A and C (docs/prereg_te_default.md): one genre per image. Rows per seed: the plain render, the elf
+    without style words, then for L05, L06, L28 MLP doubled the real edit and the three random pushes. Plus the
+    empty prompt at four seeds. 'rotto' = no recognisable character or a destroyed picture."""
+    orders = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
+    cols = ["1 · originale", "2 · soggetto prima", "3 · sfondo prima", "4 · azione prima", "5 · inverso"]
+    grids = []
+    for seed in ["3141592", "1234567"]:
+        base = {v: f"benchmark_prompt_order/{v}_baseline_krea2_seed{seed}_00001_.png" for v in orders}
+        rows = [{"label": "originale", "cells": [cell(base[v], base[v], "base") for v in orders]},
+                {"label": "senza_stile", "cells": [cell(f"benchmark_te_default/{v}_nostyle_krea2_seed{seed}_00001_.png", base[v], str(i + 1))
+                                                   for i, v in enumerate(orders)]}]
+        for e in C72_EDITS:
+            rows.append({"label": f"{e}_reale", "cells": [cell(f"benchmark_te_characters/{v}_{e}_krea2_seed{seed}_00001_.png", base[v], str(i + 1))
+                                                          for i, v in enumerate(orders)]})
+            for var in ["permuted", "shared", "token"]:
+                rows.append({"label": f"{e}_{var}", "cells": [cell(f"benchmark_te_default/{v}_{e}_{var}_krea2_seed{seed}_00001_.png", base[v], str(i + 1))
+                                                               for i, v in enumerate(orders)]})
+        grids.append({"id": f"c72_{seed}", "title": f"C72 · seed {seed}", "cols": cols, "rows": rows,
+                      "note": "Un genere per immagine (anche la riga 'originale'). 'rotto' = nessun personaggio riconoscibile o immagine distrutta. "
+                              "'senza_stile' = prompt senza 'realistic western comics style, bold ink outlines, hatched shadows'. "
+                              "Righe _permuted/_shared/_token: spinte casuali della stessa grandezza della modifica, senza toccare i pesi.",
+                      "notes": {"head": "genere per colonna (1-5)", "w": "470px", "cls": "gen",
+                                "qs": [{"k": f"g{i}", "lab": str(i), "o": GENRES_C72} for i in range(1, 6)]}})
+    seeds4 = ["3141592", "1234567", "1618033", "2718281"]
+    ref = "benchmark_prompt_order/V1_Original_baseline_krea2_seed3141592_00001_.png"
+    grids.append({"id": "c72_empty", "title": "C72 · prompt vuoto", "cols": [f"seed {s}" for s in seeds4],
+                  "rows": [{"label": "vuoto", "cells": [cell(f"benchmark_te_default/EMPTY_empty_krea2_seed{s}_00001_.png", ref, s) for s in seeds4]}],
+                  "note": "Il prompt vuoto: cosa disegna il modello senza testo. Un genere per immagine.",
+                  "notes": {"head": "genere per colonna (1-4)", "w": "470px", "cls": "gen",
+                            "qs": [{"k": f"g{i}", "lab": str(i), "o": GENRES_C72} for i in range(1, 5)]}})
+    return {"title": "C72 · stile di default e spinte casuali", "grids": grids, "notes_file": "te_default_genre_alessandro.csv"}
+
+
+def build_te_words():
+    """C72 block B: each word or clause alone at four seeds. Per image: genre, and where a person appears, apparent
+    gender and beard."""
+    plan = rd("te_default_plan.csv")
+    seeds4 = ["3141592", "1234567", "1618033", "2718281"]
+    words = []
+    for r in plan:
+        if r["block"] == "B" and (r["prompt_id"], r["prompt_text"]) not in words:
+            words.append((r["prompt_id"], r["prompt_text"]))
+    ref = "benchmark_prompt_order/V1_Original_baseline_krea2_seed3141592_00001_.png"
+    rows = [{"label": f"{pid} · {w}", "cells": [cell(f"benchmark_te_default/{pid}_word_krea2_seed{s}_00001_.png", ref, s) for s in seeds4]}
+            for pid, w in words]
+    qs = []
+    for i in range(1, 5):
+        qs += [{"k": f"g{i}", "lab": f"{i} genere", "o": GENRES_C72[:-1] + ["nessuno"]},
+               {"k": f"p{i}", "lab": f"{i} persona", "o": ["donna", "uomo", "ambiguo", "nessuna"]},
+               {"k": f"b{i}", "lab": f"{i} barba", "o": ["sì", "no"]}]
+    grids = [{"id": "c72_words", "title": "C72 · ogni parola da sola", "cols": [f"seed {s}" for s in seeds4], "rows": rows,
+              "note": "Ogni frase del prompt dell'elfa, da sola, più alcune parole extra. Per ogni seed (colonna): il genere, se c'è "
+                      "una persona il suo genere apparente, e se ha la barba. 'nessuno' = nessuno stile riconoscibile.",
+              "notes": {"head": "per colonna: genere · persona · barba", "w": "560px", "cls": "gen", "qs": qs}}]
+    return {"title": "C72 · le parole da sole", "grids": grids, "notes_file": "te_words_alessandro.csv"}
+
+
+SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre, "te_genre_dose": build_te_genre_dose,
+        "te_default": build_te_default, "te_words": build_te_words}
 
 
 # ---------------------------------------------------------------- build
