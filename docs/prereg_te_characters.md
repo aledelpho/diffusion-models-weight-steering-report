@@ -116,3 +116,11 @@ cosine between dF on the comic D1 and dF on each of the other six comic characte
   edits. Part C rests on one character and two seeds.
 * Parts B and C are measured only (no eye page); the grid viewer can show them afterwards.
 * The edits were selected on one picture where they changed style; regression to the mean is expected.
+
+## Amendment 1 (2026-10-12, after the renders, before the key was opened and before any label)
+
+At Alessandro's request the eye page also asks, for each of the seven characters from left to right, whether it
+*follows the direction* (default), *changes another way* or is *nearly unchanged*, and gives a free field for how
+the exceptions change. The sheets, their order and the key are those the night run produced (the rebuilt key is
+byte-identical). These answers are descriptive: they say which characters are the exceptions to an edit and how;
+no rule above uses them.
