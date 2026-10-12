@@ -54,3 +54,10 @@ and seed. Images without a label are left out; the counts below say how many.
 * G1 rests on 20 images, and the style share comes from a single seed.
 * Within an edit, the five images share most of the push. So G1 partly compares edits again; the within-edit report
   is there to show this.
+
+## Amendment 1 (2026-10-12, after the labels arrived, before any count)
+
+Alessandro labelled seed 3141592 only (105 images); seed 1234567 is empty. G2 and G3 therefore use the switch rate
+over the **5** images of seed 3141592 per edit instead of 10. The rate can only take the values 0, 0.2, … 1, so ties
+are many; the rules are unchanged. G1 is unaffected (it was seed 3141592 only). The tally script
+(`experiments/te_genre_tally.py`) is written after this amendment.
