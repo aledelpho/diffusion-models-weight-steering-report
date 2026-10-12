@@ -1,0 +1,4 @@
+test,value,verdict
+G1,"AUC 0.462 (switched 7, not 13)",not supported
+G2,"rho 0.518 (p 0.019, n 20) vs order score 1-5",supported
+G3,"rho 0.730 (p 0.000, n 20) vs conditioning size",supported
