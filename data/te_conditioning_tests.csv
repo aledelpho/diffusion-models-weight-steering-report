@@ -1,0 +1,4 @@
+test,n,verdict,rule,rho,auc_style_changed,p
+E1 elf: conditioning change vs how much the picture changed,140,supported,rho >= 0.50,0.712,0.802,0.0
+E2 order: word-profile disagreement across orders vs 1-5 scores,20,not supported,rho >= 0.50,-0.348,,0.1332
+E3 characters: share of change on shared style words vs 'same direction',34,not supported,rho >= 0.40,0.053,,0.7673
