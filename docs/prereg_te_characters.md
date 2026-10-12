@@ -124,3 +124,8 @@ At Alessandro's request the eye page also asks, for each of the seven characters
 the exceptions change. The sheets, their order and the key are those the night run produced (the rebuilt key is
 byte-identical). These answers are descriptive: they say which characters are the exceptions to an edit and how;
 no rule above uses them.
+
+## Amendment 2 (2026-10-12, before any label)
+
+At Alessandro's request each of the seven characters on a sheet also gets a free-text field, "how it changed"
+(export columns t1–t7). Same sheets, order and key. Descriptive only, like amendment 1.

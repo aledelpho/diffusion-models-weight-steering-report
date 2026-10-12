@@ -490,7 +490,7 @@ def night(shutdown):
 def page():
     """Sheet = the 7 characters, baseline row above, edit row below; anonymous id, shuffled (rng 66), 6 repeats.
     Questions: do the seven change in the same direction (yes / partly / no); which direction (free); for each
-    character, left to right, follows / changes another way / nearly unchanged; how the exceptions change (free);
+    character, left to right, follows / changes another way / nearly unchanged, with a free text on how it changed;
     surface against the originals (cleaner / as / slight / medium / strong). Key written before any label."""
     from PIL import Image
     rng = np.random.default_rng(66)
@@ -525,14 +525,14 @@ EYE = r"""<!doctype html><html lang="it"><head><meta charset="utf-8"><title>C65:
 <style>body{margin:0;background:#1d1d1f;color:#eee;font:14px system-ui,sans-serif}#wrap{display:flex;flex-direction:column;height:100vh}
 #view{flex:1;overflow:auto;background:#000;text-align:center;min-height:0}#view img{max-width:100%;max-height:100%}#view.zoom img{max-width:none;max-height:none}
 #side{background:#2a2a2d;padding:6px 12px;max-height:46vh;overflow:auto}.r{display:flex;align-items:center;gap:6px;padding:2px 6px;border-radius:6px;border:2px solid transparent;flex-wrap:wrap}
-.r>span{min-width:330px}.r.cur{border-color:#ffcc55;background:#3a3524}.r.chg>span{color:#ffd27a}
+.r>span{min-width:330px}.r textarea[data-k]{min-width:260px}.r.cur{border-color:#ffcc55;background:#3a3524}.r.chg>span{color:#ffd27a}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
 button{font:13px system-ui;padding:2px 8px;border-radius:6px;border:1px solid #555;background:#333;color:#ddd}
 button.on{background:#2f4f3a;border-color:#6a8;color:#fff}button.on.diverso{background:#7a4a1e;border-color:#c85}button.on.invariato{background:#444b5a;border-color:#89a}
 textarea{flex:1;min-width:300px;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
 kbd{font:12px ui-monospace,monospace;background:#444;border:1px solid #666;border-radius:4px;padding:0 4px}#n{color:#aaa}.g{color:#9ab;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:6px 0 1px}</style></head><body><div id="wrap">
 <div id="view"><img id="im"></div><div id="side"><div id="n"></div>
-<small>Riga sopra: i 7 originali. Riga sotto: la stessa modifica su ciascuno. <kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro · <kbd>z</kbd> zoom. Nei campi di testo <kbd>→</kbd> per scrivere, <kbd>Esc</kbd> per uscire.</small>
+<small>Riga sopra: i 7 originali. Riga sotto: la stessa modifica su ciascuno. <kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro · clic sull'immagine = zoom. Sulle righe dei personaggi basta scrivere; negli altri campi <kbd>→</kbd> per scrivere; <kbd>Esc</kbd> per uscire.</small>
 <div id="rows"></div><button id="exp">Scarica le risposte</button></div></div>
 <script>
 const S=__SLOTS__,K="te_characters_eye_v1";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
@@ -540,32 +540,35 @@ let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}co
 const CH=["1 · nana paladina","2 · elfo ladro","3 · mezzorca guerriera","4 · gnomo mago","5 · halfling druido","6 · dragonide chierica","7 · tiefling bardo"];
 const R=[{k:"stessa",g:"Insieme",lab:"i 7 personaggi cambiano nella stessa direzione?",o:[["si","sì"],["parte","in parte"],["no","no"]],d:""},
  {k:"direzione",lab:"la direzione comune (stile, colori, forme…)",txt:1}];
-CH.forEach((c,j)=>R.push({k:"c"+(j+1),g:j===0?"Personaggio per personaggio, da sinistra":"",lab:c,o:[["segue","segue la direzione"],["diverso","cambia in un altro modo"],["invariato","quasi invariato"]],d:"segue"}));
-R.push({k:"eccezioni",g:"Eccezioni",lab:"come cambiano le eccezioni (es. «4: diventa acquerello»)",txt:1});
+CH.forEach((c,j)=>R.push({k:"c"+(j+1),tk:"t"+(j+1),g:j===0?"Personaggio per personaggio, da sinistra · scrivi come è cambiato":"",lab:c,o:[["segue","segue"],["diverso","altro modo"],["invariato","invariato"]],d:"segue"}));
 R.push({k:"dmg",g:"",lab:"superficie rispetto agli originali",o:[["pulito","più pulita"],["come","come"],["lieve","peggio: lieve"],["medio","medio"],["forte","forte"]],d:"come"});
 R.push({k:"note",lab:"altro (libero)",txt:1});
 let c=0;let gp="";$("#rows").innerHTML=R.map((r,j)=>(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r" id="r${j}"><span>${r.lab}</span><textarea rows="1" data-j="${j}"></textarea></div>`:
- `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+`</div>`)).join("");
+ `<div class="r" id="r${j}"><span>${r.lab}</span>`+r.o.map(([v,l])=>`<button class="${v}" data-j="${j}" data-v="${v}">${l}</button>`).join("")+
+ (r.tk?`<textarea rows="1" data-j="${j}" data-k="${r.tk}" placeholder="come è cambiato (scrivi e basta)"></textarea>`:"")+`</div>`)).join("");
 function cur(){return A[S[i]]||(A[S[i]]={})}
 function save(){try{localStorage.setItem(K,JSON.stringify(A));localStorage.setItem(K+"_i",i)}catch(e){}}
 function show(){const a=A[S[i]]||{};$("#im").src=S[i].split("#")[0]+".jpg";
  $("#n").textContent=`foglio ${i+1} di ${S.length} · completati ${S.filter(s=>A[s]&&A[s].stessa).length}`;
  R.forEach((r,j)=>{const el=$("#r"+j);el.classList.toggle("cur",j===c);if(r.txt){const t=el.querySelector("textarea");if(document.activeElement!==t)t.value=a[r.k]||"";return}
-  const v=a[r.k]||r.d;el.classList.toggle("chg",!!r.d&&v!==r.d);el.querySelectorAll("button").forEach(b=>b.classList.toggle("on",v===b.dataset.v))});save()}
+  const v=a[r.k]||r.d;el.classList.toggle("chg",!!r.d&&v!==r.d);el.querySelectorAll("button").forEach(b=>b.classList.toggle("on",v===b.dataset.v));
+  if(r.tk){const t=el.querySelector("textarea");if(document.activeElement!==t)t.value=a[r.tk]||""}});save()}
 function step(d){const r=R[c];if(r.txt){if(d>0)$("#r"+c+" textarea").focus();return}const vs=r.o.map(x=>x[0]);let k=vs.indexOf(cur()[r.k]||r.d);
  k=k<0?(d>0?0:vs.length-1):Math.max(0,Math.min(vs.length-1,k+d));cur()[r.k]=vs[k];show()}
 function move(d){c=Math.max(0,Math.min(R.length-1,c+d));show();$("#r"+c).scrollIntoView({block:"nearest"})}
 document.querySelectorAll("button[data-j]").forEach(b=>b.onclick=()=>{c=+b.dataset.j;cur()[R[c].k]=b.dataset.v;show()});
-document.querySelectorAll("textarea").forEach(t=>{t.onfocus=()=>{c=+t.dataset.j;show()};t.oninput=()=>{cur()[R[+t.dataset.j].k]=t.value;save()}});
+document.querySelectorAll("textarea").forEach(t=>{t.onfocus=()=>{c=+t.dataset.j;show()};t.oninput=()=>{cur()[t.dataset.k||R[+t.dataset.j].k]=t.value;save()}});
 addEventListener("keydown",e=>{if(e.target.tagName==="TEXTAREA"){if(["Escape","ArrowUp","ArrowDown"].includes(e.key)){e.preventDefault();e.target.blur();
   if(e.key!=="Escape")move(e.key==="ArrowDown"?1:-1)}return}
  if(e.key==="ArrowDown"){e.preventDefault();move(1)}else if(e.key==="ArrowUp"){e.preventDefault();move(-1)}
  else if(e.key==="ArrowRight"){e.preventDefault();step(1)}else if(e.key==="ArrowLeft"){e.preventDefault();step(-1)}
  else if(e.key==="Enter"){e.preventDefault();if(i<S.length-1){i++;c=0;show();$("#side").scrollTop=0}}else if(e.key==="Backspace"){e.preventDefault();if(i>0){i--;c=0;show();$("#side").scrollTop=0}}
+ else if(R[c].tk&&e.key.length===1&&!e.ctrlKey&&!e.metaKey){$("#r"+c+" textarea").focus()}
  else if(e.key.toLowerCase()==="z")$("#view").classList.toggle("zoom")});
+$("#view").onclick=()=>$("#view").classList.toggle("zoom");
 const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
-$("#exp").onclick=()=>{let t="slot,stessa,direzione,"+CH.map((_,j)=>"c"+(j+1)).join(",")+",eccezioni,dmg,note\n";S.forEach(s=>{const a=A[s]||{};const done=!!a.stessa;
- t+=[s,a.stessa||"",q(a.direzione),...CH.map((_,j)=>done?(a["c"+(j+1)]||"segue"):""),q(a.eccezioni),done?(a.dmg||"come"):"",q(a.note)].join(",")+"\n"});
+$("#exp").onclick=()=>{let t="slot,stessa,direzione,"+CH.map((_,j)=>"c"+(j+1)).join(",")+","+CH.map((_,j)=>"t"+(j+1)).join(",")+",eccezioni,dmg,note\n";S.forEach(s=>{const a=A[s]||{};const done=!!a.stessa;
+ t+=[s,a.stessa||"",q(a.direzione),...CH.map((_,j)=>done?(a["c"+(j+1)]||"segue"):""),...CH.map((_,j)=>q(a["t"+(j+1)])),q(a.eccezioni),done?(a.dmg||"come"):"",q(a.note)].join(",")+"\n"});
  const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_characters_eye_alessandro.csv";l.click()};
 show();
 </script></body></html>"""
