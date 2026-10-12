@@ -136,3 +136,27 @@ across genres, was the most sensitive to this tiny difference.
   alter the plain CLIP that feeds the other encode.
 * **The four version-1 gate renders** stay in the folder, unused; the new gate rows are named `..._v2`.
 * Tests, thresholds, material and the noise seed are unchanged. Blocks A, B and C had not been rendered.
+
+## Amendment 2 (2026-10-12, after the renders were queued, before any label)
+
+Written after a literature search on massive activations (Sun et al. 2024, arXiv 2402.17762). Qwen3-VL-4B's hidden
+states have a few channels far larger than the rest. In the C67 baseline of V1 at the last tap, channels 4 and 0
+average 84.7 times the median channel (`data/te_massive_channels.csv`, `experiments/te_massive_channels.py`,
+exploratory).
+
+The real pushes touch these channels first, but are not dominated by them. Over the 20 C65 edits at the last tap:
+
+* the two large channels carry 2–14% of the push energy;
+* the push's own ten largest channels carry 5–19%;
+* the component shared by all tokens carries 21–57%.
+
+**Consequence for block C.** The **permuted** variant moves the push's components from the large channels into
+ordinary ones. That is a perturbation no real edit produces, so it could change the picture for a reason other than
+the size of the push. The **shared** and **token** variants do not have this property. Therefore:
+
+* C1 (permuted) is reported together with C2 (shared) and C3 (token), never alone;
+* if C1 and C2/C3 disagree, the result is read as **"depends on the form of the push"**, not as support for either
+  reading.
+
+The rules and thresholds are unchanged. This amendment was written while the renders were running and before any C72
+image was looked at or labelled.
