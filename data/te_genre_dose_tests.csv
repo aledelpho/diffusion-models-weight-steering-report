@@ -1,0 +1,7 @@
+test,value,verdict
+G1d,"rho 0.054 (p 0.821, n 20) style share vs intensity",not supported
+G1d within L06_mlp_p1.00,rho -0.447 (n 5),reported
+G1d within L12_mlp_p1.00,rho 0.000 (n 5),reported
+G2d,"rho 0.699 (p 0.001, n 20) mean intensity vs order score 1-5",supported
+G3d,"rho 0.796 (p 0.000, n 20) mean intensity vs conditioning size",supported
+intensity by genre label (reported),"{""anime"": 2.23, ""cartoon"": 2.82, ""fumetto"": 0.84}",reported
