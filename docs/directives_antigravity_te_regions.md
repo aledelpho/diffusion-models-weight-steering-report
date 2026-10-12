@@ -7,7 +7,7 @@ run `--plan`.
 
 ## Step 0 — update the probe node
 
-The node has a new optional input (`taps`). Copy the repository's version over the installed one and restart
+The node has a new optional input (`taps`; C68 leaves it empty and stores all 12 taps, about 2 GB in total). Copy the repository's version over the installed one and restart
 ComfyUI through StabilityMatrix:
 
 ```powershell
@@ -35,7 +35,7 @@ If it prints `FAIL`, **stop** and paste.
 ## Step 2 — paste back
 
 Write `docs/RENDERS_2026-10-12_te_regions.md` with the exact commands and outputs inside plain triple-backtick
-fences, and the size of `Text2Img\benchmark_te_regions`. Do not commit; Claude commits and runs `--analyze`.
+fences, and the size of `Text2Img\benchmark_te_regions` (expected around 2 GB). Do not commit; Claude commits and runs `--analyze`.
 
 ## Not authorised
 

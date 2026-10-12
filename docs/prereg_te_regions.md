@@ -17,7 +17,9 @@ regions?**
 ## Material
 
 The 20 C65 edits on the five word orders of the elf and on the seven comic characters: 240 encodes, stored in full
-for the last three taps (layers 29, 32, 35; every one of the 20 edits reaches them), plus one edit encoded twice.
+for **all 12 taps** (revised with Alessandro on 2026-10-12, before any encode: the first draft kept only the last
+three), plus one edit encoded twice. **Primary analysis on the taps each edit reaches** (as in C67); the last three
+taps (layers 29, 32, 35, reached by every edit) are repeated as a like-for-like comparison and reported.
 The baselines are the C67 full files (all taps). Change = edited − baseline; **residual** = change minus its mean
 over the prompt's positions (the shared push removed); template tokens dropped.
 
@@ -32,6 +34,9 @@ The edit encoded twice is identical; on 10 edits the relative change recomputed 
 diff files within 2 × 2⁻¹¹ (both are limited by float16). Otherwise stop.
 
 ## The answer to "how large"
+
+**Per tap** (reported): the half-life below, computed at each single tap an edit reaches — does the region size grow
+with depth?
 
 **Size** (reported, deciding nothing): for each prompt, the mean cosine between residuals of tokens at distance
 k = 1 … 40; the **half-life** = the first k at which it falls to half its value at k = 1. Per edit the median over
@@ -50,6 +55,6 @@ about 6 tokens, a sentence about 25).
 
 ## Limits
 
-Three taps only (the last); a region effect that exists only at early taps is not seen. Units are punctuation-based,
+Units are punctuation-based,
 not semantic. H3–H4 use the same eye labels as C67 (one observer); H3 rests on 20 edits. The residual removes the
 mean push over the whole prompt, so a region that dominates the prompt also dominates that mean.

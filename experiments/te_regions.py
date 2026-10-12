@@ -1,7 +1,7 @@
 """C68 — how large are the regions of the prompt that a text-encoder edit pushes the same way?
 (docs/prereg_te_regions.md). Written 2026-10-12, before any C68 encode. No images.
 
-  python te_regions.py --plan            # data/te_regions_plan.csv (20 C65 edits x 5 word orders + 7 characters, full, last 3 taps)
+  python te_regions.py --plan            # data/te_regions_plan.csv (20 C65 edits x 5 word orders + 7 characters, full, all 12 taps)
   python te_regions.py --queue --first 2 # the gate pair (one edit encoded twice)
   python te_regions.py --queue           # everything else
   python te_regions.py --count
@@ -9,8 +9,9 @@
   python te_regions.py --analyze         # data/te_regions_*.csv and the tests (Claude)
   python te_regions.py --selftest
 
-Change of an edit = edited conditioning (C68, last three taps: layers 29, 32, 35 — read by every edit of the set) minus
-the C67 baseline of the same prompt (stored in full). Residual = change minus its mean over the prompt's positions
+Change of an edit = edited conditioning (C68, all 12 taps; amendment of 2026-10-12 before any encode) minus the C67
+baseline of the same prompt (stored in full). Primary analysis on the taps the edit reaches; per-tap sizes and the
+last three taps (reached by every edit) reported. Residual = change minus its mean over the prompt's positions
 (the shared push C67 found). All units are built from the decoded tokens with fixed rules (`units()`).
 """
 import argparse, csv, itertools, json, re, sys, urllib.request
@@ -23,7 +24,8 @@ import te_conditioning as T
 DATA = HERE.parent / "data"
 PLAN = DATA / "te_regions_plan.csv"
 FOLDER = "benchmark_te_regions"
-TAPS = [9, 10, 11]                         # tap indices (layers 29, 32, 35)
+TAPS = list(range(12))                     # all tap indices (layers 2, 5, ..., 35)
+LAST3 = [9, 10, 11]
 ORDERS = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
 CHARS = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter", "G5_gnome_wizard", "H3_halfling_druid",
          "R6_dragonborn_cleric", "T7_tiefling_bard"]
@@ -58,7 +60,7 @@ def make_plan():
 def workflow(r):
     wf = T.workflow({"prompt_text": r["prompt_text"], "te_granular_json": r["te_granular_json"], "out": r["out"],
                      "mode": "full", "baseline": ""})
-    wf["90"]["inputs"]["taps"] = ",".join(map(str, TAPS))
+    wf["90"]["inputs"]["taps"] = ""            # all taps
     return wf
 
 
@@ -103,9 +105,9 @@ def gate():
         D, _ = change(r["set"], r["prompt_id"], r["cond"])
         Bv, _ = base(r["set"], r["prompt_id"])
         rel = np.linalg.norm(D, axis=-1) / (np.linalg.norm(Bv, axis=-1) + 1e-6)
-        ref = np.load(T.out_path(r["set"], r["prompt_id"], r["cond"]))["rel"][:, TAPS]
+        ref = np.load(T.out_path(r["set"], r["prompt_id"], r["cond"]))["rel"]
         worst = max(worst, float(np.abs(rel - ref).max()))
-    print(f"agreement with the C67 diff files (10 edits, last 3 taps): max |rel - rel_C67| = {worst:.6f} (limit {2 * FLOOR:.6f})")
+    print(f"agreement with the C67 diff files (10 edits, all taps): max |rel - rel_C67| = {worst:.6f} (limit {2 * FLOOR:.6f})")
     ok = same and worst <= 2 * FLOOR
     print("GATE", "PASS" if ok else "FAIL - stop")
     return ok
@@ -176,6 +178,33 @@ def size_curve(R, cl_of):
 
 def analyze():
     inv = T.vocab()
+    unit = {r["cond"]: r["unit"] for r in rd(PLAN)}
+    # per-tap size (reported): half-life of the residual similarity at each single tap the edit reaches
+    by_tap = []
+    for r in rd(PLAN):
+        if r["cond"].endswith("_again"):
+            continue
+        D, ids = change(r["set"], r["prompt_id"], r["cond"])
+        for t in range(T.first_tap(r["unit"]), 12):
+            R = residual(D[:, [t]], ids, inv)
+            cl = units(ids, inv, "clause"); cl_of = np.full(len(R), -1)
+            for j, u in enumerate(cl):
+                cl_of[[p for p in u["pos"] if p < len(R)]] = j
+            _, half, b = size_curve(R, cl_of)
+            by_tap.append({"cond": r["cond"], "prompt": r["prompt_id"], "tap_layer": T.TAPS[t], "half_life": half, "same_minus_cross_clause": round(b, 4)})
+    with open(DATA / "te_regions_size_by_tap.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(by_tap[0])); w.writeheader(); w.writerows(by_tap)
+    for L in T.TAPS:
+        xs = [x["half_life"] for x in by_tap if x["tap_layer"] == L]
+        if xs:
+            print(f"tap layer {L:2d}: median half-life {np.median(xs):.1f} tokens over {len(xs)} edit-prompts")
+    for mode in ("reached", "last3"):
+        _analyze(inv, unit, mode)
+
+
+def _analyze(inv, unit, mode):
+    sel = (lambda k: list(range(T.first_tap(unit[k]), 12))) if mode == "reached" else (lambda k: LAST3)
+    tag = "" if mode == "reached" else "_last3"
     edits = []
     for r in rd(PLAN):
         if not r["cond"].endswith("_again") and r["cond"] not in edits:
@@ -187,7 +216,7 @@ def analyze():
         # word orders
         U = {}
         for v in ORDERS:
-            D, ids = change("order", v, k); R = residual(D, ids, inv)
+            D, ids = change("order", v, k); D = D[:, sel(k)]; R = residual(D, ids, inv)
             cl = units(ids, inv, "clause"); cl_of = np.full(len(R), -1)
             for j, u in enumerate(cl):
                 cl_of[[p for p in u["pos"] if p < len(R)]] = j
@@ -205,7 +234,7 @@ def analyze():
         # characters: the frame shared by all seven prompts
         F = {}
         for ch in CHARS:
-            D, ids = change("chars", ch, k); R = residual(D, ids, inv)
+            D, ids = change("chars", ch, k); D = D[:, sel(k)]; R = residual(D, ids, inv)
             cl = units(ids, inv, "clause"); cl_of = np.full(len(R), -1)
             for j, u in enumerate(cl):
                 cl_of[[p for p in u["pos"] if p < len(R)]] = j
@@ -217,7 +246,7 @@ def analyze():
                           "order_disagreement_sentence": round(dis["sentence"][0], 4), "order_disagreement_clause": round(dis["clause"][0], 4),
                           "order_disagreement_word": round(dis["word"][0], 4), "n_clauses_matched": dis["clause"][1], "frame_units": len(shared),
                           "frame_agreement_chars": round(float(np.mean([cos(frame_vec[k][a], frame_vec[k][b]) for a, b in itertools.combinations(CHARS, 2)])), 4)})
-    for name, rows in (("te_regions_size.csv", size_rows), ("te_regions_curves.csv", curves)):
+    for name, rows in ((f"te_regions_size{tag}.csv", size_rows), (f"te_regions_curves{tag}.csv", curves)):
         with open(DATA / name, "w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     S = {r["cond"]: r for r in size_rows}
@@ -227,7 +256,7 @@ def analyze():
     for k in edits:
         vals = []
         for v in ORDERS:
-            D, ids = change("order", v, k)
+            D, ids = change("order", v, k); D = D[:, sel(k)]
             cl = units(ids, inv, "clause")
             X = np.stack([D[[p for p in u["pos"]]].reshape(len(u["pos"]), -1).mean(0) for u in cl])
             C = cosm(X); vals.append(float(C[np.triu_indices(len(X), 1)].mean()))
@@ -274,8 +303,12 @@ def analyze():
                 "n": len(edits), "value": f"{np.median([S[k]['half_life_tokens_median'] for k in edits]):.1f} tokens "
                 f"(range {min(S[k]['half_life_tokens_median'] for k in edits):.0f}-{max(S[k]['half_life_tokens_median'] for k in edits):.0f})",
                 "rule": "reported (the answer to 'how large')", "verdict": "reported"})
-    with open(DATA / "te_regions_tests.csv", "w", newline="", encoding="utf-8") as f:
+    if mode != "reached":
+        for x in res:
+            x["verdict"] = "reported (last three taps)"
+    with open(DATA / f"te_regions_tests{tag}.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["test", "n", "value", "rule", "verdict"]); w.writeheader(); w.writerows(res)
+    print("==", mode)
     for r in res:
         print(r)
 
