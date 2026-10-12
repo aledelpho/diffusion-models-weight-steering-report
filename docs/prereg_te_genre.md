@@ -61,3 +61,29 @@ Alessandro labelled seed 3141592 only (105 images); seed 1234567 is empty. G2 an
 over the **5** images of seed 3141592 per edit instead of 10. The rate can only take the values 0, 0.2, … 1, so ties
 are many; the rules are unchanged. G1 is unaffected (it was seed 3141592 only). The tally script
 (`experiments/te_genre_tally.py`) is written after this amendment.
+
+## Amendment 2 (2026-10-12, after G1-G3 were counted, before any intensity label)
+
+Alessandro pointed out that a binary "switched / not switched" may hide what happens, and asked for an intensity per
+image. Second labelling pass, seed 3141592, 105 images (`Text2Img\_grid_viewer\te_genre_dose.html`, CSV
+`data/te_genre_dose_alessandro.csv`, committed as downloaded). For each image, how far its style moves from the
+original of the same column:
+
+* 0 = same style;
+* 1 = slight drift;
+* 2 = clearly another style, with traces of the original;
+* 3 = entirely another genre.
+
+The page shows the genre labels already given. G1–G3 above stand as counted (`data/te_genre_tests.csv`). The new
+tests are:
+
+| test | measure | rule |
+|---|---|---|
+| G1d | the 20 C69 images: style share vs intensity | Spearman ρ ≤ −0.40 → supported |
+| G2d | the 20 edits: mean intensity (5 images) vs order score 1–5 | ρ ≥ 0.50 → supported |
+| G3d | the 20 edits: mean intensity vs conditioning size | ρ ≥ 0.50 → supported |
+
+Reported: G1d inside L06 MLP+ and inside L12 MLP+ (5 images each, no rule).
+
+Limit: Alessandro gives these labels after the binary G1 result was reported to him; the per-image style shares
+were not shown.

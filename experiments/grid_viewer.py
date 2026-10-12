@@ -10,7 +10,7 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|all] [--img-root PATH] [--budget 160] [--workers 2]
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|all] [--img-root PATH] [--budget 160] [--workers 2]
       -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
@@ -397,7 +397,33 @@ def build_te_genre():
     return {"title": "Genere delle immagini (C70)", "grids": grids, "notes_file": "te_genre_alessandro.csv"}
 
 
-SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre}
+def build_te_genre_dose():
+    """C70 amendment 2: how far each image moves from the style of the original of its column (0-3), seed 3141592."""
+    plan = rd("te_characters_plan.csv")
+    edits = []
+    for r in plan:
+        if r["phase"] == "order" and r["cond"] not in edits:
+            edits.append(r["cond"])
+    orders = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
+    cols = ["1 · originale", "2 · soggetto prima", "3 · sfondo prima", "4 · azione prima", "5 · inverso"]
+    seed = "3141592"
+    gl = {r["row"]: [r[f"g{i}"] for i in range(1, 6)] for r in rd("te_genre_alessandro.csv") if r["grid"] == f"te_genre_{seed}"}
+    base = {v: f"benchmark_prompt_order/{v}_baseline_krea2_seed{seed}_00001_.png" for v in orders}
+    rows = [{"label": "originali", "cells": [cell(base[v], base[v], "base · " + gl.get("originali", [""] * 5)[i]) for i, v in enumerate(orders)]}]
+    for k in edits:
+        rows.append({"label": k, "cells": [cell(f"benchmark_te_characters/{v}_{k}_krea2_seed{seed}_00001_.png", base[v],
+                                                f"{i + 1} · {gl.get(k, [''] * 5)[i]}") for i, v in enumerate(orders)]})
+    grids = [{"id": f"te_dose_{seed}", "title": f"C70 · quanto si allontana dall'originale · seed {seed}",
+              "note": "Per ogni immagine: quanto il suo stile si allontana dall'originale della stessa colonna. "
+                      "0 = stesso stile · 1 = deriva leggera (qualche tratto diverso) · 2 = chiaramente un altro stile, con tracce "
+                      "dell'originale · 3 = del tutto un altro genere. Sotto ogni immagine il genere che hai già scelto.",
+              "cols": cols, "rows": rows,
+              "notes": {"head": "intensità per colonna (0-3)", "w": "330px", "cls": "gen",
+                        "qs": [{"k": f"d{i}", "lab": str(i), "o": ["0", "1", "2", "3"]} for i in range(1, 6)]}}]
+    return {"title": "Intensità del cambio di stile (C70)", "grids": grids, "notes_file": "te_genre_dose_alessandro.csv"}
+
+
+SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre, "te_genre_dose": build_te_genre_dose}
 
 
 # ---------------------------------------------------------------- build
