@@ -1,0 +1,6 @@
+test,value,verdict
+H1,"rho -0.009 (p 0.971, n 20) cos(push, anime direction) vs anime count",not supported
+H2,"rho -0.001 (p 0.996) cos(push, anime - painting) vs anime count",not supported
+R1 cartoon (reported),"rho 0.521 (p 0.018) cos(push, cartoon - painting) vs cartoon count",
+R2 control (reported),"rho 0.061 (p 0.797) cos(push, painting direction) vs anime count",
+R3 style directions (reported),"{""anime~cartoon"": 0.7907, ""anime~painting"": 0.3645, ""cartoon~painting"": 0.3767}",
