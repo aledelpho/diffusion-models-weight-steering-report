@@ -1,0 +1,9 @@
+test,n,value,rule,verdict
+H1 clauses of one prompt are pushed less alike than the whole prompt across orders,20,20/20 edits; median clause agreement 0.576,>= 16 of 20,reported (last three taps)
+"H2 at equal distance, tokens of the same clause are pushed more alike than across clauses",20,"18/20 edits, sign test p = 0.0002",>= 15 of 20 and p < 0.05,reported (last three taps)
+H3 order disagreement of the clause residuals vs the 1-5 scores,20,"rho -0.384, p 0.0947",rho >= 0.50 (clause decides; sentence and word reported),reported (last three taps)
+H3 order disagreement of the sentence residuals vs the 1-5 scores,20,"rho -0.333, p 0.1509",rho >= 0.50 (clause decides; sentence and word reported),reported (last three taps)
+H3 order disagreement of the word residuals vs the 1-5 scores,20,"rho -0.377, p 0.1014",rho >= 0.50 (clause decides; sentence and word reported),reported (last three taps)
+H4a frame residual agreement across characters vs 'same direction',34,"rho 0.180, p 0.3082",rho >= 0.40,reported (last three taps)
+"H4b exceptions: a character's frame residual vs the other six, follows vs another way",157+81,AUC 0.578,AUC >= 0.70,reported (last three taps)
+"SIZE half-life of the residual similarity, tokens (median over edits; per edit = median over the 12 prompts)",20,3.0 tokens (range 2-5),reported (the answer to 'how large'),reported (last three taps)
