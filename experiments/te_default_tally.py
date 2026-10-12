@@ -95,7 +95,9 @@ def words_report(rows):
         if x:
             out.append({"test": f"word '{word}' (reported)", "value": f"genres {x['genres']} | persons {x['persons']} | beards {x['beards']}", "verdict": ""})
     x = find("dwarf")
-    if x:
+    if x and not x["persons"].strip():
+        out.append({"test": "'dwarf' alone gives a bearded man in >= 3 of 4 seeds (reported)", "value": "row not labelled", "verdict": "n/a"})
+    elif x:
         n = sum(1 for p, b in zip(x["persons"].split(), x["beards"].split()) if p == "uomo" and b == "sì")
         out.append({"test": "'dwarf' alone gives a bearded man in >= 3 of 4 seeds (reported)", "value": f"{n} of 4", "verdict": "yes" if n >= 3 else "no"})
     allg = Counter(g for x in table for g in x["genres"].split())

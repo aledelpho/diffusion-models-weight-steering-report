@@ -1,0 +1,15 @@
+test,value,verdict
+A1,9 anime of 9 labelled ({'anime': 9}),default anime: supported (incomplete labels)
+C1 (permuted),switch rate 0.41 (11/27) / real 0.52 (14/27) = R 0.79,size alone suffices: supported
+C2 (shared),switch rate 0.00 (0/27) / real 0.52 (14/27) = R 0.00,the direction matters
+C3 (token),switch rate 0.37 (10/27) / real 0.52 (14/27) = R 0.71,size alone suffices: supported
+C joint reading (amendment 2),size alone suffices: supported; the direction matters; size alone suffices: supported,depends on the form of the push
+empty prompt (reported),"['anime', 'realist', 'anime', 'pittura']",
+anime share among switched random pushes (reported),15/21,
+broken pictures per variant (reported),{},
+word 'dwarf' (reported),genres     | persons     | beards    ,
+word 'female dwarf' (reported),genres cartoon pittura cartoon fumetto | persons donna donna donna donna | beards sì sì sì sì,
+word 'female paladin mountain dwarf' (reported),genres pittura pittura pittura pittura | persons donna donna donna donna | beards sì sì sì sì,
+word 'uniform' (reported),genres anime anime anime anime | persons donna donna donna donna | beards no no no no,
+'dwarf' alone gives a bearded man in >= 3 of 4 seeds (reported),row not labelled,n/a
+genres over all single-word pictures (reported),"{'fumetto': 9, 'cartoon': 11, 'realist': 78, 'pittura': 36, 'anime': 23, 'nessuno': 4, 'altro': 4}",

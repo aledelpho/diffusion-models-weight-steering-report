@@ -1,0 +1,44 @@
+word,genres,persons,beards
+W00 · realistic western comics style,fumetto fumetto fumetto fumetto,uomo uomo uomo uomo,sì sì sì sì
+W01 · bold ink outlines,fumetto cartoon cartoon cartoon,uomo uomo donna uomo,no no no no
+W02 · hatched shadows,realist realist realist realist,nessuna nessuna nessuna nessuna,no no no no
+W03 · smug grin with half-closed eye,pittura pittura realist pittura,donna uomo donna uomo,no no no no
+W04 · seen from a high angle,realist realist realist realist,ambiguo ambiguo ambiguo ambiguo,no no no no
+W05 · from above,realist realist realist realist,ambiguo ambiguo nessuna nessuna,no no no no
+W06 · top view,realist realist realist realist,nessuna nessuna nessuna nessuna,no no no no
+W07 · dynamic,anime anime anime anime,donna uomo uomo donna,no no no no
+W08 · upper body portrait,pittura pittura pittura pittura,donna donna donna donna,no no no no
+W09 · close-up on gauntlet,realist   ,ambiguo ambiguo ambiguo ambiguo,no no no no
+W10 · dynamic pose,cartoon pittura cartoon pittura,uomo uomo uomo uomo,no no no no
+W11 · dramatic angle,pittura realist realist realist,donna uomo uomo donna,no no no no
+W12 · strong perspective,realist realist realist realist,nessuna nessuna nessuna nessuna,no no no no
+W13 · female antlered elf brawler,anime anime fumetto anime,donna donna donna donna,no no no no
+W14 · tousled green hair fading to teal at the tips,realist realist realist realist,ambiguo ambiguo ambiguo ambiguo,no no no no
+W15 · thick green eyebrows,realist realist realist realist,ambiguo ambiguo ambiguo ambiguo,no no no no
+W16 · an eyepatch over one eye,pittura anime realist pittura,ambiguo uomo ambiguo uomo,no no no no
+W17 · pointed ears,pittura anime anime anime,donna donna donna donna,no no no no
+W18 · tan sun-kissed skin gradient,realist realist realist realist,ambiguo donna ambiguo donna,no no no no
+W19 · small pair of pale antlers,realist realist realist realist,nessuna nessuna nessuna nessuna,no no no no
+W20 · young adult,realist realist anime realist,uomo uomo donna uomo,no sì no no
+W21 · a sharp bright green visible eye,realist realist realist realist,donna ambiguo donna donna,no no no no
+W22 · wide reckless grin,anime anime anime fumetto,uomo uomo donna uomo,no no no no
+W23 · fur-collared dark navy jacket with a gold wood-textured pauldron,pittura realist realist realist,ambiguo ambiguo ambiguo ambiguo,no no no no
+W24 · black uniform,realist anime realist realist,donna uomo donna donna,no no no no
+W25 · brown leather arm straps,realist realist realist realist,nessuna nessuna nessuna nessuna,no no no no
+W26 · looking to her left,pittura pittura pittura pittura,donna donna donna donna,no no no no
+W27 · wearing a heavy silver gauntlet crackling with blue electric energy,realist realist realist realist,ambiguo ambiguo ambiguo ambiguo,no no no no
+W28 · showing fist to viewer,realist realist realist realist,ambiguo ambiguo ambiguo ambiguo,no no no no
+W29 · wildly smug expression,pittura realist cartoon pittura,donna uomo donna uomo,no sì no no
+W30 · background,pittura pittura realist realist,nessuna uomo nessuna nessuna,no sì no no
+W31 · white empty background,nessuno nessuno nessuno nessuno,nessuna nessuna nessuna nessuna,no no no no
+W32 · flat background,altro altro altro altro,nessuna nessuna nessuna nessuna,no no no no
+W33 · lighting,realist realist realist realist,nessuna ambiguo nessuna nessuna,no no no no
+W34 · warm light,realist realist realist realist,nessuna nessuna donna nessuna,no no no no
+W35 · deep amber shadows and sharp blue highlights along her electrified gauntlet,pittura pittura pittura pittura,donna donna donna donna,no no no no
+W36 · dwarf,   ,   ,   
+W37 · female dwarf,cartoon pittura cartoon fumetto,donna donna donna donna,sì sì sì sì
+W38 · female paladin mountain dwarf,pittura pittura pittura pittura,donna donna donna donna,sì sì sì sì
+W39 · elf,anime pittura pittura anime,donna donna donna donna,no no no no
+W40 · female elf,pittura pittura anime pittura,donna donna donna donna,no no no no
+W41 · uniform,anime anime anime anime,donna donna donna donna,no no no no
+W42 · brawler,cartoon fumetto cartoon cartoon,uomo uomo uomo uomo,no no no no

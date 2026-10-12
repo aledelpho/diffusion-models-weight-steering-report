@@ -1,0 +1,13 @@
+edit,variant,switched,labelled,genres
+L05_mlp_p1.00,reale,9,9,{'anime': 10}
+L05_mlp_p1.00,permuted,0,9,{'fumetto': 10}
+L05_mlp_p1.00,shared,0,9,{'fumetto': 10}
+L05_mlp_p1.00,token,1,9,"{'fumetto': 8, 'anime': 2}"
+L06_mlp_p1.00,reale,5,9,"{'fumetto': 5, 'anime': 3, 'cartoon': 2}"
+L06_mlp_p1.00,permuted,2,9,"{'fumetto': 8, 'anime': 2}"
+L06_mlp_p1.00,shared,0,9,{'fumetto': 10}
+L06_mlp_p1.00,token,2,9,"{'fumetto': 7, 'anime': 3}"
+L28_mlp_p1.00,reale,0,9,{'fumetto': 10}
+L28_mlp_p1.00,permuted,9,9,"{'cartoon': 4, 'anime': 6}"
+L28_mlp_p1.00,shared,0,9,{'fumetto': 10}
+L28_mlp_p1.00,token,7,9,"{'cartoon': 2, 'anime': 6, 'fumetto': 2}"
