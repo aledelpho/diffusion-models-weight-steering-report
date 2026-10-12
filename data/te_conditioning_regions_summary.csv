@@ -1,0 +1,9 @@
+what,median_cos
+"same region (style), different edits",0.5865
+"same region (framing), different edits",0.5803
+"same region (subject), different edits",0.5366
+"same region (clothes), different edits",0.4704
+"same region (action), different edits",0.5202
+"same region (background), different edits",0.508
+"same region (lighting), different edits",0.5262
+"different regions, same edit",0.7354
