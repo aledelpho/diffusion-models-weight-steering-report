@@ -56,10 +56,10 @@ output here.
 | L28 MLP doubled (largest push) | 0 | 9 | 0 | 7 |
 
 * **Words alone (block B), 4 seeds each:**
-  * "uniform" → an anime woman in 4 of 4;
+  * "uniform" → an anime girl in a school uniform in 4 of 4;
   * "female dwarf" → a woman **with a beard** in 4 of 4;
   * "female paladin mountain dwarf" → a bearded woman in 4 of 4;
-  * "realistic western comics style" → a bearded man drawn as a Western comic in 4 of 4;
+  * "realistic western comics style" → bearded cowboys in comic panels in 4 of 4 ("western" read as the American West);
   * "dynamic" → anime in 4 of 4;
   * "female antlered elf brawler" → anime in 3 of 4;
   * "wide reckless grin" → anime in 3 of 4;
@@ -90,7 +90,7 @@ output here.
 4. **The word priors predict what surfaces.**
    * "female dwarf" is drawn with a beard on its own; the beard Alessandro saw on the dwarf under edits is the
      model's prior for "dwarf", not something the edit created.
-   * "uniform" alone is an anime uniform, as in the L05 pictures.
+   * "uniform" alone is an anime school uniform (the L05 pictures show a military one).
 
 ## Limits
 

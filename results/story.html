@@ -313,14 +313,30 @@ tell the switched pictures from the others.</p>
 "anime style" in place of "western comics style" and compared the two moves. They have nothing in common.
 The edits push somewhere else entirely, and 5 to 24 times harder than swapping a style word.</p>
 <p><img alt="Left, for each of 20 edits, the cosine between its push and the text's own comics-to-anime direction is near zero whatever the number of anime pictures; right, each push is 5 to 24 times the size of swapping the style word." src="../assets/30-the-text-encoder/F30.6_te_direction_vs_anime.webp" /></p>
-<p>What is left is a guess, not a result. These edits throw the conditioning far away from anything a normal
-prompt would produce. The image model then reads less of the prompt and falls back on its own habit for
-"an illustration", which for this model is anime. The guess has clear exceptions, and the experiment that
-would settle it — random pushes of the same size, with no weight edited — is still to be done.</p>
+<p>So I stopped guessing and looked. I removed the three words that name the style and kept everything
+else. Every time, the elf came out as anime: same character, same pose, flatter colours and no hatching.
+Anime is where this description goes when nothing holds it in a style. It is not the model's answer to
+nothing at all: an empty prompt gives anime, a photograph, anime, a painting.</p>
+<p><img alt="The elf in five word orders at two seeds, with and without the three style phrases: with them every picture is labelled Western comic, without them every labelled picture is anime, with the same character and pose." src="../assets/30-the-text-encoder/F30.7_te_nostyle_sheet.webp" /></p>
+<p>Then the control a reviewer asked for: random pushes on the text as large as the edits, with no weight
+touched. If the anime were only about the size of the push, random pushes should get there too. Some do:
+random noise that varies from word to word sends the picture to anime or cartoon about as often as the
+edits. But the same random push added equally to every word does nothing at all. And the real edits are
+not random. The one with the largest push keeps the comic every time, where random pushes of its size
+break it almost every time; another, with a smaller push, turns everything to anime, where random pushes
+almost never do. Each edit has a direction of its own.</p>
+<p><img alt="For L05, L06 and L28 MLP doubled at order 1: the real edit, then three random pushes of the same size; L05's real edit is anime while its random pushes stay comic, and L28's real edit stays comic while its permuted and token random pushes turn cartoon." src="../assets/30-the-text-encoder/F30.8_te_random_push_sheet.webp" /></p>
+<p>Last, I asked the model to draw each phrase of the prompt on its own. Some answers explain what we had
+seen. "Female dwarf" is drawn with a beard, every time — so the beard on my dwarf under edits was the
+model's own picture of a dwarf. "Uniform" is always an anime schoolgirl. And "realistic western comics
+style" draws cowboys: the model reads "western" as the Wild West.</p>
+<p><img alt="Four phrases alone at four seeds: 'realistic western comics style' draws bearded cowboys in comic panels, 'uniform' anime schoolgirls, 'female dwarf' a woman with a beard every time, and the elf's own description mostly anime." src="../assets/30-the-text-encoder/F30.10_te_word_priors_sheet.webp" /></p>
 <p>→ <a href="index.html#p-30-the-text-encoder">page 30</a> · the size of the push predicts the change <strong>holds</strong>, mostly between
 kinds of edit · these edits change genre and identity more than they damage the surface <strong>holds</strong> · one edit moves every character the same way
 <strong>overturned</strong> · the switch comes from less attention on the style words <strong>overturned</strong> · or from a push
-toward "anime" <strong>overturned</strong> · anime as the default <strong>open</strong></p>
+toward "anime" <strong>overturned</strong> · without style words the elf falls back to anime <strong>holds</strong> · random
+pushes of the same size do it too <strong>ambiguous</strong> (only if they vary across words) · each edit's own direction
+decides <strong>open</strong></p>
 <hr />
 <h2>11 · What fooled us</h2>
 <p><img alt="The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left." src="../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp" /></p>
@@ -338,7 +354,7 @@ attention alone before giving up on them: most of the noise is in the MLP. A blo
 meant to be corrected, is on <a href="index.html#p-21-block-map--a-starting-guide-what-each-block-seems-to-do">page 21</a>.</p>
 <p><img alt="Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves." src="../assets/21-block-map/F21.5_guide_comic.webp" /></p>
 <p>Not known yet: whether the clean middle edits are truly free; whether a measure can ever replace the
-eye on noise; why edits to the text encoder send pictures to anime, and whether milder doses of them make usable knobs;
+eye on noise; why each text-encoder edit points where it does, whether other characters fall back to anime too, and whether milder doses make usable knobs;
 whether a preset can keep a character's expression as well as its identity (the
 portrait preset kept who they were, not always how they looked at you); whether a blind observer
 would still say "same character" when some sheets show two different ones; whether the noise of a

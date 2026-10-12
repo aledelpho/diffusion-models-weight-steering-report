@@ -1022,3 +1022,46 @@ figures:
       Left, for each of 20 edits, the cosine between its push and the text's own comics-to-anime direction is near
       zero whatever the number of anime pictures; right, each push is 5 to 24 times the size of swapping the style
       word.
+  - id: F30.7
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_nostyle_sheet
+    source: data/te_default_genre_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The elf in five word orders at two seeds, with and without the three style phrases: with them every picture is
+      labelled Western comic, without them every labelled picture is anime, with the same character and pose.
+  - id: F30.8
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_random_push_sheet
+    source: data/te_default_genre_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      For L05, L06 and L28 MLP doubled at order 1: the real edit, then three random pushes of the same size; L05's
+      real edit is anime while its random pushes stay comic, and L28's real edit stays comic while its permuted and
+      token random pushes turn cartoon.
+  - id: F30.9
+    page: 30-the-text-encoder
+    kind: paired_bars
+    builder: results_figures.te_random_push_counts
+    source: data/te_default_cells.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Genre switches per edit and kind of push: the real L05 edit switches 9 of 9 and its random pushes at most 1;
+      the real L28 edit switches none and its permuted and token random pushes 9 and 7; the shared random pushes
+      switch none for any edit.
+  - id: F30.10
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_word_priors_sheet
+    source: data/te_words_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Four phrases alone at four seeds: 'realistic western comics style' draws bearded cowboys in comic panels,
+      'uniform' anime schoolgirls, 'female dwarf' a woman with a beard every time, and the elf's own description
+      mostly anime.

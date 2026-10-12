@@ -145,7 +145,7 @@ pictures:</strong> calibrated on four character portraits and frozen, it gave th
 never seen the look its author had described, about as coherently as on the four (0.51 against
 0.61), and an observer blind to the condition chose it as the closer match in 56 of 56
 comparisons; each character stays recognisable, though the face moves slightly more than under a
-change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. <strong>Editing the text encoder instead</strong> (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style". Rewriting a prompt changes what a block does about as much as
+change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. <strong>Editing the text encoder instead</strong> (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the character is then drawn as anime in 9 of 9 cases (pre-registered) — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
 inconclusive by its own rule. We also report four claims that were made from statistics and
 withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
@@ -288,11 +288,13 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--a-shared-push-made-of-small-regions">Beyond a push shared by the whole prompt, an edit pushes small groups of two to four tokens in their own directions, and the boundaries of those groups follow the commas.</a></td><td class="ev">Pre-registered (C68), all 12 readings, 241 encodes. Half-life of the residual similarity 3 tokens (median over 20 edits, range 2-5). H1: clauses pushed less alike than whole prompts across orders in 20 of 20 edits (0.54 against 0.97-0.99). H2: at equal distance, tokens of one clause pushed more alike than across clauses in 18 of 20, sign test p = 0.0002.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--genre-and-identity-not-surface">At dose ±1, text-encoder edits change the genre and the content of a picture, usually including who is drawn, while costing less surface quality than a DiT preset.</a></td><td class="ev">Pre-registered prediction P2 (C65): BRISQUE change -1.52 against +8.09 for the DiT preset of page 28, CLIP-IQA -0.001 against -0.037. Identity (ArcFace, C65) kept for at most 2 eligible characters in 19 of 20 edits. Exploratory eye pass (C64, 140 edits): surface medium or strong in 8 of 140; strong changes 40 of 70 when a half is doubled against 4 of 70 when it is zeroed.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--inside-the-image-model">Inside the image model, the two strongest text-encoder edits move where the picture reads each phrase of the prompt about twice as much as two mild edits.</a></td><td class="ev">Pre-registered (C69 P4), 25 re-renders pixel-identical to the originals: change of the attention maps against the original 0.29 and 0.30 for L06 and L12 MLP doubled, 0.16 and 0.13 for L10 MLP and L19 attention zeroed.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--the-fallback-is-anime">With its style words removed, the elf character is drawn as anime: anime is the model&#x27;s fallback for this description when nothing names a style, though not its default for an empty prompt.</a></td><td class="ev">Pre-registered (C72 A1): the prompt without &quot;realistic western comics style, bold ink outlines, hatched shadows&quot;, five word orders at two seeds, labelled anime in 9 of 9 labelled pictures (one unlabelled; bar 7 of 10). The same prompts with the style words: Western comic in 9 of 9. The empty prompt at four seeds: anime, realistic, anime, painting. One labeller, not blind.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-21-block-map--what-the-weights-show">How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.</a></td><td class="ev">Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-24-wording--the-registered-rule">Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block&#x27;s effect no more than changing the seed does, while changing the subject changes it a great deal.</a></td><td class="ev">Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-27-other-edits--a-curiosity-attributes-that-appear">A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.</a></td><td class="ev">Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-29-inside-the-block--the-cost-of-a-push-revisited">The fine-texture cost per block measured in notebook page 05 replicates on new seeds for its own two comic prompts, but does not extend as measured to photographs.</a></td><td class="ev">Pre-registered attempt to overturn page 05 (C61): the gate failed (blocks 23-27, G = 0.989, p = 0.26) and the primary was undecided, so by its own rule nothing is decided. On P01 and P02, four new seeds: blocks 1-22 0.989 (page 05: 0.989), blocks 23-27 0.934 (0.932). On two photographs the tail turns into a gain (0.989 overall, block 27 at 1.27).</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-30-the-text-encoder--inside-the-image-model">The strong edits make the five word orders read the same phrases in more different places than the mild edits do, from the first steps of sampling.</a></td><td class="ev">Pre-registered (C69 P1, P2). P1 holds by its rule with a margin of 0.003, and only L12 MLP doubled raises the divergence (+0.060); L06 does not (-0.004) although its pictures scored as high. P2 holds at step 0 but the separation is not kept at steps 3-6.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-30-the-text-encoder--random-pushes-of-the-same-size">A random push of the conditioning as large as an edit&#x27;s changes the genre of the picture as often as the edit does.</a></td><td class="ev">Pre-registered (C72 C1-C3, amendment 2: read together). Per-token random pushes switch the genre about as often as the real edits (permuted 11/27, token 10/27, against 14/27; R 0.79 and 0.71, bar 0.5), mostly to anime (15 of 21 switches); the same random vector added to every token switches none (0/27). By the rule fixed before the labels the joint reading is &quot;depends on the form of the push&quot;.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-25-standard-metrics--a-content-embedding-does-not-see-it">The family-coherent change the eye saw on the middle blocks is a change of content that a content embedding, DINOv2, would record.</a></td><td class="ev">Pre-registered (H5): supported if the median within-family coherence of the five middle arms on DINOv2 changes reached the style-feature value plus 0.10 (0.26). It is 0.007, below the style-feature value 0.159: refuted. In DINOv2 space no arm is family-coherent (all W at most 0.06).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--the-best-doses-by-the-statistic">Pushed to dose 0.500, the macro-block sliders Block_4 and Block_1 move the picture far from the baseline while keeping its line work, and are the best operating points found.</a></td><td class="ev">Published from two statistics, then retracted the next day when the renders were opened: Block_4 + at 0.500 leaves no subject, only a crumpled-stroke texture; Block_1 + at 0.500 is colour confetti. Block_4 + is already broken at 0.350.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-26-what-did-not-work--a-measure-with-the-sign-wrong">Structure coherence, a statistic of oriented line work, can rank edits by how much of the drawing they preserve.</a></td><td class="ev">Pre-registered eye veto: 7 agreements in 9 resolved pairs against a threshold of 8 in 12. Both disagreements are one condition, Block_6 + 0.080, which the statistic scores above its baseline and which I and six blind model observers call broken; Block_1 - 0.500 is the same case. The sign is wrong, not the size.</td></tr>
@@ -316,7 +318,9 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-28-portrait-preset--what-the-preset-takes-away">The portrait preset can flatten an expression the prompt asks for and remove small details the prompt names, while keeping the character recognisable.</a></td><td class="ev">Analyst&#x27;s look after all numbers, not blind, on seven pairs selected because ArcFace marked them: the gnome&#x27;s prompted wide-eyed curiosity becomes a frown at three seeds of three; the half-orc&#x27;s snarl becomes a stern closed face; prompted dirt smudges and chalk dust vanish. No deformation in any of the seven. Untested; block 8 (+0.15) is the first suspect.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-29-inside-the-block--where-the-noise-sits">Pushed at the same dose, the MLP half of a block is noisier than its attention half in most blocks; the attention adds noise only at the very end of the stack.</a></td><td class="ev">Blind eye pass on the split atlas (C59), one seed, three prompts, one observer: of 19 block-sign cells with noise in either half, the MLP is noisier in 13, the attention in 2, tied in 4 (at medium or stronger: 7, 1, 3). Protocol fixed before the labels, no decision rule. The pre-registered measure of C58 could not decide.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-29-inside-the-block--the-first-block">In the first block the two halves compensate each other: either half lowered alone destroys the picture, while the whole block lowered by the same amount keeps its composition, though not its surface.</a></td><td class="ev">C59 at -0.35: attention alone and MLP alone break the image in 9 of 9 cells each by eye; the whole block keeps the layout in 3 of 3 cells (layout r 0.69-0.80 against 0.05-0.36) but is labelled strong blotches blind. The whole block exists at one seed only.</td></tr>
-<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--the-default-is-anime">When a text-encoder edit makes a Western-comic picture change genre, it lands on anime far more often than on anything else, and only edits that double a layer half do it.</a></td><td class="ev">Described, not tested (C70, one observer, seed 3141592, elf in five word orders). Of 100 edited pictures, 50 changed genre: 39 to anime, 11 to cartoon, none to realistic or painting. None of the four edits that zero a layer half changed genre; 13 of the 16 that double one did, in at least one order.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--where-the-switches-go">When a text-encoder edit makes a Western-comic picture change genre, it lands on anime far more often than on anything else, and only edits that double a layer half do it.</a></td><td class="ev">Described, not tested (C70, one observer, seed 3141592, elf in five word orders). Of 100 edited pictures, 50 changed genre: 39 to anime, 11 to cartoon, none to realistic or painting. None of the four edits that zero a layer half changed genre; 13 of the 16 that double one did, in at least one order.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--random-pushes-of-the-same-size">Where a strong text-encoder edit sends the picture depends on the edit&#x27;s own direction, not only on its size.</a></td><td class="ev">Reported, not tested (C72, 9 labelled cells per edit). L28 MLP doubled, the largest push, keeps the Western comic in 9 of 9 while random pushes of its size switch 16 of 18; L05 MLP doubled goes to anime in 9 of 9 while random pushes of its size switch 1 of 18.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--what-each-phrase-draws-alone">Single phrases of the prompt carry strong priors of their own, and they match what surfaces under edits: a female dwarf with a beard, a uniform drawn as anime.</a></td><td class="ev">Described (C72 block B, four seeds, one labeller): &quot;female dwarf&quot; and the full dwarf prompt give a bearded woman in 4 of 4; &quot;uniform&quot; an anime girl in 4 of 4; &quot;realistic western comics style&quot; a bearded cowboy comic in 4 of 4; &quot;female antlered elf brawler&quot; anime in 3 of 4; phrases without a person are mostly realistic (78 of 165).</td></tr>
       </tbody>
     </table>
   </section>
@@ -2612,7 +2616,7 @@ analysis:
 </ul>
 </section>
 <section id="p-30-the-text-encoder">
-<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">1019 renders · 14 prompts · 5 seeds · pre-registered · 2026-10-12</span></p>
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">1299 renders · 63 prompts · 6 seeds · pre-registered · 2026-10-12</span></p>
 <h1 id="p-30-the-text-encoder--the-text-encoder-how-hard-it-pushes-and-where-the-picture-goes">The text encoder — how hard it pushes, and where the picture goes</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> Krea-2 reads the prompt with a language model, Qwen3-VL-4B, before
@@ -2621,9 +2625,11 @@ text encoder, they might change <em>what the picture is about</em> — the genre
 its surface. And once the picture changes, I want to know why it goes where it goes.</p>
 <p><strong>What would kill it.</strong> Edits whose effect cannot be predicted from anything we can measure on the
 text side; and, for the "why", an explanation that does not survive a test fixed before the data.</p>
-<p><strong>Where we are.</strong> How <em>much</em> a picture changes is predictable from the text side alone. <em>Where</em> it
-goes — very often anime — is not explained by anything we have measured. Two natural explanations
-were tested and failed.</p>
+<p><strong>Where we are.</strong> How <em>much</em> a picture changes is predictable from the text side alone, mostly by
+the kind of edit. <em>Where</em> it goes is now clearer: anime is this character's fallback when the style
+words stop working, shown directly by removing them. Random pushes reach that fallback only if they
+vary from token to token, and each real edit has a direction of its own: one protects the comic, another
+drives it to anime. Why a given edit points where it does is still open.</p>
 </blockquote>
 <h2 id="p-30-the-text-encoder--in-two-minutes">In two minutes</h2>
 <p>Before the image model draws, a language model reads the prompt and hands over a long list of
@@ -2642,9 +2648,14 @@ change genre, all of them large, it says little about which change more.</p>
 <p>The puzzle: <strong>where</strong> the picture goes. When the genre changes, it goes to anime in 39 of 50 cases.
 We tested two explanations. Maybe the picture stops paying attention to the words "western comics":
 no. Maybe the edit pushes the text the way writing "anime" would: no, the push points somewhere else
-entirely, and it is 5 to 24 times larger than swapping a style word. One reading that fits, not yet
-tested: the edit pushes the conditioning far from anything a normal prompt produces, and the image
-model falls back on its own default style.</p>
+entirely, and it is 5 to 24 times larger than swapping a style word.</p>
+<p>Then we looked at the fallback directly. Remove the three style words and the elf is drawn as anime,
+every time. Anime is where this description goes when nothing holds it in a style.</p>
+<p><img alt="The elf in five word orders at two seeds, with and without the three style phrases: with them every picture is labelled Western comic, without them every labelled picture is anime, with the same character and pose." src="../assets/30-the-text-encoder/F30.7_te_nostyle_sheet.webp" /></p>
+<p>Random pushes as large as the edits, with no weight touched, also reach it, but only when they vary from
+token to token: the same random vector added to every token changes nothing. And the real edits are not
+random: the edit with the largest push keeps the comic every time, while random pushes of its size break
+it almost every time.</p>
 <h2 id="p-30-the-text-encoder--the-verdict">The verdict</h2>
 <p><strong>Holds</strong>, pre-registered twice: the size of the push on the conditioning predicts how much the
 picture changes (Spearman 0.71 and 0.80), mostly between kinds of edit; within the edits that change
@@ -2652,14 +2663,21 @@ genre it nearly vanishes (exploratory). <strong>Holds</strong>: the push is shar
 regions of 2-4 tokens bounded by commas. <strong>Holds</strong>: these edits change genre and identity, with less
 surface-quality loss than a DiT preset. <strong>Overturned</strong>: one edit moving different characters the same way; the genre switch
 coming from less attention on the style words; the switch coming from a text-like push toward "anime".
-<strong>Open</strong>: anime as the default destination. <strong>Ambiguous</strong>: whether the strong edits separate word
-orders inside the image model.</p>
+<strong>Holds</strong>, pre-registered (C72): without its style words the elf is drawn as anime. <strong>Ambiguous</strong>:
+whether random pushes of the same size reach the fallback as often as edits — yes if they vary across
+tokens, no if they are one shared vector. <strong>Open</strong>: that each edit's own direction decides; what single
+phrases draw alone; anime as the usual destination of a switch. <strong>Ambiguous</strong>: whether the strong edits
+separate word orders inside the image model.</p>
 <h2 id="p-30-the-text-encoder--why-i-might-be-wrong">Why I might be wrong</h2>
 <p><strong>One observer, not blind.</strong> Every genre and intensity label is Alessandro's. On the order grids he
 saw the edit names, and he had seen these pictures before. The intensity labels were given after he
 knew the first test had failed.</p>
 <p><strong>One prompt carries the word-order story.</strong> C69, C70 and C71 rest on the elf in five word orders at
 one seed. The anime default may be specific to this prompt or this character.</p>
+<p><strong>The fallback rests on one character.</strong> Anime is the fallback of <em>this</em> elf description. The empty
+prompt is not anime, so other descriptions may fall back elsewhere. In the no-style pictures the character,
+pose and composition stay; what changes is the rendering — flatter cel shading, no hatching — and the
+label "anime" is Alessandro's reading of that change.</p>
 <p><strong>Size mostly sorts kinds of edit.</strong> The two tests of the size of the push were fixed on all edits
 together. Checked afterwards within one kind, the relation nearly vanishes for the MLP-doubled edits —
 the ones that change genre — and holds at 0.46-0.66 for the others (<code>data/te_size_within_type.csv</code>). Part
@@ -2735,7 +2753,7 @@ the same way (page 28); these edits do not. Only 4 of 20 were coherent across ch
 14). The eye and the statistics disagreed in a telling way: the strong edits shift every picture the
 same way in colour and contrast, but each character lands in a different genre. At ±1 these edits also
 change who is drawn: identity is kept for at most two eligible characters in 19 of 20 edits.</p>
-<h3 id="p-30-the-text-encoder--the-default-is-anime">The default is anime</h3>
+<h3 id="p-30-the-text-encoder--where-the-switches-go">Where the switches go</h3>
 <p>C70 asked Alessandro to name the genre of each of the 105 pictures of the word-order test (seed
 3141592) and, separately, how far each moved from its original (0-3). The five originals are all
 Western comic, so word order alone does not change the genre. Of the 100 edited pictures, 50 changed
@@ -2799,11 +2817,77 @@ anime point, if anywhere, slightly <em>away</em> from it. The pushes are 5 to 24
 (exploratory). The only hint of a direction is cartoon: the cartoon-minus-painting cosine follows the
 number of cartoon pictures (Spearman 0.52, reported, counts of at most 3).</p>
 <p><img alt="Left, for each of 20 edits, the cosine between its push and the text's own comics-to-anime direction is near zero whatever the number of anime pictures; right, each push is 5 to 24 times the size of swapping the style word." src="../assets/30-the-text-encoder/F30.6_te_direction_vs_anime.webp" /></p>
-<p>One reading fits most of this: the edits move the conditioning far from where normal prompts sit, and
-the further they go, the more the image model falls back on its default for an illustration. It has
-clear exceptions. L28 MLP doubled has the largest push and stays a comic, though its rendering changes
-completely. L12 attention doubled has a small one and goes to anime four times in five. The test that
-would decide it — random pushes of the same size, with no weight edited — has not been run.</p>
+<h3 id="p-30-the-text-encoder--the-fallback-is-anime">The fallback is anime</h3>
+<p>C72 asked what the picture becomes when nothing names a style. The elf prompt was rendered in its five word
+orders at two seeds without "realistic western comics style", "bold ink outlines" and "hatched shadows".
+Every labelled picture is anime: 9 of 9, against a bar of 7 of 10 fixed before the labels (one picture was not
+labelled; the result holds whatever it is). With the style words, the same orders and seeds are Western comic in
+9 of 9. The empty prompt is not anime (anime, realistic, anime, painting), so this is not the model's global
+default. It is what this description of a character becomes when the style words are gone.</p>
+<h3 id="p-30-the-text-encoder--random-pushes-of-the-same-size">Random pushes of the same size</h3>
+<p>C72 then added to the plain conditioning random pushes as large as the real push of three edits, tap by tap,
+with no weight edited. The edits were L05 (all orders to anime), L06 (orders scattered) and L28 (largest push,
+stays comic). A gate checked the instrument first: with no push the render is pixel-identical to the plain one,
+and passing the real edit's conditioning through gives exactly the edit's render. A first version of the gate,
+built on stored float16 encodes, failed and was replaced before any other render (amendment 1).</p>
+<p><img alt="For L05, L06 and L28 MLP doubled at order 1: the real edit, then three random pushes of the same size; L05's real edit is anime while its random pushes stay comic, and L28's real edit stays comic while its permuted and token random pushes turn cartoon." src="../assets/30-the-text-encoder/F30.8_te_random_push_sheet.webp" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>push</th>
+<th>genre switches (27 labelled cells)</th>
+<th>ratio to the real edits</th>
+<th>rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>real edits</td>
+<td>14</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>random, permuted channels</td>
+<td>11</td>
+<td>0.79</td>
+<td>size alone suffices</td>
+</tr>
+<tr>
+<td>random, one vector for all tokens</td>
+<td>0</td>
+<td>0.00</td>
+<td>the direction matters</td>
+</tr>
+<tr>
+<td>random, noise per token</td>
+<td>10</td>
+<td>0.71</td>
+<td>size alone suffices</td>
+</tr>
+</tbody>
+</table></div>
+<p>By the rule fixed before the labels (amendment 2), the variants disagree, so the answer is "depends on the form
+of the push". Random pushes that vary from token to token reach the fallback, mostly anime (15 of 21 switches);
+a shift shared by every token, as large, does nothing to the genre. Edit by edit, the real pushes are not like
+random ones. L28's random pushes switch 16 of 18 pictures, yet the real L28 edit keeps all 9 a Western comic.
+L05's random pushes switch 1 of 18, yet the real L05 edit turns all 9 anime.</p>
+<p><img alt="Genre switches per edit and kind of push: the real L05 edit switches 9 of 9 and its random pushes at most 1; the real L28 edit switches none and its permuted and token random pushes 9 and 7; the shared random pushes switch none for any edit." src="../assets/30-the-text-encoder/F30.9_te_random_push_counts.webp" /></p>
+<p>So size alone does not decide where a strong edit goes; each edit's direction does, and why each points where
+it does is not known. One untested reason a shared shift may be harmless: the image model's text path normalises
+what it receives, which could absorb an offset common to every token.</p>
+<h3 id="p-30-the-text-encoder--what-each-phrase-draws-alone">What each phrase draws alone</h3>
+<p>The same pass rendered each of the 36 phrases of the elf prompt alone, plus a few words, at four seeds.
+Described, not tested:
+* <strong>"female dwarf"</strong> is drawn as a woman <strong>with a beard</strong> in 4 of 4, and so is the full dwarf prompt. The beard that
+  appears on the dwarf under edits is the model's own picture of a dwarf, not something the edit invents.
+* <strong>"uniform"</strong> is an anime girl in a school uniform in 4 of 4.
+* <strong>"realistic western comics style"</strong> alone draws bearded cowboys in comic panels: the model reads "western" as the
+  genre of the American West.
+* <strong>The elf's description</strong> ("female antlered elf brawler") is anime in 3 of 4.
+* <strong>Phrases without a person</strong> are mostly drawn as realistic photographs (78 of 165 labelled single-phrase
+  pictures).</p>
+<p><img alt="Four phrases alone at four seeds: 'realistic western comics style' draws bearded cowboys in comic panels, 'uniform' anime schoolgirls, 'female dwarf' a woman with a beard every time, and the elf's own description mostly anime." src="../assets/30-the-text-encoder/F30.10_te_word_priors_sheet.webp" /></p>
 <h3 id="p-30-the-text-encoder--reproducing-this">Reproducing this</h3>
 <pre><code class="language-yaml">model:
   checkpoint: krea2_turbo_bf16.safetensors
@@ -2823,39 +2907,42 @@ tuner:
   version: not recorded — the tuner is a separate repository
   mode: Real Value; one layer half through granular_json (layers.L.self_attn.{q,k,v,o}_proj.weight or layers.L.mlp.{gate,up,down}_proj.weight), weight x (1 + d)
 prompts:
-  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv]
-  ids: [P1_elfbrawler, V1_Original, V2_SubjectFirst, V3_BGFirst, V4_ActionFirst, V5_Inverse, D1_dwarf_paladin, D1W_dwarf_paladin_watercolor, E2_elf_rogue, G5_gnome_wizard, H3_halfling_druid, O4_halforc_fighter, R6_dragonborn_cleric, T7_tiefling_bard]
-seeds: [1618033, 1234567, 2645751, 3141592, 3316624]
+  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv]
+  ids: [P1_elfbrawler, V1_Original, V2_SubjectFirst, V3_BGFirst, V4_ActionFirst, V5_Inverse, D1_dwarf_paladin, D1W_dwarf_paladin_watercolor, E2_elf_rogue, G5_gnome_wizard, H3_halfling_druid, O4_halforc_fighter, R6_dragonborn_cleric, T7_tiefling_bard, &quot;V1-V5 without the style clauses (C72)&quot;, EMPTY, W00-W42 (C72 single phrases)]
+seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281]
 conditions:
   - name: one layer half of the text encoder, d = -1.00 (zeroed) or +1.00 (doubled); C64 also at ±0.10 and ±0.35
     dose: 1.000
     measured_D: not measured; the dose is a per-matrix gain, not a calibrated displacement
 outputs:
-  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge]
-  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv]
+  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default]
+  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv]
   encodes_without_images: [benchmark_te_conditioning (C67, 721), benchmark_te_regions (C68, 241), benchmark_te_direction (C71, 16)]
 analysis:
-  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py]
+  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py]
   produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv
 </code></pre>
 <h2 id="p-30-the-text-encoder--provenance">Provenance</h2>
 <ul>
-<li>Renders: C64 pilot (463), C65 characters (531), C69 bridge (25).</li>
+<li>Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280).</li>
 <li>Encodes without images: C67 (721), C68 (241), C71 (16).</li>
 <li><strong>Pre-registrations:</strong> <code>docs/prereg_te_characters.md</code> (+ amendments 1-3), <code>docs/prereg_te_conditioning.md</code>
   (+ amendments 1-2), <code>docs/prereg_te_regions.md</code>, <code>docs/prereg_te_bridge.md</code>, <code>docs/prereg_te_genre.md</code>
-  (+ amendments 1-2), <code>docs/prereg_te_direction.md</code>; the pilot plan <code>docs/plan_te_pilot.md</code>.</li>
+  (+ amendments 1-2), <code>docs/prereg_te_direction.md</code>, <code>docs/prereg_te_default.md</code> (+ amendments 1-2); the pilot plan <code>docs/plan_te_pilot.md</code>.</li>
 <li><strong>Result documents:</strong> <code>docs/te_pilot_phase1_result.md</code>, <code>docs/te_characters_result.md</code>,
   <code>docs/te_characters_eye_result.md</code>, <code>docs/te_order_grid_result.md</code>, <code>docs/te_conditioning_result.md</code>,
   <code>docs/te_regions_result.md</code>, <code>docs/te_bridge_result.md</code>, <code>docs/te_genre_result.md</code>,
-  <code>docs/te_direction_result.md</code>.</li>
+  <code>docs/te_direction_result.md</code>, <code>docs/te_default_result.md</code>.</li>
 <li><strong>Data:</strong> <code>data/te_pilot_eye_alessandro_phase1.csv</code>, <code>data/te_order_grid_notes_alessandro.csv</code>,
   <code>data/te_order_tests.csv</code>, <code>data/te_size_within_type.csv</code>, <code>data/te_genre_alessandro.csv</code>, <code>data/te_genre_dose_alessandro.csv</code>,
-  <code>data/te_bridge_style.csv</code>, <code>data/te_direction_by_edit.csv</code>, <code>data/te_direction_norms.csv</code>.</li>
+  <code>data/te_bridge_style.csv</code>, <code>data/te_direction_by_edit.csv</code>, <code>data/te_direction_norms.csv</code>,
+  <code>data/te_default_genre_alessandro.csv</code>, <code>data/te_default_cells.csv</code>, <code>data/te_default_tests.csv</code>,
+  <code>data/te_words_alessandro.csv</code>, <code>data/te_massive_channels.csv</code>.</li>
 <li><strong>Labels and keys</strong> were committed in the order the protocols require: key before labels, labels as
   downloaded before any count.</li>
 <li><strong>Probes:</strong> <code>tools/comfyui_krea2_probe</code> (conditioning), <code>tools/comfyui_krea2_attnprobe</code> (attention; reads
-  only, checked pixel-identical on all 25 renders).</li>
+  only, checked pixel-identical on all 25 renders), <code>tools/comfyui_krea2_condpush</code> (random pushes; gate
+  pixel-identical).</li>
 </ul>
 </section>
 </main>

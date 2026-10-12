@@ -1024,6 +1024,99 @@ def te_direction_vs_anime(out: Path) -> Path:
     return _save(fig, out, "C71 · 20 edits, 5 orders · blue: doubled, orange: zeroed · source data/te_direction_by_edit.csv, data/te_direction_norms.csv")
 
 
+GENRE_EN2 = {**GENRE_EN, "rotto": "broken", "nessuno": "no style", "": "not labelled"}
+
+
+def _c72_labels():
+    t = {}
+    for r in csv.DictReader(open(DATA / "te_default_genre_alessandro.csv", encoding="utf-8")):
+        t[(r["grid"], r["row"])] = [r.get(f"g{i}", "") for i in range(1, 6)]
+    return t
+
+
+def te_nostyle_sheet(out: Path) -> Path:
+    """F30.7 - C72 block A: the elf in five orders with and without the three style clauses, two seeds. Caption:
+    Alessandro's genre label (C72 pass)."""
+    t = _c72_labels()
+    rows = [(("3141592", "originale"), "with style · 3141592"), (("3141592", "senza_stile"), "no style · 3141592"),
+            (("1234567", "originale"), "with style · 1234567"), (("1234567", "senza_stile"), "no style · 1234567")]
+    oi = {k: i for i, (k, _) in enumerate(TE_ORDERS)}
+    def path(r, c):
+        s, kind = r
+        if kind == "originale":
+            return _img(f"benchmark_prompt_order/{c}_baseline_krea2_seed{s}_00001_.png")
+        return _img(f"benchmark_te_default/{c}_nostyle_krea2_seed{s}_00001_.png")
+    def cap(r, c):
+        g = t[(f"c72_{r[0]}", r[1])][oi[c]]
+        return (GENRE_EN2[g], NEG if g == "anime" else DIM_RGB)
+    return _sheet(rows, TE_ORDERS, path, cap, out,
+                  "C72 block A · elf brawler, five word orders · 'no style' = the prompt without 'realistic western comics style, bold ink outlines, "
+                  "hatched shadows' · caption = Alessandro's genre label · source data/te_default_genre_alessandro.csv", W=150, H=188, LAB=150)
+
+
+def te_random_push_sheet(out: Path) -> Path:
+    """F30.8 - C72 block C at order 1, seed 3141592: plain render, the real edit and the three random pushes of the
+    same size, for L05, L06, L28 MLP doubled. Caption: genre label."""
+    t = _c72_labels()
+    cols = [("plain", "original"), ("reale", "real edit"), ("permuted", "random: permuted"), ("shared", "random: shared"), ("token", "random: token")]
+    rows = [(e, _te_name(e)) for e in ["L05_mlp_p1.00", "L06_mlp_p1.00", "L28_mlp_p1.00"]]
+    def path(e, c):
+        if c == "plain":
+            return _img("benchmark_prompt_order/V1_Original_baseline_krea2_seed3141592_00001_.png")
+        if c == "reale":
+            return _img(f"benchmark_te_characters/V1_Original_{e}_krea2_seed3141592_00001_.png")
+        return _img(f"benchmark_te_default/V1_Original_{e}_{c}_krea2_seed3141592_00001_.png")
+    def cap(e, c):
+        g = t[("c72_3141592", "originale" if c == "plain" else f"{e}_{c}")][0]
+        return (GENRE_EN2[g], NEG if g != "fumetto" else DIM_RGB)
+    return _sheet(rows, cols, path, cap, out,
+                  "C72 block C · elf, order 1, seed 3141592 · random pushes match the real push's size tap by tap, no weight edited · "
+                  "caption = Alessandro's genre label · source data/te_default_genre_alessandro.csv", W=150, H=188, LAB=110)
+
+
+def te_random_push_counts(out: Path) -> Path:
+    """F30.9 - C72 block C: genre switches out of the labelled cells, per edit and kind of push."""
+    import numpy as np
+    rows = list(csv.DictReader(open(DATA / "te_default_cells.csv", encoding="utf-8")))
+    edits = ["L05_mlp_p1.00", "L06_mlp_p1.00", "L28_mlp_p1.00"]
+    kinds = [("reale", "real edit", INK), ("permuted", "random: permuted", CAT[0]), ("shared", "random: shared", CAT[2]), ("token", "random: token", CAT[1])]
+    v = {(r["edit"], r["variant"]): (int(r["switched"]), int(r["labelled"])) for r in rows}
+    fig, ax = _canvas(6.4, 3.3)
+    x = np.arange(len(edits)); w = 0.2
+    for k, (key, lab, col) in enumerate(kinds):
+        ys = [v[(e, key)][0] for e in edits]
+        ax.bar(x + (k - 1.5) * w, ys, w * 0.9, color=col, label=lab)
+        for xi, y in zip(x + (k - 1.5) * w, ys):
+            ax.text(xi, y + 0.15, str(y), ha="center", color=INK, fontsize=7)
+    ax.set_xticks(x); ax.set_xticklabels([_te_name(e) for e in edits], color=DIM, fontsize=8)
+    ax.set_ylabel(f"genre switches (of {v[(edits[0], 'reale')][1]} labelled cells)", color=DIM, fontsize=7.5)
+    ax.set_ylim(0, 13)
+    ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper center", ncol=4)
+    ax.set_title("Random pushes switch genre only if they vary across tokens; the real edits do their own thing", color=INK, fontsize=8.5, loc="left")
+    fig.subplots_adjust(left=0.09, right=0.98, top=0.88, bottom=0.12)
+    return _save(fig, out, "C72 block C · 5 orders x 2 seeds, order 5 at seed 1234567 unlabelled · source data/te_default_cells.csv")
+
+
+def te_word_priors_sheet(out: Path) -> Path:
+    """F30.10 - C72 block B: four phrases alone at four seeds. Caption: genre, person and beard as labelled."""
+    words = {r["row"]: r for r in csv.DictReader(open(DATA / "te_words_alessandro.csv", encoding="utf-8"))}
+    pick = [("W00", "realistic western comics style"), ("W41", "uniform"), ("W37", "female dwarf"), ("W13", "female antlered elf brawler")]
+    seeds = [("3141592", "seed 3141592"), ("1234567", "seed 1234567"), ("1618033", "seed 1618033"), ("2718281", "seed 2718281")]
+    si = {s: i + 1 for i, (s, _) in enumerate(seeds)}
+    P_EN = {"donna": "woman", "uomo": "man", "ambiguo": "ambiguous", "nessuna": "no person", "": "?"}
+    def path(w, s):
+        return _img(f"benchmark_te_default/{w[0]}_word_krea2_seed{s}_00001_.png")
+    def cap(w, s):
+        r = words[f"{w[0]} · {w[1]}"]; i = si[s]
+        g = {"fumetto": "comic"}.get(r[f"g{i}"], GENRE_EN2[r[f"g{i}"]])
+        txt = f"{g} · {P_EN[r[f'p{i}']]}" + (" · beard" if r[f"b{i}"] == "sì" else "")
+        return (txt, NEG if r[f"b{i}"] == "sì" or r[f"g{i}"] == "anime" else DIM_RGB)
+    rows = [(w, w[1] if len(w[1]) < 24 else w[1][:22] + "…") for w in pick]
+    return _sheet(rows, seeds, path, cap, out,
+                  "C72 block B · each phrase alone · caption = Alessandro's labels (genre · person · beard) · source data/te_words_alessandro.csv",
+                  W=170, H=212, LAB=170)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1067,6 +1160,10 @@ BUILDERS = {
     "F30.4": ("30-the-text-encoder", "te_attention_on_style", te_attention_on_style),
     "F30.5": ("30-the-text-encoder", "te_style_share_by_image", te_style_share_by_image),
     "F30.6": ("30-the-text-encoder", "te_direction_vs_anime", te_direction_vs_anime),
+    "F30.7": ("30-the-text-encoder", "te_nostyle_sheet", te_nostyle_sheet),
+    "F30.8": ("30-the-text-encoder", "te_random_push_sheet", te_random_push_sheet),
+    "F30.9": ("30-the-text-encoder", "te_random_push_counts", te_random_push_counts),
+    "F30.10": ("30-the-text-encoder", "te_word_priors_sheet", te_word_priors_sheet),
 }
 
 
