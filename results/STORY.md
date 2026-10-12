@@ -246,7 +246,59 @@ free **holds** · the noise lives in the MLP **open** · the cost of every push 
 
 ---
 
-## 10 · What fooled us
+## 10 · What happens if you edit the text half?
+
+Before the image model draws anything, a language model reads the prompt and turns it into a long list
+of numbers — the *conditioning*, the only thing the image model ever knows about your words. So I tried
+the same trick on that language model: take one of its layers and switch off its attention or its MLP,
+or double it.
+
+![Schema: the prompt goes through a 36-layer text encoder, one layer of which is edited; the conditioning carries 12 readings of every token to the 28-block image model, which draws the picture; each experiment looked at a different stage.](../assets/30-the-text-encoder/F30.1_te_schema.webp)
+
+The pictures change a lot, but not the way they do when you push the image model. They don't get noisy.
+They change **genre**. A Western comic becomes anime, a cartoon, a children's book. Removing a layer half
+does little; doubling one does a lot. And the same edit on the same words, written in a different order,
+can land in a different genre.
+
+![Five word orders of the same prompt: the originals are all Western comic; L05 MLP doubled turns all five into anime, L06 MLP doubled scatters them between comic, anime and cartoon, L10 MLP zeroed keeps all five as Western comic.](../assets/30-the-text-encoder/F30.2_te_order_genre_sheet.webp)
+
+The good news is that one thing about this is predictable without drawing anything. Measure how far an
+edit moves the conditioning, and you know roughly how much the picture will change. That held in two
+tests fixed in advance.
+
+![Per edit, the size of the change in the conditioning against the mean intensity of change seen by eye over five word orders: the two rise together, with L28 MLP doubled changing the picture more than its size predicts and L10 attention doubled less.](../assets/30-the-text-encoder/F30.3_te_size_vs_intensity.webp)
+
+The puzzle is *where* the picture goes. When the genre changed, it went to anime 39 times out of 50, and
+never to a photograph or a painting. Why anime? I tested two ideas, each with its rule written down before
+looking.
+
+The first: maybe the picture stops paying attention to the words "western comics". I added a probe that
+only watches the image model, without changing a pixel, and recorded where every part of the picture looks
+among the words of the prompt. One strong edit does lower the attention on the style words. The other
+raises it, and switches genre just as often. Picture by picture, the attention on the style words does not
+tell the switched pictures from the others.
+
+![Each of the 25 C69 pictures by its share of attention on the style phrases, marked by whether its genre switched: under L06 the switched and unswitched pictures sit at the same low share, under L12 the switched ones sit at the highest shares.](../assets/30-the-text-encoder/F30.5_te_style_share_by_image.webp)
+
+The second: maybe the edit pushes the text the way writing "anime style" would. I encoded the prompt with
+"anime style" in place of "western comics style" and compared the two moves. They have nothing in common.
+The edits push somewhere else entirely, and 5 to 24 times harder than swapping a style word.
+
+![Left, for each of 20 edits, the cosine between its push and the text's own comics-to-anime direction is near zero whatever the number of anime pictures; right, each push is 5 to 24 times the size of swapping the style word.](../assets/30-the-text-encoder/F30.6_te_direction_vs_anime.webp)
+
+What is left is a guess, not a result. These edits throw the conditioning far away from anything a normal
+prompt would produce. The image model then reads less of the prompt and falls back on its own habit for
+"an illustration", which for this model is anime. The guess has clear exceptions, and the experiment that
+would settle it — random pushes of the same size, with no weight edited — is still to be done.
+
+→ [page 30](30-the-text-encoder.md) · the size of the push predicts the change **holds** · these edits
+change genre more than they damage **holds** · one edit moves every character the same way
+**overturned** · the switch comes from less attention on the style words **overturned** · or from a push
+toward "anime" **overturned** · anime as the default **open**
+
+---
+
+## 11 · What fooled us
 
 ![The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.](../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp)
 
@@ -260,7 +312,7 @@ and undone by looking. That is why every test in this report puts the eye first.
 
 ---
 
-## 11 · Where to start, and what is not known
+## 12 · Where to start, and what is not known
 
 To try the tuner, start from the map: the end blocks for colour, grain and softness, safe at small
 doses; the middle blocks for deeper changes, with care. If the end blocks bring noise, try their
@@ -270,7 +322,7 @@ meant to be corrected, is on [page 21](21-block-map.md#a-starting-guide-what-eac
 ![Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves.](../assets/21-block-map/F21.5_guide_comic.webp)
 
 Not known yet: whether the clean middle edits are truly free; whether a measure can ever replace the
-eye on noise; what the text encoder, the other half of the model, can do — that work has just started;
+eye on noise; why edits to the text encoder send pictures to anime, and whether milder doses of them make usable knobs;
 whether a preset can keep a character's expression as well as its identity (the
 portrait preset kept who they were, not always how they looked at you); whether a blind observer
 would still say "same character" when some sheets show two different ones; whether the noise of a

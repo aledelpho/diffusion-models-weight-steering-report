@@ -955,3 +955,70 @@ figures:
     alt: >
       The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the
       MLP of block 27 pushed up keeps the same picture and covers it in blotches.
+
+  - id: F30.1
+    page: 30-the-text-encoder
+    kind: schema
+    builder: results_figures.te_schema
+    source: null
+    caption_from: static
+    crop: whole
+    alt: >
+      Schema: the prompt goes through a 36-layer text encoder, one layer of which is edited; the conditioning carries
+      12 readings of every token to the 28-block image model, which draws the picture; each experiment looked at a
+      different stage.
+  - id: F30.2
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_order_genre_sheet
+    source: data/te_genre_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Five word orders of the same prompt: the originals are all Western comic; L05 MLP doubled turns all five into
+      anime, L06 MLP doubled scatters them between comic, anime and cartoon, L10 MLP zeroed keeps all five as Western
+      comic.
+  - id: F30.3
+    page: 30-the-text-encoder
+    kind: scatter
+    builder: results_figures.te_size_vs_intensity
+    source: data/te_genre_dose_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Per edit, the size of the change in the conditioning against the mean intensity of change seen by eye over
+      five word orders: the two rise together, with L28 MLP doubled changing the picture more than its size predicts
+      and L10 attention doubled less.
+  - id: F30.4
+    page: 30-the-text-encoder
+    kind: diffmap
+    builder: results_figures.te_attention_on_style
+    source: data/te_bridge_style.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Where the picture reads "realistic western comics style", averaged over steps and blocks: attention to the
+      style phrase is spread over the whole picture, slightly weaker under L06 MLP doubled (style share 0.089) than
+      in the original (0.120) or under L12 MLP doubled (0.108).
+  - id: F30.5
+    page: 30-the-text-encoder
+    kind: strip
+    builder: results_figures.te_style_share_by_image
+    source: data/te_bridge_style.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Each of the 25 C69 pictures by its share of attention on the style phrases, marked by whether its genre
+      switched: under L06 the switched and unswitched pictures sit at the same low share, under L12 the switched ones
+      sit at the highest shares.
+  - id: F30.6
+    page: 30-the-text-encoder
+    kind: scatter
+    builder: results_figures.te_direction_vs_anime
+    source: data/te_direction_by_edit.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Left, for each of 20 edits, the cosine between its push and the text's own comics-to-anime direction is near
+      zero whatever the number of anime pictures; right, each push is 5 to 24 times the size of swapping the style
+      word.

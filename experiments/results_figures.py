@@ -839,6 +839,189 @@ def form_surface_large(out: Path) -> Path:
                   "source data/comic_form_eye_tally_alessandro.csv", W=420, H=525, LAB=8)
 
 
+# ---------------------------------------------------------------- 30-the-text-encoder
+
+TE_ORDERS = [("V1_Original", "1 · original order"), ("V2_SubjectFirst", "2 · subject first"), ("V3_BGFirst", "3 · background first"),
+             ("V4_ActionFirst", "4 · action first"), ("V5_Inverse", "5 · inverse")]
+GENRE_EN = {"fumetto": "Western comic", "anime": "anime", "cartoon": "cartoon", "realist": "realistic", "pittura": "painting", "altro": "other"}
+
+
+def _te_labels():
+    gen = {r["row"]: [r[f"g{i}"] for i in range(1, 6)] for r in csv.DictReader(open(DATA / "te_genre_alessandro.csv", encoding="utf-8"))
+           if r["grid"] == "te_genre_3141592"}
+    dose = {r["row"]: [r[f"d{i}"] for i in range(1, 6)] for r in csv.DictReader(open(DATA / "te_genre_dose_alessandro.csv", encoding="utf-8"))}
+    return gen, dose
+
+
+def _te_name(k: str) -> str:
+    L, part, dose = k.split("_")
+    return f"{L} {'MLP' if part == 'mlp' else 'attn'} {'×2' if dose == 'p1.00' else '×0'}"
+
+
+def te_schema(out: Path) -> Path:
+    """F30.1 - schema, no measured number: where a text-encoder edit sits, and what C67-C71 looked at."""
+    S = Image.new("RGB", (1200, 470), SURF_RGB); d = ImageDraw.Draw(S)
+    d.text((20, 14), "SCHEMA — the text half of the model, and where each experiment looked (no measured values)", fill=DIM_RGB, font=font(13, True))
+    box = lambda x, y, w, h, c: d.rectangle([x, y, x + w, y + h], outline=c, width=2)
+    d.text((30, 92), "prompt", fill=INK_RGB, font=font(14, True))
+    d.text((30, 114), "\"realistic western\ncomics style, bold\nink outlines, ...\"", fill=DIM_RGB, font=font(11))
+    d.line([150, 110, 200, 110], fill=DIM_RGB, width=2)
+    # text encoder: 36 layers
+    d.text((205, 44), "text encoder (Qwen3-VL-4B): 36 layers", fill=INK_RGB, font=font(13, True))
+    for k in range(36):
+        x = 205 + k * 11
+        col = (0x39, 0x87, 0xE5) if k == 6 else (0x3a, 0x3a, 0x38)
+        d.rectangle([x, 80, x + 8, 140], fill=col)
+    d.text((205 + 6 * 11 - 30, 146), "one layer edited:\nits attention or its MLP\nscaled (here: zeroed or doubled)", fill=(0x39, 0x87, 0xE5), font=font(11))
+    for k in range(12):
+        x = 205 + (2 + 3 * k) * 11 + 4
+        d.line([x, 76, x, 66], fill=DIM_RGB, width=1)
+    d.line([610, 110, 660, 110], fill=DIM_RGB, width=2)
+    d.text((665, 80), "conditioning:\n12 readings of\nevery token", fill=INK_RGB, font=font(13, True))
+    d.line([800, 110, 850, 110], fill=DIM_RGB, width=2)
+    d.text((855, 44), "image model (DiT): 28 blocks", fill=INK_RGB, font=font(13, True))
+    for b in range(28):
+        d.rectangle([855 + b * 9, 80, 861 + b * 9, 140], fill=(0x3a, 0x3a, 0x38))
+    d.line([855 + 28 * 9, 110, 855 + 28 * 9 + 20, 110], fill=DIM_RGB, width=2)
+    d.text((855 + 28 * 9 + 26, 102), "picture", fill=INK_RGB, font=font(12, True))
+    notes = [(205, "C64-C65: edit a layer, look at the pictures (by eye)"),
+             (665, "C67-C68, C71: read the conditioning itself (no pictures)"),
+             (855, "C69: watch, inside the DiT, where the picture\n         reads each phrase of the prompt (attention)")]
+    for i, (x, t) in enumerate(notes):
+        d.text((30, 250 + i * 46), "•", fill=(0x39, 0x87, 0xE5), font=font(14, True))
+        d.text((50, 250 + i * 46), t, fill=INK_RGB, font=font(13))
+    d.text((30, 400), "C70: the genre of each picture, labelled by eye, ties the three together.", fill=INK_RGB, font=font(13))
+    d.text((30, 436), "Layer counts are the model's architecture, not measurements. The edit multiplies a weight W by (1 + d), d = ±1.", fill=DIM_RGB, font=font(11))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    S.save(out, "WEBP", quality=90, method=6)
+    return out
+
+
+def te_order_genre_sheet(out: Path) -> Path:
+    """F30.2 - C65 B at seed 3141592: five word orders, the originals and three edits. Caption: Alessandro's genre
+    label and intensity (0-3) for that image (C70)."""
+    gen, dose = _te_labels()
+    rows = [("originali", "original"), ("L05_mlp_p1.00", "L05 MLP ×2"), ("L06_mlp_p1.00", "L06 MLP ×2"), ("L10_mlp_m1.00", "L10 MLP ×0")]
+    oi = {k: i for i, (k, _) in enumerate(TE_ORDERS)}
+    def path(r, c):
+        if r == "originali":
+            return _img(f"benchmark_prompt_order/{c}_baseline_krea2_seed3141592_00001_.png")
+        return _img(f"benchmark_te_characters/{c}_{r}_krea2_seed3141592_00001_.png")
+    def cap(r, c):
+        g = GENRE_EN[gen[r][oi[c]]]
+        if r == "originali":
+            return (g, DIM_RGB)
+        return (f"{g} · {dose[r][oi[c]]}/3", NEG if gen[r][oi[c]] != "fumetto" else DIM_RGB)
+    return _sheet(rows, TE_ORDERS, path, cap, out,
+                  "C65 B · elf brawler, seed 3141592 · same words, five orders (columns) · caption = Alessandro's genre label and "
+                  "intensity of change 0-3 (C70) · source data/te_genre_alessandro.csv, data/te_genre_dose_alessandro.csv",
+                  W=170, H=212, LAB=96)
+
+
+def te_size_vs_intensity(out: Path) -> Path:
+    """F30.3 - C70 G3d: per edit, the size of the conditioning change (C67/C65) against the mean intensity seen by eye."""
+    gen, dose = _te_labels()
+    size = {r["cond"]: float(r["size"]) for r in csv.DictReader(open(DATA / "te_order_tests.csv", encoding="utf-8"))}
+    fig, ax = _canvas(6.4, 3.6)
+    for k, v in size.items():
+        y = statistics.mean(int(x) for x in dose[k])
+        neg = k.endswith("_m1.00")
+        ax.scatter(v, y, s=26, color=CAT[1] if neg else CAT[0], zorder=3)
+        if k in ("L28_mlp_p1.00", "L12_attn_p1.00", "L04_mlp_m1.00", "L05_mlp_p1.00", "L10_attn_p1.00"):
+            dx = -62 if k == "L05_mlp_p1.00" else 6
+            dy = 5 if k == "L12_attn_p1.00" else -3
+            ax.annotate(_te_name(k), (v, y), xytext=(dx, dy), textcoords="offset points", color=INK, fontsize=7)
+    ax.scatter([], [], color=CAT[0], s=26, label="layer half doubled (d = +1)")
+    ax.scatter([], [], color=CAT[1], s=26, label="layer half zeroed (d = −1)")
+    ax.set_xlabel("size of the change in the conditioning (mean relative change)", color=DIM, fontsize=8)
+    ax.set_ylabel("mean intensity by eye, 0-3 (5 orders)", color=DIM, fontsize=8)
+    ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="lower right")
+    ax.set_title("The bigger the push on the text, the more the picture changes (Spearman 0.80, n 20)", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.88, bottom=0.17)
+    return _save(fig, out, "C70 G3d · elf, seed 3141592 · source data/te_genre_dose_alessandro.csv, data/te_order_tests.csv, data/te_genre_dose_tests.csv")
+
+
+def te_attention_on_style(out: Path) -> Path:
+    """F30.4 - C69: where the picture reads the clause 'realistic western comics style' (order 1), mean over 9 steps and
+    28 blocks, original and the two strongest edits. Caption: style share (te_bridge_style.csv) and genre label."""
+    import json
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import LinearSegmentedColormap
+    gen, _ = _te_labels()
+    st = {r["cond"]: json.loads(r["per_order_style_share"]) for r in csv.DictReader(open(DATA / "te_bridge_style.csv", encoding="utf-8"))}
+    plan = {(r["prompt_id"], r["cond"]): r for r in csv.DictReader(open(DATA / "te_bridge_plan.csv", encoding="utf-8"))}
+    conds = [("baseline", "original", "originali"), ("L06_mlp_p1.00", "L06 MLP ×2", "L06_mlp_p1.00"), ("L12_mlp_p1.00", "L12 MLP ×2", "L12_mlp_p1.00")]
+    maps, ims = [], []
+    for c, _, _ in conds:
+        texts = json.loads(plan[("V1_Original", c)]["unit_texts"])
+        j = texts.index("realistic western comics style")
+        fs = sorted(_img(f"benchmark_te_bridge/attn/V1_Original_{c}").glob("step*.npz"))
+        maps.append(np.mean([np.load(f)["attn"].astype(np.float32)[:, :, :, j].mean(0) for f in fs], axis=0))
+        ims.append(np.asarray(Image.open(_img(f"benchmark_te_bridge/V1_Original_{c}_krea2_seed3141592_00001_.png")).convert("RGB").resize((256, 320))))
+    vmax = float(np.percentile(np.stack(maps), 99))
+    cmap = LinearSegmentedColormap.from_list("ramp", ["#1a1a19", "#d95926", "#ffd8b0"])
+    fig = plt.figure(figsize=(6.4, 3.9), dpi=150); fig.patch.set_facecolor(SURFACE)
+    for k, ((c, lab, row), m, im) in enumerate(zip(conds, maps, ims)):
+        ax = fig.add_subplot(1, 3, k + 1); ax.set_facecolor(SURFACE)
+        ax.imshow(im * 0.75 / 255.0, extent=(0, 32, 40, 0))
+        ax.imshow(m, cmap=cmap, vmin=0, vmax=vmax, alpha=0.6, extent=(0, 32, 40, 0), interpolation="bilinear")
+        ax.set_xticks([]); ax.set_yticks([])
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        ax.set_title(lab, color=INK, fontsize=8.5)
+        ax.text(0.5, -0.06, f"style share {st[c][0]:.3f} · {GENRE_EN[gen[row][0]]}", transform=ax.transAxes, ha="center", va="top", color=INK, fontsize=7.5)
+    fig.suptitle("Where the picture reads \"realistic western comics style\" (brighter = more attention)", color=INK, fontsize=9, x=0.02, ha="left")
+    fig.subplots_adjust(left=0.02, right=0.98, top=0.86, bottom=0.12, wspace=0.03)
+    return _save(fig, out, "C69 · elf, order 1, seed 3141592 · 9 steps x 28 blocks, one scale · style share: 3 style phrases / all text · "
+                 "source data/te_bridge_style.csv")
+
+
+def te_style_share_by_image(out: Path) -> Path:
+    """F30.5 - C69/C70 G1: the style share of each of the 25 C69 images, marked by whether its genre switched."""
+    import json
+    gen, _ = _te_labels()
+    st = {r["cond"]: json.loads(r["per_order_style_share"]) for r in csv.DictReader(open(DATA / "te_bridge_style.csv", encoding="utf-8"))}
+    conds = [("baseline", "original", "originali"), ("L06_mlp_p1.00", "L06 MLP ×2", "L06_mlp_p1.00"), ("L12_mlp_p1.00", "L12 MLP ×2", "L12_mlp_p1.00"),
+             ("L10_mlp_m1.00", "L10 MLP ×0", "L10_mlp_m1.00"), ("L19_attn_m1.00", "L19 attn ×0", "L19_attn_m1.00")]
+    fig, ax = _canvas(6.4, 3.4)
+    for i, (c, lab, row) in enumerate(conds):
+        for j in range(5):
+            sw = gen[row][j] != "fumetto"
+            ax.scatter(i + (j - 2) * 0.09, st[c][j], s=34, marker="o" if sw else "o",
+                       facecolors=CAT[1] if sw else "none", edgecolors=CAT[1] if sw else CAT[0], linewidths=1.2, zorder=3)
+    ax.scatter([], [], s=34, facecolors=CAT[1], edgecolors=CAT[1], label="genre switched (anime or cartoon)")
+    ax.scatter([], [], s=34, facecolors="none", edgecolors=CAT[0], label="still Western comic")
+    ax.set_xticks(range(len(conds))); ax.set_xticklabels([c[1] for c in conds], color=DIM, fontsize=7.5)
+    ax.set_ylabel("share of text attention on the style phrases", color=DIM, fontsize=7.5)
+    ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="upper right")
+    ax.set_title("Switched pictures are not the ones that read the style words less (AUC 0.46)", color=INK, fontsize=9, loc="left")
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.88, bottom=0.14)
+    return _save(fig, out, "C69 + C70 G1 · elf, seed 3141592, 5 orders per column · source data/te_bridge_style.csv, data/te_genre_alessandro.csv")
+
+
+def te_direction_vs_anime(out: Path) -> Path:
+    """F30.6 - C71: per edit, the cosine between its push and the text's own 'comics -> anime' direction against the
+    number of anime pictures; and the size of the push in units of that word swap."""
+    rows = list(csv.DictReader(open(DATA / "te_direction_by_edit.csv", encoding="utf-8")))
+    nrm = {r["cond"]: float(r["ratio"]) for r in csv.DictReader(open(DATA / "te_direction_norms.csv", encoding="utf-8"))}
+    import matplotlib.pyplot as plt
+    fig = plt.figure(figsize=(6.4, 3.3), dpi=150); fig.patch.set_facecolor(SURFACE)
+    a1, a2 = _axes(fig, 2, 1), _axes(fig, 2, 2)
+    for r in rows:
+        neg = r["cond"].endswith("_m1.00")
+        a1.scatter(int(r["anime_n"]), float(r["cos_anime"]), s=22, color=CAT[1] if neg else CAT[0], zorder=3)
+        a2.scatter(int(r["switch_n"]), nrm[r["cond"]], s=22, color=CAT[1] if neg else CAT[0], zorder=3)
+    a1.axhline(0, color=GRID, lw=0.8); a1.set_ylim(-1, 1)
+    a1.set_xlabel("anime pictures out of 5", color=DIM, fontsize=7.5); a1.set_ylabel("cosine with \"comics → anime\"", color=DIM, fontsize=7.5)
+    a1.set_title("Direction: about zero for every edit", color=INK, fontsize=8.5, loc="left")
+    a2.set_xlabel("pictures that changed genre, out of 5", color=DIM, fontsize=7.5); a2.set_ylabel("push size / size of the word swap", color=DIM, fontsize=7.5)
+    a2.set_title("Size: 5 to 24 times a word swap", color=INK, fontsize=8.5, loc="left")
+    a2.set_ylim(0, 26)
+    fig.subplots_adjust(left=0.09, right=0.98, top=0.86, bottom=0.18, wspace=0.32)
+    return _save(fig, out, "C71 · 20 edits, 5 orders · blue: doubled, orange: zeroed · source data/te_direction_by_edit.csv, data/te_direction_norms.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -876,6 +1059,12 @@ BUILDERS = {
     "F29.2": ("29-inside-the-block", "comic_form_sheet", comic_form_sheet),
     "F29.3": ("29-inside-the-block", "cost_floor_by_block", cost_floor_by_block),
     "F29.4": ("29-inside-the-block", "form_surface_large", form_surface_large),
+    "F30.1": ("30-the-text-encoder", "te_schema", te_schema),
+    "F30.2": ("30-the-text-encoder", "te_order_genre_sheet", te_order_genre_sheet),
+    "F30.3": ("30-the-text-encoder", "te_size_vs_intensity", te_size_vs_intensity),
+    "F30.4": ("30-the-text-encoder", "te_attention_on_style", te_attention_on_style),
+    "F30.5": ("30-the-text-encoder", "te_style_share_by_image", te_style_share_by_image),
+    "F30.6": ("30-the-text-encoder", "te_direction_vs_anime", te_direction_vs_anime),
 }
 
 
