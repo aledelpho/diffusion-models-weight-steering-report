@@ -74,3 +74,22 @@ resolve.
 bit-identical, maximum ≤ 2⁻¹¹; the active check above 10 × 2⁻¹¹ at every position of the taps it reaches. **Every
 relative change below 2⁻¹¹ is read as zero** in what follows. E1–E3 and their thresholds are unchanged; no encode is
 repeated.
+
+## Amendment 2 (2026-10-12, after E1–E3 were read; exploratory, written before the direction is computed)
+
+E2 and E3 failed on *which words* move. Alessandro asks for the *direction* of the change. Stored per edit and
+prompt: the change of the mean over positions at each tap (`dmean`, 12 × 2560). Measure: for an edit, the vector of
+`dmean` over the taps it reaches (concatenated); **direction agreement** = mean cosine of that vector between
+prompts (5 word orders; or the 7 comic characters, 21 pairs).
+
+* **D1 (orders):** 1 − direction agreement across the five orders vs the 1–5 scores (seed 3141592); ρ ≥ 0.50.
+* **D2 (characters):** direction agreement across the seven characters vs "same direction" (yes 2 / partly 1 /
+  no 0, both seeds' sheets); ρ ≥ 0.40.
+* **D3 (exceptions):** per sheet answered, each character's cosine with the mean direction of the other six,
+  "another way" vs "follows"; AUC ≥ 0.70 (lower cosine for "another way").
+* Reported: the watercolour D1 against the comic D1 (cosine) per edit; agreement between *different* edits as the
+  floor a shared "any edit" shift would give.
+
+These rules are exploratory (the question was asked after E2–E3 were seen); they decide nothing about the
+pre-registered tests. Limit: `dmean` is the mean over all positions — a per-word direction is not stored outside the
+20 elf edits kept in full.
