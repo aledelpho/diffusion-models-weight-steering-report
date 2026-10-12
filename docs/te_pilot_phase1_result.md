@@ -34,7 +34,7 @@ Five renders carry answers imported from the earlier full page (column `imported
    than noise. This is unlike the DiT blocks, where large edits mostly cost surface.
 4. **Content goes with style.** At strong change the notes often list lost prompt traits (antlers, fur,
    pauldron, eyepatch, tan skin, gauntlet) and a moved camera; several renders keep every trait and change only
-   the drawing (e.g. L05 MLP+, L09 MLP+, L22 attn+ in the notes "tutti i dettagli rispettati").
+   the drawing (L20, L29 and L31 MLP+: "tutto coincide", "gli attributi ci sono tutti", "rispetto assoluto del prompt").
 5. **The six DiT-side text slots** (txtfusion, txtmlp) at ±1.00: 11/12 strong, 10/12 style changed, both signs.
    One slot scales the whole adapter, so this is not comparable layer for layer.
 
@@ -44,7 +44,7 @@ The prompt fixes neither the gauntlet arm nor the eye under the patch. Both flip
 
 * **Arm:** other arm in 50/138, ambiguous ("hands merged", gauntlet between them) in 18/138 (two text renders
   excluded). Ambiguous arms were rarer at strong change (3/44) than at slight or no change (12/74); the
-  difference is not significant (p ≈ 0.31).
+  difference is not significant (Fisher p ≈ 0.16).
 * **Late attention, exploratory:** ambiguous arms gather where attention of layers 24–34 is edited, either
   sign: 8/22, against 10/118 elsewhere (Fisher p ≈ 0.002). This band was picked after looking at the table, so
   the p-value is descriptive, not a test. These are also the edits that change the picture least (18/22
