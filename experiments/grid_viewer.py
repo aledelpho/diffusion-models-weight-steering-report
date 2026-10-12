@@ -290,6 +290,11 @@ def _te_labels():
     return out
 
 
+ONSET = {"head": "da che dose cambia lo stile? (− a sinistra, + a destra)",
+         "qs": [{"k": "onset_neg", "lab": "lato −", "o": ["0.10", "0.35", "1.00", "mai"]},
+                {"k": "onset_pos", "lab": "lato +", "o": ["0.10", "0.35", "1.00", "mai"]}]}
+
+
 def build_te_pilot():
     F = "benchmark_te_pilot"
     plan = rd("te_pilot_plan.csv")
@@ -316,21 +321,21 @@ def build_te_pilot():
             "Etichette: il tuo test a occhio fase 1 (solo dosi ±1.00); passa il mouse sulla cella per la nota.")
     grids = [
         {"id": "te_attn", "title": "C64 · attention (q, k, v, o) per layer", "note": note,
-         "cols": cols, "rows": [{"label": u, "cells": mk(u, "attn")} for u in layers]},
+         "cols": cols, "rows": [{"label": u, "cells": mk(u, "attn")} for u in layers], "notes": ONSET},
         {"id": "te_mlp", "title": "C64 · MLP (gate, up, down) per layer", "note": note,
-         "cols": cols, "rows": [{"label": u, "cells": mk(u, "mlp")} for u in layers]},
+         "cols": cols, "rows": [{"label": u, "cells": mk(u, "mlp")} for u in layers], "notes": ONSET},
         {"id": "te_both", "title": "C64 · attention e MLP alternate per layer", "note": note + " Righe alternate: attn, MLP.",
          "cols": cols, "rows": [x for u in layers for x in ({"label": f"{u} attn", "cells": mk(u, "attn")},
                                                               {"label": f"{u} MLP", "cells": mk(u, "mlp")})]},
         {"id": "te_slots", "title": "C64 · slot di testo del DiT (vettore)", "note": "Gli slot 28-33 del DiT che lavorano sul testo, per confronto.",
-         "cols": cols, "rows": [{"label": u, "cells": mk(u, "slot")} for u in sorted({u for (u, p, _) in by if p == "slot"})]},
+         "cols": cols, "rows": [{"label": u, "cells": mk(u, "slot")} for u in sorted({u for (u, p, _) in by if p == "slot"})], "notes": ONSET},
     ]
     chk = [r for r in plan if r["phase"] == "check" and r["cond"] != "CHK_repro_baseline"]
     grids.append({"id": "te_checks", "title": "C64 · controlli", "note": "Nulli attesi: L35 (mai letto) e torre visiva. "
                   "Attivo atteso: L02 MLP. q+k: previsione di nullità falsificata (circa 10/255).",
                   "cols": ["base"] + [r["cond"].replace("CHK_", "") for r in chk],
                   "rows": [{"label": "controlli", "cells": [cell(base, base, "0")] + [cell(f"{F}/{r['expected_filename']}", base, r["dose"]) for r in chk]}]})
-    return {"title": "Text encoder (C64)", "grids": grids}
+    return {"title": "Text encoder (C64)", "grids": grids, "notes_file": "te_pilot_dose_grid_alessandro.csv"}
 
 
 # ---------------------------------------------------------------- grids: C65 part B, word order (same words, five orders)
@@ -357,8 +362,10 @@ def build_te_order():
                       "note": "Elfa P1, stesse parole in cinque ordini (colonne). Prima riga: gli originali di ogni ordine; sotto, la stessa "
                               "modifica del text encoder (±1.00) su ciascun ordine. La differenza dalla base è calcolata contro l'originale "
                               "della stessa colonna. Nel tooltip: quanto la modifica concorda tra ordini e tra semi (23 statistiche).",
-                      "cols": cols, "rows": rows, "notes": True})
-    return {"title": "Ordine delle parole (C65 B)", "grids": grids}
+                      "cols": cols, "rows": rows,
+                      "notes": {"head": "quanto cambia con l'ordine? (1 poco · 5 molto)",
+                                "qs": [{"k": "score_1_5", "lab": "quanto cambia", "o": ["1", "2", "3", "4", "5"]}]}})
+    return {"title": "Ordine delle parole (C65 B)", "grids": grids, "notes_file": "te_order_grid_notes_alessandro.csv"}
 
 
 SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order}
@@ -522,16 +529,17 @@ function render(){
   const corner=document.createElement('div');corner.className='hd';corner.style.left='0';corner.style.zIndex=5;g.appendChild(corner);
   G.cols.forEach(c=>{const d=document.createElement('div');d.className='hd';d.textContent=c;g.appendChild(d)});
   g.style.setProperty('--nw',G.notes?'280px':'0px');$('#ntbar').style.display=G.notes?'':'none';
-  if(G.notes){const d=document.createElement('div');d.className='hd';d.textContent='quanto cambia con l\'ordine? (1 poco · 5 molto)';g.appendChild(d)}
+  if(G.notes){const d=document.createElement('div');d.className='hd';d.textContent=G.notes.head||'';g.appendChild(d)}
   G.rows.forEach((row,ri)=>{
     const l=document.createElement('div');l.className='rl';l.innerHTML=`<b>${row.label}</b>`+spark(row);g.appendChild(l);
     row.cells.forEach((c,ci)=>{
       if(!c){const e=document.createElement('div');e.className='empty';g.appendChild(e);return}
       const el=mkCell(c);el.dataset.r=ri;el.dataset.c=ci;g.appendChild(el);CELLS.push([el,c]);hook(el)});
     if(G.notes){const d=document.createElement('div');d.className='nt';const key=G.id+'|'+row.label;
-      const sc=document.createElement('div');sc.className='sc';sc.innerHTML='<span class="lab">quanto cambia</span>'+[1,2,3,4,5].map(v=>`<button data-v="${v}">${v}</button>`).join('');
-      const paint=()=>sc.querySelectorAll('button').forEach(b=>b.classList.toggle('on',SCORES[key]==b.dataset.v));
-      sc.querySelectorAll('button').forEach(b=>b.onclick=()=>{SCORES[key]=SCORES[key]==b.dataset.v?undefined:b.dataset.v;saveNotes();paint()});paint();d.appendChild(sc);
+      (G.notes.qs||[]).forEach(qq=>{const kk=skey(key,qq.k);const sc=document.createElement('div');sc.className='sc';
+        sc.innerHTML=`<span class="lab">${qq.lab}</span>`+qq.o.map(v=>`<button data-v="${v}">${v}</button>`).join('');
+        const paint=()=>sc.querySelectorAll('button').forEach(b=>b.classList.toggle('on',SCORES[kk]==b.dataset.v));
+        sc.querySelectorAll('button').forEach(b=>b.onclick=()=>{SCORES[kk]=SCORES[kk]==b.dataset.v?undefined:b.dataset.v;saveNotes();paint()});paint();d.appendChild(sc)});
       const t=document.createElement('textarea');
       t.placeholder='dettagli importanti (facoltativo)';t.value=NOTES[G.id+'|'+row.label]||'';
       t.oninput=()=>{NOTES[G.id+'|'+row.label]=t.value;saveNotes()};d.appendChild(t);g.appendChild(d)}
@@ -597,9 +605,12 @@ $('#cw').oninput=e=>{document.documentElement.style.setProperty('--w',e.target.v
 $('#num').onchange=e=>{S.num=e.target.value;document.body.classList.toggle('noms',!S.num);render()};
 $('#bdt').onclick=()=>{document.body.classList.toggle('nobd');$('#bdt').classList.toggle('on')};
 $('#z0').onclick=()=>{S.z=1;S.cx=S.cy=.5;draw()};
-$('#ntexp').onclick=()=>{const q=v=>'"'+String(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"';let t='grid,row,score_1_5,note\n';
-  D.grids.filter(g=>g.notes).forEach(g=>g.rows.forEach(r=>{const k=g.id+'|'+r.label;t+=[g.id,q(r.label),SCORES[k]||'',q(NOTES[k])].join(',')+'\n'}));
-  const u=URL.createObjectURL(new Blob([t],{type:'text/csv'}));const l=document.createElement('a');l.href=u;l.download='te_order_grid_notes_alessandro.csv';l.click()};
+function skey(key,k){return k==='score_1_5'?key:key+'|'+k}
+$('#ntexp').onclick=()=>{const q=v=>'"'+String(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"';
+  const QK=[];D.grids.filter(g=>g.notes).forEach(g=>(g.notes.qs||[]).forEach(x=>{if(!QK.includes(x.k))QK.push(x.k)}));
+  let t='grid,row,'+QK.join(',')+(QK.length?',':'')+'note\n';
+  D.grids.filter(g=>g.notes).forEach(g=>g.rows.forEach(r=>{const k=g.id+'|'+r.label;t+=[g.id,q(r.label),...QK.map(x=>SCORES[skey(k,x)]||''),q(NOTES[k])].join(',')+'\n'}));
+  const u=URL.createObjectURL(new Blob([t],{type:'text/csv'}));const l=document.createElement('a');l.href=u;l.download=D.notes_file||'grid_notes_alessandro.csv';l.click()};
 addEventListener('keydown',e=>{if(e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT'&&e.target.type!=='range')return;
   const k=e.key.toLowerCase();
   if(k==='d'){setMode({p:'a',a:'s',s:'p'}[S.mode]);return}
