@@ -50,3 +50,22 @@ python te_characters.py --queue
 ```text
 queued 529
 ```
+
+## Step 4 — the measurements
+
+```powershell
+python te_characters.py --features
+```
+
+```text
+features ok te_characters_style_features.csv
+features ok te_order_style_features.csv
+```
+
+```powershell
+python te_characters.py --faces
+```
+
+```text
+faces ok: 291 of 308 with a face
+```
