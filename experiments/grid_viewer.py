@@ -10,7 +10,7 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|all] [--img-root PATH] [--budget 160] [--workers 2]
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|all] [--img-root PATH] [--budget 160] [--workers 2]
       -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
@@ -368,7 +368,36 @@ def build_te_order():
     return {"title": "Ordine delle parole (C65 B)", "grids": grids, "notes_file": "te_order_grid_notes_alessandro.csv"}
 
 
-SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order}
+GENRES = ["fumetto", "anime", "cartoon", "realist", "pittura", "altro"]
+
+
+def build_te_genre():
+    """C70: the genre of every image of C65 B (word orders), one choice per image. No measurements shown on the page."""
+    plan = rd("te_characters_plan.csv")
+    edits = []
+    for r in plan:
+        if r["phase"] == "order" and r["cond"] not in edits:
+            edits.append(r["cond"])
+    orders = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
+    cols = ["1 · originale", "2 · soggetto prima", "3 · sfondo prima", "4 · azione prima", "5 · inverso"]
+    grids = []
+    for seed in ["3141592", "1234567"]:
+        base = {v: f"benchmark_prompt_order/{v}_baseline_krea2_seed{seed}_00001_.png" for v in orders}
+        rows = [{"label": "originali", "cells": [cell(base[v], base[v], "base") for v in orders]}]
+        for k in edits:
+            rows.append({"label": k, "cells": [cell(f"benchmark_te_characters/{v}_{k}_krea2_seed{seed}_00001_.png", base[v], str(i + 1))
+                                                for i, v in enumerate(orders)]})
+        grids.append({"id": f"te_genre_{seed}", "title": f"C70 · genere di ogni immagine · seed {seed}",
+                      "note": "Per ogni immagine (colonne 1-5) scegli il genere che vedi: fumetto occidentale, anime/manga, cartoon, "
+                              "realistico o semi-realistico (foto, 3D), pittura (acquerello, olio, digital painting), altro. "
+                              "Anche gli originali. Una scelta per immagine; il testo libero è facoltativo.",
+                      "cols": cols, "rows": rows,
+                      "notes": {"head": "genere per colonna (1-5)", "w": "430px", "cls": "gen",
+                                "qs": [{"k": f"g{i}", "lab": str(i), "o": GENRES} for i in range(1, 6)]}})
+    return {"title": "Genere delle immagini (C70)", "grids": grids, "notes_file": "te_genre_alessandro.csv"}
+
+
+SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre}
 
 
 # ---------------------------------------------------------------- build
@@ -430,7 +459,7 @@ button{background:#333;color:#eee;border:1px solid #555;border-radius:6px;paddin
 #note{color:var(--mut);padding:6px 10px 0;max-width:1300px;line-height:1.4}#help{color:#777;padding:2px 10px 0;font-size:12px}
 #grid{display:grid;gap:3px;padding:8px 10px 40px;grid-template-columns:150px repeat(var(--n),var(--w)) var(--nw,0px);width:max-content}
 .nt{display:flex;flex-direction:column;gap:2px;padding:2px 0 2px 6px}.nt textarea{flex:1;width:100%;box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui;resize:none;min-height:40px}
-.nt textarea:focus{border-color:#fc6}.sc{display:flex;gap:3px;align-items:center}.sc button{padding:2px 8px}.sc .lab{margin-right:4px}
+.nt textarea:focus{border-color:#fc6}.sc{display:flex;gap:3px;align-items:center}.sc button{padding:2px 8px}.sc .lab{margin-right:4px;min-width:14px}.sc.gen button{padding:1px 5px;font-size:12px}
 .hd{position:sticky;top:var(--barh,40px);z-index:4;background:var(--bg);text-align:center;color:var(--mut);padding:3px 0;font-weight:600}
 .rl{position:sticky;left:0;z-index:3;background:var(--bg);padding:2px 4px;display:flex;flex-direction:column;justify-content:center;gap:2px}
 .rl b{font-size:13px}.rl svg{display:block}
@@ -528,7 +557,7 @@ function render(){
   g.innerHTML='';CELLS=[];
   const corner=document.createElement('div');corner.className='hd';corner.style.left='0';corner.style.zIndex=5;g.appendChild(corner);
   G.cols.forEach(c=>{const d=document.createElement('div');d.className='hd';d.textContent=c;g.appendChild(d)});
-  g.style.setProperty('--nw',G.notes?'280px':'0px');$('#ntbar').style.display=G.notes?'':'none';
+  g.style.setProperty('--nw',G.notes?(G.notes.w||'280px'):'0px');$('#ntbar').style.display=G.notes?'':'none';
   if(G.notes){const d=document.createElement('div');d.className='hd';d.textContent=G.notes.head||'';g.appendChild(d)}
   G.rows.forEach((row,ri)=>{
     const l=document.createElement('div');l.className='rl';l.innerHTML=`<b>${row.label}</b>`+spark(row);g.appendChild(l);
@@ -536,7 +565,7 @@ function render(){
       if(!c){const e=document.createElement('div');e.className='empty';g.appendChild(e);return}
       const el=mkCell(c);el.dataset.r=ri;el.dataset.c=ci;g.appendChild(el);CELLS.push([el,c]);hook(el)});
     if(G.notes){const d=document.createElement('div');d.className='nt';const key=G.id+'|'+row.label;
-      (G.notes.qs||[]).forEach(qq=>{const kk=skey(key,qq.k);const sc=document.createElement('div');sc.className='sc';
+      (G.notes.qs||[]).forEach(qq=>{const kk=skey(key,qq.k);const sc=document.createElement('div');sc.className='sc'+(G.notes.cls?' '+G.notes.cls:'');
         sc.innerHTML=`<span class="lab">${qq.lab}</span>`+qq.o.map(v=>`<button data-v="${v}">${v}</button>`).join('');
         const paint=()=>sc.querySelectorAll('button').forEach(b=>b.classList.toggle('on',SCORES[kk]==b.dataset.v));
         sc.querySelectorAll('button').forEach(b=>b.onclick=()=>{SCORES[kk]=SCORES[kk]==b.dataset.v?undefined:b.dataset.v;saveNotes();paint()});paint();d.appendChild(sc)});
