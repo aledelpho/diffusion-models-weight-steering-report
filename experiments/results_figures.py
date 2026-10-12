@@ -1117,6 +1117,80 @@ def te_word_priors_sheet(out: Path) -> Path:
                   W=170, H=212, LAB=170)
 
 
+
+def te_regions_by_tap(out: Path) -> Path:
+    """F30.11 - C68: by depth of the reading (tap layer), the median half-life of the residual similarity and how much
+    more alike tokens of one clause are pushed than tokens across clauses."""
+    import numpy as np
+    rows = list(csv.DictReader(open(DATA / "te_regions_size_by_tap.csv", encoding="utf-8")))
+    taps = sorted({int(r["tap_layer"]) for r in rows})
+    hl = [float(np.median([float(r["half_life"]) for r in rows if int(r["tap_layer"]) == t])) for t in taps]
+    sc = [float(np.median([float(r["same_minus_cross_clause"]) for r in rows if int(r["tap_layer"]) == t])) for t in taps]
+    n = [sum(1 for r in rows if int(r["tap_layer"]) == t) for t in taps]
+    import matplotlib.pyplot as plt
+    fig = plt.figure(figsize=(6.4, 3.0), dpi=150); fig.patch.set_facecolor(SURFACE)
+    a1, a2 = _axes(fig, 2, 1), _axes(fig, 2, 2)
+    a1.plot(taps, hl, "o-", color=CAT[0], ms=3, lw=1.2)
+    a1.set_xlabel("text-encoder layer read (tap)", color=DIM, fontsize=7.5); a1.set_ylabel("half-life (tokens), median", color=DIM, fontsize=7.5)
+    a1.set_title("A region is a few tokens wide", color=INK, fontsize=8.5, loc="left")
+    a1.set_ylim(0, max(hl) * 1.15)
+    a2.plot(taps, sc, "o-", color=CAT[1], ms=3, lw=1.2); a2.axhline(0, color=GRID, lw=0.8)
+    a2.set_xlabel("text-encoder layer read (tap)", color=DIM, fontsize=7.5); a2.set_ylabel("same clause minus across clauses", color=DIM, fontsize=7.5)
+    a2.set_title("Commas start to matter mid-encoder", color=INK, fontsize=8.5, loc="left")
+    fig.subplots_adjust(left=0.09, right=0.98, top=0.86, bottom=0.18, wspace=0.35)
+    return _save(fig, out, f"C68 · residual of the push (shared part removed) · 20 edits x 5 orders, n per tap {min(n)}-{max(n)} · first point: only L02, L04 reach it · source data/te_regions_size_by_tap.csv")
+
+
+def te_characters_identity_sheet(out: Path) -> Path:
+    """F30.12 - C65 A at seed 2645751: four characters, the original and three edits. Caption: ArcFace similarity of
+    the face to the original (te_characters_faces.csv), or 'no face found'."""
+    import numpy as np
+    emb = {}
+    for r in csv.DictReader(open(DATA / "te_characters_faces.csv", encoding="utf-8")):
+        if r["detected"] == "1" and r["emb"].strip():
+            v = np.array([float(x) for x in r["emb"].split()]); emb[(r["char"], r["cond"], r["seed"])] = v / np.linalg.norm(v)
+    seed = "2645751"
+    chars = [("D1_dwarf_paladin", "dwarf paladin"), ("E2_elf_rogue", "elf rogue"), ("G5_gnome_wizard", "gnome wizard"), ("T7_tiefling_bard", "tiefling bard")]
+    cols = [("baseline", "original"), ("L06_mlp_p1.00", "L06 MLP ×2"), ("L12_mlp_p1.00", "L12 MLP ×2"), ("L19_attn_m1.00", "L19 attn ×0")]
+    def path(ch, c):
+        if c == "baseline":
+            return _img(f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{seed}_00001_.png")
+        return _img(f"benchmark_te_characters/{ch}_{c}_krea2_seed{seed}_00001_.png")
+    def cap(ch, c):
+        if c == "baseline":
+            return None
+        a, b = emb.get((ch, "baseline", seed)), emb.get((ch, c, seed))
+        if a is None or b is None:
+            return ("no face found", DIM_RGB)
+        sim = float(a @ b)
+        return (f"face similarity {sim:.2f}", NEG if sim < 0.5 else DIM_RGB)
+    return _sheet(chars, cols, path, cap, out,
+                  "C65 A · seed 2645751 · face similarity = ArcFace cosine with the original (same seed) · source data/te_characters_faces.csv",
+                  W=170, H=212, LAB=110)
+
+
+def te_genre_by_edit(out: Path) -> Path:
+    """F30.13 - C70: for each of the 20 edits, the genre of its five word-order pictures (seed 3141592), edits sorted
+    by the size of their push on the conditioning."""
+    rows = list(csv.DictReader(open(DATA / "te_genre_by_edit.csv", encoding="utf-8")))
+    rows.sort(key=lambda r: float(r["size"]))
+    orders = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
+    col = {"fumetto": "#5a5f68", "anime": CAT[1], "cartoon": CAT[0], "realist": CAT[2], "pittura": "#b48ead", "altro": "#888888"}
+    fig, ax = _canvas(6.4, 3.6)
+    for i, r in enumerate(rows):
+        for j, v in enumerate(orders):
+            ax.add_patch(__import__("matplotlib").patches.Rectangle((i - 0.42, j - 0.42), 0.84, 0.84, color=col.get(r[v], "#888888")))
+    ax.set_xlim(-0.6, len(rows) - 0.4); ax.set_ylim(-0.6, 4.6)
+    ax.set_xticks(range(len(rows))); ax.set_xticklabels([_te_name(r["cond"]) for r in rows], rotation=60, ha="right", fontsize=6, color=DIM)
+    ax.set_yticks(range(5)); ax.set_yticklabels(["order 1", "order 2", "order 3", "order 4", "order 5"], fontsize=6.5, color=DIM)
+    for g, lab in (("fumetto", "Western comic"), ("anime", "anime"), ("cartoon", "cartoon")):
+        ax.scatter([], [], marker="s", s=40, color=col[g], label=lab)
+    ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3)
+    fig.text(0.09, 0.95, "Genre of each picture, edits sorted by push size (small → large)", color=INK, fontsize=8.5)
+    fig.subplots_adjust(left=0.09, right=0.98, top=0.82, bottom=0.30)
+    return _save(fig, out, "C70 · elf, seed 3141592 · Alessandro's genre labels · x = edit (×2 doubled, ×0 zeroed) · source data/te_genre_by_edit.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1164,6 +1238,9 @@ BUILDERS = {
     "F30.8": ("30-the-text-encoder", "te_random_push_sheet", te_random_push_sheet),
     "F30.9": ("30-the-text-encoder", "te_random_push_counts", te_random_push_counts),
     "F30.10": ("30-the-text-encoder", "te_word_priors_sheet", te_word_priors_sheet),
+    "F30.11": ("30-the-text-encoder", "te_regions_by_tap", te_regions_by_tap),
+    "F30.12": ("30-the-text-encoder", "te_characters_identity_sheet", te_characters_identity_sheet),
+    "F30.13": ("30-the-text-encoder", "te_genre_by_edit", te_genre_by_edit),
 }
 
 

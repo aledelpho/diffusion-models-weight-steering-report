@@ -2740,6 +2740,7 @@ away that shared push and looked at what was left. Two neighbouring tokens are p
 directions; four or five tokens apart the relation has halved (half-life 3 tokens). Groups follow the
 commas, most clearly in the middle of the encoder. These regions are as stable across word orders as
 the shared push, so they do not explain why word order matters (C68 H3, Spearman -0.37, not supported).</p>
+<p><img alt="By depth of the text-encoder reading, the residual push stays related over two to four tokens, and tokens of the same clause are pushed more alike than tokens across clauses from layer 11 on, most at layers 20-26." src="../assets/30-the-text-encoder/F30.11_te_regions_by_tap.webp" /></p>
 <h3 id="p-30-the-text-encoder--genre-and-identity-not-surface">Genre and identity, not surface</h3>
 <p>The C64 pilot doubled or removed each half of each of the 35 layers the image model reads, on the elf,
 and Alessandro labelled every picture blind (140 edits, 10 repeats). Doubling changes far more than
@@ -2753,6 +2754,10 @@ the same way (page 28); these edits do not. Only 4 of 20 were coherent across ch
 14). The eye and the statistics disagreed in a telling way: the strong edits shift every picture the
 same way in colour and contrast, but each character lands in a different genre. At ±1 these edits also
 change who is drawn: identity is kept for at most two eligible characters in 19 of 20 edits.</p>
+<p><img alt="Four characters at one seed under three edits: L19 attention zeroed keeps each face (similarity 0.77-0.91 where a face is found), L12 MLP doubled redraws them in another style with lower similarity, and L06 MLP doubled turns the dwarf and the gnome into realistic photographs (similarity 0.15 and 0.17)." src="../assets/30-the-text-encoder/F30.12_te_characters_identity_sheet.webp" /></p>
+<p>The figure also shows that the destination depends on the character. On these portraits L06 MLP doubled
+turns the dwarf and the gnome into photographs, not anime; on the elf (below) the same edit scatters the word
+orders between comic, anime and cartoon. Anime is the elf's fallback, not every character's.</p>
 <h3 id="p-30-the-text-encoder--where-the-switches-go">Where the switches go</h3>
 <p>C70 asked Alessandro to name the genre of each of the 105 pictures of the word-order test (seed
 3141592) and, separately, how far each moved from its original (0-3). The five originals are all
@@ -2761,6 +2766,7 @@ genre: <strong>39 to anime</strong>, 11 to cartoon, none to realistic or paintin
 changed the genre. Two patterns appear among those that do. L05, L20 and L25 MLP doubled send all five
 orders to anime. L06, L09, L12 and L14 MLP doubled scatter them across genres; these are the edits he
 had scored highest for word-order dependence.</p>
+<p><img alt="For each of the 20 edits, sorted by the size of their push, the genre of the five word-order pictures: the edits that zero a layer half and the smallest pushes stay Western comic, the larger pushes turn mostly anime, a few scatter into cartoon, and L28 MLP doubled stays comic despite a mid-size push." src="../assets/30-the-text-encoder/F30.13_te_genre_by_edit.webp" /></p>
 <h3 id="p-30-the-text-encoder--inside-the-image-model">Inside the image model</h3>
 <p>C69 re-rendered 25 pictures — the elf in five orders, the original and four edits — with a probe that
 only reads the image model's attention. All 25 came out identical to the originals, pixel for pixel. At
