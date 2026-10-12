@@ -987,7 +987,7 @@ figures:
     crop: whole
     alt: >
       Per edit, the size of the change in the conditioning against the mean intensity of change seen by eye over
-      five word orders: the two rise together, with L28 MLP doubled changing the picture more than its size predicts
+      five word orders: the two rise together across all edits but only weakly within the MLP-doubled ones, with L28 MLP doubled changing the picture more than its size predicts
       and L10 attention doubled less.
   - id: F30.4
     page: 30-the-text-encoder

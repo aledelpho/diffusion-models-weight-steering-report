@@ -24,6 +24,10 @@ claims:
       against the eye's "how much it changed" on 140 elf edits, Spearman 0.71 (threshold 0.50); style
       changed against unchanged, AUC 0.80. C70 G3d: against the mean intensity of change by eye over
       five word orders, 20 edits, Spearman 0.80 (threshold 0.50); G3, rate of genre switches, 0.73.
+      Exploratory check added after a review: the relation is carried mostly by differences between kinds
+      of edit. Within the MLP-doubled edits, the ones that change genre, it nearly vanishes (C67 material
+      0.06, n 35, with 28 of 35 already labelled strong; C70 material 0.36, n 11, p 0.28); within the other
+      kinds it stays 0.46-0.66.
     anchor: "#the-size-of-the-push"
   - id: te-push-small-regions
     status: holds
@@ -39,13 +43,14 @@ claims:
   - id: te-edits-change-genre-not-surface
     status: holds
     statement: >
-      At dose ±1, text-encoder edits change the drawing style of a picture with less quality loss than a
-      DiT preset; they shift genre rather than add noise.
+      At dose ±1, text-encoder edits change the genre and the content of a picture, usually including who is
+      drawn, while costing less surface quality than a DiT preset.
     evidence: >
       Pre-registered prediction P2 (C65): BRISQUE change -1.52 against +8.09 for the DiT preset of page
-      28, CLIP-IQA -0.001 against -0.037. Exploratory eye pass (C64, 140 edits): surface medium or strong
-      in 8 of 140; strong changes 40 of 70 when a half is doubled against 4 of 70 when it is zeroed.
-    anchor: "#style-not-damage"
+      28, CLIP-IQA -0.001 against -0.037. Identity (ArcFace, C65) kept for at most 2 eligible characters in
+      19 of 20 edits. Exploratory eye pass (C64, 140 edits): surface medium or strong in 8 of 140; strong
+      changes 40 of 70 when a half is doubled against 4 of 70 when it is zeroed.
+    anchor: "#genre-and-identity-not-surface"
   - id: te-edit-common-direction-across-characters
     status: overturned
     statement: >
@@ -134,14 +139,16 @@ one layer, its attention or its MLP, zeroed or doubled.
 ![Schema: the prompt goes through a 36-layer text encoder, one layer of which is edited; the conditioning carries 12 readings of every token to the 28-block image model, which draws the picture; each experiment looked at a different stage.](../assets/30-the-text-encoder/F30.1_te_schema.webp)
 
 The pictures change a lot, and in a particular way. They do not get noisy, as they do when the image
-model is pushed hard. They change **genre**: a Western comic becomes anime or a cartoon. The same edit
+model is pushed hard. They change **genre** — a Western comic becomes anime or a cartoon — and usually
+**who** is drawn: the character loses her antlers, her ears, her skin tone, often her identity. The same edit
 on the same words in a different order can land in a different genre.
 
 ![Five word orders of the same prompt: the originals are all Western comic; L05 MLP doubled turns all five into anime, L06 MLP doubled scatters them between comic, anime and cartoon, L10 MLP zeroed keeps all five as Western comic.](../assets/30-the-text-encoder/F30.2_te_order_genre_sheet.webp)
 
 The useful part: **how much** a picture changes can be predicted without rendering it. Measure how
 far the edit moves the conditioning, and you know roughly how far the picture will move. That held in
-two tests fixed in advance.
+two tests fixed in advance — but mostly because it tells kinds of edit apart. Among the edits that
+change genre, all of them large, it says little about which change more.
 
 The puzzle: **where** the picture goes. When the genre changes, it goes to anime in 39 of 50 cases.
 We tested two explanations. Maybe the picture stops paying attention to the words "western comics":
@@ -153,9 +160,10 @@ model falls back on its own default style.
 ## The verdict
 
 **Holds**, pre-registered twice: the size of the push on the conditioning predicts how much the
-picture changes (Spearman 0.71 and 0.80). **Holds**: the push is shared by the whole prompt plus small
-regions of 2-4 tokens bounded by commas. **Holds**: these edits change genre with less quality loss
-than a DiT preset. **Overturned**: one edit moving different characters the same way; the genre switch
+picture changes (Spearman 0.71 and 0.80), mostly between kinds of edit; within the edits that change
+genre it nearly vanishes (exploratory). **Holds**: the push is shared by the whole prompt plus small
+regions of 2-4 tokens bounded by commas. **Holds**: these edits change genre and identity, with less
+surface-quality loss than a DiT preset. **Overturned**: one edit moving different characters the same way; the genre switch
 coming from less attention on the style words; the switch coming from a text-like push toward "anime".
 **Open**: anime as the default destination. **Ambiguous**: whether the strong edits separate word
 orders inside the image model.
@@ -168,6 +176,11 @@ knew the first test had failed.
 
 **One prompt carries the word-order story.** C69, C70 and C71 rest on the elf in five word orders at
 one seed. The anime default may be specific to this prompt or this character.
+
+**Size mostly sorts kinds of edit.** The two tests of the size of the push were fixed on all edits
+together. Checked afterwards within one kind, the relation nearly vanishes for the MLP-doubled edits —
+the ones that change genre — and holds at 0.46-0.66 for the others (`data/te_size_within_type.csv`). Part
+of that may be a ceiling: 28 of the 35 MLP-doubled edits were already labelled strong.
 
 **Large doses only.** Almost everything here is at ±1: a layer half doubled or removed. These are
 blunt edits; what milder doses do is mostly unknown.
@@ -190,13 +203,19 @@ moves it most (median 0.89), then doubling an attention (0.29), removing an MLP 
 attention (0.11) — the same order in which the eye ranked the pictures. Scaling only the queries and
 keys of a layer changes nothing the image model receives: a normalisation inside the attention cancels it.
 
-![Per edit, the size of the change in the conditioning against the mean intensity of change seen by eye over five word orders: the two rise together, with L28 MLP doubled changing the picture more than its size predicts and L10 attention doubled less.](../assets/30-the-text-encoder/F30.3_te_size_vs_intensity.webp)
+![Per edit, the size of the change in the conditioning against the mean intensity of change seen by eye over five word orders: the two rise together across all edits but only weakly within the MLP-doubled ones, with L28 MLP doubled changing the picture more than its size predicts and L10 attention doubled less.](../assets/30-the-text-encoder/F30.3_te_size_vs_intensity.webp)
 
 | test | value | rule | verdict |
 |---|---|---|---|
 | C67 E1 — size against "how much it changed", 140 elf edits | Spearman 0.71; AUC 0.80 for style changed | ≥ 0.50 | supported |
 | C70 G3 — size against the rate of genre switches, 20 edits | Spearman 0.73 | ≥ 0.50 | supported |
 | C70 G3d — size against the mean intensity 0-3, 20 edits | Spearman 0.80 | ≥ 0.50 | supported |
+
+These tests pooled every kind of edit, and the kinds differ a lot in size. Within one kind the picture is
+different (exploratory, `data/te_size_within_type.csv`): attention doubled 0.66, MLP zeroed 0.65, attention
+zeroed 0.46 on the C67 material, but MLP doubled 0.06 (n 35). On the C70 material the MLP-doubled edits give
+0.36 (n 11, p 0.28). So the size of the push tells a strong kind of edit from a mild one; among the strong
+ones, the ones that change genre, it does not say which changes the picture more.
 
 ### A shared push made of small regions
 
@@ -207,7 +226,7 @@ directions; four or five tokens apart the relation has halved (half-life 3 token
 commas, most clearly in the middle of the encoder. These regions are as stable across word orders as
 the shared push, so they do not explain why word order matters (C68 H3, Spearman -0.37, not supported).
 
-### Style, not damage
+### Genre and identity, not surface
 
 The C64 pilot doubled or removed each half of each of the 35 layers the image model reads, on the elf,
 and Alessandro labelled every picture blind (140 edits, 10 repeats). Doubling changes far more than
@@ -315,7 +334,7 @@ outputs:
   manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv]
   encodes_without_images: [benchmark_te_conditioning (C67, 721), benchmark_te_regions (C68, 241), benchmark_te_direction (C71, 16)]
 analysis:
-  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py]
+  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py]
   produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv
 ```
 
@@ -331,7 +350,7 @@ analysis:
   `docs/te_regions_result.md`, `docs/te_bridge_result.md`, `docs/te_genre_result.md`,
   `docs/te_direction_result.md`.
 * **Data:** `data/te_pilot_eye_alessandro_phase1.csv`, `data/te_order_grid_notes_alessandro.csv`,
-  `data/te_order_tests.csv`, `data/te_genre_alessandro.csv`, `data/te_genre_dose_alessandro.csv`,
+  `data/te_order_tests.csv`, `data/te_size_within_type.csv`, `data/te_genre_alessandro.csv`, `data/te_genre_dose_alessandro.csv`,
   `data/te_bridge_style.csv`, `data/te_direction_by_edit.csv`, `data/te_direction_norms.csv`.
 * **Labels and keys** were committed in the order the protocols require: key before labels, labels as
   downloaded before any count.

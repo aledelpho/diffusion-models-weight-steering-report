@@ -936,9 +936,11 @@ def te_size_vs_intensity(out: Path) -> Path:
     ax.set_xlabel("size of the change in the conditioning (mean relative change)", color=DIM, fontsize=8)
     ax.set_ylabel("mean intensity by eye, 0-3 (5 orders)", color=DIM, fontsize=8)
     ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="lower right")
-    ax.set_title("The bigger the push on the text, the more the picture changes (Spearman 0.80, n 20)", color=INK, fontsize=9, loc="left")
+    wt = {r["group"]: r for r in csv.DictReader(open(DATA / "te_size_within_type.csv", encoding="utf-8")) if r["source"].startswith("C70")}
+    ax.set_title(f"Bigger push, bigger change: Spearman {float(wt['all']['spearman']):.2f} over all 20 edits, "
+                 f"{float(wt['mlp doubled']['spearman']):.2f} within MLP ×2 (n {wt['mlp doubled']['n']})", color=INK, fontsize=9, loc="left")
     fig.subplots_adjust(left=0.1, right=0.98, top=0.88, bottom=0.17)
-    return _save(fig, out, "C70 G3d · elf, seed 3141592 · source data/te_genre_dose_alessandro.csv, data/te_order_tests.csv, data/te_genre_dose_tests.csv")
+    return _save(fig, out, "C70 G3d · elf, seed 3141592 · source data/te_genre_dose_alessandro.csv, data/te_order_tests.csv, data/te_size_within_type.csv")
 
 
 def te_attention_on_style(out: Path) -> Path:
