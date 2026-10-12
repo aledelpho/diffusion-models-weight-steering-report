@@ -357,7 +357,7 @@ def build_te_order():
                       "note": "Elfa P1, stesse parole in cinque ordini (colonne). Prima riga: gli originali di ogni ordine; sotto, la stessa "
                               "modifica del text encoder (±1.00) su ciascun ordine. La differenza dalla base è calcolata contro l'originale "
                               "della stessa colonna. Nel tooltip: quanto la modifica concorda tra ordini e tra semi (23 statistiche).",
-                      "cols": cols, "rows": rows})
+                      "cols": cols, "rows": rows, "notes": True})
     return {"title": "Ordine delle parole (C65 B)", "grids": grids}
 
 
@@ -421,7 +421,9 @@ PAGE = r"""<!doctype html><html lang="it"><head><meta charset="utf-8">
 select,button,input{font:13px system-ui,sans-serif}select{background:#333;color:#eee;border:1px solid #555;border-radius:6px;padding:3px}
 button{background:#333;color:#eee;border:1px solid #555;border-radius:6px;padding:3px 9px;cursor:pointer}button.on{background:#2c5880;border-color:var(--acc)}
 #note{color:var(--mut);padding:6px 10px 0;max-width:1300px;line-height:1.4}#help{color:#777;padding:2px 10px 0;font-size:12px}
-#grid{display:grid;gap:3px;padding:8px 10px 40px;grid-template-columns:150px repeat(var(--n),var(--w));width:max-content}
+#grid{display:grid;gap:3px;padding:8px 10px 40px;grid-template-columns:150px repeat(var(--n),var(--w)) var(--nw,0px);width:max-content}
+.nt{display:flex;flex-direction:column;gap:2px;padding:2px 0 2px 6px}.nt textarea{flex:1;width:100%;box-sizing:border-box;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui;resize:none;min-height:40px}
+.nt textarea:focus{border-color:#fc6}
 .hd{position:sticky;top:var(--barh,40px);z-index:4;background:var(--bg);text-align:center;color:var(--mut);padding:3px 0;font-weight:600}
 .rl{position:sticky;left:0;z-index:3;background:var(--bg);padding:2px 4px;display:flex;flex-direction:column;justify-content:center;gap:2px}
 .rl b{font-size:13px}.rl svg{display:block}
@@ -449,6 +451,7 @@ body.nobd .bd,body.nobd .sb{display:none}body.noms .ms{display:none}
  <div class="g"><span class="lab">guadagno Δ</span><input id="gain" type="range" min="0.5" max="6" step="0.25" value="1"><span id="gainv">×1</span></div>
  <div class="g"><span class="lab">cella</span><input id="cw" type="range" min="70" max="420" step="10" value="150"></div>
  <div class="g"><span class="lab">numero</span><select id="num"><option value="mad">|Δ| medio</option><option value="dy">ΔL medio</option><option value="hf">HF ×base</option><option value="p95">|Δ| 95°</option><option value="">nessuno</option></select></div>
+ <div class="g" id="ntbar" style="display:none"><button id="ntexp">scarica le note</button><span id="ntn" class="lab"></span></div>
  <div class="g"><button id="bdt" class="on">etichette</button><button id="z0">zoom 1:1</button><span id="zv" class="lab">×1.0</span></div>
 </div>
 <div id="note"></div>
@@ -471,6 +474,8 @@ body.nobd .bd,body.nobd .sb{display:none}body.noms .ms{display:none}
 </div>
 <script>
 const D=__DATA__;
+const NK='grid_notes_'+D.title;let NOTES={};try{NOTES=JSON.parse(localStorage.getItem(NK)||'{}')}catch(e){}
+function saveNotes(){try{localStorage.setItem(NK,JSON.stringify(NOTES))}catch(e){}const el=document.querySelector('#ntn');if(el)el.textContent=Object.values(NOTES).filter(v=>v.trim()).length+' note'}
 const $=s=>document.querySelector(s);
 const S={g:0,mode:'p',z:1,cx:.5,cy:.5,gain:1,num:'mad',sel:null};
 let G=null,CELLS=[];
@@ -515,11 +520,16 @@ function render(){
   g.innerHTML='';CELLS=[];
   const corner=document.createElement('div');corner.className='hd';corner.style.left='0';corner.style.zIndex=5;g.appendChild(corner);
   G.cols.forEach(c=>{const d=document.createElement('div');d.className='hd';d.textContent=c;g.appendChild(d)});
+  g.style.setProperty('--nw',G.notes?'280px':'0px');$('#ntbar').style.display=G.notes?'':'none';
+  if(G.notes){const d=document.createElement('div');d.className='hd';d.textContent='quanto cambia con l\'ordine?';g.appendChild(d)}
   G.rows.forEach((row,ri)=>{
     const l=document.createElement('div');l.className='rl';l.innerHTML=`<b>${row.label}</b>`+spark(row);g.appendChild(l);
     row.cells.forEach((c,ci)=>{
       if(!c){const e=document.createElement('div');e.className='empty';g.appendChild(e);return}
       const el=mkCell(c);el.dataset.r=ri;el.dataset.c=ci;g.appendChild(el);CELLS.push([el,c]);hook(el)});
+    if(G.notes){const d=document.createElement('div');d.className='nt';const t=document.createElement('textarea');
+      t.placeholder='quanto e come cambia da un ordine all\'altro';t.value=NOTES[G.id+'|'+row.label]||'';
+      t.oninput=()=>{NOTES[G.id+'|'+row.label]=t.value;saveNotes()};d.appendChild(t);g.appendChild(d)}
   });
   document.documentElement.style.setProperty('--barh',$('#bar').offsetHeight+'px');
   draw();}
@@ -582,7 +592,10 @@ $('#cw').oninput=e=>{document.documentElement.style.setProperty('--w',e.target.v
 $('#num').onchange=e=>{S.num=e.target.value;document.body.classList.toggle('noms',!S.num);render()};
 $('#bdt').onclick=()=>{document.body.classList.toggle('nobd');$('#bdt').classList.toggle('on')};
 $('#z0').onclick=()=>{S.z=1;S.cx=S.cy=.5;draw()};
-addEventListener('keydown',e=>{if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT'&&e.target.type!=='range')return;
+$('#ntexp').onclick=()=>{const q=v=>'"'+String(v||'').replace(/"/g,'""').replace(/\n/g,' ')+'"';let t='grid,row,note\n';
+  D.grids.filter(g=>g.notes).forEach(g=>g.rows.forEach(r=>{t+=[g.id,q(r.label),q(NOTES[g.id+'|'+r.label])].join(',')+'\n'}));
+  const u=URL.createObjectURL(new Blob([t],{type:'text/csv'}));const l=document.createElement('a');l.href=u;l.download='te_order_grid_notes_alessandro.csv';l.click()};
+addEventListener('keydown',e=>{if(e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT'&&e.target.type!=='range')return;
   const k=e.key.toLowerCase();
   if(k==='d'){setMode({p:'a',a:'s',s:'p'}[S.mode]);return}
   if(k==='0'){S.z=1;S.cx=S.cy=.5;draw();return}
@@ -594,6 +607,7 @@ addEventListener('keydown',e=>{if(e.target.tagName==='SELECT'||e.target.tagName=
   else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const L=G.rows[F.r].cells.map((c,i)=>c?i:null).filter(i=>i!=null);let i=L.indexOf(F.c)+(e.key==='ArrowRight'?1:-1);i=(i+L.length)%L.length;F.c=L[i];fxSync()}
   else if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();const L=G.rows.map((r,i)=>r.cells[F.c]?i:null).filter(i=>i!=null);let i=L.indexOf(F.r)+(e.key==='ArrowDown'?1:-1);i=(i+L.length)%L.length;F.r=L[i];fxSync()}});
 addEventListener('keyup',e=>{if(e.key.toLowerCase()==='b'&&F.open){F.showBase=false;fxDraw()}});
+saveNotes();
 addEventListener('resize',()=>{document.documentElement.style.setProperty('--barh',$('#bar').offsetHeight+'px');draw()});
 render();
 </script></body></html>"""
