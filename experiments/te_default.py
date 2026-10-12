@@ -4,7 +4,7 @@ Written 2026-10-12, before any C72 render. Renders authorised by Alessandro on 2
 
   python te_default.py --plan            # data/te_default_plan.csv
   python te_default.py --queue --first 4 # the four gate renders
-  python te_default.py --gate            # zero push = plain render, pixel for pixel; real push close to the edit's render
+  python te_default.py --gate            # zero push = plain render, real push = edit's render, pixel for pixel (amendment 1)
   python te_default.py --queue           # the rest
   python te_default.py --count
   python te_default.py --selftest
@@ -68,14 +68,16 @@ def clauses():
 
 def make_plan():
     tx = texts(); rows = []
+    gj = {r["cond"]: r["te_granular_json"] for r in rd(DATA / "te_characters_plan.csv") if r["phase"] == "order"}
     def add(block, pid, cond, text, seed, **kw):
         prefix = f"{pid}_{cond}_krea2_seed{seed}"
         rows.append({"row": len(rows), "block": block, "prompt_id": pid, "cond": cond, "prompt_text": text, "seed": seed,
-                     "push_edit": kw.get("edit", ""), "variant": kw.get("variant", ""), "noise_seed": kw.get("ns", ""),
+                     "push_edit": kw.get("edit", ""), "te_granular_json": gj.get(kw.get("edit", ""), ""),
+                     "variant": kw.get("variant", ""), "noise_seed": kw.get("ns", ""),
                      "output_prefix": prefix, "expected_filename": f"{prefix}_00001_.png", **SET})
-    add("gate", ORDERS[0], "push_zero", tx[ORDERS[0]], "3141592", edit=PUSH_EDITS[0], variant="zero", ns=NOISE_SEED)
+    add("gate", ORDERS[0], "push_zero_v2", tx[ORDERS[0]], "3141592", edit=PUSH_EDITS[0], variant="zero", ns=NOISE_SEED)
     for e in PUSH_EDITS:
-        add("gate", ORDERS[0], f"{e}_real", tx[ORDERS[0]], "3141592", edit=e, variant="real", ns=NOISE_SEED)
+        add("gate", ORDERS[0], f"{e}_real_v2", tx[ORDERS[0]], "3141592", edit=e, variant="real", ns=NOISE_SEED)
     for s in SEEDS_AC:
         for v in ORDERS:
             add("A", v, "nostyle", drop_style(tx[v]), s)
@@ -97,12 +99,17 @@ def make_plan():
 
 
 def workflow(r):
-    wf = TP.workflow({**r, "te_granular_json": "", "vectors_override": ""})
+    wf = TP.workflow({**r, "te_granular_json": "", "vectors_override": ""})     # plain CLIP on node 40
     wf["61"]["inputs"]["filename_prefix"] = f"{FOLDER}/{r['output_prefix']}"
     if r["variant"]:
+        # amendment 1: the push is measured live, plain encode (40) against the same prompt under the edit (94)
+        wf["51"] = {"class_type": "ArthemyKrea2CLIPTuner", "inputs": {
+            "clip": ["37", 1], "mode": "Real Value", "vectors_override": "", "granular_json": r["te_granular_json"],
+            "Embedding": 0.0, "Layer_1": 0.0, "Layer_2": 0.0, "Layer_3": 0.0, "Layer_4": 0.0, "Layer_5": 0.0,
+            "Layer_6": 0.0, "Layer_7": 0.0}}
+        wf["94"] = {"class_type": "CLIPTextEncode", "inputs": {"clip": ["51", 0], "text": r["prompt_text"]}}
         wf["93"] = {"class_type": "Krea2ConditioningPush", "inputs": {
-            "conditioning": ["40", 0], "baseline_path": str(T.out_path("order", r["prompt_id"], "baseline")),
-            "edit_path": str(RG.out_path("order", r["prompt_id"], r["push_edit"])), "variant": r["variant"],
+            "conditioning": ["40", 0], "conditioning_edit": ["94", 0], "variant": r["variant"],
             "noise_seed": int(r["noise_seed"])}}
         wf["42"]["inputs"]["positive"] = ["93", 0]
     return wf
@@ -136,9 +143,9 @@ def gate():
         e = r["push_edit"]
         ref = _im(c47.IMG_ROOT / "benchmark_te_characters" / f"{ORDERS[0]}_{e}_krea2_seed3141592_00001_.png")
         new = _im(c47.IMG_ROOT / FOLDER / r["expected_filename"])
-        a, b = float(np.abs(new - ref).mean()), float(np.abs(base - ref).mean())
-        print(f"real push {e}: mean abs diff to the edit's render {a:.2f}, plain render to the edit's render {b:.2f}, ratio {a / b:.3f}")
-        ok &= a <= 0.25 * b
+        dm = int(np.abs(new - ref).max())
+        print(f"real push {e} (amendment 1): max abs diff to the edit's existing render {dm}")
+        ok &= dm == 0
     print("GATE", "PASS" if ok else "FAIL - stop")
 
 

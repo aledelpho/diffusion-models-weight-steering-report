@@ -101,3 +101,38 @@ blind (limit).
   whatever else makes the real pushes special.
 * **The ridge reading** predicts a gradual rise of switches with dose. That needs intermediate doses across orders
   and seeds, which this plan does not include.
+
+## Amendment 1 (2026-10-12, after the gate failed, before any render of blocks A, B, C)
+
+**The gate failed** (`python te_default.py --gate`, run by Antigravity):
+
+* zero push: max abs diff 0;
+* real push L05: ratio 0.186;
+* real push L06: ratio 0.372;
+* real push L28: ratio 0.278;
+* the bar was ≤ 0.25 for all three.
+
+Antigravity stopped as instructed.
+
+**What the renders show.** Claude opened the four gate renders next to the existing renders
+(`Text2Img\_grid_viewer\_c70_check\c72_gate.jpg`). The three rebuilt pushes give the same genre and composition as the
+real edits; L05 and L28 are nearly indistinguishable from them. On L06 the details are redrawn: the head turns, and
+an ear and a mark over the eye appear.
+
+**Cause.** The push was rebuilt from the C67/C68 encodes, which are stored in float16, so it carried rounding of about
+2⁻¹¹ relative. The sampler (euler_ancestral) redraws unstable details under any small change of input, as results
+page 22 documents for the weights. The node adds the push correctly; the threshold of 0.25 was a guess, made without
+knowing how much a rounding-size change moves this sampler. Noted, not used: L06, the edit whose word orders scatter
+across genres, was the most sensitive to this tiny difference.
+
+**Change.**
+
+* **The node (version 2)** measures the push live, inside each workflow. It encodes the prompt twice — plain CLIP,
+  and the same CLIP under the edit's ArthemyKrea2CLIPTuner patch — in the conditioning's own precision. The
+  variants are otherwise unchanged.
+* **"real" now passes the edited conditioning through untouched**, so the gate can be strict.
+* **New gate:** the zero push must be pixel-identical to the plain render, and **each real push must be
+  pixel-identical to the edit's existing render** (max abs diff 0). This also checks that the tuner node does not
+  alter the plain CLIP that feeds the other encode.
+* **The four version-1 gate renders** stay in the folder, unused; the new gate rows are named `..._v2`.
+* Tests, thresholds, material and the noise seed are unchanged. Blocks A, B and C had not been rendered.

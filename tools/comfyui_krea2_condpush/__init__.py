@@ -1,25 +1,22 @@
 """Krea2 Conditioning Push — a ComfyUI node for C72 (diffusion-models-weight-steering-report).
 
-Adds a displacement to Krea-2's conditioning (1, seq, 12 * 2560) after CLIPTextEncode, built from two "full" files of
-the C67/C68 probes (stored as (seq, 12, 2560) float16): the baseline of a prompt and the same prompt under a
-text-encoder edit. The real push is P = edit - baseline. Variants, all with the same Frobenius norm as P on every
-one of the 12 taps (taps P does not reach stay at zero):
+Version 2 (amendment 1 of docs/prereg_te_default.md). The push is computed inside the workflow from two live encodes
+of the same prompt, in the conditioning's own precision: `conditioning` (plain CLIP) and `conditioning_edit` (the
+same CLIP under an ArthemyKrea2CLIPTuner edit). Version 1 read the float16 files of C67/C68 and failed its gate.
+Krea-2's conditioning is (1, seq, 12 * 2560), tap-major per token. The real push is P = edit - plain. Variants, all
+with the same Frobenius norm as P on every one of the 12 taps (taps P does not reach stay at zero):
 
-  zero      no displacement (gate: must reproduce the plain render pixel for pixel)
-  real      P itself (positive control: must reproduce the edit's render closely)
-  permuted  P with its 2560 channels permuted (one permutation from noise_seed, same for every token and tap):
-            same per-token structure and per-tap norm, random direction
-  shared    one random unit vector per tap (from noise_seed), added to every token, scaled to P's per-tap norm
-  token     independent Gaussian noise per token and tap (from noise_seed), scaled to P's per-tap norm
+  zero      the plain conditioning, untouched (gate: must reproduce the plain render pixel for pixel)
+  real      the edited conditioning, untouched (gate: must reproduce the edit's render pixel for pixel)
+  permuted  plain + P with its 2560 channels permuted (one permutation from noise_seed, same for every token and
+            tap): same per-token structure, per-tap norm and large channels, random direction
+  shared    plain + one random unit vector per tap (from noise_seed), added to every token, scaled to P's per-tap norm
+  token     plain + independent Gaussian noise per token and tap (from noise_seed), scaled to P's per-tap norm
 
-No weight is edited. The node prints the per-tap norms it applied.
+No weight of the image model is edited, and in permuted/shared/token the edited encoder only serves to measure P.
 """
 import numpy as np
 import torch
-
-
-def _load(path):
-    return np.load(path)["cond"].astype(np.float32)          # (seq, 12, 2560)
 
 
 class Krea2ConditioningPush:
@@ -27,8 +24,7 @@ class Krea2ConditioningPush:
     def INPUT_TYPES(cls):
         return {"required": {
             "conditioning": ("CONDITIONING",),
-            "baseline_path": ("STRING", {"default": ""}),
-            "edit_path": ("STRING", {"default": ""}),
+            "conditioning_edit": ("CONDITIONING",),
             "variant": (["zero", "real", "permuted", "shared", "token"],),
             "noise_seed": ("INT", {"default": 7, "min": 0, "max": 2 ** 31 - 1}),
         }}
@@ -37,32 +33,30 @@ class Krea2ConditioningPush:
     FUNCTION = "push"
     CATEGORY = "conditioning/probe"
 
-    def push(self, conditioning, baseline_path, edit_path, variant, noise_seed):
+    def push(self, conditioning, conditioning_edit, variant, noise_seed):
+        if variant == "zero":
+            return (conditioning,)
+        if variant == "real":
+            return (conditioning_edit,)
         out = []
-        for c, meta in conditioning:
+        for (c, meta), (e, _) in zip(conditioning, conditioning_edit):
+            if c.shape != e.shape:
+                raise ValueError(f"plain {tuple(c.shape)} != edit {tuple(e.shape)}")
             seq = c.shape[1]
-            if variant == "zero":
-                out.append([c, meta]); continue
-            P = _load(edit_path) - _load(baseline_path)
-            if P.shape[0] != seq:
-                raise ValueError(f"push has {P.shape[0]} positions, conditioning has {seq}")
+            P = (e[0].float() - c[0].float()).cpu().numpy().reshape(seq, 12, -1)
             rng = np.random.default_rng(noise_seed)
-            norms = np.linalg.norm(P.reshape(seq, 12, -1), axis=(0, 2))           # per tap
-            if variant == "real":
-                D = P
-            elif variant == "permuted":
+            norms = np.linalg.norm(P, axis=(0, 2))
+            if variant == "permuted":
                 D = P[:, :, rng.permutation(P.shape[2])]
             elif variant == "shared":
                 u = rng.standard_normal((12, P.shape[2])); u /= np.linalg.norm(u, axis=1, keepdims=True)
                 D = np.broadcast_to(u[None] * (norms / np.sqrt(seq))[None, :, None], P.shape).copy()
             else:
                 g = rng.standard_normal(P.shape)
-                g *= (norms / (np.linalg.norm(g, axis=(0, 2)) + 1e-12))[None, :, None]
-                D = g
-            got = np.linalg.norm(D, axis=(0, 2))
+                D = g * (norms / (np.linalg.norm(g, axis=(0, 2)) + 1e-12))[None, :, None]
             print(f"[Krea2ConditioningPush] {variant} seed {noise_seed}: tap norms target {np.round(norms, 2).tolist()} "
-                  f"applied {np.round(got, 2).tolist()}")
-            d = torch.from_numpy(D.reshape(seq, -1)).to(device=c.device, dtype=torch.float32)[None]
+                  f"applied {np.round(np.linalg.norm(D, axis=(0, 2)), 2).tolist()}")
+            d = torch.from_numpy(D.reshape(seq, -1).astype(np.float32)).to(device=c.device)[None]
             out.append([(c.float() + d).to(c.dtype), meta])
         return (out,)
 

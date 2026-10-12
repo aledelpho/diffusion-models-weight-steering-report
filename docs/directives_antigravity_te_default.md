@@ -7,11 +7,14 @@ If a step fails, stop and paste the output. Do not change the script, the plan o
 Pre-registration: `docs/prereg_te_default.md`. The plan is frozen (`data/te_default_plan.csv`, 280 rows): do
 **not** run `--plan`. Expected time: about 5-6 hours at ~70 s per render.
 
-## Step 0 — install the push node
+## Step 0 — install the push node (version 2, amendment 1)
+
+The first gate failed and the node was revised (`docs/prereg_te_default.md`, amendment 1). Replace the copy installed
+before; this overwrites only that node's own folder:
 
 ```powershell
-Copy-Item -Recurse C:\Users\aless\Desktop\diffusion-models-weight-steering-report\tools\comfyui_krea2_condpush `
-  C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\comfyui_krea2_condpush
+Copy-Item -Recurse -Force C:\Users\aless\Desktop\diffusion-models-weight-steering-report\tools\comfyui_krea2_condpush\* `
+  C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\comfyui_krea2_condpush\
 ```
 
 Restart ComfyUI the usual way, through StabilityMatrix. Check that the console says the node loaded
@@ -24,13 +27,13 @@ cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 python te_default.py --queue --first 4
 ```
 
-When the four images exist in `Text2Img\benchmark_te_default`, run:
+When the four `..._v2` images exist in `Text2Img\benchmark_te_default` (the four older gate images stay there, untouched), run:
 
 ```powershell
 python te_default.py --gate
 ```
 
-It must print `GATE PASS`. If it prints `FAIL`, **stop** and paste the output, together with the console lines of
+It must print `max abs diff 0` on all four lines and `GATE PASS`. If it prints `FAIL`, **stop** and paste the output, together with the console lines of
 `[Krea2ConditioningPush]`.
 
 ## Step 2 — the other 276 renders
