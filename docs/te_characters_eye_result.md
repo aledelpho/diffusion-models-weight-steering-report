@@ -26,7 +26,7 @@ free texts are kept); one of them (L08 MLP−, 3316624) is answered on its repea
 |---|---|---|---|
 | coherent and mild | L08 MLP−, L10 MLP−, L14 attn+, L15 attn+, L19 attn−, L28 MLP+ | yes / partly | none |
 | partly coherent | L02 MLP+, L04 MLP−, L06 MLP+, L10 attn+, L12 attn+, L25 MLP+, L26 MLP+ | partly | none to strong |
-| no common direction | L05 MLP+, L09 MLP+, L12 MLP+, L14 MLP+ (one seed partly), L17 MLP+, L20 MLP+, L09 attn+ (one seed) | no | medium / strong |
+| no common direction | L05 MLP+, L09 MLP+, L12 MLP+, L17 MLP+; L14 MLP+, L20 MLP+ and L09 attn+ *partly* on one seed | no | medium / strong |
 
 ## What the notes say
 
@@ -41,7 +41,7 @@ free texts are kept); one of them (L08 MLP−, 3316624) is answered on its repea
   dwarf (prompt: "battle-scarred", "a vertical scar"), a tusk on the half-orc ("lower tusks"), a real dragon face
   on the dragonborn ("blunt draconic snout"). L25 MLP+ on both seeds: dragon face, smoke at the tiefling's mouth
   ("faint smoke curling from one nostril"). L10 MLP− on both seeds: the half-orc's tusk. The tiefling's horns
-  become ram horns under seven edits ("short curling horns" read another way).
+  become ram horns under six edits ("short curling horns" read another way).
 
 ## Against Alessandro's predictions (by eye only; the measured tests come with `--test`)
 
