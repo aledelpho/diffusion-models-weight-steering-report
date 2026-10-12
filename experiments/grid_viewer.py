@@ -10,7 +10,7 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|all] [--img-root PATH] [--budget 160] [--workers 2]
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|all] [--img-root PATH] [--budget 160] [--workers 2]
       -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
@@ -333,7 +333,35 @@ def build_te_pilot():
     return {"title": "Text encoder (C64)", "grids": grids}
 
 
-SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot}
+# ---------------------------------------------------------------- grids: C65 part B, word order (same words, five orders)
+def build_te_order():
+    plan = rd("te_characters_plan.csv")
+    edits = []
+    for r in plan:
+        if r["phase"] == "order" and r["cond"] not in edits:
+            edits.append(r["cond"])
+    orders = ["V1_Original", "V2_SubjectFirst", "V3_BGFirst", "V4_ActionFirst", "V5_Inverse"]
+    cols = ["1 · originale", "2 · soggetto prima", "3 · sfondo prima", "4 · azione prima", "5 · inverso"]
+    eye = {}
+    if (DATA / "te_characters_tests.csv").exists():
+        for r in rd("te_order_tests.csv"):
+            eye[r["cond"]] = f"cos ordini {r['cos_order']} · cos semi {r['cos_seed']}"
+    grids = []
+    for seed in ["3141592", "1234567"]:
+        base = {v: f"benchmark_prompt_order/{v}_baseline_krea2_seed{seed}_00001_.png" for v in orders}
+        rows = [{"label": "originali", "cells": [cell(base[v], base[v], "base") for v in orders]}]
+        for k in edits:
+            rows.append({"label": k, "cells": [cell(f"benchmark_te_characters/{v}_{k}_krea2_seed{seed}_00001_.png", base[v], k.split("_")[0],
+                                                    "", eye.get(k, "")) for v in orders]})
+        grids.append({"id": f"te_order_{seed}", "title": f"C65 · ordine delle parole · seed {seed}",
+                      "note": "Elfa P1, stesse parole in cinque ordini (colonne). Prima riga: gli originali di ogni ordine; sotto, la stessa "
+                              "modifica del text encoder (±1.00) su ciascun ordine. La differenza dalla base è calcolata contro l'originale "
+                              "della stessa colonna. Nel tooltip: quanto la modifica concorda tra ordini e tra semi (23 statistiche).",
+                      "cols": cols, "rows": rows})
+    return {"title": "Ordine delle parole (C65 B)", "grids": grids}
+
+
+SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order}
 
 
 # ---------------------------------------------------------------- build
@@ -519,7 +547,8 @@ function select(r,c){S.sel=[r,c];for(const[el]of CELLS)el.classList.toggle('sel'
 function line(){return F.axis==='c'?G.rows[F.r].cells.map((c,i)=>c?i:null).filter(i=>i!=null):G.rows.map((row,i)=>row.cells[F.c]?i:null).filter(i=>i!=null)}
 function openFx(){if(!S.sel)select(0,G.cols.indexOf('base')>=0?G.cols.indexOf('base'):0);F.open=true;$('#fx').classList.add('open');fxSync()}
 function closeFx(){F.open=false;$('#fx').classList.remove('open');stop();stopFlk()}
-function fxCur(){return F.showBase?baseCell():cellAt(F.r,F.c)}
+function colBase(c){const r=G.rows.find(r=>r.cells[c]&&r.cells[c].base);return r?r.cells[c]:baseCell()}
+function fxCur(){return F.showBase?colBase(F.c):cellAt(F.r,F.c)}
 function fxSize(){const v=$('#fxv'),m=$('#fxmain');const H=m.clientHeight-20,W=m.clientWidth-260;const ar=G.aspect||.8;let h=H,w=h*ar;if(w>W){w=W;h=w/ar}v.style.width=w+'px';v.style.height=h+'px'}
 function fxDraw(){const c=fxCur();if(!c)return;const v=$('#fxv');fxSize();place(v,c);fillTags(v,c);
   $('#fxt').textContent=`${G.rows[F.r].label} · ${G.cols[F.c]}`+(F.showBase?'  [BASE]':'');$('#fxside').innerHTML=info(F.r,F.c)}

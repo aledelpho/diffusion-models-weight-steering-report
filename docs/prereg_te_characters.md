@@ -129,3 +129,18 @@ no rule above uses them.
 
 At Alessandro's request each of the seven characters on a sheet also gets a free-text field, "how it changed"
 (export columns t1–t7). Same sheets, order and key. Descriptive only, like amendment 1.
+
+## Amendment 3 (2026-10-12, after `--test`; exploratory, decides nothing)
+
+H2 was inconclusive on the 23 statistics, and they cannot say *which* style each word order lands in. Alessandro
+asks the question by eye: do prompt structures that use the same words get carried into different styles by the
+same weight edit? Two instruments, both written after the part-B measures were computed and read (the analyst
+has seen the per-edit cos_order / cos_seed; Alessandro has seen only the summary):
+
+* an anonymous eye page (`te_characters.py --page_order`, `Text2Img/benchmark_te_characters/eye_test_order/`):
+  one sheet per edit × seed, the five orders' originals above and the edit below, shuffled (rng 67), 4 repeats;
+  key `data/te_order_eye_key.csv` committed before any label;
+* the grid viewer (`grid_viewer.py --set te_order`): rows = the 20 edits, columns = the five orders, one grid per
+  seed, edit names shown (not blind), the faster of the two.
+
+Whatever comes out is descriptive and is reported as exploratory.

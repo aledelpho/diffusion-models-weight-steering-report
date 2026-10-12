@@ -9,6 +9,7 @@ Written 2026-10-11, before any render. Renders authorised by Alessandro.
   python te_characters.py --features        # data/te_characters_style_features.csv (23 style statistics)
   python te_characters.py --faces           # data/te_characters_faces.csv (ArcFace buffalo_l, BRISQUE, CLIP-IQA; GPU PC)
   python te_characters.py --page            # eye page + data/te_characters_eye_key.csv (key committed before labels)
+  python te_characters.py --page_order      # part B eye page (exploratory) + data/te_order_eye_key.csv
   python te_characters.py --night [--shutdown]  # wait for ComfyUI's queue to empty, then count, repro, page, log; then power off
   python te_characters.py --test            # the decision rules (Claude runs it)
   python te_characters.py --selftest        # the rules on synthetic data
@@ -486,6 +487,56 @@ def night(shutdown):
         print("shutdown scheduled in 5 minutes")
 
 
+CH_LABELS = ["1 · nana paladina", "2 · elfo ladro", "3 · mezzorca guerriera", "4 · gnomo mago", "5 · halfling druido",
+             "6 · dragonide chierica", "7 · tiefling bardo"]
+ORDER_LABELS = ["1 · originale (stile prima)", "2 · soggetto prima", "3 · sfondo prima", "4 · azione prima", "5 · inverso (stile in fondo)"]
+ORDER_KEY = DATA / "te_order_eye_key.csv"
+
+
+def _eye(slots, lskey, labels, qsame, qeach, dl, intro):
+    return (EYE.replace("__SLOTS__", json.dumps(slots)).replace("__LSKEY__", json.dumps(lskey))
+            .replace("__CH__", json.dumps(labels, ensure_ascii=False)).replace("__QSAME__", json.dumps(qsame, ensure_ascii=False))
+            .replace("__QEACH__", json.dumps(qeach, ensure_ascii=False)).replace("__DL__", json.dumps(dl)).replace("__INTRO__", intro))
+
+
+def page_order():
+    """Part B eye page (exploratory, added 2026-10-12 after the part-B measures were computed). Sheet = the five word
+    orders of P1_elfbrawler, baselines above, the same edit below; one sheet per edit x seed, anonymous id, shuffled
+    (rng 67), 4 repeats. Questions: do the five orders go to the same style; the common direction; for each order,
+    follows / another way / nearly unchanged with a free text; surface / prompt loss; note."""
+    from PIL import Image
+    rng = np.random.default_rng(67)
+    out = c47.IMG_ROOT / FOLDER / "eye_test_order"; out.mkdir(parents=True, exist_ok=True)
+    sheets = [(k, s) for k in main_conds() for s in ORDER_SEEDS]
+    ids = rng.permutation(np.arange(100, 999))[: len(sheets)]
+    items = [{"id": f"o{i}", "cond": k, "seed": s} for (k, s), i in zip(sheets, ids)]
+    W, H = 360, 450
+    for x in items:
+        dst = out / f"{x['id']}.jpg"
+        if dst.exists():
+            continue
+        canvas = Image.new("RGB", (W * 5, H * 2), "white")
+        for j, v in enumerate(ORDERS):
+            canvas.paste(Image.open(order_path(v, "baseline", x["seed"])).convert("RGB").resize((W, H), Image.LANCZOS), (j * W, 0))
+            canvas.paste(Image.open(order_path(v, x["cond"], x["seed"])).convert("RGB").resize((W, H), Image.LANCZOS), (j * W, H))
+        canvas.save(dst, quality=90)
+    show = [x["id"] for x in items]; rng.shuffle(show)
+    rep = list(rng.choice(show, 4, replace=False))
+    for x in rep:
+        show.insert(int(rng.integers(len(show) // 3, len(show) + 1)), x)
+    with open(ORDER_KEY, "w", newline="") as fh:
+        w = csv.writer(fh); w.writerow(["item", "cond", "seed", "repeated"])
+        for x in items:
+            w.writerow([x["id"], x["cond"], x["seed"], int(x["id"] in rep)])
+    slots = [f"{s}#{k}" for k, s in enumerate(show)]
+    (out / "eye_test.html").write_text(_eye(slots, "te_order_eye_v1", ORDER_LABELS,
+        "le 5 versioni del prompt vanno verso lo stesso stile?",
+        "Ordine per ordine, da sinistra · scrivi in che stile è finita",
+        "te_order_eye_alessandro.csv",
+        "Stesse parole, cinque ordini diversi. Riga sopra: i 5 originali. Riga sotto: la stessa modifica dei pesi su ciascuno."), encoding="utf-8")
+    print(len(items), "sheets,", len(slots), "showings ->", out / "eye_test.html")
+
+
 # ---------------------------------------------------------------- eye page: one sheet per edit x seed
 def page():
     """Sheet = the 7 characters, baseline row above, edit row below; anonymous id, shuffled (rng 66), 6 repeats.
@@ -517,7 +568,9 @@ def page():
         for x in items:
             w.writerow([x["id"], x["cond"], x["seed"], int(x["id"] in rep)])
     slots = [f"{s}#{k}" for k, s in enumerate(show)]
-    (out / "eye_test.html").write_text(EYE.replace("__SLOTS__", json.dumps(slots)), encoding="utf-8")
+    (out / "eye_test.html").write_text(_eye(slots, "te_characters_eye_v1", CH_LABELS, "i 7 personaggi cambiano nella stessa direzione?",
+                                            "Personaggio per personaggio, da sinistra · scrivi come è cambiato",
+                                            "te_characters_eye_alessandro.csv", "Riga sopra: i 7 originali. Riga sotto: la stessa modifica su ciascuno."), encoding="utf-8")
     print(len(items), "sheets,", len(slots), "showings ->", out / "eye_test.html")
 
 
@@ -532,15 +585,15 @@ button.on{background:#2f4f3a;border-color:#6a8;color:#fff}button.on.diverso{back
 textarea{flex:1;min-width:300px;background:#222;color:#eee;border:1px solid #555;border-radius:6px;font:13px system-ui}
 kbd{font:12px ui-monospace,monospace;background:#444;border:1px solid #666;border-radius:4px;padding:0 4px}#n{color:#aaa}.g{color:#9ab;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:6px 0 1px}</style></head><body><div id="wrap">
 <div id="view"><img id="im"></div><div id="side"><div id="n"></div>
-<small>Riga sopra: i 7 originali. Riga sotto: la stessa modifica su ciascuno. <kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro · clic sull'immagine = zoom. Sulle righe dei personaggi basta scrivere; negli altri campi <kbd>→</kbd> per scrivere; <kbd>Esc</kbd> per uscire.</small>
+<small>__INTRO__ <kbd>↑</kbd><kbd>↓</kbd> voce · <kbd>←</kbd><kbd>→</kbd> valore · <kbd>Invio</kbd> avanti · <kbd>⌫</kbd> indietro · clic sull'immagine = zoom. Sulle righe dei personaggi basta scrivere; negli altri campi <kbd>→</kbd> per scrivere; <kbd>Esc</kbd> per uscire.</small>
 <div id="rows"></div><button id="exp">Scarica le risposte</button></div></div>
 <script>
-const S=__SLOTS__,K="te_characters_eye_v1";let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+const S=__SLOTS__,K=__LSKEY__;let A={};try{A=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
 let i=0;try{i=Math.min(+localStorage.getItem(K+"_i")||0,S.length-1)}catch(e){}const $=q=>document.querySelector(q);
-const CH=["1 · nana paladina","2 · elfo ladro","3 · mezzorca guerriera","4 · gnomo mago","5 · halfling druido","6 · dragonide chierica","7 · tiefling bardo"];
-const R=[{k:"stessa",g:"Insieme",lab:"i 7 personaggi cambiano nella stessa direzione?",o:[["si","sì"],["parte","in parte"],["no","no"]],d:""},
+const CH=__CH__;
+const R=[{k:"stessa",g:"Insieme",lab:__QSAME__,o:[["si","sì"],["parte","in parte"],["no","no"]],d:""},
  {k:"direzione",lab:"la direzione comune (stile, colori, forme…)",txt:1}];
-CH.forEach((c,j)=>R.push({k:"c"+(j+1),tk:"t"+(j+1),g:j===0?"Personaggio per personaggio, da sinistra · scrivi come è cambiato":"",lab:c,o:[["segue","segue"],["diverso","altro modo"],["invariato","invariato"]],d:"segue"}));
+CH.forEach((c,j)=>R.push({k:"c"+(j+1),tk:"t"+(j+1),g:j===0?__QEACH__:"",lab:c,o:[["segue","segue"],["diverso","altro modo"],["invariato","invariato"]],d:"segue"}));
 R.push({k:"dmg",g:"",lab:"superficie rispetto agli originali",o:[["pulito","più pulita"],["come","come"],["lieve","peggio: lieve"],["medio","medio"],["forte","forte"]],d:"come"});
 R.push({k:"note",lab:"altro (libero)",txt:1});
 let c=0;let gp="";$("#rows").innerHTML=R.map((r,j)=>(r.g?`<div class="g">${r.g}</div>`:"")+(r.txt?`<div class="r" id="r${j}"><span>${r.lab}</span><textarea rows="1" data-j="${j}"></textarea></div>`:
@@ -569,14 +622,14 @@ $("#view").onclick=()=>$("#view").classList.toggle("zoom");
 const q=v=>'"'+String(v||"").replace(/"/g,'""').replace(/\n/g," ")+'"';
 $("#exp").onclick=()=>{let t="slot,stessa,direzione,"+CH.map((_,j)=>"c"+(j+1)).join(",")+","+CH.map((_,j)=>"t"+(j+1)).join(",")+",eccezioni,dmg,note\n";S.forEach(s=>{const a=A[s]||{};const done=!!a.stessa;
  t+=[s,a.stessa||"",q(a.direzione),...CH.map((_,j)=>done?(a["c"+(j+1)]||"segue"):""),...CH.map((_,j)=>q(a["t"+(j+1)])),q(a.eccezioni),done?(a.dmg||"come"):"",q(a.note)].join(",")+"\n"});
- const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download="te_characters_eye_alessandro.csv";l.click()};
+ const u=URL.createObjectURL(new Blob([t],{type:"text/csv"}));const l=document.createElement("a");l.href=u;l.download=__DL__;l.click()};
 show();
 </script></body></html>"""
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    for x in ("plan", "queue", "repro", "count", "features", "faces", "page", "test", "selftest", "night", "shutdown"):
+    for x in ("plan", "queue", "repro", "count", "features", "faces", "page", "page_order", "test", "selftest", "night", "shutdown"):
         ap.add_argument(f"--{x}", action="store_true")
     ap.add_argument("--first", type=int, default=0)
     ap.add_argument("--img-root")
@@ -589,6 +642,7 @@ if __name__ == "__main__":
     if a.features: features()
     if a.faces: faces()
     if a.page: page()
+    if a.page_order: page_order()
     if a.test: test()
     if a.selftest: selftest()
     if a.night: night(a.shutdown)
