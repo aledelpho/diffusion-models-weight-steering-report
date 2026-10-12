@@ -122,17 +122,25 @@ def count():
     print("expected", len(rows), "missing", len(miss), miss[:3])
 
 
+FP16_FLOOR = 2 ** -11   # baselines are stored in float16: |b - fp16(b)| / |b| <= 2^-11 per position (amendment 1)
+
+
 def gate():
+    """Amendment 1 (2026-10-12): the baselines are stored in float16 and the diffs compare a float32 encode with them,
+    so an unchanged encode reads as a relative change up to 2^-11, not 0. Gate: the two encodes of the baseline are
+    identical; the two null edits (layer 35, visual tower) give bit-identical diff files (so the encoder output is the
+    same in both) whose maximum is <= 2^-11; the active check (L02 MLP +1.00) is above 10 x 2^-11 everywhere it can
+    reach (taps after layer 2)."""
     a = np.load(out_path("elf", "P1_elfbrawler", "baseline")); b = np.load(out_path("elf", "P1_elfbrawler", "baseline_again"))
     same = np.array_equal(a["cond"], b["cond"]) and np.array_equal(a["ids"], b["ids"])
     print("determinism:", "identical" if same else f"DIFFERENT max {np.abs(a['cond'].astype(np.float32) - b['cond'].astype(np.float32)).max()}")
-    rep = {}
-    for c in ("CHK_null_L35_both_p1.00", "CHK_null_visual4_p1.00", "CHK_active_L02_mlp_p1.00"):
-        p = out_path("elf", "P1_elfbrawler", c)
-        if p.exists():
-            rep[c] = float(np.load(p)["rel"].max())
-    print("max relative change:", rep)
-    ok = same and rep.get("CHK_null_L35_both_p1.00", 1) == 0 and rep.get("CHK_active_L02_mlp_p1.00", 0) > 0
+    z = {c: np.load(out_path("elf", "P1_elfbrawler", c)) for c in ("CHK_null_L35_both_p1.00", "CHK_null_visual4_p1.00", "CHK_active_L02_mlp_p1.00")}
+    n1, n2, act = z["CHK_null_L35_both_p1.00"], z["CHK_null_visual4_p1.00"], z["CHK_active_L02_mlp_p1.00"]
+    nulls_equal = all(np.array_equal(n1[k], n2[k]) for k in ("rel", "cos", "dmean"))
+    null_max = float(max(n1["rel"].max(), n2["rel"].max()))
+    act_min = float(act["rel"][:, first_tap("L02"):].min())
+    print(f"nulls bit-identical: {nulls_equal}; null max {null_max:.6f} (floor {FP16_FLOOR:.6f}); active min over reached taps {act_min:.4f}")
+    ok = same and nulls_equal and null_max <= FP16_FLOOR and act_min > 10 * FP16_FLOOR
     print("GATE", "PASS" if ok else "FAIL - stop")
     return ok
 
@@ -187,7 +195,7 @@ def reduce():
         op = out_path(r["set"], r["prompt_id"], r["cond"])
         if r["mode"] != "diff" or not op.exists():
             continue
-        z = np.load(op); rel = z["rel"]; ids = z["ids"]
+        z = np.load(op); rel = np.where(z["rel"] <= FP16_FLOOR, 0.0, z["rel"]); ids = z["ids"]   # amendment 1
         j0 = first_tap(r["unit"])
         reach = rel[:, j0:] if j0 < rel.shape[1] else rel[:, :0]
         per_pos = reach.mean(1) if reach.shape[1] else np.zeros(len(ids))

@@ -54,3 +54,23 @@ small one it amplifies, would break E1–E3 without the measurement being wrong.
 direction and size; the cosine is stored for later. One prompt per family; the word grouping of tokens is a fixed
 rule (`words()` in the code). The logit lens on intermediate layers of a model with tied embeddings is a known but
 rough reading (Belrose et al. 2023 propose tuned lenses for this reason).
+
+## Amendment 1 (2026-10-12, after the encodes, before `--reduce`, `--logitlens` or any test)
+
+**What happened.** `--gate` printed `determinism: identical` and then `GATE FAIL`: the layer-35 and visual-tower
+nulls gave a maximum relative change of 0.000364, not 0. Antigravity stopped as instructed and diagnosed it: the
+node stores the baselines in float16, while each diff encode is compared in float32 with the float16-rounded
+baseline. An unchanged encode therefore reads as |b − fp16(b)| / |b|, which is at most 2⁻¹¹ ≈ 0.000488 per
+position. The design error is the analyst's (the node), not the data's.
+
+**Check made before changing anything** (only the gate files and the reported q+k checks were opened): the two
+null diff files are bit-identical to each other (rel, cos and mean change), so the encoder output is exactly the
+same under both null edits; their maximum is 0.000364 ≤ 2⁻¹¹. The active check (L02 MLP +1.00) has median 0.187
+and minimum 0.048 over the taps it reaches. The q+k-only checks (L05, L17, L29) have the same maximum as the
+nulls, 0.000364, without being bit-identical to them: whatever q+k changes is below what float16 baselines can
+resolve.
+
+**New gate** (code changed accordingly, `gate()`): baseline encoded twice identical; the two null diffs
+bit-identical, maximum ≤ 2⁻¹¹; the active check above 10 × 2⁻¹¹ at every position of the taps it reaches. **Every
+relative change below 2⁻¹¹ is read as zero** in what follows. E1–E3 and their thresholds are unchanged; no encode is
+repeated.
