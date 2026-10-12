@@ -1,0 +1,5 @@
+test,n,verdict,rule,p,auc,median,rho
+D1 orders: direction disagreement vs 1-5 scores,20,does not hold,rho >= 0.50,0.4637,,,0.174
+D2 characters: direction agreement vs 'same direction',34,does not hold,rho >= 0.40,0.0465,,,0.344
+"D3 exceptions: cosine with the other six, follows vs another way",157+81,does not hold,AUC >= 0.70,,0.65,,
+"floor: agreement between different edits (V1, common taps)",190,reported,reported,,,0.55,

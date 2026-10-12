@@ -52,3 +52,27 @@ prompt per family. E1 is partly confounded with layer depth.
   style words in the same direction in every prompt (cosine of the per-word change across prompts).
 * E1 as an instrument: a cheap, image-free predictor of how much an edit will change the picture, to choose edits
   and doses before rendering.
+
+## Addendum — direction of the change (amendment 2, exploratory, 2026-10-12)
+
+`experiments/te_conditioning_direction.py` → `data/te_conditioning_direction.csv`, `te_conditioning_direction_tests.csv`.
+Direction = the change of the mean conditioning vector at each tap the edit reaches (concatenated).
+
+| test | value | rule | |
+|---|---|---|---|
+| D1 orders: direction disagreement vs 1–5 scores | ρ = 0.17 (n 20, p 0.46) | ρ ≥ 0.50 | does not hold |
+| D2 characters: direction agreement vs "same direction" | ρ = 0.34 (n 34, p 0.047) | ρ ≥ 0.40 | does not hold (right sign) |
+| D3 exceptions: cosine with the other six, follows vs another way | AUC 0.65 (157 + 81) | AUC ≥ 0.70 | does not hold (right sign) |
+
+**The main fact is not in the tests: every edit pushes the conditioning in its own direction, almost the same for
+every prompt.** Agreement of an edit's direction across the five word orders: 0.97–0.99; across the seven comic
+characters: 0.91–0.97; watercolour D1 against comic D1: 0.98–0.99. Two *different* edits on the same prompt agree
+at a median of 0.55. So the text encoder gives the DiT the same push whatever the order of the words, the character
+or the style family; the agreement is lowest (0.91–0.94) for the strong MLP+ edits, the ones the eye saw split, and
+the weak signal of D2 and D3 points the right way (less aligned push → more exceptions).
+
+**Reading.** The divergence Alessandro sees — different genres for different word orders or characters under the
+same edit — is not produced by the text encoder pushing differently; it is produced downstream, by how the DiT
+turns one shared push into a picture *from a different starting conditioning*. The same displacement lands in
+different places because it starts from different places. Caveat: this is the mean over positions; a per-word
+direction is stored only for the 20 elf edits kept in full.
