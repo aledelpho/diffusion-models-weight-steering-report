@@ -1,20 +1,20 @@
 # Knobs inside the weights: single-block scaling in Krea-2 — results
 
-> **Scope.** Everything here is about one model, Krea-2 (28 single-stream transformer blocks),
-> edited without training by multiplying the weights of single blocks. It is an investigation
-> into whether controllable "knobs" exist inside the weights, not a tool that competes with
-> post-production. The exploratory lab notebook that led here is in [`../notebook/`](../notebook/)
-> and stays the record of every test run; this folder holds only the results that were
-> confirmed, or that the report needs in order to be honest about what was not.
+> **Scope.** Everything here is about one model, Krea-2 (28 single-stream transformer blocks), edited
+> without any training by multiplying the weights of single blocks. It's an investigation into whether
+> controllable "knobs" already exist inside the weights — not a tool to compete with post-production. The
+> exploratory lab notebook that led here is in [`../notebook/`](../notebook/) and stays the record of
+> every test I ran; this folder holds only the results that were confirmed, or that I need here to be
+> honest about what wasn't.
 
-> **New here?** Start from [the story](STORY.md): what we found, told with pictures. This page is the
+> **New here?** Start from [the story](STORY.md): what I found, told with pictures. This page is the
 > report: abstract, related work, and the table of every claim.
 
 ## Abstract
 
 Does a text-to-image diffusion transformer hold controllable "knobs" in its own weights —
 directions that do one thing, consistently across prompts, seeds and wordings, and can be reached
-without training? We study Krea-2, a diffusion transformer with 28 single-stream blocks, edited by
+without training? I study Krea-2, a diffusion transformer with 28 single-stream blocks, edited by
 multiplying the weight matrices of one block by 1 + d. An exploratory atlas of 1,412 renders (23
 prompts, every block in both directions) produced claims that were then frozen and tested on new
 benches, each pre-registered with its decision rule and scoring code, opened by a pixel-identical
@@ -27,7 +27,7 @@ from late blocks are coherent inside a family of prompts** written in one style:
 coherence 0.53 against 0.26 between families and 0.76 across seeds, strongest on cartoon and
 weakest on photographs, at a visible cost in noise at the doses used. **Middle blocks change
 content most** (DINOv2 similarity 0.87–0.88) at no measured quality cost and look
-family-coherent to the eye, but no metric we tried records that coherence, and one of them can
+family-coherent to the eye, but no metric I tried records that coherence, and one of them can
 change a subject's identity. **A preset written by eye from the block map carries over to new
 pictures:** calibrated on four character portraits and frozen, it gave three characters it had
 never seen the look its author had described, about as coherently as on the four (0.51 against
@@ -35,39 +35,42 @@ never seen the look its author had described, about as coherently as on the four
 comparisons; each character stays recognisable, though the face moves slightly more than under a
 change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. **Inside a block, the two halves differ:** labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. **Editing the text encoder instead** (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
-inconclusive by its own rule. We also report four claims that were made from statistics and
+inconclusive by its own rule. I also report four claims that were made from statistics and
 withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
 single observer who knew the conditions — all except the portrait test, which was judged blind.
 
 ## Introduction
 
-The usual ways to steer a diffusion model add something to it: a trained adapter, a learned
-direction, a hook on the activations at inference. This project asks whether some control is
-already there, in the base weights, at the granularity of a block. The edit is the simplest
-possible one: the eight weight matrices of a block are multiplied by one number, and a preset is a
-vector of such numbers. Nothing is trained, nothing runs at inference beyond the patched weights,
-and any preset can be written down in one line.
+The usual ways to steer a diffusion model *add* something to it: a trained adapter, a learned direction, a
+hook on the activations at inference. I wanted to know whether some control is already there, hidden in
+the base weights, at the scale of a single block. So I used the simplest edit I could think of: the
+eight weight matrices of a block multiplied by one number. A preset is just a list of such numbers.
+Nothing is trained, nothing runs at inference beyond the patched weights, and any preset fits in one line.
 
-What that buys in practice is shown best by the last test. I looked at what every block does to
-four drawn characters, wrote a preset of ten small numbers aiming at *a more American-comic look,
-flat colours and clean lines*, froze it, and applied it to seven characters at four new seeds.
-Three of them had never been rendered while I tuned it. Here they are, base above and preset below:
+What does that buy you in practice? The last test shows it best. I looked at what every block does to
+four drawn characters, wrote a preset of ten small numbers aiming at *a more American-comic look, flat
+colours and clean lines*, froze it, and applied it to seven characters at four new seeds. Three of them
+had never been rendered while I was tuning it. Here they are, base above and preset below:
 
 > **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
 > before looking at the pictures below if you can.
 
 ![The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.](../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp)
 
-Someone who had never seen the project, shown each pair side by side without knowing which was
-which, picked the preset as the closer match to that description every time, 56 times out of 56.
-The characters stay themselves, but not untouched: the face moves a little more than a change of
-seed would move it, and a prompted expression can turn into a frown ([page 28](28-portrait-preset.md)).
+Someone who had never seen the project, shown each pair side by side without knowing which was which,
+picked the preset as the closer match to that description every single time: 56 out of 56. The characters
+stay themselves, but not untouched: the face moves a little more than a change of seed would move it, and
+a prompted expression can turn into a frown ([page 28](28-portrait-preset.md)).
 
-The project started with hand-calibrated presets over the whole stack
-([notebook page 01](../notebook/01-mark-style.md)) and an exploratory notebook of tests on
-permutations, rotations and block groups ([notebook](../notebook/)). Single blocks turned out to be
-the more useful unit: they are finer than the tuner's macro-blocks, and some of them behave the
-same way on every prompt tried. The pages below report what survived confirmation:
+Then I turned to the other half of the model, the language model that reads the prompt. The same kind of
+edit there doesn't add noise: it changes the *genre* of the picture, and often who is drawn. Where the
+picture ends up depends on the edit and on the character — and when I took the style words away, each
+character fell back to a style of its own ([page 30](30-the-text-encoder.md)).
+
+I started with hand-calibrated presets over the whole stack ([notebook page 01](../notebook/01-mark-style.md))
+and a notebook full of tests on permutations, rotations and block groups ([notebook](../notebook/)).
+Single blocks turned out to be the more useful unit: they're finer than the tuner's macro-blocks, and some
+of them behave the same way on every prompt I tried. The pages below report what survived confirmation:
 
 * the edit and the instrument, including what the eye pass is and is not ([20](20-method.md));
 * a map of the 28 blocks, and a provisional guide to what each one does ([21](21-block-map.md));
@@ -110,7 +113,7 @@ tuner used here, already do: the `FluxBlocksBuster` node [17] gives one multipli
 per block, and Block Patcher [18] sweeps a list of regular expressions over the block tensors,
 rendering one image per value. Read from their source, both apply exactly the operation studied here
 — `W := W x v` through ComfyUI's `add_patches` with `strength_patch = 0` — and so does the tuner used
-in this report; Block Patcher's regex is in fact finer than our per-block vector, reaching one tensor
+in this report; Block Patcher's regex is in fact finer than my per-block vector, reaching one tensor
 at a time. Neither tool publishes a map, a dose, or a claim about what any block does: their author
 calls them probing tools. **The contribution here is therefore not the edit but its
 characterisation** — a measured per-block map with calibrated doses, pre-registered confirmations,
@@ -121,7 +124,7 @@ scaling coefficients — one per block, or one per attention and MLP layer, or o
 an evolutionary search against a reward, and reports that the calibrated FLUX, SD-3.5 and Qwen-Image
 models are better than the originals [19]. It is the closest published work to this report: the same
 kind of edit, a multiplier on part of a block, but searched by a reward model rather than mapped by eye.
-Scaling the output projection of an attention or an MLP, as our edits do among others, is close to
+Scaling the output projection of an attention or an MLP, as my edits do among others, is close to
 scaling that layer's output, which is what Calibri tunes. Calibri does not analyse attention against
 MLP or early against late blocks; page 29 does, and finds that they differ.
 
