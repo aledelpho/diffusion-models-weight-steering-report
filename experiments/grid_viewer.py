@@ -530,7 +530,8 @@ def build_te_dose():
     qs = [{"k": "cambia_da", "lab": "stile cambia da", "o": dsel},
           {"k": "come", "lab": "come", "o": ["graduale", "scatto", "nessuno"]},
           {"k": "verso", "lab": "va verso 1.00", "o": ["sì", "no", "incerto", "nessuno"]},
-          {"k": "coerenza_da", "lab": "perde coerenza da", "o": dsel}]
+          {"k": "coerenza_da", "lab": "perde coerenza da", "o": dsel},
+          {"k": "attributi_da", "lab": "perde attributi del prompt da", "o": dsel}]   # amendment 2: reported only
     grids = []
     for L in (6, 14, 28):
         rows = []
@@ -543,8 +544,13 @@ def build_te_dose():
                 rows.append({"label": f"{ch} · {s}", "cells": cells})
         grids.append({"id": f"dose_L{L:02d}", "title": f"C74 · MLP dello strato {L}, dose crescente", "cols": cols, "rows": rows,
                       "note": "Per ogni striscia: da quale dose lo stile si discosta dall'originale; se il cambiamento è graduale o a scatto; "
-                              "se le dosi intermedie vanno verso l'immagine a 1.00; da quale dose l'immagine perde coerenza di stile "
-                              "(stili mescolati, resa rotta, artefatti). 'mai' = mai fino a 1.00.",
+                              "se le dosi intermedie vanno verso l'immagine a 1.00; da quale dose l'immagine perde coerenza di stile; "
+                              "da quale dose perde attributi chiesti dal prompt. 'mai' = mai fino a 1.00. "
+                              "STILE CAMBIA: anche un ibrido che si legge come una scelta voluta (es. linee da fumetto con texture pittoriche) "
+                              "è un cambio di stile, non una perdita di coerenza. PERDE COERENZA: l'immagine si legge come rotta o in conflitto "
+                              "con se stessa (stili che si scontrano in parti diverse, resa rotta, artefatti, anatomia sfatta). "
+                              "PERDE ATTRIBUTI: sparisce o cambia qualcosa che il prompt chiede (razza, classe, armatura, arma, barba…); "
+                              "è separato dalla coerenza e non decide nessun test.",
                       "notes": {"head": "per striscia", "w": "760px", "cls": "gen", "qs": qs}})
     return {"title": "C74 · scala di dose", "grids": grids, "notes_file": "te_dose_alessandro.csv"}
 

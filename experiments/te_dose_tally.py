@@ -1,5 +1,6 @@
 """C74 tally (docs/prereg_te_dose.md). Written 2026-10-13, before any C74 label. Input: data/te_dose_alessandro.csv
-(committed as downloaded), columns grid,row,cambia_da,come,verso,coerenza_da,note. Output: data/te_dose_tests.csv.
+(committed as downloaded), columns grid,row,cambia_da,come,verso,coerenza_da,note
+(amendment 2 adds attributi_da, reported only). Output: data/te_dose_tests.csv.
 
   python te_dose_tally.py
   python te_dose_tally.py --selftest
@@ -38,7 +39,14 @@ def tally(rows):
     for L in ("dose_L06", "dose_L14", "dose_L28"):
         rs = [r for r in rows if r["grid"] == L]
         out.append({"test": f"{L} (reported)", "value": f"onset {dict(Counter(r.get('cambia_da', '') for r in rs))}; how {dict(Counter(r.get('come', '') for r in rs))}; "
-                    f"toward 1.00 {dict(Counter(r.get('verso', '') for r in rs))}; coherence lost from {dict(Counter(r.get('coerenza_da', '') for r in rs))}", "verdict": ""})
+                    f"toward 1.00 {dict(Counter(r.get('verso', '') for r in rs))}; coherence lost from {dict(Counter(r.get('coerenza_da', '') for r in rs))}; "
+                    f"prompt attributes lost from {dict(Counter(r.get('attributi_da', '') for r in rs))}", "verdict": ""})
+    # amendment 2, reported: does attribute loss come before, with or after the style change (L06, L14)
+    a = [r for r in ch if r.get("attributi_da")]
+    out.append({"test": "attributes vs style change (reported, L06, L14)",
+                "value": f"attributes lost before style change {sum(ORDER[r['attributi_da']] < ORDER[r['cambia_da']] for r in a)}, "
+                         f"at the same dose {sum(ORDER[r['attributi_da']] == ORDER[r['cambia_da']] for r in a)}, "
+                         f"after or never {sum(ORDER[r['attributi_da']] > ORDER[r['cambia_da']] for r in a)}, of {len(a)}", "verdict": ""})
     return out
 
 

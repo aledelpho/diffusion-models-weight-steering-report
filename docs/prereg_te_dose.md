@@ -97,3 +97,22 @@ picture happens. The new doses are 0.40, 0.60, 0.70, 0.80, 0.85, 0.90 and 0.95, 
   (`te_dose_tally.py`, self-test updated).
 * **What had happened before this amendment.** The gate passed (max abs diff 0) and 62 of the first 73 renders
   existed. None had been labelled or looked at for this test.
+
+## Amendment 2 (2026-10-13, before any C74 label)
+
+Alessandro asked what "loses coherence" means, and showed a case that the first wording did not settle: a dwarf at
+an intermediate dose with painterly textures and comic-book lines. The eye reads it as a colouring choice inside the
+comic style, not as a broken picture. I fixed the definitions before any label.
+
+* **Style changes** (`cambia_da`). Any visible departure from the original's style counts, including a hybrid that
+  reads as one deliberate style (comic lines with painterly textures, for example). Such a hybrid is a style change,
+  not a loss of coherence.
+* **Loses coherence** (`coerenza_da`). The picture reads as broken or in conflict with itself: styles that clash in
+  different parts of the image, broken rendering, artefacts, anatomy coming apart. A mix that reads as intended does
+  not count.
+* **Loses prompt attributes** (`attributi_da`, new). Something the prompt asks for disappears or changes: race, class,
+  armour, weapon, beard, and so on. It is kept apart from coherence so that H3 stays about rendering. It is
+  **reported only** and decides no test: the tally reports, for L06 and L14, whether attributes go before, with or
+  after the style change.
+
+The page note carries these definitions and the example. H1–H3, their inputs and thresholds are unchanged.
