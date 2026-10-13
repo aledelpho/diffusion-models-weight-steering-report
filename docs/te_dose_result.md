@@ -62,7 +62,8 @@ changes at some dose: 11 of 12.
 * In L28, which never changes style, attributes are lost in 4 of 6 strips.
 * What goes:
   * hair colour (dwarf, half-orc; L14);
-  * the elf rogue's dark skin (L14, from 0.80 and 1.00);
+  * the elf rogue's dark skin (L14, from 0.80 and 1.00). The prompt names no skin tone ("non-binary rogue wood
+    elf"), so this is a drift from the original picture, not a lost prompt trait;
   * the half-orc's tusks, ears and skin;
   * clothing:
     * the half-orc fighter gets a garment I described as a kimono (L06 from 0.70, L28 from 0.90);
@@ -90,6 +91,9 @@ changes at some dose: 11 of 12.
   output already several times larger than the original. This is an estimate, not a measurement.
 * **Identity moves before style.**
   * Race markers, skin tone, hair colour and clothing change before, or without, any change of genre.
+  * Some are asked by the prompt (the half-orc's tusks, the dwarf's copper hair); others are choices of the original
+    picture the prompt does not name (skin tone, pointed ears). My notes did not separate the two.
+  * At seed 2645751 the original half-orc already shows no tusks: the baseline itself does not satisfy every trait.
   * The direction is toward a lighter-skinned, more generic human.
   * This fits the stereotype hypothesis behind C70: weakening part of the encoding lets defaults take over.
   * The default here is in the character, not only in the style.

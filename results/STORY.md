@@ -323,17 +323,30 @@ style"... draws cowboys. The model reads "western" as the Wild West!
 
 ![Four phrases alone at four seeds: 'realistic western comics style' draws bearded cowboys in comic panels, 'uniform' anime schoolgirls, 'female dwarf' a woman with a beard every time, and the elf's own description mostly anime.](../assets/30-the-text-encoder/F30.10_te_word_priors_sheet.webp)
 
-Said so, two honest warnings. My genre labels are coarse: two pictures I labelled "Western comic" can look
-nothing alike, so "no change of genre" doesn't mean "same style". And all these edits were extreme:
-"doubling" an MLP scales all three of its matrices, which is far stronger than the word suggests. The next
-test walks the dose down, step by step.
+Said so, two warnings. My genre labels are coarse: two pictures I labelled "Western comic" can look nothing alike,
+so "no change of genre" doesn't mean "same style". And all these edits were extreme: "doubling" an MLP scales all
+three of its matrices, which is far stronger than the word suggests.
+
+So I walked the dose down. Three edits, twelve doses from a tenth of the edit to the full one, three portraits,
+two seeds, all compared side by side. First surprise: nothing breaks. Not one picture loses coherence, even at full
+dose. Second: the style is stubborn. Below 0.70 nothing changes style at all; then one edit jumps from comic to
+photograph in a single step, and another slides slowly toward cartoon.
+
+The third is the one that matters to me. Before the style moves, the character is already gone. My half-orc loses
+her tusks, which I asked for, and her pointed ears and grey skin, which the model had chosen, while she is still
+drawn as a comic; the elf rogue's dark skin lightens, though I never asked for a skin tone; the control edit, which never touches the style, still dresses the half-orc in a high oriental collar.
+And the changes all lean the same way: toward a lighter-skinned, more generic human. For me this is the real damage
+of a text-encoder edit: it doesn't break the picture, it makes the model forget what I asked for and fill the gap
+with its defaults. I haven't tested this yet: it's what I noted while comparing, and it's the next thing to measure.
+
+![Three portraits along the dose ladder: under L06 the half-orc loses her orc features by 0.70 and becomes a photograph at 0.80; under L14 the elf rogue's skin lightens before the picture turns more cartoon; under L28 the half-orc stays a comic while her face and collar change.](../assets/30-the-text-encoder/F30.16_te_dose_sheet.webp)
 
 → [page 30](30-the-text-encoder.md) · the size of the push predicts the change **holds**, mostly between
 kinds of edit · these edits change genre and identity more than they damage the surface **holds** · one edit moves every character the same way
 **overturned** · the switch comes from less attention on the style words **overturned** · or from a push
 toward "anime" **overturned** · without style words the elf falls back to anime **holds** · every character has its own fallback **holds** · edits lead there **overturned** · random
 pushes of the same size do it too **ambiguous** (only if they vary across words) · each edit's own direction
-decides **open**
+decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **ambiguous** (one edit slides, one jumps) · the character's traits go first **open**
 
 ---
 

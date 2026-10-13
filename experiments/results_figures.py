@@ -1243,6 +1243,77 @@ def te_fallback_by_edit(out: Path) -> Path:
     return _save(fig, out, "C73 · MLP-doubled C65 edits on the seven portraits · my genre labels · source data/te_fallback_by_edit.csv")
 
 
+def _c74_labels():
+    return {(r["grid"], r["row"]): r for r in csv.DictReader(open(DATA / "te_dose_alessandro.csv", encoding="utf-8"))}
+
+
+C74_DOSES = ["0.10", "0.25", "0.40", "0.50", "0.60", "0.70", "0.75", "0.80", "0.85", "0.90", "0.95", "1.00"]
+
+
+def _c74_path(ch, L, s, d):
+    if d == "orig":
+        return _img(f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{s}_00001_.png")
+    if d == "1.00":
+        return _img(f"benchmark_te_characters/{ch}_L{L}_mlp_p1.00_krea2_seed{s}_00001_.png")
+    return _img(f"benchmark_te_dose/{ch}_L{L}_mlp_p{d}_krea2_seed{s}_00001_.png")
+
+
+def te_dose_sheet(out: Path) -> Path:
+    """F30.16 - C74: three dose strips, the high end of the ladder. Caption: where I marked the style change and the
+    loss of prompt traits (data/te_dose_alessandro.csv)."""
+    t = _c74_labels()
+    strips = [("06|O4_halforc_fighter|2645751", "L06 · half-orc · s1"), ("14|E2_elf_rogue|2645751", "L14 · elf rogue · s1"),
+              ("28|O4_halforc_fighter|2645751", "L28 · half-orc · s1")]
+    cols = [("orig", "original")] + [(d, d) for d in ["0.40", "0.60", "0.70", "0.75", "0.80", "0.85", "0.90", "0.95", "1.00"]]
+    def path(rk, d):
+        L, ch, s = rk.split("|")
+        return _c74_path(ch, L, s, d)
+    def cap(rk, d):
+        L, ch, s = rk.split("|")
+        r = t[(f"dose_L{L}", f"{ch} · {s}")]
+        bits = []
+        if r["attributi_da"] == d:
+            bits.append("traits lost")
+        if r["cambia_da"] == d:
+            bits.append("style changes")
+        return (" + ".join(bits), NEG) if bits else None
+    return _sheet(strips, cols, path, cap, out,
+                  "C74 · MLP of one text-encoder layer at growing dose, seed 2645751 · captions = where I marked the first trait lost and the "
+                  "style change · source data/te_dose_alessandro.csv", W=118, H=148, LAB=150)
+
+
+def te_dose_onsets(out: Path) -> Path:
+    """F30.17 - C74: per strip, the dose where I marked the style change and the first lost prompt trait."""
+    rows = list(csv.DictReader(open(DATA / "te_dose_alessandro.csv", encoding="utf-8")))
+    xs = {d: i for i, d in enumerate(C74_DOSES)}
+    NEVER = len(C74_DOSES) + 0.6
+    ch_en = {"D1_dwarf_paladin": "dwarf", "E2_elf_rogue": "elf rogue", "O4_halforc_fighter": "half-orc"}
+    fig, ax = _canvas(6.4, 4.2)
+    labels = []
+    for i, r in enumerate(rows):
+        ch, s = r["row"].split(" · ")
+        labels.append(f"{r['grid'].replace('dose_', '')} · {ch_en[ch]} · {'s1' if s == '2645751' else 's2'}")
+        def x(v):
+            return None if not v else (NEVER if v == "mai" else xs[v])
+        a, b = x(r["cambia_da"]), x(r["attributi_da"])
+        if a is not None:
+            ax.scatter([a], [i - 0.13], s=34, color=CAT[0], zorder=3, label="style changes" if i == 0 else None)
+        if b is not None:
+            ax.scatter([b], [i + 0.13], s=34, marker="^", color=CAT[1], zorder=3, label="first prompt trait lost" if i == 0 else None)
+        if a is None or b is None:
+            ax.text(NEVER + 0.7, i, "not labelled", va="center", fontsize=6, color=DIM)
+    for y in (5.5, 11.5):
+        ax.axhline(y, color=GRID, lw=0.6)
+    ax.set_xticks(list(range(len(C74_DOSES))) + [NEVER]); ax.set_xticklabels(C74_DOSES + ["never"], fontsize=6.5, color=DIM)
+    ax.set_xlim(-0.6, NEVER + 2.2)
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels(labels, fontsize=6.5, color=DIM); ax.invert_yaxis()
+    ax.set_xlabel("dose d (each of gate, up, down scaled by 1 + d)", color=DIM, fontsize=7.5)
+    ax.legend(frameon=False, fontsize=6.5, labelcolor=INK, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2)
+    fig.text(0.1, 0.955, "Nothing moves below 0.70; traits often go before the style", color=INK, fontsize=8.5)
+    fig.subplots_adjust(left=0.2, right=0.98, top=0.84, bottom=0.13)
+    return _save(fig, out, "C74 · 3 edits × 3 characters × 2 seeds · my labels, one row onset 'never' kept as downloaded · source data/te_dose_alessandro.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1295,6 +1366,8 @@ BUILDERS = {
     "F30.13": ("30-the-text-encoder", "te_genre_by_edit", te_genre_by_edit),
     "F30.14": ("30-the-text-encoder", "te_fallback_sheet", te_fallback_sheet),
     "F30.15": ("30-the-text-encoder", "te_fallback_by_edit", te_fallback_by_edit),
+    "F30.16": ("30-the-text-encoder", "te_dose_sheet", te_dose_sheet),
+    "F30.17": ("30-the-text-encoder", "te_dose_onsets", te_dose_onsets),
 }
 
 

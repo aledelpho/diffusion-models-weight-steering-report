@@ -3,13 +3,13 @@ id: 30-the-text-encoder
 title: The text encoder — how hard it pushes, and where the picture goes
 status: holds
 stage: confirmatory
-date: 2026-10-12
+date: 2026-10-13
 preregistration: docs/prereg_te_conditioning.md
 supersedes: []
 pitfalls: [90]
 
 corpus:
-  renders: 1328
+  renders: 1527
   prompts: 70
   seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281, 3605551, 4123105]
 
@@ -171,11 +171,54 @@ claims:
       in 4 of 4; "uniform" an anime girl in 4 of 4; "realistic western comics style" a bearded cowboy comic in 4 of 4;
       "female antlered elf brawler" anime in 3 of 4; phrases without a person are mostly realistic (78 of 165).
     anchor: "#what-each-phrase-draws-alone"
+  - id: te-dose-no-breakage
+    status: holds
+    statement: >
+      Up to the full dose (one MLP of the text encoder doubled), the edits change style and content without breaking
+      the picture: the style moves before coherence is lost, and coherence is not lost at all.
+    evidence: >
+      Pre-registered (C74 H3, amendment 2 fixing what counts as loss of coherence): L06 and L14 MLP on three portraits
+      at two seeds, twelve doses from 0.10 to 1.00. The style changes before coherence is lost in 11 of 11 changing
+      strips (bar 2/3); coherence is marked lost in none of the 18 strips, the L28 control included. One labeller, not
+      blind.
+    anchor: "#a-dose-ladder"
+  - id: te-dose-moves-toward-full-dose
+    status: holds
+    statement: >
+      Along a dose ladder the intermediate pictures move toward the picture at full dose: the destination is set by
+      the edit, not reached by a detour.
+    evidence: >
+      Pre-registered (C74 H2): yes in 10 of 11 changing strips of L06 and L14 (0.91, bar 0.7). The one "no" is the elf
+      rogue under L06, which passes through a painted look before ending in anime.
+    anchor: "#a-dose-ladder"
+  - id: te-dose-gradual-or-step
+    status: ambiguous
+    statement: >
+      The style change along the dose is gradual rather than a sudden step.
+    evidence: >
+      Pre-registered (C74 H1), pooled over L06 and L14: gradual in 8 of 11 changing strips (0.73, bar 0.6), so the rule
+      says gradual. Split by edit, the two disagree: L14 is gradual in 6 of 6, L06 is a step in 4 of 5, from comic to
+      photograph around d = 0.80. The split was not pre-registered. No strip changes style below d = 0.70.
+    anchor: "#a-dose-ladder"
+  - id: te-edit-loses-traits-first
+    status: open
+    statement: >
+      The first thing a text-encoder edit costs is the character: traits the prompt asks for (the half-orc's tusks,
+      the dwarf's copper hair) and features of the original picture the prompt does not name (skin tone, ears,
+      clothing) change before the style does, or without any style change.
+    evidence: >
+      Reported, not tested (C74, amendment 2, free-text traits, one labeller). In L06 and L14, a prompt trait is lost
+      before the style changes in 5 of 10 strips, at the same dose in 2, after in 3. In the L28 control, which never
+      changes style, traits are lost in 4 of 6 strips. The half-orc loses her tusks (asked) and her ears and grey skin
+      (not named) under L06 by d = 0.70 while still drawn as a comic; under L14 the elf rogue's skin, dark in the
+      original though the prompt names no skin tone, lightens. My notes did not separate asked traits from unnamed
+      ones, and at one seed the original half-orc already shows no tusks.
+    anchor: "#a-dose-ladder"
 ---
 
 # The text encoder — how hard it pushes, and where the picture goes
 
-> **Holds** · 1328 renders · 70 prompts · pre-registered 2026-10-12
+> **Holds** · 1527 renders · 70 prompts · pre-registered 2026-10-12
 > [← all results](README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Krea-2 reads the prompt with a language model, Qwen3-VL-4B, before
@@ -191,7 +234,9 @@ claims:
 > words stop working, shown directly by removing them — but only for the elf: other characters fall back to
 > painting or realistic renders. Random pushes reach that fallback only if they
 > vary from token to token, and each real edit has a direction of its own: one protects the comic, another
-> drives it to anime. Why a given edit points where it does is still open.
+> drives it to anime. Why a given edit points where it does is still open. And a dose ladder showed that the
+> full-strength edits do not break the picture: the style holds up to about d = 0.70, and before it moves, the
+> edit has often already changed *who* is drawn.
 
 ## In two minutes
 
@@ -230,6 +275,14 @@ token to token: the same random vector added to every token changes nothing. And
 random: the edit with the largest push keeps the comic every time, while random pushes of its size break
 it almost every time.
 
+Last, I asked whether those edits were simply too strong. I rendered three of them at twelve doses, from a
+tenth of the edit to the full one. Nothing changes style below 0.70, and no picture breaks, even at full dose. But
+the character goes first. The half-orc loses her tusks, which the prompt asks for, and her ears and grey skin,
+which the model had chosen, while she is still drawn as a comic; the style changes only later. For me this is the real damage: the edit makes the model forget what I asked
+for, and it fills the gap with a more generic person.
+
+![Three portraits along the dose ladder: under L06 the half-orc loses her orc features by 0.70 and becomes a photograph at 0.80; under L14 the elf rogue's skin lightens before the picture turns more cartoon; under L28 the half-orc stays a comic while her face and collar change.](../assets/30-the-text-encoder/F30.16_te_dose_sheet.webp)
+
 ## The verdict
 
 **Holds**, pre-registered twice: the size of the push on the conditioning predicts how much the
@@ -244,7 +297,10 @@ character to its own fallback. **Ambiguous**:
 whether random pushes of the same size reach the fallback as often as edits — yes if they vary across
 tokens, no if they are one shared vector. **Open**: that each edit's own direction decides; what single
 phrases draw alone; anime as the usual destination of a switch. **Ambiguous**: whether the strong edits
-separate word orders inside the image model.
+separate word orders inside the image model. **Holds** (C74): along a dose ladder the pictures move toward the
+full-dose picture, and the style changes before coherence breaks, which it never does. **Ambiguous** (C74): whether
+the change is gradual: pooled yes, but L14 slides and L06 jumps. **Open** (C74): that the edit loses the character's
+traits before its style.
 
 ## Why I might be wrong
 
@@ -263,15 +319,20 @@ label "anime" is my reading of that change.
 **Genre labels hide sub-styles, and the doses are extreme.** While labelling I noticed that each label covers
 very different sub-styles: two pictures labelled "Western comic" can look nothing alike, so "no switch" does not mean
 "same style". All these edits zero or double a layer half; at that strength part of what is labelled a change of
-genre may be a loss of stylistic coherence. A dose ladder with comparative judgements is the next test (C74).
+genre may be a loss of stylistic coherence. C74 checked this with a dose ladder and comparative judgements: no picture
+lost coherence, up to full dose. The labels of sub-style remain mine.
 
 **Size mostly sorts kinds of edit.** The two tests of the size of the push were fixed on all edits
 together. Checked afterwards within one kind, the relation nearly vanishes for the MLP-doubled edits —
 the ones that change genre — and holds at 0.46-0.66 for the others (`data/te_size_within_type.csv`). Part
 of that may be a ceiling: 28 of the 35 MLP-doubled edits were already labelled strong.
 
-**Large doses only.** Almost everything here is at ±1: a layer half doubled or removed. These are
-blunt edits; what milder doses do is mostly unknown.
+**Mostly large doses.** Almost everything here is at ±1: a layer half doubled or removed. C74 adds twelve
+doses, but for three edits, three characters and two seeds only.
+
+**Traits were not a fixed list.** In C74 I wrote down which prompt traits were lost in free text, and that question
+decided no test. One row has an onset of "never" although the picture changes at 0.80 (I checked); it is kept as
+downloaded and changes no verdict.
 
 **What the measures do not see.** The conditioning is what the image model receives, not what it does
 with it. Attention says where a phrase is read, not what it says. C71 averages over all the tokens of a
@@ -463,6 +524,41 @@ Described, not tested:
 
 ![Four phrases alone at four seeds: 'realistic western comics style' draws bearded cowboys in comic panels, 'uniform' anime schoolgirls, 'female dwarf' a woman with a beard every time, and the elf's own description mostly anime.](../assets/30-the-text-encoder/F30.10_te_word_priors_sheet.webp)
 
+### A dose ladder
+
+C74 rendered three MLP edits at twelve doses (0.10 to 1.00) on three portraits at two seeds: L06 (to realistic),
+L14 (to cartoon) and L28 (keeps the comic, the control). The full-dose render was re-made first and is
+pixel-identical to the C65 one. For each strip I answered, side by side, where the style starts to differ, whether
+it moves gradually or in a step, whether the intermediate pictures head toward the full-dose one, where the picture
+loses coherence and where it loses a trait the prompt asks for. Before labelling I fixed the definitions
+(amendment 2): a hybrid that reads as one intended style, such as comic lines with painted textures, is a change of
+style, not a loss of coherence.
+
+| test (L06 and L14, 11 changing strips) | value | rule | verdict |
+|---|---|---|---|
+| H1 — gradual rather than a step | 8 of 11 = 0.73 | ≥ 0.6 | gradual (pooled) |
+| H2 — intermediate doses head toward the full dose | 10 of 11 = 0.91 | ≥ 0.7 | supported |
+| H3 — style changes before coherence is lost | 11 of 11 | ≥ 2/3 | supported |
+
+The pooled H1 hides two behaviours. L14 slides toward cartoon in 6 of 6 strips. L06 jumps from comic to photograph
+around 0.80 in 4 of 5. And H3 is met in the simplest way: I marked no loss of coherence anywhere.
+
+![For each of the 18 strips, the dose where the style changes and the dose where the first prompt trait is lost: no style change below 0.70, L06 changes at 0.80-0.85, L14 between 0.70 and 1.00, L28 never; traits are lost at or before the style change in most L06 and L14 strips and in four of six L28 strips.](../assets/30-the-text-encoder/F30.17_te_dose_onsets.webp)
+
+What the ladder shows beyond the tests (reported, not tested):
+
+* **The style holds for most of the range.** No strip changes style below 0.70. Since the edit scales three matrices
+  of the MLP, the layer's output at 0.70 is, by my estimate of (1 + d)³, already several times the original.
+* **The character goes first.** In L06 and L14, a trait the prompt asks for is lost before the style changes in 5
+  of 10 strips and at the same dose in 2. "Trait" here mixes two things my notes did not separate: features the
+  prompt asks for (the half-orc's tusks, the dwarf's copper hair) and features of the original picture the prompt
+  does not name (skin tone, ears). The L28 control never changes style, yet loses traits in 4 of 6 strips:
+  the elf's face turns green, the half-orc gets a high oriental collar. The changes lean one way: tusks, pointed
+  ears and grey or dark skin give way to a lighter-skinned, more generic human. The prompts name no skin tone, so
+  the skin is a drift from the original picture, not a failure to follow the prompt.
+* **Composition moves smoothly.** In all 18 strips pose and framing change little from one dose to the next, even
+  where the style jumps.
+
 ### Reproducing this
 
 ```yaml
@@ -484,39 +580,42 @@ tuner:
   version: not recorded — the tuner is a separate repository
   mode: Real Value; one layer half through granular_json (layers.L.self_attn.{q,k,v,o}_proj.weight or layers.L.mlp.{gate,up,down}_proj.weight), weight x (1 + d)
 prompts:
-  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv]
+  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv, data/te_dose_plan.csv]
   ids: [P1_elfbrawler, V1_Original, V2_SubjectFirst, V3_BGFirst, V4_ActionFirst, V5_Inverse, D1_dwarf_paladin, D1W_dwarf_paladin_watercolor, E2_elf_rogue, G5_gnome_wizard, H3_halfling_druid, O4_halforc_fighter, R6_dragonborn_cleric, T7_tiefling_bard, "V1-V5 without the style clauses (C72)", EMPTY, W00-W42 (C72 single phrases), "the seven portraits without 'Western comics style' (C73)"]
 seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281, 3605551, 4123105]
 conditions:
   - name: one layer half of the text encoder, d = -1.00 (zeroed) or +1.00 (doubled); C64 also at ±0.10 and ±0.35
     dose: 1.000
     measured_D: not measured; the dose is a per-matrix gain, not a calibrated displacement
+  - name: C74 dose ladder, MLP of L06, L14, L28 at d = 0.10, 0.25, 0.40, 0.50, 0.60, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00
+    dose: 0.10-1.00
+    measured_D: not measured; the dose is a per-matrix gain, not a calibrated displacement
 outputs:
-  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default, benchmark_te_fallback]
-  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv]
+  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default, benchmark_te_fallback, benchmark_te_dose]
+  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv, data/te_dose_plan.csv]
   encodes_without_images: [benchmark_te_conditioning (C67, 721), benchmark_te_regions (C68, 241), benchmark_te_direction (C71, 16)]
 analysis:
-  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py, experiments/te_fallback.py, experiments/te_fallback_tally.py]
-  produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv
+  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py, experiments/te_fallback.py, experiments/te_fallback_tally.py, experiments/te_dose.py, experiments/te_dose_tally.py]
+  produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv, data/te_dose_tests.csv
 ```
 
 ## Provenance
 
-* Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280), C73 fallbacks (29).
+* Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280), C73 fallbacks (29), C74 dose ladder (199, gate included).
 * Encodes without images: C67 (721), C68 (241), C71 (16).
 * **Pre-registrations:** `docs/prereg_te_characters.md` (+ amendments 1-3), `docs/prereg_te_conditioning.md`
   (+ amendments 1-2), `docs/prereg_te_regions.md`, `docs/prereg_te_bridge.md`, `docs/prereg_te_genre.md`
-  (+ amendments 1-2), `docs/prereg_te_direction.md`, `docs/prereg_te_default.md` (+ amendments 1-2), `docs/prereg_te_fallback.md`; the pilot plan `docs/plan_te_pilot.md`.
+  (+ amendments 1-2), `docs/prereg_te_direction.md`, `docs/prereg_te_default.md` (+ amendments 1-2), `docs/prereg_te_fallback.md`, `docs/prereg_te_dose.md` (+ amendments 1-2); the pilot plan `docs/plan_te_pilot.md`.
 * **Result documents:** `docs/te_pilot_phase1_result.md`, `docs/te_characters_result.md`,
   `docs/te_characters_eye_result.md`, `docs/te_order_grid_result.md`, `docs/te_conditioning_result.md`,
   `docs/te_regions_result.md`, `docs/te_bridge_result.md`, `docs/te_genre_result.md`,
-  `docs/te_direction_result.md`, `docs/te_default_result.md`, `docs/te_fallback_result.md`.
+  `docs/te_direction_result.md`, `docs/te_default_result.md`, `docs/te_fallback_result.md`, `docs/te_dose_result.md`.
 * **Data:** `data/te_pilot_eye_alessandro_phase1.csv`, `data/te_order_grid_notes_alessandro.csv`,
   `data/te_order_tests.csv`, `data/te_size_within_type.csv`, `data/te_genre_alessandro.csv`, `data/te_genre_dose_alessandro.csv`,
   `data/te_bridge_style.csv`, `data/te_direction_by_edit.csv`, `data/te_direction_norms.csv`,
   `data/te_default_genre_alessandro.csv`, `data/te_default_cells.csv`, `data/te_default_tests.csv`,
   `data/te_words_alessandro.csv`, `data/te_massive_channels.csv`, `data/te_fallback_genre_alessandro.csv`,
-  `data/te_fallback_tests.csv`, `data/te_fallback_by_edit.csv`.
+  `data/te_fallback_tests.csv`, `data/te_fallback_by_edit.csv`, `data/te_dose_alessandro.csv`, `data/te_dose_tests.csv`.
 * **Labels and keys** were committed in the order the protocols require: key before labels, labels as
   downloaded before any count.
 * **Probes:** `tools/comfyui_krea2_probe` (conditioning), `tools/comfyui_krea2_attnprobe` (attention; reads

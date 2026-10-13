@@ -1118,3 +1118,25 @@ figures:
     alt: >
       For each MLP-doubled edit, the genres of its fourteen portrait pictures: L06 is mostly realistic, L14 mostly
       cartoon, L26 and L28 stay Western comic in all fourteen, L05 and L12 spread over anime, painting and realistic.
+  - id: F30.16
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_dose_sheet
+    source: data/te_dose_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Three portraits along the dose ladder: under L06 the half-orc loses her orc features by 0.70 and becomes a
+      photograph at 0.80; under L14 the elf rogue's skin lightens before the picture turns more cartoon; under L28 the
+      half-orc stays a comic while her face and collar change.
+  - id: F30.17
+    page: 30-the-text-encoder
+    kind: scatter
+    builder: results_figures.te_dose_onsets
+    source: data/te_dose_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      For each of the 18 strips, the dose where the style changes and the dose where the first prompt trait is lost:
+      no style change below 0.70, L06 changes at 0.80-0.85, L14 between 0.70 and 1.00, L28 never; traits are lost at
+      or before the style change in most L06 and L14 strips and in four of six L28 strips.
