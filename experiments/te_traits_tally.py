@@ -6,6 +6,10 @@ Outputs: data/te_traits_tests.csv, data/te_traits_by_picture.csv.
 
   python te_traits_tally.py
   python te_traits_tally.py --selftest
+  python te_traits_tally.py --part B            # added 2026-10-13 after the part B renders, before its labels:
+  python te_traits_tally.py --part B --selftest # B0, B1, B1-skin, repeats; T1-T2 again without fragile traits.
+Part B inputs: data/te_traits_key_B.csv, data/te_traits_schedule_B.csv, data/te_traits_B_alessandro.csv, plus the
+part A files. Output: data/te_traits_B_tests.csv.
 """
 import argparse, csv, statistics
 from collections import Counter, defaultdict
@@ -52,7 +56,7 @@ def kappa(pairs):
     return 1.0 if pe == 1 else (po - pe) / (1 - pe)
 
 
-def tally(key, sched, questions, labels, c74):
+def tally(key, sched, questions, labels, c74, exclude=frozenset()):
     traits = {q["id"] for q in questions if q["kind"] in ("asked", "common")}
     ans1, ans2 = {}, {}
     for r in labels:
@@ -60,7 +64,7 @@ def tally(key, sched, questions, labels, c74):
     K = {k["item"]: k for k in key}
     per_char = defaultdict(set)
     for s in sched:
-        if s["kind"] == "trait":
+        if s["kind"] == "trait" and s["question"] not in exclude:
             per_char[s["char"]].add(s["question"])
     orig = {(k["char"], k["seed"]): k["item"] for k in key if k["dose"] == "0.00"}
     def pres(item, q, a=ans1):
@@ -214,7 +218,142 @@ def selftest():
     print("selftest ok")
 
 
+def _answers(labels):
+    a1, a2 = {}, {}
+    for r in labels:
+        (a1 if str(r["showing"]) == "1" else a2)[(r["item"], r["question"])] = r["answer"]
+    return a1, a2
+
+
+def _skin(a, item):
+    s, l, d = a.get((item, "skin_same")), a.get((item, "skin_lighter")), a.get((item, "skin_darker"))
+    if s == "sì": return "same"
+    if s == "no" and l == "sì": return "lighter"
+    if s == "no" and l == "no" and d == "sì": return "darker"
+    if s == "no" and l == "no" and d == "no": return "other hue"
+    return None
+
+
+def band(x):
+    return "more" if x >= 0.15 else ("size" if -0.05 <= x <= 0.05 else ("less" if x <= -0.15 else "mid"))
+
+
+def tally_B(keyB, schedB, questions, labB, keyA, schedA, labA, c74):
+    out = []
+    a1, a2 = _answers(labB); A1, _ = _answers(labA)
+    traits = {q["id"] for q in questions if q["kind"] in ("asked", "common")}
+    per_char = defaultdict(set)
+    for s in schedB:
+        if s["kind"] == "trait":
+            per_char[s["char"]].add(s["question"])
+    def pres(a, it, q):
+        v = a.get((it, q)); return VAL.get(v) if v is not None else None
+    # B0: presence over 8 seeds (2 originals from part B session + 6 plain; part A originals reported apart)
+    rate = {}
+    for c in CH:
+        plain = [k["item"] for k in keyB if k["char"] == c and k["variant"] in ("original", "plain_B0")]
+        for q in sorted(per_char[c]):
+            v = [pres(a1, it, q) for it in plain if pres(a1, it, q) is not None]
+            rate[q] = (sum(v) / len(v), len(v)) if v else (None, 0)
+    fragile = {q for q, (r, n) in rate.items() if r is not None and r < 0.5}
+    out.append({"test": "B0 presence of each trait in the unedited model, 8 seeds (reported)",
+                "value": " ".join(f"{q}:{r:.2f}(n{n})" for q, (r, n) in sorted(rate.items(), key=lambda x: (x[1][0] is None, x[1][0])) if r is not None),
+                "verdict": ""})
+    out.append({"test": "B0 fragile at baseline (presence < 0.5)", "value": " ".join(sorted(fragile)) or "none", "verdict": ""})
+    # B1: retention against the part B original of the same character and seed
+    orig = {(k["char"], k["seed"]): k["item"] for k in keyB if k["variant"] == "original"}
+    def R(it, c, s):
+        o = orig[(c, s)]
+        p0 = [q for q in per_char[c] if pres(a1, o, q) == 1 and pres(a1, it, q) is not None]
+        return sum(pres(a1, it, q) for q in p0) / len(p0) if p0 else None
+    cells = defaultdict(dict)
+    for k in keyB:
+        if k["edit"]:
+            cells[(k["char"], k["seed"], k["edit"], k["dose"])][k["variant"]] = R(k["item"], k["char"], k["seed"])
+    full = {c: v for c, v in cells.items() if all(v.get(x) is not None for x in ("real", "token", "permuted"))}
+    if full:
+        dp = statistics.mean((v["token"] + v["permuted"]) / 2 - v["real"] for v in full.values())
+        dt = statistics.mean(v["token"] - v["real"] for v in full.values())
+        dm = statistics.mean(v["permuted"] - v["real"] for v in full.values())
+        bt, bm = band(dt), band(dm)
+        if bt != bm and "mid" not in (bt, bm):
+            vb = "depends on the form of the push"
+        else:
+            vb = {"more": "the edit costs more traits than its size: supported", "size": "size alone",
+                  "less": "random pushes cost more", "mid": "inconclusive"}[band(dp)]
+        out.append({"test": "B1 random minus real retention, matched cells", "value": f"pooled {dp:+.2f}; token {dt:+.2f}; permuted {dm:+.2f}; cells {len(full)} of {len(cells)}", "verdict": vb})
+        for e in ("L06_mlp", "L14_mlp", "L28_mlp"):
+            ve = [v for c, v in full.items() if c[2] == e]
+            if ve:
+                out.append({"test": f"B1 by edit, {e} (reported)", "value": f"real {statistics.mean(v['real'] for v in ve):.2f}; token {statistics.mean(v['token'] for v in ve):.2f}; permuted {statistics.mean(v['permuted'] for v in ve):.2f}", "verdict": ""})
+    else:
+        out.append({"test": "B1 random minus real retention, matched cells", "value": "", "verdict": "inconclusive (no labels)"})
+    sk = Counter((k["variant"], _skin(a1, k["item"])) for k in keyB if k["edit"])
+    out.append({"test": "B1-skin share lighter among lighter + darker (reported)",
+                "value": " ".join(f"{v}: {sk[(v, 'lighter')]}/{sk[(v, 'lighter')] + sk[(v, 'darker')]} (other hue {sk[(v, 'other hue')]})" for v in ("real", "token", "permuted")), "verdict": ""})
+    pairs = [(a1[(it, q)], a2[(it, q)]) for (it, q) in a2 if q in traits and (it, q) in a1 and a1[(it, q)] in ("sì", "no") and a2[(it, q)] in ("sì", "no")]
+    kp = kappa(pairs)
+    out.append({"test": "Reliability, part B repeats (Cohen kappa, traits)", "value": f"kappa {kp:.2f} on {len(pairs)} pairs" if kp is not None else "no pairs",
+                "verdict": "" if kp is None else ("passed" if kp >= 0.60 else "failed: no claim from B may be stated as holds")})
+    # same pictures labelled in both sessions (originals, real edits at 0.70 / 0.85 / 1.00): cross-session agreement
+    fileA = {k["file"]: k["item"] for k in keyA}
+    cross = [(A1[(fileA[k["file"]], q)], a1[(k["item"], q)]) for k in keyB if k["file"] in fileA for q in per_char[k["char"]]
+             if (fileA[k["file"]], q) in A1 and (k["item"], q) in a1 and A1[(fileA[k["file"]], q)] in ("sì", "no") and a1[(k["item"], q)] in ("sì", "no")]
+    kc = kappa(cross)
+    out.append({"test": "Agreement across sessions, same pictures (reported)", "value": f"kappa {kc:.2f} on {len(cross)} pairs" if kc is not None else "no pairs", "verdict": ""})
+    # T1, T2 of part A without the fragile traits
+    if labA and fragile:
+        o2, _ = tally(keyA, schedA, questions, labA, c74, exclude=frozenset(fragile))
+        for o in o2:
+            if o["test"].startswith(("T1", "T2 traits")):
+                out.append({"test": o["test"] + " - without fragile traits (reported)", "value": o["value"], "verdict": o["verdict"]})
+    return out
+
+
+def run_B():
+    labA = rd(DATA / "te_traits_alessandro.csv") if (DATA / "te_traits_alessandro.csv").exists() else []
+    out = tally_B(rd(DATA / "te_traits_key_B.csv"), rd(DATA / "te_traits_schedule_B.csv"), rd(DATA / "te_traits_questions.csv"),
+                  rd(DATA / "te_traits_B_alessandro.csv"), rd(DATA / "te_traits_key_A.csv"), rd(DATA / "te_traits_schedule_A.csv"),
+                  labA, rd(DATA / "te_dose_alessandro.csv"))
+    with open(DATA / "te_traits_B_tests.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["test", "value", "verdict"]); w.writeheader(); w.writerows(out)
+    for o in out: print(o)
+
+
+def selftest_B():
+    """Synthetic labeller for part B: the real edit loses the first four traits at every dose, random pushes lose
+    none; o_tusks absent in every plain picture. Expected: B1 'edit costs more', o_tusks fragile, kappa 1."""
+    keyB, schedB, qs = rd(DATA / "te_traits_key_B.csv"), rd(DATA / "te_traits_schedule_B.csv"), rd(DATA / "te_traits_questions.csv")
+    K = {k["item"]: k for k in keyB}
+    traits = defaultdict(list)
+    for s in schedB:
+        if s["kind"] == "trait" and s["question"] not in traits[s["char"]]:
+            traits[s["char"]].append(s["question"])
+    lab = []
+    for s in schedB:
+        k = K[s["item"]]; base = dict(block=s["block"], pos=s["pos"], item=s["item"], showing=s["showing"])
+        if s["kind"] == "trait":
+            a = "no" if (k["variant"] == "real" and s["question"] in sorted(traits[k["char"]])[:4]) or (s["question"] == "o_tusks" and not k["edit"]) else "sì"
+            lab.append({**base, "question": s["question"], "answer": a})
+        elif s["kind"] == "skin":
+            lab.append({**base, "question": "skin_same", "answer": "no" if k["variant"] == "real" else "sì"})
+            if k["variant"] == "real": lab.append({**base, "question": "skin_lighter", "answer": "sì"})
+        else:
+            lab.append({**base, "question": "person", "answer": "sì"})
+    out = tally_B(keyB, schedB, qs, lab, rd(DATA / "te_traits_key_A.csv"), rd(DATA / "te_traits_schedule_A.csv"), [], [])
+    d = {}
+    for o in out:
+        d.setdefault(o["test"].split(",")[0], o)
+    assert d["B1 random minus real retention"]["verdict"].startswith("the edit costs more"), d["B1 random minus real retention"]
+    assert "o_tusks" in d["B0 fragile at baseline (presence < 0.5)"]["value"]
+    assert d["Reliability"]["verdict"] == "passed"
+    print("selftest B ok")
+
+
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("--selftest", action="store_true")
+    ap = argparse.ArgumentParser(); ap.add_argument("--selftest", action="store_true"); ap.add_argument("--part", default="A")
     a = ap.parse_args()
-    selftest() if a.selftest else run()
+    if a.part == "B":
+        selftest_B() if a.selftest else run_B()
+    else:
+        selftest() if a.selftest else run()

@@ -337,3 +337,37 @@ renders, the plan has **122 rows** (`data/te_traits_plan.csv`, `experiments/te_t
 
 The Part B labelling page is built after the renders, with the same protocol. Its tally is added to
 `te_traits_tally.py` before those labels, following the B1 rule fixed above.
+
+## Amendment 2 (2026-10-13, after the Part B renders, before any Part B label)
+
+The renders passed the gate (`docs/RENDERS_2026-10-13_te_traits.md`: both diffs 0, 122 of 122). I opened one contact
+sheet to check that the files are valid pictures (`Text2Img\_grid_viewer\_c74_check\c75_b_check.jpg`). Nothing was
+labelled or counted.
+
+**The Part B page** (`Text2Img\_grid_viewer\te_traits_B\index.html`) uses the protocol of amendment 1. It has 186
+pictures, 62 per character:
+
+* the 2 originals;
+* the 6 plain B0 portraits: the 4 new seeds plus 3605551 and 4123105 from `phase_c`;
+* the 18 real-edit pictures at d = 0.70, 0.85 and 1.00;
+* the 36 random-push pictures.
+
+Changes from the text above:
+
+* **Repeats.** There are 4 repeats per character (12 in all), as fixed above; at least one is an original.
+* **B0 and the reference.** The B0 portraits have no reference of their own seed among the edited pictures. They are
+  asked the trait questions only, not skin or person.
+* **Files.** Key `data/te_traits_key_B.csv`, schedule `data/te_traits_schedule_B.csv` (3,066 steps before the skin
+  follow-ups), seed 7476. The labels file is `te_traits_B_alessandro.csv`.
+
+**Measures and rules** (`te_traits_tally.py --part B`, self-test on a synthetic labeller):
+
+* **B1.** Retention is measured against the original as labelled in the same Part B session. The bands are
+  "more" ≥ +0.15, "size" within ±0.05, "less" ≤ −0.15 and "mid" otherwise.
+  * If token and permuted fall in two different bands, neither of them "mid", the verdict is "depends on the form
+    of the push".
+  * Otherwise the pooled difference decides.
+* **B0.** Presence rate over the 8 plain pictures of each character, labelled in Part B (the 2 originals and 6
+  plain). A trait with presence < 0.5 is fragile. T1 and T2 of Part A are re-reported without the fragile traits.
+* **Reported in addition:** agreement across sessions on the same pictures (the originals and the real edits at
+  0.70, 0.85 and 1.00, shown in both parts), as κ.

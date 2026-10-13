@@ -3,6 +3,8 @@ Written 2026-10-13, before any C75 label.
 
   python te_traits_page.py --key   --img-root <Text2Img>   # data/te_traits_key_A.csv, data/te_traits_schedule_A.csv
   python te_traits_page.py --page  --img-root <Text2Img>   # Text2Img/_grid_viewer/te_traits/index.html + img/
+  python te_traits_page.py --key  --part B ...             # part B (added 2026-10-13 after the renders, before its labels):
+  python te_traits_page.py --page --part B ...             # data/te_traits_key_B.csv, _schedule_B.csv, _grid_viewer/te_traits_B/
 
 One question at a time over every picture of one character (question-major). Right arrow = yes, left = no,
 down = cannot tell, Backspace = back. Item numbers, edits, doses and seeds are not shown.
@@ -37,6 +39,65 @@ def pictures():
                     out.append({"char": c, "seed": s, "edit": f"L{L:02d}_mlp", "dose": d,
                                 "file": f"{folder}/{ch}_L{L:02d}_mlp_p{d}_krea2_seed{s}_00001_.png"})
     return out
+
+
+SEEDS_B0 = ["1618033", "1234567", "3141592", "2718281", "3605551", "4123105"]
+B_DOSES = ["0.70", "0.85", "1.00"]
+N_REPEAT_B = 4
+
+
+def pictures_B():
+    """Part B: per character the 2 originals, the 6 plain portraits of B0, and for L06/L14/L28 x 2 seeds x 3 doses the
+    real edit (C74 / C65 render) and the two random pushes (token, permuted)."""
+    out = []
+    for c, ch in CHARS.items():
+        for s in SEEDS:
+            out.append({"char": c, "seed": s, "edit": "", "dose": "0.00", "variant": "original",
+                        "file": f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{s}_00001_.png"})
+        for s in SEEDS_B0:
+            folder = "benchmark_portraits/phase_c" if s in ("3605551", "4123105") else "benchmark_te_traits"
+            out.append({"char": c, "seed": s, "edit": "", "dose": "0.00", "variant": "plain_B0",
+                        "file": f"{folder}/{ch}_baseline_krea2_seed{s}_00001_.png"})
+        for L in LAYERS:
+            for s in SEEDS:
+                for d in B_DOSES:
+                    folder = "benchmark_te_characters" if d == "1.00" else "benchmark_te_dose"
+                    out.append({"char": c, "seed": s, "edit": f"L{L:02d}_mlp", "dose": d, "variant": "real",
+                                "file": f"{folder}/{ch}_L{L:02d}_mlp_p{d}_krea2_seed{s}_00001_.png"})
+                    for v in ("token", "permuted"):
+                        out.append({"char": c, "seed": s, "edit": f"L{L:02d}_mlp", "dose": d, "variant": v,
+                                    "file": f"benchmark_te_traits/{ch}_L{L:02d}_mlp_p{d}_{v}_krea2_seed{s}_00001_.png"})
+    return out
+
+
+def make_key_B():
+    rng = random.Random(RNG_SEED + 1)
+    pics = pictures_B(); rng.shuffle(pics)
+    for n, p in enumerate(pics, 1):
+        p["item"] = f"B{n:03d}"
+    reps = {}
+    for c in CHARS:
+        mine = [p for p in pics if p["char"] == c and p["variant"] != "plain_B0"]
+        orig = [p for p in mine if p["variant"] == "original"]
+        first = rng.choice(orig)
+        reps[c] = [first["item"]] + [p["item"] for p in rng.sample([p for p in mine if p is not first], N_REPEAT_B - 1)]
+    for p in pics:
+        p["repeated"] = int(p["item"] in reps[p["char"]])
+    with open(DATA / "te_traits_key_B.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["item", "char", "seed", "edit", "dose", "variant", "repeated", "file"])
+        w.writeheader(); w.writerows(sorted(pics, key=lambda p: p["item"]))
+    per = questions(); sched = []
+    for c in CHARS:
+        ids_all = [p["item"] for p in pics if p["char"] == c]
+        ids_ref = [p["item"] for p in pics if p["char"] == c and p["variant"] != "plain_B0"]   # B0 has no reference
+        qs = per[c][:]; rng.shuffle(qs)
+        blocks = [(q, "trait", ids_all) for q in qs] + [("skin", "skin", ids_ref), ("person", "person", ids_ref)]
+        for q, kind, ids in blocks:
+            for k, (i, sh) in enumerate(block_order(rng, ids, reps[c])):
+                sched.append({"block": f"{c}:{q}", "char": c, "question": q, "kind": kind, "pos": k, "item": i, "showing": sh})
+    with open(DATA / "te_traits_schedule_B.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(sched[0])); w.writeheader(); w.writerows(sched)
+    print("items", len(pics), "schedule rows", len(sched), "blocks", len({s['block'] for s in sched}))
 
 
 def questions():
@@ -171,11 +232,11 @@ render();
 </script></body></html>"""
 
 
-def make_page():
+def make_page(part="A"):
     from PIL import Image
-    key = {r["item"]: r for r in rd(DATA / "te_traits_key_A.csv")}
-    sched = rd(DATA / "te_traits_schedule_A.csv")
-    out = IMG_ROOT / "_grid_viewer" / "te_traits"; (out / "img").mkdir(parents=True, exist_ok=True)
+    key = {r["item"]: r for r in rd(DATA / f"te_traits_key_{part}.csv")}
+    sched = rd(DATA / f"te_traits_schedule_{part}.csv")
+    out = IMG_ROOT / "_grid_viewer" / ("te_traits" if part == "A" else f"te_traits_{part}"); (out / "img").mkdir(parents=True, exist_ok=True)
     def jpg(src, dst):
         if not dst.exists():
             im = Image.open(IMG_ROOT / src).convert("RGB"); im.thumbnail((720, 900), Image.LANCZOS); im.save(dst, "JPEG", quality=88)
@@ -183,13 +244,16 @@ def make_page():
         jpg(r["file"], out / "img" / f"{it}.jpg")
     ref = {}
     for it, r in key.items():
+        if r.get("variant") == "plain_B0":       # part B0: trait questions only, no reference
+            continue
         name = f"ref_{r['char']}_{r['seed']}.jpg"
         jpg(f"benchmark_portraits/phase_c/{CHARS[r['char']]}_baseline_krea2_seed{r['seed']}_00001_.png", out / "img" / name)
         ref[it] = name
     qtext = {q["id"]: q["question_it"] for q in rd(DATA / "te_traits_questions.csv")}
     S = [{"block": s["block"], "pos": int(s["pos"]), "item": s["item"], "showing": int(s["showing"]),
           "question": s["question"], "kind": s["kind"]} for s in sched]
-    html = PAGE.replace("__SCHED__", json.dumps(S, separators=(",", ":"))).replace("__QUESTIONS__", json.dumps(qtext, ensure_ascii=False)).replace("__REF__", json.dumps(ref))
+    page = PAGE if part == "A" else PAGE.replace("te_traits_A_v1", f"te_traits_{part}_v1").replace("te_traits_alessandro.csv", f"te_traits_{part}_alessandro.csv").replace("C75 · tratti", f"C75 · tratti · parte {part}")
+    html = page.replace("__SCHED__", json.dumps(S, separators=(",", ":"))).replace("__QUESTIONS__", json.dumps(qtext, ensure_ascii=False)).replace("__REF__", json.dumps(ref))
     (out / "index.html").write_text(html, encoding="utf-8")
     print("page", out / "index.html", "steps (before skin follow-ups)", len(S), "images", len(key))
 
@@ -197,7 +261,8 @@ def make_page():
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--key", action="store_true"); ap.add_argument("--page", action="store_true"); ap.add_argument("--img-root")
+    ap.add_argument("--part", default="A")
     a = ap.parse_args()
     if a.img_root: IMG_ROOT = Path(a.img_root)
-    if a.key: make_key()
-    if a.page: make_page()
+    if a.key: make_key() if a.part == "A" else make_key_B()
+    if a.page: make_page(a.part)
