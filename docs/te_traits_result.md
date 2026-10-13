@@ -1,12 +1,13 @@
-# C75 result, part A — what a text-encoder edit costs the character (blind labels on the C74 ladder)
+# C75 result — what a text-encoder edit costs the character (blind labels; part A on the C74 ladder, part B2 against random pushes)
 
-* **Pre-registration:** `docs/prereg_te_traits.md` (amendments 1 and 2).
+* **Pre-registration:** `docs/prereg_te_traits.md` (amendments 1–4).
 * **Labels:** mine, blind to edit and dose, one question at a time, committed as downloaded
   (`data/te_traits_alessandro.csv`, 3,938 answers, none missing).
 * **Tally:** `experiments/te_traits_tally.py`, outputs `data/te_traits_tests.csv` and `data/te_traits_by_picture.csv`.
 * **Exploratory checks:** `experiments/te_traits_explore.py`, output `data/te_traits_explore.csv`.
-* **Part B is not labelled yet.** The control with random pushes of the same size, which decides whether these costs
-  belong to the edit or to any push of that size, is still open.
+* **Part B2** (random pushes of the same size, plain portraits at eight seeds) was labelled by a second person who had
+  seen none of the pictures and did not know what the study is about. See [Part B2](#part-b2--the-control-with-random-pushes)
+  at the end.
 
 ## Tests
 
@@ -116,9 +117,8 @@ baseline.
   * This matches what audits of text-to-image models report about their defaults (Luccioni et al. 2023, "Stable
     Bias"; Bianchi et al. 2023).
   * Here it appears as what is left when the conditioning is weakened.
-* **Not yet shown: that this belongs to the edit.** Part B compares the same doses with random pushes of the same size.
-  If those cost the same traits and the same skin, the right reading is that these traits are fragile to any push,
-  not that these edits target them.
+* **It belongs to the edit, not to the size of the push.** Part B2, labelled by someone else, finds random pushes of
+  the same size costing far fewer traits, and almost never changing the skin.
 * **T3 is inconclusive.** The control edit costs few listed traits. The C74 claim that L28 "loses traits in 4 of 6
   strips" is mostly the half-orc's race and the elf's green face.
 
@@ -132,3 +132,92 @@ baseline.
 * **T2 compares a blind multi-item measure with a non-blind single judgement.** See the stricter check above.
 * **"Click what is missing" was replaced by explicit yes/no for every trait** (amendment 1). So unnoticed absences
   are not counted as present by default.
+
+## Part B2 — the control with random pushes
+
+* **Labels:** a second labeller, blind, neutral instructions, committed as downloaded (`data/te_traits_B2_rater2.csv`,
+  2,245 answers, none missing).
+* **Tally:** `te_traits_tally.py --part B2`, output `data/te_traits_B2_tests.csv`.
+* **Exploratory breakdowns:** `experiments/te_traits_explore_B2.py`, output `data/te_traits_B2_explore.csv`.
+
+| test | value | rule | verdict |
+|---|---|---|---|
+| B1 random minus real retention, 36 matched cells | pooled +0.18; token +0.20; permuted +0.17 | ≥ +0.15, both variants in the same band | **the edit costs more traits than its size** |
+| Reliability, her repeats | κ 0.98 on 162 pairs | ≥ 0.60 | passed |
+| Agreement with me on the shared pictures (reported) | κ 0.83 on 566 pairs; 0.85 without e_androgynous | — | — |
+
+### By edit and dose (reported)
+
+Retention against the original, her labels.
+
+| | real | token | permuted |
+|---|---|---|---|
+| L06, d = 1.00 (6 cells) | 0.48 | 0.89 | 0.87 |
+| L14, d = 1.00 (6 cells) | 0.63 | 0.95 | 0.94 |
+| L28, d = 1.00 (6 cells) | 0.97 | 0.92 | 0.83 |
+| all, d = 0.85 (9 cells) | 0.80 | 0.97 | 0.94 |
+| all, d = 0.70 (9 cells) | 0.82 | 0.97 | 0.97 |
+
+* **L06 and L14:** random pushes of the same size keep about nine traits in ten, while the real edit keeps half to two
+  thirds.
+* **L28 goes the other way:** its real edit keeps 0.97, and its permuted random push costs more (0.83). This matches
+  C72, where L28's random pushes switched the genre and the real edit did not.
+* **What "edit costs more" means here.** The pooled verdict is carried by L06 and L14. The finding is that **each edit's
+  direction decides what it costs**, not that every edit costs more than noise.
+* **At 0.70 and 0.85** the gap is already there for L06 and L14: real 0.69–0.78 against random 0.93–1.00.
+
+### Skin (reported)
+
+Among pictures whose skin changed:
+
+* **real edits:** lighter in 14 of 14;
+* **token random pushes:** lighter in 2 of 3;
+* **permuted random pushes:** lighter in 3 of 3.
+
+Random pushes rarely change the skin at all. The drift toward lighter skin found in part A belongs to the real edits
+L06 and L14.
+
+On the 36 edited pictures we both labelled:
+
+* we agree on skin in 29;
+* both of us say "lighter" for 12 of them.
+
+### What the unedited model draws (B0, eight seeds)
+
+* **Five asked traits are never drawn at any seed, by her labels:**
+  * the dwarf's scarred wide nose and eyebrow scar;
+  * the half-orc's tusks, dirt smudges and snarl.
+* **These are fragile at baseline.** Without them, T1 (median ρ −0.89) and T2 (11 of 11) are unchanged.
+* **The fragile traits are not what the edits remove.** They were never there to lose.
+
+### Agreement between the two labellers
+
+The lowest agreement is on:
+
+* "reads as a dwarf" (8 of 14);
+* the dwarf's stern expression (9 of 14);
+* the dwarf's braids (9 of 14);
+* the half-orc's youth (9 of 14).
+
+She answered "reads as a dwarf" yes on every plain portrait; I answered no on the originals. Most other traits agree
+in 13 or 14 of 14.
+
+## What C75 changes, all together
+
+* **The first and largest cost of the L06 and L14 text-encoder edits is the character the prompt asks for.**
+  * Traits fall with dose and go before the style.
+  * Random pushes of the same size cost about a fifth as much.
+  * This was found by two labellers, one of whom knew nothing of the study.
+* **The drift of what the prompt does not name has a direction, lighter skin, and it comes with the edit.** Random
+  pushes of the same size almost never change the skin.
+* **Not every edit does this.** L28 keeps the character better than random pushes of its size. Like the destination
+  of the genre switch (C72, C73), the cost depends on the edit's direction.
+* **The unedited model already misses some traits at every seed:** tusks, scars, the snarl. A text-encoder edit
+  cannot be blamed for those, and they are excluded by the B0 check without changing any verdict.
+
+## Limits of part B2
+
+* **A short set:** 1.00 for every cell, but 9 cells each at 0.70 and 0.85 (amendment 3), chosen after I had seen part
+  A.
+* **Two questions were reworded for her** (amendment 4), so the agreement on androgyny and person is not comparable.
+* **Two labellers, three characters, two seeds, one kind of edit.**

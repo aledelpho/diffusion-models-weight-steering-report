@@ -1,0 +1,51 @@
+what,n_cells,real,token,permuted
+B1 dose 0.70 all,9,0.817,0.97,0.969
+B1 dose 0.70 L06_mlp,3,0.744,0.939,0.939
+B1 dose 0.70 L14_mlp,3,0.745,1.0,0.967
+B1 dose 0.70 L28_mlp,3,0.963,0.972,1.0
+B1 dose 0.85 all,9,0.802,0.971,0.941
+B1 dose 0.85 L06_mlp,3,0.69,0.943,0.933
+B1 dose 0.85 L14_mlp,3,0.783,1.0,0.967
+B1 dose 0.85 L28_mlp,3,0.933,0.97,0.922
+B1 dose 1.00 all,18,0.689,0.92,0.882
+B1 dose 1.00 L06_mlp,6,0.477,0.885,0.874
+B1 dose 1.00 L14_mlp,6,0.625,0.95,0.938
+B1 dose 1.00 L28_mlp,6,0.965,0.924,0.833
+"inter-rater kappa, traits without e_androgynous",552,0.848,,
+inter-rater agreement d_dwarf,14,0.571,,
+inter-rater agreement d_stern,14,0.643,,
+inter-rater agreement d_braids,14,0.643,,
+inter-rater agreement o_young,14,0.643,,
+inter-rater agreement e_buckles,14,0.714,,
+inter-rater agreement d_brass,14,0.857,,
+inter-rater agreement d_gorget,14,0.857,,
+inter-rater agreement d_navy,11,0.909,,
+inter-rater agreement e_undercut,13,0.923,,
+inter-rater agreement d_copper,14,0.929,,
+inter-rater agreement e_black,14,0.929,,
+inter-rater agreement o_greyeyes,14,0.929,,
+inter-rater agreement o_dirt,14,0.929,,
+inter-rater agreement c_whitebg,42,1.0,,
+inter-rater agreement c_frontal,42,1.0,,
+inter-rater agreement d_female,14,1.0,,
+inter-rater agreement d_nose,14,1.0,,
+inter-rater agreement d_browscar,14,1.0,,
+inter-rater agreement d_middleaged,14,1.0,,
+inter-rater agreement d_browneyes,14,1.0,,
+inter-rater agreement e_cheeks,14,1.0,,
+inter-rater agreement e_feather,14,1.0,,
+inter-rater agreement e_young,14,1.0,,
+inter-rater agreement e_tunic,14,1.0,,
+inter-rater agreement e_amber,14,1.0,,
+inter-rater agreement e_smirk,14,1.0,,
+inter-rater agreement e_cowl,14,1.0,,
+inter-rater agreement e_ears,13,1.0,,
+inter-rater agreement o_female,14,1.0,,
+inter-rater agreement o_scale,14,1.0,,
+inter-rater agreement o_tusks,14,1.0,,
+inter-rater agreement o_undercut,14,1.0,,
+inter-rater agreement o_orc,14,1.0,,
+inter-rater agreement o_knot,11,1.0,,
+inter-rater agreement o_jack,14,1.0,,
+inter-rater agreement o_snarl,14,1.0,,
+"skin (Alessandro, rater 2) on shared edited pictures",36,"{('same', 'same'): 16, ('lighter', 'lighter'): 12, ('same', 'lighter'): 2, ('other hue', 'same'): 2, ('lighter', 'same'): 3, ('other hue', 'other hue'): 1}",,

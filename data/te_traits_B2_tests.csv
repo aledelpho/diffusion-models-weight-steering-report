@@ -1,0 +1,12 @@
+test,value,verdict
+"B0 presence of each trait in the unedited model, 8 seeds (reported)",d_browscar:0.00(n8) d_nose:0.00(n8) o_dirt:0.00(n8) o_snarl:0.00(n8) o_tusks:0.00(n8) d_browneyes:0.75(n8) e_smirk:0.88(n8) o_orc:0.88(n8) c_frontal:1.00(n8) c_whitebg:1.00(n8) d_braids:1.00(n8) d_brass:1.00(n8) d_copper:1.00(n8) d_dwarf:1.00(n8) d_female:1.00(n8) d_gorget:1.00(n8) d_middleaged:1.00(n8) d_navy:1.00(n8) d_stern:1.00(n8) e_amber:1.00(n8) e_androgynous:1.00(n8) e_black:1.00(n8) e_buckles:1.00(n8) e_cheeks:1.00(n8) e_cowl:1.00(n8) e_ears:1.00(n8) e_feather:1.00(n8) e_tunic:1.00(n8) e_undercut:1.00(n8) e_young:1.00(n8) o_female:1.00(n8) o_greyeyes:1.00(n8) o_jack:1.00(n8) o_knot:1.00(n7) o_scale:1.00(n8) o_undercut:1.00(n8) o_young:1.00(n8),
+B0 fragile at baseline (presence < 0.5),d_browscar d_nose o_dirt o_snarl o_tusks,
+"B1 random minus real retention, matched cells",pooled +0.18; token +0.20; permuted +0.17; cells 36 of 36,the edit costs more traits than its size: supported
+"B1 by edit, L06_mlp (reported)",real 0.60; token 0.91; permuted 0.91,
+"B1 by edit, L14_mlp (reported)",real 0.69; token 0.97; permuted 0.95,
+"B1 by edit, L28_mlp (reported)",real 0.96; token 0.95; permuted 0.90,
+B1-skin share lighter among lighter + darker (reported),real: 14/14 (other hue 1) token: 2/3 (other hue 0) permuted: 3/3 (other hue 0),
+"Reliability, part B repeats (Cohen kappa, traits)",kappa 0.98 on 162 pairs,passed
+"Agreement across sessions, same pictures (reported)",kappa 0.83 on 566 pairs,
+T1 retention falls with dose - without fragile traits (reported),median Spearman over 18 strips = -0.89,supported
+"T2 traits lost before the style changes (L06, L14) - without fragile traits (reported)","traits first 11, style first 0, ties or never 0, of 11",traits go first
