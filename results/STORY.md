@@ -300,6 +300,14 @@ nothing at all: an empty prompt gives anime, a photograph, anime, a painting.
 
 ![The elf in five word orders at two seeds, with and without the three style phrases: with them every picture is labelled Western comic, without them every labelled picture is anime, with the same character and pose.](../assets/30-the-text-encoder/F30.7_te_nostyle_sheet.webp)
 
+But that was one character. I did the same with seven other portraits, removing only "Western comics
+style": they did not go anime. They came back as paintings or realistic renders, the same faces in a
+different hand — one in 28 was anime. Every character has its own fallback. And the edits do not lead
+there: each edit has its own destination instead, one toward photographs, one toward cartoons, two that
+never leave the comic, whoever is drawn.
+
+![Seven portraits at two seeds with and without 'Western comics style': with it every picture is a Western comic; without it the same character comes back as a painting or a realistic render, with the same face, costume and framing.](../assets/30-the-text-encoder/F30.14_te_fallback_sheet.webp)
+
 Then the control a reviewer asked for: random pushes on the text as large as the edits, with no weight
 touched. If the anime were only about the size of the push, random pushes should get there too. Some do:
 random noise that varies from word to word sends the picture to anime or cartoon about as often as the
@@ -320,7 +328,7 @@ style" draws cowboys: the model reads "western" as the Wild West.
 → [page 30](30-the-text-encoder.md) · the size of the push predicts the change **holds**, mostly between
 kinds of edit · these edits change genre and identity more than they damage the surface **holds** · one edit moves every character the same way
 **overturned** · the switch comes from less attention on the style words **overturned** · or from a push
-toward "anime" **overturned** · without style words the elf falls back to anime **holds** · random
+toward "anime" **overturned** · without style words the elf falls back to anime **holds** · every character has its own fallback **holds** · edits lead there **overturned** · random
 pushes of the same size do it too **ambiguous** (only if they vary across words) · each edit's own direction
 decides **open**
 

@@ -1097,3 +1097,24 @@ figures:
       For each of the 20 edits, sorted by the size of their push, the genre of the five word-order pictures: the edits
       that zero a layer half and the smallest pushes stay Western comic, the larger pushes turn mostly anime, a few
       scatter into cartoon, and L28 MLP doubled stays comic despite a mid-size push.
+  - id: F30.14
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_fallback_sheet
+    source: data/te_fallback_genre_alessandro.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Seven portraits at two seeds with and without 'Western comics style': with it every picture is a Western comic;
+      without it the same character comes back as a painting or a realistic render, with the same face, costume and
+      framing.
+  - id: F30.15
+    page: 30-the-text-encoder
+    kind: paired_bars
+    builder: results_figures.te_fallback_by_edit
+    source: data/te_fallback_by_edit.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      For each MLP-doubled edit, the genres of its fourteen portrait pictures: L06 is mostly realistic, L14 mostly
+      cartoon, L26 and L28 stay Western comic in all fourteen, L05 and L12 spread over anime, painting and realistic.

@@ -9,9 +9,9 @@ supersedes: []
 pitfalls: [90]
 
 corpus:
-  renders: 1299
-  prompts: 63
-  seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281]
+  renders: 1328
+  prompts: 70
+  seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281, 3605551, 4123105]
 
 claims:
   - id: te-push-size-predicts-change
@@ -120,8 +120,26 @@ claims:
       Pre-registered (C72 A1): the prompt without "realistic western comics style, bold ink outlines, hatched
       shadows", five word orders at two seeds, labelled anime in 9 of 9 labelled pictures (one unlabelled; bar 7 of
       10). The same prompts with the style words: Western comic in 9 of 9. The empty prompt at four seeds: anime,
-      realistic, anime, painting. One labeller, not blind.
+      realistic, anime, painting. One labeller, not blind. C73 found that anime is this prompt's fallback only: seven
+      portraits without "Western comics style" fall back to painting or realistic renders (anime in 1 of 28).
     anchor: "#the-fallback-is-anime"
+  - id: te-fallback-depends-on-character
+    status: holds
+    statement: >
+      Without its style words, each character falls back to a genre of its own; there is no single default style.
+    evidence: >
+      Pre-registered (C73 H1): seven C52 portraits without "Western comics style", four seeds each. Painting for the
+      elf rogue, dragonborn and tiefling, realistic for the half-orc, mixed painting / realistic / 3D for the dwarf,
+      gnome and halfling; anime in 1 of 28. With the style clause all 28 are Western comic. One labeller, not blind.
+    anchor: "#every-character-has-its-own-fallback"
+  - id: te-edit-goes-to-character-fallback
+    status: overturned
+    statement: >
+      A strong text-encoder edit sends each character to the genre that character falls back to without style words.
+    evidence: >
+      Pre-registered (C73 H2), not supported: of 43 switched pictures of the four characters with a clear fallback,
+      0.28 land on that fallback, against 0.27 expected if destinations ignored the character (bar: +0.20).
+    anchor: "#every-character-has-its-own-fallback"
   - id: te-random-push-reaches-the-fallback
     status: ambiguous
     statement: >
@@ -140,7 +158,8 @@ claims:
     evidence: >
       Reported, not tested (C72, 9 labelled cells per edit). L28 MLP doubled, the largest push, keeps the Western
       comic in 9 of 9 while random pushes of its size switch 16 of 18; L05 MLP doubled goes to anime in 9 of 9 while
-      random pushes of its size switch 1 of 18.
+      random pushes of its size switch 1 of 18. On seven portraits (C73, 14 pictures per edit): L06 MLP doubled
+      gives realistic renders in 11 of 14, L14 cartoon in 9 of 14, L26 and L28 keep the Western comic in 14 of 14.
     anchor: "#random-pushes-of-the-same-size"
   - id: te-word-priors
     status: open
@@ -156,7 +175,7 @@ claims:
 
 # The text encoder — how hard it pushes, and where the picture goes
 
-> **Holds** · 1299 renders · 63 prompts · pre-registered 2026-10-12
+> **Holds** · 1328 renders · 70 prompts · pre-registered 2026-10-12
 > [← all results](README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Krea-2 reads the prompt with a language model, Qwen3-VL-4B, before
@@ -169,7 +188,8 @@ claims:
 >
 > **Where we are.** How *much* a picture changes is predictable from the text side alone, mostly by
 > the kind of edit. *Where* it goes is now clearer: anime is this character's fallback when the style
-> words stop working, shown directly by removing them. Random pushes reach that fallback only if they
+> words stop working, shown directly by removing them — but only for the elf: other characters fall back to
+> painting or realistic renders. Random pushes reach that fallback only if they
 > vary from token to token, and each real edit has a direction of its own: one protects the comic, another
 > drives it to anime. Why a given edit points where it does is still open.
 
@@ -199,7 +219,9 @@ no. Maybe the edit pushes the text the way writing "anime" would: no, the push p
 entirely, and it is 5 to 24 times larger than swapping a style word.
 
 Then we looked at the fallback directly. Remove the three style words and the elf is drawn as anime,
-every time. Anime is where this description goes when nothing holds it in a style.
+every time. Anime is where *this* description goes when nothing holds it in a style. Seven other characters,
+stripped of their style words, fall back to painting or realistic renders instead: there is no single
+default.
 
 ![The elf in five word orders at two seeds, with and without the three style phrases: with them every picture is labelled Western comic, without them every labelled picture is anime, with the same character and pose.](../assets/30-the-text-encoder/F30.7_te_nostyle_sheet.webp)
 
@@ -216,7 +238,9 @@ genre it nearly vanishes (exploratory). **Holds**: the push is shared by the who
 regions of 2-4 tokens bounded by commas. **Holds**: these edits change genre and identity, with less
 surface-quality loss than a DiT preset. **Overturned**: one edit moving different characters the same way; the genre switch
 coming from less attention on the style words; the switch coming from a text-like push toward "anime".
-**Holds**, pre-registered (C72): without its style words the elf is drawn as anime. **Ambiguous**:
+**Holds**, pre-registered (C72): without its style words the elf is drawn as anime. **Holds** (C73): each
+character has its own fallback, mostly painting or realistic. **Overturned** (C73): strong edits send a
+character to its own fallback. **Ambiguous**:
 whether random pushes of the same size reach the fallback as often as edits — yes if they vary across
 tokens, no if they are one shared vector. **Open**: that each edit's own direction decides; what single
 phrases draw alone; anime as the usual destination of a switch. **Ambiguous**: whether the strong edits
@@ -231,10 +255,15 @@ knew the first test had failed.
 **One prompt carries the word-order story.** C69, C70 and C71 rest on the elf in five word orders at
 one seed. The anime default may be specific to this prompt or this character.
 
-**The fallback rests on one character.** Anime is the fallback of *this* elf description. The empty
-prompt is not anime, so other descriptions may fall back elsewhere. In the no-style pictures the character,
+**The fallback rests on one character.** Anime is the fallback of *this* elf description; C73 confirmed that
+other characters fall back elsewhere. In the no-style pictures the character,
 pose and composition stay; what changes is the rendering — flatter cel shading, no hatching — and the
 label "anime" is Alessandro's reading of that change.
+
+**Genre labels hide sub-styles, and the doses are extreme.** Alessandro notes that each label covers very
+different sub-styles: two pictures labelled "Western comic" can look nothing alike, so "no switch" does not mean
+"same style". All these edits zero or double a layer half; at that strength part of what is labelled a change of
+genre may be a loss of stylistic coherence. A dose ladder with comparative judgements is the next test (C74).
 
 **Size mostly sorts kinds of edit.** The two tests of the size of the push were fixed on all edits
 together. Checked afterwards within one kind, the relation nearly vanishes for the MLP-doubled edits —
@@ -402,6 +431,23 @@ So size alone does not decide where a strong edit goes; each edit's direction do
 it does is not known. One untested reason a shared shift may be harmless: the image model's text path normalises
 what it receives, which could absorb an offset common to every token.
 
+### Every character has its own fallback
+
+C73 repeated the no-style test on the seven portraits of page 28 and C65, removing only "Western comics style"
+from their frame, at four seeds. With the clause all 28 pictures are Western comic; without it, the same faces
+and costumes come back as paintings or realistic renders, and only one picture of 28 is anime. The fallback
+depends on the character (pre-registered H1, supported).
+
+![Seven portraits at two seeds with and without 'Western comics style': with it every picture is a Western comic; without it the same character comes back as a painting or a realistic render, with the same face, costume and framing.](../assets/30-the-text-encoder/F30.14_te_fallback_sheet.webp)
+
+Do the edits lead each character to that fallback? No (H2, not supported): switched pictures land on the
+character's own fallback 0.28 of the time, as often as chance (0.27). What they show instead is a destination
+per edit, across characters: L06 MLP doubled gives realistic renders, L14 cartoons, L26 and L28 leave the comic
+alone, others spread. Elves bend several edits toward anime: the elf rogue, whose own fallback is painting,
+switches to anime in 10 of its 12 switched pictures.
+
+![For each MLP-doubled edit, the genres of its fourteen portrait pictures: L06 is mostly realistic, L14 mostly cartoon, L26 and L28 stay Western comic in all fourteen, L05 and L12 spread over anime, painting and realistic.](../assets/30-the-text-encoder/F30.15_te_fallback_by_edit.webp)
+
 ### What each phrase draws alone
 
 The same pass rendered each of the 36 phrases of the elf prompt alone, plus a few words, at four seeds.
@@ -438,38 +484,39 @@ tuner:
   version: not recorded — the tuner is a separate repository
   mode: Real Value; one layer half through granular_json (layers.L.self_attn.{q,k,v,o}_proj.weight or layers.L.mlp.{gate,up,down}_proj.weight), weight x (1 + d)
 prompts:
-  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv]
-  ids: [P1_elfbrawler, V1_Original, V2_SubjectFirst, V3_BGFirst, V4_ActionFirst, V5_Inverse, D1_dwarf_paladin, D1W_dwarf_paladin_watercolor, E2_elf_rogue, G5_gnome_wizard, H3_halfling_druid, O4_halforc_fighter, R6_dragonborn_cleric, T7_tiefling_bard, "V1-V5 without the style clauses (C72)", EMPTY, W00-W42 (C72 single phrases)]
-seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281]
+  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv]
+  ids: [P1_elfbrawler, V1_Original, V2_SubjectFirst, V3_BGFirst, V4_ActionFirst, V5_Inverse, D1_dwarf_paladin, D1W_dwarf_paladin_watercolor, E2_elf_rogue, G5_gnome_wizard, H3_halfling_druid, O4_halforc_fighter, R6_dragonborn_cleric, T7_tiefling_bard, "V1-V5 without the style clauses (C72)", EMPTY, W00-W42 (C72 single phrases), "the seven portraits without 'Western comics style' (C73)"]
+seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281, 3605551, 4123105]
 conditions:
   - name: one layer half of the text encoder, d = -1.00 (zeroed) or +1.00 (doubled); C64 also at ±0.10 and ±0.35
     dose: 1.000
     measured_D: not measured; the dose is a per-matrix gain, not a calibrated displacement
 outputs:
-  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default]
-  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv]
+  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default, benchmark_te_fallback]
+  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv]
   encodes_without_images: [benchmark_te_conditioning (C67, 721), benchmark_te_regions (C68, 241), benchmark_te_direction (C71, 16)]
 analysis:
-  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py]
+  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py, experiments/te_fallback.py, experiments/te_fallback_tally.py]
   produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv
 ```
 
 ## Provenance
 
-* Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280).
+* Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280), C73 fallbacks (29).
 * Encodes without images: C67 (721), C68 (241), C71 (16).
 * **Pre-registrations:** `docs/prereg_te_characters.md` (+ amendments 1-3), `docs/prereg_te_conditioning.md`
   (+ amendments 1-2), `docs/prereg_te_regions.md`, `docs/prereg_te_bridge.md`, `docs/prereg_te_genre.md`
-  (+ amendments 1-2), `docs/prereg_te_direction.md`, `docs/prereg_te_default.md` (+ amendments 1-2); the pilot plan `docs/plan_te_pilot.md`.
+  (+ amendments 1-2), `docs/prereg_te_direction.md`, `docs/prereg_te_default.md` (+ amendments 1-2), `docs/prereg_te_fallback.md`; the pilot plan `docs/plan_te_pilot.md`.
 * **Result documents:** `docs/te_pilot_phase1_result.md`, `docs/te_characters_result.md`,
   `docs/te_characters_eye_result.md`, `docs/te_order_grid_result.md`, `docs/te_conditioning_result.md`,
   `docs/te_regions_result.md`, `docs/te_bridge_result.md`, `docs/te_genre_result.md`,
-  `docs/te_direction_result.md`, `docs/te_default_result.md`.
+  `docs/te_direction_result.md`, `docs/te_default_result.md`, `docs/te_fallback_result.md`.
 * **Data:** `data/te_pilot_eye_alessandro_phase1.csv`, `data/te_order_grid_notes_alessandro.csv`,
   `data/te_order_tests.csv`, `data/te_size_within_type.csv`, `data/te_genre_alessandro.csv`, `data/te_genre_dose_alessandro.csv`,
   `data/te_bridge_style.csv`, `data/te_direction_by_edit.csv`, `data/te_direction_norms.csv`,
   `data/te_default_genre_alessandro.csv`, `data/te_default_cells.csv`, `data/te_default_tests.csv`,
-  `data/te_words_alessandro.csv`, `data/te_massive_channels.csv`.
+  `data/te_words_alessandro.csv`, `data/te_massive_channels.csv`, `data/te_fallback_genre_alessandro.csv`,
+  `data/te_fallback_tests.csv`, `data/te_fallback_by_edit.csv`.
 * **Labels and keys** were committed in the order the protocols require: key before labels, labels as
   downloaded before any count.
 * **Probes:** `tools/comfyui_krea2_probe` (conditioning), `tools/comfyui_krea2_attnprobe` (attention; reads

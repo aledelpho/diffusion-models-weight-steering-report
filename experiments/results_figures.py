@@ -1191,6 +1191,58 @@ def te_genre_by_edit(out: Path) -> Path:
     return _save(fig, out, "C70 · elf, seed 3141592 · Alessandro's genre labels · x = edit (×2 doubled, ×0 zeroed) · source data/te_genre_by_edit.csv")
 
 
+
+def _c73_labels():
+    return {(r["grid"], r["row"]): [r.get(f"g{i}", "") for i in range(1, 5)]
+            for r in csv.DictReader(open(DATA / "te_fallback_genre_alessandro.csv", encoding="utf-8"))}
+
+
+C73_CHARS_EN = [("D1_dwarf_paladin", "dwarf paladin"), ("E2_elf_rogue", "elf rogue"), ("O4_halforc_fighter", "half-orc fighter"),
+                ("G5_gnome_wizard", "gnome wizard"), ("H3_halfling_druid", "halfling druid"), ("R6_dragonborn_cleric", "dragonborn cleric"),
+                ("T7_tiefling_bard", "tiefling bard")]
+
+
+def te_fallback_sheet(out: Path) -> Path:
+    """F30.14 - C73: the seven portraits with and without 'Western comics style', two seeds. Caption: genre label."""
+    t = _c73_labels()
+    cols = [("with:2645751", "with style · s1"), ("without:2645751", "no style · s1"), ("with:3316624", "with style · s2"), ("without:3316624", "no style · s2")]
+    si = {"2645751": 0, "3316624": 1}
+    def path(ch, c):
+        kind, s = c.split(":")
+        if kind == "with":
+            return _img(f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{s}_00001_.png")
+        return _img(f"benchmark_te_fallback/{ch}_nostyle_krea2_seed{s}_00001_.png")
+    def cap(ch, c):
+        kind, s = c.split(":")
+        g = t[("fb_with" if kind == "with" else "fb_without", ch)][si[s]]
+        return (GENRE_EN2[g], NEG if kind == "without" else DIM_RGB)
+    return _sheet(C73_CHARS_EN, cols, path, cap, out,
+                  "C73 · seeds 2645751 (s1), 3316624 (s2) · 'no style' = without 'Western comics style' · caption = Alessandro's genre label · "
+                  "source data/te_fallback_genre_alessandro.csv", W=130, H=162, LAB=120)
+
+
+def te_fallback_by_edit(out: Path) -> Path:
+    """F30.15 - C73: where each MLP-doubled edit sends the seven portraits (14 pictures per edit)."""
+    import ast
+    import numpy as np
+    rows = list(csv.DictReader(open(DATA / "te_fallback_by_edit.csv", encoding="utf-8")))
+    order = ["fumetto", "realist", "pittura", "cartoon", "anime", "altro", "not labelled"]
+    lab = {"fumetto": "Western comic (no switch)", "realist": "realistic", "pittura": "painting", "cartoon": "cartoon", "anime": "anime", "altro": "other", "not labelled": "not labelled"}
+    col = {"fumetto": "#5a5f68", "realist": CAT[2], "pittura": "#b48ead", "cartoon": CAT[0], "anime": CAT[1], "altro": "#888888", "not labelled": "#333333"}
+    fig, ax = _canvas(6.4, 3.4)
+    left = np.zeros(len(rows))
+    for g in order:
+        v = np.array([ast.literal_eval(r["genres_14_pictures"]).get(g, 0) for r in rows])
+        ax.barh(range(len(rows)), v, left=left, color=col[g], label=lab[g], height=0.75)
+        left += v
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels([_te_name(r["edit"]) for r in rows], fontsize=7, color=DIM)
+    ax.invert_yaxis(); ax.set_xlabel("pictures (7 characters × 2 seeds)", color=DIM, fontsize=7.5)
+    ax.legend(frameon=False, fontsize=6.5, labelcolor=INK, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=4)
+    fig.text(0.1, 0.955, "Each edit has a destination of its own across characters", color=INK, fontsize=8.5)
+    fig.subplots_adjust(left=0.13, right=0.98, top=0.8, bottom=0.19)
+    return _save(fig, out, "C73 · MLP-doubled C65 edits on the seven portraits · Alessandro's genre labels · source data/te_fallback_by_edit.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1241,6 +1293,8 @@ BUILDERS = {
     "F30.11": ("30-the-text-encoder", "te_regions_by_tap", te_regions_by_tap),
     "F30.12": ("30-the-text-encoder", "te_characters_identity_sheet", te_characters_identity_sheet),
     "F30.13": ("30-the-text-encoder", "te_genre_by_edit", te_genre_by_edit),
+    "F30.14": ("30-the-text-encoder", "te_fallback_sheet", te_fallback_sheet),
+    "F30.15": ("30-the-text-encoder", "te_fallback_by_edit", te_fallback_by_edit),
 }
 
 
