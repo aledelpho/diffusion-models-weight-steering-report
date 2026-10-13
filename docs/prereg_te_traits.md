@@ -371,3 +371,50 @@ Changes from the text above:
   plain). A trait with presence < 0.5 is fragile. T1 and T2 of Part A are re-reported without the fragile traits.
 * **Reported in addition:** agreement across sessions on the same pictures (the originals and the real edits at
   0.70, 0.85 and 1.00, shown in both parts), as κ.
+
+## Amendment 3 (2026-10-13, after the Part A tally, before any Part B label)
+
+**What had happened before this amendment:**
+
+* The Part A labels had been tallied (`docs/te_traits_result.md`). I had read the result; Alessandro had not.
+* No Part B picture had been labelled.
+
+**A second labeller.** Part B is labelled by a second person instead of Alessandro.
+
+* She has seen none of these pictures. She does not know what the edits are, nor what the study is about.
+* She is told only how to answer: a neutral instruction screen in Italian, with no mention of edits, doses or
+  expectations.
+* The B1 comparison (real edit vs random pushes at matched cells) is made within her labels, so the change of
+  labeller does not touch it.
+* The pictures shared with Part A (the originals and the real edits at the shared doses) give an **inter-rater**
+  agreement in place of the cross-session one. It is reported as κ and decides nothing.
+
+**A shorter set.** To shorten the session, the Part B page (`te_traits_B`, not labelled) is replaced by `te_traits_B2`:
+
+* **Every one of the 18 cells at d = 1.00.**
+* **One intermediate dose per cell:** 0.70 on one seed and 0.85 on the other. Which seed takes 0.70 alternates over
+  the nine (character, edit) pairs (`b2_dose` in `te_traits_page.py`), so both doses meet both seeds.
+  * The result is 9 cells at 0.70 and 9 at 0.85, against 18 at each before.
+  * The 18 cells at 1.00 are unchanged.
+* **The rest is kept:** the originals, the B0 plain portraits, 4 repeats per character, and the skin and person
+  questions.
+* **Size:** 132 pictures; 2,220 steps before the skin follow-ups, against 3,066.
+
+**Why this choice, and its risk.** The choice of doses was made after I had seen the Part A result.
+
+* It does not favour either arm of B1: real edits and random pushes keep the same cells.
+* It favours d = 1.00, where Part A shows the largest loss under real edits. That gives B1 the most room to separate
+  the two arms in either direction.
+* Alessandro asked to keep some 0.70 and 0.85 pictures, so that the dose trend of B1 can still be described.
+
+**Rules.**
+
+* B1, B0 and their bands are unchanged. B1 pools every matched cell (36).
+* By dose (0.70, 0.85, 1.00), the result is reported only.
+
+**Files.**
+
+* Key `data/te_traits_key_B2.csv`, schedule `data/te_traits_schedule_B2.csv` (seed 7477).
+* Page `Text2Img\_grid_viewer\te_traits_B2\index.html`.
+* Labels `te_traits_B2_rater2.csv`, committed as downloaded.
+* Tally `te_traits_tally.py --part B2`, with a self-test.

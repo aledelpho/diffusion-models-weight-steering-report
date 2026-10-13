@@ -70,11 +70,29 @@ def pictures_B():
     return out
 
 
-def make_key_B():
-    rng = random.Random(RNG_SEED + 1)
-    pics = pictures_B(); rng.shuffle(pics)
+def b2_dose(c, L, s):
+    """Amendment 3: every cell at 1.00; one intermediate dose per cell, 0.70 on one seed and 0.85 on the other,
+    alternating over the nine (character, edit) pairs so that each dose meets each seed."""
+    k = list(CHARS).index(c) * 3 + LAYERS.index(L)
+    first = SEEDS[0] if k % 2 == 0 else SEEDS[1]
+    return "0.70" if s == first else "0.85"
+
+
+def pictures_B2():
+    keep = []
+    for p in pictures_B():
+        if p["edit"] and p["dose"] != "1.00":
+            if p["dose"] != b2_dose(p["char"], int(p["edit"][1:3]), p["seed"]):
+                continue
+        keep.append(p)
+    return keep
+
+
+def make_key_B(part="B"):
+    rng = random.Random(RNG_SEED + (1 if part == "B" else 2))
+    pics = pictures_B() if part == "B" else pictures_B2(); rng.shuffle(pics)
     for n, p in enumerate(pics, 1):
-        p["item"] = f"B{n:03d}"
+        p["item"] = f"{part}{n:03d}" if part != "B" else f"B{n:03d}"
     reps = {}
     for c in CHARS:
         mine = [p for p in pics if p["char"] == c and p["variant"] != "plain_B0"]
@@ -83,7 +101,7 @@ def make_key_B():
         reps[c] = [first["item"]] + [p["item"] for p in rng.sample([p for p in mine if p is not first], N_REPEAT_B - 1)]
     for p in pics:
         p["repeated"] = int(p["item"] in reps[p["char"]])
-    with open(DATA / "te_traits_key_B.csv", "w", newline="", encoding="utf-8") as f:
+    with open(DATA / f"te_traits_key_{part}.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["item", "char", "seed", "edit", "dose", "variant", "repeated", "file"])
         w.writeheader(); w.writerows(sorted(pics, key=lambda p: p["item"]))
     per = questions(); sched = []
@@ -95,7 +113,7 @@ def make_key_B():
         for q, kind, ids in blocks:
             for k, (i, sh) in enumerate(block_order(rng, ids, reps[c])):
                 sched.append({"block": f"{c}:{q}", "char": c, "question": q, "kind": kind, "pos": k, "item": i, "showing": sh})
-    with open(DATA / "te_traits_schedule_B.csv", "w", newline="", encoding="utf-8") as f:
+    with open(DATA / f"te_traits_schedule_{part}.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(sched[0])); w.writeheader(); w.writerows(sched)
     print("items", len(pics), "schedule rows", len(sched), "blocks", len({s['block'] for s in sched}))
 
@@ -176,7 +194,7 @@ button{background:#262626;color:var(--ink);border:1px solid #3a3a3a;border-radiu
 <div id="top"><span id="prog"></span><span id="bprog"></span><button id="dl">Scarica CSV</button></div>
 <div id="q"></div><div id="stage"></div>
 <div id="keys"><button class="k-no" data-a="no">← no</button><button class="k-unk" data-a="non so">↓ non si vede</button><button class="k-yes" data-a="sì">sì →</button><button id="back">⌫ indietro</button></div>
-<div id="card"><h1 id="ct"></h1><p id="cp"></p><button id="go">Inizia (spazio)</button></div><div id="flash"></div>
+__INTRO__<div id="card"><h1 id="ct"></h1><p id="cp"></p><button id="go">Inizia (spazio)</button></div><div id="flash"></div>
 <script>
 const S=__SCHED__, Q=__QUESTIONS__, REF=__REF__, KEY='te_traits_A_v1';
 // steps: one per (schedule row, sub-question). Skin rows expand on the fly.
@@ -187,6 +205,10 @@ function subs(r){ // questions to ask for this schedule row, given answers so fa
   const k=r.block+'|'+r.pos, s=A[k+'|skin_same'], l=A[k+'|skin_lighter'];
   const out=['skin_same']; if(s==='no'){out.push('skin_lighter'); if(l==='no')out.push('skin_darker')} return out}
 let i=0, sub=0, shownCard=null;
+const intro=document.getElementById('intro');
+if(intro){if(Object.keys(A).length===0){intro.style.display='flex'}else{intro.remove()}}
+addEventListener('keydown',e=>{const t=document.getElementById('intro');if(t&&t.style.display==='flex'){e.stopImmediatePropagation();
+  if(e.key==='Enter'){t.remove();render()}}},true);
 function firstOpen(){for(let n=0;n<S.length;n++){const r=S[n],L=subs(r);for(let m=0;m<L.length;m++){if(A[r.block+'|'+r.pos+'|'+L[m]]===undefined)return[n,m]}}return[S.length,0]}
 [i,sub]=firstOpen();
 function qid(r){return subs(r)[sub]}
@@ -232,6 +254,20 @@ render();
 </script></body></html>"""
 
 
+INTRO_B2 = """<div id="intro" style="position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;justify-content:center;align-items:center;padding:24px;z-index:9;overflow:auto">
+<div style="max-width:760px;line-height:1.55">
+<h1 style="font-size:28px;margin:0 0 12px">Istruzioni</h1>
+<p>Vedrai dei ritratti disegnati di tre personaggi. Per ogni immagine ti viene fatta <b>una sola domanda</b>, sempre la stessa per un blocco di immagini; poi si passa alla domanda successiva.</p>
+<p>Rispondi guardando <b>solo l'immagine</b>, senza pensare alle risposte precedenti e senza cercare di indovinare un motivo. Non ci sono risposte giuste o sbagliate: conta quello che vedi.</p>
+<p><b>Sì solo se è vero tutto quello che la domanda dice.</b> Se la domanda dice "folti, intrecciati e raccolti indietro" e i capelli sono intrecciati ma sciolti, la risposta è no.</p>
+<p>In alcuni blocchi vedrai a sinistra un'immagine di <b>riferimento</b>: la domanda chiede un confronto con quella.</p>
+<p>Alcune immagini tornano più di una volta: è normale, rispondi di nuovo come ti sembra.</p>
+<p style="font-size:18px;margin-top:18px"><b>→</b> sì &nbsp;·&nbsp; <b>←</b> no &nbsp;·&nbsp; <b>↓</b> non si vede (solo se la cosa è nascosta o tagliata fuori) &nbsp;·&nbsp; <b>⌫</b> torna indietro</p>
+<p>Puoi fermarti quando vuoi: le risposte restano salvate in questo browser. Alla fine, o ogni tanto, premi <b>"Scarica CSV"</b> in alto a destra e manda il file.</p>
+<p style="margin-top:22px;color:var(--mut)">Premi Invio per iniziare.</p>
+</div></div>"""
+
+
 def make_page(part="A"):
     from PIL import Image
     key = {r["item"]: r for r in rd(DATA / f"te_traits_key_{part}.csv")}
@@ -252,7 +288,8 @@ def make_page(part="A"):
     qtext = {q["id"]: q["question_it"] for q in rd(DATA / "te_traits_questions.csv")}
     S = [{"block": s["block"], "pos": int(s["pos"]), "item": s["item"], "showing": int(s["showing"]),
           "question": s["question"], "kind": s["kind"]} for s in sched]
-    page = PAGE if part == "A" else PAGE.replace("te_traits_A_v1", f"te_traits_{part}_v1").replace("te_traits_alessandro.csv", f"te_traits_{part}_alessandro.csv").replace("C75 · tratti", f"C75 · tratti · parte {part}")
+    page = PAGE if part == "A" else PAGE.replace("te_traits_A_v1", f"te_traits_{part}_v1").replace("te_traits_alessandro.csv", f"te_traits_{part}_alessandro.csv" if part == "B" else f"te_traits_{part}_rater2.csv").replace("C75 · tratti", "Ritratti · domande" if part == "B2" else f"C75 · tratti · parte {part}")
+    page = page.replace("__INTRO__", INTRO_B2 if part == "B2" else "")
     html = page.replace("__SCHED__", json.dumps(S, separators=(",", ":"))).replace("__QUESTIONS__", json.dumps(qtext, ensure_ascii=False)).replace("__REF__", json.dumps(ref))
     (out / "index.html").write_text(html, encoding="utf-8")
     print("page", out / "index.html", "steps (before skin follow-ups)", len(S), "images", len(key))
@@ -264,5 +301,5 @@ if __name__ == "__main__":
     ap.add_argument("--part", default="A")
     a = ap.parse_args()
     if a.img_root: IMG_ROOT = Path(a.img_root)
-    if a.key: make_key() if a.part == "A" else make_key_B()
+    if a.key: make_key() if a.part == "A" else make_key_B(a.part)
     if a.page: make_page(a.part)

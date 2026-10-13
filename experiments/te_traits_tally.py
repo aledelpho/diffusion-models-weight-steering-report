@@ -310,20 +310,23 @@ def tally_B(keyB, schedB, questions, labB, keyA, schedA, labA, c74):
     return out
 
 
-def run_B():
+LABELS_B = {"B": "te_traits_B_alessandro.csv", "B2": "te_traits_B2_rater2.csv"}   # B2: amendment 3, second labeller
+
+
+def run_B(part="B"):
     labA = rd(DATA / "te_traits_alessandro.csv") if (DATA / "te_traits_alessandro.csv").exists() else []
-    out = tally_B(rd(DATA / "te_traits_key_B.csv"), rd(DATA / "te_traits_schedule_B.csv"), rd(DATA / "te_traits_questions.csv"),
-                  rd(DATA / "te_traits_B_alessandro.csv"), rd(DATA / "te_traits_key_A.csv"), rd(DATA / "te_traits_schedule_A.csv"),
+    out = tally_B(rd(DATA / f"te_traits_key_{part}.csv"), rd(DATA / f"te_traits_schedule_{part}.csv"), rd(DATA / "te_traits_questions.csv"),
+                  rd(DATA / LABELS_B[part]), rd(DATA / "te_traits_key_A.csv"), rd(DATA / "te_traits_schedule_A.csv"),
                   labA, rd(DATA / "te_dose_alessandro.csv"))
-    with open(DATA / "te_traits_B_tests.csv", "w", newline="", encoding="utf-8") as f:
+    with open(DATA / f"te_traits_{part}_tests.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["test", "value", "verdict"]); w.writeheader(); w.writerows(out)
     for o in out: print(o)
 
 
-def selftest_B():
+def selftest_B(part="B"):
     """Synthetic labeller for part B: the real edit loses the first four traits at every dose, random pushes lose
     none; o_tusks absent in every plain picture. Expected: B1 'edit costs more', o_tusks fragile, kappa 1."""
-    keyB, schedB, qs = rd(DATA / "te_traits_key_B.csv"), rd(DATA / "te_traits_schedule_B.csv"), rd(DATA / "te_traits_questions.csv")
+    keyB, schedB, qs = rd(DATA / f"te_traits_key_{part}.csv"), rd(DATA / f"te_traits_schedule_{part}.csv"), rd(DATA / "te_traits_questions.csv")
     K = {k["item"]: k for k in keyB}
     traits = defaultdict(list)
     for s in schedB:
@@ -347,13 +350,13 @@ def selftest_B():
     assert d["B1 random minus real retention"]["verdict"].startswith("the edit costs more"), d["B1 random minus real retention"]
     assert "o_tusks" in d["B0 fragile at baseline (presence < 0.5)"]["value"]
     assert d["Reliability"]["verdict"] == "passed"
-    print("selftest B ok")
+    print(f"selftest {part} ok")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--selftest", action="store_true"); ap.add_argument("--part", default="A")
     a = ap.parse_args()
-    if a.part == "B":
-        selftest_B() if a.selftest else run_B()
+    if a.part in ("B", "B2"):
+        selftest_B(a.part) if a.selftest else run_B(a.part)
     else:
         selftest() if a.selftest else run()
