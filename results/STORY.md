@@ -337,7 +337,17 @@ her tusks, which I asked for, and her pointed ears and grey skin, which the mode
 drawn as a comic; the elf rogue's dark skin lightens, though I never asked for a skin tone; the control edit, which never touches the style, still dresses the half-orc in a high oriental collar.
 And the changes all lean the same way: toward a lighter-skinned, more generic human. For me this is the real damage
 of a text-encoder edit: it doesn't break the picture, it makes the model forget what I asked for and fill the gap
-with its defaults. I haven't tested this yet: it's what I noted while comparing, and it's the next thing to measure.
+with its defaults.
+
+So I tested it blind. Every phrase of the prompt became a yes/no question, asked one at a time over every picture,
+with no dose and no edit on screen. The traits fall with the dose, and they go before the style. Then the control I
+cared about most: random pushes of the same size, labelled by someone who had never seen these pictures and knew
+nothing about what I'm doing. Random pushes keep nine traits in ten. Two of my edits keep half to two thirds. And when
+those two change the skin, it goes lighter, 14 times out of 14, while random pushes almost never touch it. The third
+edit, L28, keeps the character better than the random pushes do. So it isn't the size of the push: it's where each
+edit points.
+
+![Three portraits at full dose: the original, the real edit and two random pushes of the same size; under L06 and L14 the real edit turns the elf and the half-orc into lighter-skinned generic humans while the random pushes keep them, and under L28 the real edit keeps the dwarf while the random pushes change her.](../assets/30-the-text-encoder/F30.20_te_traits_sheet.webp)
 
 ![Three portraits along the dose ladder: under L06 the half-orc loses her orc features by 0.70 and becomes a photograph at 0.80; under L14 the elf rogue's skin lightens before the picture turns more cartoon; under L28 the half-orc stays a comic while her face and collar change.](../assets/30-the-text-encoder/F30.16_te_dose_sheet.webp)
 
@@ -346,7 +356,7 @@ kinds of edit · these edits change genre and identity more than they damage the
 **overturned** · the switch comes from less attention on the style words **overturned** · or from a push
 toward "anime" **overturned** · without style words the elf falls back to anime **holds** · every character has its own fallback **holds** · edits lead there **overturned** · random
 pushes of the same size do it too **ambiguous** (only if they vary across words) · each edit's own direction
-decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **holds\*** (\*pooled: one edit slides, one jumps) · the character's traits go first **open**
+decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **holds\*** (\*pooled: one edit slides, one jumps) · the character's traits go first **holds** (L06, L14) · and that cost follows each edit's direction, not its size **holds** · dark skin turns lighter under those edits **holds**
 
 ---
 

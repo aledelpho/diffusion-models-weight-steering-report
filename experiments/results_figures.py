@@ -1314,6 +1314,72 @@ def te_dose_onsets(out: Path) -> Path:
     return _save(fig, out, "C74 · 3 edits × 3 characters × 2 seeds · my labels, one row onset 'never' kept as downloaded · source data/te_dose_alessandro.csv")
 
 
+def te_traits_by_dose(out: Path) -> Path:
+    """F30.18 - C75 part A: mean retention of the character's traits by dose, per edit (blind labels)."""
+    rows = list(csv.DictReader(open(DATA / "te_traits_by_picture.csv", encoding="utf-8")))
+    fig, ax = _canvas(6.4, 3.3)
+    lab = {"L06_mlp": "L06 MLP (to realistic)", "L14_mlp": "L14 MLP (to cartoon)", "L28_mlp": "L28 MLP (keeps the comic)"}
+    for j, e in enumerate(("L06_mlp", "L14_mlp", "L28_mlp")):
+        xs, ys = [], []
+        for d in C74_DOSES:
+            v = [float(r["R"]) for r in rows if r["edit"] == e and r["dose"] == d and r["R"] not in ("", "None")]
+            if v:
+                xs.append(float(d)); ys.append(statistics.mean(v))
+        ax.plot(xs, ys, marker="o", ms=3.5, lw=1.4, color=CAT[j], label=lab[e])
+    ax.set_ylim(0.4, 1.03); ax.set_xlim(0.05, 1.05)
+    ax.set_xlabel("dose d (each of gate, up, down scaled by 1 + d)", color=DIM, fontsize=7.5)
+    ax.set_ylabel("share of the original's traits kept", color=DIM, fontsize=7.5)
+    ax.tick_params(labelsize=7, colors=DIM); ax.grid(axis="y", color=GRID, lw=0.5)
+    ax.legend(frameon=False, fontsize=6.8, labelcolor=INK, loc="lower left")
+    fig.text(0.1, 0.94, "The character goes first: traits fall with dose under L06 and L14", color=INK, fontsize=8.5)
+    fig.subplots_adjust(left=0.12, right=0.98, top=0.86, bottom=0.17)
+    return _save(fig, out, "C75 part A · 3 portraits x 2 seeds per edit · blind yes/no labels, mine · source data/te_traits_by_picture.csv")
+
+
+def te_traits_real_vs_random(out: Path) -> Path:
+    """F30.19 - C75 part B2: retention under the real edit and under random pushes of the same size (second labeller)."""
+    import numpy as np
+    rows = list(csv.DictReader(open(DATA / "te_traits_B2_by_picture.csv", encoding="utf-8")))
+    edits = ("L06_mlp", "L14_mlp", "L28_mlp"); vars_ = ("real", "token", "permuted")
+    col = {"real": CAT[1], "token": "#7a8394", "permuted": "#a9b0bd"}
+    lab = {"real": "real edit", "token": "random push, per-token noise", "permuted": "random push, permuted channels"}
+    fig = __import__("matplotlib.pyplot", fromlist=["x"]).figure(figsize=(6.4, 3.2), facecolor=SURFACE)
+    for k, (title, doses) in enumerate((("d = 1.00 (6 cells per edit)", ("1.00",)), ("d = 0.70 and 0.85 (6 cells per edit)", ("0.70", "0.85")))):
+        ax = _axes(fig, 2, k + 1)
+        for j, v in enumerate(vars_):
+            ys = [statistics.mean([float(r["R"]) for r in rows if r["edit"] == e and r["variant"] == v and r["dose"] in doses and r["R"]]) for e in edits]
+            ax.bar(np.arange(3) + (j - 1) * 0.26, ys, width=0.25, color=col[v], label=lab[v] if k == 0 else None)
+        ax.set_xticks(range(3)); ax.set_xticklabels([e[:3] for e in edits], fontsize=7, color=DIM)
+        ax.set_ylim(0, 1.05); ax.tick_params(labelsize=7, colors=DIM); ax.grid(axis="y", color=GRID, lw=0.5)
+        ax.set_title(title, fontsize=7.5, color=DIM)
+        if k == 0:
+            ax.set_ylabel("share of the original's traits kept", color=DIM, fontsize=7.5)
+    fig.legend(frameon=False, fontsize=6.6, labelcolor=INK, loc="upper left", bbox_to_anchor=(0.08, 0.93), ncol=3)
+    fig.text(0.08, 0.955, "Random pushes of the same size keep the character; L06 and L14 do not, L28 does", color=INK, fontsize=8.5)
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.76, bottom=0.12, wspace=0.25)
+    return _save(fig, out, "C75 part B2 · blind yes/no labels by a second labeller · source data/te_traits_B2_by_picture.csv")
+
+
+def te_traits_sheet(out: Path) -> Path:
+    """F30.20 - C75 part B2: original, real edit and the two random pushes at d = 1.00, three cells.
+    Caption: retention and skin under the second labeller's answers."""
+    rows = {(r["char"], r["seed"], r["edit"], r["dose"], r["variant"]): r for r in csv.DictReader(open(DATA / "te_traits_B2_by_picture.csv", encoding="utf-8"))}
+    cells = [("E2|2645751|L06_mlp", "L06 · elf rogue · s1"), ("O4|3316624|L14_mlp", "L14 · half-orc · s2"), ("D1|2645751|L28_mlp", "L28 · dwarf · s1")]
+    cols = [("original", "original"), ("real", "real edit, d = 1.00"), ("token", "random, per token"), ("permuted", "random, permuted")]
+    def key(rk, v):
+        c, s, e = rk.split("|")
+        return (c, s, "", "0.00", v) if v == "original" else (c, s, e, "1.00", v)
+    def path(rk, v):
+        return _img(rows[key(rk, v)]["file"])
+    def cap(rk, v):
+        if v == "original":
+            return None
+        r = rows[key(rk, v)]
+        return (f"kept {float(r['R']):.2f}" + (f" · skin {r['skin']}" if r["skin"] not in ("same", "") else ""), NEG if v == "real" else DIM_RGB)
+    return _sheet(cells, cols, path, cap, out,
+                  "C75 part B2 · caption = share of the original's traits kept (skin if changed), second labeller · data/te_traits_B2_by_picture.csv", W=150, H=188, LAB=150)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1368,6 +1434,9 @@ BUILDERS = {
     "F30.15": ("30-the-text-encoder", "te_fallback_by_edit", te_fallback_by_edit),
     "F30.16": ("30-the-text-encoder", "te_dose_sheet", te_dose_sheet),
     "F30.17": ("30-the-text-encoder", "te_dose_onsets", te_dose_onsets),
+    "F30.18": ("30-the-text-encoder", "te_traits_by_dose", te_traits_by_dose),
+    "F30.19": ("30-the-text-encoder", "te_traits_real_vs_random", te_traits_real_vs_random),
+    "F30.20": ("30-the-text-encoder", "te_traits_sheet", te_traits_sheet),
 }
 
 

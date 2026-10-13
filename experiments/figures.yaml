@@ -1140,3 +1140,35 @@ figures:
       For each of the 18 strips, the dose where the style changes and the dose where the first prompt trait is lost:
       no style change below 0.70, L06 changes at 0.80-0.85, L14 between 0.70 and 1.00, L28 never; traits are lost at
       or before the style change in most L06 and L14 strips and in four of six L28 strips.
+  - id: F30.18
+    page: 30-the-text-encoder
+    kind: strip
+    builder: results_figures.te_traits_by_dose
+    source: data/te_traits_by_picture.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Mean share of the original's traits kept, by dose: L06 and L14 stay near 1 up to 0.5, then fall to 0.52 and 0.63
+      at full dose; L28 stays above 0.93.
+  - id: F30.19
+    page: 30-the-text-encoder
+    kind: paired_bars
+    builder: results_figures.te_traits_real_vs_random
+    source: data/te_traits_B2_by_picture.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Share of the original's traits kept under the real edit and two random pushes of the same size: at full dose L06
+      keeps 0.48 and L14 0.63 against 0.87-0.95 for the random pushes, while L28 keeps 0.97 against 0.92 and 0.83; at
+      0.70 and 0.85 the same pattern, smaller.
+  - id: F30.20
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_traits_sheet
+    source: data/te_traits_B2_by_picture.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Three portraits at full dose: the original, the real edit and two random pushes of the same size; under L06 and
+      L14 the real edit turns the elf and the half-orc into lighter-skinned generic humans while the random pushes keep
+      them, and under L28 the real edit keeps the dwarf while the random pushes change her.

@@ -38,10 +38,19 @@ for k in kB:
         if x in ("sì", "no") and y in ("sì", "no"):
             agree[q][0] += x == y; agree[q][1] += 1; pairs.append((x, y))
 out.append({"what": "inter-rater kappa, traits without e_androgynous", "n_cells": len(pairs), "real": round(T.kappa(pairs), 3), "token": "", "permuted": ""})
-for q, (a, n) in sorted(agree.items(), key=lambda x: x[1][0] / x[1][1]):
+for q, (a, n) in sorted(agree.items(), key=lambda x: (x[1][0] / x[1][1], x[0])):
     out.append({"what": f"inter-rater agreement {q}", "n_cells": n, "real": round(a / n, 3), "token": "", "permuted": ""})
 sk = Counter((T._skin(a1, fA[k["file"]]), T._skin(b1, k["item"])) for k in kB if k["file"] in fA and k["edit"])
 out.append({"what": "skin (Alessandro, rater 2) on shared edited pictures", "n_cells": sum(sk.values()), "real": str(dict(sk)), "token": "", "permuted": ""})
 with open(DATA / "te_traits_B2_explore.csv", "w", newline="", encoding="utf-8") as f:
     w = csv.DictWriter(f, fieldnames=list(out[0])); w.writeheader(); w.writerows(out)
 for o in out: print(o)
+
+# per picture, for the results figures (added 2026-10-13): retention and skin category under her labels
+rows = []
+for k in kB:
+    rows.append({"item": k["item"], "char": k["char"], "seed": k["seed"], "edit": k["edit"], "dose": k["dose"], "variant": k["variant"],
+                 "R": "" if not k["edit"] else ("" if R(k["item"], k["char"], k["seed"]) is None else round(R(k["item"], k["char"], k["seed"]), 3)),
+                 "skin": T._skin(b1, k["item"]) or "", "file": k["file"]})
+with open(DATA / "te_traits_B2_by_picture.csv", "w", newline="", encoding="utf-8") as f:
+    w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)

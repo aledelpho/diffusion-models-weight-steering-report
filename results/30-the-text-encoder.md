@@ -9,7 +9,7 @@ supersedes: []
 pitfalls: [90]
 
 corpus:
-  renders: 1527
+  renders: 1649
   prompts: 70
   seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281, 3605551, 4123105]
 
@@ -201,24 +201,54 @@ claims:
       photograph around d = 0.80. The split was not pre-registered. No strip changes style below d = 0.70.
     anchor: "#a-dose-ladder"
   - id: te-edit-loses-traits-first
-    status: open
+    status: holds
     statement: >
-      The first thing a text-encoder edit costs is the character: traits the prompt asks for (the half-orc's tusks,
-      the dwarf's copper hair) and features of the original picture the prompt does not name (skin tone, ears,
-      clothing) change before the style does, or without any style change.
+      The first and largest cost of the L06 and L14 text-encoder edits is the character the prompt asks for: its
+      traits fall steadily with dose and go before the style changes.
     evidence: >
-      Reported, not tested (C74, amendment 2, free-text traits, one labeller). In L06 and L14, a prompt trait is lost
-      before the style changes in 5 of 10 strips, at the same dose in 2, after in 3. In the L28 control, which never
-      changes style, traits are lost in 4 of 6 strips. The half-orc loses her tusks (asked) and her ears and grey skin
-      (not named) under L06 by d = 0.70 while still drawn as a comic; under L14 the elf rogue's skin, dark in the
-      original though the prompt names no skin tone, lightens. My notes did not separate asked traits from unnamed
-      ones, and at one seed the original half-orc already shows no tusks.
+      Pre-registered (C75), blind yes/no labels, one question at a time. Part A (my labels, 222 pictures of the C74
+      ladder): retention falls with dose, median Spearman -0.89 over 18 strips (bar -0.50); traits go before the style
+      in 11 of 11 L06/L14 strips (bar 2/3; 8 of 11 with a stricter criterion, exploratory); kappa 0.93 on repeats.
+      Mean retention at d = 1.00: L06 0.52, L14 0.63, L28 0.93. Unchanged without the five traits the unedited model
+      never draws (B0, eight seeds). C74 first noted it in free text. Status changed from open to holds by Alessandro
+      on 2026-10-13.
+    anchor: "#what-the-edit-costs-the-character"
+  - id: te-edit-cost-depends-on-direction
+    status: holds
+    statement: >
+      How much a text-encoder edit costs the character depends on its direction, not its size: L06 and L14 cost far
+      more traits than random pushes of the same size, L28 fewer.
+    evidence: >
+      Pre-registered (C75 B1), labelled blind by a second person who knew nothing of the study: retention under random
+      pushes minus the real edit over 36 matched cells, +0.18 pooled (token +0.20, permuted +0.17; bar +0.15).
+      At d = 1.00: L06 real 0.48 against random 0.89 / 0.87; L14 0.63 against 0.95 / 0.94; L28 0.97 against 0.92 /
+      0.83. Her repeats kappa 0.98; agreement with my labels kappa 0.85.
+    anchor: "#what-the-edit-costs-the-character"
+  - id: te-edit-lightens-skin
+    status: holds
+    statement: >
+      When the L06 or L14 edits change a character's skin, it becomes lighter; random pushes of the same size almost
+      never change it. The prompts name no skin tone, so this is a drift toward the model's default, not a failure to
+      follow the prompt.
+    evidence: >
+      Pre-registered (C75 T4, part A, my labels): lighter in 52 of 53 skin changes (bar 0.80), lighter majority for 2 of
+      3 characters (the dwarf's skin never changes). Part B2, second labeller: lighter in 14 of 14 changes under real
+      edits; random pushes change the skin in 6 of 108 pictures.
+    anchor: "#what-the-edit-costs-the-character"
+  - id: te-l28-costs-traits-without-style
+    status: ambiguous
+    statement: >
+      L28 MLP doubled, which never changes the style, still costs the character's traits.
+    evidence: >
+      Pre-registered (C75 T3): mean retention at d = 1.00 minus at 0.10 = -0.07 (bar -0.15: inconclusive). The half-orc
+      loses her orc features from 0.60-0.70; other traits mostly stay; the elf's face turns green. Under random pushes
+      of its size the character fares worse (B1).
     anchor: "#a-dose-ladder"
 ---
 
 # The text encoder — how hard it pushes, and where the picture goes
 
-> **Holds** · 1527 renders · 70 prompts · pre-registered 2026-10-12
+> **Holds** · 1649 renders · 70 prompts · pre-registered 2026-10-12
 > [← all results](README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** Krea-2 reads the prompt with a language model, Qwen3-VL-4B, before
@@ -236,7 +266,8 @@ claims:
 > vary from token to token, and each real edit has a direction of its own: one protects the comic, another
 > drives it to anime. Why a given edit points where it does is still open. And a dose ladder showed that the
 > full-strength edits do not break the picture: the style holds up to about d = 0.70, and before it moves, the
-> edit has often already changed *who* is drawn.
+> edit has often already changed *who* is drawn. Blind labels by two people confirm it: two of the edits
+> cost the character far more than random pushes of the same size, and turn dark skin lighter.
 
 ## In two minutes
 
@@ -277,9 +308,18 @@ it almost every time.
 
 Last, I asked whether those edits were simply too strong. I rendered three of them at twelve doses, from a
 tenth of the edit to the full one. Nothing changes style below 0.70, and no picture breaks, even at full dose. But
-the character goes first. The half-orc loses her tusks, which the prompt asks for, and her ears and grey skin,
-which the model had chosen, while she is still drawn as a comic; the style changes only later. For me this is the real damage: the edit makes the model forget what I asked
-for, and it fills the gap with a more generic person.
+the character goes first. The half-orc stops looking like a half-orc — pointed ears, grey skin, undercut and warrior
+knot go — while she is still drawn as a comic; the style changes only later. For me this is the real damage: the edit
+makes the model forget what I asked for, and it fills the gap with a more generic person.
+
+So I measured it blind: a yes/no question for every trait in the prompt, one question at a time, with no dose or edit
+shown. The traits fall steadily with the dose, and they go before the style. Then the control: random pushes of the
+same size. Someone else labelled those, without knowing anything about the study. Random pushes keep nine traits in
+ten; L06 and L14 keep half to two thirds. And when the skin changes under those two edits, it becomes lighter, every
+time; under random pushes it almost never changes. The prompts never name a skin tone: the edit takes away what holds
+the character, and the model fills the gap with its default.
+
+![Three portraits at full dose: the original, the real edit and two random pushes of the same size; under L06 and L14 the real edit turns the elf and the half-orc into lighter-skinned generic humans while the random pushes keep them, and under L28 the real edit keeps the dwarf while the random pushes change her.](../assets/30-the-text-encoder/F30.20_te_traits_sheet.webp)
 
 ![Three portraits along the dose ladder: under L06 the half-orc loses her orc features by 0.70 and becomes a photograph at 0.80; under L14 the elf rogue's skin lightens before the picture turns more cartoon; under L28 the half-orc stays a comic while her face and collar change.](../assets/30-the-text-encoder/F30.16_te_dose_sheet.webp)
 
@@ -299,8 +339,10 @@ tokens, no if they are one shared vector. **Open**: that each edit's own directi
 phrases draw alone; anime as the usual destination of a switch. **Ambiguous**: whether the strong edits
 separate word orders inside the image model. **Holds** (C74): along a dose ladder the pictures move toward the
 full-dose picture, and the style changes before coherence breaks, which it never does. **Holds\*** (C74): the change is
-gradual, by the rule fixed in advance; \*but only pooled: L14 slides, L06 jumps. **Open** (C74): that the edit loses the character's
-traits before its style.
+gradual, by the rule fixed in advance; \*but only pooled: L14 slides, L06 jumps. **Holds** (C75): the first cost of L06 and L14 is the character,
+before the style; the cost depends on the edit's direction, not its size (random pushes of the same size keep the
+character, and L28 keeps it better than they do); under L06 and L14 dark skin turns lighter. **Ambiguous** (C75):
+that L28 costs traits without changing style.
 
 ## Why I might be wrong
 
@@ -330,9 +372,12 @@ of that may be a ceiling: 28 of the 35 MLP-doubled edits were already labelled s
 **Mostly large doses.** Almost everything here is at ±1: a layer half doubled or removed. C74 adds twelve
 doses, but for three edits, three characters and two seeds only.
 
-**Traits were not a fixed list.** In C74 I wrote down which prompt traits were lost in free text, and that question
-decided no test. One row has an onset of "never" although the picture changes at 0.80 (I checked); it is kept as
-downloaded and changes no verdict.
+**Traits are judgements too.** C75 fixed the list of traits before any label and asked them blind, but some are
+judgements of degree (age, androgyny, "reads as a dwarf"), and those are where the two labellers disagree most. The
+part B2 set was shortened after I had seen part A (every cell at full dose, half at 0.70 and half at 0.85), and two
+questions were reworded for the second labeller, so on those two our answers are not compared. Three characters, two
+seeds, one kind of edit. In C74, one row has an onset of "never" although the picture changes at 0.80 (I checked); it
+is kept as downloaded and changes no verdict.
 
 **What the measures do not see.** The conditioning is what the image model receives, not what it does
 with it. Attention says where a phrase is read, not what it says. C71 averages over all the tokens of a
@@ -549,15 +594,58 @@ What the ladder shows beyond the tests (reported, not tested):
 
 * **The style holds for most of the range.** No strip changes style below 0.70. Since the edit scales three matrices
   of the MLP, the layer's output at 0.70 is, by my estimate of (1 + d)³, already several times the original.
-* **The character goes first.** In L06 and L14, a trait the prompt asks for is lost before the style changes in 5
-  of 10 strips and at the same dose in 2. "Trait" here mixes two things my notes did not separate: features the
-  prompt asks for (the half-orc's tusks, the dwarf's copper hair) and features of the original picture the prompt
-  does not name (skin tone, ears). The L28 control never changes style, yet loses traits in 4 of 6 strips:
-  the elf's face turns green, the half-orc gets a high oriental collar. The changes lean one way: tusks, pointed
-  ears and grey or dark skin give way to a lighter-skinned, more generic human. The prompts name no skin tone, so
-  the skin is a drift from the original picture, not a failure to follow the prompt.
+* **The character goes first.** In my free-text notes, a trait was lost before the style changed in 5 of 10 L06/L14
+  strips and at the same dose in 2. Those notes mixed traits the prompt asks for with features it does not name, and
+  were not blind; C75 measured this properly (next section).
 * **Composition moves smoothly.** In all 18 strips pose and framing change little from one dose to the next, even
   where the style jumps.
+
+### What the edit costs the character
+
+C75 turned the C74 notes into a blind test. Every phrase of the three prompts became a yes/no question ("Is the hair
+copper-coloured?", "Are there lower tusks jutting past the lips?"), two common ones were added (frontal close-up, white
+background), and two questions compare with the original: is the skin the same colour, and could it be the same
+character drawn by another artist. The page asks one question over every picture of a character, shows no dose, edit
+or seed, and repeats some pictures to measure consistency.
+
+**Part A** (my labels, the 222 pictures of the C74 ladder). Retention, the share of the original's traits still
+present, falls with dose under L06 and L14 and barely moves under L28.
+
+![Mean share of the original's traits kept, by dose: L06 and L14 stay near 1 up to 0.5, then fall to 0.52 and 0.63 at full dose; L28 stays above 0.93.](../assets/30-the-text-encoder/F30.18_te_traits_by_dose.webp)
+
+| test (pre-registered) | value | rule | verdict |
+|---|---|---|---|
+| T1 — retention falls with dose | median Spearman -0.89, 18 strips | ≤ -0.50 | supported |
+| T2 — traits go before the style (L06, L14) | 11 of 11 strips | ≥ 2/3 | supported |
+| T3 — L28 costs traits without changing style | -0.07 | ≤ -0.15 | inconclusive |
+| T4 — skin changes go lighter | 52 of 53 | ≥ 0.80, 2 of 3 characters | supported |
+| reliability on repeats | kappa 0.93 | ≥ 0.60 | passed |
+
+T2 compares a blind measure made of many questions with a single style judgement made without blinding, so it leans toward the
+traits by construction. With a stricter onset (about two traits lost), traits still go first in 8 of 11 strips,
+style first in 1 (exploratory).
+
+What goes first are expressions and judgements of degree (the elf's smirk, androgyny, the dwarf's age), then race and
+costume: the half-orc stops reading as a half-orc at 0.60, then loses her knot, undercut and collar; the dwarf loses
+her braids and her armour. The elf's pointed ears are never lost.
+
+**Part B2**, the control. A second labeller, who had seen none of these pictures and did not know what the study is
+about, labelled the real edits at 0.70, 0.85 and 1.00 next to random pushes of the same size (C72's node, token and
+permuted variants), plus the unedited portraits at eight seeds.
+
+![Share of the original's traits kept under the real edit and two random pushes of the same size: at full dose L06 keeps 0.48 and L14 0.63 against 0.87-0.95 for the random pushes, while L28 keeps 0.97 against 0.92 and 0.83; at 0.70 and 0.85 the same pattern, smaller.](../assets/30-the-text-encoder/F30.19_te_traits_real_vs_random.webp)
+
+| test (pre-registered) | value | rule | verdict |
+|---|---|---|---|
+| B1 — random minus real retention, 36 matched cells | +0.18 (token +0.20, permuted +0.17) | ≥ +0.15, both variants alike | the edit costs more than its size |
+| reliability on her repeats | kappa 0.98 | ≥ 0.60 | passed |
+| agreement with my labels, shared pictures | kappa 0.85 | reported | — |
+
+The pooled verdict is carried by L06 and L14. L28 goes the other way: its real edit keeps the character better than
+random pushes of its size, as it kept the comic in C72. So the cost is a property of each edit's direction. Under the
+real edits, skin changes go lighter in 14 of 14; random pushes change the skin in 6 of 108 pictures. The unedited
+model never draws five asked traits at any of eight seeds (the dwarf's scars, the half-orc's tusks, dirt and snarl);
+leaving them out changes no verdict. The two labellers disagree most on whether the dwarf "reads as a dwarf" (8 of 14).
 
 ### Reproducing this
 
@@ -580,7 +668,7 @@ tuner:
   version: not recorded — the tuner is a separate repository
   mode: Real Value; one layer half through granular_json (layers.L.self_attn.{q,k,v,o}_proj.weight or layers.L.mlp.{gate,up,down}_proj.weight), weight x (1 + d)
 prompts:
-  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv, data/te_dose_plan.csv]
+  files: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv, data/te_dose_plan.csv, data/te_traits_plan.csv]
   ids: [P1_elfbrawler, V1_Original, V2_SubjectFirst, V3_BGFirst, V4_ActionFirst, V5_Inverse, D1_dwarf_paladin, D1W_dwarf_paladin_watercolor, E2_elf_rogue, G5_gnome_wizard, H3_halfling_druid, O4_halforc_fighter, R6_dragonborn_cleric, T7_tiefling_bard, "V1-V5 without the style clauses (C72)", EMPTY, W00-W42 (C72 single phrases), "the seven portraits without 'Western comics style' (C73)"]
 seeds: [1618033, 1234567, 2645751, 3141592, 3316624, 2718281, 3605551, 4123105]
 conditions:
@@ -591,31 +679,31 @@ conditions:
     dose: 0.10-1.00
     measured_D: not measured; the dose is a per-matrix gain, not a calibrated displacement
 outputs:
-  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default, benchmark_te_fallback, benchmark_te_dose]
-  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv, data/te_dose_plan.csv]
+  folders: [benchmark_te_pilot, benchmark_te_characters, benchmark_te_bridge, benchmark_te_default, benchmark_te_fallback, benchmark_te_dose, benchmark_te_traits]
+  manifests: [data/te_pilot_plan.csv, data/te_characters_plan.csv, data/te_bridge_plan.csv, data/te_default_plan.csv, data/te_fallback_plan.csv, data/te_dose_plan.csv, data/te_traits_plan.csv]
   encodes_without_images: [benchmark_te_conditioning (C67, 721), benchmark_te_regions (C68, 241), benchmark_te_direction (C71, 16)]
 analysis:
-  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py, experiments/te_fallback.py, experiments/te_fallback_tally.py, experiments/te_dose.py, experiments/te_dose_tally.py]
-  produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv, data/te_dose_tests.csv
+  scripts: [experiments/te_pilot_phase1_tally.py, experiments/te_characters.py, experiments/te_conditioning.py, experiments/te_regions.py, experiments/te_bridge.py, experiments/te_genre_tally.py, experiments/te_genre_dose_tally.py, experiments/te_direction.py, experiments/te_size_within_type.py, experiments/te_default.py, experiments/te_default_tally.py, experiments/te_fallback.py, experiments/te_fallback_tally.py, experiments/te_dose.py, experiments/te_dose_tally.py, experiments/te_traits.py, experiments/te_traits_page.py, experiments/te_traits_tally.py, experiments/te_traits_explore.py, experiments/te_traits_explore_B2.py]
+  produces: data/te_conditioning_tests.csv, data/te_regions_tests.csv, data/te_bridge_readings.csv, data/te_bridge_style.csv, data/te_genre_tests.csv, data/te_genre_dose_tests.csv, data/te_direction_tests.csv, data/te_dose_tests.csv, data/te_traits_tests.csv, data/te_traits_B2_tests.csv
 ```
 
 ## Provenance
 
-* Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280), C73 fallbacks (29), C74 dose ladder (199, gate included).
+* Renders: C64 pilot (463), C65 characters (531), C69 bridge (25), C72 defaults (280), C73 fallbacks (29), C74 dose ladder (199, gate included), C75 random pushes and plain portraits (122, gate included).
 * Encodes without images: C67 (721), C68 (241), C71 (16).
 * **Pre-registrations:** `docs/prereg_te_characters.md` (+ amendments 1-3), `docs/prereg_te_conditioning.md`
   (+ amendments 1-2), `docs/prereg_te_regions.md`, `docs/prereg_te_bridge.md`, `docs/prereg_te_genre.md`
-  (+ amendments 1-2), `docs/prereg_te_direction.md`, `docs/prereg_te_default.md` (+ amendments 1-2), `docs/prereg_te_fallback.md`, `docs/prereg_te_dose.md` (+ amendments 1-2); the pilot plan `docs/plan_te_pilot.md`.
+  (+ amendments 1-2), `docs/prereg_te_direction.md`, `docs/prereg_te_default.md` (+ amendments 1-2), `docs/prereg_te_fallback.md`, `docs/prereg_te_dose.md` (+ amendments 1-2), `docs/prereg_te_traits.md` (+ amendments 1-4); the pilot plan `docs/plan_te_pilot.md`.
 * **Result documents:** `docs/te_pilot_phase1_result.md`, `docs/te_characters_result.md`,
   `docs/te_characters_eye_result.md`, `docs/te_order_grid_result.md`, `docs/te_conditioning_result.md`,
   `docs/te_regions_result.md`, `docs/te_bridge_result.md`, `docs/te_genre_result.md`,
-  `docs/te_direction_result.md`, `docs/te_default_result.md`, `docs/te_fallback_result.md`, `docs/te_dose_result.md`.
+  `docs/te_direction_result.md`, `docs/te_default_result.md`, `docs/te_fallback_result.md`, `docs/te_dose_result.md`, `docs/te_traits_result.md`.
 * **Data:** `data/te_pilot_eye_alessandro_phase1.csv`, `data/te_order_grid_notes_alessandro.csv`,
   `data/te_order_tests.csv`, `data/te_size_within_type.csv`, `data/te_genre_alessandro.csv`, `data/te_genre_dose_alessandro.csv`,
   `data/te_bridge_style.csv`, `data/te_direction_by_edit.csv`, `data/te_direction_norms.csv`,
   `data/te_default_genre_alessandro.csv`, `data/te_default_cells.csv`, `data/te_default_tests.csv`,
   `data/te_words_alessandro.csv`, `data/te_massive_channels.csv`, `data/te_fallback_genre_alessandro.csv`,
-  `data/te_fallback_tests.csv`, `data/te_fallback_by_edit.csv`, `data/te_dose_alessandro.csv`, `data/te_dose_tests.csv`.
+  `data/te_fallback_tests.csv`, `data/te_fallback_by_edit.csv`, `data/te_dose_alessandro.csv`, `data/te_dose_tests.csv`, `data/te_traits_questions.csv`, `data/te_traits_key_A.csv`, `data/te_traits_alessandro.csv`, `data/te_traits_by_picture.csv`, `data/te_traits_tests.csv`, `data/te_traits_explore.csv`, `data/te_traits_key_B2.csv`, `data/te_traits_B2_rater2.csv` (second labeller), `data/te_traits_B2_by_picture.csv`, `data/te_traits_B2_tests.csv`, `data/te_traits_B2_explore.csv`.
 * **Labels and keys** were committed in the order the protocols require: key before labels, labels as
   downloaded before any count.
 * **Probes:** `tools/comfyui_krea2_probe` (conditioning), `tools/comfyui_krea2_attnprobe` (attention; reads
