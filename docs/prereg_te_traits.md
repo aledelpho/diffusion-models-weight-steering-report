@@ -418,3 +418,23 @@ Changes from the text above:
 * Page `Text2Img\_grid_viewer\te_traits_B2\index.html`.
 * Labels `te_traits_B2_rater2.csv`, committed as downloaded.
 * Tally `te_traits_tally.py --part B2`, with a self-test.
+
+## Amendment 4 (2026-10-13, before any Part B2 label)
+
+After labelling Part A, Alessandro reported trouble with two questions. Both are reworded for B2 only. Part A keeps
+its wording, and its labels are already committed.
+
+* **e_androgynous.** In practice he answered yes when he could not decide whether the elf was a boy or a girl. B2
+  asks that operation directly: "Guardando il personaggio, è difficile dire se è un ragazzo o una ragazza?" ("Looking
+  at the character, is it hard to tell whether it is a boy or a girl?").
+* **person.** A strong change of style made "the same person" hard to judge. B2 asks: "Potrebbe essere lo stesso
+  personaggio del riferimento, disegnato da un altro artista?" ("Could it be the same character as in the reference,
+  drawn by another artist?"). This separates whether the character can be recognised from the style it is drawn in.
+
+**Consequences.**
+
+* B1 is computed within the B2 labels, so it is not affected.
+* For these two questions, the agreement between Part A and B2 is not comparable and is not reported.
+* Person stays reported only, under its new wording.
+* `data/te_traits_questions.csv` gains the columns `question_it_B2` and `question_en_B2`. The page is rebuilt with
+  the same key and schedule.

@@ -285,7 +285,8 @@ def make_page(part="A"):
         name = f"ref_{r['char']}_{r['seed']}.jpg"
         jpg(f"benchmark_portraits/phase_c/{CHARS[r['char']]}_baseline_krea2_seed{r['seed']}_00001_.png", out / "img" / name)
         ref[it] = name
-    qtext = {q["id"]: q["question_it"] for q in rd(DATA / "te_traits_questions.csv")}
+    qtext = {q["id"]: (q.get("question_it_B2") or q["question_it"]) if part == "B2" else q["question_it"]
+             for q in rd(DATA / "te_traits_questions.csv")}   # amendment 4: two questions reworded for B2
     S = [{"block": s["block"], "pos": int(s["pos"]), "item": s["item"], "showing": int(s["showing"]),
           "question": s["question"], "kind": s["kind"]} for s in sched]
     page = PAGE if part == "A" else PAGE.replace("te_traits_A_v1", f"te_traits_{part}_v1").replace("te_traits_alessandro.csv", f"te_traits_{part}_alessandro.csv" if part == "B" else f"te_traits_{part}_rater2.csv").replace("C75 · tratti", "Ritratti · domande" if part == "B2" else f"C75 · tratti · parte {part}")

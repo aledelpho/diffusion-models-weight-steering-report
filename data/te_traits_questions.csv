@@ -1,42 +1,42 @@
-id,char,kind,question_it,question_en,prompt_words,reference_shown
-c_frontal,ALL,common,"È un ritratto ravvicinato, visto di fronte?",Is it a close-up portrait seen from the front?,"close-up portrait, frontal view",0
-c_whitebg,ALL,common,Lo sfondo è bianco e semplice?,Is the background plain white?,"white background, simple background",0
-d_female,D1,asked,Il personaggio è femmina? (la barba da sola non basta per dire no),Is the character female? (a beard alone is not enough for no),female,0
-d_dwarf,D1,asked,"Il personaggio è una nana, con corporatura e tratti massicci da nana, e non un'umana qualsiasi?","Is the character a dwarf, with a dwarf's heavy build and features, not an ordinary human?",mountain dwarf,0
-d_middleaged,D1,asked,Il personaggio è di mezza età?,Is the character middle-aged?,middle-aged,0
-d_stern,D1,asked,L'espressione è severa e risoluta?,Is the expression stern and resolute?,resolute stern expression,0
-d_copper,D1,asked,I capelli sono color rame?,Is the hair copper-coloured?,copper hair,0
-d_braids,D1,asked,"I capelli sono folti, intrecciati e raccolti indietro?","Is the hair thick, braided and pinned back?",thick braided ... pinned back,0
-d_browneyes,D1,asked,Gli occhi sono castano scuro?,Are the eyes dark brown?,dark brown eyes,0
-d_nose,D1,asked,Il naso è largo e segnato da cicatrici?,Is the nose wide and scarred?,a battle-scarred wide nose,0
-d_browscar,D1,asked,C'è una cicatrice verticale che attraversa un sopracciglio?,Is there a vertical scar running through one eyebrow?,a vertical scar running through one eyebrow,0
-d_gorget,D1,asked,Al collo c'è una gorgiera di acciaio lucido?,Is there a polished steel gorget at the neck?,polished steel gorget,0
-d_navy,D1,asked,Sotto la gorgiera c'è un gambesone (giubba imbottita) blu navy?,Is there a navy blue gambeson (padded jacket) under the gorget?,over a navy blue gambeson,0
-d_brass,D1,asked,C'è un colletto alto in ottone?,Is there a high brass collar?,high brass collar,0
-e_ears,E2,asked,Il personaggio ha le orecchie a punta da elfo?,Does the character have pointed elf ears?,wood elf,0
-e_androgynous,E2,asked,"Il personaggio ha un aspetto androgino, né chiaramente uomo né chiaramente donna?","Does the character look androgynous, neither clearly a man nor clearly a woman?",non-binary,0
-e_young,E2,asked,Il personaggio è un giovane adulto?,Is the character a young adult?,young adult,0
-e_smirk,E2,asked,Il personaggio ha un sorrisetto compiaciuto e storto?,"Does the character have a smug, lopsided smirk?",smug lopsided smirk,0
-e_undercut,E2,asked,"I capelli hanno un undercut asimmetrico, con un lato rasato?","Does the hair have an asymmetrical undercut, one side shaved?",undercut asymmetrical,0
-e_black,E2,asked,I capelli sono neri corvini?,Is the hair raven black?,raven hair,0
-e_amber,E2,asked,Gli occhi sono color ambra?,Are the eyes amber?,sharp amber eyes,0
-e_cheeks,E2,asked,Gli zigomi sono pronunciati?,Are the cheekbones prominent?,prominent cheekbones,0
-e_cowl,E2,asked,Il personaggio indossa un cappuccio di cuoio verde foresta scuro (alzato o abbassato)?,Does the character wear a dark forest green leather hooded cowl (hood up or down)?,dark forest green hooded leather cowl,0
-e_buckles,E2,asked,Ci sono fibbie d'ottone?,Are there brass buckles?,brass buckles,0
-e_tunic,E2,asked,Sotto c'è una tunica grigio antracite a collo alto?,Is there a high-collared charcoal tunic underneath?,high-collared charcoal tunic,0
-e_feather,E2,asked,Il personaggio porta un solo orecchino pendente a forma di piuma?,Does the character wear a single dangling feather earring?,a single dangling feather earring,0
-o_female,O4,asked,Il personaggio è femmina?,Is the character female?,female,0
-o_orc,O4,asked,"Il personaggio è una mezz'orca, con tratti non umani anche senza contare le zanne?","Is the character a half-orc, with non-human features even without counting the tusks?",half-orc,0
-o_young,O4,asked,Il personaggio è una giovane adulta?,Is the character a young adult?,young adult,0
-o_snarl,O4,asked,"Il personaggio ha un ringhio feroce, di sfida?","Does the character have a fierce, defiant snarl?",fierce defiant snarl,0
-o_undercut,O4,asked,I lati della testa sono rasati e sfumati?,Are the sides of the head shorn and faded?,shorn faded undercut,0
-o_knot,O4,asked,I capelli sono legati in una crocchia da guerriera nera e stretta?,Is the hair tied in a tight black warrior knot?,a tight black warrior knot,0
-o_greyeyes,O4,asked,Gli occhi sono grigio chiaro?,Are the eyes pale grey?,piercing pale grey eyes,0
-o_tusks,O4,asked,Ci sono zanne inferiori che sporgono oltre le labbra?,Are there lower tusks jutting past the lips?,lower tusks jutting past chiseled lips,0
-o_scale,O4,asked,Al collo c'è un colletto di maglia a scaglie in bronzo?,Is there a bronze scale-mail collar at the neck?,oxidized bronze scale-mail collar,0
-o_jack,O4,asked,Sotto c'è una giacca imbottita trapuntata bordeaux?,Is there a burgundy quilted jack underneath?,over a burgundy quilted jack,0
-o_dirt,O4,asked,Ci sono sbaffi di sporco sulla radice del naso?,Are there dirt smudges across the bridge of the nose?,fresh dirt smudges across the bridge of the nose,0
-skin_same,ALL,unnamed,La pelle ha lo stesso colore di quella del riferimento?,Is the skin the same colour as in the reference?,(not named),1
-skin_lighter,ALL,unnamed,La pelle è più chiara di quella del riferimento?,Is the skin lighter than in the reference?,(not named; asked only if skin_same = no),1
-skin_darker,ALL,unnamed,La pelle è più scura di quella del riferimento?,Is the skin darker than in the reference?,(not named; asked only if skin_lighter = no; no to both = another hue),1
-person,ALL,unnamed,È la stessa persona del riferimento?,Is it the same person as in the reference?,(not named),1
+id,char,kind,question_it,question_en,prompt_words,reference_shown,question_it_B2,question_en_B2
+c_frontal,ALL,common,"È un ritratto ravvicinato, visto di fronte?",Is it a close-up portrait seen from the front?,"close-up portrait, frontal view",0,,
+c_whitebg,ALL,common,Lo sfondo è bianco e semplice?,Is the background plain white?,"white background, simple background",0,,
+d_female,D1,asked,Il personaggio è femmina? (la barba da sola non basta per dire no),Is the character female? (a beard alone is not enough for no),female,0,,
+d_dwarf,D1,asked,"Il personaggio è una nana, con corporatura e tratti massicci da nana, e non un'umana qualsiasi?","Is the character a dwarf, with a dwarf's heavy build and features, not an ordinary human?",mountain dwarf,0,,
+d_middleaged,D1,asked,Il personaggio è di mezza età?,Is the character middle-aged?,middle-aged,0,,
+d_stern,D1,asked,L'espressione è severa e risoluta?,Is the expression stern and resolute?,resolute stern expression,0,,
+d_copper,D1,asked,I capelli sono color rame?,Is the hair copper-coloured?,copper hair,0,,
+d_braids,D1,asked,"I capelli sono folti, intrecciati e raccolti indietro?","Is the hair thick, braided and pinned back?",thick braided ... pinned back,0,,
+d_browneyes,D1,asked,Gli occhi sono castano scuro?,Are the eyes dark brown?,dark brown eyes,0,,
+d_nose,D1,asked,Il naso è largo e segnato da cicatrici?,Is the nose wide and scarred?,a battle-scarred wide nose,0,,
+d_browscar,D1,asked,C'è una cicatrice verticale che attraversa un sopracciglio?,Is there a vertical scar running through one eyebrow?,a vertical scar running through one eyebrow,0,,
+d_gorget,D1,asked,Al collo c'è una gorgiera di acciaio lucido?,Is there a polished steel gorget at the neck?,polished steel gorget,0,,
+d_navy,D1,asked,Sotto la gorgiera c'è un gambesone (giubba imbottita) blu navy?,Is there a navy blue gambeson (padded jacket) under the gorget?,over a navy blue gambeson,0,,
+d_brass,D1,asked,C'è un colletto alto in ottone?,Is there a high brass collar?,high brass collar,0,,
+e_ears,E2,asked,Il personaggio ha le orecchie a punta da elfo?,Does the character have pointed elf ears?,wood elf,0,,
+e_androgynous,E2,asked,"Il personaggio ha un aspetto androgino, né chiaramente uomo né chiaramente donna?","Does the character look androgynous, neither clearly a man nor clearly a woman?",non-binary,0,"Guardando il personaggio, è difficile dire se è un ragazzo o una ragazza?","Looking at the character, is it hard to tell whether it is a boy or a girl?"
+e_young,E2,asked,Il personaggio è un giovane adulto?,Is the character a young adult?,young adult,0,,
+e_smirk,E2,asked,Il personaggio ha un sorrisetto compiaciuto e storto?,"Does the character have a smug, lopsided smirk?",smug lopsided smirk,0,,
+e_undercut,E2,asked,"I capelli hanno un undercut asimmetrico, con un lato rasato?","Does the hair have an asymmetrical undercut, one side shaved?",undercut asymmetrical,0,,
+e_black,E2,asked,I capelli sono neri corvini?,Is the hair raven black?,raven hair,0,,
+e_amber,E2,asked,Gli occhi sono color ambra?,Are the eyes amber?,sharp amber eyes,0,,
+e_cheeks,E2,asked,Gli zigomi sono pronunciati?,Are the cheekbones prominent?,prominent cheekbones,0,,
+e_cowl,E2,asked,Il personaggio indossa un cappuccio di cuoio verde foresta scuro (alzato o abbassato)?,Does the character wear a dark forest green leather hooded cowl (hood up or down)?,dark forest green hooded leather cowl,0,,
+e_buckles,E2,asked,Ci sono fibbie d'ottone?,Are there brass buckles?,brass buckles,0,,
+e_tunic,E2,asked,Sotto c'è una tunica grigio antracite a collo alto?,Is there a high-collared charcoal tunic underneath?,high-collared charcoal tunic,0,,
+e_feather,E2,asked,Il personaggio porta un solo orecchino pendente a forma di piuma?,Does the character wear a single dangling feather earring?,a single dangling feather earring,0,,
+o_female,O4,asked,Il personaggio è femmina?,Is the character female?,female,0,,
+o_orc,O4,asked,"Il personaggio è una mezz'orca, con tratti non umani anche senza contare le zanne?","Is the character a half-orc, with non-human features even without counting the tusks?",half-orc,0,,
+o_young,O4,asked,Il personaggio è una giovane adulta?,Is the character a young adult?,young adult,0,,
+o_snarl,O4,asked,"Il personaggio ha un ringhio feroce, di sfida?","Does the character have a fierce, defiant snarl?",fierce defiant snarl,0,,
+o_undercut,O4,asked,I lati della testa sono rasati e sfumati?,Are the sides of the head shorn and faded?,shorn faded undercut,0,,
+o_knot,O4,asked,I capelli sono legati in una crocchia da guerriera nera e stretta?,Is the hair tied in a tight black warrior knot?,a tight black warrior knot,0,,
+o_greyeyes,O4,asked,Gli occhi sono grigio chiaro?,Are the eyes pale grey?,piercing pale grey eyes,0,,
+o_tusks,O4,asked,Ci sono zanne inferiori che sporgono oltre le labbra?,Are there lower tusks jutting past the lips?,lower tusks jutting past chiseled lips,0,,
+o_scale,O4,asked,Al collo c'è un colletto di maglia a scaglie in bronzo?,Is there a bronze scale-mail collar at the neck?,oxidized bronze scale-mail collar,0,,
+o_jack,O4,asked,Sotto c'è una giacca imbottita trapuntata bordeaux?,Is there a burgundy quilted jack underneath?,over a burgundy quilted jack,0,,
+o_dirt,O4,asked,Ci sono sbaffi di sporco sulla radice del naso?,Are there dirt smudges across the bridge of the nose?,fresh dirt smudges across the bridge of the nose,0,,
+skin_same,ALL,unnamed,La pelle ha lo stesso colore di quella del riferimento?,Is the skin the same colour as in the reference?,(not named),1,,
+skin_lighter,ALL,unnamed,La pelle è più chiara di quella del riferimento?,Is the skin lighter than in the reference?,(not named; asked only if skin_same = no),1,,
+skin_darker,ALL,unnamed,La pelle è più scura di quella del riferimento?,Is the skin darker than in the reference?,(not named; asked only if skin_lighter = no; no to both = another hue),1,,
+person,ALL,unnamed,È la stessa persona del riferimento?,Is it the same person as in the reference?,(not named),1,"Potrebbe essere lo stesso personaggio del riferimento, disegnato da un altro artista?","Could it be the same character as in the reference, drawn by another artist?"
