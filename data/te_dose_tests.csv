@@ -1,0 +1,8 @@
+test,value,verdict
+"H1 gradual vs step (L06, L14)",graduale 8 of 11 changing strips = 0.73,gradual supported
+H2 intermediate doses move toward the d = 1.00 picture,sì 10 of 11 = 0.91,supported
+H3 style change before loss of coherence,"before 11, at or after 0, of 11",style moves before coherence breaks: supported
+dose_L06 (reported),"onset {'0.80': 4, '0.85': 1, 'mai': 1}; how {'scatto': 4, 'graduale': 2}; toward 1.00 {'sì': 5, 'no': 1}; coherence lost from {'mai': 5, '': 1}; prompt attributes lost from {'0.85': 2, '': 1, '0.90': 1, '0.70': 2}",
+dose_L14 (reported),"onset {'0.80': 1, '0.70': 1, '0.95': 2, '1.00': 2}; how {'graduale': 6}; toward 1.00 {'sì': 6}; coherence lost from {'mai': 6}; prompt attributes lost from {'0.75': 1, '0.70': 1, '0.80': 1, '1.00': 1, '0.85': 2}",
+dose_L28 (reported),"onset {'mai': 6}; how {'graduale': 6}; toward 1.00 {'sì': 6}; coherence lost from {'mai': 6}; prompt attributes lost from {'mai': 2, '0.80': 1, '0.85': 1, '0.90': 2}",
+"attributes vs style change (reported, L06, L14)","attributes lost before style change 5, at the same dose 2, after or never 3, of 10",
