@@ -145,7 +145,7 @@ pictures:</strong> calibrated on four character portraits and frozen, it gave th
 never seen the look its author had described, about as coherently as on the four (0.51 against
 0.61), and an observer blind to the condition chose it as the closer match in 56 of 56
 comparisons; each character stays recognisable, though the face moves slightly more than under a
-change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. <strong>Editing the text encoder instead</strong> (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. Rewriting a prompt changes what a block does about as much as
+change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. <strong>Editing the text encoder instead</strong> (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. A dose ladder shows that these edits do not break the picture up to full dose and that the style holds up to about two thirds of it; what goes first is the character. In blind yes/no labels on every trait the prompt names, two edits cost the character far more than random pushes of the same size, labelled by a second labeller who knew nothing of the study (traits kept at full dose 0.48 and 0.63 against 0.87-0.95), while a third costs less; and when those two edits change the skin, it becomes lighter (52 of 53 changes; 14 of 14 for the second labeller), which random pushes almost never do (pre-registered). Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
 inconclusive by its own rule. I also report four claims that were made from statistics and
 withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
@@ -172,7 +172,11 @@ a prompted expression can turn into a frown (<a href="#p-28-portrait-preset">pag
 <p>Then I turned to the other half of the model, the language model that reads the prompt. The same kind of
 edit there doesn't add noise: it changes the <em>genre</em> of the picture, and often who is drawn. Where the
 picture ends up depends on the edit and on the character — and when I took the style words away, each
-character fell back to a style of its own (<a href="#p-30-the-text-encoder">page 30</a>).</p>
+character fell back to a style of its own. And when I walked the dose up step by step, the first thing to go wasn't the
+style: it was the character. Tusks, braids, armour, the elf's androgynous look, all gone while the picture is still a
+comic, and dark skin turning lighter on the way. Random pushes of the same strength don't do it, and someone who knew
+nothing about the study saw the same thing I did: it's where the edit points, not how hard it pushes
+(<a href="#p-30-the-text-encoder">page 30</a>).</p>
 <p>I started with hand-calibrated presets over the whole stack (<a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/blob/main/notebook/01-mark-style.md">notebook page 01</a>)
 and a notebook full of tests on permutations, rotations and block groups (<a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/tree/main/notebook">notebook</a>).
 Single blocks turned out to be the more useful unit: they're finer than the tuner's macro-blocks, and some
@@ -188,8 +192,8 @@ of them behave the same way on every prompt I tried. The pages below report what
   (<a href="#p-28-portrait-preset">28</a>);</li>
 <li>inside a block: attention against MLP, where the noise sits, and what a middle-block edit costs
   (<a href="#p-29-inside-the-block">29</a>);</li>
-<li>the text encoder: how hard an edit pushes the conditioning, and where the picture goes
-  (<a href="#p-30-the-text-encoder">30</a>);</li>
+<li>the text encoder: how hard an edit pushes the conditioning, where the picture goes, and what it costs the
+  character (<a href="#p-30-the-text-encoder">30</a>);</li>
 <li>what did not work, and the limits (<a href="#p-26-what-did-not-work">26</a>); other kinds of edit
   (<a href="#p-27-other-edits">27</a>).</li>
 </ul>
@@ -236,6 +240,12 @@ cross-attention maps in U-Nets [23, 24] and, for dual-stream transformers, throu
 [25]. Page 30 edits the weights of a language-model text encoder and follows the edit into the
 conditioning and into the attention of a single-stream transformer, where the methods of [25] do not
 apply directly.</p>
+<p><strong>What the prompt asked for, and whom the model draws.</strong> Checking a picture against its prompt with a list of
+yes/no questions derived from the prompt is the scheme of TIFA [26] and Davidsonian Scene Graph [27], which answer
+them with a vision-language model; page 30 uses the same scheme with human labellers, blind to the edit and the dose.
+Audits of text-to-image models report that, when a prompt leaves identity open, the models default to lighter-skinned
+and stereotyped people [28, 29]. Page 30 finds the same direction appearing under edits of the text encoder, and not
+under random pushes of the same size.</p>
 <p><strong>Model and metrics.</strong> Krea-2 is described in its technical report [9]. Image quality and
 similarity are measured with CLIP-IQA [10], BRISQUE [11], CLIPScore [12], LPIPS [13], DISTS [14],
 SSIM [15] and DINOv2 [16] (page 25).</p>
@@ -266,6 +276,10 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <li>Hertz, Mokady, Tenenbaum, Aberman, Pritch, Cohen-Or. <em>Prompt-to-Prompt Image Editing with Cross Attention Control.</em> ICLR 2023. arXiv:2208.01626</li>
 <li>Tang, Liu, Pandey, Jiang, Yang, Kumar, Stenetorp, Lin, Ture. <em>What the DAAM: Interpreting Stable Diffusion Using Cross Attention.</em> ACL 2023. arXiv:2210.04885</li>
 <li>Helbling, Meral, Hoover, Yanardag, Chau. <em>ConceptAttention: Diffusion Transformers Learn Highly Interpretable Features.</em> arXiv:2502.04320</li>
+<li>Hu, Liu, Kasai, Wang, Ostendorf, Krishna, Smith. <em>TIFA: Accurate and Interpretable Text-to-Image Faithfulness Evaluation with Question Answering.</em> ICCV 2023. arXiv:2303.11897</li>
+<li>Cho, Hu, Garg, Anderson, Krishna, Baldridge, Bansal, Pont-Tuset, Wang. <em>Davidsonian Scene Graph: Improving Reliability in Fine-grained Evaluation for Text-to-Image Generation.</em> ICLR 2024. arXiv:2310.18235</li>
+<li>Luccioni, Akiki, Mitchell, Jernite. <em>Stable Bias: Analyzing Societal Representations in Diffusion Models.</em> NeurIPS 2023 Datasets and Benchmarks. arXiv:2303.11408</li>
+<li>Bianchi, Kalluri, Durmus, Ladhak, Cheng, Nozza, Hashimoto, Jurafsky, Zou, Caliskan. <em>Easily Accessible Text-to-Image Generation Amplifies Demographic Stereotypes at Large Scale.</em> FAccT 2023. arXiv:2211.03759</li>
 </ol>
   </section>
 

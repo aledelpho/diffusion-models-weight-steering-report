@@ -384,13 +384,14 @@ written by eye and meant to be corrected, is on [page 21](21-block-map.md#a-star
 ![Every block pushed in both directions on a four-panel comic page: the last blocks change colour, softness and grain of the same panels, the middle blocks redraw the characters and the panels themselves.](../assets/21-block-map/F21.5_guide_comic.webp)
 
 What I don't know yet: whether the clean middle edits are truly free; whether a measure can ever replace
-the eye on noise; why each text-encoder edit points where it does, and whether milder doses make usable
-knobs; whether a preset can keep a character's expression as well as its identity (the portrait preset
+the eye on noise; why each text-encoder edit points where it does, and why two of them wipe out the
+character and lighten the skin while a third protects it (milder doses don't help much: the style holds, but the
+character starts going well before); whether a preset can keep a character's expression as well as its identity (the portrait preset
 kept who they were, not always how they looked at you); whether a blind observer would still say "same
 character" when some sheets show two different ones; whether the noise of a preset can be cleaned
 afterwards without losing its look; how much each block writes into the model's internal signal; and
 whether any of this carries over to another model. Keep in mind that all of this is one model, mostly one
-observer who knew the conditions (one blind observer for the portraits), and samples of 16 to 56 cases
+observer who knew the conditions (one blind observer for the portraits, and one for the text-encoder control), and samples of 16 to 56 cases
 per test.
 
 Other kinds of edit — reordering whole blocks, for instance — are in [appendix A](27-other-edits.md), and

@@ -33,7 +33,7 @@ pictures:** calibrated on four character portraits and frozen, it gave three cha
 never seen the look its author had described, about as coherently as on the four (0.51 against
 0.61), and an observer blind to the condition chose it as the closer match in 56 of 56
 comparisons; each character stays recognisable, though the face moves slightly more than under a
-change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. **Inside a block, the two halves differ:** labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. **Editing the text encoder instead** (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. Rewriting a prompt changes what a block does about as much as
+change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. **Inside a block, the two halves differ:** labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. **Editing the text encoder instead** (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. A dose ladder shows that these edits do not break the picture up to full dose and that the style holds up to about two thirds of it; what goes first is the character. In blind yes/no labels on every trait the prompt names, two edits cost the character far more than random pushes of the same size, labelled by a second labeller who knew nothing of the study (traits kept at full dose 0.48 and 0.63 against 0.87-0.95), while a third costs less; and when those two edits change the skin, it becomes lighter (52 of 53 changes; 14 of 14 for the second labeller), which random pushes almost never do (pre-registered). Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
 inconclusive by its own rule. I also report four claims that were made from statistics and
 withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
@@ -65,7 +65,11 @@ a prompted expression can turn into a frown ([page 28](28-portrait-preset.md)).
 Then I turned to the other half of the model, the language model that reads the prompt. The same kind of
 edit there doesn't add noise: it changes the *genre* of the picture, and often who is drawn. Where the
 picture ends up depends on the edit and on the character — and when I took the style words away, each
-character fell back to a style of its own ([page 30](30-the-text-encoder.md)).
+character fell back to a style of its own. And when I walked the dose up step by step, the first thing to go wasn't the
+style: it was the character. Tusks, braids, armour, the elf's androgynous look, all gone while the picture is still a
+comic, and dark skin turning lighter on the way. Random pushes of the same strength don't do it, and someone who knew
+nothing about the study saw the same thing I did: it's where the edit points, not how hard it pushes
+([page 30](30-the-text-encoder.md)).
 
 I started with hand-calibrated presets over the whole stack ([notebook page 01](../notebook/01-mark-style.md))
 and a notebook full of tests on permutations, rotations and block groups ([notebook](../notebook/)).
@@ -82,8 +86,8 @@ of them behave the same way on every prompt I tried. The pages below report what
   ([28](28-portrait-preset.md));
 * inside a block: attention against MLP, where the noise sits, and what a middle-block edit costs
   ([29](29-inside-the-block.md));
-* the text encoder: how hard an edit pushes the conditioning, and where the picture goes
-  ([30](30-the-text-encoder.md));
+* the text encoder: how hard an edit pushes the conditioning, where the picture goes, and what it costs the
+  character ([30](30-the-text-encoder.md));
 * what did not work, and the limits ([26](26-what-did-not-work.md)); other kinds of edit
   ([27](27-other-edits.md)).
 
@@ -137,6 +141,13 @@ cross-attention maps in U-Nets [23, 24] and, for dual-stream transformers, throu
 conditioning and into the attention of a single-stream transformer, where the methods of [25] do not
 apply directly.
 
+**What the prompt asked for, and whom the model draws.** Checking a picture against its prompt with a list of
+yes/no questions derived from the prompt is the scheme of TIFA [26] and Davidsonian Scene Graph [27], which answer
+them with a vision-language model; page 30 uses the same scheme with human labellers, blind to the edit and the dose.
+Audits of text-to-image models report that, when a prompt leaves identity open, the models default to lighter-skinned
+and stereotyped people [28, 29]. Page 30 finds the same direction appearing under edits of the text encoder, and not
+under random pushes of the same size.
+
 **Model and metrics.** Krea-2 is described in its technical report [9]. Image quality and
 similarity are measured with CLIP-IQA [10], BRISQUE [11], CLIPScore [12], LPIPS [13], DISTS [14],
 SSIM [15] and DINOv2 [16] (page 25).
@@ -168,6 +179,10 @@ SSIM [15] and DINOv2 [16] (page 25).
 23. Hertz, Mokady, Tenenbaum, Aberman, Pritch, Cohen-Or. *Prompt-to-Prompt Image Editing with Cross Attention Control.* ICLR 2023. arXiv:2208.01626
 24. Tang, Liu, Pandey, Jiang, Yang, Kumar, Stenetorp, Lin, Ture. *What the DAAM: Interpreting Stable Diffusion Using Cross Attention.* ACL 2023. arXiv:2210.04885
 25. Helbling, Meral, Hoover, Yanardag, Chau. *ConceptAttention: Diffusion Transformers Learn Highly Interpretable Features.* arXiv:2502.04320
+26. Hu, Liu, Kasai, Wang, Ostendorf, Krishna, Smith. *TIFA: Accurate and Interpretable Text-to-Image Faithfulness Evaluation with Question Answering.* ICCV 2023. arXiv:2303.11897
+27. Cho, Hu, Garg, Anderson, Krishna, Baldridge, Bansal, Pont-Tuset, Wang. *Davidsonian Scene Graph: Improving Reliability in Fine-grained Evaluation for Text-to-Image Generation.* ICLR 2024. arXiv:2310.18235
+28. Luccioni, Akiki, Mitchell, Jernite. *Stable Bias: Analyzing Societal Representations in Diffusion Models.* NeurIPS 2023 Datasets and Benchmarks. arXiv:2303.11408
+29. Bianchi, Kalluri, Durmus, Ladhak, Cheng, Nozza, Hashimoto, Jurafsky, Zou, Caliskan. *Easily Accessible Text-to-Image Generation Amplifies Demographic Stereotypes at Large Scale.* FAccT 2023. arXiv:2211.03759
 
 ## How to read the table below
 
