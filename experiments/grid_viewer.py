@@ -10,7 +10,7 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|te_default|te_words|te_fallback|all] [--img-root PATH] [--budget 160] [--workers 2]
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|te_default|te_words|te_fallback|te_dose|all] [--img-root PATH] [--budget 160] [--workers 2]
       -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
@@ -518,9 +518,40 @@ def build_te_fallback():
     return {"title": "C73 · il ripiego di ogni personaggio", "grids": grids, "notes_file": "te_fallback_genre_alessandro.csv"}
 
 
+
+def build_te_dose():
+    """C74 (docs/prereg_te_dose.md): per strip (edit, character, seed) the original and five doses. Comparative
+    questions per strip, no genre labels."""
+    chars = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter"]
+    seeds = ["2645751", "3316624"]
+    doses = ["0.10", "0.25", "0.50", "0.75"]
+    cols = ["originale", "0.10", "0.25", "0.50", "0.75", "1.00"]
+    dsel = ["0.10", "0.25", "0.50", "0.75", "1.00", "mai"]
+    qs = [{"k": "cambia_da", "lab": "stile cambia da", "o": dsel},
+          {"k": "come", "lab": "come", "o": ["graduale", "scatto", "nessuno"]},
+          {"k": "verso", "lab": "va verso 1.00", "o": ["sì", "no", "incerto", "nessuno"]},
+          {"k": "coerenza_da", "lab": "perde coerenza da", "o": dsel}]
+    grids = []
+    for L in (6, 14, 28):
+        rows = []
+        for ch in chars:
+            for s in seeds:
+                base = f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{s}_00001_.png"
+                cells = [cell(base, base, "base")]
+                cells += [cell(f"benchmark_te_dose/{ch}_L{L:02d}_mlp_p{d}_krea2_seed{s}_00001_.png", base, d) for d in doses]
+                cells.append(cell(f"benchmark_te_characters/{ch}_L{L:02d}_mlp_p1.00_krea2_seed{s}_00001_.png", base, "1.00"))
+                rows.append({"label": f"{ch} · {s}", "cells": cells})
+        grids.append({"id": f"dose_L{L:02d}", "title": f"C74 · MLP dello strato {L}, dose crescente", "cols": cols, "rows": rows,
+                      "note": "Per ogni striscia: da quale dose lo stile si discosta dall'originale; se il cambiamento è graduale o a scatto; "
+                              "se le dosi intermedie vanno verso l'immagine a 1.00; da quale dose l'immagine perde coerenza di stile "
+                              "(stili mescolati, resa rotta, artefatti). 'mai' = mai fino a 1.00.",
+                      "notes": {"head": "per striscia", "w": "520px", "cls": "gen", "qs": qs}})
+    return {"title": "C74 · scala di dose", "grids": grids, "notes_file": "te_dose_alessandro.csv"}
+
+
 SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre, "te_genre_dose": build_te_genre_dose,
         "te_default": build_te_default, "te_words": build_te_words,
-        "te_fallback": build_te_fallback}
+        "te_fallback": build_te_fallback, "te_dose": build_te_dose}
 
 
 # ---------------------------------------------------------------- build
