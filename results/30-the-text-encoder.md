@@ -192,12 +192,12 @@ claims:
       rogue under L06, which passes through a painted look before ending in anime.
     anchor: "#a-dose-ladder"
   - id: te-dose-gradual-or-step
-    status: ambiguous
+    status: holds
     statement: >
-      The style change along the dose is gradual rather than a sudden step.
+      The style change along the dose is gradual rather than a sudden step (*: pooled over two edits that disagree).
     evidence: >
       Pre-registered (C74 H1), pooled over L06 and L14: gradual in 8 of 11 changing strips (0.73, bar 0.6), so the rule
-      says gradual. Split by edit, the two disagree: L14 is gradual in 6 of 6, L06 is a step in 4 of 5, from comic to
+      says gradual. *Split by edit, the two disagree: L14 is gradual in 6 of 6, L06 is a step in 4 of 5, from comic to
       photograph around d = 0.80. The split was not pre-registered. No strip changes style below d = 0.70.
     anchor: "#a-dose-ladder"
   - id: te-edit-loses-traits-first
@@ -298,8 +298,8 @@ whether random pushes of the same size reach the fallback as often as edits — 
 tokens, no if they are one shared vector. **Open**: that each edit's own direction decides; what single
 phrases draw alone; anime as the usual destination of a switch. **Ambiguous**: whether the strong edits
 separate word orders inside the image model. **Holds** (C74): along a dose ladder the pictures move toward the
-full-dose picture, and the style changes before coherence breaks, which it never does. **Ambiguous** (C74): whether
-the change is gradual: pooled yes, but L14 slides and L06 jumps. **Open** (C74): that the edit loses the character's
+full-dose picture, and the style changes before coherence breaks, which it never does. **Holds\*** (C74): the change is
+gradual, by the rule fixed in advance; \*but only pooled: L14 slides, L06 jumps. **Open** (C74): that the edit loses the character's
 traits before its style.
 
 ## Why I might be wrong
@@ -536,11 +536,11 @@ style, not a loss of coherence.
 
 | test (L06 and L14, 11 changing strips) | value | rule | verdict |
 |---|---|---|---|
-| H1 — gradual rather than a step | 8 of 11 = 0.73 | ≥ 0.6 | gradual (pooled) |
+| H1 — gradual rather than a step | 8 of 11 = 0.73 | ≥ 0.6 | gradual\* (pooled) |
 | H2 — intermediate doses head toward the full dose | 10 of 11 = 0.91 | ≥ 0.7 | supported |
 | H3 — style changes before coherence is lost | 11 of 11 | ≥ 2/3 | supported |
 
-The pooled H1 hides two behaviours. L14 slides toward cartoon in 6 of 6 strips. L06 jumps from comic to photograph
+\*The pooled H1 hides two behaviours. L14 slides toward cartoon in 6 of 6 strips. L06 jumps from comic to photograph
 around 0.80 in 4 of 5. And H3 is met in the simplest way: I marked no loss of coherence anywhere.
 
 ![For each of the 18 strips, the dose where the style changes and the dose where the first prompt trait is lost: no style change below 0.70, L06 changes at 0.80-0.85, L14 between 0.70 and 1.00, L28 never; traits are lost at or before the style change in most L06 and L14 strips and in four of six L28 strips.](../assets/30-the-text-encoder/F30.17_te_dose_onsets.webp)

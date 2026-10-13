@@ -346,7 +346,7 @@ kinds of edit · these edits change genre and identity more than they damage the
 **overturned** · the switch comes from less attention on the style words **overturned** · or from a push
 toward "anime" **overturned** · without style words the elf falls back to anime **holds** · every character has its own fallback **holds** · edits lead there **overturned** · random
 pushes of the same size do it too **ambiguous** (only if they vary across words) · each edit's own direction
-decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **ambiguous** (one edit slides, one jumps) · the character's traits go first **open**
+decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **holds\*** (\*pooled: one edit slides, one jumps) · the character's traits go first **open**
 
 ---
 
