@@ -1,0 +1,19 @@
+char,seed,edit,onset_R_below_1,onset_R_le_0.85,style_onset_C74,lost_at_1.00,skin_changes
+D1,2645751,L06_mlp,0.60,0.70,0.80,d_braids;d_brass;d_gorget;d_navy,{}
+D1,2645751,L14_mlp,0.10,0.80,0.80,c_frontal;d_braids;d_browneyes;d_copper;d_female,{}
+D1,2645751,L28_mlp,mai,mai,mai,,{}
+D1,3316624,L06_mlp,0.60,0.75,0.80,d_braids;d_brass;d_copper;d_gorget;d_navy,{}
+D1,3316624,L14_mlp,0.60,0.90,0.70,d_braids;d_copper;d_female,{}
+D1,3316624,L28_mlp,1.00,mai,mai,d_copper,{}
+E2,2645751,L06_mlp,0.25,0.75,0.85,e_amber;e_cheeks;e_smirk;e_undercut;e_young,"{'lighter': 3, 'darker': 1}"
+E2,2645751,L14_mlp,0.40,0.95,0.95,e_androgynous;e_cheeks;e_tunic,{'lighter': 6}
+E2,2645751,L28_mlp,1.00,mai,mai,e_undercut,{'other hue': 6}
+E2,3316624,L06_mlp,0.25,0.75,0.80,e_amber;e_cheeks;e_smirk;e_undercut;e_young,{'lighter': 4}
+E2,3316624,L14_mlp,0.60,0.90,1.00,e_androgynous;e_cheeks,{'lighter': 6}
+E2,3316624,L28_mlp,mai,mai,mai,,{'other hue': 5}
+O4,2645751,L06_mlp,0.60,0.60,0.80,o_jack;o_knot;o_orc;o_scale;o_undercut;o_young,{'lighter': 6}
+O4,2645751,L14_mlp,0.60,0.60,0.95,o_knot;o_orc;o_scale;o_undercut;o_young,{'lighter': 7}
+O4,2645751,L28_mlp,0.70,mai,mai,o_orc,{'lighter': 2}
+O4,3316624,L06_mlp,0.50,0.60,mai,o_jack;o_knot;o_orc;o_scale;o_undercut;o_young,{'lighter': 8}
+O4,3316624,L14_mlp,0.50,0.50,1.00,o_knot;o_orc;o_scale;o_undercut,{'lighter': 8}
+O4,3316624,L28_mlp,0.60,mai,mai,o_orc,{'lighter': 2}

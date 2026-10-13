@@ -1,0 +1,15 @@
+test,value,verdict
+T1 retention falls with dose,median Spearman over 18 strips = -0.89,supported
+"T2 traits lost before the style changes (L06, L14)","traits first 11, style first 0, ties or never 0, of 11",traits go first
+T2 with the C74 slip read as 0.80 (reported),"traits first 12, style first 0, of 12",
+T2 strips (reported),"D1/2645751/L06: traits 0.60, style 0.80 | D1/3316624/L06: traits 0.60, style 0.80 | E2/2645751/L06: traits 0.25, style 0.85 | E2/3316624/L06: traits 0.25, style 0.80 | O4/2645751/L06: traits 0.60, style 0.80 | D1/2645751/L14: traits 0.10, style 0.80 | D1/3316624/L14: traits 0.60, style 0.70 | E2/2645751/L14: traits 0.40, style 0.95 | E2/3316624/L14: traits 0.60, style 1.00 | O4/2645751/L14: traits 0.60, style 0.95 | O4/3316624/L14: traits 0.50, style 1.00",
+T3 L28 costs traits without changing style,mean R at 1.00 minus at 0.10 = -0.07,inconclusive
+T4 unnamed drift toward lighter skin,lighter 52 of 53 lighter+darker = 0.98; characters with lighter majority 2; other hue 11,toward lighter skin: supported
+"Reliability gate (Cohen kappa on repeats, traits)",kappa 0.93 on 325 pairs,passed
+"Repeat agreement, skin and person (reported)",skin 23 of 24; person 23 of 24,
+"mean R by dose, L06_mlp (reported)",0.10:1.00 0.25:0.98 0.40:0.96 0.50:0.94 0.60:0.83 0.70:0.76 0.75:0.73 0.80:0.70 0.85:0.67 0.90:0.65 0.95:0.59 1.00:0.52,
+"mean R by dose, L14_mlp (reported)",0.10:0.97 0.25:0.98 0.40:0.94 0.50:0.94 0.60:0.84 0.70:0.77 0.75:0.80 0.80:0.77 0.85:0.77 0.90:0.66 0.95:0.63 1.00:0.63,
+"mean R by dose, L28_mlp (reported)",0.10:1.00 0.25:0.99 0.40:0.97 0.50:0.98 0.60:0.97 0.70:0.96 0.75:0.95 0.80:0.96 0.85:0.95 0.90:0.95 0.95:0.94 1.00:0.93,
+"lowest dose at which each trait is lost, median over strips (reported)",d_browneyes:0.10(n1) e_smirk:0.25(n3) e_androgynous:0.33(n4) d_middleaged:0.55(n2) o_knot:0.60(n5) o_orc:0.60(n6) o_undercut:0.65(n4) o_scale:0.65(n4) d_braids:0.70(n4) e_undercut:0.75(n5) d_navy:0.75(n3) d_gorget:0.75(n2) e_black:0.80(n2) o_young:0.85(n3) e_cheeks:0.88(n4) e_young:0.90(n2) e_tunic:0.90(n2) d_copper:0.90(n5) d_brass:0.90(n3) c_frontal:0.90(n1) d_female:0.95(n2) o_jack:0.97(n2) e_amber:0.97(n2),
+fidelity of the originals F (reported),D1/2645751:0.71 E2/2645751:1.00 O4/3316624:0.77 O4/2645751:0.77 D1/3316624:0.64 E2/3316624:1.00,
+"person = no, by edit (reported)",L06_mlp:50/72 L14_mlp:42/72 L28_mlp:30/72,
