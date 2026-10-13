@@ -10,7 +10,7 @@ Display aid only. The numbers it shows (mean |delta| on 0-255, mean signed lumin
 high-frequency ratio std(gray - blur1.5) edit/baseline) are computed for the viewer from the renders
 and are NOT published measures; nothing here changes a claim.
 
-  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|te_default|te_words|all] [--img-root PATH] [--budget 160] [--workers 2]
+  python grid_viewer.py --build [--set ranger|split_atlas|te_pilot|te_order|te_genre|te_genre_dose|te_default|te_words|te_fallback|all] [--img-root PATH] [--budget 160] [--workers 2]
       -> <img-root>/_grid_viewer/{ranger,split_atlas,te_pilot}.html  (+ cache/ with previews and difference maps)
 
 The cache is kept between runs; re-run until it prints "0 left". The pages are rewritten on every run
@@ -485,8 +485,42 @@ def build_te_words():
     return {"title": "C72 · le parole da sole", "grids": grids, "notes_file": "te_words_alessandro.csv"}
 
 
+
+C73_CHARS = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter", "G5_gnome_wizard", "H3_halfling_druid",
+             "R6_dragonborn_cleric", "T7_tiefling_bard"]
+C73_SEEDS = ["2645751", "3316624", "3605551", "4123105"]
+C73_EDITS = ["L02_mlp_p1.00", "L05_mlp_p1.00", "L06_mlp_p1.00", "L09_mlp_p1.00", "L12_mlp_p1.00", "L14_mlp_p1.00",
+             "L17_mlp_p1.00", "L20_mlp_p1.00", "L25_mlp_p1.00", "L26_mlp_p1.00", "L28_mlp_p1.00"]
+GENRES_C73 = ["fumetto", "anime", "cartoon", "realist", "pittura", "altro", "rotto"]
+
+
+def build_te_fallback():
+    """C73 (docs/prereg_te_fallback.md): one genre per image. The seven characters with and without "Western comics
+    style" at four seeds; then, per character, the eleven MLP-doubled C65 edits at the two C65 seeds."""
+    base = lambda ch, s: f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{s}_00001_.png"
+    cols4 = [f"seed {s}" for s in C73_SEEDS]
+    q4 = {"head": "genere per colonna (1-4)", "w": "470px", "cls": "gen", "qs": [{"k": f"g{i}", "lab": str(i), "o": GENRES_C73} for i in range(1, 5)]}
+    grids = [
+        {"id": "fb_with", "title": "C73 · con 'Western comics style'", "cols": cols4,
+         "rows": [{"label": ch, "cells": [cell(base(ch, s), base(ch, s), "base") for s in C73_SEEDS]} for ch in C73_CHARS],
+         "note": "I sette personaggi come in C52/C65, con lo stile. Un genere per immagine.", "notes": q4},
+        {"id": "fb_without", "title": "C73 · senza 'Western comics style'", "cols": cols4,
+         "rows": [{"label": ch, "cells": [cell(f"benchmark_te_fallback/{ch}_nostyle_krea2_seed{s}_00001_.png", base(ch, s), str(i + 1))
+                                          for i, s in enumerate(C73_SEEDS)]} for ch in C73_CHARS],
+         "note": "Gli stessi prompt senza la frase 'Western comics style' (resta 'close-up portrait, frontal view.'). Un genere per immagine.", "notes": q4},
+    ]
+    q2 = {"head": "genere per colonna (1-2)", "w": "470px", "cls": "gen", "qs": [{"k": f"g{i}", "lab": str(i), "o": GENRES_C73} for i in range(1, 3)]}
+    for ch in C73_CHARS:
+        grids.append({"id": f"fb_edits_{ch}", "title": f"C73 · {ch} · modifiche MLP ×2 (C65)", "cols": [f"seed {s}" for s in C73_SEEDS[:2]],
+                      "rows": [{"label": e, "cells": [cell(f"benchmark_te_characters/{ch}_{e}_krea2_seed{s}_00001_.png", base(ch, s), e.split("_")[0])
+                                                      for s in C73_SEEDS[:2]]} for e in C73_EDITS],
+                      "note": "Le undici modifiche del text encoder che raddoppiano un MLP, sui due seed di C65. Un genere per immagine.", "notes": q2})
+    return {"title": "C73 · il ripiego di ogni personaggio", "grids": grids, "notes_file": "te_fallback_genre_alessandro.csv"}
+
+
 SETS = {"ranger": build_ranger, "split_atlas": build_split, "te_pilot": build_te_pilot, "te_order": build_te_order, "te_genre": build_te_genre, "te_genre_dose": build_te_genre_dose,
-        "te_default": build_te_default, "te_words": build_te_words}
+        "te_default": build_te_default, "te_words": build_te_words,
+        "te_fallback": build_te_fallback}
 
 
 # ---------------------------------------------------------------- build
