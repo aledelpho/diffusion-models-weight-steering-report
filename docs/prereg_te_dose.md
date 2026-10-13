@@ -82,3 +82,18 @@ All three tests use the strips of L06 and L14 (12 strips) whose style changes at
 * One edit type (MLP, all three matrices).
 * The doses are equal steps of d, not of effect.
 * The (1 + d)³ figure is an estimate, not a measurement.
+
+## Amendment 1 (2026-10-13, while the first renders were running, before any C74 label)
+
+At Alessandro's request I added more intermediate doses, mostly at the high end, where the jump to the d = 1.00
+picture happens. The new doses are 0.40, 0.60, 0.70, 0.80, 0.85, 0.90 and 0.95, rendered for every strip.
+
+* **Renders.** 7 new doses × 18 strips = **126 more renders**. The plan now has 199 rows; the new rows are appended,
+  so the original rows keep their order.
+* **The ladder per strip.** The original plus twelve doses: 0.10, 0.25, 0.40, 0.50, 0.60, 0.70, 0.75, 0.80, 0.85,
+  0.90, 0.95, 1.00.
+* **Questions.** The same four, with the same twelve doses offered as answers.
+* **Rules.** H1–H3 and their thresholds are unchanged. The tally orders the doses by their value
+  (`te_dose_tally.py`, self-test updated).
+* **What had happened before this amendment.** The gate passed (max abs diff 0) and 62 of the first 73 renders
+  existed. None had been labelled or looked at for this test.

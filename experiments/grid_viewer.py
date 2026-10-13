@@ -524,9 +524,9 @@ def build_te_dose():
     questions per strip, no genre labels."""
     chars = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter"]
     seeds = ["2645751", "3316624"]
-    doses = ["0.10", "0.25", "0.50", "0.75"]
-    cols = ["originale", "0.10", "0.25", "0.50", "0.75", "1.00"]
-    dsel = ["0.10", "0.25", "0.50", "0.75", "1.00", "mai"]
+    doses = ["0.10", "0.25", "0.40", "0.50", "0.60", "0.70", "0.75", "0.80", "0.85", "0.90", "0.95"]   # amendment 1
+    cols = ["originale"] + doses + ["1.00"]
+    dsel = doses + ["1.00", "mai"]
     qs = [{"k": "cambia_da", "lab": "stile cambia da", "o": dsel},
           {"k": "come", "lab": "come", "o": ["graduale", "scatto", "nessuno"]},
           {"k": "verso", "lab": "va verso 1.00", "o": ["sì", "no", "incerto", "nessuno"]},
@@ -545,7 +545,7 @@ def build_te_dose():
                       "note": "Per ogni striscia: da quale dose lo stile si discosta dall'originale; se il cambiamento è graduale o a scatto; "
                               "se le dosi intermedie vanno verso l'immagine a 1.00; da quale dose l'immagine perde coerenza di stile "
                               "(stili mescolati, resa rotta, artefatti). 'mai' = mai fino a 1.00.",
-                      "notes": {"head": "per striscia", "w": "520px", "cls": "gen", "qs": qs}})
+                      "notes": {"head": "per striscia", "w": "760px", "cls": "gen", "qs": qs}})
     return {"title": "C74 · scala di dose", "grids": grids, "notes_file": "te_dose_alessandro.csv"}
 
 

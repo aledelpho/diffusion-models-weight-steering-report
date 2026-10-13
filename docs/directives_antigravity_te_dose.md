@@ -1,4 +1,4 @@
-# Directive for Antigravity — C74, 73 renders (authorised by Alessandro on 2026-10-13)
+# Directive for Antigravity — C74, 199 renders (amendment 1: +126) (authorised by Alessandro on 2026-10-13)
 
 Written by Claude.
 
@@ -7,7 +7,7 @@ Written by Claude.
 * Do not close anything. Do not use `monitor_and_shutdown.py`, do not shut the PC down, and do not change power or
   system settings.
 * If a step fails, stop and paste the output. Do not change the script or the plan.
-* The plan is frozen (`data/te_dose_plan.csv`, 73 rows): do **not** run `--plan`.
+* The plan is frozen (`data/te_dose_plan.csv`, 199 rows after amendment 1): do **not** run `--plan`.
 * No new node is needed.
 
 Pre-registration: `docs/prereg_te_dose.md`.
@@ -27,7 +27,7 @@ python te_dose.py --gate
 
 It must print `max abs diff 0` and `GATE PASS`. If it prints `FAIL`, **stop** and paste.
 
-## Step 2 — the other 72 renders
+## Step 2 — all the other renders (also after amendment 1)
 
 ```powershell
 python te_dose.py --queue
@@ -39,7 +39,8 @@ When ComfyUI's queue is empty, run:
 python te_dose.py --count
 ```
 
-It must print `expected 73 missing 0 []`.
+It must print `expected 199 missing 0 []`. If the first round was already running, simply run `--queue` again
+when ComfyUI is idle: it skips every image that already exists and queues only the 126 new doses.
 
 ## Step 3 — paste back (required)
 

@@ -8,7 +8,8 @@ import argparse, csv
 from collections import Counter
 from pathlib import Path
 DATA = Path(__file__).resolve().parent.parent / "data"
-ORDER = {"0.10": 1, "0.25": 2, "0.50": 3, "0.75": 4, "1.00": 5, "mai": 9}
+ORDER = {d: i for i, d in enumerate(["0.10", "0.25", "0.40", "0.50", "0.60", "0.70", "0.75", "0.80", "0.85", "0.90", "0.95", "1.00"], 1)}
+ORDER["mai"] = 99   # amendment 1: twelve doses
 
 
 def tally(rows):

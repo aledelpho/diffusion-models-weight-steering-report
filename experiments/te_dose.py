@@ -9,7 +9,7 @@
   python te_dose.py --selftest
 
 Edits: the MLP of layer 6, 14 or 28 of the text encoder, every matrix (gate, up, down) scaled by (1 + d),
-d in {0.10, 0.25, 0.50, 0.75}; d = 1.00 is the existing C65 render. Three characters, two seeds.
+d in {0.10, 0.25, 0.50, 0.75} and, after amendment 1, {0.40, 0.60, 0.70, 0.80, 0.85, 0.90, 0.95}; d = 1.00 is the existing C65 render. Three characters, two seeds.
 """
 import argparse, csv, json, sys, urllib.request
 from pathlib import Path
@@ -25,6 +25,7 @@ CHARS = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter"]
 SEEDS = ["2645751", "3316624"]
 LAYERS = [6, 14, 28]
 DOSES = [0.10, 0.25, 0.50, 0.75]
+DOSES_A1 = [0.40, 0.60, 0.70, 0.80, 0.85, 0.90, 0.95]   # amendment 1 (2026-10-13): finer steps, mostly at high doses
 SET = {"sampler": "euler_ancestral", "scheduler": "simple", "steps": "9", "cfg": "1.0", "denoise": "1.0", "width": "1024", "height": "1280"}
 
 
@@ -64,6 +65,11 @@ def make_plan():
             for s in SEEDS:
                 for d in DOSES:
                     add("ladder", ch, layer, d, s)
+    for layer in LAYERS:                      # amendment 1: appended, so the original rows keep their order
+        for ch in CHARS:
+            for s in SEEDS:
+                for d in DOSES_A1:
+                    add("ladder_a1", ch, layer, d, s)
     with open(PLAN, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print("plan rows:", len(rows))
