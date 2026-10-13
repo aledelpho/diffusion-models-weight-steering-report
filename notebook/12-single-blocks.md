@@ -64,8 +64,8 @@ claims:
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** The six block groups of the tuner kept cutting through whatever
-> structure the model had (pages 04, 08, 10). Alessandro's reading of the first single-block renders
-> was that he could see "a lot of identifiable controls" in every zone. If single blocks are the
+> structure the model had (pages 04, 08, 10). My reading of the first single-block renders was that I
+> could see "a lot of identifiable controls" in every zone. If single blocks are the
 > natural unit, each should do something of its own, recognisably, on any picture.
 >
 > **What would kill it.** Blocks that are no more recognisable across pictures than chance, or whose
@@ -137,15 +137,15 @@ saturation rises in 47 and fine-grain energy in 40. It is the common mode found 
 
 ![At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture.](../assets/12-single-blocks/F12.2_sensitivity_map.webp)
 
-Alessandro labelled every atlas render by the artefacts he could see
+I labelled every atlas render by the artefacts I could see
 (`data/single_blocks_eye_artifacts_alessandro.csv`). The output end breaks first; the middle shows
-nothing at 0.350. His labels set the doses of the later benches: up to 0.45 on the styles bench, 0.55
+nothing at 0.350. My labels set the doses of the later benches: up to 0.45 on the styles bench, 0.55
 in places on v4. The middle has its own, softer limit — a clean picture whose drawing stops making
 sense — which no label or statistic here records ([results page 21](../results/21-block-map.md#how-far-each-block-can-be-pushed)).
 
 ### The tail as rendering controls
 
-Alessandro named blocks 22–27 after what they seemed to control. The test, fixed before any statistic
+I named blocks 22–27 after what they seemed to control. The test, fixed before any statistic
 was computed, asked of each name whether the block moves its own measure in two directions, more than
 any other measure, and on a replication bench (`docs/late_blocks_render_controls_result.md`).
 

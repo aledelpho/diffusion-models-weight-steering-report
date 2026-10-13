@@ -435,7 +435,7 @@ feels (<code>docs/RENDERS_2026-09-30_single_blocks_styles.md</code>).</p>
 <p>Each reproduction row was queued alone first and compared before the rest of the bench was
 allowed to run. The outputs of the checks are in the render notes listed under Provenance.</p>
 <p>The first row only shows that the tuner is clean when it is switched off: at zero it adds no patch
-at all. Whether it stays clean when switched <em>on</em> was a question Alessandro raised on 2026-10-06,
+at all. Whether it stays clean when switched <em>on</em> was a question I raised on 2026-10-06,
 and the C55 rows answer it (<code>docs/prereg_null_patch.md</code>). Read from the code, an active patch is
 <code>W × (1 + d)</code> computed in float32 and rounded back to bfloat16, on the patched tensors only; a
 multiplier of 1.0001 rounds every bf16 weight of block 27 back to itself. With the node active on
@@ -558,7 +558,7 @@ partly visible in the weights themselves, but that result is marginal.</p>
   the groups were chosen after seeing the first set and the measure was the same.</li>
 <li><strong>The weights result rests on n = 28</strong> and one checkpoint, and a single block can flip it.</li>
 <li><strong>The guide to each block is one observer's shorthand.</strong> It was written from a few prompts, at
-  one dose per direction, by someone who knew which block he was looking at. Several entries are
+  one dose per direction, by me, knowing which block I was looking at. Several entries are
   simplifications, some will turn out to be wrong, and the effect of many Style-band blocks
   changes with the prompt.</li>
 </ul>
@@ -2458,9 +2458,8 @@ middle edits carry a detectable cost. <strong>Open</strong> for where the noise 
 decision rule) and for the first block. <strong>Ambiguous</strong> for the cost of a push: page 05 replicates
 on its own prompts, the test as a whole did not decide.</p>
 <h2 id="p-29-inside-the-block--why-i-might-be-wrong">Why I might be wrong</h2>
-<p><strong>One observer.</strong> Every eye label is Alessandro's. He was blind to the condition, and his
-self-agreement on the damage threshold was 1.00 on the 15 repeats of C60, but his eye is also the
-one that chose the middle-block edits in C59. New prompts and seeds guard against fitting the
+<p><strong>One observer.</strong> Every eye label is mine. I was blind to the condition, and my self-agreement on the
+damage threshold was 1.00 on the 15 repeats of C60, but my eye is also the one that chose the middle-block edits in C59. New prompts and seeds guard against fitting the
 images, not against fitting a taste.</p>
 <p><strong>"Slight" does not reproduce.</strong> In both eye passes every disagreement between a first and a
 repeated showing was "slight" against "none". Only medium and stronger count as damage here.</p>
@@ -2477,7 +2476,7 @@ are drawn; the only photographs are in C61, where they behaved differently.</p>
 <p>The split atlas pushed the attention (wq, wk, wv, gate, wo) or the MLP (gate, up, down) of one
 block by ±0.35, through <code>granular_json</code>. Both checks passed to the pixel: the atlas baseline
 reproduced, and all eight matrices through the granular path equalled the whole block through the
-vector. Alessandro labelled 168 sheets at seed 2718281, one per block, half and sign, each showing
+vector. I labelled 168 sheets at seed 2718281, one per block, half and sign, each showing
 the same edit on the three prompts, plus 20 unannounced repeats.</p>
 <p>68 of 168 sheets carry an artefact and 46 carry noise (blotches, grain, collapse or a regular
 screen). Blocks 2, 3, 5 and 7 to 9 are clean in all six conditions. Among the 19 block-sign cells
@@ -2538,7 +2537,7 @@ of edit and baseline with the side random, plus 15 repeats.</p>
 </tr>
 </tbody>
 </table></div>
-<p>A preference question was dropped before any label, at Alessandro's request, as too subjective.</p>
+<p>A preference question was dropped before any label, at my request, as too subjective.</p>
 <p><img alt="The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the MLP of block 27 pushed up keeps the same picture and covers it in blotches." src="../assets/29-inside-the-block/F29.4_form_surface_large.webp" /></p>
 <h3 id="p-29-inside-the-block--what-the-middle-costs">What the middle costs</h3>
 <p>The middle edits are not free. By the rule fixed before the labels, a cost is present: 0.19 against
@@ -2636,8 +2635,8 @@ drives it to anime. Why a given edit points where it does is still open.</p>
 </blockquote>
 <h2 id="p-30-the-text-encoder--in-two-minutes">In two minutes</h2>
 <p>Before the image model draws, a language model reads the prompt and hands over a long list of
-numbers, the <strong>conditioning</strong>. We edited that language model the same way we edit the image model:
-one layer, its attention or its MLP, zeroed or doubled.</p>
+numbers, the <strong>conditioning</strong>. That's all the image model will ever know about your words. So I edited that
+language model the same way I edit the image model: one layer, its attention or its MLP, zeroed or doubled.</p>
 <p><img alt="Schema: the prompt goes through a 36-layer text encoder, one layer of which is edited; the conditioning carries 12 readings of every token to the 28-block image model, which draws the picture; each experiment looked at a different stage." src="../assets/30-the-text-encoder/F30.1_te_schema.webp" /></p>
 <p>The pictures change a lot, and in a particular way. They do not get noisy, as they do when the image
 model is pushed hard. They change <strong>genre</strong> — a Western comic becomes anime or a cartoon — and usually
@@ -2648,11 +2647,11 @@ on the same words in a different order can land in a different genre.</p>
 far the edit moves the conditioning, and you know roughly how far the picture will move. That held in
 two tests fixed in advance — but mostly because it tells kinds of edit apart. Among the edits that
 change genre, all of them large, it says little about which change more.</p>
-<p>The puzzle: <strong>where</strong> the picture goes. When the genre changes, it goes to anime in 39 of 50 cases.
-We tested two explanations. Maybe the picture stops paying attention to the words "western comics":
+<p>The puzzle: <strong>where</strong> the picture goes. When the elf changes genre, she goes to anime in 39 of 50 cases.
+I tested two explanations. Maybe the picture stops paying attention to the words "western comics":
 no. Maybe the edit pushes the text the way writing "anime" would: no, the push points somewhere else
 entirely, and it is 5 to 24 times larger than swapping a style word.</p>
-<p>Then we looked at the fallback directly. Remove the three style words and the elf is drawn as anime,
+<p>Then I stopped guessing and looked at the fallback directly. Remove the three style words and the elf is drawn as anime,
 every time. Anime is where <em>this</em> description goes when nothing holds it in a style. Seven other characters,
 stripped of their style words, fall back to painting or realistic renders instead: there is no single
 default.</p>
@@ -2676,17 +2675,17 @@ tokens, no if they are one shared vector. <strong>Open</strong>: that each edit'
 phrases draw alone; anime as the usual destination of a switch. <strong>Ambiguous</strong>: whether the strong edits
 separate word orders inside the image model.</p>
 <h2 id="p-30-the-text-encoder--why-i-might-be-wrong">Why I might be wrong</h2>
-<p><strong>One observer, not blind.</strong> Every genre and intensity label is Alessandro's. On the order grids he
-saw the edit names, and he had seen these pictures before. The intensity labels were given after he
-knew the first test had failed.</p>
+<p><strong>One observer, not blind.</strong> Every genre and intensity label is mine. On the order grids I saw the edit
+names, and I had seen these pictures before. I gave the intensity labels after I knew the first test had
+failed.</p>
 <p><strong>One prompt carries the word-order story.</strong> C69, C70 and C71 rest on the elf in five word orders at
 one seed. The anime default may be specific to this prompt or this character.</p>
 <p><strong>The fallback rests on one character.</strong> Anime is the fallback of <em>this</em> elf description; C73 confirmed that
 other characters fall back elsewhere. In the no-style pictures the character,
 pose and composition stay; what changes is the rendering — flatter cel shading, no hatching — and the
-label "anime" is Alessandro's reading of that change.</p>
-<p><strong>Genre labels hide sub-styles, and the doses are extreme.</strong> Alessandro notes that each label covers very
-different sub-styles: two pictures labelled "Western comic" can look nothing alike, so "no switch" does not mean
+label "anime" is my reading of that change.</p>
+<p><strong>Genre labels hide sub-styles, and the doses are extreme.</strong> While labelling I noticed that each label covers
+very different sub-styles: two pictures labelled "Western comic" can look nothing alike, so "no switch" does not mean
 "same style". All these edits zero or double a layer half; at that strength part of what is labelled a change of
 genre may be a loss of stylistic coherence. A dose ladder with comparative judgements is the next test (C74).</p>
 <p><strong>Size mostly sorts kinds of edit.</strong> The two tests of the size of the push were fixed on all edits
@@ -2754,9 +2753,9 @@ the shared push, so they do not explain why word order matters (C68 H3, Spearman
 <p><img alt="By depth of the text-encoder reading, the residual push stays related over two to four tokens, and tokens of the same clause are pushed more alike than tokens across clauses from layer 11 on, most at layers 20-26." src="../assets/30-the-text-encoder/F30.11_te_regions_by_tap.webp" /></p>
 <h3 id="p-30-the-text-encoder--genre-and-identity-not-surface">Genre and identity, not surface</h3>
 <p>The C64 pilot doubled or removed each half of each of the 35 layers the image model reads, on the elf,
-and Alessandro labelled every picture blind (140 edits, 10 repeats). Doubling changes far more than
+and I labelled every picture blind (140 edits, 10 repeats). Doubling changes far more than
 removing: strong changes in 40 of 70 against 4 of 70. Surface damage is rare (medium or strong in 8 of
-140). His notes describe genres more often than noise: anime, chibi, a 1990s cartoon, children's
+140). My notes describe genres more often than noise: anime, chibi, a 1990s cartoon, children's
 illustration. C65 confirmed the quality side on seven characters: BRISQUE improves slightly (-1.52)
 where the DiT preset of page 28 costs +8.09.</p>
 <h3 id="p-30-the-text-encoder--no-common-direction-across-characters">No common direction across characters</h3>
@@ -2770,8 +2769,8 @@ change who is drawn: identity is kept for at most two eligible characters in 19 
 turns the dwarf and the gnome into photographs, not anime; on the elf (below) the same edit scatters the word
 orders between comic, anime and cartoon. Anime is the elf's fallback, not every character's.</p>
 <h3 id="p-30-the-text-encoder--where-the-switches-go">Where the switches go</h3>
-<p>C70 asked Alessandro to name the genre of each of the 105 pictures of the word-order test (seed
-3141592) and, separately, how far each moved from its original (0-3). The five originals are all
+<p>In C70 I named the genre of each of the 105 pictures of the word-order test (seed
+3141592) and, separately, how far each one moved from its original (0-3). The five originals are all
 Western comic, so word order alone does not change the genre. Of the 100 edited pictures, 50 changed
 genre: <strong>39 to anime</strong>, 11 to cartoon, none to realistic or painting. No edit that zeroes a layer half
 changed the genre. Two patterns appear among those that do. L05, L20 and L25 MLP doubled send all five

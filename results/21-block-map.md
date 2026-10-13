@@ -137,7 +137,7 @@ partly visible in the weights themselves, but that result is marginal.
   the groups were chosen after seeing the first set and the measure was the same.
 * **The weights result rests on n = 28** and one checkpoint, and a single block can flip it.
 * **The guide to each block is one observer's shorthand.** It was written from a few prompts, at
-  one dose per direction, by someone who knew which block he was looking at. Several entries are
+  one dose per direction, by me, knowing which block I was looking at. Several entries are
   simplifications, some will turn out to be wrong, and the effect of many Style-band blocks
   changes with the prompt.
 

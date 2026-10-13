@@ -545,7 +545,7 @@ down move the picture the same way, mostly more colour and more grain — the co
 one block at a time. → [12](12-single-blocks.md#two-poles-or-one-direction)
 
 **The tail keeps the subject.** Blocks 22–27 change the layout least of all (0.834 against 0.771,
-p = 0.010). Of the names Alessandro gave them, "focus" for block 27 holds on every test; the others
+p = 0.010). Of the names I gave them, "focus" for block 27 holds on every test; the others
 are not single levers by their own measure. → [12](12-single-blocks.md#the-tail-as-rendering-controls)
 
 ![At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture.](../assets/12-single-blocks/F12.2_sensitivity_map.webp)
@@ -576,7 +576,7 @@ better than the ends (p = 0.19), and `Block_5`, in the centre, gives way hardest
 → [13](13-pushing-harder.md#can-the-centre-be-pushed-further) — **overturned**
 
 **The line statistic has the sign wrong.** Structure coherence scored as improved the render that
-Alessandro and six blind observers called broken, and ranked the two destroyed renders above as the
+I and six blind observers called broken, and ranked the two destroyed renders above as the
 best of the bench. → [13](13-pushing-harder.md#the-statistic-with-the-sign-wrong) — **overturned**
 
 > **Where X leaves us.** Groups and broad slices had given what they could. The next step was single
@@ -666,7 +666,7 @@ per test, and one comic-line register for most structural claims. ([scope](../do
 10. **Whether finer control needs a finer preset.** A number per tensor chooses where to push. Aiming at
     *what* is stored there probably needs directions inside a tensor, which the tuner does not offer.
 11. **Whether any page status should change after this week**, starting with the first block's
-    "inverted knob". That decision is Alessandro's.
+    "inverted knob". That decision is mine.
 12. **Whether middle blocks keep a character's identity** across a series of images in one style
     (test C51, proposed, not run).
 13. **Whether a preset's noise can be cleaned afterwards** without losing its look.

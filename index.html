@@ -146,7 +146,7 @@
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-09-style-direction--what-the-frozen-criteria-returned">That the direction a weight displacement imprints on the image depends on the style the prompt declares more than it depends on the subject the prompt describes. Tested against criteria frozen before the renders, not supported, and at the usable dose it runs the other way.</a></td><td class="ev">Pre-registered 2026-09-18 at 08:55 with three acceptance criteria. Criterion 1, full confirmation in the complete space and in the texture space, is never met: texture is not significant at either amplitude. At the usable amplitude no cell of 12 is significant and 6 of 12 carry the sign opposite to the prediction, including all four cells of the calibrated preset. The two artefact clauses, criteria 2 and 3, both fire.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--a-groove-or-a-hole">A targeted edit — a block group, a single block or one projection — can move the picture visibly toward what the model already draws while keeping the drawing.</a></td><td class="ev">Pre-registered on 1,224 existing cells: 84 visible units, 53 of them moving away from the model&#x27;s repertoire, 0 groove candidates. The nearest miss, Block_5 positive at 0.120, fell short of visibility by 0.0004 on one prompt.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--can-the-centre-be-pushed-further">At equal visibility, the central block groups keep the drawing better than the two at the ends of the stack, so the centre can be pushed further.</a></td><td class="ev">Pre-registered primary: T = +0.053, p = 0.19 over 495 relabellings, range guard passed — a null, not an inconclusive. Block_5, in the centre, gives way hardest of all.</td></tr>
-<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--the-statistic-with-the-sign-wrong">Structure coherence, the statistic used to tell a kept drawing from a broken one, orders renders the way the eye does.</a></td><td class="ev">Pre-registered eye veto: 7 agreements of 9 resolved pairs against a threshold of 8 in 12. Both disagreements are Block_6 positive at 0.080, scored above its baseline and called broken by Alessandro and six blind model observers. The doses the statistic ranked best, Block_4 and Block_1 positive at 0.500, are destroyed.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-13-pushing-harder--the-statistic-with-the-sign-wrong">Structure coherence, the statistic used to tell a kept drawing from a broken one, orders renders the way the eye does.</a></td><td class="ev">Pre-registered eye veto: 7 agreements of 9 resolved pairs against a threshold of 8 in 12. Both disagreements are Block_6 positive at 0.080, scored above its baseline and called broken by me and six blind model observers. The doses the statistic ranked best, Block_4 and Block_1 positive at 0.500, are destroyed.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-00-the-bench--what-is-still-unknown">Two more arms produce no change at all and nobody yet knows whether that is the architecture or a bug in delivery.</a></td><td class="ev">Not verified here. The diagnosis is one run that prints the patch count.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--the-53-kb-payload">A 53 KB hand-calibrated weight perturbation shifts the mark style of a 12.8-billion parameter diffusion model coherently and repeatably across seeds.</a></td><td class="ev">On 24 prompts in data/global_aggregation_corrected.csv the preset separates from both controls on the stroke-continuity axis: PC1 -2.532, 95% CI [-2.997, -2.067], dz = -2.30, Holm p = 3e-05 against block derangement, and -2.117, CI [-2.692, -1.542], Holm p = 3e-05 against the sign scramble. Crosshatch entropy moves with it, -1.691 and -0.485, both Holm significant. Exploratory: no threshold was frozen before these were computed.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-01-mark-style--direction-not-distance">This is not &quot;the further from the checkpoint, the more the style changes&quot;. Controls at the same Frobenius displacement without the calibrated structure do not reproduce it.</a></td><td class="ev">Both controls carry the identical measured displacement, d_model_relative = 0.05381584 in data/preset_displacements.csv, and both are separated from the preset on the same axis: PC1 -2.532 against block derangement and -2.117 against the sign scramble, Holm p = 3e-05 each, in data/global_aggregation_corrected.csv. Distance is held constant by construction, so what differs is the structure.</td></tr>
@@ -4652,12 +4652,11 @@ somebody opening an image, and the measurement came second, to check.</p>
 </blockquote>
 <h2 id="p-11-what-the-numbers-could-not-see--in-two-minutes">In two minutes</h2>
 <p>Three disagreements, in the order they happened.</p>
-<p><strong>One.</strong> I ranked 140 edits by how far they moved the picture against how much of its composition
-they cost, published the top of that ranking as the best operating points, and said the images
-agreed. Alessandro cut one of them out at 1:1 and it was full of defects. Re-measured with a
-statistic that asks whether the drawing is still a drawing, the five conditions I had recommended
-turned out to be the five worst in the corpus, and the one he had picked out by eye was the best of
-eighty.</p>
+<p><strong>One.</strong> 140 edits were ranked by how far they moved the picture against how much of its composition
+they cost; the top of that ranking was published as the best operating points, with the claim that the
+images agreed. I cut one of them out at 1:1 and it was full of defects. Re-measured with a statistic
+that asks whether the drawing is still a drawing, the five recommended conditions turned out to be the
+five worst in the corpus, and the one I had picked out by eye was the best of eighty.</p>
 <p><strong>Two.</strong> An edit removes all the colour from a leaf while leaving the leaf perfectly drawn. It
 happens in nine of twenty fresh seeds and in none of the twenty unedited controls. It never happens
 when the prompt names a colour — not once in seventy-two cells, on an ordinary colour or an odd one.</p>
@@ -4996,8 +4995,8 @@ evidence in <code>docs/open_work_register.md</code> §E.</p>
 <h1 id="p-12-single-blocks--one-block-at-a-time">One block at a time</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> The six block groups of the tuner kept cutting through whatever
-structure the model had (pages 04, 08, 10). Alessandro's reading of the first single-block renders
-was that he could see "a lot of identifiable controls" in every zone. If single blocks are the
+structure the model had (pages 04, 08, 10). My reading of the first single-block renders was that I
+could see "a lot of identifiable controls" in every zone. If single blocks are the
 natural unit, each should do something of its own, recognisably, on any picture.</p>
 <p><strong>What would kill it.</strong> Blocks that are no more recognisable across pictures than chance, or whose
 two directions are mirror images of nothing in particular.</p>
@@ -5075,13 +5074,13 @@ saturation rises in 47 and fine-grain energy in 40. It is the common mode found 
 (<code>docs/sign_decomposition_result.md</code>), visible one block at a time.</p>
 <h3 id="p-12-single-blocks--how-far-each-block-can-be-pushed">How far each block can be pushed</h3>
 <p><img alt="At the same dose 0.350 blocks 4 to 11 show no artefact in either direction, while most blocks from 19 to 27 pushed positive show artefacts and blocks 26 and 27 break the picture." src="assets/12-single-blocks/F12.2_sensitivity_map.webp" /></p>
-<p>Alessandro labelled every atlas render by the artefacts he could see
+<p>I labelled every atlas render by the artefacts I could see
 (<code>data/single_blocks_eye_artifacts_alessandro.csv</code>). The output end breaks first; the middle shows
-nothing at 0.350. His labels set the doses of the later benches: up to 0.45 on the styles bench, 0.55
+nothing at 0.350. My labels set the doses of the later benches: up to 0.45 on the styles bench, 0.55
 in places on v4. The middle has its own, softer limit — a clean picture whose drawing stops making
 sense — which no label or statistic here records (<a href="../results/21-block-map.md#how-far-each-block-can-be-pushed">results page 21</a>).</p>
 <h3 id="p-12-single-blocks--the-tail-as-rendering-controls">The tail as rendering controls</h3>
-<p>Alessandro named blocks 22–27 after what they seemed to control. The test, fixed before any statistic
+<p>I named blocks 22–27 after what they seemed to control. The test, fixed before any statistic
 was computed, asked of each name whether the block moves its own measure in two directions, more than
 any other measure, and on a replication bench (<code>docs/late_blocks_render_controls_result.md</code>).</p>
 <div class="tablewrap"><table>
@@ -5185,7 +5184,7 @@ analysis:
 <p class="status"><span class="pill" style="--c:#d03b3b">Overturned</span><span class="corpus">747 renders · 2 prompts · 6 seeds · pre-registered · 2026-10-05</span></p>
 <h1 id="p-13-pushing-harder--pushing-harder-cutting-finer-and-four-answers-that-said-no">Pushing harder, cutting finer, and four answers that said no</h1>
 <blockquote>
-<p><strong>The direction I'm chasing.</strong> Two intuitions of Alessandro's, after the broad presets of page 09
+<p><strong>The direction I'm chasing.</strong> Two intuitions of mine, after the broad presets of page 09
 had been refuted: targeted edits "carve a groove" that broad ones cannot, and the centre of the
 model can be pushed much further than the ends before the drawing breaks. Both are about finding
 the room an edit has before it turns into damage.</p>
@@ -5236,7 +5235,7 @@ text projector on one prompt (<code>docs/parameter_families_first_result.md</cod
 depths turned out to exist already in the q/k/v/o atlas, which had been claimed missing
 (pitfall 88).</p>
 <h3 id="p-13-pushing-harder--a-groove-or-a-hole">A groove or a hole</h3>
-<p>Alessandro's claim, after broad presets had been shown to move the picture away from what the model
+<p>My claim, after broad presets had been shown to move the picture away from what the model
 draws: targeted presets can carve a groove, if pushed hard enough to be visible. The pre-registered
 study measured 1,224 existing cells — groups, <code>blk16</code>, 56 single-block arms, 16 projections
 (<code>docs/groove_or_hole_result.md</code>).</p>
@@ -5264,7 +5263,7 @@ study measured 1,224 existing cells — groups, <code>blk16</code>, 56 single-bl
 </table></div>
 <p>Most targeted edits never became visible at all: all 16 projections stay below the bar. The nearest
 miss was <code>Block_5</code> positive at 0.120: visible on one prompt and short by 0.0004 on the other. Of
-Alessandro's descriptive claims, "the ends break the line" held (27% against 14% of units), "the
+my descriptive claims, "the ends break the line" held (27% against 14% of units), "the
 centre moves the picture more" did not — the ends moved it more at all six doses.</p>
 <h3 id="p-13-pushing-harder--can-the-centre-be-pushed-further">Can the centre be pushed further?</h3>
 <p><code>benchmark_centre_push</code> took the six groups to 0.080, 0.200, 0.350 and 0.500 on two prompts and three
@@ -5273,10 +5272,10 @@ returned T = +0.053, p = 0.19 over 495 relabellings, with the range guard passed
 how fast they give way, the groups do not split by position: <code>Block_5</code>, in the centre, gives way
 hardest; <code>Block_1</code>, at an end, less than five of the eight central arms (<code>docs/centre_push_result.md</code>).</p>
 <h3 id="p-13-pushing-harder--the-statistic-with-the-sign-wrong">The statistic with the sign wrong</h3>
-<p>The bench carried an eye veto, registered before rendering: twelve pairs, and for each Alessandro
-said which render was more broken. He resolved 9 and agreed with structure coherence on 7, below the
+<p>The bench carried an eye veto, registered before rendering: twelve pairs, and for each I said
+which render was more broken. I resolved 9 and agreed with structure coherence on 7, below the
 registered 8 of 12. Both disagreements are <code>Block_6</code> positive at 0.080, which the statistic scores
-above its own baseline and which he — and six blind model observers, in both orientations of the
+above its own baseline and which I — and six blind model observers, in both orientations of the
 sheets — called broken (<code>docs/centre_push_eye_veto_result.md</code>). The same day, the two doses the
 statistic ranked best were opened and found destroyed: a regular texture is "line" everywhere, and a
 destroyed picture is far from its baseline. The recommendation was retracted and the bench planned

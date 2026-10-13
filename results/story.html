@@ -284,62 +284,66 @@ noise rests on one pair of eyes — mine.</p>
 free <strong>holds</strong> · the noise lives in the MLP <strong>open</strong> · the cost of every push <strong>ambiguous</strong></p>
 <hr />
 <h2>10 · What happens if you edit the text half?</h2>
-<p>Before the image model draws anything, a language model reads the prompt and turns it into a long list
-of numbers — the <em>conditioning</em>, the only thing the image model ever knows about your words. So I tried
-the same trick on that language model: take one of its layers and switch off its attention or its MLP,
-or double it.</p>
+<p>Before the image model draws a single pixel, a language model reads your prompt and turns it into a long
+list of numbers: the <em>conditioning</em>. That list is the only thing the image model will ever know about your
+words. So, of course, I tried the same trick on it: pick one of its layers and switch off its attention or
+its MLP — or double it.</p>
 <p><img alt="Schema: the prompt goes through a 36-layer text encoder, one layer of which is edited; the conditioning carries 12 readings of every token to the 28-block image model, which draws the picture; each experiment looked at a different stage." src="../assets/30-the-text-encoder/F30.1_te_schema.webp" /></p>
-<p>The pictures change a lot, but not the way they do when you push the image model. They don't get noisy.
-They change <strong>genre</strong> — a Western comic becomes anime, a cartoon, a children's book — and usually <em>who</em>
-is drawn: the elf loses her antlers, her ears, her skin tone, often her face.</p>
+<p>The pictures change a lot, but not the way they do when you push the image model. They don't get noisy:
+they change <strong>genre</strong>. A Western comic becomes anime, a cartoon, a children's book... and quite often it
+changes <em>who</em> is drawn, too. My elf loses her antlers, her pointed ears, her tan skin, sometimes her whole
+face.</p>
 <p><img alt="Four characters at one seed under three edits: L19 attention zeroed keeps each face (similarity 0.77-0.91 where a face is found), L12 MLP doubled redraws them in another style with lower similarity, and L06 MLP doubled turns the dwarf and the gnome into realistic photographs (similarity 0.15 and 0.17)." src="../assets/30-the-text-encoder/F30.12_te_characters_identity_sheet.webp" /></p>
-<p>The destination even depends on who is drawn: the same edit that scatters my elf between comic and anime
-turns a dwarf and a gnome into photographs. Removing a layer half
-does little; doubling one does a lot. And the same edit on the same words, written in a different order,
-can land in a different genre.</p>
+<p>The destination depends on the character, too: the same edit that scatters my elf between comic and anime
+turns a dwarf and a gnome into photographs. Switching off half a layer does little; doubling it does a lot.
+Even the word order matters: same edit, same words, different order... different genre.</p>
 <p><img alt="Five word orders of the same prompt: the originals are all Western comic; L05 MLP doubled turns all five into anime, L06 MLP doubled scatters them between comic, anime and cartoon, L10 MLP zeroed keeps all five as Western comic." src="../assets/30-the-text-encoder/F30.2_te_order_genre_sheet.webp" /></p>
-<p>One thing about this is predictable without drawing anything. Measure how far an edit moves the
-conditioning, and you know roughly how much the picture will change. That held in two tests fixed in
-advance, but with a catch found afterwards: it mostly tells a strong kind of edit from a mild one. Among
-the strong edits, the ones that change genre, it says little about which will change the picture more.</p>
+<p>Is any of this predictable? Partly. Measure how far an edit moves the conditioning and you know roughly how
+much the picture will change — that held in two tests fixed in advance. The catch, found afterwards: it
+mostly tells a strong kind of edit from a mild one. Among the strong edits, the ones that change genre, it
+can't tell you which will change the picture more.</p>
 <p><img alt="Per edit, the size of the change in the conditioning against the mean intensity of change seen by eye over five word orders: the two rise together across all edits but only weakly within the MLP-doubled ones, with L28 MLP doubled changing the picture more than its size predicts and L10 attention doubled less." src="../assets/30-the-text-encoder/F30.3_te_size_vs_intensity.webp" /></p>
-<p>The puzzle is <em>where</em> the picture goes. When the genre changed, it went to anime 39 times out of 50, and
-never to a photograph or a painting. Why anime? I tested two ideas, each with its rule written down before
-looking.</p>
-<p>The first: maybe the picture stops paying attention to the words "western comics". I added a probe that
-only watches the image model, without changing a pixel, and recorded where every part of the picture looks
-among the words of the prompt. One strong edit does lower the attention on the style words. The other
-raises it, and switches genre just as often. Picture by picture, the attention on the style words does not
-tell the switched pictures from the others.</p>
+<p>The real puzzle was <em>where</em> the picture goes. When my elf changed genre, she went to anime 39 times out of
+50, and never to a photograph or a painting. Why anime? I tested two ideas, each with its rule written down
+before looking.</p>
+<p>Idea one: maybe the picture simply stops paying attention to the words "western comics". So I added a probe
+that watches where every part of the picture "looks" among the words of the prompt, without changing a
+single pixel. One strong edit does lower the attention on the style words... the other one raises it, and
+switches genre just as often. Picture by picture, the attention doesn't tell the switched images from the
+others.</p>
 <p><img alt="Each of the 25 C69 pictures by its share of attention on the style phrases, marked by whether its genre switched: under L06 the switched and unswitched pictures sit at the same low share, under L12 the switched ones sit at the highest shares." src="../assets/30-the-text-encoder/F30.5_te_style_share_by_image.webp" /></p>
-<p>The second: maybe the edit pushes the text the way writing "anime style" would. I encoded the prompt with
-"anime style" in place of "western comics style" and compared the two moves. They have nothing in common.
-The edits push somewhere else entirely, and 5 to 24 times harder than swapping a style word.</p>
+<p>Idea two: maybe the edit pushes the text the way writing "anime style" would. So I encoded the prompt with
+"anime style" in place of "western comics style" and compared the two moves. Nothing in common: the edits
+push somewhere else entirely, and 5 to 24 times harder than swapping a style word.</p>
 <p><img alt="Left, for each of 20 edits, the cosine between its push and the text's own comics-to-anime direction is near zero whatever the number of anime pictures; right, each push is 5 to 24 times the size of swapping the style word." src="../assets/30-the-text-encoder/F30.6_te_direction_vs_anime.webp" /></p>
-<p>So I stopped guessing and looked. I removed the three words that name the style and kept everything
-else. Every time, the elf came out as anime: same character, same pose, flatter colours and no hatching.
-Anime is where this description goes when nothing holds it in a style. It is not the model's answer to
-nothing at all: an empty prompt gives anime, a photograph, anime, a painting.</p>
+<p>So I stopped guessing and looked. I removed the three words that name the style and kept everything else.
+Every single time, the elf came out as anime: same character, same pose, flatter colours, no hatching.
+That's where <em>this</em> description goes when nothing holds it in a style. (It's not the model's answer to
+nothing at all: an empty prompt gave me anime, a photo, anime and a painting.)</p>
 <p><img alt="The elf in five word orders at two seeds, with and without the three style phrases: with them every picture is labelled Western comic, without them every labelled picture is anime, with the same character and pose." src="../assets/30-the-text-encoder/F30.7_te_nostyle_sheet.webp" /></p>
-<p>But that was one character. I did the same with seven other portraits, removing only "Western comics
-style": they did not go anime. They came back as paintings or realistic renders, the same faces in a
-different hand — one in 28 was anime. Every character has its own fallback. And the edits do not lead
-there: each edit has its own destination instead, one toward photographs, one toward cartoons, two that
-never leave the comic, whoever is drawn.</p>
-<p><img alt="Seven portraits at two seeds with and without 'Western comics style': with it every picture is a Western comic; without it the same character comes back as a painting or a realistic render, with the same face, costume and framing." src="../assets/30-the-text-encoder/F30.14_te_fallback_sheet.webp" /></p>
-<p>Then the control a reviewer asked for: random pushes on the text as large as the edits, with no weight
-touched. If the anime were only about the size of the push, random pushes should get there too. Some do:
-random noise that varies from word to word sends the picture to anime or cartoon about as often as the
-edits. But the same random push added equally to every word does nothing at all. And the real edits are
-not random. The one with the largest push keeps the comic every time, where random pushes of its size
-break it almost every time; another, with a smaller push, turns everything to anime, where random pushes
-almost never do. Each edit has a direction of its own.</p>
+<p>Then the control a reviewer asked for: random pushes on the text, as large as the edits, without touching a
+single weight. If the anime were only a matter of "pushing hard enough", random pushes should get there too.
+Some do: noise that changes from word to word sends the picture to anime or cartoon about as often as the
+edits. But the same random push added equally to every word does... nothing at all. And the real edits are
+not random. The one with the largest push keeps the comic every time, where random pushes of the same size
+break it almost every time; another one, with a smaller push, turns everything into anime, where random
+pushes almost never do. Each edit has a direction of its own.</p>
 <p><img alt="For L05, L06 and L28 MLP doubled at order 1: the real edit, then three random pushes of the same size; L05's real edit is anime while its random pushes stay comic, and L28's real edit stays comic while its permuted and token random pushes turn cartoon." src="../assets/30-the-text-encoder/F30.8_te_random_push_sheet.webp" /></p>
-<p>Last, I asked the model to draw each phrase of the prompt on its own. Some answers explain what we had
-seen. "Female dwarf" is drawn with a beard, every time — so the beard on my dwarf under edits was the
-model's own picture of a dwarf. "Uniform" is always an anime schoolgirl. And "realistic western comics
-style" draws cowboys: the model reads "western" as the Wild West.</p>
+<p>But the elf is one character. So I repeated the "no style" test on seven other portraits, removing only
+"Western comics style". Well... they didn't go anime. They came back as paintings or realistic renders — the
+same faces, painted by a different hand — and only one picture in 28 was anime. Every character has its own
+fallback. And the edits don't lead there either: each edit has a destination of its own, one toward
+photographs, one toward cartoons, two that never leave the comic, whoever is drawn.</p>
+<p><img alt="Seven portraits at two seeds with and without 'Western comics style': with it every picture is a Western comic; without it the same character comes back as a painting or a realistic render, with the same face, costume and framing." src="../assets/30-the-text-encoder/F30.14_te_fallback_sheet.webp" /></p>
+<p>Last, I asked the model to draw each phrase of the prompt on its own, and some answers explained a lot.
+"Female dwarf" comes with a beard, every time: so the beard I kept seeing on my dwarf under edits was simply
+the model's own idea of a dwarf. "Uniform" is always an anime schoolgirl. And "realistic western comics
+style"... draws cowboys. The model reads "western" as the Wild West!</p>
 <p><img alt="Four phrases alone at four seeds: 'realistic western comics style' draws bearded cowboys in comic panels, 'uniform' anime schoolgirls, 'female dwarf' a woman with a beard every time, and the elf's own description mostly anime." src="../assets/30-the-text-encoder/F30.10_te_word_priors_sheet.webp" /></p>
+<p>Said so, two honest warnings. My genre labels are coarse: two pictures I labelled "Western comic" can look
+nothing alike, so "no change of genre" doesn't mean "same style". And all these edits were extreme:
+"doubling" an MLP scales all three of its matrices, which is far stronger than the word suggests. The next
+test walks the dose down, step by step.</p>
 <p>→ <a href="index.html#p-30-the-text-encoder">page 30</a> · the size of the push predicts the change <strong>holds</strong>, mostly between
 kinds of edit · these edits change genre and identity more than they damage the surface <strong>holds</strong> · one edit moves every character the same way
 <strong>overturned</strong> · the switch comes from less attention on the style words <strong>overturned</strong> · or from a push

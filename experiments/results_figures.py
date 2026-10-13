@@ -201,7 +201,7 @@ def edit_schema(out: Path) -> Path:
     d.text((40, 296), "d < 0 weakens the block's contribution, d > 0 strengthens it; d is the 'dose'.", fill=INK_RGB, font=font(12))
     d.text((40, 322), "The 1-D tensors (norm scales, modulation) are not reachable this way and stay as they are.", fill=INK_RGB, font=font(12))
     d.text((40, 348), "A preset is a vector of 34 such factors (28 blocks + 6 other sections); a single-block edit sets one.", fill=INK_RGB, font=font(12))
-    d.text((40, 384), "Band names are Alessandro's labels from looking at the renders, not measurements.", fill=DIM_RGB, font=font(11))
+    d.text((40, 384), "Band names are my labels from looking at the renders, not measurements.", fill=DIM_RGB, font=font(11))
     out.parent.mkdir(parents=True, exist_ok=True)
     S.save(out, "WEBP", quality=90, method=6)
     return out
@@ -710,7 +710,7 @@ def hood_watershed(out: Path) -> Path:
             return IMG / "benchmark_blk23_colorful" / f"P3_archerforest_{c}_krea2_seed3141592_00001_.png"
         return IMG / "benchmark_single_blocks_v3" / "renders" / f"P3_archerforest_{c}_krea2_seed3141592_00001_.png"
     _sheet([("frame", "")], cols, path, lambda r, c: (lab[c], DIM_RGB) if lab[c] else None, out,
-           "archer, seed 3141592 · whole frames · label = Alessandro's blind label · source data/hood_tally_alessandro.csv",
+           "archer, seed 3141592 · whole frames · label = my blind label · source data/hood_tally_alessandro.csv",
            W=200, H=250, LAB=8)
     assert tally[("blk21", "+", "0.250")] == "a metà" and tally[("blk13", "-", "0.450")] == "abbassato"
     return out
@@ -742,7 +742,7 @@ def hood_threshold(out: Path) -> Path:
               frameon=False, fontsize=7, labelcolor=INK)
     ax.set_title("Pushed negative, three of four blocks complete the hood at 0.02", color=INK, fontsize=9, loc="left")
     fig.subplots_adjust(left=0.22, right=0.72, top=0.88, bottom=0.17)
-    return _save(fig, out, "archer, seed 3141592 · Alessandro's blind labels · baseline half-formed · source data/hood_threshold_tally.csv")
+    return _save(fig, out, "archer, seed 3141592 · my blind labels · baseline half-formed · source data/hood_threshold_tally.csv")
 
 
 # ---------------------------------------------------------------- page 29 (C59-C61)
@@ -780,7 +780,7 @@ def split_atlas_eye_sheet(out: Path) -> Path:
         lv, nm = hits[0]
         return (f"{nm}, {LEVEL_EN[lv]}" + (" +" if len(hits) > 1 else ""), NEG if lv >= 2 else DIM_RGB)
     return _sheet(rows, cols, path, cap, out,
-                  "C59 · blacksmith, seed 2718281 · whole frames · label = strongest class in Alessandro's blind label for the "
+                  "C59 · blacksmith, seed 2718281 · whole frames · label = strongest class in my blind label for the "
                   "sheet (three prompts) · source data/split_atlas_eye_tally_alessandro.csv", W=170, H=212, LAB=96)
 
 
@@ -800,7 +800,7 @@ def comic_form_sheet(out: Path) -> Path:
         return (dl[v], NEG if v >= 2 else DIM_RGB)
     return _sheet([("elf", "")], cols, lambda r, c: _img(f"benchmark_comic_form/P1_elfbrawler_{c}_krea2_seed1618033_00001_.png"),
                   cap, out, "C60 · elf brawler, seed 1618033 · first four edits: FORM set (blocks 1-19), last four: SURFACE set (blocks 20-27) · "
-                  "label = Alessandro's blind damage label on the edited side · source data/comic_form_eye_tally_alessandro.csv",
+                  "label = my blind damage label on the edited side · source data/comic_form_eye_tally_alessandro.csv",
                   W=150, H=188, LAB=8)
 
 
@@ -835,7 +835,7 @@ def form_surface_large(out: Path) -> Path:
         v = int(float(tal[("P1_elfbrawler", "1618033", c)]["d_edit"]))
         return (dl[v], NEG if v >= 2 else DIM_RGB)
     return _sheet([("elf", "")], cols, lambda r, c: _img(f"benchmark_comic_form/P1_elfbrawler_{c}_krea2_seed1618033_00001_.png"),
-                  cap, out, "C60 · elf brawler, seed 1618033 · whole frames · label = Alessandro's blind damage label · "
+                  cap, out, "C60 · elf brawler, seed 1618033 · whole frames · label = my blind damage label · "
                   "source data/comic_form_eye_tally_alessandro.csv", W=420, H=525, LAB=8)
 
 
@@ -913,7 +913,7 @@ def te_order_genre_sheet(out: Path) -> Path:
             return (g, DIM_RGB)
         return (f"{g} · {dose[r][oi[c]]}/3", NEG if gen[r][oi[c]] != "fumetto" else DIM_RGB)
     return _sheet(rows, TE_ORDERS, path, cap, out,
-                  "C65 B · elf brawler, seed 3141592 · same words, five orders (columns) · caption = Alessandro's genre label and "
+                  "C65 B · elf brawler, seed 3141592 · same words, five orders (columns) · caption = my genre label and "
                   "intensity of change 0-3 (C70) · source data/te_genre_alessandro.csv, data/te_genre_dose_alessandro.csv",
                   W=170, H=212, LAB=96)
 
@@ -1051,7 +1051,7 @@ def te_nostyle_sheet(out: Path) -> Path:
         return (GENRE_EN2[g], NEG if g == "anime" else DIM_RGB)
     return _sheet(rows, TE_ORDERS, path, cap, out,
                   "C72 block A · elf brawler, five word orders · 'no style' = the prompt without 'realistic western comics style, bold ink outlines, "
-                  "hatched shadows' · caption = Alessandro's genre label · source data/te_default_genre_alessandro.csv", W=150, H=188, LAB=150)
+                  "hatched shadows' · caption = my genre label · source data/te_default_genre_alessandro.csv", W=150, H=188, LAB=150)
 
 
 def te_random_push_sheet(out: Path) -> Path:
@@ -1071,7 +1071,7 @@ def te_random_push_sheet(out: Path) -> Path:
         return (GENRE_EN2[g], NEG if g != "fumetto" else DIM_RGB)
     return _sheet(rows, cols, path, cap, out,
                   "C72 block C · elf, order 1, seed 3141592 · random pushes match the real push's size tap by tap, no weight edited · "
-                  "caption = Alessandro's genre label · source data/te_default_genre_alessandro.csv", W=150, H=188, LAB=110)
+                  "caption = my genre label · source data/te_default_genre_alessandro.csv", W=150, H=188, LAB=110)
 
 
 def te_random_push_counts(out: Path) -> Path:
@@ -1113,7 +1113,7 @@ def te_word_priors_sheet(out: Path) -> Path:
         return (txt, NEG if r[f"b{i}"] == "sì" or r[f"g{i}"] == "anime" else DIM_RGB)
     rows = [(w, w[1] if len(w[1]) < 24 else w[1][:22] + "…") for w in pick]
     return _sheet(rows, seeds, path, cap, out,
-                  "C72 block B · each phrase alone · caption = Alessandro's labels (genre · person · beard) · source data/te_words_alessandro.csv",
+                  "C72 block B · each phrase alone · caption = my labels (genre · person · beard) · source data/te_words_alessandro.csv",
                   W=170, H=212, LAB=170)
 
 
@@ -1188,7 +1188,7 @@ def te_genre_by_edit(out: Path) -> Path:
     ax.legend(frameon=False, fontsize=7, labelcolor=INK, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3)
     fig.text(0.09, 0.95, "Genre of each picture, edits sorted by push size (small → large)", color=INK, fontsize=8.5)
     fig.subplots_adjust(left=0.09, right=0.98, top=0.82, bottom=0.30)
-    return _save(fig, out, "C70 · elf, seed 3141592 · Alessandro's genre labels · x = edit (×2 doubled, ×0 zeroed) · source data/te_genre_by_edit.csv")
+    return _save(fig, out, "C70 · elf, seed 3141592 · my genre labels · x = edit (×2 doubled, ×0 zeroed) · source data/te_genre_by_edit.csv")
 
 
 
@@ -1217,7 +1217,7 @@ def te_fallback_sheet(out: Path) -> Path:
         g = t[("fb_with" if kind == "with" else "fb_without", ch)][si[s]]
         return (GENRE_EN2[g], NEG if kind == "without" else DIM_RGB)
     return _sheet(C73_CHARS_EN, cols, path, cap, out,
-                  "C73 · seeds 2645751 (s1), 3316624 (s2) · 'no style' = without 'Western comics style' · caption = Alessandro's genre label · "
+                  "C73 · seeds 2645751 (s1), 3316624 (s2) · 'no style' = without 'Western comics style' · caption = my genre label · "
                   "source data/te_fallback_genre_alessandro.csv", W=130, H=162, LAB=120)
 
 
@@ -1240,7 +1240,7 @@ def te_fallback_by_edit(out: Path) -> Path:
     ax.legend(frameon=False, fontsize=6.5, labelcolor=INK, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=4)
     fig.text(0.1, 0.955, "Each edit has a destination of its own across characters", color=INK, fontsize=8.5)
     fig.subplots_adjust(left=0.13, right=0.98, top=0.8, bottom=0.19)
-    return _save(fig, out, "C73 · MLP-doubled C65 edits on the seven portraits · Alessandro's genre labels · source data/te_fallback_by_edit.csv")
+    return _save(fig, out, "C73 · MLP-doubled C65 edits on the seven portraits · my genre labels · source data/te_fallback_by_edit.csv")
 
 
 BUILDERS = {

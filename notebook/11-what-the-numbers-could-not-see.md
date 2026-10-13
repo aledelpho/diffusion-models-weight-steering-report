@@ -61,12 +61,11 @@ claims:
 
 Three disagreements, in the order they happened.
 
-**One.** I ranked 140 edits by how far they moved the picture against how much of its composition
-they cost, published the top of that ranking as the best operating points, and said the images
-agreed. Alessandro cut one of them out at 1:1 and it was full of defects. Re-measured with a
-statistic that asks whether the drawing is still a drawing, the five conditions I had recommended
-turned out to be the five worst in the corpus, and the one he had picked out by eye was the best of
-eighty.
+**One.** 140 edits were ranked by how far they moved the picture against how much of its composition
+they cost; the top of that ranking was published as the best operating points, with the claim that the
+images agreed. I cut one of them out at 1:1 and it was full of defects. Re-measured with a statistic
+that asks whether the drawing is still a drawing, the five recommended conditions turned out to be the
+five worst in the corpus, and the one I had picked out by eye was the best of eighty.
 
 **Two.** An edit removes all the colour from a leaf while leaving the leaf perfectly drawn. It
 happens in nine of twenty fresh seeds and in none of the twenty unedited controls. It never happens

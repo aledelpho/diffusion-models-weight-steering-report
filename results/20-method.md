@@ -134,7 +134,7 @@ Each reproduction row was queued alone first and compared before the rest of the
 allowed to run. The outputs of the checks are in the render notes listed under Provenance.
 
 The first row only shows that the tuner is clean when it is switched off: at zero it adds no patch
-at all. Whether it stays clean when switched *on* was a question Alessandro raised on 2026-10-06,
+at all. Whether it stays clean when switched *on* was a question I raised on 2026-10-06,
 and the C55 rows answer it (`docs/prereg_null_patch.md`). Read from the code, an active patch is
 `W × (1 + d)` computed in float32 and rounded back to bfloat16, on the patched tensors only; a
 multiplier of 1.0001 rounds every bf16 weight of block 27 back to itself. With the node active on

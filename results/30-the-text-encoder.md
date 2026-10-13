@@ -196,8 +196,8 @@ claims:
 ## In two minutes
 
 Before the image model draws, a language model reads the prompt and hands over a long list of
-numbers, the **conditioning**. We edited that language model the same way we edit the image model:
-one layer, its attention or its MLP, zeroed or doubled.
+numbers, the **conditioning**. That's all the image model will ever know about your words. So I edited that
+language model the same way I edit the image model: one layer, its attention or its MLP, zeroed or doubled.
 
 ![Schema: the prompt goes through a 36-layer text encoder, one layer of which is edited; the conditioning carries 12 readings of every token to the 28-block image model, which draws the picture; each experiment looked at a different stage.](../assets/30-the-text-encoder/F30.1_te_schema.webp)
 
@@ -213,12 +213,12 @@ far the edit moves the conditioning, and you know roughly how far the picture wi
 two tests fixed in advance — but mostly because it tells kinds of edit apart. Among the edits that
 change genre, all of them large, it says little about which change more.
 
-The puzzle: **where** the picture goes. When the genre changes, it goes to anime in 39 of 50 cases.
-We tested two explanations. Maybe the picture stops paying attention to the words "western comics":
+The puzzle: **where** the picture goes. When the elf changes genre, she goes to anime in 39 of 50 cases.
+I tested two explanations. Maybe the picture stops paying attention to the words "western comics":
 no. Maybe the edit pushes the text the way writing "anime" would: no, the push points somewhere else
 entirely, and it is 5 to 24 times larger than swapping a style word.
 
-Then we looked at the fallback directly. Remove the three style words and the elf is drawn as anime,
+Then I stopped guessing and looked at the fallback directly. Remove the three style words and the elf is drawn as anime,
 every time. Anime is where *this* description goes when nothing holds it in a style. Seven other characters,
 stripped of their style words, fall back to painting or realistic renders instead: there is no single
 default.
@@ -248,9 +248,9 @@ separate word orders inside the image model.
 
 ## Why I might be wrong
 
-**One observer, not blind.** Every genre and intensity label is Alessandro's. On the order grids he
-saw the edit names, and he had seen these pictures before. The intensity labels were given after he
-knew the first test had failed.
+**One observer, not blind.** Every genre and intensity label is mine. On the order grids I saw the edit
+names, and I had seen these pictures before. I gave the intensity labels after I knew the first test had
+failed.
 
 **One prompt carries the word-order story.** C69, C70 and C71 rest on the elf in five word orders at
 one seed. The anime default may be specific to this prompt or this character.
@@ -258,10 +258,10 @@ one seed. The anime default may be specific to this prompt or this character.
 **The fallback rests on one character.** Anime is the fallback of *this* elf description; C73 confirmed that
 other characters fall back elsewhere. In the no-style pictures the character,
 pose and composition stay; what changes is the rendering — flatter cel shading, no hatching — and the
-label "anime" is Alessandro's reading of that change.
+label "anime" is my reading of that change.
 
-**Genre labels hide sub-styles, and the doses are extreme.** Alessandro notes that each label covers very
-different sub-styles: two pictures labelled "Western comic" can look nothing alike, so "no switch" does not mean
+**Genre labels hide sub-styles, and the doses are extreme.** While labelling I noticed that each label covers
+very different sub-styles: two pictures labelled "Western comic" can look nothing alike, so "no switch" does not mean
 "same style". All these edits zero or double a layer half; at that strength part of what is labelled a change of
 genre may be a loss of stylistic coherence. A dose ladder with comparative judgements is the next test (C74).
 
@@ -319,9 +319,9 @@ the shared push, so they do not explain why word order matters (C68 H3, Spearman
 ### Genre and identity, not surface
 
 The C64 pilot doubled or removed each half of each of the 35 layers the image model reads, on the elf,
-and Alessandro labelled every picture blind (140 edits, 10 repeats). Doubling changes far more than
+and I labelled every picture blind (140 edits, 10 repeats). Doubling changes far more than
 removing: strong changes in 40 of 70 against 4 of 70. Surface damage is rare (medium or strong in 8 of
-140). His notes describe genres more often than noise: anime, chibi, a 1990s cartoon, children's
+140). My notes describe genres more often than noise: anime, chibi, a 1990s cartoon, children's
 illustration. C65 confirmed the quality side on seven characters: BRISQUE improves slightly (-1.52)
 where the DiT preset of page 28 costs +8.09.
 
@@ -341,8 +341,8 @@ orders between comic, anime and cartoon. Anime is the elf's fallback, not every 
 
 ### Where the switches go
 
-C70 asked Alessandro to name the genre of each of the 105 pictures of the word-order test (seed
-3141592) and, separately, how far each moved from its original (0-3). The five originals are all
+In C70 I named the genre of each of the 105 pictures of the word-order test (seed
+3141592) and, separately, how far each one moved from its original (0-3). The five originals are all
 Western comic, so word order alone does not change the genre. Of the 100 edited pictures, 50 changed
 genre: **39 to anime**, 11 to cartoon, none to realistic or painting. No edit that zeroes a layer half
 changed the genre. Two patterns appear among those that do. L05, L20 and L25 MLP doubled send all five

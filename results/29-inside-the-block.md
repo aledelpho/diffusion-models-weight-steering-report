@@ -123,9 +123,8 @@ on its own prompts, the test as a whole did not decide.
 
 ## Why I might be wrong
 
-**One observer.** Every eye label is Alessandro's. He was blind to the condition, and his
-self-agreement on the damage threshold was 1.00 on the 15 repeats of C60, but his eye is also the
-one that chose the middle-block edits in C59. New prompts and seeds guard against fitting the
+**One observer.** Every eye label is mine. I was blind to the condition, and my self-agreement on the
+damage threshold was 1.00 on the 15 repeats of C60, but my eye is also the one that chose the middle-block edits in C59. New prompts and seeds guard against fitting the
 images, not against fitting a taste.
 
 **"Slight" does not reproduce.** In both eye passes every disagreement between a first and a
@@ -148,7 +147,7 @@ are drawn; the only photographs are in C61, where they behaved differently.
 The split atlas pushed the attention (wq, wk, wv, gate, wo) or the MLP (gate, up, down) of one
 block by ±0.35, through `granular_json`. Both checks passed to the pixel: the atlas baseline
 reproduced, and all eight matrices through the granular path equalled the whole block through the
-vector. Alessandro labelled 168 sheets at seed 2718281, one per block, half and sign, each showing
+vector. I labelled 168 sheets at seed 2718281, one per block, half and sign, each showing
 the same edit on the three prompts, plus 20 unannounced repeats.
 
 68 of 168 sheets carry an artefact and 46 carry noise (blotches, grain, collapse or a regular
@@ -194,7 +193,7 @@ of edit and baseline with the side random, plus 15 repeats.
 | change seen by eye, 0-2 | 1.59 | 0.47 | p = 0.0002 |
 | damage medium or stronger, edited side | 17 / 90 | 71 / 90 | baseline sides 0 / 180 |
 
-A preference question was dropped before any label, at Alessandro's request, as too subjective.
+A preference question was dropped before any label, at my request, as too subjective.
 
 ![The elf at a new seed, large: block 8 pushed up redraws her pose, arm and gauntlet with no damage, while the MLP of block 27 pushed up keeps the same picture and covers it in blotches.](../assets/29-inside-the-block/F29.4_form_surface_large.webp)
 

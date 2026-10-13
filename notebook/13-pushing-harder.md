@@ -51,7 +51,7 @@ claims:
     evidence: >
       Pre-registered eye veto: 7 agreements of 9 resolved pairs against a threshold of 8 in 12. Both
       disagreements are Block_6 positive at 0.080, scored above its baseline and called broken by
-      Alessandro and six blind model observers. The doses the statistic ranked best, Block_4 and
+      me and six blind model observers. The doses the statistic ranked best, Block_4 and
       Block_1 positive at 0.500, are destroyed.
     anchor: "#the-statistic-with-the-sign-wrong"
   - id: wo-slices-add-up
@@ -72,7 +72,7 @@ claims:
 > **Overturned** · 747 renders · three pre-registered tests and one verification, 2026-09-28/29
 > [← all experiments](../README.md#what-holds-and-what-does-not)
 
-> **The direction I'm chasing.** Two intuitions of Alessandro's, after the broad presets of page 09
+> **The direction I'm chasing.** Two intuitions of mine, after the broad presets of page 09
 > had been refuted: targeted edits "carve a groove" that broad ones cannot, and the centre of the
 > model can be pushed much further than the ends before the drawing breaks. Both are about finding
 > the room an edit has before it turns into damage.
@@ -135,7 +135,7 @@ depths turned out to exist already in the q/k/v/o atlas, which had been claimed 
 
 ### A groove or a hole
 
-Alessandro's claim, after broad presets had been shown to move the picture away from what the model
+My claim, after broad presets had been shown to move the picture away from what the model
 draws: targeted presets can carve a groove, if pushed hard enough to be visible. The pre-registered
 study measured 1,224 existing cells — groups, `blk16`, 56 single-block arms, 16 projections
 (`docs/groove_or_hole_result.md`).
@@ -148,7 +148,7 @@ study measured 1,224 existing cells — groups, `blk16`, 56 single-block arms, 1
 
 Most targeted edits never became visible at all: all 16 projections stay below the bar. The nearest
 miss was `Block_5` positive at 0.120: visible on one prompt and short by 0.0004 on the other. Of
-Alessandro's descriptive claims, "the ends break the line" held (27% against 14% of units), "the
+my descriptive claims, "the ends break the line" held (27% against 14% of units), "the
 centre moves the picture more" did not — the ends moved it more at all six doses.
 
 ### Can the centre be pushed further?
@@ -161,10 +161,10 @@ hardest; `Block_1`, at an end, less than five of the eight central arms (`docs/c
 
 ### The statistic with the sign wrong
 
-The bench carried an eye veto, registered before rendering: twelve pairs, and for each Alessandro
-said which render was more broken. He resolved 9 and agreed with structure coherence on 7, below the
+The bench carried an eye veto, registered before rendering: twelve pairs, and for each I said
+which render was more broken. I resolved 9 and agreed with structure coherence on 7, below the
 registered 8 of 12. Both disagreements are `Block_6` positive at 0.080, which the statistic scores
-above its own baseline and which he — and six blind model observers, in both orientations of the
+above its own baseline and which I — and six blind model observers, in both orientations of the
 sheets — called broken (`docs/centre_push_eye_veto_result.md`). The same day, the two doses the
 statistic ranked best were opened and found destroyed: a regular texture is "line" everywhere, and a
 destroyed picture is far from its baseline. The recommendation was retracted and the bench planned
