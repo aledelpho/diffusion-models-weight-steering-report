@@ -1,0 +1,8 @@
+char,with_style,no_style,fallback,edit_switches,edit_switch_genres
+D1_dwarf_paladin,fumetto fumetto fumetto fumetto,pittura realist pittura realist,mixed,10,"{'pittura': 2, 'realist': 2, 'cartoon': 6}"
+E2_elf_rogue,fumetto fumetto fumetto fumetto,pittura pittura anime pittura,pittura,12,"{'cartoon': 2, 'anime': 10}"
+O4_halforc_fighter,fumetto fumetto fumetto fumetto,realist realist realist realist,realist,15,"{'anime': 4, 'realist': 6, 'cartoon': 4, 'pittura': 1}"
+G5_gnome_wizard,fumetto fumetto fumetto fumetto,pittura pittura realist altro,mixed,14,"{'realist': 7, 'pittura': 6, 'cartoon': 1}"
+H3_halfling_druid,fumetto fumetto fumetto fumetto,pittura pittura realist altro,mixed,16,"{'realist': 5, 'pittura': 7, 'cartoon': 2, 'altro': 2}"
+R6_dragonborn_cleric,fumetto fumetto fumetto fumetto,pittura pittura pittura pittura,pittura,11,"{'pittura': 6, 'realist': 2, 'anime': 1, 'cartoon': 2}"
+T7_tiefling_bard,fumetto fumetto fumetto fumetto,pittura pittura fumetto pittura,pittura,5,"{'cartoon': 1, 'realist': 2, 'anime': 2}"

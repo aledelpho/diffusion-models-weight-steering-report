@@ -1,0 +1,4 @@
+test,value,verdict
+H1,"majority no-style genre per character: {'D1_dwarf_paladin': 'mixed', 'E2_elf_rogue': 'pittura', 'O4_halforc_fighter': 'realist', 'G5_gnome_wizard': 'mixed', 'H3_halfling_druid': 'mixed', 'R6_dragonborn_cleric': 'pittura', 'T7_tiefling_bard': 'pittura'}; distinct ['pittura', 'realist']",supported: the fallback depends on the character
+H2,"match 0.28 vs expected 0.27 (n 43 switched pictures of characters with a clear fallback; all switches 83: {'pittura': 22, 'realist': 24, 'cartoon': 18, 'anime': 17, 'altro': 2})",not supported
+with-style genres (reported),{'fumetto': 28},
