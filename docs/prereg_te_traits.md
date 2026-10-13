@@ -262,3 +262,78 @@ Repeats use the first showing; the second is used only for agreement.
 * **"Click what is missing" invites misses.** An absence that is not noticed counts as present, which biases R
   upward. The repeats show how often this happens.
 * **Three characters, two seeds (eight for B0), one kind of edit (MLP, three matrices).**
+
+## Amendment 1 (2026-10-13, before any C75 label or render)
+
+Alessandro reviewed the trait lists and asked for a faster, simpler protocol. Every change below was made before the
+key was drawn and before any picture was labelled.
+
+**Questions.**
+
+* Every trait is now a direct yes/no question that repeats the prompt's words: "Il personaggio è femmina?"
+  instead of "reads as a woman".
+* The full list, in Italian (shown on the page) and English, with the prompt words behind each question, is
+  `data/te_traits_questions.csv`. The trait ids and their number are unchanged: 14 for the dwarf, 14 for the elf and
+  13 for the half-orc, including the 2 common ones.
+* **Rule for compound questions:** answer yes only if everything the question says is true.
+* **Rule for the dwarf:** a beard alone is not enough to answer no to "is female". C72 showed that the model draws
+  female dwarves with beards.
+
+**Answers.**
+
+* Right arrow = yes, left arrow = no.
+* Down arrow = "cannot tell", kept as an escape for traits that are hidden. It plays the role of "not visible" in
+  the measures.
+* Backspace goes back one step.
+
+**Unnamed features as yes/no.**
+
+* Skin becomes a chain of questions:
+  1. "same colour as the reference?";
+  2. if no, "lighter?";
+  3. if no, "darker?"; no to both means another hue.
+
+  The four categories of T4 are unchanged.
+* Person becomes "the same person as the reference?" (yes/no). The "similar" choice is dropped.
+
+**One question at a time (question-major).**
+
+* The page asks one question over every picture of one character, then moves to the next question. This keeps a
+  single criterion in mind and makes each picture one of 74 in a block, not a whole sheet to scan.
+* **Order:** characters D1, E2, O4. Within each character, the trait questions come in a shuffled order, then skin,
+  then person.
+* **Pictures within a block:** shuffled; seed 7475 for everything.
+* **The reference original** is shown only for skin and person. Trait questions show the picture alone, so that the
+  answer is about the picture and not a comparison.
+* **No item number is shown.** Picture files are renamed by item.
+
+**Repeats.**
+
+* The same 24 pictures (8 per character, at least one original each) are shown a second time in every block of
+  their character.
+* The second showing comes more than 30 positions after the first; a block has 82 positions.
+* κ is computed over all trait blocks.
+
+**Measures.**
+
+* A strip whose retention never changes (Spearman undefined) counts as ρ = 0 in T1: no relation.
+* "Cannot tell" at a dose is skipped when the sustained onset is computed.
+
+**Files.**
+
+* Key `data/te_traits_key_A.csv`.
+* Schedule `data/te_traits_schedule_A.csv` (3,854 steps before the skin follow-ups).
+* Page and key script `experiments/te_traits_page.py`.
+* Tally `experiments/te_traits_tally.py`, with a self-test on a synthetic labeller.
+
+All are committed before the page is opened.
+
+**Part B is authorised** (Alessandro, 2026-10-13). B0 needs only 12 new renders, because seeds 3605551 and 4123105
+already exist for the three portraits in `benchmark_portraits/phase_c`. With the 108 renders of B1 and the 2 gate
+renders, the plan has **122 rows** (`data/te_traits_plan.csv`, `experiments/te_traits.py`).
+
+* **Gate 1:** variant `zero` at L06 d = 0.85 must equal the plain portrait.
+* **Gate 2:** variant `real` must equal the C74 render.
+
+The Part B labelling page is built after the renders, with the same protocol. Its tally is added to
+`te_traits_tally.py` before those labels, following the B1 rule fixed above.
