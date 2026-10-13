@@ -31,7 +31,7 @@ Tally (committed before the labels): `experiments/te_fallback_tally.py`. Outputs
   prompt, which carries anime-leaning phrases of its own (C72 block B), not to the model.
 * **Destinations depend on the edit, across characters** (14 pictures per edit, `data/te_fallback_by_edit.csv`;
   described, not tested):
-  * L06 MLP doubled → realistic in 11 of 14, and anime in the other 3, all of them on elves;
+  * L06 MLP doubled → realistic in 11 of 14, and anime in the other 3 (two on the elf rogue, one on the tiefling);
   * L14 → cartoon in 9 of 14;
   * L26 and L28 → still Western comic in 14 of 14;
   * L02 → still comic in 11 of 14;
