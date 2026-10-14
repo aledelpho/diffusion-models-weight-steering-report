@@ -159,12 +159,12 @@ def build(out):
 
     # 03 words alone
     c = Card("3 · Single words carry their own baggage",
-             "Each phrase rendered on its own (three of the four seeds shown). If something keeps showing up uninvited, try the suspicious words alone.")
+             "Each phrase rendered on its own, all four seeds. If something keeps showing up uninvited, try the suspicious words alone.")
     c.spec("No weight edited · the phrase alone is the whole prompt · labels: 4 seeds per phrase")
     for w, lab in (("W37", '"female dwarf"  → a beard, 4 of 4'), ("W41", '"uniform"  → anime schoolgirl, 4 of 4'),
-                   ("W00", '"realistic western comics style"  → cowboys')):
+                   ("W00", '"realistic western comics style"  → cowboys, 4 of 4')):
         c.text(lab, 28, INK, True)
-        c.row([(f"benchmark_te_default/{w}_word_krea2_seed{s}_00001_.png", f"seed {s}", DIM) for s in ("3141592", "1234567", "1618033")], h=340)
+        c.row([(f"benchmark_te_default/{w}_word_krea2_seed{s}_00001_.png", f"seed {s}", DIM) for s in ("3141592", "1234567", "1618033", "2718281")], h=340)
     c.render(out / "03_words_alone.png")
 
     # 04 the character goes first (rebuilt 2026-10-14: every picture says what it lost, from the blind labels)
