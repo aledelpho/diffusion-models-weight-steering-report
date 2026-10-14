@@ -10,7 +10,8 @@ HERE = Path(__file__).resolve().parent; DATA = HERE.parent / "data"; ASSETS = HE
 IMG = Path(".")
 BG, INK, DIM, ACC, OK = (20, 20, 20), (240, 240, 240), (160, 160, 160), (236, 120, 60), (90, 190, 130)
 W = 1600; PAD = 48
-FOOT = "Krea-2 only · small samples · mostly one observer · full report linked in the post"
+FOOT = "Krea-2 turbo · euler_ancestral, 9 steps, CFG 1, 1024×1280 · small samples, mostly one observer · full report linked in the post"
+SPEC = (130, 190, 230)
 GEN = {"fumetto": "Western comic", "anime": "anime", "cartoon": "cartoon", "realist": "realistic", "pittura": "painting", "altro": "other"}
 
 
@@ -40,6 +41,9 @@ class Card:
     def stats(self, items):
         """items: [(big, small, color)]"""
         self.blocks.append(("stats", items))
+
+    def spec(self, s):
+        self.blocks.append(("text", "⚙ " + s, 22, SPEC, False))
 
     def image(self, im):
         self.blocks.append(("image", im))
@@ -114,10 +118,11 @@ def build(out):
     c = Card("1 · Text-encoder edits change WHAT is drawn, not the image quality",
              "Same seed, one layer of the text encoder doubled. The pictures stay clean, but genre and character change, "
              "and the same edit moves different characters in different directions.")
+    c.spec("Text encoder: Qwen3-VL-4B, 36 layers · edit: the gate, up and down matrices of ONE layer's MLP × 2 each (d = +1), so the layer's output grows up to about × 8 (estimate) · seed 2645751")
     for ch in ("D1_dwarf_paladin", "T7_tiefling_bard"):
         c.row([(pc(ch, "2645751"), "original", DIM),
-               (f"benchmark_te_characters/{ch}_L06_mlp_p1.00_krea2_seed2645751_00001_.png", "text-encoder edit A", ACC),
-               (f"benchmark_te_characters/{ch}_L12_mlp_p1.00_krea2_seed2645751_00001_.png", "text-encoder edit B", ACC)], h=380)
+               (f"benchmark_te_characters/{ch}_L06_mlp_p1.00_krea2_seed2645751_00001_.png", "TE layer 6 MLP × 2", ACC),
+               (f"benchmark_te_characters/{ch}_L12_mlp_p1.00_krea2_seed2645751_00001_.png", "TE layer 12 MLP × 2", ACC)], h=380)
     c.stats([("−1.52 vs +8.09", "image-quality change (BRISQUE, lower = better): text-encoder edits vs an image-model preset", OK),
              ("4 of 20", "text-encoder edits that moved different characters the same way", ACC)])
     c.render(out / "01_text_encoder_vs_model.png")
@@ -128,6 +133,7 @@ def build(out):
     c = Card("2 · Without a style in the prompt, there is no single default",
              "I removed the style words. This elf turns anime every time; other characters come back as paintings or "
              "photographs. Each description carries its own fallback.")
+    c.spec("No weight edited · same prompt with and without its style words · seeds 3141592 (elf) and 2645751 (portraits)")
     c.row([("benchmark_prompt_order/V1_Original_baseline_krea2_seed3141592_00001_.png", "with style: " + GEN[eg[("c72_3141592", "originale")][0]], DIM),
            ("benchmark_te_default/V1_Original_nostyle_krea2_seed3141592_00001_.png", "no style: " + GEN[eg[("c72_3141592", "senza_stile")][0]], ACC)], h=460)
     items = []
@@ -142,6 +148,7 @@ def build(out):
     # 03 words alone
     c = Card("3 · Single words carry their own baggage",
              "Each phrase rendered on its own (three of the four seeds shown). If something keeps showing up uninvited, try the suspicious words alone.")
+    c.spec("No weight edited · the phrase alone is the whole prompt · labels: 4 seeds per phrase")
     for w, lab in (("W37", '"female dwarf"  → a beard, 4 of 4'), ("W41", '"uniform"  → anime schoolgirl, 4 of 4'),
                    ("W00", '"realistic western comics style"  → cowboys')):
         c.text(lab, 28, INK, True)
@@ -154,12 +161,14 @@ def build(out):
     c = Card("4 · When the text encoder is altered, the character goes first",
              "One text-encoder layer amplified step by step. The half-orc stops being a half-orc around 0.6-0.7, while she is "
              "still a comic; only later does the style change.")
+    c.spec("Text encoder layer 6 MLP: gate, up, down each × (1 + d), so the layer's output grows up to about (1 + d)³ (estimate) · random pushes: noise added to what the text encoder hands over, "
+           "matched in size to the real edit, varying per word (token) or with channels shuffled (permuted) · seed 2645751")
     def dose_p(d):
         return pc(ch, s) if d == "0" else (f"benchmark_te_characters/{ch}_L06_mlp_p1.00_krea2_seed{s}_00001_.png" if d == "1.00"
                                            else f"benchmark_te_dose/{ch}_L06_mlp_p{d}_krea2_seed{s}_00001_.png")
-    c.row([(dose_p(d), "original" if d == "0" else f"strength {d}", ACC if d in ("0.70", "1.00") else DIM)
+    c.row([(dose_p(d), "original" if d == "0" else f"d {d} (× {1 + float(d):.1f})", ACC if d in ("0.70", "1.00") else DIM)
            for d in ("0", "0.40", "0.60", "0.70", "0.80", "1.00")], h=320, label_size=20)
-    c.text("Same strength, random direction: the character survives.", 28, INK, True)
+    c.text("Same size of push, random direction: the character survives.", 28, INK, True)
     c.row([(pc(ch, s), "original", DIM), (dose_p("1.00"), f"real edit · traits kept {float(R[(ch[:2], s, 'L06_mlp', '1.00', 'real')]['R']):.2f}", ACC),
            (f"benchmark_te_traits/{ch}_L06_mlp_p1.00_token_krea2_seed{s}_00001_.png", f"random push · kept {float(R[(ch[:2], s, 'L06_mlp', '1.00', 'token')]['R']):.2f}", OK),
            (f"benchmark_te_traits/{ch}_L06_mlp_p1.00_permuted_krea2_seed{s}_00001_.png", f"random push · kept {float(R[(ch[:2], s, 'L06_mlp', '1.00', 'permuted')]['R']):.2f}", OK)],
@@ -172,6 +181,7 @@ def build(out):
     c = Card("5 · Commas seem to act as borders (lead, not proof)",
              "When I edit the text encoder, the meaning of every word shifts a little. Part of the shift is shared by the whole "
              "prompt; part moves in small packets of 2-4 neighbouring words, and the packets tend to break at commas.")
+    c.spec("Measured on 20 text-encoder edits × 12 readings of the conditioning (241 encodes, no images)")
     im = Image.new("RGB", (W - 2 * PAD, 330), BG); d = ImageDraw.Draw(im)
     groups = [["dark", "green", "hooded", "cowl"], ["brass", "buckles"], ["a", "single", "feather", "earring"]]
     cols = [(236, 120, 60), (90, 160, 230), (120, 200, 120)]
@@ -202,8 +212,9 @@ def build(out):
     c = Card("6 · Different blocks do different things",
              "One block of the image model pushed at a time, same seed. Middle blocks change the content; the last ones change "
              "colour, contrast and grain.")
-    c.row([(f"{root}/{P}_baseline_krea2_seed{sd}_00001_.png", "original", DIM), (b(9, "pos"), "middle block 9: content", ACC),
-           (b(23, "pos"), "late block 23: colour", ACC), (b(26, "pos"), "late block 26: surface", ACC)], h=460, label_size=22)
+    c.spec("Image model: 28 blocks · edit: every weight matrix of ONE block × (1 + d) · seed 1234567")
+    c.row([(f"{root}/{P}_baseline_krea2_seed{sd}_00001_.png", "original", DIM), (b(9, "pos"), f"block 9 × {1 + float(plan[(9, 'pos')]):.2f}: content", ACC),
+           (b(23, "pos"), f"block 23 × {1 + float(plan[(23, 'pos')]):.2f}: colour", ACC), (b(26, "pos"), f"block 26 × {1 + float(plan[(26, 'pos')]):.2f}: surface", ACC)], h=460, label_size=22)
     c.stats([("19% vs 79%", "pictures with surface damage: edits to blocks 1-19 vs blocks 20-27 (comics and cartoons, labelled blind)", OK)])
     c.render(out / "06_blocks.png")
 
@@ -211,11 +222,12 @@ def build(out):
     c = Card("7 · Block 23 works as a saturation knob",
              "Block 23 alone moves colour and keeps the picture. Writing \"colorful\" in the prompt changes far more: the elf "
              "turns blonde, a cut lemon appears in the still life.")
+    c.spec("Image model block 23 only, all its weight matrices × (1 + d) · seed 2718281")
     for p, sd2 in (("E1_cartoon", "2718281"), ("C4_stilllife", "2718281")):
         bb = "benchmark_blk23_colorful"
         c.row([(f"{bb}/{p}_baseline_krea2_seed{sd2}_00001_.png", "original", DIM),
-               (f"{bb}/{p}_b23_m0.450_krea2_seed{sd2}_00001_.png", "block 23: more colour", OK),
-               (f"{bb}/{p}_b23_p0.300_krea2_seed{sd2}_00001_.png", "block 23: less colour", OK),
+               (f"{bb}/{p}_b23_m0.450_krea2_seed{sd2}_00001_.png", "block 23 × 0.55: more colour", OK),
+               (f"{bb}/{p}_b23_p0.300_krea2_seed{sd2}_00001_.png", "block 23 × 1.30: less colour", OK),
                (f"{bb}/{p}_txtpos_krea2_seed{sd2}_00001_.png", 'words: "colorful…"', ACC)], h=360, label_size=20)
     c.text("Not cleaner than a saturation slider in post-production; it can help when a merge leans too vivid or too dull.", 24)
     c.render(out / "07_saturation.png")
@@ -225,6 +237,7 @@ def build(out):
              "Tuned by eye on four portraits, then applied to three new characters. A person who didn't know which was which "
              "picked the preset as closer to the look I described (a more American-comic look, flat colours, clean lines) "
              "56 times out of 56.")
+    c.spec("Preset: 10 of the tuner's 34 multipliers changed, from −0.35 to +0.15, frozen before the test · seed 3316624")
     chars = ("H3_halfling_druid", "R6_dragonborn_cleric", "T7_tiefling_bard")
     c.row([(pc(ch, "3316624"), "original", DIM) for ch in chars], h=420)
     c.row([(pc(ch, "3316624", "preset"), "preset", ACC) for ch in chars], h=420)
@@ -237,10 +250,11 @@ def build(out):
     c = Card("9 · Same words, five orders (lead, still under study)",
              "The same prompt with its phrases shuffled. Some text-encoder edits send every order to the same place, others "
              "scatter them into different genres. I don't know why yet.")
+    c.spec("Elf brawler, seed 3141592 · edits: one text-encoder layer's MLP × 2")
     c.row([(f"benchmark_prompt_order/{o}_baseline_krea2_seed3141592_00001_.png", GEN[gen["originali"][i]], DIM) for i, o in enumerate(orders)], h=260, label_size=18)
-    c.text("edit A: every order goes anime", 26, INK, True)
+    c.text("TE layer 5 MLP × 2: every order goes anime", 26, INK, True)
     c.row([(f"benchmark_te_characters/{o}_L05_mlp_p1.00_krea2_seed3141592_00001_.png", GEN[gen["L05_mlp_p1.00"][i]], ACC) for i, o in enumerate(orders)], h=260, label_size=18)
-    c.text("edit B: the orders scatter", 26, INK, True)
+    c.text("TE layer 6 MLP × 2: the orders scatter", 26, INK, True)
     c.row([(f"benchmark_te_characters/{o}_L06_mlp_p1.00_krea2_seed3141592_00001_.png", GEN[gen["L06_mlp_p1.00"][i]], ACC) for i, o in enumerate(orders)], h=260, label_size=18)
     c.render(out / "09_shuffled_prompts.png")
 
@@ -249,6 +263,7 @@ def build(out):
              "Shuffling the order of blocks inside the checkpoint: one direction runs the shadow strokes parallel, the other "
              "crosses them more. Confirmed on 16 of 16 new prompts with a measure of stroke directions; by eye the difference "
              "is subtle, so look at cheeks and neck. The same edit also enlarges the subject (9 of 10 styles).")
+    c.spec("Edit: weights of whole blocks moved between positions in the checkpoint, ± direction, relative weight change 5.4% · seed 42")
     r7 = "benchmark_stage7/renders"
     def crop(pid, sg, box):
         im = Image.open(IMG / f"{r7}/{pid}_blockshuf_{sg}_seed42_00001_.png").convert("RGB")
@@ -261,6 +276,7 @@ def build(out):
     c = Card("11 · How much a picture will change can be predicted without rendering it",
              "Measure how far a text-encoder edit moves what it hands to the image model, and you know roughly how much the "
              "picture will change (correlation 0.71 and 0.80, pre-registered). It works mostly to tell kinds of edit apart.")
+    c.spec("Each dot: one text-encoder edit (one layer, attention or MLP, × 0 or × 2) · x = how far it moves the text encoder's output · y = how much the picture changed by eye")
     c.image(Image.open(ASSETS / "30-the-text-encoder" / "F30.3_te_size_vs_intensity.webp").convert("RGB"))
     c.render(out / "11_predict_change.png")
 
