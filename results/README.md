@@ -7,8 +7,9 @@
 > every test I ran; this folder holds only the results that were confirmed, or that I need here to be
 > honest about what wasn't.
 
-> **New here?** Start from [the story](STORY.md): what I found, told with pictures. This page is the
-> report: abstract, related work, and the table of every claim.
+> **New here?** Start from [the story](STORY.md): what I found, told with pictures. If you just make images
+> and want the practical lessons, read the [FAQ](FAQ.md). This page is the report: abstract, related work, and
+> the table of every claim.
 
 ## Abstract
 

@@ -58,7 +58,7 @@ SURFACE, INK, INK_2, MUTED, GRID = "#1a1a19", "#ffffff", "#c3c2b7", "#898781", "
 def read_pages() -> list[dict]:
     pages = []
     for path in sorted(NOTEBOOK.glob("*.md")):
-        if path.name.startswith("_") or path.name in ("AUTHORING.md", "README.md", "STORY.md"):
+        if path.name.startswith("_") or path.name in ("AUTHORING.md", "README.md", "STORY.md", "FAQ.md"):
             continue
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
@@ -176,7 +176,7 @@ def _site_links(src: str, page_href: str) -> str:
     src = re.sub(r"\]\((\d\d-[a-z0-9-]+)\.md#([a-z0-9-]+)\)", rf"]({page_href}#p-\1--\2)", src)
     src = re.sub(r"\]\((\d\d-[a-z0-9-]+)\.md\)", rf"]({page_href}#p-\1)", src)
     src = re.sub(r"\]\(README\.md#[a-z0-9-]+\)", f"]({page_href}#claims)", src)
-    src = src.replace("](STORY.md)", "](story.html)").replace("](README.md)", f"]({page_href or 'index.html'})")
+    src = src.replace("](STORY.md)", "](story.html)").replace("](FAQ.md)", "](faq.html)").replace("](README.md)", f"]({page_href or 'index.html'})")
     src = src.replace("](../notebook/)", f"]({MAIN_TREE}notebook)")
     src = re.sub(r"\]\(\.\./notebook/([^)]+)\)", rf"]({MAIN_BLOB}notebook/\1)", src)
     src = src.replace(f"]({TEST_PUBLIC})", "](try-the-test.html)")
@@ -189,7 +189,7 @@ def _md_html(src: str) -> str:
     return out.replace("<table>", '<div class="tablewrap"><table>').replace("</table>", "</table></div>")
 
 
-def results_site(index: str, pages: list[dict]) -> tuple[str, str]:
+def results_site(index: str, pages: list[dict]) -> tuple[str, str, str]:
     readme = (NOTEBOOK / "README.md").read_text(encoding="utf-8")
     intro_md = readme.split("\n## How to read the table below", 1)[0]
     intro_md = intro_md.replace("[`../notebook/`](../notebook/)", "[the exploratory notebook](../notebook/)")
@@ -201,6 +201,7 @@ def results_site(index: str, pages: list[dict]) -> tuple[str, str]:
     elsewhere_old = re.search(r"  <h2>Elsewhere</h2>\n  <ul>\n.*?</ul>\n", index, re.S).group(0)
     elsewhere = ("  <h2>Start here</h2>\n  <ul>\n"
                  '    <li><a href="story.html">The story, with pictures</a></li>\n'
+                 '    <li><a href="faq.html">FAQ: what I learned, for everyone</a></li>\n'
                  '    <li><a href="#intro">Abstract and introduction</a></li>\n'
                  '    <li><a href="try-the-test.html">Try the blind test</a></li>\n'
                  '    <li><a href="#claims">What holds, what does not</a></li>\n'
@@ -225,7 +226,13 @@ def results_site(index: str, pages: list[dict]) -> tuple[str, str]:
     head = index.split("<nav>", 1)[0].replace("<title>Knobs inside the weights — results</title>",
                                                "<title>The story — knobs inside the weights</title>")
     story_page = f"{head}<nav>{nav_story}</nav>\n<main>\n<section id=\"story\">\n{story}\n</section>\n</main>\n</body>\n</html>\n"
-    return index, story_page
+    faq_page = ""
+    if (NOTEBOOK / "FAQ.md").exists():
+        faq = _md_html(_site_links((NOTEBOOK / "FAQ.md").read_text(encoding="utf-8"), "index.html"))
+        faq = faq.replace(f'href="{TEST_PUBLIC}"', 'href="try-the-test.html"')
+        fhead = head.replace("<title>The story — knobs inside the weights</title>", "<title>FAQ — knobs inside the weights</title>")
+        faq_page = f"{fhead}<nav>{nav_story}</nav>\n<main>\n<section id=\"faq\">\n{faq}\n</section>\n</main>\n</body>\n</html>\n"
+    return index, story_page, faq_page
 
 
 def _claim_target(page, claim):
@@ -394,12 +401,15 @@ def main() -> int:
     index = render_index(pages)
     stale = []
     if args.dir == "results":
-        index, story_page = results_site(index, pages)
-        story_file = NOTEBOOK / "story.html"
-        if not story_file.exists() or story_file.read_text(encoding="utf-8") != story_page:
-            stale.append("story.html")
-            if not args.check:
-                story_file.write_text(story_page, encoding="utf-8")
+        index, story_page, faq_page = results_site(index, pages)
+        for fname, content in (("story.html", story_page), ("faq.html", faq_page)):
+            if not content:
+                continue
+            f = NOTEBOOK / fname
+            if not f.exists() or f.read_text(encoding="utf-8") != content:
+                stale.append(fname)
+                if not args.check:
+                    f.write_text(content, encoding="utf-8")
 
     if README.exists():
         text = README.read_text(encoding="utf-8")
