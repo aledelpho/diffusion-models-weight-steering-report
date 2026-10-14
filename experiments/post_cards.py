@@ -367,6 +367,29 @@ def build(out):
                for cond, h in zip(("attn", "mlp", "block"), heads)], h=330, label_size=19)
     c.render(out / "13_layer0_text.png")
 
+    # 14 the dose grid of the first two text-encoder layers (C64 pilot, elf, seed 1618033)
+    doses = [("m1.00", "× 0"), ("m0.35", "× 0.65"), ("m0.10", "× 0.9"), ("p0.10", "× 1.1"), ("p0.35", "× 1.35"), ("p1.00", "× 2")]
+    rows_ = [("L00", "attn", "layer 0\nattention"), ("L00", "mlp", "layer 0\nMLP"), ("L01", "attn", "layer 1\nattention"), ("L01", "mlp", "layer 1\nMLP")]
+    cw, ch_, lw, top = 200, 250, 150, 50
+    g = Image.new("RGB", (lw + 6 * (cw + 8), top + 4 * (ch_ + 12) + 70), BG); gd = ImageDraw.Draw(g)
+    for j, (_, lab) in enumerate(doses):
+        gd.text((lw + j * (cw + 8) + cw // 2, 18), lab, fill=INK, font=F(24, True), anchor="mm")
+    for i, (L, part, lab) in enumerate(rows_):
+        y = top + i * (ch_ + 12)
+        gd.multiline_text((lw - 14, y + ch_ // 2), lab, fill=INK, font=F(22, True), anchor="rm", align="right")
+        for j, (d, _) in enumerate(doses):
+            x = lw + j * (cw + 8)
+            im = Image.open(IMG / f"benchmark_te_pilot/P1_elfbrawler_{L}_{part}_{d}_krea2_seed1618033_00001_.png").convert("RGB")
+            g.paste(im.resize((cw, ch_)), (x, y))
+            if L == "L00" and d == "m1.00":
+                gd.rectangle((x - 4, y - 4, x + cw + 3, y + ch_ + 3), outline=ACC, width=6)
+    x0 = lw; y0 = top + 1 * (ch_ + 12)
+    gd.text((lw, top + 4 * (ch_ + 12) + 8), "WTF is going on there?", fill=ACC, font=F(40, True))
+    c = Card("", "")
+    c.spec("Text encoder: Qwen3-VL-4B, 36 layers · each picture multiplies ONE half (attention or MLP) of ONE layer by the number on top; × 1 would be the original · same prompt, seed 1618033 · from the C64 pilot: one prompt, one seed")
+    c.image(g)
+    c.render(out / "14_dose_grid.png")
+
 
 def build_schema(out):
     """00 - what the edit is: the whole model, and the one crude multiplication applied to it."""
