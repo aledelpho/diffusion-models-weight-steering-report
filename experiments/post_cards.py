@@ -340,7 +340,88 @@ def build(out):
     c.render(out / "11_predict_change.png")
 
 
+def build_schema(out):
+    """00 - what the edit is: the whole model, and the one crude multiplication applied to it."""
+    import random
+    rnd = random.Random(3)
+    Wc, Hc = 1600, 1200
+    im = Image.new("RGB", (Wc, Hc), BG); d = ImageDraw.Draw(im)
+    TE_C, DIT_C, HI = (70, 110, 160), (80, 80, 80), ACC
+    # pipeline row
+    y0 = 40
+    def box(x, y, w, h, txt, sub, col, fs=26):
+        d.rounded_rectangle((x, y, x + w, y + h), 14, fill=col)
+        d.text((x + 16, y + 12), txt, fill=INK, font=F(fs, True))
+        if sub:
+            d.text((x + 16, y + 12 + fs + 8), sub, fill=(220, 220, 220), font=F(20))
+    def arrow(x1, y, x2):
+        d.line((x1, y, x2 - 12, y), fill=DIM, width=4); d.polygon([(x2, y), (x2 - 16, y - 9), (x2 - 16, y + 9)], fill=DIM)
+    box(PAD, y0, 200, 90, "prompt", "your words", (55, 55, 55))
+    arrow(PAD + 205, y0 + 45, PAD + 265)
+    box(PAD + 270, y0, 420, 90, "Text encoder", "Qwen3-VL-4B · 36 layers", TE_C)
+    arrow(PAD + 695, y0 + 45, PAD + 755)
+    box(PAD + 760, y0, 470, 90, "Image model (DiT)", "Krea-2 · 28 blocks", DIT_C)
+    arrow(PAD + 1235, y0 + 45, PAD + 1295)
+    thumb = Image.open(IMG / pc("R6_dragonborn_cleric", "3316624")).convert("RGB"); thumb.thumbnail((120, 150))
+    im.paste(thumb, (PAD + 1300, y0 - 25))
+    d.text((PAD, y0 + 108), "the text encoder turns the words into numbers (12 readings per word); that is all the image model ever sees of the prompt",
+           fill=DIM, font=F(19))
+    # text encoder layers
+    y1 = 230
+    d.text((PAD, y1), "Text encoder: 36 layers (each: attention + MLP)", fill=INK, font=F(26, True))
+    cw = (Wc - 2 * PAD - 35 * 6) / 36
+    for i in range(36):
+        x = PAD + i * (cw + 6); hl = i == 6
+        d.rounded_rectangle((x, y1 + 44, x + cw, y1 + 110), 6, fill=HI if hl else TE_C)
+        if i % 5 == 0 or hl:
+            d.text((x + 3, y1 + 116), str(i), fill=HI if hl else DIM, font=F(16, hl))
+    d.text((PAD + 6 * (cw + 6) - 10, y1 + 140), "e.g. layer 6: its MLP matrices (gate, up, down) × 2", fill=HI, font=F(20, True))
+    # image model blocks
+    y2 = 430
+    d.text((PAD, y2), "Image model: 28 blocks (each: attention + MLP, 8 weight matrices)", fill=INK, font=F(26, True))
+    cw2 = (Wc - 2 * PAD - 27 * 8) / 28
+    bx = {}
+    for i in range(28):
+        x = PAD + i * (cw2 + 8); hl = i == 23
+        d.rounded_rectangle((x, y2 + 44, x + cw2, y2 + 130), 8, fill=HI if hl else DIT_C)
+        d.text((x + 6, y2 + 136), str(i), fill=HI if hl else DIM, font=F(16, hl))
+        bx[i] = x
+    d.text((PAD, y2 + 166), "early blocks", fill=DIM, font=F(20)); d.text((bx[9], y2 + 166), "middle: content", fill=DIM, font=F(20))
+    lt = "late: colour, grain, surface"; d.text((bx[23] - 14 - d.textlength(lt, font=F(20)), y2 + 166), lt, fill=DIM, font=F(20))
+    # zoom on block 23
+    y3 = 650
+    zx0, zx1 = PAD + 40, Wc - PAD - 40
+    yl = y2 + 198
+    d.line((bx[23] + cw2 / 2, y2 + 160, bx[23] + cw2 / 2, yl), fill=HI, width=3)
+    d.line((bx[23] + cw2 / 2, yl, zx0, y3), fill=HI, width=2); d.line((bx[23] + cw2 / 2, yl, zx1, y3), fill=HI, width=2)
+    d.rounded_rectangle((zx0, y3, zx1, y3 + 470), 16, outline=HI, width=3)
+    d.text((zx0 + 24, y3 + 16), "block 23, opened: its 8 weight matrices (illustration: each square stands for thousands of numbers)", fill=INK, font=F(22, True))
+    # 8 matrices as noise squares
+    ms = 120
+    for k in range(8):
+        x = zx0 + 30 + k * (ms + 50); y = y3 + 70
+        tile = Image.new("L", (24, 24))
+        tile.putdata([int(128 + rnd.gauss(0, 45)) for _ in range(24 * 24)])
+        tile = tile.resize((ms, ms), Image.NEAREST).convert("RGB")
+        im.paste(tile, (x, y))
+        d.text((x, y + ms + 6), ["attn q", "attn k", "attn v", "attn out", "attn gate", "MLP up", "MLP gate", "MLP down"][k], fill=DIM, font=F(18))
+    # the operation
+    ya = y3 + 250
+    d.text((zx0 + 30, ya), "The whole intervention:", fill=INK, font=F(30, True))
+    d.text((zx0 + 30, ya + 50), "every number in those 8 matrices  ×  1.30", fill=HI, font=F(44, True))
+    ex_in = [0.0121, -0.0307, 0.0043, -0.0189]; f = 1.30
+    d.text((zx0 + 30, ya + 120), "for example   " + "   ".join(f"{v:+.4f}" for v in ex_in) + "   →   " + "   ".join(f"{v * f:+.4f}" for v in ex_in),
+           fill=(200, 200, 200), font=F(22))
+    d.text((zx0 + 30, ya + 165), "one number per block · nothing trained · nothing added · the other 27 blocks and the text encoder untouched",
+           fill=DIM, font=F(22))
+    # footer
+    d.text((PAD, Hc - 60), "A preset is just a list of such multipliers (34 numbers in the tuner). Numbers in the example row are illustrative.",
+           fill=(110, 110, 110), font=F(20))
+    im.save(out / "00_what_the_edit_is.png"); print("card 00_what_the_edit_is.png", im.size)
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--img-root", required=True)
     a = ap.parse_args(); IMG = Path(a.img_root)
     build(IMG / "_post_cards")
+    build_schema(IMG / "_post_cards")
