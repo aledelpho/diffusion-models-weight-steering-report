@@ -218,13 +218,18 @@ def build(out):
     # 06 blocks
     plan = {(int(r["block_idx"]), r["sign"]): f"{abs(float(r['dose'])):.3f}" for r in rd("single_blocks_v4_plan.csv") if r["block_idx"]}
     root = "benchmark_single_blocks_v4/renders"; P = "P5_comic_panels"; sd = "1234567"
-    b = lambda k, sg: f"{root}/{P}_blk{k:02d}_{sg}_d{plan[(k, sg)]}_krea2_seed{sd}_00001_.png"
+    b0 = lambda k, sg: f"{root}/{P}_blk{k:02d}_{sg}_d{plan[(k, sg)]}_krea2_seed{sd}_00001_.png"
+    def top(path):
+        im = Image.open(IMG / path).convert("RGB"); w, h = im.size
+        return im.crop((w // 2, 0, w, h // 2))      # the upper-right panel of the comic page (the elf), larger
+    b = lambda k, sg: top(b0(k, sg))
     c = Card("6 · Different blocks do different things",
              "One block of the image model pushed at a time, same seed. Middle blocks change the content; the last ones change "
              "colour, contrast and grain.")
     c.spec("Image model: 28 blocks · edit: every weight matrix of ONE block × (1 + d) · seed 1234567")
-    c.row([(f"{root}/{P}_baseline_krea2_seed{sd}_00001_.png", "original", DIM), (b(9, "pos"), f"block 9 × {1 + float(plan[(9, 'pos')]):.2f}: content", ACC),
-           (b(23, "pos"), f"block 23 × {1 + float(plan[(23, 'pos')]):.2f}: colour", ACC), (b(26, "pos"), f"block 26 × {1 + float(plan[(26, 'pos')]):.2f}: surface", ACC)], h=460, label_size=22)
+    c.row([(top(f"{root}/{P}_baseline_krea2_seed{sd}_00001_.png"), "original", DIM), (b(9, "pos"), f"block 9 × {1 + float(plan[(9, 'pos')]):.2f}: content", ACC),
+           (b(23, "pos"), f"block 23 × {1 + float(plan[(23, 'pos')]):.2f}: colour", ACC), (b(26, "pos"), f"block 26 × {1 + float(plan[(26, 'pos')]):.2f}: surface", ACC)], h=420, label_size=22)
+    c.text("(one panel of a four-panel comic page, enlarged; every picture is the same seed)", 20, DIM)
     c.stats([("19% vs 79%", "pictures with surface damage: edits to blocks 1-19 vs blocks 20-27 (comics and cartoons, labelled blind)", OK)])
     c.render(out / "06_blocks.png")
 
@@ -233,12 +238,12 @@ def build(out):
              "Block 23 alone moves colour and keeps the picture. Writing \"colorful\" in the prompt changes far more: the elf "
              "turns blonde, a cut lemon appears in the still life.")
     c.spec("Image model block 23 only, all its weight matrices × (1 + d) · seed 2718281")
-    for p, sd2 in (("E1_cartoon", "2718281"), ("C4_stilllife", "2718281")):
+    for p, sd2 in (("E3_oil", "2718281"), ("E1_cartoon", "2718281"), ("C4_stilllife", "2718281")):
         bb = "benchmark_blk23_colorful"
         c.row([(f"{bb}/{p}_baseline_krea2_seed{sd2}_00001_.png", "original", DIM),
                (f"{bb}/{p}_b23_m0.450_krea2_seed{sd2}_00001_.png", "block 23 × 0.55: more colour", OK),
                (f"{bb}/{p}_b23_p0.300_krea2_seed{sd2}_00001_.png", "block 23 × 1.30: less colour", OK),
-               (f"{bb}/{p}_txtpos_krea2_seed{sd2}_00001_.png", 'words: "colorful…"', ACC)], h=360, label_size=20)
+               (f"{bb}/{p}_txtpos_krea2_seed{sd2}_00001_.png", 'words: "colorful…"', ACC)], h=330, label_size=20)
     c.render(out / "07_saturation.png")
 
     # 08 preset on unseen characters
@@ -266,18 +271,13 @@ def build(out):
     c.row([(f"benchmark_te_characters/{o}_L06_mlp_p1.00_krea2_seed3141592_00001_.png", GEN[gen["L06_mlp_p1.00"][i]], ACC) for i, o in enumerate(orders)], h=260, label_size=18)
     c.render(out / "09_shuffled_prompts.png")
 
-    # 10 hatching (crops)
-    c = Card("10 · Reordering whole blocks sets the hatching",
-             "Shuffling the order of blocks inside the checkpoint: one direction runs the shadow strokes parallel, the other "
-             "crosses them more. Confirmed on 16 of 16 new prompts with a measure of stroke directions; by eye the difference "
-             "is subtle, so look at cheeks and neck. The same edit also enlarges the subject (9 of 10 styles).")
-    c.spec("Edit: weights of whole blocks moved between positions in the checkpoint, ± direction, relative weight change 5.4% · seed 42")
-    r7 = "benchmark_stage7/renders"
-    def crop(pid, sg, box):
-        im = Image.open(IMG / f"{r7}/{pid}_blockshuf_{sg}_seed42_00001_.png").convert("RGB")
-        w, h = im.size; return im.crop((int(box[0] * w), int(box[1] * h), int(box[2] * w), int(box[3] * h)))
-    for pid, box in (("I06", (0.3, 0.1, 0.7, 0.42)), ("I01", (0.3, 0.1, 0.7, 0.42))):
-        c.row([(crop(pid, "neg", box), "one direction: fewer crossings", DIM), (crop(pid, "pos", box), "the other: more cross-hatching", ACC)], h=560)
+    # 10 hatching: the measured result (crops were not convincing by eye, 2026-10-14)
+    c = Card("10", "")
+    c.spec("Edit: weights of whole blocks moved between positions in the checkpoint, + and − direction, relative weight change 5.4% "
+           "· 16 new comic prompts × 5 seeds · measure: crosshatch entropy, how varied the stroke directions are (higher = more crossing)")
+    c.image(Image.open(HERE.parent / "assets" / "06-the-hatching-axis" / "F06.1_hatching_axis_by_prompt.webp").convert("RGB"))
+    c.text("Orange row: block reordering, 16 prompts of 16 on the predicted side. Blue: my hand-calibrated preset goes the other way. "
+           "Green: a random edit of the same size does nothing consistent. By eye the effect is subtle; it shows up in the measure.", 22)
     c.render(out / "10_hatching.png")
 
     # 11 predict
