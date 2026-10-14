@@ -67,7 +67,7 @@ class Card:
             for i, l in enumerate(lines):
                 d.text((PAD, i * size * 1.3), l, fill=color, font=f)
             return im
-        parts.append(txt(self.title, 46, INK, True)); parts.append(txt(self.sub, 28, DIM, False))
+        # 2026-10-14: titles and explanations stay in the post (translatable); the card carries only content
         for b in self.blocks:
             if b[0] == "text":
                 parts.append(txt(b[1], b[2], b[3], b[4]))
@@ -141,8 +141,6 @@ def build(out):
         items += [(pc(ch, "2645751"), f"{name}: with style", DIM),
                   (f"benchmark_te_fallback/{ch}_nostyle_krea2_seed2645751_00001_.png", f"no style: {GEN[fb[('fb_without', ch)][0]]}", ACC)]
     c.row(items, h=300, label_size=18)
-    c.text("Seven characters without 'Western comics style': anime in 1 of 28 pictures. My hypothesis (not proven): each concept "
-           "falls back to the style the model has seen it in most often.", 24)
     c.render(out / "02_no_single_fallback.png")
 
     # 03 words alone
@@ -201,8 +199,6 @@ def build(out):
     c.image(im)
     c.stats([("18 of 20", "edits where words of the same comma-phrase moved more alike than words across a comma", ACC),
              ("~3 words", "distance at which the similarity of two words' shifts halves", ACC)])
-    c.text("Measured on the numbers the text encoder hands to the image model, not on the pictures. Whether moving commas changes "
-           "the result, and by how much, is still untested.", 24)
     c.render(out / "05_commas.png")
 
     # 06 blocks
@@ -229,7 +225,6 @@ def build(out):
                (f"{bb}/{p}_b23_m0.450_krea2_seed{sd2}_00001_.png", "block 23 × 0.55: more colour", OK),
                (f"{bb}/{p}_b23_p0.300_krea2_seed{sd2}_00001_.png", "block 23 × 1.30: less colour", OK),
                (f"{bb}/{p}_txtpos_krea2_seed{sd2}_00001_.png", 'words: "colorful…"', ACC)], h=360, label_size=20)
-    c.text("Not cleaner than a saturation slider in post-production; it can help when a merge leans too vivid or too dull.", 24)
     c.render(out / "07_saturation.png")
 
     # 08 preset on unseen characters
@@ -241,7 +236,6 @@ def build(out):
     chars = ("H3_halfling_druid", "R6_dragonborn_cleric", "T7_tiefling_bard")
     c.row([(pc(ch, "3316624"), "original", DIM) for ch in chars], h=420)
     c.row([(pc(ch, "3316624", "preset"), "preset", ACC) for ch in chars], h=420)
-    c.text("Faces move a bit more than a change of seed would.", 24)
     c.render(out / "08_preset_unseen.png")
 
     # 09 shuffled prompts
