@@ -62,11 +62,12 @@ def make_page():
     S = [{"block": s["block"], "pos": int(s["pos"]), "item": s["item"], "showing": int(s["showing"]),
           "question": s["question"], "kind": "trait"} for s in sched]
     intro = TP.INTRO_B2.replace("""<p>In alcuni blocchi vedrai a sinistra un'immagine di <b>riferimento</b>: la domanda chiede un confronto con quella.</p>
-""", """<p>Le domande riguardano i <b>colori</b>. Quando chiedono "sulla pelle, sui capelli o negli occhi", conta solo il corpo del personaggio, non i vestiti, l'armatura o lo sfondo.</p>
+""", """<p>Le domande riguardano i <b>colori</b>. Quando chiedono di pelle, capelli o occhi, conta solo il corpo del personaggio, non i vestiti, l'armatura o lo sfondo, e conta solo una <b>tinta che una persona normale non avrebbe</b>: un'abbronzatura, una guancia rossa o delle lentiggini non contano.</p>
+<p>Se la domanda nomina un oggetto che nell'immagine non c'è (per esempio un cappuccio o un'armatura), giudica <b>quello che c'è al suo posto</b>. Usa "non si vede" solo se quella zona è tagliata fuori o coperta.</p>
 """).replace("Se la domanda dice \"folti, intrecciati e raccolti indietro\" e i capelli sono intrecciati ma sciolti, la risposta è no.",
              "Se un colore c'è solo in parte o è molto vicino, decidi tu: non esiste una risposta perfetta.")
     assert "colori" in intro
-    page = (TP.PAGE.replace("te_traits_A_v1", "te_bind_v1").replace("te_traits_alessandro.csv", "te_bind_rater.csv")
+    page = (TP.PAGE.replace("te_traits_A_v1", "te_bind_v2").replace("te_traits_alessandro.csv", "te_bind_rater.csv")
             .replace("C75 · tratti", "Ritratti · colori").replace("__INTRO__", intro))
     html = page.replace("__SCHED__", json.dumps(S, separators=(",", ":"))).replace("__QUESTIONS__", json.dumps(qtext, ensure_ascii=False)).replace("__REF__", "{}")
     (out / "index.html").write_text(html, encoding="utf-8")

@@ -1,13 +1,13 @@
 id,char,kind,word,question_it,question_en,prompt_words
 copper_on,D1,on,copper,I capelli sono color rame?,Is the hair copper-coloured?,thick braided copper hair
-copper_off,D1,off,copper,Vedi del color rame sulla pelle o negli occhi?,Do you see copper on the skin or in the eyes?,thick braided copper hair
-navy_on,D1,on,navy,La giubba imbottita sotto l'armatura è blu navy?,Is the padded jacket under the armour navy blue?,a navy blue gambeson
-navy_off,D1,off,navy,"Vedi del blu navy sulla pelle, sui capelli o negli occhi?","Do you see navy blue on the skin, the hair or in the eyes?",a navy blue gambeson
+copper_off,D1,off,copper,La pelle o gli occhi hanno una tinta color rame che una persona normale non avrebbe?,Do the skin or the eyes have a copper tint that a real person would not have?,thick braided copper hair
+navy_on,D1,on,navy,La giubba imbottita sotto l'armatura (o il vestito al suo posto) è blu navy?,Is the padded jacket under the armour (or the garment in its place) navy blue?,a navy blue gambeson
+navy_off,D1,off,navy,"La pelle, i capelli o gli occhi hanno una tinta blu navy che una persona normale non avrebbe?","Do the skin, the hair or the eyes have a navy blue tint that a real person would not have?",a navy blue gambeson
 amber_on,E2,on,amber,Gli occhi sono color ambra?,Are the eyes amber?,sharp amber eyes
-amber_off,E2,off,amber,Vedi del color ambra sulla pelle o sui capelli?,Do you see amber on the skin or the hair?,sharp amber eyes
-green_on,E2,on,green,Il cappuccio è verde scuro?,Is the hood dark green?,dark forest green hooded leather cowl
-green_off,E2,off,green,"Vedi del verde sulla pelle, sui capelli o negli occhi?","Do you see green on the skin, the hair or in the eyes?",dark forest green hooded leather cowl
-burgundy_on,O4,on,burgundy,La giacca imbottita è bordeaux?,Is the quilted jacket burgundy?,a burgundy quilted jack
-burgundy_off,O4,off,burgundy,"Vedi del bordeaux o rosso scuro sulla pelle, sui capelli o negli occhi?","Do you see burgundy or dark red on the skin, the hair or in the eyes?",a burgundy quilted jack
-bronze_on,O4,on,bronze,Il colletto a scaglie è color bronzo?,Is the scale collar bronze?,oxidized bronze scale-mail collar
-bronze_off,O4,off,bronze,"Vedi del color bronzo sulla pelle, sui capelli o negli occhi?","Do you see bronze on the skin, the hair or in the eyes?",oxidized bronze scale-mail collar
+amber_off,E2,off,amber,La pelle o i capelli hanno una tinta color ambra che una persona normale non avrebbe?,Do the skin or the hair have an amber tint that a real person would not have?,sharp amber eyes
+green_on,E2,on,green,Il cappuccio (o ciò che copre testa e spalle al suo posto) è verde scuro?,Is the hood (or what covers head and shoulders in its place) dark green?,dark forest green hooded leather cowl
+green_off,E2,off,green,"La pelle, i capelli o gli occhi hanno una tinta verde che una persona normale non avrebbe?","Do the skin, the hair or the eyes have a green tint that a real person would not have?",dark forest green hooded leather cowl
+burgundy_on,O4,on,burgundy,La giacca imbottita (o il vestito al suo posto) è bordeaux?,Is the quilted jacket (or the garment in its place) burgundy?,a burgundy quilted jack
+burgundy_off,O4,off,burgundy,"La pelle, i capelli o gli occhi hanno una tinta bordeaux o rosso scuro che una persona normale non avrebbe?","Do the skin, the hair or the eyes have a burgundy or dark red tint that a real person would not have?",a burgundy quilted jack
+bronze_on,O4,on,bronze,Il colletto a scaglie (o ciò che c'è al collo al suo posto) è color bronzo?,Is the scale collar (or what is at the neck in its place) bronze?,oxidized bronze scale-mail collar
+bronze_off,O4,off,bronze,"La pelle, i capelli o gli occhi hanno una tinta color bronzo che una persona normale non avrebbe?","Do the skin, the hair or the eyes have a bronze tint that a real person would not have?",oxidized bronze scale-mail collar

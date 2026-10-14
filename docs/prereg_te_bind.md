@@ -139,3 +139,21 @@ Three off-target rates:
 * A colour can appear on the body for reasons other than misbinding. For example, warm lighting can tint the skin
   bronze. L_0 and L_kept are there to absorb this.
 * Lost cases are not chosen in advance. Their number depends on the labels; below 10, M1 is inconclusive.
+
+## Amendment 1 (2026-10-14, before any label is kept)
+
+While trying the page, Alessandro found two problems. Both are fixed before anyone labels.
+
+* **Natural skin tones read as warm colours.** A tanned or flushed skin can look copper, amber or bronze, so the
+  "off" questions as written would partly measure skin tone. Every "off" question now asks for a tint that a real
+  person would not have ("La pelle o gli occhi hanno una tinta color rame che una persona normale non avrebbe?").
+  The instructions add that a tan, a red cheek or freckles do not count.
+* **The object can be gone.** For example, a photographic render with a shirt instead of armour and gambeson. A "no"
+  there would count as a lost colour even when the colour is still on the garment in its place. The "on" questions
+  for clothing now say "(or the garment in its place)". The instructions add the rule: judge what is in the
+  object's place; "cannot tell" only if that area is cut off or covered.
+
+**What does not change:** the measures, the rules, the key and the schedule.
+
+**The page.** It is rebuilt with a new storage key (`te_bind_v2`), so that answers given to the first wording are not
+carried over. Any answers given on the first page were a trial and are not used.
