@@ -351,6 +351,18 @@ def build(out):
     c.row([(im.crop(box), "", DIM) for im in ims], h=400)
     c.render(out / "12_block_derangement.png")
 
+    # 13 layer 0 of the text encoder knocked out: the prompt is drawn as text (C64 pilot, one prompt, one seed)
+    tp = "benchmark_te_pilot/P1_elfbrawler_{}_krea2_seed1618033_00001_.png"
+    c = Card("", "")
+    c.spec("Text encoder: Qwen3-VL-4B, 36 layers · each picture changes ONE half (attention or MLP) of ONE layer: × 0 switches it off, × 2 doubles it · same prompt, seed 1618033 · one prompt, one seed: observed, not tested · of 70 switch-offs (every half of every layer), only layer 0 turned the picture into text (2 of 2)")
+    c.row([(tp.format("CHK_repro_baseline"), "original", DIM),
+           (tp.format("L00_mlp_m1.00"), "layer 0 MLP × 0\nthe prompt, as letters", ACC),
+           (tp.format("L00_attn_m1.00"), "layer 0 attention × 0\nwords and noise", ACC)], h=500, label_size=21)
+    c.row([(tp.format("L00_attn_p1.00"), "layer 0 attention × 2\nloses antlers, eyepatch, fur", ACC),
+           (tp.format("L06_mlp_p1.00"), "layer 6 MLP × 2\nanother genre, another person", ACC),
+           (tp.format("L28_mlp_p1.00"), "layer 28 MLP × 2\nsame character, small changes", ACC)], h=500, label_size=21)
+    c.render(out / "13_layer0_text.png")
+
 
 def build_schema(out):
     """00 - what the edit is: the whole model, and the one crude multiplication applied to it."""
