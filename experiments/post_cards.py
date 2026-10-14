@@ -78,12 +78,26 @@ class Card:
                 gap = 10; total = sum(ws) + gap * (len(ws) - 1)
                 if total > W - 2 * PAD:
                     k = (W - 2 * PAD) / total; h = int(h * k); ws = [int(w * k) for w in ws]; total = sum(ws) + gap * (len(ws) - 1)
-                row = Image.new("RGB", (W, h + ls + 22), BG); d = ImageDraw.Draw(row); x = (W - total) // 2
-                for im, w, it in zip(ims, ws, items):
+                f = F(ls, True); meas = ImageDraw.Draw(Image.new("RGB", (1, 1)))
+                def wrap(lab, w):
+                    """Labels never overflow their picture: split on spaces (after ':' or '·' first), one or more lines."""
+                    out, cur = [], ""
+                    for word in lab.split(" "):
+                        t = (cur + " " + word).strip()
+                        if meas.textlength(t, font=f) <= w - 6 or not cur:
+                            cur = t
+                        else:
+                            out.append(cur); cur = word
+                    return out + [cur]
+                labs = [wrap(it[1], w) for it, w in zip(items, ws)]
+                nl = max(len(l) for l in labs); lh = int(ls * 1.25)
+                row = Image.new("RGB", (W, h + nl * lh + 16), BG); d = ImageDraw.Draw(row); x = (W - total) // 2
+                for im, w, it, ll in zip(ims, ws, items, labs):
                     row.paste(im.resize((w, h), Image.LANCZOS), (x, 0))
-                    lab = it[1]; f = F(ls, True)
-                    tw = d.textlength(lab, font=f)
-                    d.text((x + (w - tw) / 2, h + 6), lab, fill=it[2], font=f); x += w + gap
+                    for j, line in enumerate(ll):
+                        tw = d.textlength(line, font=f)
+                        d.text((x + (w - tw) / 2, h + 6 + j * lh), line, fill=it[2], font=f)
+                    x += w + gap
                 parts.append(row)
             elif b[0] == "stats":
                 n = len(b[1]); cw = (W - 2 * PAD) // n
