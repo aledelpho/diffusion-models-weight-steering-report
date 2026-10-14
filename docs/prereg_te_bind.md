@@ -77,7 +77,7 @@ Each word gets two yes/no questions:
 **Answers:** right arrow = yes, left arrow = no, down arrow = cannot tell, Backspace = back. It is the C75 protocol:
 
 * one question at a time over every picture of one character;
-* shuffled order with seed 7476;
+* shuffled order with seed 7478;
 * no dose, edit or seed shown;
 * no reference picture.
 
