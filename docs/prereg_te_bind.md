@@ -157,3 +157,11 @@ While trying the page, Alessandro found two problems. Both are fixed before anyo
 
 **The page.** It is rebuilt with a new storage key (`te_bind_v2`), so that answers given to the first wording are not
 carried over. Any answers given on the first page were a trial and are not used.
+
+## Withdrawn (2026-10-14, before any label)
+
+Alessandro withdrew C76 before any picture was labelled. On existing pictures the "off" questions cannot be defined
+consistently: a colour named in the prompt can reach the body in ways a real person could also have (copper or bronze
+skin, blue eyes from "navy"). No wording separates misbinding from natural variation. The binding question will be
+asked again with renders made for it: prompts whose colours cannot belong to a body, with swapped controls. No result
+of C76 exists. The key, schedule, page and tally stay in the repository as a record of the attempt.
