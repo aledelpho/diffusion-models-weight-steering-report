@@ -351,16 +351,20 @@ def build(out):
     c.row([(im.crop(box), "", DIM) for im in ims], h=400)
     c.render(out / "12_block_derangement.png")
 
-    # 13 layer 0 of the text encoder knocked out: the prompt is drawn as text (C64 pilot, one prompt, one seed)
-    tp = "benchmark_te_pilot/P1_elfbrawler_{}_krea2_seed1618033_00001_.png"
+    # 13 layer 0 of the text encoder broken: half of it -> the prompt written as text; all of it -> noise (C64, C77)
+    def l0(ch, cond):
+        if ch == "P1_elfbrawler" and cond != "block":
+            return f"benchmark_te_pilot/P1_elfbrawler_L00_{cond}_m1.00_krea2_seed1618033_00001_.png"
+        fold = "benchmark_te_layer0_block" if cond == "block" else "benchmark_te_layer0"
+        return f"{fold}/{ch}_L00_{cond}_m1.00_krea2_seed1618033_00001_.png"
+    names = {"P1_elfbrawler": "elf, comic", "D1_dwarf_paladin": "dwarf, comic", "R6_dragonborn_cleric": "dragonborn, comic",
+             "D1W_dwarf_paladin_watercolor": "dwarf, watercolour"}
     c = Card("", "")
-    c.spec("Text encoder: Qwen3-VL-4B, 36 layers · each picture changes ONE half (attention or MLP) of ONE layer: × 0 switches it off, × 2 doubles it · same prompt, seed 1618033 · one prompt, one seed: observed, not tested · of 70 switch-offs (every half of every layer), only layer 0 turned the picture into text (2 of 2)")
-    c.row([(tp.format("CHK_repro_baseline"), "original", DIM),
-           (tp.format("L00_mlp_m1.00"), "layer 0 MLP × 0\nthe prompt, as letters", ACC),
-           (tp.format("L00_attn_m1.00"), "layer 0 attention × 0\nwords and noise", ACC)], h=500, label_size=21)
-    c.row([(tp.format("L00_attn_p1.00"), "layer 0 attention × 2\nloses antlers, eyepatch, fur", ACC),
-           (tp.format("L06_mlp_p1.00"), "layer 6 MLP × 2\nanother genre, another person", ACC),
-           (tp.format("L28_mlp_p1.00"), "layer 28 MLP × 2\nsame character, small changes", ACC)], h=500, label_size=21)
+    c.spec("Text encoder: Qwen3-VL-4B · layer 0 (the first) switched off: its attention only, its MLP only, or both (× 0) · nothing else changed · 4 prompts, seed 1618033 · text with readable prompt fragments: attention off 4 of 4, MLP off 2 of 4, whole layer off 0 of 4 · a curiosity, not a tested result")
+    for k, ch in enumerate(names):
+        heads = ["attention off", "MLP off", "whole layer off"] if k == 0 else ["", "", ""]
+        c.row([(l0(ch, cond), (h + "\n" if h else "") + names[ch] if cond == "attn" else h, ACC if h else DIM)
+               for cond, h in zip(("attn", "mlp", "block"), heads)], h=330, label_size=19)
     c.render(out / "13_layer0_text.png")
 
 
