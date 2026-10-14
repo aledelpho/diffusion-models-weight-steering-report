@@ -155,6 +155,7 @@ def build(out):
     c.text(HOW + "each row is one character. Left: the original. Right: the same seed after doubling one layer of the text "
            "encoder. Nothing gets noisy or broken, but the style and even the person change, and the same layer pushes the "
            "two characters in different directions.", 26, INK)
+    c.spec("Text encoder: Qwen3-VL-4B, 36 layers · edit: the gate, up and down matrices of ONE layer's MLP × 2 each (d = +1), so the layer's output grows up to about × 8 (estimate) · seed 2645751")
     for ch in ("D1_dwarf_paladin", "T7_tiefling_bard"):
         c.row([(pc(ch, "2645751"), "original", DIM),
                (f"benchmark_te_characters/{ch}_L06_mlp_p1.00_krea2_seed2645751_00001_.png", "text-encoder layer 6 doubled", ACC),
@@ -168,6 +169,7 @@ def build(out):
     c.text(HOW + "each pair is the same prompt and seed. Left: the prompt asks for Western comics. Right: the style words are "
            "removed. The elf (faces enlarged, two seeds) loses the inked, hatched shadows and turns to flat anime shading; the "
            "other characters fall back to painting or a realistic render.", 26, INK)
+    c.spec("No weight edited · same prompt with and without its style words ('realistic western comics style, bold ink outlines, hatched shadows' for the elf; 'Western comics style' for the portraits) · seeds 3141592, 1234567 (elf) and 2645751 (portraits)")
     def face(path):
         im = Image.open(IMG / path).convert("RGB"); w, h = im.size
         return im.crop((int(0.08 * w), 0, int(0.72 * w), int(0.5 * h)))   # the face, enlarged: ink and hatching vs flat cel shading
@@ -187,6 +189,7 @@ def build(out):
     c = Card("", "")
     c.text(HOW + "each row is one phrase used alone as the whole prompt, at four different seeds. The model adds things the "
            "phrase never asked for, every time.", 26, INK)
+    c.spec('No weight edited · the phrase alone is the whole prompt · seeds 3141592, 1234567, 1618033, 2718281')
     for w, lab in (("W37", '"female dwarf"  → always a beard'), ("W41", '"uniform"  → always a schoolgirl'),
                    ("W00", '"realistic western comics style"  → always cowboys')):
         c.text(lab, 28, INK, True)
@@ -214,6 +217,7 @@ def build(out):
     c.text(HOW + "left to right, one text-encoder layer (6) is turned up a little more each time. Under each picture: how many "
            "of the half-orc's traits are gone (orc features, undercut, warrior knot, scale collar…) and whether it is still a "
            "comic. The traits go first; the comic style only breaks at the end.", 26, INK)
+    c.spec("Text encoder layer 6 MLP: gate, up, down each × (1 + d), the multiplier under each picture; the layer's output grows up to about (1 + d)³ (estimate) · random pushes: noise added to what the text encoder hands over, matched in size to the real edit, varying per word or with channels shuffled · 8 traits judged on the original · seed 2645751")
     row = []
     for d in ("0.00", "0.40", "0.60", "0.70", "0.80", "1.00"):
         k, n = counts_A("L06_mlp", d)
@@ -248,6 +252,7 @@ def build(out):
     c = Card("", "")
     c.text(HOW + "this is a drawing of the pattern, not a measured picture. When I edit the text encoder, words shift a "
            "little. Words of the same comma-phrase (same colour) shift together; the packets break at the commas.", 26, INK)
+    c.spec("Measured on 20 text-encoder edits × 12 readings of the conditioning (241 encodes, no images) · the similarity of two words' shifts halves after about 3 words")
     im = Image.new("RGB", (W - 2 * PAD, 260), BG); d = ImageDraw.Draw(im)
     groups = [["dark", "green", "hooded", "cowl"], ["brass", "buckles"], ["a", "single", "feather", "earring"]]
     cols = [(236, 120, 60), (90, 160, 230), (120, 200, 120)]
@@ -275,6 +280,7 @@ def build(out):
     c = Card("", "")
     c.text(HOW + "same picture and seed; each time one block of the image model is turned up. A middle block redraws the "
            "content (dress, pose, light). The late blocks keep the same drawing and change only colour or surface.", 26, INK)
+    c.spec('Image model: 28 blocks · edit: every weight matrix of ONE block × (1 + d): block 9 × 1.55, block 23 × 1.30, block 26 × 1.15 · seed 1234567 · upper-right panel of a four-panel comic page')
     c.row([(top(f"{root}/{P}_baseline_krea2_seed{sd}_00001_.png"), "original", DIM),
            (b(9), "middle block 9:\ncontent changes", ACC), (b(23), "late block 23:\nless colour", OK), (b(26), "late block 26:\nsurface, contrast", OK)],
           h=440, label_size=22)
@@ -284,6 +290,7 @@ def build(out):
     c = Card("", "")
     c.text(HOW + "each row is one picture. Middle columns: only block 23 is turned down or up, and only the colour moves. "
            "Last column: \"colorful\" added to the prompt, and the picture itself changes (hair colour, objects, layout).", 26, INK)
+    c.spec("Image model block 23 only, all its weight matrices × (1 + d): × 0.55 (more colour), × 1.30 (less colour) · the words added: 'colorful, vivid highly saturated colors' · seed 2718281")
     bb = "benchmark_blk23_colorful"
     for p_, sd2 in (("E3_oil", "2718281"), ("E1_cartoon", "2718281"), ("C4_stilllife", "2718281")):
         c.row([(f"{bb}/{p_}_baseline_krea2_seed{sd2}_00001_.png", "original", DIM),
@@ -298,6 +305,7 @@ def build(out):
            "to lean toward animation: flatter colours, simpler lines and shapes (look at the hatching on faces and clothes, "
            "the texture of the cloak, the ornaments). A person who didn't know which was which, given that description, "
            "picked the preset version as the closer match 56 times out of 56.", 26, INK)
+    c.spec("Preset: 10 of the tuner's 34 multipliers changed, from −0.35 to +0.15, frozen before the test · seed 3316624 · blind test: 28 pairs (7 characters × 4 seeds), each shown twice with sides swapped = 56 choices")
     chars = ("H3_halfling_druid", "R6_dragonborn_cleric", "T7_tiefling_bard")
     c.row([(pc(x, "3316624"), "original", DIM) for x in chars], h=420)
     c.row([(pc(x, "3316624", "preset"), "with the preset", ACC) for x in chars], h=420)
@@ -309,6 +317,7 @@ def build(out):
     c = Card("", "")
     c.text(HOW + "each column is the same prompt with its phrases in a different order. Top: no edit, always a Western comic. "
            "Middle: one text-encoder edit sends all five orders to anime. Bottom: another edit sends them to different styles.", 26, INK)
+    c.spec("Elf brawler, seed 3141592 · edits: one text-encoder layer's MLP (gate, up, down) × 2 · genre labels: mine")
     c.row([(f"benchmark_prompt_order/{o}_baseline_krea2_seed3141592_00001_.png", GEN[gen["originali"][i]], DIM) for i, o in enumerate(orders)], h=250, label_size=18)
     c.text("text-encoder layer 5 doubled: every order → anime", 24, INK, True)
     c.row([(f"benchmark_te_characters/{o}_L05_mlp_p1.00_krea2_seed3141592_00001_.png", GEN[gen["L05_mlp_p1.00"][i]], ACC) for i, o in enumerate(orders)], h=250, label_size=18)
@@ -337,6 +346,7 @@ def build(out):
     c.text(HOW + "each dot is one of 16 new comic prompts (5 seeds averaged). Dots right of the dashed line got more "
            "cross-hatching in the shadows after the edit. Block reordering: all 16 on the right. A random edit of the same "
            "size: scattered on both sides. Measured with a statistic of stroke directions; by eye the change is subtle.", 26, INK)
+    c.spec('Edit: weights of whole blocks moved between positions in the checkpoint, + and − direction, relative weight change 5.4% · random edit: weights changed by the same 5.4% with random signs · 16 prompts × 5 seeds · measure: crosshatch entropy (variety of stroke directions)')
     c.image(chart(draw, 10, 3.6))
     c.render(out / "10_hatching.png")
 
@@ -354,6 +364,7 @@ def build(out):
     c.text(HOW + "each dot is one text-encoder edit. Further right: the edit changes the numbers the text encoder passes to the "
            "image model more. Higher: the picture changed more, judged by eye. The two rise together, so the size of the change "
            "can be estimated before rendering. It mostly separates the two kinds of edit (switched off vs doubled).", 26, INK)
+    c.spec('Each dot: one text-encoder edit (one layer, attention or MLP, × 0 or × 2) on the elf prompt, seed 3141592 · x: mean relative change of the conditioning · y: mean intensity of change by eye (0-3) over 5 word orders · Spearman 0.80 (pre-registered)')
     c.image(chart(draw2, 10, 4.6))
     c.render(out / "11_predict_change.png")
 
