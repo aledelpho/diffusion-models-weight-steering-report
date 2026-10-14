@@ -89,7 +89,7 @@ class Card:
                         else:
                             out.append(cur); cur = word
                     return out + [cur]
-                labs = [wrap(it[1], w) for it, w in zip(items, ws)]
+                labs = [sum((wrap(part, w) for part in it[1].split("\n")), []) for it, w in zip(items, ws)]
                 nl = max(len(l) for l in labs); lh = int(ls * 1.25)
                 row = Image.new("RGB", (W, h + nl * lh + 16), BG); d = ImageDraw.Draw(row); x = (W - total) // 2
                 for im, w, it, ll in zip(ims, ws, items, labs):
@@ -167,26 +167,51 @@ def build(out):
         c.row([(f"benchmark_te_default/{w}_word_krea2_seed{s}_00001_.png", f"seed {s}", DIM) for s in ("3141592", "1234567", "1618033")], h=340)
     c.render(out / "03_words_alone.png")
 
-    # 04 the character goes first
-    R = {(r["char"], r["seed"], r["edit"], r["dose"], r["variant"]): r for r in rd("te_traits_B2_by_picture.csv")}
+    # 04 the character goes first (rebuilt 2026-10-14: every picture says what it lost, from the blind labels)
+    NAMES = {"o_orc": "orc features", "o_undercut": "undercut", "o_knot": "warrior knot", "o_scale": "scale collar",
+             "o_young": "young", "o_jack": "quilted jacket", "o_female": "female", "o_greyeyes": "grey eyes",
+             "o_tusks": "tusks", "o_snarl": "snarl", "o_dirt": "dirt", "c_frontal": "frontal", "c_whitebg": "white background"}
     ch, s = "O4_halforc_fighter", "2645751"
-    c = Card("4 · When the text encoder is altered, the character goes first",
-             "One text-encoder layer amplified step by step. The half-orc stops being a half-orc around 0.6-0.7, while she is "
-             "still a comic; only later does the style change.")
-    c.spec("Text encoder layer 6 MLP: gate, up, down each × (1 + d), so the layer's output grows up to about (1 + d)³ (estimate) · random pushes: noise added to what the text encoder hands over, "
-           "matched in size to the real edit, varying per word (token) or with channels shuffled (permuted) · seed 2645751")
+    A = {(r["edit"], r["dose"]): r for r in rd("te_traits_by_picture.csv") if r["char"] == "O4" and r["seed"] == s}
+    style_from = next(r["cambia_da"] for r in rd("te_dose_alessandro.csv") if r["grid"] == "dose_L06" and r["row"] == f"{ch} · {s}")
     def dose_p(d):
         return pc(ch, s) if d == "0" else (f"benchmark_te_characters/{ch}_L06_mlp_p1.00_krea2_seed{s}_00001_.png" if d == "1.00"
                                            else f"benchmark_te_dose/{ch}_L06_mlp_p{d}_krea2_seed{s}_00001_.png")
-    c.row([(dose_p(d), "original" if d == "0" else f"d {d} (× {1 + float(d):.1f})", ACC if d in ("0.70", "1.00") else DIM)
-           for d in ("0", "0.40", "0.60", "0.70", "0.80", "1.00")], h=320, label_size=20)
-    c.text("Same size of push, random direction: the character survives.", 28, INK, True)
-    c.row([(pc(ch, s), "original", DIM), (dose_p("1.00"), f"real edit · traits kept {float(R[(ch[:2], s, 'L06_mlp', '1.00', 'real')]['R']):.2f}", ACC),
-           (f"benchmark_te_traits/{ch}_L06_mlp_p1.00_token_krea2_seed{s}_00001_.png", f"random push · kept {float(R[(ch[:2], s, 'L06_mlp', '1.00', 'token')]['R']):.2f}", OK),
-           (f"benchmark_te_traits/{ch}_L06_mlp_p1.00_permuted_krea2_seed{s}_00001_.png", f"random push · kept {float(R[(ch[:2], s, 'L06_mlp', '1.00', 'permuted')]['R']):.2f}", OK)],
-          h=360, label_size=20)
-    c.stats([("0.48 vs 0.88", "share of prompt traits kept at full strength, layer 6, average of 6 pictures: real edit vs random pushes (labelled blind by a second person)", ACC),
-             ("0.63 vs 0.94", "same for layer 14", ACC)])
+    def lab_a(d):
+        r = A[("", "0.00")] if d == "0" else A[("L06_mlp", d)]
+        lost = [NAMES.get(t, t) for t in r["lost"].split(";") if t]
+        style = "comic" if d == "0" or float(d) < float(style_from) else "realistic"
+        head = "original" if d == "0" else f"× {1 + float(d):.1f}"
+        return (f"{head}\ntraits kept {float(r['R']):.2f}\nlost: {', '.join(lost) if lost else 'nothing'}\nstyle: {style}",
+                ACC if lost else DIM)
+    c = Card("4", "")
+    c.spec("Text encoder layer 6 MLP: gate, up, down each × (1 + d), shown as the multiplier under each picture · "
+           "'traits kept' = share of the traits the prompt asks for (and the original shows) that are still there, blind yes/no labels · seed 2645751")
+    c.text("Turning one text-encoder layer up: the half-orc loses her traits first, the drawing style changes later", 26, INK, True)
+    c.row([(dose_p(d), *lab_a(d)) for d in ("0", "0.40", "0.60", "0.70", "0.80", "1.00")], h=300, label_size=17)
+    # second row: the same size of push in a random direction, labelled by the second person
+    K = {r["item"]: r for r in rd("te_traits_key_B2.csv")}
+    lab2 = {}
+    for r in rd("te_traits_B2_rater2.csv"):
+        if r["showing"] == "1":
+            k = K[r["item"]]
+            if k["char"] == "O4" and k["seed"] == s and k["dose"] in ("0.00", "1.00") and k["edit"] in ("", "L06_mlp") and k["variant"] != "plain_B0":
+                lab2[(k["variant"], r["question"])] = r["answer"]
+    def lost2(v):
+        return [NAMES.get(q, q) for (vv, q), a in lab2.items() if vv == v and q in NAMES and a == "no" and lab2.get(("original", q)) == "sì"]
+    R = {(r["variant"]): r for r in rd("te_traits_B2_by_picture.csv") if r["char"] == "O4" and r["seed"] == s and r["dose"] in ("0.00", "1.00") and r["edit"] in ("", "L06_mlp") and r["variant"] != "plain_B0"}
+    def lab_b(v, head):
+        L = lost2(v)
+        kept = "" if v == "original" else f"\ntraits kept {float(R[v]['R']):.2f}"
+        return (f"{head}{kept}\nlost: {', '.join(sorted(L)) if L else 'nothing'}", ACC if v == "real" else (OK if v != "original" else DIM))
+    c.text("Same size of push (× 2.0), but in a random direction: most traits stay (labels by a second, blind person)", 26, INK, True)
+    c.row([(pc(ch, s), *lab_b("original", "original")),
+           (dose_p("1.00"), *lab_b("real", "real edit")),
+           (f"benchmark_te_traits/{ch}_L06_mlp_p1.00_token_krea2_seed{s}_00001_.png", *lab_b("token", "random push (per word)")),
+           (f"benchmark_te_traits/{ch}_L06_mlp_p1.00_permuted_krea2_seed{s}_00001_.png", *lab_b("permuted", "random push (shuffled)"))],
+          h=330, label_size=18)
+    c.stats([("0.48 vs 0.88", "traits kept at × 2.0, layer 6, average of 6 pictures: real edit vs random pushes", ACC),
+             ("0.63 vs 0.94", "the same for layer 14", ACC)])
     c.render(out / "04_character_goes_first.png")
 
     # 05 commas (schematic)
