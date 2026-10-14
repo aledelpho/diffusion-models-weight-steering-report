@@ -295,8 +295,9 @@ def build(out):
     # 08 preset
     c = Card("", "")
     c.text(HOW + "top: three characters the preset was never tuned on. Bottom: the same seed with the preset. It was meant "
-           "to give a more American-comic look, with flatter colours and cleaner lines. A person who didn't know which was "
-           "which picked the preset version as the closer match 56 times out of 56.", 26, INK)
+           "to lean toward animation: flatter colours, simpler lines and shapes (look at the hatching on faces and clothes, "
+           "the texture of the cloak, the ornaments). A person who didn't know which was which, given that description, "
+           "picked the preset version as the closer match 56 times out of 56.", 26, INK)
     chars = ("H3_halfling_druid", "R6_dragonborn_cleric", "T7_tiefling_bard")
     c.row([(pc(x, "3316624"), "original", DIM) for x in chars], h=420)
     c.row([(pc(x, "3316624", "preset"), "with the preset", ACC) for x in chars], h=420)
