@@ -316,11 +316,11 @@ def build(out):
         ax.axvline(0, color="#888888", ls="--", lw=1)
         ax.scatter(re_, [1] * len(re_), s=90, color="#ec783c", zorder=3)
         ax.scatter(rnd, [0] * len(rnd), s=90, color="#5abe82", zorder=3)
-        ax.set_yticks([0, 1]); ax.set_yticklabels(["random edit,\nsame size", "block\nreordering"], color="#eeeeee", fontsize=13)
+        ax.set_yticks([0, 1]); ax.set_yticklabels(["random edit,\nsame size", "multipliers\nreassigned"], color="#eeeeee", fontsize=13)
         ax.set_ylim(-0.6, 1.6); ax.set_xlim(-0.5, 0.6)
         ax.set_xlabel("← fewer crossing strokes      change in shadow hatching after the edit      more crossing strokes →", color="#bbbbbb", fontsize=12)
     c = Card("", "")
-    c.spec('Edit: weights of whole blocks moved between positions in the checkpoint, + and − direction, relative weight change 5.4% · random edit: weights changed by the same 5.4% with random signs · 16 prompts × 5 seeds · measure: crosshatch entropy (variety of stroke directions)')
+    c.spec('Edit: the per-block multipliers of a hand-made preset handed to different blocks (image model and text encoder), + and − direction, relative weight change 5.4% · random edit: weights changed by the same 5.4% with random signs · 16 prompts × 5 seeds · measure: crosshatch entropy (variety of stroke directions)')
     c.image(chart(draw, 10, 3.6))
     c.render(out / "10_hatching.png")
 
@@ -338,6 +338,18 @@ def build(out):
     c.spec('Each dot: one text-encoder edit (one layer, attention or MLP, × 0 or × 2) on the elf prompt, seed 3141592 · x: mean relative change of the conditioning · y: mean intensity of change by eye (0-3) over 5 word orders · Spearman 0.80 (pre-registered)')
     c.image(chart(draw2, 10, 4.6))
     c.render(out / "11_predict_change.png")
+
+    # 12 block derangement on the half-orc warrior (stage 7, prompt I07, seed 1337)
+    b7a, b7 = "benchmark_stage7a/renders", "benchmark_stage7/renders"
+    ims = [Image.open(IMG / f"{b7a}/I07_baseline_seed1337_00001_.png").convert("RGB")] + \
+          [Image.open(IMG / f"{b7}/I07_blockshuf_{k}_seed1337_00001_.png").convert("RGB") for k in ("neg", "pos")]
+    labs = [("original", DIM), ("edit, − direction", ACC), ("edit, + direction", ACC)]
+    c = Card("", "")
+    c.spec("Edit: the per-block multipliers of a hand-made preset (about ±2-5% per block), handed to different blocks of the image model and of the text encoder (each block gets another block's multiplier); − flips every sign · total relative weight change 5.4% · prompt asks for granite armour, an iron jaw visor, hatched shadows · seed 1337")
+    c.row([(im, l, col) for im, (l, col) in zip(ims, labs)], h=560)
+    box = (560, 250, 960, 650)
+    c.row([(im.crop(box), "", DIM) for im in ims], h=400)
+    c.render(out / "12_block_derangement.png")
 
 
 def build_schema(out):
