@@ -100,7 +100,6 @@
     <li><a href="story.html">The story, with pictures</a></li>
     <li><a href="faq.html">FAQ: what I learned, for everyone</a></li>
     <li><a href="#intro">Abstract and introduction</a></li>
-    <li><a href="try-the-test.html">Try the blind test</a></li>
     <li><a href="#claims">What holds, what does not</a></li>
   </ul>
   <h2>Elsewhere</h2>
@@ -162,10 +161,6 @@ Nothing is trained, nothing runs at inference beyond the patched weights, and an
 four drawn characters, wrote a preset of ten small numbers aiming at <em>a more American-comic look, flat
 colours and clean lines</em>, froze it, and applied it to seven characters at four new seeds. Three of them
 had never been rendered while I was tuning it. Here they are, base above and preset below:</p>
-<blockquote>
-<p><strong>Try it yourself.</strong> The same blind choice, 14 pairs, takes two minutes: <a href="try-the-test.html">take the test</a>. Take it
-before looking at the pictures below if you can.</p>
-</blockquote>
 <p><img alt="The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow." src="../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp" /></p>
 <p>Someone who had never seen the project, shown each pair side by side without knowing which was which,
 picked the preset as the closer match to that description every single time: 56 out of 56. The characters
@@ -2206,10 +2201,6 @@ little more than a change of seed moves it, and an expression can go flat. The t
 observer and no sheets with two different characters.</p>
 </blockquote>
 <h2 id="p-28-portrait-preset--in-two-minutes">In two minutes</h2>
-<blockquote>
-<p><strong>Try it yourself.</strong> The same blind choice, 14 pairs, takes two minutes: <a href="try-the-test.html">take the test</a>. Take it
-before looking at the pictures below if you can.</p>
-</blockquote>
 <p>Seven character portraits written in one template ("Western comics style, close-up portrait,
 frontal view.", then the character). On four of them I looked at every single block pushed both
 ways (457 renders) and wrote a preset by eye: ten blocks, doses between 0.05 and 0.35. What I
@@ -2441,8 +2432,9 @@ analysis:
 <li><strong>Eye pass:</strong> <code>data/portrait_preset_eye_alessandro.csv</code>, deposited before any number.</li>
 <li><strong>Phase A plan:</strong> 457 rows written by <code>experiments/portraits.py</code> (<code>--plan</code>), committed beside the
   other bench plans.</li>
-<li><strong>Public version of the blind test:</strong> <code>experiments/build_try_the_test.py</code> builds the page from 14
-  pairs at seeds 3605551 and 4123105. Answers shared through it are kept apart from this result.</li>
+<li><strong>Public version of the blind test:</strong> <code>experiments/build_try_the_test.py</code> builds a page from 14
+  pairs at seeds 3605551 and 4123105. It is no longer linked from the site (2026-10-14): the blind tests will
+  be published together, all or none.</li>
 </ul>
 </section>
 <section id="p-29-inside-the-block">

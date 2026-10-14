@@ -138,9 +138,6 @@ at *a more American-comic look leaning toward animation: flat colours and clean 
 only then rendered seven characters at four new seeds, with and without it. The halfling, the dragonborn
 and the tiefling had never been rendered while I was tuning.
 
-> **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
-> before looking at the pictures below if you can.
-
 ![The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.](../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp)
 
 By the numbers, the preset changes the three new characters in a common direction about as coherently as

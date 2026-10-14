@@ -76,11 +76,12 @@ nothing in the settings.
 
 ## Step 5 — check both sites (after one or two minutes)
 
-1. https://aledelpho.github.io/diffusion-models-weight-steering-report/results/index.html — the page list must
-   include **29 · Inside a block**, and the related work must mention **Calibri** (reference 19).
-2. https://aledelpho.github.io/krea2-weight-knobs-results/ — the same two checks; open page 29 and confirm its
-   three figures load.
-3. https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html — still opens.
+1. https://aledelpho.github.io/diffusion-models-weight-steering-report/results/index.html — the "Start here" list
+   must include **FAQ: what I learned, for everyone** and must no longer include a blind-test link.
+2. https://aledelpho.github.io/krea2-weight-knobs-results/ — the same check; then open
+   https://aledelpho.github.io/krea2-weight-knobs-results/faq.html and confirm it loads.
+3. https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html — must now give **404** (the blind
+   test is no longer published, 2026-10-14). Do not delete anything by hand to obtain this: step 4 already does it.
 
 ## Step 6 — paste back
 

@@ -203,7 +203,6 @@ def results_site(index: str, pages: list[dict]) -> tuple[str, str, str]:
                  '    <li><a href="story.html">The story, with pictures</a></li>\n'
                  '    <li><a href="faq.html">FAQ: what I learned, for everyone</a></li>\n'
                  '    <li><a href="#intro">Abstract and introduction</a></li>\n'
-                 '    <li><a href="try-the-test.html">Try the blind test</a></li>\n'
                  '    <li><a href="#claims">What holds, what does not</a></li>\n'
                  "  </ul>\n  <h2>Elsewhere</h2>\n  <ul>\n"
                  f'    <li><a href="{MAIN_TREE}notebook">The exploratory notebook</a></li>\n'

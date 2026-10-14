@@ -53,9 +53,6 @@ four drawn characters, wrote a preset of ten small numbers aiming at *a more Ame
 colours and clean lines*, froze it, and applied it to seven characters at four new seeds. Three of them
 had never been rendered while I was tuning it. Here they are, base above and preset below:
 
-> **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
-> before looking at the pictures below if you can.
-
 ![The three characters never seen while the preset was tuned, large, at one seed: each keeps face, hair and costume, while the preset flattens the colour, removes many wrinkle and hatching lines, simplifies the ornament, and turns the tiefling's patterned jacket plain yellow.](../assets/28-portrait-preset/F28.4_portrait_held_out_large.webp)
 
 Someone who had never seen the project, shown each pair side by side without knowing which was which,

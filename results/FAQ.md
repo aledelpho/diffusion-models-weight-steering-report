@@ -210,7 +210,6 @@ What I learned, often the hard way:
    judging one picture at a time.
 4. **Ask someone who does not know which is which.**
    * Give them the description of the look you want, and the pair, in random order.
-   * You can try it on my preset: [the blind test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html).
 5. **Use more than one seed and more than one subject.** An effect on one picture is an anecdote.
 6. **Compare with a fair control.**
    * For example, a random change of the same size.

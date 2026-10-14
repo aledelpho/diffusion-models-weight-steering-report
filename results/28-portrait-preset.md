@@ -78,9 +78,6 @@ claims:
 
 ## In two minutes
 
-> **Try it yourself.** The same blind choice, 14 pairs, takes two minutes: [take the test](https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html). Take it
-> before looking at the pictures below if you can.
-
 Seven character portraits written in one template ("Western comics style, close-up portrait,
 frontal view.", then the character). On four of them I looked at every single block pushed both
 ways (457 renders) and wrote a preset by eye: ten blocks, doses between 0.05 and 0.35. What I
@@ -263,5 +260,6 @@ analysis:
 * **Eye pass:** `data/portrait_preset_eye_alessandro.csv`, deposited before any number.
 * **Phase A plan:** 457 rows written by `experiments/portraits.py` (`--plan`), committed beside the
   other bench plans.
-* **Public version of the blind test:** `experiments/build_try_the_test.py` builds the page from 14
-  pairs at seeds 3605551 and 4123105. Answers shared through it are kept apart from this result.
+* **Public version of the blind test:** `experiments/build_try_the_test.py` builds a page from 14
+  pairs at seeds 3605551 and 4123105. It is no longer linked from the site (2026-10-14): the blind tests will
+  be published together, all or none.
