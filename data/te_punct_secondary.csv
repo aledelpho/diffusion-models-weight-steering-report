@@ -1,0 +1,45 @@
+question,prompt,primary,negative_wording,text,original,comma,period,semicolon,nopunct,break,nolabels
+t01,P3_totem,1,0,L'orco è alla base della piramide?,8/8,8/8,8/8,8/8,8/8,8/8,8/8
+t02,P3_totem,1,0,"La tiefling è nel mezzo, sulle spalle dell'orco?",8/8,8/8,8/8,8/8,8/8,5/6,7/8
+t03,P3_totem,1,0,L'elfa è in cima?,8/8,8/8,8/8,8/8,8/8,8/8,7/8
+t04,P3_totem,1,0,"Il gatto è aggrappato all'elfa, in aria?",0/7,2/5,1/5,2/4,2/7,0/8,2/7
+t05,P3_totem,1,0,L'orco ha la pelle verde?,8/8,8/8,8/8,8/8,8/8,8/8,8/8
+t06,P3_totem,1,0,La tiefling ha la pelle rossa e le corna?,8/8,8/8,8/8,8/8,8/8,1/8,8/8
+t07,P3_totem,1,0,L'elfa ha corna da cervo e la benda sull'occhio?,7/8,7/8,8/8,7/8,8/8,8/8,6/8
+t08,P3_totem,1,0,Il guanto d'argento è dell'elfa?,8/8,8/8,8/8,8/8,8/8,0/0,8/8
+t09,P3_totem,1,0,Scintille blu escono solo dal guanto dell'elfa?,0/8,0/8,0/8,0/8,0/8,0/8,0/8
+t10,P3_totem,1,0,Il gatto ha pelo fulvo e occhi gialli?,8/8,7/8,7/8,7/8,4/8,0/8,7/8
+t11,P3_totem,1,0,L'orco ha gli occhi chiusi e le braccia incrociate?,8/8,8/8,8/8,8/8,8/8,0/8,8/8
+t12,P3_totem,1,1,Nessun altro oltre alla tiefling ha pelle rossa o corna da ariete?,8/8,8/8,8/8,8/8,8/8,0/7,8/8
+t14,P3_totem,0,1,L'orco non ha armatura di metallo?,8/8,7/8,8/8,8/8,8/8,1/8,8/8
+t15,P3_totem,0,1,La tiefling non ha le braccia incrociate?,1/8,2/8,4/8,1/8,5/8,6/7,8/8
+t16,P3_totem,0,0,Il guanto dell'elfa è d'argento?,8/8,8/8,8/8,8/8,8/8,3/3,8/8
+p01,P4_prison,1,0,"L'elfa è al centro, in primo piano?",8/8,8/8,8/8,8/8,8/8,8/8,8/8
+p02,P4_prison,1,0,Dal guanto dell'elfa escono fulmini blu?,8/8,8/8,8/8,8/8,8/8,2/8,8/8
+p03,P4_prison,1,0,Fulmini blu escono solo dall'elfa?,8/8,8/8,8/8,8/8,8/8,2/8,8/8
+p04,P4_prison,1,0,L'orco è in alto a sinistra?,8/8,8/8,8/8,8/8,8/8,8/8,8/8
+p05,P4_prison,1,0,L'orco ha pelle verde e zanne?,8/8,8/8,8/8,8/8,8/8,2/7,8/8
+p06,P4_prison,1,0,Il gatto è in basso a destra?,8/8,8/8,8/8,8/8,8/8,0/8,8/8
+p07,P4_prison,1,0,Il gatto tiene un mazzo di chiavi?,8/8,6/8,8/8,6/8,5/8,0/8,7/8
+p08,P4_prison,1,0,La tiefling è dietro il gruppo con il martello alzato?,8/8,8/8,8/8,8/8,8/8,0/8,8/8
+p09,P4_prison,1,0,La tiefling ha pelle rossa e corna?,8/8,8/8,8/8,8/8,8/8,0/8,8/8
+p10,P4_prison,1,0,C'è un'aura o un'onda dorata attorno alla tiefling o al martello?,0/8,0/8,0/8,1/8,0/8,0/8,0/8
+p11,P4_prison,1,0,C'è un'esplosione arancione dietro il cancello?,8/8,8/8,8/8,8/8,8/8,8/8,8/8
+p12,P4_prison,1,1,Nessun altro oltre alla tiefling ha pelle rossa o corna?,8/8,8/8,8/8,8/8,8/8,0/8,8/8
+p13,P4_prison,0,0,"Il guanto dell'elfa è d'argento, mano inclusa, senza verde?",2/8,2/8,2/8,0/8,4/8,0/8,7/8
+s01,P3_totem,0,0,"Ci sono tutti e quattro i personaggi (orco, tiefling, elfa, gatto)?",8/8,8/8,8/8,8/8,7/8,0/8,8/8
+s02,P3_totem,0,0,"Il gatto è un gatto umanoide (vestito, con corpo da persona), non un gatto animale?",8/8,8/8,7/8,8/8,7/8,0/8,1/8
+s03,P3_totem,0,1,Non ci sono personaggi in più oltre ai quattro?,8/8,8/8,8/8,8/8,8/8,8/8,8/8
+s04,P4_prison,0,0,"Ci sono tutti e quattro i personaggi (elfa, orco, gatto, tiefling)?",8/8,8/8,8/8,8/8,8/8,0/8,8/8
+s05,P4_prison,0,0,"Il gatto è un gatto umanoide (vestito, con corpo da persona), non un gatto animale?",8/8,8/8,8/8,8/8,8/8,0/8,8/8
+s06,P4_prison,0,1,Non ci sono personaggi in più oltre ai quattro (le guardie sullo sfondo non contano)?,8/8,8/8,8/8,8/8,8/8,0/8,8/8
+x01,P3_totem,0,0,"L'elfa ha capelli verde-acqua, piccole corna chiare da cervo, benda nera sull'occhio e pelle abbronzata?",7/8,7/8,8/8,7/8,8/8,0/8,6/8
+x02,P3_totem,0,0,La tiefling ha corna nere da ariete e una coda?,7/8,7/8,5/8,8/8,8/8,0/8,8/8
+x03b,P3_totem,0,0,Il gatto ha la coda dritta verso l'alto?,5/8,4/8,6/8,6/8,0/8,0/8,6/8
+x04,P3_totem,0,0,L'elfa sta in bilico su un piede solo agitando le braccia?,0/8,1/8,0/8,0/8,0/8,0/8,2/8
+x05b,P3_totem,0,1,"L'orco non ha tratti presi dagli altri personaggi (capelli verde-acqua, corna, orecchie o coda da gatto)?",8/8,8/8,8/8,8/8,8/8,5/8,7/8
+y01,P4_prison,0,0,"L'elfa ha capelli verde-acqua, corna chiare da cervo, benda nera sull'occhio e pelle abbronzata?",8/8,8/8,8/8,8/8,8/8,0/8,8/8
+y02,P4_prison,0,0,L'orco ha le braccia fasciate di lino e respinge delle alabarde?,3/8,6/8,2/8,4/8,4/8,0/8,7/8
+y03,P4_prison,0,0,Il gatto tiene anche un sacchetto di monete?,0/8,0/8,0/8,0/8,0/8,0/8,0/8
+y04,P4_prison,0,0,La tiefling ha corna nere e usa un martello a due mani contro una porta o un cancello?,0/8,0/8,0/8,0/8,0/8,0/8,0/8
+y05b,P4_prison,0,1,"L'orco non ha tratti presi dagli altri personaggi (capelli verde-acqua, corna, orecchie o coda da gatto)?",8/8,8/8,8/8,8/8,8/8,8/8,8/8
