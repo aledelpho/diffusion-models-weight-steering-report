@@ -79,11 +79,13 @@ nothing in the settings.
 1. https://aledelpho.github.io/diffusion-models-weight-steering-report/results/index.html — the "Start here" list
    must include **FAQ: what I learned, for everyone** and must no longer include a blind-test link.
 2. https://aledelpho.github.io/krea2-weight-knobs-results/ — the same check; then open
-   https://aledelpho.github.io/krea2-weight-knobs-results/faq.html and confirm it loads.
+   https://aledelpho.github.io/krea2-weight-knobs-results/faq.html and confirm it loads. Then open
+   https://aledelpho.github.io/krea2-weight-knobs-results/prompts.html (2026-10-15): it must load and show
+   "The prompts" with sections 20 to 30; "Start here" must list **Every prompt, in full**.
 3. https://aledelpho.github.io/krea2-weight-knobs-results/try-the-test.html — must now give **404** (the blind
    test is no longer published, 2026-10-14). Do not delete anything by hand to obtain this: step 4 already does it.
 
 ## Step 6 — paste back
 
 The outputs of steps 1 and 2 (`git push`, `<SHA>`), the full output of the export, the output of the results
-push, and the result of the three checks in step 5.
+push, and the result of the checks in step 5.
