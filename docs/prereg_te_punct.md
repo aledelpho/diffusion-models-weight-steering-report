@@ -199,5 +199,5 @@ check that the orc has not taken the elf's hair or anyone's horns, and three det
 the tiefling's black ram horns and tail, the catfolk's raised tail and flat ears, the elf balancing on one foot; P4:
 the orc's linen-wrapped arms deflecting halberds, the catfolk's coin pouch, the tiefling's black horns and two-handed
 hammer against a door or gate). The prompts say nothing about the orc's hair, so "has hair" is not an error; only
-borrowed teal hair or horns are. Appended at the end of the page (560 more answers, RNG seed 7880). Secondary, like
+borrowed teal hair or horns are. Appended at the end of the page (600 more answers with the repeats, RNG seed 7880). Secondary, like
 amendments 4 and 5.
