@@ -340,6 +340,7 @@ tuner:
   mode: Real Value, driven by a 34-slot vectors_override (one block at a time)
 prompts:
   measured_on: data/block_colour_layout.csv (12 styles prompts, 6 v3 prompts, 5 v4 prompts)
+  files: [data/single_blocks_styles_plan.csv, data/single_blocks_v3_plan.csv, data/single_blocks_v4_plan.csv]
 seeds: [2718281, 3141592, 1618033, 1234567]
 conditions:
   - name: single block, negative dose, each of 28 blocks

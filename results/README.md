@@ -8,8 +8,8 @@
 > honest about what wasn't.
 
 > **New here?** Start from [the story](STORY.md): what I found, told with pictures. If you just make images
-> and want the practical lessons, read the [FAQ](FAQ.md). This page is the report: abstract, related work, and
-> the table of every claim.
+> and want the practical lessons, read the [FAQ](FAQ.md). Every prompt used is listed in full on
+> [the prompts page](PROMPTS.md). This page is the report: abstract, related work, and the table of every claim.
 
 ## Abstract
 

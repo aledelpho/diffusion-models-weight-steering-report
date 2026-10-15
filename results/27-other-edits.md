@@ -141,6 +141,7 @@ tuner:
   mode: preset_json
 prompts:
   source: notebook pages 02, 03 and 06
+  files: [data/stage7b_images.csv, data/stage12_images.csv]   # pages 06 and 03; the page-02 prompt is in the notebook
 seeds: as recorded on each notebook page
 conditions:
   - name: block derangement, block permutation, sign scramble, calibrated preset

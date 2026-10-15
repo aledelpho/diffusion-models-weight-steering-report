@@ -99,6 +99,7 @@
   <ul>
     <li><a href="story.html">The story, with pictures</a></li>
     <li><a href="faq.html">FAQ: what I learned, for everyone</a></li>
+    <li><a href="prompts.html">Every prompt, in full</a></li>
     <li><a href="#intro">Abstract and introduction</a></li>
     <li><a href="#claims">What holds, what does not</a></li>
   </ul>
@@ -121,8 +122,8 @@ exploratory lab notebook that led here is in <a href="https://github.com/aledelp
 every test I ran; this folder holds only the results that were confirmed, or that I need here to be
 honest about what wasn't.</p>
 <p><strong>New here?</strong> Start from <a href="story.html">the story</a>: what I found, told with pictures. If you just make images
-and want the practical lessons, read the <a href="faq.html">FAQ</a>. This page is the report: abstract, related work, and
-the table of every claim.</p>
+and want the practical lessons, read the <a href="faq.html">FAQ</a>. Every prompt used is listed in full on
+<a href="prompts.html">the prompts page</a>. This page is the report: abstract, related work, and the table of every claim.</p>
 </blockquote>
 <h2 class="intro">Abstract</h2>
 <p>Does a text-to-image diffusion transformer hold controllable "knobs" in its own weights —
@@ -988,6 +989,7 @@ tuner:
   mode: Real Value, driven by a 34-slot vectors_override (one block at a time)
 prompts:
   measured_on: data/block_colour_layout.csv (12 styles prompts, 6 v3 prompts, 5 v4 prompts)
+  files: [data/single_blocks_styles_plan.csv, data/single_blocks_v3_plan.csv, data/single_blocks_v4_plan.csv]
 seeds: [2718281, 3141592, 1618033, 1234567]
 conditions:
   - name: single block, negative dose, each of 28 blocks
@@ -2165,6 +2167,7 @@ tuner:
   mode: preset_json
 prompts:
   source: notebook pages 02, 03 and 06
+  files: [data/stage7b_images.csv, data/stage12_images.csv]   # pages 06 and 03; the page-02 prompt is in the notebook
 seeds: as recorded on each notebook page
 conditions:
   - name: block derangement, block permutation, sign scramble, calibrated preset

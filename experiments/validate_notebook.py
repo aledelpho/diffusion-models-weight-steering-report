@@ -562,7 +562,7 @@ def main() -> int:
     check_figure_files(reg, rep)
 
     pages = sorted(p for p in NOTEBOOK.glob("*.md")
-                   if not p.name.startswith("_") and p.name not in ("AUTHORING.md", "STORY.md", "README.md", "FAQ.md"))
+                   if not p.name.startswith("_") and p.name not in ("AUTHORING.md", "STORY.md", "README.md", "FAQ.md", "PROMPTS.md"))
     if args.page:
         pages = [p for p in pages if p.stem == args.page]
         if not pages:

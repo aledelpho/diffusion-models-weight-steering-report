@@ -58,7 +58,7 @@ SURFACE, INK, INK_2, MUTED, GRID = "#1a1a19", "#ffffff", "#c3c2b7", "#898781", "
 def read_pages() -> list[dict]:
     pages = []
     for path in sorted(NOTEBOOK.glob("*.md")):
-        if path.name.startswith("_") or path.name in ("AUTHORING.md", "README.md", "STORY.md", "FAQ.md"):
+        if path.name.startswith("_") or path.name in ("AUTHORING.md", "README.md", "STORY.md", "FAQ.md", "PROMPTS.md"):
             continue
         text = path.read_text(encoding="utf-8")
         if not text.startswith("---"):
@@ -176,7 +176,7 @@ def _site_links(src: str, page_href: str) -> str:
     src = re.sub(r"\]\((\d\d-[a-z0-9-]+)\.md#([a-z0-9-]+)\)", rf"]({page_href}#p-\1--\2)", src)
     src = re.sub(r"\]\((\d\d-[a-z0-9-]+)\.md\)", rf"]({page_href}#p-\1)", src)
     src = re.sub(r"\]\(README\.md#[a-z0-9-]+\)", f"]({page_href}#claims)", src)
-    src = src.replace("](STORY.md)", "](story.html)").replace("](FAQ.md)", "](faq.html)").replace("](README.md)", f"]({page_href or 'index.html'})")
+    src = src.replace("](STORY.md)", "](story.html)").replace("](FAQ.md)", "](faq.html)").replace("](PROMPTS.md)", "](prompts.html)").replace("](README.md)", f"]({page_href or 'index.html'})")
     src = src.replace("](../notebook/)", f"]({MAIN_TREE}notebook)")
     src = re.sub(r"\]\(\.\./notebook/([^)]+)\)", rf"]({MAIN_BLOB}notebook/\1)", src)
     src = src.replace(f"]({TEST_PUBLIC})", "](try-the-test.html)")
@@ -189,7 +189,7 @@ def _md_html(src: str) -> str:
     return out.replace("<table>", '<div class="tablewrap"><table>').replace("</table>", "</table></div>")
 
 
-def results_site(index: str, pages: list[dict]) -> tuple[str, str, str]:
+def results_site(index: str, pages: list[dict]) -> tuple[str, str, str, str]:
     readme = (NOTEBOOK / "README.md").read_text(encoding="utf-8")
     intro_md = readme.split("\n## How to read the table below", 1)[0]
     intro_md = intro_md.replace("[`../notebook/`](../notebook/)", "[the exploratory notebook](../notebook/)")
@@ -202,6 +202,7 @@ def results_site(index: str, pages: list[dict]) -> tuple[str, str, str]:
     elsewhere = ("  <h2>Start here</h2>\n  <ul>\n"
                  '    <li><a href="story.html">The story, with pictures</a></li>\n'
                  '    <li><a href="faq.html">FAQ: what I learned, for everyone</a></li>\n'
+                 '    <li><a href="prompts.html">Every prompt, in full</a></li>\n'
                  '    <li><a href="#intro">Abstract and introduction</a></li>\n'
                  '    <li><a href="#claims">What holds, what does not</a></li>\n'
                  "  </ul>\n  <h2>Elsewhere</h2>\n  <ul>\n"
@@ -231,7 +232,12 @@ def results_site(index: str, pages: list[dict]) -> tuple[str, str, str]:
         faq = faq.replace(f'href="{TEST_PUBLIC}"', 'href="try-the-test.html"')
         fhead = head.replace("<title>The story — knobs inside the weights</title>", "<title>FAQ — knobs inside the weights</title>")
         faq_page = f"{fhead}<nav>{nav_story}</nav>\n<main>\n<section id=\"faq\">\n{faq}\n</section>\n</main>\n</body>\n</html>\n"
-    return index, story_page, faq_page
+    prompts_page = ""
+    if (NOTEBOOK / "PROMPTS.md").exists():
+        pr = _md_html(_site_links((NOTEBOOK / "PROMPTS.md").read_text(encoding="utf-8"), "index.html"))
+        phead = head.replace("<title>The story — knobs inside the weights</title>", "<title>Prompts — knobs inside the weights</title>")
+        prompts_page = f"{phead}<nav>{nav_story}</nav>\n<main>\n<section id=\"prompts\">\n{pr}\n</section>\n</main>\n</body>\n</html>\n"
+    return index, story_page, faq_page, prompts_page
 
 
 def _claim_target(page, claim):
@@ -400,8 +406,8 @@ def main() -> int:
     index = render_index(pages)
     stale = []
     if args.dir == "results":
-        index, story_page, faq_page = results_site(index, pages)
-        for fname, content in (("story.html", story_page), ("faq.html", faq_page)):
+        index, story_page, faq_page, prompts_page = results_site(index, pages)
+        for fname, content in (("story.html", story_page), ("faq.html", faq_page), ("prompts.html", prompts_page)):
             if not content:
                 continue
             f = NOTEBOOK / fname
