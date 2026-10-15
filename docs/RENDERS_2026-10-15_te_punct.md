@@ -100,3 +100,32 @@ python te_punct2.py --count
 ```text
 expected 16 missing 0 []
 ```
+
+## Amendment 4 versions
+
+```powershell
+cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
+python te_punct2.py --queue --block versions
+```
+
+```text
+queued 96 block versions
+```
+
+```powershell
+python te_punct2.py --count
+```
+
+```text
+expected 112 missing 0 []
+```
+
+## Benchmark folder size (after Amendment 4)
+
+```text
+Text2Img\benchmark_te_punct: 181 files, 318.52 MB (333992654 bytes)
+  - C78 original: 45 files, 67.69 MB (70981616 bytes)
+  - C78 extra nopunct: 24 files, 35.89 MB (37629607 bytes)
+  - C78 amendment 3 pilot2: 16 files, 30.75 MB (32244645 bytes)
+  - C78 amendment 4 versions: 96 files, 184.19 MB (193136786 bytes)
+```

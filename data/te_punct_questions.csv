@@ -1,0 +1,29 @@
+id,prompt,primary,question_it
+t01,P3_totem,1,L'orco è alla base della piramide?
+t02,P3_totem,1,"La tiefling è nel mezzo, sulle spalle dell'orco?"
+t03,P3_totem,1,L'elfa è in cima?
+t04,P3_totem,1,"Il gatto è aggrappato all'elfa, in aria?"
+t05,P3_totem,1,L'orco ha la pelle verde?
+t06,P3_totem,1,La tiefling ha la pelle rossa e le corna?
+t07,P3_totem,1,L'elfa ha corna da cervo e la benda sull'occhio?
+t08,P3_totem,1,Il guanto d'argento è dell'elfa?
+t09,P3_totem,1,Scintille blu escono solo dal guanto dell'elfa?
+t10,P3_totem,1,Il gatto ha pelo fulvo e occhi gialli?
+t11,P3_totem,1,L'orco ha gli occhi chiusi e le braccia incrociate?
+t12,P3_totem,1,Nessun altro oltre alla tiefling ha pelle rossa o corna da ariete?
+t14,P3_totem,0,L'orco non ha armatura di metallo?
+t15,P3_totem,0,La tiefling non ha le braccia incrociate?
+t16,P3_totem,0,Il guanto dell'elfa è d'argento?
+p01,P4_prison,1,"L'elfa è al centro, in primo piano?"
+p02,P4_prison,1,Dal guanto dell'elfa escono fulmini blu?
+p03,P4_prison,1,Fulmini blu escono solo dall'elfa?
+p04,P4_prison,1,L'orco è in alto a sinistra?
+p05,P4_prison,1,L'orco ha pelle verde e zanne?
+p06,P4_prison,1,Il gatto è in basso a destra?
+p07,P4_prison,1,Il gatto tiene un mazzo di chiavi?
+p08,P4_prison,1,La tiefling è dietro il gruppo con il martello alzato?
+p09,P4_prison,1,La tiefling ha pelle rossa e corna?
+p10,P4_prison,1,C'è un'aura o un'onda dorata attorno alla tiefling o al martello?
+p11,P4_prison,1,C'è un'esplosione arancione dietro il cancello?
+p12,P4_prison,1,Nessun altro oltre alla tiefling ha pelle rossa o corna?
+p13,P4_prison,0,"Il guanto dell'elfa è d'argento, mano inclusa, senza verde?"
