@@ -3,6 +3,7 @@ break'), pilot only. Written 2026-10-15, before any of these renders. Pilot auth
 
   python te_punct2.py --plan     # reads the two prompts verbatim from the PNG metadata, writes data/te_punct2_plan.csv
   python te_punct2.py --queue --block pilot2
+  python te_punct2.py --queue --block versions   # amendment 4, 96 renders
   python te_punct2.py --count
 
 Plain Krea-2 (no preset, no 5D tuner), the C78 sampling (euler_ancestral, simple, 9 steps, cfg 1.0), 1024x1536.
@@ -24,15 +25,48 @@ def source_text(png):
     return d["93"]["inputs"]["value"]
 
 
-def make_plan():
+import re
+LABEL = re.compile(r"^(Character \d+ \([^)]*\)|Composition and spatial staging|Environment, background, and lighting|Background and lighting):\s*")
+VERSIONS = ["comma", "period", "semicolon", "nopunct", "break", "nolabels"]
+
+
+def paragraphs(text):
+    return [p.strip() for p in text.split("\n") if p.strip()]
+
+
+def version_text(text, v):
+    """Amendment 4. Words never change; only separators, line breaks and section labels."""
+    if v == "comma":      # sentence ends and line breaks become commas
+        t = " ".join(p.rstrip(".") + "," for p in paragraphs(text)).rstrip(",")
+        return re.sub(r"\.\s+", ", ", t)
+    if v == "period":     # every comma becomes a period; line breaks kept
+        return text.replace(", ", ". ")
+    if v == "semicolon":  # every comma becomes a semicolon; line breaks kept
+        return text.replace(", ", "; ")
+    if v == "nopunct":    # as Alessandro's amendment-2 script
+        return re.sub(r"\s+", " ", re.sub(r"[,.;:\n\r]+", " ", text)).strip()
+    if v == "break":      # each paragraph (style line, four characters, staging, environment) encoded alone
+        return P.BRK.join(paragraphs(text))
+    if v == "nolabels":   # no "Character N (...):" or section headers, one paragraph
+        return " ".join(LABEL.sub("", p) for p in paragraphs(text))
+    raise ValueError(v)
+
+
+def make_plan(versions=False):
     rows = []
+    def add(block, pid, png, v, text, s):
+        prefix = f"{pid}_{v}_krea2_seed{s}"
+        rows.append({"row": len(rows), "block": block, "prompt_id": pid, "version": v, "source_png": png,
+                     "prompt_text": text, "seed": s, "output_prefix": prefix,
+                     "expected_filename": f"{prefix}_00001_.png", **{**P.SET, "height": "1536"}})
     for pid, png in SOURCES.items():
-        text = source_text(png)
         for s in P.SEEDS8:
-            prefix = f"{pid}_original_krea2_seed{s}"
-            rows.append({"row": len(rows), "block": "pilot2", "prompt_id": pid, "version": "original", "source_png": png,
-                         "prompt_text": text, "seed": s, "output_prefix": prefix,
-                         "expected_filename": f"{prefix}_00001_.png", **{**P.SET, "height": "1536"}})
+            add("pilot2", pid, png, "original", source_text(png), s)
+    if versions:
+        for pid, png in SOURCES.items():
+            for v in VERSIONS:
+                for s in P.SEEDS8:
+                    add("versions", pid, png, v, version_text(source_text(png), v), s)
     with open(PLAN, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print("plan rows:", len(rows))
@@ -45,6 +79,6 @@ if __name__ == "__main__":
     ap.add_argument("--block", default="pilot2")
     a = ap.parse_args()
     P.PLAN = PLAN
-    if a.plan: make_plan()
+    if a.plan: make_plan(versions=True)
     if a.queue: P.queue(a.block)
     if a.count: P.count()

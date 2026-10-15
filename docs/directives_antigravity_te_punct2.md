@@ -1,4 +1,4 @@
-# Directive for Antigravity — C78 amendment 3, pilot, 16 renders (authorised by Alessandro on 2026-10-15)
+# Directive for Antigravity — C78 amendments 3–4: pilot (done) and versions, 96 renders (authorised by Alessandro on 2026-10-15)
 
 Written by Claude.
 
@@ -30,6 +30,24 @@ It must print `expected 16 missing 0 []`.
 
 Append to `docs/RENDERS_2026-10-15_te_punct.md` a section "Amendment 3 pilot" with the commands and outputs, inside
 plain triple-backtick fences. Do not commit; Claude commits. Then stop and wait.
+
+## Step 3 — the versions (96 renders; authorised by Alessandro on 2026-10-15)
+
+The plan now has 112 rows: the 16 pilot rows (unchanged) and 96 `versions` rows. Some use BREAK (the core
+`ConditioningConcat` node, as in C78 Step 2).
+
+```powershell
+python te_punct2.py --queue --block versions
+```
+
+When ComfyUI's queue is empty:
+
+```powershell
+python te_punct2.py --count
+```
+
+It must print `expected 112 missing 0 []`. Append a section "Amendment 4 versions" to the same RENDERS file, with
+the outputs and the size of `Text2Img\benchmark_te_punct`. Do not commit.
 
 ## Not authorised
 

@@ -81,3 +81,22 @@ python te_punct_nopunct.py --count
 ```text
 expected 24 missing 0 []
 ```
+
+## Amendment 3 pilot
+
+```powershell
+cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
+python te_punct2.py --queue --block pilot2
+```
+
+```text
+queued 16 block pilot2
+```
+
+```powershell
+python te_punct2.py --count
+```
+
+```text
+expected 16 missing 0 []
+```

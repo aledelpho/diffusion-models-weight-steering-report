@@ -138,3 +138,31 @@ un'esplosione arancione dietro il cancello? (12) nessun altro oltre alla tieflin
 Otherwise it stops. If it goes on, the versions (comma, period, semicolon, no punctuation, BREAK between characters,
 and the same text without the "Character N (…):" labels and line breaks) and the paired test on the error count are a
 further amendment, written before those renders.
+
+## Amendment 4 — 2026-10-15, after the amendment-3 pilot, before any version render
+
+**Pilot outcome (Claude, by eye, not blind).** On the 12 fixed questions both prompts average about 1 error per
+picture, so both go on (rule: 1 to 6). The errors the questions catch are mostly omissions: the elf's blue sparks
+missing in the totem, the tiefling's golden aura missing in the prison break, the catfolk's keys missing once or
+twice. The pilot also showed leaks the questions do not cover: the elf's gauntleted fist turning green in the prison
+break; the orc monk wearing metal pauldrons in all eight totems; the tiefling copying the orc's folded arms in most
+totems.
+
+**Versions** (`experiments/te_punct2.py`, plan `data/te_punct2_plan.csv`, block `versions`; words never change):
+comma (sentence ends and line breaks become commas), period (every comma becomes a period), semicolon (every comma
+becomes a semicolon), nopunct (as amendment 2: , . ; : and line breaks removed), break (each paragraph encoded alone
+and joined with ConditioningConcat: style line, four characters, staging, environment = 7 parts), nolabels (the
+"Character N (…):" labels and section headers removed, one paragraph). 6 versions × 2 prompts × 8 seeds = 96
+renders, compared with the `original` pilot pictures at the same seed.
+
+**Primary test (the 12 questions fixed in amendment 3).** For each version, d = mean over the 16 seed-pairs of
+(errors of the version − errors of the original). **Helps** if d ≤ −1 and pairs with fewer errors ≥ pairs with more
+errors + 3; **hurts** for the mirror image; **no difference** if |d| ≤ 0.25; otherwise inconclusive. Six versions
+are tested, so a single "helps" or "hurts" is reported with that number in view (no correction applied).
+
+**Secondary (questions chosen after seeing the original pictures).** (13) P4: il guanto dell'elfa è d'argento, mano
+inclusa, senza verde? (14) P3: l'orco non ha armatura di metallo? (15) P3: la tiefling non ha le braccia incrociate?
+(16) P3: il guanto dell'elfa è d'argento? Reported as counts by version. Because they were picked where the original
+fails, any version will tend to look better on them by regression to the mean; they decide nothing.
+
+**Labels:** Alessandro, blind to version, question-major page as in C75; 4 repeats per prompt; κ ≥ 0.60 gate.
