@@ -190,3 +190,14 @@ decide nothing and are reported as counts by version, like amendment 4's): s01/s
 s02/s05 the catfolk is humanoid, not an animal; s03/s06 no extra characters (background guards in the prison do not
 count). They are appended at the end of the labelling page (360 more answers, new schedule rows with RNG seed 7879);
 answers already given are untouched.
+
+## Amendment 6 — 2026-10-15, during labelling, before any analysis
+
+At Alessandro's request, ten more secondary questions, mostly combining several attributes the prompts name (yes
+only if all are true): for each prompt, the elf's full look (teal hair, pale antlers, black eyepatch, tan skin), a
+check that the orc has not taken the elf's hair or anyone's horns, and three details of the other characters (P3:
+the tiefling's black ram horns and tail, the catfolk's raised tail and flat ears, the elf balancing on one foot; P4:
+the orc's linen-wrapped arms deflecting halberds, the catfolk's coin pouch, the tiefling's black horns and two-handed
+hammer against a door or gate). The prompts say nothing about the orc's hair, so "has hair" is not an error; only
+borrowed teal hair or horns are. Appended at the end of the page (560 more answers, RNG seed 7880). Secondary, like
+amendments 4 and 5.
