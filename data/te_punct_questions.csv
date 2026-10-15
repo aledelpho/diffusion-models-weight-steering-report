@@ -32,10 +32,10 @@ s02,P3_totem,0,"Il gatto è un gatto umanoide (vestito, con corpo da persona), n
 s03,P3_totem,0,Non ci sono personaggi in più oltre ai quattro?
 s04,P4_prison,0,"Ci sono tutti e quattro i personaggi (elfa, orco, gatto, tiefling)?"
 s05,P4_prison,0,"Il gatto è un gatto umanoide (vestito, con corpo da persona), non un gatto animale?"
-s06,P4_prison,0,"Non ci sono personaggi in più oltre ai quattro (le guardie sullo sfondo non contano)?"
+s06,P4_prison,0,Non ci sono personaggi in più oltre ai quattro (le guardie sullo sfondo non contano)?
 x01,P3_totem,0,"L'elfa ha capelli verde-acqua, piccole corna chiare da cervo, benda nera sull'occhio e pelle abbronzata?"
 x02,P3_totem,0,La tiefling ha corna nere da ariete e una coda?
-x03,P3_totem,0,Il gatto ha la coda dritta verso l'alto e le orecchie appiattite?
+x03b,P3_totem,0,Il gatto ha la coda dritta verso l'alto?
 x04,P3_totem,0,L'elfa sta in bilico su un piede solo agitando le braccia?
 x05,P3_totem,0,L'orco non ha capelli verde-acqua né corna?
 y01,P4_prison,0,"L'elfa ha capelli verde-acqua, corna chiare da cervo, benda nera sull'occhio e pelle abbronzata?"

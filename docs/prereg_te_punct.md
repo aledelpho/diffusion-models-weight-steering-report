@@ -201,3 +201,7 @@ the orc's linen-wrapped arms deflecting halberds, the catfolk's coin pouch, the 
 hammer against a door or gate). The prompts say nothing about the orc's hair, so "has hair" is not an error; only
 borrowed teal hair or horns are. Appended at the end of the page (600 more answers with the repeats, RNG seed 7880). Secondary, like
 amendments 4 and 5.
+
+**Amendment 6, change (same day, during labelling).** Alessandro saw that almost no catfolk has flat ears, so the
+two-part question x03 ("raised tail and flat ears") would be "no" almost everywhere. Replaced by x03b, "Il gatto ha
+la coda dritta verso l'alto?" (tail only), with a new block id so that any answer given to x03 is not exported.
