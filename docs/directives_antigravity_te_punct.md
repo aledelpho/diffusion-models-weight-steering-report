@@ -1,4 +1,4 @@
-# Directive for Antigravity — C78, 69 renders in three stages (authorised by Alessandro on 2026-10-15)
+# Directive for Antigravity — C78, 93 renders in three stages (authorised by Alessandro on 2026-10-15)
 
 Written by Claude.
 
@@ -25,7 +25,16 @@ python te_punct.py --gate
 
 Both lines must print `max abs diff 0`, then `GATE PASS`. If it prints `FAIL`, **stop** and paste.
 
-## Step 2 — the pilot and the natural prompts (16 + 19 renders)
+## Step 2 — one BREAK render, then the pilot and the natural prompts (1 + 16 + 26 renders)
+
+The BREAK version uses the core `ConditioningConcat` node (already installed with ComfyUI). Run it alone first:
+
+```powershell
+python te_punct.py --queue --block smoke
+```
+
+When `Text2Img\benchmark_te_punct\D1_dwarf_paladin_break_krea2_seed2645751_00001_.png` exists, go on. If ComfyUI
+reports an error for it, paste the error, **skip the other BREAK renders** and go on with the rest.
 
 ```powershell
 python te_punct.py --queue --block pilot
@@ -38,18 +47,18 @@ When ComfyUI's queue is empty:
 python te_punct.py --count
 ```
 
-It must print `expected 69 missing 32`.
+It must print `expected 93 missing 48`.
 
 **Then stop.** Write the paste-back (Step 4) for Steps 1–2 and wait. Claude checks the pilot against the rule in the
 pre-registration and says whether to run Step 3.
 
-## Step 3 — only after Claude's go (32 renders)
+## Step 3 — only after Claude's go (48 renders)
 
 ```powershell
 python te_punct.py --queue --block main
 ```
 
-When the queue is empty, `python te_punct.py --count` must print `expected 69 missing 0 []`.
+When the queue is empty, `python te_punct.py --count` must print `expected 93 missing 0 []`.
 
 ## Step 4 — paste back
 

@@ -1,7 +1,7 @@
 # Pre-registration C78 — does punctuation keep the concepts of a prompt apart?
 
 Written 2026-10-15, **before any C78 render.** Renders authorised by Alessandro on 2026-10-15 (prompts designed with
-him). Code: `experiments/te_punct.py` (plan, queue, gate). Plan: `data/te_punct_plan.csv`, 69 rows.
+him). Code: `experiments/te_punct.py` (plan, queue, gate). Plan: `data/te_punct_plan.csv`, 69 rows (93 after amendment 1).
 
 ## Why
 
@@ -78,3 +78,24 @@ systematic gain).
 Two built prompts, eight seeds, one labeller. A change of separator also changes the composition, as any rewording
 does (C45), so a difference in failures can come from a different layout rather than a cleaner split. The pairs by
 seed do not remove this; the encoder measure is there to say whether the split itself changed.
+
+## Amendment 1 — 2026-10-15, before any C78 render: a BREAK arm
+
+Asked by Alessandro after the literature check: the community's usual answer to concept bleeding is not punctuation
+but A1111's `BREAK`, which encodes chunks of the prompt separately. In ComfyUI the equivalent is to encode each part
+with its own `CLIPTextEncode` and join them with the core `ConditioningConcat` node. That is the fourth version.
+
+* **Built prompts:** the four parts encoded separately, 8 seeds each (16 renders, in the `main` block).
+* **Natural prompts:** BREAK between sentences (at ". " and at the line break), as people use it: 3 parts for the
+  dwarf, 6 for the elf. Dwarf at its 4 seeds, elf at its 4 seeds (8 renders).
+* **Smoke render:** the dwarf BREAK at 2645751 is rendered alone first. If the workflow errors, the BREAK arm is
+  dropped and that is reported; nothing else changes.
+* **H3:** BREAK against comma, same rule as H1. With an LLM text encoder each part is read with no context from the
+  others, so this is the strongest separation of the four. Prediction: fewer failures than commas (the only
+  directional prediction of C78), but the full rule must be met.
+* **Encoder measure:** not computed for BREAK (the parts never meet inside the encoder, so the same-part /
+  cross-part comparison is undefined).
+* **Limit:** each part gets the encoder's own prompt wrapping, so the concatenated conditioning repeats those wrapping
+  tokens. Whatever BREAK does here includes that.
+
+Plan: 93 rows (gate 2, smoke 1, pilot 16, main 48, natural 26).

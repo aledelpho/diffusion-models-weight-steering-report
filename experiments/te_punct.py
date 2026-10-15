@@ -4,6 +4,7 @@
   python te_punct.py --plan               # data/te_punct_plan.csv
   python te_punct.py --queue --block gate # 2 renders that must equal existing pictures
   python te_punct.py --gate
+  python te_punct.py --queue --block smoke    # one BREAK render: does the concat workflow run at all?
   python te_punct.py --queue --block pilot
   python te_punct.py --queue --block main     # only after Claude's go (pilot rule)
   python te_punct.py --queue --block natural
@@ -44,6 +45,17 @@ def natural_texts():
     return {"D1_dwarf_paladin": d1, "P1_elfbrawler": elf}
 
 
+BRK = " BREAK "
+
+
+def break_natural(text):
+    """Natural prompts: BREAK between sentences (at '. ' and at the line break), as people use it in A1111."""
+    parts = []
+    for line in text.split("\n"):
+        parts += [p.strip().rstrip(".") for p in line.split(". ") if p.strip()]
+    return BRK.join(parts)
+
+
 def swap_commas(text, sep):
     """Natural prompts: every ', ' becomes the separator; existing periods and words stay."""
     return text if sep == ", " else text.replace(", ", sep)
@@ -57,21 +69,26 @@ def make_plan():
                      "seed": seed, "output_prefix": prefix, "expected_filename": f"{prefix}_00001_.png", **SET})
     add("gate", "D1_dwarf_paladin", "comma", nat["D1_dwarf_paladin"], "2645751")
     add("gate", "P1_elfbrawler", "comma", nat["P1_elfbrawler"], "1618033")
+    add("smoke", "D1_dwarf_paladin", "break", break_natural(nat["D1_dwarf_paladin"]), "2645751")
     for pid, parts in BUILT.items():
         for s in SEEDS8:
             add("pilot", pid, "comma", SEPS["comma"].join(parts), s)
     for pid, parts in BUILT.items():
-        for v in ("period", "semicolon"):
+        for v in ("period", "semicolon", "break"):
             for s in SEEDS8:
-                add("main", pid, v, SEPS[v].join(parts), s)
-    for v in ("period", "semicolon"):
+                add("main", pid, v, (BRK if v == "break" else SEPS[v]).join(parts), s)
+    for v in ("period", "semicolon", "break"):
         for s in SEEDS_D1:
-            add("natural", "D1_dwarf_paladin", v, swap_commas(nat["D1_dwarf_paladin"], SEPS[v]), s)
-    for v in ("comma", "period", "semicolon"):
+            if v == "break" and s == "2645751":
+                continue  # already the smoke render
+            t = break_natural(nat["D1_dwarf_paladin"]) if v == "break" else swap_commas(nat["D1_dwarf_paladin"], SEPS[v])
+            add("natural", "D1_dwarf_paladin", v, t, s)
+    for v in ("comma", "period", "semicolon", "break"):
         for s in SEEDS_ELF:
             if v == "comma" and s == "1618033":
                 continue  # already the gate render
-            add("natural", "P1_elfbrawler", v, swap_commas(nat["P1_elfbrawler"], SEPS[v]), s)
+            t = break_natural(nat["P1_elfbrawler"]) if v == "break" else swap_commas(nat["P1_elfbrawler"], SEPS[v])
+            add("natural", "P1_elfbrawler", v, t, s)
     with open(PLAN, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     from collections import Counter
@@ -81,6 +98,19 @@ def make_plan():
 def workflow(r):
     wf = TP.workflow({**r, "te_granular_json": "", "vectors_override": ""})
     wf["61"]["inputs"]["filename_prefix"] = f"{FOLDER}/{r['output_prefix']}"
+    if r["version"] == "break":
+        # A1111's BREAK in ComfyUI terms: each part encoded on its own, joined with the core ConditioningConcat node
+        parts = r["prompt_text"].split(BRK); clip = wf["40"]["inputs"]["clip"]; last = None
+        for i, part in enumerate(parts):
+            wf[f"70{i:02d}"] = {"class_type": "CLIPTextEncode", "inputs": {"clip": clip, "text": part}}
+            if last is None:
+                last = [f"70{i:02d}", 0]
+            else:
+                wf[f"71{i:02d}"] = {"class_type": "ConditioningConcat",
+                                    "inputs": {"conditioning_to": last, "conditioning_from": [f"70{i:02d}", 0]}}
+                last = [f"71{i:02d}", 0]
+        del wf["40"]
+        wf["42"]["inputs"]["positive"] = last; wf["43"]["inputs"]["conditioning"] = last
     return wf
 
 
@@ -130,6 +160,10 @@ def selftest():
         assert all("," not in p and "." not in p and ";" not in p for p in parts), pid
     print(repr(SEPS["period"].join(BUILT["P2_held_clothes"])))
     print(repr(swap_commas(nat["D1_dwarf_paladin"], "; ")[:120]))
+    b = break_natural(nat["P1_elfbrawler"]); print(len(b.split(BRK)), "elf BREAK parts:", b.split(BRK)[:2])
+    print(len(break_natural(nat["D1_dwarf_paladin"]).split(BRK)), "dwarf BREAK parts")
+    r = {"version": "break", "prompt_text": BRK.join(BUILT["P2_held_clothes"]), "output_prefix": "x", **SET, "seed": "1"}
+    wf = workflow(r); assert "40" not in wf and wf["42"]["inputs"]["positive"] == ["7103", 0], wf["42"]["inputs"]["positive"]
     print("selftest ok")
 
 
