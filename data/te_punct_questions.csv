@@ -27,3 +27,9 @@ p10,P4_prison,1,C'è un'aura o un'onda dorata attorno alla tiefling o al martell
 p11,P4_prison,1,C'è un'esplosione arancione dietro il cancello?
 p12,P4_prison,1,Nessun altro oltre alla tiefling ha pelle rossa o corna?
 p13,P4_prison,0,"Il guanto dell'elfa è d'argento, mano inclusa, senza verde?"
+s01,P3_totem,0,"Ci sono tutti e quattro i personaggi (orco, tiefling, elfa, gatto)?"
+s02,P3_totem,0,"Il gatto è un gatto umanoide (vestito, con corpo da persona), non un gatto animale?"
+s03,P3_totem,0,Non ci sono personaggi in più oltre ai quattro?
+s04,P4_prison,0,"Ci sono tutti e quattro i personaggi (elfa, orco, gatto, tiefling)?"
+s05,P4_prison,0,"Il gatto è un gatto umanoide (vestito, con corpo da persona), non un gatto animale?"
+s06,P4_prison,0,"Non ci sono personaggi in più oltre ai quattro (le guardie sullo sfondo non contano)?"

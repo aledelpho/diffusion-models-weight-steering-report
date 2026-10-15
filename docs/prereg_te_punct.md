@@ -173,3 +173,20 @@ Alessandro asked how to answer t16 ("Il guanto dell'elfa è d'argento?") when th
 questions ask about colour and ownership, not number. Rule given: answer on colour only; two silver gauntlets → yes;
 if either of them is not silver → no. The same reading applies to t08 and p13: a second gauntlet is not an error by
 itself.
+
+## Labelling note 2 and amendment 5 — 2026-10-15, during labelling, before any analysis
+
+**Keys (p07).** The prompt asks for "a stolen iron keyring". Yes if the catfolk holds a ring or bunch with at least
+one recognisable key (two bunches: yes); no if it holds nothing, or a bare ring with no key; "cannot tell" if a shape
+on the ring may or may not be a key.
+
+**Missing or changed characters.** Alessandro saw pictures where a character is missing or the catfolk is drawn as
+an ordinary cat. For the primary questions: a question about a character that is not in the picture is answered
+"no" (the prompt asks for it); questions about fur, eyes or colour are answered on what is drawn, whatever the
+catfolk's anatomy.
+
+**Amendment 5: six secondary questions, added during labelling** (Alessandro had seen part of the pictures; they
+decide nothing and are reported as counts by version, like amendment 4's): s01/s04 all four characters present;
+s02/s05 the catfolk is humanoid, not an animal; s03/s06 no extra characters (background guards in the prison do not
+count). They are appended at the end of the labelling page (360 more answers, new schedule rows with RNG seed 7879);
+answers already given are untouched.
