@@ -99,3 +99,42 @@ with its own `CLIPTextEncode` and join them with the core `ConditioningConcat` n
   tokens. Whatever BREAK does here includes that.
 
 Plan: 93 rows (gate 2, smoke 1, pilot 16, main 48, natural 26).
+
+## Amendment 2 — 2026-10-15, recorded after the renders: the no-punctuation version (Alessandro's addition)
+
+While the Step-2 renders ran, Alessandro queued a fifth version with every punctuation mark and line break removed
+(`experiments/te_punct_nopunct.py`, written by Antigravity; files `EXTRA_nopunct_*`): P1, P2 and the D1 dwarf at the
+eight seeds, 24 renders. It was not in this pre-registration. For the dwarf it is compared with the other versions on
+the four D1 seeds only; the other four seeds are descriptive.
+
+**Pilot outcome (Claude, by eye, not blind, as the pilot rule says):** P1 and P2 fail in 0 of 8 with commas, and in 0
+of 8 without punctuation. Both prompts stop: the `main` block (48 renders) is not run. H1–H3 cannot be tested on
+them. Seen by eye on the natural prompts, to be labelled blind: commas, periods and semicolons give nearly the same
+picture at a seed; without punctuation the dwarf's steel gorget turns brass in 2 of 4 seeds; with BREAK the elf's
+silver gauntlet turns gold and the gold pauldron disappears in 4 of 4.
+
+## Amendment 3 — 2026-10-15, before any of these renders: two complex prompts, pilot
+
+Two four-character prompts written by Alessandro, taken verbatim from the metadata of his pictures ComfyUI_07456
+("totem") and ComfyUI_07459 ("prison break"). His pictures used a preset and a 5D tuner; here the **plain model** and
+the C78 sampling are used, at 1024×1536. Script `experiments/te_punct2.py`, plan `data/te_punct2_plan.csv`: the
+original text at the eight C78 seeds, 16 renders.
+
+**Questions (yes / no / cannot tell), fixed now.** Errors = number of "no" per picture.
+
+P3 totem: (1) l'orco è alla base della piramide? (2) la tiefling è nel mezzo, sulle spalle dell'orco? (3) l'elfa è in
+cima? (4) il gatto è aggrappato all'elfa, in aria? (5) l'orco ha la pelle verde? (6) la tiefling ha la pelle rossa e
+le corna? (7) l'elfa ha corna da cervo e la benda sull'occhio? (8) il guanto d'argento è dell'elfa? (9) scintille blu
+escono solo dal guanto dell'elfa? (10) il gatto ha pelo fulvo e occhi gialli? (11) l'orco ha gli occhi chiusi e le
+braccia incrociate? (12) nessun altro oltre alla tiefling ha pelle rossa o corna da ariete?
+
+P4 prison: (1) l'elfa è al centro, in primo piano? (2) dal guanto dell'elfa escono fulmini blu? (3) fulmini blu
+escono solo dall'elfa? (4) l'orco è in alto a sinistra? (5) l'orco ha pelle verde e zanne? (6) il gatto è in basso a
+destra? (7) il gatto tiene un mazzo di chiavi? (8) la tiefling è dietro il gruppo con il martello alzato? (9) la
+tiefling ha pelle rossa e corna? (10) c'è un'aura o un'onda dorata attorno alla tiefling o al martello? (11) c'è
+un'esplosione arancione dietro il cancello? (12) nessun altro oltre alla tiefling ha pelle rossa o corna?
+
+**Pilot rule.** A prompt goes on if its mean number of errors over the 8 pictures is between 1 and 6 (Claude, by eye).
+Otherwise it stops. If it goes on, the versions (comma, period, semicolon, no punctuation, BREAK between characters,
+and the same text without the "Character N (…):" labels and line breaks) and the paired test on the error count are a
+further amendment, written before those renders.
