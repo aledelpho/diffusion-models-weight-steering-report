@@ -205,3 +205,9 @@ amendments 4 and 5.
 **Amendment 6, change (same day, during labelling).** Alessandro saw that almost no catfolk has flat ears, so the
 two-part question x03 ("raised tail and flat ears") would be "no" almost everywhere. Replaced by x03b, "Il gatto ha
 la coda dritta verso l'alto?" (tail only), with a new block id so that any answer given to x03 is not exported.
+
+**Amendment 6, second change (same day, during labelling).** x05 and y05 ("l'orco non ha capelli verde-acqua né
+corna?") left open whether a bald orc was required. The prompts say nothing about the orc's hair, so they are
+replaced by x05b and y05b: "L'orco non ha tratti presi dagli altri personaggi (capelli verde-acqua, corna, orecchie o
+coda da gatto)?". Hair of another colour (grey, black) and the orc's own pointed ears are not borrowed traits: yes.
+New block ids, so any answer to x05 or y05 is not exported.
