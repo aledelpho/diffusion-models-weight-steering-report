@@ -166,3 +166,10 @@ inclusa, senza verde? (14) P3: l'orco non ha armatura di metallo? (15) P3: la ti
 fails, any version will tend to look better on them by regression to the mean; they decide nothing.
 
 **Labels:** Alessandro, blind to version, question-major page as in C75; 4 repeats per prompt; κ ≥ 0.60 gate.
+
+## Labelling note — 2026-10-15, during labelling, before any analysis
+
+Alessandro asked how to answer t16 ("Il guanto dell'elfa è d'argento?") when the elf wears two gauntlets. The
+questions ask about colour and ownership, not number. Rule given: answer on colour only; two silver gauntlets → yes;
+if either of them is not silver → no. The same reading applies to t08 and p13: a second gauntlet is not an error by
+itself.
