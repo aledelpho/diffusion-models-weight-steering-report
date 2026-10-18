@@ -1,0 +1,10 @@
+test,value,verdict
+"Rule 1 straight: edits vs controls (whole, MLP, positive)",0 of 9 vs 0 of 9,
+"Rule 1 spiral: edits vs controls (whole, MLP, positive)",0 of 9 vs 0 of 9,
+"Rule 1 wave: edits vs controls (whole, MLP, positive)",0 of 9 vs 0 of 9,
+"Rule 1 clip: edits vs controls (whole, MLP, positive)",0 of 9 vs 0 of 9,
+"Rule 1 accelerating: edits vs controls (whole, MLP, positive)",0 of 9 vs 0 of 9,
+"Rule 1 other: edits vs controls (whole, MLP, positive)",9 of 9 vs 9 of 9,belongs to the network
+Rule 2 per-tap shapes differ from the whole / early vs late majority differs,30 of 30 / 20 of 30,the shape lives in the taps
+"Rule 3 per-token shapes, edits (MLP, positive; reported)",other:0.99 spiral:0.01 (n 747),
+"Rule 3 per-token shapes, controls (MLP, positive; reported)",other:0.97 spiral:0.03 (n 747),

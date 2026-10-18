@@ -1,0 +1,6 @@
+test,value,verdict
+Q1 text-encoder perturbations hit the image-model fragile places (median partial r over 48),0.715,supported
+Q2 text-encoder perturbations agree among themselves (cells with median >= 0.30),12 of 12,agree
+"Q1 for T4 alone, random push of the conditioning (reported)",median 0.724 (n 12),
+"size of changes, median mean delta W / T (reported)",5.33 / 5.24,
+Q1 / Q2 with the one-pixel jitter covariate (reported),0.714 / 12 of 12,
