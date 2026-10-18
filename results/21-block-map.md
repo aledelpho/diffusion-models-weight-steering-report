@@ -3,13 +3,13 @@ id: 21-block-map
 title: A map of the 28 blocks
 status: open
 stage: exploratory
-date: 2026-10-05
+date: 2026-10-17
 preregistration: null
 supersedes: []
 pitfalls: [64, 87, 90]
 
 corpus:
-  renders: 1583
+  renders: 1606
   prompts: 26
   seeds: [2718281, 3141592, 1618033, 1234567]
 
@@ -44,6 +44,30 @@ claims:
       threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and
       0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.
     anchor: "#what-the-weights-show"
+  - id: stream-grows-with-depth
+    status: holds
+    statement: >
+      Inside the unedited image model, the norm of the image residual stream grows with depth,
+      almost monotonically, from the first block to the last.
+    evidence: >
+      Pre-registered (C48 P3), 23 baseline renders with a read-only residual probe verified
+      pixel-identical (max abs diff 0 on 23 of 23): Spearman correlation between stream norm and
+      block index +0.99 (threshold +0.80), growing from 32.3 at block 0 and 1,364 at block 2 to
+      16,307 at block 27.
+    anchor: "#what-each-block-writes-into-the-stream"
+  - id: relative-write-size-explains-instability
+    status: overturned
+    statement: >
+      The middle blocks rewrite the picture more than the late blocks because they write a larger
+      fraction of the residual stream, and blocks 8 or 9 write the largest MLP fraction in the
+      middle of the stack.
+    evidence: >
+      Pre-registered (C48 P1, P2), both refuted. P1: Spearman between relative write ratio and
+      layout stability +0.49 (rule <= -0.50; with depth removed, -0.056) — late blocks 21-27 write
+      the largest fraction of the stream (0.46 to 0.99) yet keep the layout (0.88). P2: among
+      blocks 02-20 the largest MLP relative write sits at block 10 (0.612,jumping the stream from
+      1,775 to 2,844), not block 8 (0.156) or 9 (0.178).
+    anchor: "#what-each-block-writes-into-the-stream"
   - id: ends-change-properties-middle-changes-content
     status: open
     statement: >
@@ -85,7 +109,7 @@ claims:
 
 # A map of the 28 blocks
 
-> **Open** · 1583 renders · exploratory map, one pre-registered test on the weights
+> **Open** · 1606 renders · exploratory map, two pre-registered tests on weights and activations
 > [← all results](README.md#what-holds-and-what-does-not)
 
 > **The direction I'm chasing.** If knobs live in the weights, they should live in particular
@@ -98,8 +122,11 @@ claims:
 >
 > **Where we are.** The two ends behave like controls on the surface of the picture; the middle
 > rewrites what is depicted. A few groups of neighbouring blocks push the same way on a second
-> set of prompts. This page is a map, not a test: only the weights claim was pre-registered,
-> and it passed by a thin margin.
+> set of prompts. Only the weights and residual-stream tests were pre-registered: the weights
+> claim passed by a thin margin, the residual stream grows 505-fold from input to output, and
+> the prediction that late blocks keep the layout because they write a smaller fraction of the
+> stream was refuted — they write the largest fraction — while block 10 produces the middle-stack
+> MLP write spike.
 
 ## In two minutes
 
@@ -124,12 +151,16 @@ The ends of the stack are where a single block behaves like a surface control: t
 and colour, grain or sharpness move. The middle is where single blocks change content — viewpoint,
 identity, medium — and are least predictable. A few groups of neighbouring blocks push in the
 same direction on a second set of prompts. The split between stable and unstable blocks is
-partly visible in the weights themselves, but that result is marginal.
+partly visible in the weights themselves, though that result is marginal. A read-only probe on the
+23 baselines confirmed that the image residual stream grows with depth (Spearman
++0.99), but refuted the idea that late blocks keep the layout because they write a smaller
+fraction of that stream: blocks 21–27 write 46% to 99% of the stream, while in the middle of the stack block 10 — the third member of the 08–10 group —
+produces a 0.61 MLP write spike that jumps the stream norm from 1,775 to 2,844.
 
 ## Why I might be wrong
 
 * **This is a map, drawn after looking.** The bands are my reading of the sheets; only the
-  weights test (C46) was frozen before the data.
+  weights test (C46) and the residual-stream probe (C48) were frozen before the data.
 * **The doses differ by block and by bench.** A block that looks stable may have been pushed less.
 * **64×80 sees layout and colour, not grain.** The groups say nothing about blocks 00, 01, 21, 26
   and 27, whose effects are fine texture.
@@ -226,6 +257,58 @@ in their MLP gate in the stack (σ₁ 113 and 130 against 34–97 elsewhere). Bl
 through almost one direction (stable rank of the attention output 26 and 13 against 100–260
 elsewhere), which is one mechanical reading of a knob. Block 23, the saturation knob of page 22,
 does not stand out on any of the 40 values.
+
+### What each block writes into the stream
+
+Weights alone do not show how much a block actually adds to the running image signal during
+sampling. A pre-registered follow-up (C48, `docs/prereg_residual_probe.md`) re-rendered the 23
+baselines of the styles (12), v3 (6) and v4 (5) benches with a read-only forward hook on each of
+the 28 `SingleStreamBlock`s (`tools/comfy_residual_probe`), recording on the image tokens at each
+of the 9 steps the norm of the incoming stream, the norm of the block's total write, the gated
+attention and MLP writes separately, and the cosine between the write and the stream
+(`data/residual_probe_raw.csv`, 5,796 rows; `data/residual_probe_blocks.csv`). All 23 renders came
+out pixel-identical to the originals (max absolute difference 0).
+
+| test (pre-registered, `data/residual_probe_test.csv`) | value | rule | verdict |
+|---|---|---|---|
+| P1 — Spearman(relative write ratio, layout stability), 28 blocks | +0.49 | ≤ −0.50 supported, > −0.30 refuted | **refuted** |
+| P1b — Spearman(relative write ratio, layout stability), depth removed | −0.056 | reported | — |
+| P2 — block with largest MLP relative write among blocks 02–20 | block 10 (0.612) | block 08 or 09 | **refuted** |
+| P3 — Spearman(stream norm, block index) | **+0.99** | ≥ +0.80 | **supported** |
+
+| blocks / landmark (`data/residual_probe_blocks.csv`) | stream norm | write norm | relative write `ratio` | `attn_ratio` | `mlp_ratio` | `cos(write, stream)` |
+|---|---:|---:|---:|---:|---:|---:|
+| block 00 (initialisation) | 32.3 | 1,420.6 | **44.32** | 4.274 | 42.860 | +0.264 |
+| block 01 | 1,429.4 | 298.8 | 0.210 | 0.194 | 0.041 | −0.305 |
+| blocks 02–07 (early Style) | 1,358.8–1,490.8 | 80.6–209.3 | 0.060–0.140 | 0.040–0.085 | 0.040–0.113 | −0.095 to +0.318 |
+| block 08 | 1,576.2 | 266.6 | 0.167 | 0.102 | 0.156 | +0.319 |
+| block 09 | 1,695.3 | 271.0 | 0.158 | 0.137 | 0.178 | +0.168 |
+| **block 10 (middle spike)** | **1,774.7** | **1,372.7** | **0.772** | **0.219** | **0.612** | **+0.623** |
+| blocks 11–17 | 2,844.3–4,409.7 | 536.6–806.2 | 0.174–0.198 | 0.117–0.149 | 0.132–0.189 | +0.077 to +0.479 |
+| blocks 18–20 | 4,532.2–4,857.7 | 1,221.6–1,760.1 | 0.269–0.382 | 0.200–0.318 | 0.214–0.357 | −0.302 to +0.204 |
+| blocks 21–25 | 5,218.3–9,083.5 | 2,683.4–5,840.6 | 0.461–0.645 | 0.263–0.499 | 0.415–0.513 | −0.174 to +0.195 |
+| block 26 | 10,738.7 | 9,374.5 | **0.880** | 0.496 | 0.608 | +0.315 |
+| block 27 | 16,306.9 | 16,210.2 | **0.993** | 0.427 | 0.761 | +0.225 |
+
+Three things emerge from the measurements:
+
+1. **The stream norm grows 505× across the stack (P3 supported, ρ = +0.99).** Block 00 enters at
+   32.3 and its MLP writes 1,383.8 (`mlp_ratio = 42.86`), establishing the working scale of the
+   stream (1,429.4 at block 01). From block 02 (1,364.0) to block 27 (16,306.9) the norm rises
+   almost monotonically.
+2. **Late blocks keep the layout despite writing the largest fraction of the stream (P1 refuted,
+   ρ = +0.49; depth-removed −0.056).** P1 assumed that blocks 21–27 keep the composition because
+   their writes are small relative to a large stream. Instead, `ratio` is largest in blocks 21–27
+   (0.46 to 0.99) and smallest in blocks 02–09 (0.06 to 0.17). So write size does not explain why
+   late blocks keep the layout. A reading consistent with this page, not tested: by block 21 the
+   composition is already fixed and the large late writes act on the surface; blocks 26
+   (`ratio = 0.88`) and 27 (`ratio = 0.99`) are also the first to break the surface when pushed.
+3. **Block 10 is the middle-stack MLP write spike (`ratio = 0.772`, `mlp_ratio = 0.612`).** P2
+   predicted that among blocks 02–20 the largest `mlp_ratio` would sit at block 08 or 09, where the
+   MLP gate's top singular value peaks. Instead, blocks 08 and 09 write 0.156 and 0.178, and
+   **block 10** — the third member of the `08–10` positive group — writes 0.612 (`cos = +0.623`
+   with the stream), jumping the stream norm from 1,774.7 to 2,844.3 in a single step before blocks
+   11–17 return to 0.17–0.20.
 
 ### How far each block can be pushed
 
@@ -335,7 +418,7 @@ sampling:
   vae: qwen_image_vae.safetensors
   text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
 tuner:
-  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher
+  node: ArthemyKrea2ModelTuner, after ArthemyKrea2ResetPatcher (and ArthemyResidualProbe on the 23 baselines of C48)
   version: not recorded — the tuner is a separate repository
   mode: Real Value, driven by a 34-slot vectors_override (one block at a time)
 prompts:
@@ -349,8 +432,11 @@ conditions:
   - name: single block, positive dose, each of 28 blocks
     dose: calibrated by eye per block and per bench
     measured_D: not measured
+  - name: C48 residual-stream probe on the 23 unedited baselines
+    dose: 0.000
+    measured_D: 0.000
 outputs:
-  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4, benchmark_single_blocks_atlas]
+  folders: [benchmark_single_blocks_styles, benchmark_single_blocks_v3, benchmark_single_blocks_v4, benchmark_single_blocks_atlas, benchmark_residual_probe]
   manifest: no single committed manifest for all three benches; data/block_colour_layout.csv lists every measured image
 analysis:
   scripts:
@@ -358,14 +444,16 @@ analysis:
     - experiments/block_effect_overlap.py       # 29853a9f70e6f86987c119d0f74112517cf56e92a3754cb6cf212ca32c4ae188
     - experiments/block_weight_structure.py     # 1df6cc4b4cedf27e99efba52f19cf7318b7a5572f228e53abcd17e900e405645
     - experiments/block_change_breadth.py       # 564ed1578c1c6db997e489241d3cb1991f7ef5859de50c153e15b218bec575b1
-  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv, data/block_change_breadth.csv
+    - experiments/analyze_residual_probe.py
+  produces: data/block_colour_layout.csv, data/block_effect_overlap_mean.csv, data/block_weight_structure.csv, data/block_weight_structure_test.csv, data/block_change_breadth.csv, data/residual_probe_raw.csv, data/residual_probe_blocks.csv, data/residual_probe_test.csv
 ```
 
 ## Provenance
 
-* **Renders.** benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332), benchmark_single_blocks_atlas (171).
-* **Pre-registration (weights only):** `docs/prereg_block_weight_structure.md`, committed before
-  any weight was read.
+* **Renders.** benchmark_single_blocks_styles (684), benchmark_single_blocks_v3 (396), benchmark_single_blocks_v4 (332), benchmark_single_blocks_atlas (171), benchmark_residual_probe (23).
+* **Pre-registrations:** `docs/prereg_block_weight_structure.md` (weights, C46) and `docs/prereg_residual_probe.md` (residual-stream writes, C48), both committed before their measurements were read.
 * **Result documents:** `docs/block_groups_and_prompt_order.md`,
-  `docs/single_blocks_exploration_synthesis.md`, `docs/block_weight_structure_result.md`.
+  `docs/single_blocks_exploration_synthesis.md`, `docs/block_weight_structure_result.md`,
+  `docs/residual_probe_result.md`.
 * **Observations:** `data/single_blocks_v4_definitions_alessandro.md` (the original, in Italian, of the guide to each block).
+* **Probes:** `tools/comfy_residual_probe` (`ArthemyResidualProbe`, read-only forward hooks on the 28 `SingleStreamBlock`s, checked pixel-identical on all 23 renders).
