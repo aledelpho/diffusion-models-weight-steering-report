@@ -46,8 +46,8 @@ fp16 range at d = 10. The negative side is not the mirror of the positive: near 
 
 ## Tool rule
 
-A dose curve calibrated once per edit can be used on any prompt. The negative knob needs a bound before −1 (C74's
-negative branch already stops at −1). Heavy positive doses are bounded by image damage, not by the shape of the push;
+A dose curve calibrated once per edit can be used on any prompt. The negative knob needs a bound before −1,
+where the edited matrices reach zero. Heavy positive doses are bounded by image damage, not by the shape of the push;
 the whole layer 6 also by the fp16 range.
 
 ## Limits
