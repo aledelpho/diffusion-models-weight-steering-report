@@ -4,7 +4,7 @@ Pre-registration: `docs/prereg_te_shapes_layers.md`. Script: `experiments/te_sha
 Output: `data/te_shapes_layers_trajectories.csv` and `Text2Img\benchmark_te_shapes_layers\*.npz` (about 175 files).
 
 **Start only after C100 (`docs/directives_antigravity_te_shapes2.md`) has finished all its steps, including the paste
-back.** ComfyUI does not need to be running (the script loads the text encoder itself), but the GPU must be free:
+back.** After this, TEP2 resumes (`docs/directives_antigravity_te_massive.md`, section "Resume"). ComfyUI does not need to be running (the script loads the text encoder itself), but the GPU must be free:
 ComfyUI's queue must be empty. **The run takes about 2.5 hours.**
 
 ## Hard rules

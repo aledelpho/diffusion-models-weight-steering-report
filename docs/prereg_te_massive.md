@@ -35,6 +35,24 @@ so the test has to act inside the encoder.
   the saved `C1` of the dwarf at 2645751 reproduces `benchmark_te_characters/D1_dwarf_paladin_L06_mlp_p1.00` pixel for
   pixel. After the main block, all six `C1` renders must equal their `benchmark_te_characters` counterparts.
 
+### Amendment 1 (2026-10-18, after the two gate renders, before any main render or any distance was computed)
+
+Gate (b) passed (max abs diff 0). Gate (c) failed: the dwarf's `C1` at 2645751, rendered from the saved tensor, differs
+from the in-graph `benchmark_te_characters` render by max abs diff 146 per channel, mean 1.91 out of 255, with 2.4% of
+pixels differing by more than 16; the two images are the same picture by eye, and both lie at mean pixel distance 59.03
+from the plain render. The plain conditioning goes through the same save-and-load route bit-identically, so the
+difference is in the edited encode: the script's edited encoder and the in-graph tuner do not produce bit-identical
+tensors (cause not yet located; a numeric-precision difference of the patched weights is the likely candidate).
+Antigravity stopped as instructed. Approved by Alessandro:
+
+* Gate (c), and the check of the six `C1` renders after the main block, become a tolerance: the file-route `C1` must lie
+  at the same mean pixel distance from the same-seed plain render as the in-graph render, within 5% (relative). The max
+  and mean pixel differences are still printed and reported.
+* Nothing else changes. All f(X) were already defined against the file-route `C1` (`benchmark_te_massive`), so every
+  condition shares the same route and the ratios stay internally consistent.
+* Limit added: the saved `C1` is not bit-identical to the conditioning of earlier L06 renders; C87's validation of
+  DINOv2 on this edit refers to the in-graph renders.
+
 ## 3. Measures
 
 Image side (primary): DINOv2-large distance to the same-seed plain render, validated against Alessandro's blind trait

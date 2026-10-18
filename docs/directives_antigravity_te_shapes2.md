@@ -3,8 +3,8 @@
 Pre-registration: `docs/prereg_te_shapes2.md`. Script: `experiments/te_shapes2.py`.
 Output: `data/te_shapes2_trajectories.csv` and `Text2Img\benchmark_te_shapes2\*.npz`.
 
-**Start only after TEP2 (`docs/directives_antigravity_te_massive.md`) has finished all its steps, including the paste
-back.** ComfyUI does not need to be running for this one (the script loads the text encoder itself), but the GPU must be
+**Queue order changed 2026-10-18 (Alessandro): this runs now, first; TEP2 resumes after C101.** No ComfyUI render may be
+running. ComfyUI does not need to be running for this one (the script loads the text encoder itself), but the GPU must be
 free: ComfyUI's queue must be empty.
 
 ## Hard rules

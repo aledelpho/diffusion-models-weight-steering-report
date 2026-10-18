@@ -4,6 +4,22 @@ Pre-registration: `docs/prereg_te_massive.md`. Script: `experiments/te_massive.p
 (25 rows, already committed — **do not run `--plan`**). Outputs: `Text2Img\benchmark_te_massive` (renders and
 `conds\*.pt`), `data/te_massive_encoder.csv`, `data/te_massive_metrics.csv`.
 
+## Resume (2026-10-18) — read this first
+
+Steps 0–2 have been run: the encodes, the node copy, the restart and the two gate renders are done. Gate (c) failed under
+the original pixel-for-pixel rule and Antigravity stopped, as it should. Alessandro approved Amendment 1
+(`docs/prereg_te_massive.md`): gate (c) is now a tolerance, and `te_massive.py --gate` implements it.
+
+**Start only after C101 (`docs/directives_antigravity_te_shapes_layers.md`) has finished, including its paste back.**
+ComfyUI must be running (it was restarted with the new node; if it has been restarted since, the node copy is still in
+place and nothing needs copying again). Then:
+
+1. Run `te_massive.py --gate`. It must print `max abs diff 0` for the plain render, then for the dwarf's C1 a line
+   `max abs diff 146` followed by `distance to plain: ... rel diff ...` within the limit, and `GATE PASS`.
+2. Continue with Step 3 below. After the main block, `--gate` prints seven pairs: the plain one must be `max abs diff 0`;
+   each of the six C1 must be within the limit; the last line must be `GATE PASS`.
+3. Step 4 as written; include the outputs of the earlier Steps 0–2 if you still have them, and say so if not.
+
 ## Hard rules
 
 * **Do not close anything.** Do not use `monitor_and_shutdown.py`, do not shut the PC down, do not change power or
@@ -59,8 +75,7 @@ Must print `queued 23`. When ComfyUI's queue is empty:
 & "C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe" te_massive.py --analyze
 ```
 
-`--count`: `expected 25 missing 0 []`. `--gate`: seven lines `max abs diff 0` (the plain gate and the six C1 renders)
-and `GATE PASS`. `--analyze`: `wrote ...te_massive_metrics.csv 24`.
+`--count`: `expected 25 missing 0 []`. `--gate`: as in Resume, point 2. `--analyze`: `wrote ...te_massive_metrics.csv 24`.
 
 ## Step 4 — paste back
 

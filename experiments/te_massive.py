@@ -185,10 +185,21 @@ def gate():
         for s in SEEDS:
             checks.append((R / FOLDER / f"{ch}_C1_krea2_seed{s}_00001_.png",
                            R / "benchmark_te_characters" / f"{ch}_L06_mlp_p1.00_krea2_seed{s}_00001_.png"))
-    for a, b in checks:
+    for i, (a, b) in enumerate(checks):
         if not a.exists():
             continue
-        d = int(np.abs(_load(a) - _load(b)).max()); print(f"{a.name} vs {b.name}: max abs diff {d}"); ok &= d == 0
+        A, B = _load(a), _load(b)
+        d = int(np.abs(A - B).max()); print(f"{a.name} vs {b.name}: max abs diff {d}")
+        if i == 0:
+            ok &= d == 0                                                    # gate (b): exact
+            continue
+        # gate (c), amendment 1 (2026-10-18): the file-route C1 must land as far from the plain render as the in-graph one
+        ch, s = a.name.split("_C1_")[0], a.name.split("seed")[1].split("_")[0]
+        P = _load(R / "benchmark_portraits/phase_c" / f"{ch}_baseline_krea2_seed{s}_00001_.png")
+        da, db = float(np.abs(A - P).mean()), float(np.abs(B - P).mean())
+        rel = abs(da - db) / db
+        print(f"  mean abs diff {np.abs(A - B).mean():.3f}; distance to plain: file {da:.3f}, in-graph {db:.3f}, rel diff {rel:.4f} (limit 0.05)")
+        ok &= rel <= 0.05
     print("GATE", "PASS" if ok else "FAIL - stop")
 
 
