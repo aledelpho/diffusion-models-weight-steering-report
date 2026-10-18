@@ -18,8 +18,9 @@ import matplotlib.pyplot as plt
 ROOT = Path.home() / "mnt" / "Text2Img" / "benchmark_te_shapes"
 CHARS = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter"]
 EDITS = [("L06_mlp", "Layer 6 MLP"), ("L14_mlp", "Layer 14 MLP"), ("L28_mlp", "Layer 28 MLP")]
-EDIT, CTRL = "#2a78d6", "#8a8986"              # categorical slot 1; neutral for the control
-INK, MUTED, GRID, SURF = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
+# the report's dark figure style (notebook_charts.py): categorical slot 1 for the edits, a neutral for the controls
+EDIT, CTRL = "#3987e5", "#8b8a84"
+INK, MUTED, GRID, SURF = "#e3e7ee", "#98a2b2", "#2e2e2c", "#1a1a19"
 
 
 def load(ch, edit, kind):
@@ -82,6 +83,8 @@ def main(out):
     ax[0, 0].plot([], [], color=EDIT, lw=2, label="real edit (3 characters)")
     ax[0, 0].plot([], [], color=CTRL, lw=1.4, label="random push, same size, same place")
     ax[0, 0].legend(frameon=False, loc="lower right", labelcolor=INK)
+    for a_ in ax.ravel():
+        a_.tick_params(colors=MUTED)
     fig.suptitle("C93 · the push of a text-encoder edit bends once, early, then goes straight; random pushes bend too",
                  x=0.01, ha="left", color=INK, fontsize=13)
     fig.text(0.01, 0.005, "Qwen3-VL-4B, MLP doubled up to d = 3 (18 doses), mean push over tokens, 12 taps scaled to the "
