@@ -117,3 +117,13 @@ reading the source; the encoder audit agrees.
 
 **Record.** This pre-registration was not committed before the renders (file time 10:29, first render 11:26); its
 precedence rests on file times.
+
+## Labelling page — 2026-10-18, before any label
+
+`experiments/te_tap_isolation_page.py`, key `data/te_tap_key.csv`, order `data/te_tap_schedule.csv` (RNG seed 7979).
+96 pictures (72 C79, 12 baselines, 12 full edits) + 4 repeats per character (one of them a baseline) = 108 showings,
+as section C asks. Questions: the C75 asked and common traits of `data/te_traits_questions.csv` (all worded in the
+positive), skin against the same-seed baseline (same / lighter / darker), same person. One question at a time over
+all pictures of a character; condition, edit and seed never shown. A repeat returns at least 12 pictures after its
+first showing (C75 used 30, impossible with 32 pictures per character). Labeller: Alessandro. Retention R and the
+rules of section C are computed exactly as in C75's tally.
