@@ -1,0 +1,7 @@
+test,value,verdict
+T1 flips carry the change (share of squared change at delta >= 32),"share >= 0.50 in 26 of 26, <= 0.20 in 0; median 0.689",supported
+"T2 the same places flip, texture removed (median partial correlation of log patch energy over pairs)",0.506 over 325 pairs; raw 0.682,supported
+"T2 partial rho, different blocks (reported)",median 0.500 (n 264),
+"T2 partial rho, opposite signs (reported)",median 0.500 (n 169),
+"T2 partial rho, same block, same sign (reported)",median 0.692 (n 24),
+T3 two solutions: recurring patches with bimodality coefficient > 0.555,217 of 258 (0.84); median BC 0.680,supported
