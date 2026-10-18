@@ -1,0 +1,15 @@
+test,value,verdict
+Rule 1 straight: edits vs controls,0 of 18 vs 0 of 18,
+Rule 1 spiral: edits vs controls,0 of 18 vs 0 of 18,
+Rule 1 wave: edits vs controls,0 of 18 vs 0 of 18,
+Rule 1 clip: edits vs controls,0 of 18 vs 0 of 18,
+Rule 1 accelerating: edits vs controls,0 of 18 vs 0 of 18,
+Rule 1 other: edits vs controls,18 of 18 vs 18 of 18,belongs to the network
+"Rule 2 range of total turn over the 6 prompts, per edit x sign","L06+L14+L28_mlp/m:6 L06+L14+L28_mlp/p:3 L06_block/m:5 L06_block/p:2 L06_mlp/m:7 L06_mlp/p:3 L14_mlp/m:3 L14_mlp/p:4 L28_mlp/m:5 L28_mlp/p:4; <=15 in 10/10, >=30 in 0/10",a property of the edit
+Rule 3 heavy doses: label changes when doses beyond 3 / -1 are added (reported),9 of 60; new clips 0,
+"median total turn, L06_mlp, positive (reported)","72.6 deg (min 72, max 75)",
+"median total turn, L14_mlp, positive (reported)","80.5 deg (min 78, max 83)",
+"median total turn, L28_mlp, positive (reported)","50.1 deg (min 48, max 53)",
+"median total turn, L06_block, positive (reported)","82.1 deg (min 81, max 83)",
+"median total turn, L06+L14+L28_mlp, positive (reported)","84.8 deg (min 84, max 87)",
+Amendment 1 trajectories cut where the conditioning leaves the fp16 range (reported),D1_dwarf_paladin/L06_block/p/edit from 10,
