@@ -1,0 +1,12 @@
+test,value,verdict
+R1 replication: cells with median pairwise W partial r >= 0.30,12 of 12; D1/1618033:0.55 D1/2645751:0.44 D1/2718281:0.54 D1/3141592:0.35 D1/3316624:0.59 D1/4123105:0.49 P3/1618033:0.53 P3/2645751:0.43 P3/2718281:0.61 P3/3141592:0.64 P3/3316624:0.56 P3/4123105:0.52,replicated
+R1 D1_dwarf_paladin (reported),6 of 6,
+R1 P3_archerforest (reported),6 of 6,
+"R2 prompt micro-changes hit the same places (median partial r, M vs mean W)",0.488 over 36,supported
+R2 size of changes (reported),"mean delta W 5.33, M 12.33 (medians)",
+R3 same-seed vs different-seed similarity of fragility maps across prompts,"same +0.067 (n 6), different +0.085 (n 30), difference -0.018, Mann-Whitney p 0.8363",not the noise
+"R1 with jitter control (amendment 1, reported)",12 of 12 cells >= 0.30,
+"R2 with jitter control (amendment 1, reported)",median 0.488,
+"R4 Spearman(F, noise mean) pooled (reported)",-0.000,
+"R4 Spearman(F, noise mean_abs) pooled (reported)",-0.002,
+"R4 Spearman(F, noise lowfreq_energy) pooled (reported)",-0.022,
