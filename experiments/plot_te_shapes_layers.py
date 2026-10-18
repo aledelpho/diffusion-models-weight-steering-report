@@ -33,7 +33,11 @@ def load(root, L, half, sign, kind):
     if not f.exists():
         return None, None
     z = np.load(f)
-    return z["doses"], z["dmean"].astype(np.float64).reshape(len(z["doses"]), -1)
+    P = z["dmean"].astype(np.float64).reshape(len(z["doses"]), -1)
+    k = 0
+    while k < len(P) and np.isfinite(P[k]).all():                         # amendment 1: stop where fp16 overflowed
+        k += 1
+    return z["doses"][:k], P[:k]
 
 
 def turned(P):

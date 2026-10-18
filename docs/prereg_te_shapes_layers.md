@@ -44,6 +44,20 @@ layer band suffices. Rule 2 "everywhere": the edit's push is straighter than cha
 found is a property of the learned weights, not of where the push enters. A clip at some layer: that layer's knob needs
 an upper bound.
 
+### Amendment 1 (2026-10-18, after the first C100 run stopped, before any measure was read)
+
+The first C100 run stopped on its seventh trajectory (dwarf, whole layer 6, positive): at d = 10 the conditioning leaves
+the fp16 range (entries above 65504 become inf after the probe's fp16 cast, at every reachable tap; the mean push norm
+grows 62 → 131 → 235 → 575 from d = 3 to 7, and is non-finite at 10), and the shape measures fail on inf. Every dose
+up to 7 was finite. No measure or shape label had been computed or read.
+
+* A dose whose conditioning is not finite ends the trajectory: the trajectory is measured on the doses before it, the
+  dropped doses are written in the column `overflow`, and the list is reported next to the rules.
+* Leaving the fp16 range is itself an outcome of the heavy doses (rule 3): it is reported, not hidden.
+* If a cut trajectory enters rule 2 (range of θ over the prompts), θ may then be measured over different dose ranges for
+  different prompts; such cases are named in the report.
+* Written before C101 ran, after the C100 overflow; the figures stop each curve at its last finite dose.
+
 ## 4. Limits
 
 One prompt; mean over tokens at the whole level; controls for MLP positive edits only; late layers (33–34) are seen through

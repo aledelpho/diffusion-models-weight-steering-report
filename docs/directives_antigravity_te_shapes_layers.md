@@ -29,7 +29,7 @@ Must print `selftest ok`.
 ```
 
 It must print, in order: `GATE PASS` (the elf baseline), `GATE b ... max rel err` below the limit, `GATE c PASS`, then
-one `done L<nn>_<half> <sign> <rows>` line per trajectory (140 lines: 35 layers x MLP and attention x 2 signs). Among
+one `done L<nn>_<half> <sign> <rows>` line per trajectory, possibly preceded by an `overflow` line, which is expected (amendment 1) (140 `done` lines: 35 layers x MLP and attention x 2 signs). Among
 them, seven `GATE d ... rel err` lines (against C93) must be below their limit. Finally
 `wrote ...te_shapes_layers_trajectories.csv <rows>`. If any line says `FAIL` or the script stops, paste the output and
 stop.

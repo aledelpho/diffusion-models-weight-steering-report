@@ -37,3 +37,10 @@ It must print, in order: `GATE PASS` (the elf baseline), `GATE b ... max rel err
 Write `docs/RENDERS_2026-10-18_te_shapes2.md` with the exact commands and outputs of Steps 0–1 in plain
 triple-backtick fences, the number and total size of the files in `Text2Img\benchmark_te_shapes2`, and the run time. Do
 not run `--rules` (Claude runs it), do not edit any other file, do not commit.
+
+## Restart after the stop of 2026-10-18
+
+The first run stopped on `L06_block` at d = 10 (overflow, then `SVD did not converge`). Amendment 1
+(`docs/prereg_te_shapes2.md`) handles it: such a dose now ends the trajectory and is printed as a line starting with
+`overflow`; that line is expected, not a failure. Re-run Steps 0–2 from the start (the old `.npz` files are overwritten);
+in the paste back, also include the traceback of the first run if you still have it.

@@ -35,6 +35,15 @@ def gj(L, half, d):
     return {f"{pre}{m}_proj.weight": d for m in mats}
 
 
+def finite_prefix(A, doses):
+    """Amendment 1 (2026-10-18): a dose whose conditioning leaves the fp16 range (inf after the probe's fp16 cast) ends
+    the trajectory; the trajectory is measured on the doses before it, and the dropped doses are reported."""
+    k = 0
+    while k < len(A) and np.isfinite(A[k]).all():
+        k += 1
+    return A[:k], k, [float(d) for d in list(doses)[k:]]
+
+
 def run():
     import torch
     import te_conditioning as TC
@@ -108,8 +117,12 @@ def run():
                         if e > 2 * TC.FP16_FLOOR:
                             sys.exit("GATE d FAIL - stop")
                     base_row = {"layer": L, "half": half, "sign": sign, "kind": kind}
+                    A, used, over = finite_prefix(A, doses)                 # amendment 1: drop doses that leave the fp16 range
+                    base_row = {**base_row, "n_doses": used, "overflow": " ".join(f"{d:g}" for d in over)}
+                    if over:
+                        print("overflow", base_row, flush=True)
                     lim = 3.0 if sign == "p" else 1.0
-                    k3 = sum(1 for d in doses if d <= lim)
+                    k3 = min(sum(1 for d in doses if d <= lim), len(A))
                     for rng, sub in (("full", A), ("upto_C93", A[:k3])):
                         m = TS.measures(sub.reshape(len(sub), -1))
                         rows.append({**base_row, "level": "whole", "range": rng, "unit": "", **m, "shapes": "+".join(TS.shapes(m))})
@@ -171,6 +184,8 @@ def rules(rows):
     upto = {(int(r["layer"]), r["half"], r["sign"]): r["shapes"] for r in rows if r["level"] == "whole" and r["range"] == "upto_C93" and r["kind"] == "edit"}
     ch = sum(full[k] != upto.get(k) for k in full)
     out.append({"test": "Rule 4 label changes when doses beyond 3 / -1 are added (reported)", "value": f"{ch} of {len(full)}", "verdict": ""})
+    ov = sorted({f"L{int(r['layer']):02d}_{r['half']}/{r['sign']}/{r['kind']}" + " from " + r["overflow"].split()[0] for r in rows if r.get("overflow")})
+    out.append({"test": "Amendment 1 trajectories cut where the conditioning leaves the fp16 range (reported)", "value": "; ".join(ov) or "none", "verdict": ""})
     return out
 
 

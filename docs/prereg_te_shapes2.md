@@ -43,6 +43,20 @@ new happen far beyond d = 3 or past the sign flip?
 on the prompt": a dose must be calibrated per prompt. Rule 3: whether heavy doses add new behaviour or only extend the
 straight part.
 
+### Amendment 1 (2026-10-18, after the first C100 run stopped, before any measure was read)
+
+The first C100 run stopped on its seventh trajectory (dwarf, whole layer 6, positive): at d = 10 the conditioning leaves
+the fp16 range (entries above 65504 become inf after the probe's fp16 cast, at every reachable tap; the mean push norm
+grows 62 → 131 → 235 → 575 from d = 3 to 7, and is non-finite at 10), and the shape measures fail on inf. Every dose
+up to 7 was finite. No measure or shape label had been computed or read.
+
+* A dose whose conditioning is not finite ends the trajectory: the trajectory is measured on the doses before it, the
+  dropped doses are written in the column `overflow`, and the list is reported next to the rules.
+* Leaving the fp16 range is itself an outcome of the heavy doses (rule 3): it is reported, not hidden.
+* If a cut trajectory enters rule 2 (range of θ over the prompts), θ may then be measured over different dose ranges for
+  different prompts; such cases are named in the report.
+* The same guard is applied to C101 and to its figures (written before C101 ran).
+
 ## 4. Limits
 
 Six prompts, one seed-free encoder pass each (the encoder does not depend on the seed); mean over tokens at the whole

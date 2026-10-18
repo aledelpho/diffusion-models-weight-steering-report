@@ -50,6 +50,15 @@ def first_layer(edit):
     return min(L for L, _ in EDITS[edit])
 
 
+def finite_prefix(A, doses):
+    """Amendment 1 (2026-10-18): a dose whose conditioning leaves the fp16 range (inf after the probe's fp16 cast) ends
+    the trajectory; the trajectory is measured on the doses before it, and the dropped doses are reported."""
+    k = 0
+    while k < len(A) and np.isfinite(A[k]).all():
+        k += 1
+    return A[:k], k, [float(d) for d in list(doses)[k:]]
+
+
 def run():
     import torch
     import te_punct_encoder as TPE
@@ -113,8 +122,12 @@ def run():
                     A = np.stack(PP).mean(1)                                # (n doses, 12, 2560), mean over tokens
                     np.savez_compressed(outdir / f"{p}_{edit}_{sign}_{kind}.npz", dmean=A.astype(np.float16), doses=np.array(doses))
                     base_row = {"prompt": p, "edit": edit, "sign": sign, "kind": kind}
+                    A, used, over = finite_prefix(A, doses)                 # amendment 1: drop doses that leave the fp16 range
+                    base_row = {**base_row, "n_doses": used, "overflow": " ".join(f"{d:g}" for d in over)}
+                    if over:
+                        print("overflow", base_row, flush=True)
                     lim = 3.0 if sign == "p" else 1.0
-                    k3 = sum(1 for d in doses if d <= lim)
+                    k3 = min(sum(1 for d in doses if d <= lim), len(A))
                     for rng, sub in (("full", A), ("upto_C93", A[:k3])):
                         m = TS.measures(sub.reshape(len(sub), -1))
                         rows.append({**base_row, "level": "whole", "range": rng, "unit": "", **m, "shapes": "+".join(TS.shapes(m))})
@@ -159,6 +172,8 @@ def rules(rows):
     for e in EDITS:
         t = [float(r["theta"]) for r in W if r["kind"] == "edit" and r["edit"] == e and r["sign"] == "p"]
         out.append({"test": f"median total turn, {e}, positive (reported)", "value": f"{statistics.median(t):.1f} deg (min {min(t):.0f}, max {max(t):.0f})", "verdict": ""})
+    ov = sorted({f"{r['prompt']}/{r['edit']}/{r['sign']}/{r['kind']}" + " from " + r["overflow"].split()[0] for r in rows if r.get("overflow")})
+    out.append({"test": "Amendment 1 trajectories cut where the conditioning leaves the fp16 range (reported)", "value": "; ".join(ov) or "none", "verdict": ""})
     return out
 
 
