@@ -130,14 +130,23 @@ Scaling the output projection of an attention or an MLP, as my edits do among ot
 scaling that layer's output, which is what Calibri tunes. Calibri does not analyse attention against
 MLP or early against late blocks; page 29 does, and finds that they differ.
 
-**Inside the text side.** Knowledge about styles and objects can be localised in the text encoder of a
-text-to-image model and edited there [20]; Diffusion Lens reads the intermediate layers of the text
-encoder by generating images from them [21]; the per-token text embedding of a diffusion model can be
+**Inside the text side.** In Stable Diffusion 1.x, causal tracing finds knowledge about styles, objects and facts
+spread through the U-Net but concentrated in one place of the CLIP text encoder, its first self-attention layer at
+the last subject token, where a closed-form edit removes a concept in under a second [31]; the same authors later
+report that causal tracing no longer pinpoints it in SD-XL and DeepFloyd, and localise knowledge in a few U-Net layers
+instead [20]. Editing one MLP matrix of the CLIP text encoder updates what a model draws with FID and CLIP score
+nearly unchanged, while editing the cross-attention of the U-Net for the same purpose sometimes makes the pictures
+incoherent [30]. Diffusion Lens reads the intermediate layers of the text encoder by generating images from them:
+simple and common concepts appear early, relations, colour bindings and rare concepts late, more gradually in a T5
+encoder than in CLIP [21]; the per-token text embedding of a diffusion model can be
 probed and edited token by token [22]. Where the picture reads each word has been studied through
 cross-attention maps in U-Nets [23, 24] and, for dual-stream transformers, through the joint attention
 [25]. Page 30 edits the weights of a language-model text encoder and follows the edit into the
 conditioning and into the attention of a single-stream transformer, where the methods of [25] do not
-apply directly.
+apply directly. Page 30 relates to these findings in three places: text-encoder edits change *what* is drawn at
+little cost to the surface, as [30] reports for targeted edits; switching off half of the first layer of Qwen3-VL makes
+the picture write the prompt, a first layer that [31] found decisive in CLIP; and the damage of an edit needs many of
+the encoder's intermediate readings at once, closer to the gradual build-up of [21] than to a single locus.
 
 **What the prompt asked for, and whom the model draws.** Checking a picture against its prompt with a list of
 yes/no questions derived from the prompt is the scheme of TIFA [26] and Davidsonian Scene Graph [27], which answer
@@ -181,6 +190,8 @@ SSIM [15] and DINOv2 [16] (page 25).
 27. Cho, Hu, Garg, Anderson, Krishna, Baldridge, Bansal, Pont-Tuset, Wang. *Davidsonian Scene Graph: Improving Reliability in Fine-grained Evaluation for Text-to-Image Generation.* ICLR 2024. arXiv:2310.18235
 28. Luccioni, Akiki, Mitchell, Jernite. *Stable Bias: Analyzing Societal Representations in Diffusion Models.* NeurIPS 2023 Datasets and Benchmarks. arXiv:2303.11408
 29. Bianchi, Kalluri, Durmus, Ladhak, Cheng, Nozza, Hashimoto, Jurafsky, Zou, Caliskan. *Easily Accessible Text-to-Image Generation Amplifies Demographic Stereotypes at Large Scale.* FAccT 2023. arXiv:2211.03759
+30. Arad, Orgad, Belinkov. *ReFACT: Updating Text-to-Image Models by Editing the Text Encoder.* NAACL 2024. arXiv:2306.00738
+31. Basu, Zhao, Morariu, Feizi, Manjunatha. *Localizing and Editing Knowledge in Text-to-Image Generative Models.* ICLR 2024. arXiv:2310.13730
 
 ## How to read the table below
 

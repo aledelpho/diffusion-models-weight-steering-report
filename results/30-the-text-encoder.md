@@ -534,6 +534,12 @@ removing: strong changes in 40 of 70 against 4 of 70. Surface damage is rare (me
 illustration. C65 confirmed the quality side on seven characters: BRISQUE improves slightly (-1.52)
 where the DiT preset of page 28 costs +8.09.
 
+This agrees with what others found on Stable Diffusion: a targeted edit of one MLP matrix of the CLIP text encoder
+changes what the model draws with image quality (FID) nearly unchanged, while the same kind of update made in the
+image model's cross-attention sometimes leaves the pictures incoherent ([README, ref. 30](README.md#related-work)).
+Their edits are aimed at one concept and built not to disturb the rest; mine scale a whole layer, and still cost
+little surface. Neither study compares the two halves at the same size of change: that is roadmap item C86.
+
 ### No common direction across characters
 
 C65 applied 20 edits chosen from the pilot to seven fantasy characters at two seeds. A DiT preset moves them
@@ -769,6 +775,13 @@ size (0.98x and 0.84x on average over the twelve readings) and the identity of e
 token is recovered. My reading, not tested: the picture writes the prompt when the conditioning keeps the words at a
 normal size but has lost part of what layer 0 adds to them. No experiment varies the two separately.
 
+There is a precedent on a different encoder. In Stable Diffusion 1.x, causal tracing places the CLIP text encoder's
+knowledge of styles, objects and facts in its first self-attention layer, at the last token of the subject, and a
+closed-form edit of that layer removes a concept ([README, ref. 31](README.md#related-work)). The same authors found
+that this localisation does not carry over to SD-XL or DeepFloyd ([ref. 20](README.md#related-work)). Here, switching
+off the attention of Qwen3-VL's first layer is the condition that writes text in 4 of 4 prompts. Whether this is the
+same property of first layers, on a 4-billion-parameter language model instead of CLIP, is not tested.
+
 ### Punctuation, BREAK and labels
 
 C78 asked whether the separators between the parts of a prompt matter, on two prompts with four characters each
@@ -844,6 +857,11 @@ the half-tap pictures in 0 of 24. Under L06 the early and middle taps lighten it
 6 of 12, the late ones in 4 of 12 and 1 of 12. By CSD the late taps move the pictures more (21 of 24 cells); under L06,
 DINOv2 and VQAScore move more with the early ones: a hint that the late taps carry rendering and the early ones
 content, from a measure (CSD) that C66 did not validate for style.
+
+Diffusion Lens, which renders images from the intermediate layers of text encoders, finds simple and common concepts
+early and relations, colour bindings and rare concepts late, built gradually in a T5 encoder
+([README, ref. 21](README.md#related-work)). The C79 result, damage that needs many readings at once and halves that
+fall short of the whole, fits a gradual build-up better than a single locus. C87 tests it tap by tap.
 
 ### Reproducing this
 
