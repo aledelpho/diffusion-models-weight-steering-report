@@ -1,0 +1,5 @@
+test,value,verdict
+R1 replication: cells with median pairwise partial r >= 0.30,7 of 9; LG/1337:0.46 LG/42:0.34 LG/777:0.41 LN/1337:0.43 LN/42:0.38 LN/777:0.28 LP/1337:0.38 LP/42:0.40 LP/777:0.27,replicated
+R2 one word of the prompt hits the same places (median of 6),0.338; 0.35 0.52 0.02 0.33 0.09 0.43,supported
+T1 flip share (delta >= 32) at 0.050 / 0.200 (reported),median 0.656 / 0.878,
+"fragility maps across prompts, same seed vs different seed (reported; same picture at a seed)",+0.199 vs +0.047,

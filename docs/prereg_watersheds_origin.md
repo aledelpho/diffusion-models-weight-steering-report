@@ -85,3 +85,12 @@ pictures drawn from the same noise; `euler_ancestral` adds seeded noise at every
 not saved; the noise reconstruction follows ComfyUI's code and is not checked inside the sampler.
 
 Script: `experiments/watersheds_origin.py`. Directive: `docs/directives_antigravity_watersheds_origin.md`.
+
+## Amendment 1 — 2026-10-18, after C98 and before any C97 render was analysed
+
+C98 (`docs/watersheds_leaf_result.md`) showed that on a leaf part of the "same places" effect is jitter of thin
+structures (veins, outline): with a second covariate — where the baseline changes when shifted by one pixel, maximum over
+four directions — cells at ≥ 0.30 fell from 7 to 5 of 9, while on the archer of C96 nothing changed (0.506). For C97,
+R1, R2 and R3 are **also reported with that jitter covariate** next to the pre-registered values. The verdicts stay
+those of the pre-registered (texture-only) statistics; a verdict that holds only without the jitter control will be
+written as such.

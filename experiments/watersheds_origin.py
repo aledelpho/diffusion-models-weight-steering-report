@@ -159,6 +159,27 @@ def pcorr(a, b, *zs):
     return float(np.corrcoef(resid(a, *zs), resid(b, *zs))[0, 1])
 
 
+def jitter(base):
+    """Amendment 1: where the base changes when shifted by one pixel (max over four directions), log patch energy."""
+    b = base.astype(np.int16); m = np.zeros(b.shape[:2], np.float32)
+    for dy, dx in ((0, 1), (1, 0), (1, 1), (1, -1)):
+        m = np.maximum(m, np.abs(np.roll(np.roll(b, dy, 0), dx, 1) - b).max(2))
+    return np.log1p(MW.patches(m ** 2).ravel())
+
+
+def analyze_cells_jitter(cells):
+    """Amendment 1 (reported): R1 and R2 with texture + one-pixel jitter as covariates."""
+    r1, r2 = {}, []
+    for (p, s), ims in sorted(cells.items()):
+        base = ims["base"]; t = np.log1p(MW.texture(base).ravel()); j = jitter(base)
+        E = {k: logE(base, ims[k])[0] for k in [*W, "M1", "M2", "M3"]}
+        r1[(p, s)] = statistics.median(pcorr(E[a], E[b], t, j) for a, b in itertools.combinations(list(W), 2))
+        Wm = np.mean([E[k] for k in W], axis=0)
+        r2 += [pcorr(E[m], Wm, t, j) for m in ("M1", "M2", "M3")]
+    return [{"test": "R1 with jitter control (amendment 1, reported)", "value": f"{sum(v >= 0.30 for v in r1.values())} of {len(r1)} cells >= 0.30", "verdict": ""},
+            {"test": "R2 with jitter control (amendment 1, reported)", "value": f"median {statistics.median(r2):.3f}", "verdict": ""}]
+
+
 def analyze_cells(cells):
     """cells: {(prompt, seed): {"base": img, "W1".. "W5": img, "M1".."M3": img}} -> rows, tests, F maps."""
     R, out, F, T = [], [], {}, {}
@@ -222,6 +243,7 @@ def analyze():
             sys.exit(f"missing {p}")
         cells.setdefault((r["prompt_id"], r["seed"]), {})[r["cond"]] = MW.load(p)
     R, out, F = analyze_cells(cells)
+    out += analyze_cells_jitter(cells)
     if NOISE.exists():
         out += noise_stats(F, np.load(NOISE))
     for fn, data in (("watersheds_origin_cells.csv", R), ("watersheds_origin_tests.csv", out)):

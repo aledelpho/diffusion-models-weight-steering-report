@@ -1,0 +1,16 @@
+prompt,seed,what,value
+LP,42,R1 median pairwise partial r (66 pairs),0.3962
+LP,777,R1 median pairwise partial r (66 pairs),0.2711
+LP,1337,R1 median pairwise partial r (66 pairs),0.3843
+LG,42,R1 median pairwise partial r (66 pairs),0.3411
+LG,777,R1 median pairwise partial r (66 pairs),0.4115
+LG,1337,R1 median pairwise partial r (66 pairs),0.4567
+LN,42,R1 median pairwise partial r (66 pairs),0.379
+LN,777,R1 median pairwise partial r (66 pairs),0.2806
+LN,1337,R1 median pairwise partial r (66 pairs),0.434
+LP vs LN,42,R2 colour word vs mean LN edit map,0.3465
+LG vs LN,42,R2 colour word vs mean LN edit map,0.5237
+LP vs LN,777,R2 colour word vs mean LN edit map,0.0246
+LG vs LN,777,R2 colour word vs mean LN edit map,0.3287
+LP vs LN,1337,R2 colour word vs mean LN edit map,0.0868
+LG vs LN,1337,R2 colour word vs mean LN edit map,0.4348
