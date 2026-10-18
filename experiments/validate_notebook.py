@@ -249,7 +249,7 @@ def check_contaminated_pixels(body: str, path: Path, rep: Report) -> None:
             head = f.read_text(encoding="utf-8-sig", errors="ignore")
         except OSError:
             continue
-        if re.search(r"\b1760\b", head):
+        if re.search(r"(?<![.\d])1760(?![.\d])", head):
             dirty.append(c)
     if dirty and CONTAMINATION_MARKER not in body:
         rep.error(path.name, f"cites {', '.join(dirty[:3])}, whose renders carry the 480-pixel "

@@ -1,0 +1,5 @@
+test,value,verdict
+P1 ratio vs stability (raw),0.49,refuted
+"P1b ratio vs stability (depth removed, reported)",-0.056,
+P2 block with largest mlp_ratio among 02-20,10,refuted
+P3 stream norm vs depth,0.99,supported

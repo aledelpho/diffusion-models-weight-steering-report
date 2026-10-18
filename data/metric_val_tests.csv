@@ -1,0 +1,10 @@
+test,n,verdict,rule,accuracy,gap,rho_csd,per_trait,rho,auc_pooled,auc_csd,majority,auc_yes_vs_no,p,auc,auc_dino
+T1 style coherence (CSD) vs 'same direction',34,not validated,rho >= 0.40 and AUC >= 0.75,,,,,-0.482,,,,0.056,0.0039,,
+T2 exceptions (CSD) vs follows / another way,157+81,not validated,AUC >= 0.70,,,,,,,,,,,0.383,
+T3 order dispersion (CSD) vs 1-5 scores,20,validated,rho >= 0.60 (CSD only; DINOv2 reported),,,,,0.844,,,,,0.0,,
+T3 order dispersion (DINOv2) vs 1-5 scores,20,reported,rho >= 0.60 (CSD only; DINOv2 reported),,,,,0.898,,,,,0.0,,
+T4 style changed (CSD) vs unchanged,55+97,not validated,AUC(CSD) >= 0.70 and > AUC(DINOv2),,,,,,,0.796,,,,,0.815
+T5 how much it changed (DINOv2),150,validated,rho >= 0.50,,,0.654,,0.661,,,,,0.0,,
+T6 genre (CLIP zero-shot) vs the genre named in the notes,145,not validated,accuracy >= 0.60 and >= majority + 0.15,0.593,,,,,,,0.317,,,,
+T7 trait lost (VQAScore) vs the notes,78,validated,pooled AUC >= 0.80,,,,"{""antlers"": [17, 0.985], ""eyepatch"": [14, 0.824], ""fur"": [11, 0.995], ""pauldron"": [14, 0.885], ""gauntlet"": [11, 0.686], ""elf"": [4, 1.0], ""tan"": [7, 0.83]}",,0.885,,,,,,
+"D discrimination gap (CSD, genre-labelled images)",145,reported,reported,,0.207,,,,,,,,,,

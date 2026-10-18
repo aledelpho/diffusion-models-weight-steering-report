@@ -25,15 +25,17 @@ class Krea2ConditioningPush:
         return {"required": {
             "conditioning": ("CONDITIONING",),
             "conditioning_edit": ("CONDITIONING",),
-            "variant": (["zero", "real", "permuted", "shared", "token"],),
+            "variant": (["zero", "real", "permuted", "shared", "token", "taps"],),
             "noise_seed": ("INT", {"default": 7, "min": 0, "max": 2 ** 31 - 1}),
+        }, "optional": {
+            "taps": ("STRING", {"default": ""}),
         }}
 
     RETURN_TYPES = ("CONDITIONING",)
     FUNCTION = "push"
     CATEGORY = "conditioning/probe"
 
-    def push(self, conditioning, conditioning_edit, variant, noise_seed):
+    def push(self, conditioning, conditioning_edit, variant, noise_seed, taps=""):
         if variant == "zero":
             return (conditioning,)
         if variant == "real":
@@ -46,7 +48,17 @@ class Krea2ConditioningPush:
             P = (e[0].float() - c[0].float()).cpu().numpy().reshape(seq, 12, -1)
             rng = np.random.default_rng(noise_seed)
             norms = np.linalg.norm(P, axis=(0, 2))
-            if variant == "permuted":
+            if variant == "taps":
+                sel = [int(x) for x in taps.split(",") if x.strip()]
+                D = np.zeros_like(P)
+                D[:, sel, :] = P[:, sel, :]
+                print(f"[Krea2ConditioningPush] {variant} taps={taps} seed {noise_seed}: tap norms target {np.round(norms, 2).tolist()} "
+                      f"applied {np.round(np.linalg.norm(D, axis=(0, 2)), 2).tolist()}")
+                res = c.clone().reshape(c.shape[0], seq, 12, -1)
+                res[:, :, sel, :] = e.reshape(e.shape[0], seq, 12, -1)[:, :, sel, :]
+                out.append([res.reshape(c.shape), meta])
+                continue
+            elif variant == "permuted":
                 D = P[:, :, rng.permutation(P.shape[2])]
             elif variant == "shared":
                 u = rng.standard_normal((12, P.shape[2])); u /= np.linalg.norm(u, axis=1, keepdims=True)
@@ -54,7 +66,7 @@ class Krea2ConditioningPush:
             else:
                 g = rng.standard_normal(P.shape)
                 D = g * (norms / (np.linalg.norm(g, axis=(0, 2)) + 1e-12))[None, :, None]
-            print(f"[Krea2ConditioningPush] {variant} seed {noise_seed}: tap norms target {np.round(norms, 2).tolist()} "
+            print(f"[Krea2ConditioningPush] {variant} taps={taps} seed {noise_seed}: tap norms target {np.round(norms, 2).tolist()} "
                   f"applied {np.round(np.linalg.norm(D, axis=(0, 2)), 2).tolist()}")
             d = torch.from_numpy(D.reshape(seq, -1).astype(np.float32)).to(device=c.device)[None]
             out.append([(c.float() + d).to(c.dtype), meta])
@@ -62,4 +74,5 @@ class Krea2ConditioningPush:
 
 
 NODE_CLASS_MAPPINGS = {"Krea2ConditioningPush": Krea2ConditioningPush}
-NODE_DISPLAY_NAME_MAPPINGS = {"Krea2ConditioningPush": "Krea2 Conditioning Push (C72)"}
+NODE_DISPLAY_NAME_MAPPINGS = {"Krea2ConditioningPush": "Krea2 Conditioning Push (C72/C79)"}
+

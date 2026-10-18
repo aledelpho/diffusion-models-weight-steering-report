@@ -1,0 +1,17 @@
+set,scope,version,mean_diff_raw_all12,mean_diff_raw_L11_to_L35,mean_diff_centred_all12,mean_diff_centred_L11_to_L35
+built_4parts,all_parts,comma,0.02969,0.03595,0.07717,0.09973
+built_4parts,all_parts,nopunct,0.03061,0.03724,0.07571,0.0981
+built_4parts,all_parts,period,0.0294,0.03584,0.07373,0.09564
+built_4parts,all_parts,semicolon,0.03047,0.03679,0.07723,0.0996
+complex_all7,all_parts,comma,0.02986,0.03589,0.06588,0.08198
+complex_all7,all_parts,nolabels,0.02811,0.03361,0.06307,0.07814
+complex_all7,all_parts,nopunct,0.03178,0.03807,0.07139,0.08871
+complex_all7,all_parts,original,0.03086,0.03688,0.06801,0.08437
+complex_all7,all_parts,period,0.03043,0.03644,0.06717,0.0835
+complex_all7,all_parts,semicolon,0.03054,0.03667,0.06721,0.08361
+complex_all7,chars_1to4,comma,0.01948,0.02538,0.04338,0.05573
+complex_all7,chars_1to4,nolabels,0.01831,0.02376,0.0418,0.05351
+complex_all7,chars_1to4,nopunct,0.02144,0.02762,0.04874,0.06252
+complex_all7,chars_1to4,original,0.01936,0.02519,0.04246,0.05455
+complex_all7,chars_1to4,period,0.01926,0.02503,0.04194,0.05391
+complex_all7,chars_1to4,semicolon,0.01939,0.02526,0.0424,0.05458

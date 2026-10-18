@@ -61,11 +61,35 @@ labels "Character N (…)" change which attributes travel between characters, in
 parts separately (BREAK) destroys the scene. The community advice that comes from CLIP-based models (use BREAK to
 stop concepts bleeding) does the opposite of what it promises here.
 
+## Encoder-side measure (reported, deciding nothing)
+
+Script: `experiments/te_punct_encoder.py` (bit-exact gate against `benchmark_te_conditioning/elf/P1_elfbrawler_baseline.npz`: `max_abs_diff = 0.0`, `GATE PASS`). Outputs: `data/te_punct_encoder_by_tap.csv` (384 rows), `data/te_punct_encoder_summary.csv` (16 rows). For each tap, mean cosine similarity of content tokens in the same part minus content tokens in different parts, both on raw tap vectors and on position-centred tap vectors (mean across tokens subtracted per tap):
+
+| set & scope | version | raw (all 12 taps) | raw (L11–L35) | centred (all 12 taps) | centred (L11–L35) |
+|---|---|---|---|---|---|
+| built (`P1`, `P2`, 4 parts) | comma | 0.02969 | 0.03595 | 0.07717 | 0.09973 |
+| built (`P1`, `P2`, 4 parts) | period | 0.02940 | 0.03584 | 0.07373 | 0.09564 |
+| built (`P1`, `P2`, 4 parts) | semicolon | 0.03047 | 0.03679 | 0.07723 | 0.09960 |
+| built (`P1`, `P2`, 4 parts) | no punctuation | 0.03061 | 0.03724 | 0.07571 | 0.09810 |
+| complex (`P3`, `P4`, all 7 parts) | original | 0.03086 | 0.03688 | 0.06801 | 0.08437 |
+| complex (`P3`, `P4`, all 7 parts) | comma | 0.02986 | 0.03589 | 0.06588 | 0.08198 |
+| complex (`P3`, `P4`, all 7 parts) | period | 0.03043 | 0.03644 | 0.06717 | 0.08350 |
+| complex (`P3`, `P4`, all 7 parts) | semicolon | 0.03054 | 0.03667 | 0.06721 | 0.08361 |
+| complex (`P3`, `P4`, all 7 parts) | no punctuation | 0.03178 | 0.03807 | 0.07139 | 0.08871 |
+| complex (`P3`, `P4`, all 7 parts) | no labels | 0.02811 | 0.03361 | 0.06307 | 0.07814 |
+| complex (`P3`, `P4`, Characters 1–4) | original | 0.01936 | 0.02519 | 0.04246 | 0.05455 |
+| complex (`P3`, `P4`, Characters 1–4) | comma | 0.01948 | 0.02538 | 0.04338 | 0.05573 |
+| complex (`P3`, `P4`, Characters 1–4) | period | 0.01926 | 0.02503 | 0.04194 | 0.05391 |
+| complex (`P3`, `P4`, Characters 1–4) | semicolon | 0.01939 | 0.02526 | 0.04240 | 0.05458 |
+| complex (`P3`, `P4`, Characters 1–4) | no punctuation | 0.02144 | 0.02762 | 0.04874 | 0.06252 |
+| complex (`P3`, `P4`, Characters 1–4) | no labels | 0.01831 | 0.02376 | 0.04180 | 0.05351 |
+
+* **The pre-registered expectation ("larger with periods than commas from layer 11 on") does not hold.** Across `built_4parts`, `complex_all7`, and `chars_1to4`, `period`, `comma`, `semicolon`, and `original` sit within `0.0010` of each other on raw cosine (`0.03584`–`0.03688` on all parts; `0.02503`–`0.02538` on Characters 1–4) and within `0.0041` on centred cosine (`0.05391` vs `0.05573` on Characters 1–4, with `period` slightly below `comma`). Removing punctuation altogether (`nopunct`) does not reduce within-part similarity (`0.02762` raw / `0.06252` centred on Characters 1–4). The separator character does not measurably change how the tapped layers group the parts of the prompt, which agrees with the null result on the images. What does drive the grouping (position, word content) was not tested.
+
 ## Not yet done
 
 * The natural prompts (dwarf and elf brawler in five versions) are not labelled; the gold gorget and gold gauntlet
   seen by eye stay descriptive.
-* The encoder-side measure (same-part vs cross-part similarity by version) is not computed.
 
 ## Limits
 

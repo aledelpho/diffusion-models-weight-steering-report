@@ -87,24 +87,38 @@ def key(r):
 # ---------------------------------------------------------------- models (GPU PC)
 class Models:
     def __init__(self, vqa=True):
-        import torch
-        from transformers import AutoModel, AutoImageProcessor, CLIPModel, CLIPProcessor, pipeline
+        import torch, types, open_clip
+        from huggingface_hub import hf_hub_download
+        from transformers import AutoModel, AutoImageProcessor, CLIPModel, CLIPProcessor
         self.dev = "cuda" if torch.cuda.is_available() else "cpu"
         self.torch = torch
-        self.csd = pipeline("image-feature-extraction", model="tomg-group-umd/CSD-ViT-L", trust_remote_code=True,
-                            device=0 if self.dev == "cuda" else -1)
+        ck = torch.load(hf_hub_download("tomg-group-umd/CSD-ViT-L", "pytorch_model.bin"), map_location="cpu", weights_only=False)["model_state_dict"]
+        m_csd, _, self.csd_p = open_clip.create_model_and_transforms("ViT-L-14", pretrained=None, quick_gelu=True)
+        self.csd_bb = m_csd.visual; self.csd_bb.proj = None
+        self.csd_bb.load_state_dict({k.replace("module.backbone.", ""): v for k, v in ck.items() if k.startswith("module.backbone.")}, strict=True)
+        self.csd_bb = self.csd_bb.to(self.dev).eval()
+        self.csd_proj = ck["module.last_layer_style"].float().to(self.dev)
         self.dino_p = AutoImageProcessor.from_pretrained("facebook/dinov2-large")
         self.dino = AutoModel.from_pretrained("facebook/dinov2-large").to(self.dev).eval()
         self.clip_p = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
         self.clip = CLIPModel.from_pretrained("openai/clip-vit-large-patch14").to(self.dev).eval()
         self.vqa = None
         if vqa:
+            for k in ("tiktoken", "ImageReward", "hpsv2", "t2v_metrics.models.vqascore_models.lavis", "t2v_metrics.models.vqascore_models.lavis.models"):
+                m = sys.modules.setdefault(k, types.ModuleType(k)); m.load_model = None
             import t2v_metrics
+            from t2v_metrics.models.vqascore_models.clip_t5.model.multimodal_encoder.clip_encoder import CLIPVisionTower
+            from t2v_metrics.models.vqascore_models.clip_t5.model import CLIPT5ForConditionalGeneration
+            _orig_vt_init = CLIPVisionTower.__init__
+            CLIPVisionTower.__init__ = lambda vt, vision_tower, args, delay_load=False: _orig_vt_init(vt, vision_tower, args, delay_load=True)
+            CLIPT5ForConditionalGeneration.resize_token_embeddings = lambda m, *a, **kw: m.get_input_embeddings()
             self.vqa = t2v_metrics.VQAScore(model="clip-flant5-xl")
 
     def csd_vec(self, im):
-        a = np.asarray(self.csd(im), dtype=np.float32).squeeze()
-        return a[0] if a.ndim == 2 else a          # first token if the pipeline returns tokens
+        with self.torch.no_grad():
+            f = self.csd_bb(self.csd_p(im).unsqueeze(0).to(self.dev)).float()
+            s = self.torch.nn.functional.normalize(f @ self.csd_proj, dim=1, p=2)[0]
+        return s.cpu().numpy()
 
     def dino_vec(self, im):
         with self.torch.no_grad():
@@ -230,7 +244,7 @@ def t_order(E, scores, space):
 def t_style_vs_content(Ec, Ed, elf):
     """T4. On the elf (+-1.00): CSD distance to the baseline separates 'style changed' from 'unchanged' (AUC >= 0.70)
     and better than DINOv2 does (discriminant validity). T5. DINOv2 distance tracks 'how much it changed' (rho >= 0.50)."""
-    dist = lambda E, r: 1 - cos(E[f"elf|{r['cond']}||1618033"], E["elf|baseline||1618033"])
+    dist = lambda E, r: 1 - cos(E[f"elf|{r['cond']}|{r['unit']}|1618033"], E["elf|baseline||1618033"])
     ch = [r for r in elf if r["stile"] == "cambiato"]; un = [r for r in elf if r["stile"] == "inalterato"]
     ac = auc([dist(Ec, r) for r in ch], [dist(Ec, r) for r in un]); ad = auc([dist(Ed, r) for r in ch], [dist(Ed, r) for r in un])
     order = {"nessuna": 0, "lieve": 1, "media": 2, "forte": 3}
@@ -259,7 +273,7 @@ def genre_labels():
         t = (r["stilenote"] + " " + r["note"]).lower()
         hit = [g for g, rx in GENRE_RE.items() if re.search(rx, t)]
         if r["phase"] == "main" and len(hit) == 1:
-            out.append((f"elf|{r['cond']}||1618033", hit[0]))
+            out.append((f"elf|{r['cond']}|{r['unit']}|1618033", hit[0]))
     return out
 
 
@@ -286,9 +300,9 @@ def elf_trait_labels():
             if r["entita"] == "testo":
                 continue
             if re.search(rx, t):
-                pos[tr].append(f"elf|{r['cond']}||1618033")
+                pos[tr].append(f"elf|{r['cond']}|{r['unit']}|1618033")
             elif r["entita"] in ("nessuna", "lieve"):
-                neg[tr].append(f"elf|{r['cond']}||1618033")
+                neg[tr].append(f"elf|{r['cond']}|{r['unit']}|1618033")
     for tr in ELF_TRAITS:
         neg[tr].append("elf|baseline||1618033")
     return pos, neg

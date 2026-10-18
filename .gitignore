@@ -21,3 +21,7 @@ data/_repro/
 
 recovered_renders/
 benchmark_rotations_clean_v2/
+
+# model caches downloaded by the metric scripts (2026-10-17, ~32 GB): never commit
+hf_cache/
+experiments/hf_cache/
