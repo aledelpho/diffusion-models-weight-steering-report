@@ -12,6 +12,9 @@ with the same Frobenius norm as P on every one of the 12 taps (taps P does not r
             tap): same per-token structure, per-tap norm and large channels, random direction
   shared    plain + one random unit vector per tap (from noise_seed), added to every token, scaled to P's per-tap norm
   token     plain + independent Gaussian noise per token and tap (from noise_seed), scaled to P's per-tap norm
+  file      (TEP2, 2026-10-18) the conditioning tensor saved by experiments/te_massive.py at push_path, used as is
+            (no arithmetic, pitfall 92); the metadata of the plain conditioning is kept. Gate: the saved plain and
+            edited conditionings must reproduce their renders pixel for pixel.
 
 No weight of the image model is edited, and in permuted/shared/token the edited encoder only serves to measure P.
 """
@@ -25,19 +28,29 @@ class Krea2ConditioningPush:
         return {"required": {
             "conditioning": ("CONDITIONING",),
             "conditioning_edit": ("CONDITIONING",),
-            "variant": (["zero", "real", "permuted", "shared", "token", "taps"],),
+            "variant": (["zero", "real", "permuted", "shared", "token", "taps", "file"],),
             "noise_seed": ("INT", {"default": 7, "min": 0, "max": 2 ** 31 - 1}),
         }, "optional": {
             "taps": ("STRING", {"default": ""}),
+            "push_path": ("STRING", {"default": ""}),
         }}
 
     RETURN_TYPES = ("CONDITIONING",)
     FUNCTION = "push"
     CATEGORY = "conditioning/probe"
 
-    def push(self, conditioning, conditioning_edit, variant, noise_seed, taps=""):
+    def push(self, conditioning, conditioning_edit, variant, noise_seed, taps="", push_path=""):
         if variant == "zero":
             return (conditioning,)
+        if variant == "file":
+            t = torch.load(push_path, map_location="cpu")
+            out = []
+            for c, meta in conditioning:
+                if tuple(t.shape) != tuple(c.shape):
+                    raise ValueError(f"saved {tuple(t.shape)} != plain {tuple(c.shape)}")
+                out.append([t.to(device=c.device, dtype=c.dtype), meta])
+            print(f"[Krea2ConditioningPush] file {push_path} {tuple(t.shape)} {t.dtype}")
+            return (out,)
         if variant == "real":
             return (conditioning_edit,)
         out = []
