@@ -1,0 +1,17 @@
+test,value,verdict
+"Rule 1 primary: trait loss, early/mid taps vs late taps","dR early_mid 0.21, dR late 0.07, difference +0.15; early_mid loses more in 5/6 pairs, late in 1/6",inconclusive (no branch of rule 1 met)
+Rule 1 pairs (reported),D1/L06: em 0.43 late 0.09 local 0.00 | D1/L14: em 0.23 late 0.07 local 0.00 | E2/L06: em 0.25 late 0.04 local 0.02 | E2/L14: em 0.05 late 0.07 local 0.00 | O4/L06: em 0.21 late 0.10 local 0.03 | O4/L14: em 0.10 late 0.03 local 0.00,
+"Rule 2 local sufficiency, L06",dR local 0.01 / dR early_mid 0.30 = 0.05,needs accumulation across intermediate taps
+"Rule 2 local sufficiency, L14 (local = one tap, amendment 1)",dR local 0.00 / dR early_mid 0.13 = 0.00,needs accumulation across intermediate taps
+"Rule 3 automatic, dinov2",Delta early-late > 0 in 15/24 cells (< 0 in 9); Pi > 0 in 4/12 cells (< 0 in 8),no unidirectional verdict
+"Rule 3 automatic, csd",Delta early-late > 0 in 3/24 cells (< 0 in 21); Pi > 0 in 3/12 cells (< 0 in 9),late farther from baseline
+"mean R by condition, L06 (reported)",taps_local:0.99 taps_early_mid:0.70 taps_late:0.92 full:0.54,
+"mean R by condition, L14 (reported)",taps_local:1.00 taps_early_mid:0.87 taps_late:0.94 full:0.62,
+"skin vs same-seed baseline, L06 (reported)",taps_local: lighter 0 darker 0 other 0 same 12 | taps_early_mid: lighter 6 darker 0 other 0 same 6 | taps_late: lighter 4 darker 1 other 0 same 7 | full: lighter 4 darker 0 other 0 same 2,
+"same person = no, L06 (reported)",taps_local:0/12 taps_early_mid:6/12 taps_late:1/12 full:6/6,
+"skin vs same-seed baseline, L14 (reported)",taps_local: lighter 0 darker 0 other 0 same 12 | taps_early_mid: lighter 0 darker 0 other 0 same 12 | taps_late: lighter 0 darker 0 other 0 same 12 | full: lighter 4 darker 0 other 0 same 2,
+"same person = no, L14 (reported)",taps_local:0/12 taps_early_mid:0/12 taps_late:0/12 full:6/6,
+"baseline vs itself, person and skin (sanity, reported)",person sì 12/12; skin same 12,
+"Reliability gate (Cohen kappa on repeats, traits; C75 threshold 0.60)","kappa 1.00 on 164 pairs, raw agreement 164/164",passed
+"Repeat agreement, skin and person (reported)",skin 11 of 12; person 11 of 12,
+traits lost most often in early_mid + late (reported),o_orc:9 d_gorget:8 o_knot:8 e_cheeks:7 d_braids:7 e_undercut:7 e_smirk:4 d_browneyes:4,
