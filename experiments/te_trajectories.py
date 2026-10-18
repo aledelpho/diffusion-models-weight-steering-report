@@ -27,7 +27,8 @@ def measure(P, Pm=None):
     c = cos(P["0.10"], P["1.00"])
     a = ang(P["0.10"], P["0.35"]) + ang(P["0.35"], P["1.00"]); b = ang(P["0.10"], P["1.00"])
     return {"bend_c": round(c, 4), "path_a": round(a, 2), "chord_b": round(b, 2),
-            "arc": int(a <= 1.2 * b or b < 1.0),  # b < 1 degree: no turn at all, counted as an arc "norm_1": round(float(np.linalg.norm(P["1.00"])), 4),
+            "arc": int(a <= 1.2 * b or b < 1.0),  # b < 1 degree: no turn at all, counted as an arc
+            "norm_1": round(float(np.linalg.norm(P["1.00"])), 4),
             "sym": round(cos(P["0.10"], -Pm), 4) if Pm is not None else ""}
 
 
@@ -57,7 +58,7 @@ def verdict(rows):
 
 def run():
     import blk23_colorful as c47
-    root = c47.IMG_ROOT / "benchmark_te_conditioning" / "elf"
+    root = (c47.IMG_ROOT if c47.IMG_ROOT.exists() else Path.home() / "mnt" / "Text2Img") / "benchmark_te_conditioning" / "elf"
     base = np.load(root / "P1_elfbrawler_baseline.npz")["cond"].astype(np.float32)
     scale = np.linalg.norm(base, axis=-1).mean(0)            # mean token norm per tap, (12,)
     def vec(f):

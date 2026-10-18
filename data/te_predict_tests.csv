@@ -1,0 +1,6 @@
+test,value,verdict
+accuracy pooled,MAJ 0.472 EDIT 0.583 PUSH 0.587 SIZE 0.579 (n 252),
+accuracy orders,MAJ 0.500 EDIT 0.730 PUSH 0.740 SIZE 0.710 (n 100),
+accuracy chars,MAJ 0.454 EDIT 0.487 PUSH 0.487 SIZE 0.493 (n 152),
+Rule: PUSH - EDIT (pooled),"+0.004, permutation p = 0.367 (1000); EDIT - MAJ +0.111",inconclusive
+PUSH where EDIT is wrong (reported),0.210 of 105,

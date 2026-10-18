@@ -1,0 +1,9 @@
+test,value,verdict
+"Rule: median bend c, strong trajectories",0.665 over 70 (all used: 0.835 over 140); arcs among c<=0.50: 2 of 20,in between
+"median c, attn, sign p (reported)","0.850 (n 35, min 0.101)",
+"median c, attn, sign m (reported)","0.965 (n 35, min 0.273)",
+"median c, mlp, sign p (reported)","0.548 (n 35, min 0.263)",
+"median c, mlp, sign m (reported)","0.843 (n 35, min -0.075)",
+"sign symmetry cos(p(+0.10), -p(-0.10)) (reported)","median 0.977, min -0.250, n 140",
+most bent trajectories (reported),L02mlpm:-0.07 L01mlpm:0.00 L06mlpm:0.06 L03attnp:0.10 L01mlpp:0.26 L02mlpp:0.27 L00attnm:0.27 L00mlpm:0.28,
+"Spearman(1 - c, C64 intensity by eye at 1.00) (reported, lead only)",+0.572 (n 138),

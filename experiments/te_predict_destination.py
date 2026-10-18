@@ -20,7 +20,8 @@ CHARS = ["D1_dwarf_paladin", "E2_elf_rogue", "G5_gnome_wizard", "H3_halfling_dru
 
 def enc_root():
     import blk23_colorful as c47
-    return c47.IMG_ROOT / "benchmark_te_conditioning"
+    root = c47.IMG_ROOT if c47.IMG_ROOT.exists() else Path.home() / "mnt" / "Text2Img"   # Windows, or the VM mount
+    return root / "benchmark_te_conditioning"
 
 
 def rd(n):
