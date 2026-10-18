@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ITEMS = ROOT / "docs" / "roadmap_items.csv"
 MD = ROOT / "docs" / "ROADMAP_MASTER.md"
 HTML = ROOT / "roadmap.html"
-ORDER = ["in progress", "waiting for decision", "open", "proposed", "done", "withdrawn"]
+ORDER = ["in progress", "waiting for decision", "open", "proposed", "paused", "done", "withdrawn"]
 
 
 def items():
@@ -23,6 +23,10 @@ def items():
     bad = [r["id"] for r in rows if r["status"] not in ORDER]
     if bad:
         sys.exit(f"unknown status in {bad}")
+    norule = [r["id"] for r in rows if r["status"] in ("open", "proposed", "in progress") and r["area"] != "Publication"
+              and not r.get("tool_rule")]
+    if norule:
+        sys.exit(f"open experiments without a tool rule (what the tool learns if yes / if no): {norule}")
     return rows
 
 
@@ -49,7 +53,9 @@ def build_md(rows, pg):
          "* Claim statuses on the results pages change only with Alessandro's approval.",
          "* A blind human rule is not replaced by automatic metrics, and correlations are not written as causes.",
          "* Never use `monitor_and_shutdown.py`; never close, shut down or change system settings; no push without the "
-         "publication directive.", "",
+         "publication directive.",
+         "* Every open or proposed experiment states its **tool rule**: what the tool learns if the answer is yes and "
+         "if it is no (added 2026-10-18). Experiments that cannot say it lose priority.", "",
          "## Results pages (from their front matter)", "",
          "| page | title | page status | renders | claims |", "|---|---|---|---|---|"]
     for p in pg:
@@ -59,18 +65,18 @@ def build_md(rows, pg):
         sel = sorted([r for r in rows if r["status"] == st], key=lambda r: (r["priority"] or "9", r["id"]))
         if not sel:
             continue
-        L += ["", f"## {st.capitalize()}", "", "| id | area | priority | what | state | next | files |",
-              "|---|---|---|---|---|---|---|"]
+        L += ["", f"## {st.capitalize()}", "", "| id | area | priority | what | state | next | tool rule | files |",
+              "|---|---|---|---|---|---|---|---|"]
         for r in sel:
             files = "<br>".join(f"`{f}`" for f in r["files"].split(";") if f)
-            L.append(f"| **{r['id']}** | {r['area']} | {r['priority']} | {r['title']} | {r['state']} | {r['next']} | {files} |")
+            L.append(f"| **{r['id']}** | {r['area']} | {r['priority']} | {r['title']} | {r['state']} | {r['next']} | {r.get('tool_rule', '')} | {files} |")
     return "\n".join(L) + "\n"
 
 
 PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Project roadmap</title><style>
 :root{--bg:#fafaf8;--panel:#fff;--ink:#1d1d1f;--mut:#6b6b70;--line:#e3e3e0;--acc:#3b5bdb;
---s-in:#e8590c;--s-wait:#ae3ec9;--s-open:#1c7ed6;--s-prop:#868e96;--s-done:#2f9e44;--s-wd:#c92a2a}
+--s-in:#e8590c;--s-wait:#ae3ec9;--s-open:#1c7ed6;--s-prop:#868e96;--s-pause:#adb5bd;--s-done:#2f9e44;--s-wd:#c92a2a}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141416;--panel:#1c1c1f;--ink:#ececee;--mut:#9a9aa2;--line:#2c2c31;--acc:#748ffc}}
 :root[data-theme=dark]{--bg:#141416;--panel:#1c1c1f;--ink:#ececee;--mut:#9a9aa2;--line:#2c2c31;--acc:#748ffc}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
@@ -87,7 +93,7 @@ table{border-collapse:collapse;width:100%;font-size:13px;margin-bottom:24px}td,t
 <h2>Experiments and tasks</h2><div class="bar" id="bar"></div><div id="list"></div>
 <script>
 const ITEMS=__ITEMS__, PAGES=__PAGES__, ORDER=__ORDER__;
-const COL={"in progress":"var(--s-in)","waiting for decision":"var(--s-wait)","open":"var(--s-open)","proposed":"var(--s-prop)","done":"var(--s-done)","withdrawn":"var(--s-wd)"};
+const COL={"in progress":"var(--s-in)","waiting for decision":"var(--s-wait)","open":"var(--s-open)","proposed":"var(--s-prop)","paused":"var(--s-pause)","done":"var(--s-done)","withdrawn":"var(--s-wd)"};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 document.getElementById('pg').innerHTML='<tr><th>page</th><th>title</th><th>status</th><th>renders</th><th>claims</th></tr>'+
  PAGES.map(p=>`<tr><td>${p.page.slice(0,2)}</td><td>${esc(p.title)}</td><td>${esc(p.status)}</td><td>${p.renders}</td><td>${Object.entries(p.claims).map(([k,v])=>k+' '+v).join(', ')}</td></tr>`).join('');
@@ -99,7 +105,7 @@ function draw(){bar.querySelectorAll('button').forEach(b=>b.classList.toggle('on
   .sort((a,b)=>ORDER.indexOf(a.status)-ORDER.indexOf(b.status)||(a.priority||9)-(b.priority||9));
  document.getElementById('list').innerHTML=L.map(i=>`<div class="card" style="--c:${COL[i.status]}"><h3>${esc(i.id)} · ${esc(i.title)}</h3>
  <div class="meta">${esc(i.area)} · ${esc(i.status)}${i.priority?' · priority '+i.priority:''}</div>
- <div><span class="lab">State.</span> ${esc(i.state)}</div><div><span class="lab">Next.</span> ${esc(i.next)}</div>
+ <div><span class="lab">State.</span> ${esc(i.state)}</div><div><span class="lab">Next.</span> ${esc(i.next)}</div>${i.tool_rule?`<div><span class="lab">Tool rule.</span> ${esc(i.tool_rule)}</div>`:''}
  <div class="meta" style="margin-top:6px">${i.files.split(';').filter(Boolean).map(f=>'<code>'+esc(f)+'</code>').join(' ')}</div></div>`).join('')||'<p>No item.</p>'}
 draw();
 </script></main></body></html>
