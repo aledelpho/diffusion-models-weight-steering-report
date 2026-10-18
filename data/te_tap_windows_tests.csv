@@ -1,0 +1,6 @@
+test,value,verdict
+Rule 1 step or slope (forward windows),"cells with one increment >= 0.40: 5 of 6 (taps [8, 4, 9, 10, 10]); largest increment per cell [0.48, 0.32, 0.73, 0.53, 0.96, 0.58]",mixed
+Rule 2 hub tap (single taps 3-10),"mean share t3:0.08 t4:0.21 t5:0.13 t6:0.11 t7:0.23 t8:0.13 t9:0.12 t10:0.22; largest per cell {3: 1, 7: 1, 4: 2, 10: 2}",no hub
+"Rule 3 complementary windows F(2..k-1) + B(k..11), mean share (reported; < 1 read only with the eye)",k3:1.05 k4:1.04 k5:1.26 k6:1.16 k7:1.24 k8:1.20 k9:1.01 k10:0.93 k11:1.27,
+"forward curve, mean share (reported)",F02:0.10 F03:0.16 F04:0.32 F05:0.28 F06:0.42 F07:0.57 F08:0.68 F09:0.77 F10:1.17,
+"backward curve, mean share (reported)",B03:0.96 B04:0.88 B05:0.95 B06:0.87 B07:0.83 B08:0.63 B09:0.34 B10:0.17 B11:0.10,
