@@ -348,12 +348,35 @@ edit points.
 
 ![Three portraits along the dose ladder: under L06 the half-orc loses her orc features by 0.70 and becomes a photograph at 0.80; under L14 the elf rogue's skin lightens before the picture turns more cartoon; under L28 the half-orc stays a comic while her face and collar change.](../assets/30-the-text-encoder/F30.16_te_dose_sheet.webp)
 
+So, where inside the text encoder does the damage happen? First I just looked, with a probe that reads without
+touching anything. One layer does almost all the writing: the MLP of layer 6 takes the encoder's internal signal from
+about 400 to about 13,100, and every layer after it adds a few percent. Layer 6 is also the edit that turned my
+portraits into photographs. Coincidence? Maybe. It's the next thing I'll test.
+
+Then a detail I had missed: the image model doesn't read only the last layer of the text encoder. It takes **twelve
+readings** of every word along the way, at layers 2, 5, 8... up to 35, and mixes them. L28, the edit that keeps the
+character, can only reach the last three. So maybe L06 and L14 do their damage through the earlier readings? I let
+each edit reach only some readings and kept the others untouched. The readings right after the edited layer: nothing
+happens. The early and middle ones cost more traits than the late ones in five cases out of six... by a margin just
+short of the bar I had fixed. And the halves don't add up: under L14 the whole edit turns the half-orc into another
+person every time, while each half leaves her a half-orc.
+
+![The half-orc at four seeds under L06 MLP doubled: the full edit turns her into a photograph of a generic woman, the push on the taps right after the layer leaves her unchanged, on the early and middle taps she becomes a human woman with lighter skin, on the late taps a lighter, half-painted woman who keeps her ears.](../assets/30-the-text-encoder/F30.22_te_taps_L06_halforc.webp)
+
+Two curiosities to finish. Switch off half of the encoder's very first layer and the image model stops drawing:
+it *writes* the prompt, in broken words ("realist: om wetern comips"). Switch off the whole layer and it's just
+coloured noise. And people asked me about commas. On two prompts with four characters each, commas, periods,
+semicolons, no punctuation at all: no difference. BREAK, the old trick to keep concepts apart, does the opposite of
+what it promises here: it breaks the scene in 16 pairs out of 16.
+
+![Four prompts at one seed with layer 0 of the text encoder switched off: attention off fills the picture with fragments of the prompt as text, MLP off writes clean text for the elf and text over a face for the watercolour dwarf, the whole layer off gives tiled coloured noise every time.](../assets/30-the-text-encoder/F30.21_te_layer0_text.webp)
+
 → [page 30](30-the-text-encoder.md) · the size of the push predicts the change **holds**, mostly between
 kinds of edit · these edits change genre and identity more than they damage the surface **holds** · one edit moves every character the same way
 **overturned** · the switch comes from less attention on the style words **overturned** · or from a push
 toward "anime" **overturned** · without style words the elf falls back to anime **holds** · every character has its own fallback **holds** · edits lead there **overturned** · random
 pushes of the same size do it too **ambiguous** (only if they vary across words) · each edit's own direction
-decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **holds\*** (\*pooled: one edit slides, one jumps) · the character's traits go first **holds** (L06, L14) · and that cost follows each edit's direction, not its size **holds** · dark skin turns lighter under those edits **holds**
+decides **open** · along the dose the style moves before the picture breaks, which it never does **holds** · gradually **holds\*** (\*pooled: one edit slides, one jumps) · the character's traits go first **holds** (L06, L14) · and that cost follows each edit's direction, not its size **holds** · dark skin turns lighter under those edits **holds** · the damage doesn't go through the readings right after the edited layer **holds** · it goes through the early and middle ones rather than the late ones **ambiguous** · layer 6 writes almost all of the encoder's signal **open** · half of layer 0 off makes the picture write the prompt **open** · separators make no difference on complex prompts **holds** · BREAK breaks the scene **holds**
 
 ---
 
@@ -382,7 +405,8 @@ written by eye and meant to be corrected, is on [page 21](21-block-map.md#a-star
 
 What I don't know yet: whether the clean middle edits are truly free; whether a measure can ever replace
 the eye on noise; why each text-encoder edit points where it does, and why two of them wipe out the
-character and lighten the skin while a third protects it (milder doses don't help much: the style holds, but the
+character and lighten the skin while a third protects it (the damage needs many of the encoder's readings at once, and
+is more than the sum of its halves) (milder doses don't help much: the style holds, but the
 character starts going well before); whether a preset can keep a character's expression as well as its identity (the portrait preset
 kept who they were, not always how they looked at you); whether a blind observer would still say "same
 character" when some sheets show two different ones; whether the noise of a preset can be cleaned

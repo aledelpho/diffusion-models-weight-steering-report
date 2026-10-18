@@ -144,9 +144,11 @@ def _sheet(rows, cols, path_fn, caption_fn, out: Path, footer: str, W=150, H=188
         d.text((6, y + H // 2 - 8), rl, fill=INK_RGB, font=font(12))
         for j, (ck, _) in enumerate(cols):
             p = path_fn(rk, ck)
+            x = LAB + j * (W + GAP)
+            if p is None:  # a cell with no picture by design (e.g. a condition rendered at some seeds only)
+                continue
             if not p.exists():
                 raise FileNotFoundError(p)
-            x = LAB + j * (W + GAP)
             S.paste(Image.open(p).convert("RGB").resize((W, H), Image.LANCZOS), (x, y))
             cap = caption_fn(rk, ck)
             if cap:
@@ -1380,6 +1382,67 @@ def te_traits_sheet(out: Path) -> Path:
                   "C75 part B2 · caption = share of the original's traits kept (skin if changed), second labeller · data/te_traits_B2_by_picture.csv", W=150, H=188, LAB=150)
 
 
+def te_layer0_sheet(out: Path) -> Path:
+    """F30.21 - C77 (+ the C64 elf): layer 0 of the text encoder with its attention, its MLP or all of it x 0, four
+    prompts at seed 1618033. Caption: mean conditioning norm over the 12 taps relative to the unedited encoder
+    (data/te_layer0_encoder_summary.csv, averaged over the four prompts)."""
+    rows_ = list(csv.DictReader(open(DATA / "te_layer0_encoder_summary.csv", encoding="utf-8")))
+    ratio = {c: statistics.mean(float(r["norm_ratio_vs_base"]) for r in rows_ if r["cond"] == c)
+             for c in ("L00_attn_m1.00", "L00_mlp_m1.00", "L00_block_m1.00")}
+    names = [("P1_elfbrawler", "elf, comic"), ("D1_dwarf_paladin", "dwarf, comic"),
+             ("R6_dragonborn_cleric", "dragonborn, comic"), ("D1W_dwarf_paladin_watercolor", "dwarf, watercolour")]
+    cols = [("attn", "attention x 0"), ("mlp", "MLP x 0"), ("block", "whole layer x 0")]
+    def path(ch, c):
+        if ch == "P1_elfbrawler" and c != "block":
+            return _img(f"benchmark_te_pilot/P1_elfbrawler_L00_{c}_m1.00_krea2_seed1618033_00001_.png")
+        fold = "benchmark_te_layer0_block" if c == "block" else "benchmark_te_layer0"
+        return _img(f"{fold}/{ch}_L00_{c}_m1.00_krea2_seed1618033_00001_.png")
+    def cap(ch, c):
+        return (f"conditioning norm x{ratio['L00_' + c + '_m1.00']:.2f}", NEG if c == "block" else DIM_RGB)
+    return _sheet(names, cols, path, cap, out,
+                  "C77 · seed 1618033 · caption = mean norm over the 12 taps vs the unedited encoder, 4 prompts · data/te_layer0_encoder_summary.csv",
+                  W=300, H=375, LAB=130)
+
+
+def _te_tap_sheet(edit: str, char: str, out: Path) -> Path:
+    key = list(csv.DictReader(open(DATA / "te_tap_key.csv", encoding="utf-8")))
+    pic = {r["item"]: r for r in csv.DictReader(open(DATA / "te_tap_by_picture.csv", encoding="utf-8"))}
+    seeds = ["2645751", "3316624", "3605551", "4123105"]
+    cell = {}
+    for k in key:
+        if k["char"] != char:
+            continue
+        if k["cond"] == "baseline":
+            cell[(k["seed"], "baseline")] = k
+        elif k["edit"] == edit:
+            cell[(k["seed"], k["cond"])] = k
+    cols = [("baseline", "original"), ("full", "full edit"), ("taps_local", "next taps"),
+            ("taps_early_mid", "early+middle taps"), ("taps_late", "late taps")]
+    def path(s, c):
+        k = cell.get((s, c))
+        return _img(k["file"]) if k else None
+    def cap(s, c):
+        k = cell.get((s, c))
+        if not k or c == "baseline":
+            return None if k else ("not rendered", DIM_RGB)
+        r = pic[k["item"]]
+        txt = f"kept {float(r['R']):.2f}" + (f" · skin {r['skin']}" if r["skin"] not in ("same", "") else "")
+        return (txt, NEG if float(r["R"]) < 0.8 else DIM_RGB)
+    return _sheet([(s, f"seed {s}") for s in seeds], cols, path, cap, out,
+                  f"C79 · {edit} · caption = share of the original's traits kept (skin if changed), blind labels · data/te_tap_by_picture.csv",
+                  W=180, H=225, LAB=110)
+
+
+def te_taps_L06_halforc(out: Path) -> Path:
+    """F30.22 - C79: the half-orc under L06 MLP doubled, push kept on some taps only."""
+    return _te_tap_sheet("L06_mlp_p1.00", "O4", out)
+
+
+def te_taps_L14_halforc(out: Path) -> Path:
+    """F30.23 - C79: the half-orc under L14 MLP doubled, push kept on some taps only."""
+    return _te_tap_sheet("L14_mlp_p1.00", "O4", out)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1437,6 +1500,9 @@ BUILDERS = {
     "F30.18": ("30-the-text-encoder", "te_traits_by_dose", te_traits_by_dose),
     "F30.19": ("30-the-text-encoder", "te_traits_real_vs_random", te_traits_real_vs_random),
     "F30.20": ("30-the-text-encoder", "te_traits_sheet", te_traits_sheet),
+    "F30.21": ("30-the-text-encoder", "te_layer0_text", te_layer0_sheet),
+    "F30.22": ("30-the-text-encoder", "te_taps_L06_halforc", te_taps_L06_halforc),
+    "F30.23": ("30-the-text-encoder", "te_taps_L14_halforc", te_taps_L14_halforc),
 }
 
 

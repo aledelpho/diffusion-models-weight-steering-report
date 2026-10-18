@@ -1172,3 +1172,36 @@ figures:
       Three portraits at full dose: the original, the real edit and two random pushes of the same size; under L06 and
       L14 the real edit turns the elf and the half-orc into lighter-skinned generic humans while the random pushes keep
       them, and under L28 the real edit keeps the dwarf while the random pushes change her.
+  - id: F30.21
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_layer0_sheet
+    source: data/te_layer0_encoder_summary.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Four prompts at one seed with layer 0 of the text encoder switched off: attention off fills the picture with
+      fragments of the prompt as text, MLP off writes clean text for the elf and text over a face for the watercolour
+      dwarf, the whole layer off gives tiled coloured noise every time.
+  - id: F30.22
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_taps_L06_halforc
+    source: data/te_tap_by_picture.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The half-orc at four seeds under L06 MLP doubled: the full edit turns her into a photograph of a generic woman,
+      the push on the taps right after the layer leaves her unchanged, on the early and middle taps she becomes a
+      human woman with lighter skin, on the late taps a lighter, half-painted woman who keeps her ears.
+  - id: F30.23
+    page: 30-the-text-encoder
+    kind: contact_sheet
+    builder: results_figures.te_taps_L14_halforc
+    source: data/te_tap_by_picture.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The half-orc at four seeds under L14 MLP doubled: the full edit turns her into a light-skinned human with brown
+      braids; with the push on one tap, on the early and middle taps or on the late taps she stays a half-orc, with
+      small changes to her hair and a tusk.
