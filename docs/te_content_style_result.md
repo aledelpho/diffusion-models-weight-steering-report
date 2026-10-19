@@ -32,7 +32,10 @@ direction; the blind halves stand.
 
 ## What follows
 
-* Random edits are legitimate knobs: each one, once fixed, produces its own change, reproducible across seeds.
+* Random edits are legitimate knobs **for a given prompt**: each one, once fixed, produces its own change, reproducible
+  across seeds of that prompt. C104 says nothing across prompts: the earlier domain-specificity result (2026-09-25,
+  replication pending) and C103's pictures (the same push ages the paladin and turns the teapot into a kettle) say the
+  change depends on the prompt.
 * Depth (L09 against L26) did not change this answer.
 * For "same change" questions, the measure is the eye; a computed proxy needs validating against it first.
 
