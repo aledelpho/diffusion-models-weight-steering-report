@@ -1,0 +1,13 @@
+test,value,verdict
+Layer 09 computed (reported),DINOv2 kappa 0.36 rho 0.58 r 1.61 | CSD kappa 0.42 rho 0.31 r 0.75 | edit: DINOv2 kappa 0.77 eps 0.50; CSD kappa 0.62 eps 0.30,
+Rule 1 layer 09: content is the network's,blind B content 0.0 (n 9); DINOv2 r 1.61,disagreement
+Rule 2 layer 09: style is the perturbation's own,blind B style 0.56 (n 9); CSD r 0.75,not supported
+"Rule 3 layer 09: content from the network, rendering from the perturbation",,not supported
+"Rule 4 layer 09: A units of random pushes, same change across seeds (reported)",content 1.0 (n 5); style 0.67 (n 6),
+Layer 26 computed (reported),DINOv2 kappa 0.55 rho 0.48 r 0.87 | CSD kappa 0.68 rho 0.57 r 0.84 | edit: DINOv2 kappa 0.53 eps 0.30; CSD kappa 0.77 eps 0.44,
+Rule 1 layer 26: content is the network's,blind B content 0.25 (n 12); DINOv2 r 0.87,disagreement
+Rule 2 layer 26: style is the perturbation's own,blind B style 0.25 (n 12); CSD r 0.84,disagreement
+"Rule 3 layer 26: content from the network, rendering from the perturbation",,not supported
+"Rule 4 layer 26: A units of random pushes, same change across seeds (reported)",content 0.92 (n 12); style 0.5 (n 12),
+Rule 4 'non si vede' (reported),"content 2, style 0",
+Rule 4 test-retest (reported),"content 6/6, style 6/6",
