@@ -1,0 +1,18 @@
+test,value,verdict
+"Rule 0 realized median D, L09 (target 0.30)",0.350 over 9,matched
+"Rule 0 realized median D, L26 (target 0.30)",0.376 over 12,matched
+"Rule 0 realized median D, R09a (target 0.30)",0.128 over 9,not matched
+"Rule 0 realized median D, R09b (target 0.30)",0.211 over 9,matched
+"Rule 0 realized median D, R09c (target 0.30)",0.171 over 9,matched
+"Rule 0 realized median D, R26a (target 0.30)",0.323 over 12,matched
+"Rule 0 realized median D, R26b (target 0.30)",0.253 over 12,matched
+"Rule 0 realized median D, R26c (target 0.30)",0.359 over 12,matched
+Rule 4 'non si vede' per condition (reported),B:R09 0 B:R26 1 L09_t 0 L26_t 0 R09a_t 1 R09b_t 0 R09c_t 1 R26a_t 0 R26b_t 1 R26c_t 0,
+Rule 4 blind test-retest (reported),6 of 6 identical,
+Rule 1 layer 09: any fixed random push changes the seeds the same way,kappa >= 0.30 in 4/6 (median 0.36); blind stesso 0.86 (n 7),disagreement
+Rule 2 layer 09: own direction or the network's,median rho 0.58 / median kappa 0.36 = r 1.61; blind B stesso 0.22 (n 9),"disagreement: computed network, blind own (the network imposes the direction)"
+Rule 4 edit L09: kappa and epsilon (edit like its layer's random pushes) (reported),kappa median 0.77 (random 0.36); epsilon median 0.50 (rho 0.58),
+Rule 1 layer 26: any fixed random push changes the seeds the same way,kappa >= 0.30 in 10/12 (median 0.55); blind stesso 0.55 (n 11),disagreement
+Rule 2 layer 26: own direction or the network's,median rho 0.48 / median kappa 0.55 = r 0.87; blind B stesso 0.00 (n 11),"disagreement: computed network, blind own (the network imposes the direction)"
+Rule 4 edit L26: kappa and epsilon (edit like its layer's random pushes) (reported),kappa median 0.53 (random 0.55); epsilon median 0.30 (rho 0.48),
+Rule 3 depth: answers at L09 and L26 (reported),"L09 ('disagreement', 'disagreement: computed network, blind own') | L26 ('disagreement', 'disagreement: computed network, blind own')",same
