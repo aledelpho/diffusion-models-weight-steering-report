@@ -247,6 +247,13 @@ def kappa(V, p, c):
     return statistics.mean(_cos(a, b) for a, b in itertools.combinations(D, 2))
 
 
+def kappa_seeds(V, p, c, seeds):
+    D = [V[(p, s, c)] - V[(p, s, "C0")] for s in seeds if (p, s, c) in V]
+    if len(D) < 2:
+        return None
+    return statistics.mean(_cos(a, b) for a, b in itertools.combinations(D, 2))
+
+
 def rules(V, labels=None, key=None):
     out = []
     K = {(p, c): kappa(V, p, c) for p in PROMPTS for c in conds()[1:]}
