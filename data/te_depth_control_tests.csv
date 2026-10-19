@@ -1,0 +1,9 @@
+test,value,verdict
+"Rule 1 dkappa (edit - its random control), L26 and L09, 8 cells",L26 >= 0.10 in 4/8; L09 < 0.10 in 5/8; L26 +0.12 +0.01 +0.17 +0.02 +0.02 +0.10 +0.11 -0.03; L09 -0.29 +0.07 +0.43 -0.21 +0.12 +0.24 +0.01 -0.14,mixed
+Rule 3 dkappa L04 against R09 (reported),median +0.086; >= 0.10 in 3/8,
+Rule 3 dkappa L30 against R26 (reported),median +0.004; >= 0.10 in 3/8,
+Rule 3 at equal push the deep edits move the picture less than the early ones (reported),23 of 24,
+Rule 3 kappa per prompt x condition (reported),D1/L04_t1:0.32 | D1/L09_t1:0.22 | D1/L26_t1:-0.00 | D1/L30_t1:0.01 | D1/R09_t1:0.51 | D1/R26_t1:-0.13 | D1/L04_t2:0.80 | D1/L09_t2:0.79 | D1/L26_t2:0.15 | D1/L30_t2:0.10 | D1/R09_t2:0.72 | D1/R26_t2:0.14 | S1/L04_t1:0.35 | S1/L09_t1:0.19 | S1/L26_t1:0.12 | S1/L30_t1:0.12 | S1/R09_t1:-0.24 | S1/R26_t1:-0.05 | S1/L04_t2:0.38 | S1/L09_t2:0.22 | S1/L26_t2:-0.02 | S1/L30_t2:0.23 | S1/R09_t2:0.42 | S1/R26_t2:-0.04 | C4/L04_t1:0.44 | C4/L09_t1:0.08 | C4/L26_t1:-0.02 | C4/L30_t1:-0.03 | C4/R09_t1:-0.04 | C4/R26_t1:-0.04 | C4/L04_t2:0.56 | C4/L09_t2:0.71 | C4/L26_t2:0.25 | C4/L30_t2:-0.08 | C4/R09_t2:0.46 | C4/R26_t2:0.15 | P5/L04_t1:0.06 | P5/L09_t1:0.03 | P5/L26_t1:0.13 | P5/L30_t1:-0.00 | P5/R09_t1:0.01 | P5/R26_t1:0.02 | P5/L04_t2:0.73 | P5/L09_t2:0.34 | P5/L26_t2:0.06 | P5/L30_t2:0.09 | P5/R09_t2:0.48 | P5/R26_t2:0.09,
+Rule 2 blind: (s(L26) - s(R26)) - (s(L09) - s(R09)),-0.04; means L04 0.69 L09 0.62 L26 0.25 L30 0.00 R09 0.71 R26 0.38,the eye does not separate them
+Rule 3 blind test-retest (reported),5 of 6 identical,
+Combined verdict (rules 1 and 2),,not supported
