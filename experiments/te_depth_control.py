@@ -280,7 +280,9 @@ def rules(V, labels=None, key=None):
     out.append({"test": "Rule 3 kappa per prompt x condition (reported)",
                 "value": " | ".join(f"{p[:2]}/{c}:{K[(p, c)]:.2f}" for p in PROMPTS for c in conds()[1:] if K.get((p, c)) is not None), "verdict": ""})
     if labels and key:
-        sc = {"si": 1.0, "sì": 1.0, "in parte": 0.5, "no": 0.0}
+        sc = {"si": 1.0, "sì": 1.0, "in parte": 0.5, "inparte": 0.5, "no": 0.0}
+        labels = [{"unit": r["unit"], "answer": r.get("answer") or r.get("same") or ""} for r in labels]
+        labels = [r for r in labels if r["answer"].strip()]
         S = {}
         first = {}
         reps = []
