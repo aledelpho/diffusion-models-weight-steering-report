@@ -1,0 +1,12 @@
+test,value,verdict
+"Rule 1 Spearman layer vs total turn, MLP edits, positive","rho -0.655, p 0.0002, n 35",depth orders the bend (deeper bends less)
+"Rule 2 layers where the edit bends less than its random control (MLP, positive)","24 of 35; not less at layers [2, 3, 4, 8, 9, 10, 11, 14, 15, 17, 34]",depends on the layer
+"Rule 3 shape counts over layers, MLP positive, edit (reported)",{'other': 35},
+"Rule 3 shape counts over layers, MLP positive, control (reported)","{'other': 34, 'straight': 1}",
+Rule 3 where a spiral appears (reported),L04_mlp/m/edit L07_mlp/m/edit L09_mlp/m/edit L10_mlp/m/edit L11_mlp/m/edit L16_mlp/m/edit L20_mlp/m/edit L21_mlp/m/edit L24_attn/m/edit,
+Rule 3 where a wave appears (reported),L01_mlp/m/edit,
+Rule 3 where a clip appears (reported),L00_attn/m/edit L01_attn/m/edit L02_attn/m/edit L02_mlp/m/edit L03_attn/m/edit L04_attn/m/edit L05_attn/m/edit L06_attn/m/edit L07_attn/m/edit L08_attn/m/edit L09_attn/m/edit L10_attn/m/edit L11_attn/m/edit L12_attn/m/edit L13_attn/m/edit L14_attn/m/edit L15_attn/m/edit L16_attn/m/edit L17_attn/m/edit L18_attn/m/edit L19_attn/m/edit L20_attn/m/edit L21_attn/m/edit L22_attn/m/edit L23_attn/m/edit L25_attn/m/edit L26_attn/m/edit L27_attn/m/edit L28_attn/m/edit L29_attn/m/edit L30_attn/m/edit L31_attn/m/edit L32_attn/m/edit L33_attn/m/edit L34_attn/m/edit,
+"Rule 4 median total turn MLP vs attention, sign p (reported)",64.9 vs 60.2 deg; attention bends more at 8 of 35 layers,
+"Rule 4 median total turn MLP vs attention, sign m (reported)",78.0 vs 142.3 deg; attention bends more at 35 of 35 layers,
+Rule 4 label changes when doses beyond 3 / -1 are added (reported),53 of 140,
+Amendment 1 trajectories cut where the conditioning leaves the fp16 range (reported),L32_mlp/p/edit from 10; L34_mlp/p/edit from 10,
