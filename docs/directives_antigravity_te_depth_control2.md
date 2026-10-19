@@ -1,4 +1,4 @@
-# Directive for Antigravity — C103, deep against early edits matched on the picture (encodes + about 256 renders)
+# Directive for Antigravity — C103, random edits: own direction or the network's (encodes + about 240 renders)
 
 Pre-registration: `docs/prereg_te_depth_control2.md`. Script: `experiments/te_depth_control2.py`. Outputs in
 `Text2Img\benchmark_te_depth_control2` and `data/te_depth_control2_*`.
@@ -18,7 +18,7 @@ cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 & $PY te_depth_control2.py --encode-cal
 ```
 
-`selftest ok`; `--encode-cal`: `GATE PASS`, four `done <prompt>` lines, `wrote ...te_depth_control2_cal_plan.csv 100`.
+`selftest ok`; `--encode-cal`: `GATE PASS`, four `done <prompt>` lines, `wrote ...te_depth_control2_cal_plan.csv 132`.
 Lines `NONFINITE` are allowed (that rung is dropped); report them.
 
 ## Step 1 — calibration renders (ComfyUI running)
@@ -27,7 +27,7 @@ Lines `NONFINITE` are allowed (that rung is dropped); report them.
 & $PY te_depth_control2.py --queue --block cal
 ```
 
-`queued 100` (or fewer if rungs were dropped). Wait until ComfyUI's queue is empty.
+`queued 132` (or fewer if rungs were dropped). Wait until ComfyUI's queue is empty.
 
 ## Step 2 — strengths and matched conditionings (ComfyUI's queue empty)
 
@@ -36,7 +36,7 @@ Lines `NONFINITE` are allowed (that rung is dropped); report them.
 ```
 
 Four `calibrated <prompt>` lines, then `wrote ... and ...te_depth_control2_plan.csv <n>`. `UNREACHABLE` lines are
-allowed and expected for some deep conditions; report them all.
+allowed (some deep conditions may not reach the target); report them all.
 
 ## Step 3 — gate and main renders
 
@@ -60,7 +60,7 @@ When the queue is empty:
 ```
 
 `--count`: `missing 0` for both plans. `--analyze`: `wrote ...metrics.csv <n> and ...dino.npz`. `--page`:
-`units <n> -> ...occhio_C103.html`.
+`units <n> (A 32 B 24 + 6 repeats) -> ...occhio_C103.html` (fewer if some targets were unreachable).
 
 ## Step 4 — paste back
 

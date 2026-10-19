@@ -1,8 +1,8 @@
-"""C103 - deep against early text-encoder edits, matched on the change in the picture (docs/prereg_te_depth_control2.md).
-Written 2026-10-19 with the pre-registration, before any encode or render.
+"""C103 - random edits: own direction or the network's? (docs/prereg_te_depth_control2.md). Rewritten 2026-10-19 with the
+new pre-registration, before any encode or render.
 
   python te_depth_control2.py --selftest
-  python te_depth_control2.py --encode-cal        # GPU: ladder conditionings -> data/te_depth_control2_cal_plan.csv (100 rows)
+  python te_depth_control2.py --encode-cal        # GPU: ladder conditionings -> data/te_depth_control2_cal_plan.csv (132 rows)
   python te_depth_control2.py --queue --block cal
   python te_depth_control2.py --calibrate         # GPU: DINOv2 on the ladder, strengths, matched conditionings -> data/te_depth_control2_plan.csv
   python te_depth_control2.py --queue --block gate
@@ -33,11 +33,13 @@ TESTS = DATA / "te_depth_control2_tests.csv"
 FOLDER = "benchmark_te_depth_control2"
 PROMPTS, SEEDS = T.PROMPTS, T.SEEDS
 CAL_SEED = "1618033"
-LADDER = {"L04": [0.5, 0.75, 1.0, 1.25], "L09": [0.5, 0.75, 1.0, 1.25], "L26": [1.5, 3.0, 5.0, 8.0], "L30": [1.5, 3.0, 5.0, 8.0],
-          "R09": [1.5, 2.25, 3.0, 4.0], "R26": [6.0, 12.0, 24.0, 48.0]}
-LAYER = {"L04": 4, "L09": 9, "L26": 26, "L30": 30, "R09": 9, "R26": 26}
-TARGETS = {"t1": 0.12, "t2": 0.30}
-NAMES = ["L04", "L09", "L26", "L30", "R09", "R26"]
+LADDER = {"L09": [0.5, 0.75, 1.0, 1.25], "L26": [1.5, 3.0, 5.0, 8.0]}
+LADDER.update({f"R09{x}": [1.5, 2.25, 3.0, 4.0] for x in "abc"})
+LADDER.update({f"R26{x}": [6.0, 12.0, 24.0, 48.0] for x in "abc"})
+LAYER = {n: int(n[1:3]) for n in LADDER}
+RSEED = {"a": 9393, "b": 9394, "c": 9395}
+TARGETS = {"t": 0.30}
+NAMES = ["L09", "L26", "R09a", "R09b", "R09c", "R26a", "R26b", "R26c"]
 SET = T.SET
 
 
@@ -89,7 +91,7 @@ class Enc:
         if p not in self.cap:
             self.baseline_mlp(p)
         c = self.cap[p][L]
-        g = torch.Generator(device="cpu").manual_seed(9393)
+        g = torch.Generator(device="cpu").manual_seed(RSEED[name[-1]])
         R = torch.randn(c.shape, generator=g); R = R / torch.linalg.vector_norm(R, dim=-1, keepdim=True)
         add = R * torch.linalg.vector_norm(c, dim=-1, keepdim=True).cpu() * x
         h = self.layers[L].mlp.register_forward_hook(lambda m, a, o: o + add.to(o.device, o.dtype))
@@ -183,7 +185,7 @@ def calibrate():
             for c in conds()[1:]:
                 if (p, c) in ok:
                     rows.append(row("main", p, s, c, cpath(p, c)))
-    write(PLAN, rows); print("wrote", CALM, STRENGTH, "and", PLAN, len(rows), "(156 if every target was reached)")
+    write(PLAN, rows); print("wrote", CALM, STRENGTH, "and", PLAN, len(rows), "(108 if every target was reached)")
 
 
 # ---------------------------------------------------------------- renders
@@ -248,92 +250,117 @@ def analyze():
 OPTS = [("stesso", "stesso modo"), ("diversi", "in modi diversi"), ("nonsivede", "non si vede")]
 
 
+def units_spec(have):
+    """A: one perturbation, three seeds. B: one layer, one seed, three random pushes."""
+    A = [("A", p, c, "") for p in PROMPTS for c in conds()[1:] if all((p, s, c) in have for s in SEEDS)]
+    B = [("B", p, f"R{L}", s) for p in PROMPTS for L in ("09", "26") for s in SEEDS
+         if all((p, s, f"R{L}{x}_t") in have for x in "abc")]
+    return A, B
+
+
 def page():
     from eye_grid_page import thumb, build
     R = T.img_root(); root = str(R); rng = random.Random(10303)
-    have = {(r["char"], r["cond"]) for r in rd(PLAN) if r["block"] == "main"}
-    base = sorted({(p, c) for p, c in have}); rng.shuffle(base)
+    have = {(r["char"], r["seed"], r["cond"]) for r in rd(PLAN) if r["block"] == "main"}
+    A, B = units_spec(have); base = A + B; rng.shuffle(base)
     reps = rng.sample(base, 6); order = list(base)
     for r in reps:
         i = order.index(r); order.insert(rng.randint(min(i + 10, len(order)), len(order)), r)
+    f = lambda p, c, s: thumb(str(R / FOLDER / f"{p}_{c}_krea2_seed{s}_00001_.png"), root)
     key, units, seen = [], [], set()
-    for n, (p, c) in enumerate(order, 1):
-        uid = f"V{n:02d}"; key.append({"unit": uid, "prompt": p, "cond": c, "repeat": int((p, c) in seen)}); seen.add((p, c))
+    for n, u in enumerate(order, 1):
+        kind, p, c, s0 = u; uid = f"V{n:02d}"
+        key.append({"unit": uid, "kind": kind, "prompt": p, "cond": c, "seed": s0, "repeat": int(u in seen)}); seen.add(u)
+        pairs = [(s, c) for s in SEEDS] if kind == "A" else [(s0, f"{c}{x}_t") for x in "abc"]
         rows = []
-        for k, s in enumerate(SEEDS, 1):
-            a = thumb(str(R / FOLDER / f"{p}_C0_krea2_seed{s}_00001_.png"), root); b = thumb(str(R / FOLDER / f"{p}_{c}_krea2_seed{s}_00001_.png"), root)
+        for k, (s, cc) in enumerate(pairs, 1):
+            a, b = f(p, "C0", s), f(p, cc, s)
             rows.append({"label": f"coppia {k}", "cells": [{"t": a[0], "f": a[1]}, {"t": b[0], "f": b[1]}]})
         units.append({"id": uid, "title": f"Scheda {n:02d}", "groups": [{"id": "g", "name": "", "cols": ["prima", "dopo"], "rows": rows}]})
-    with open(KEY, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["unit", "prompt", "cond", "repeat"]); w.writeheader(); w.writerows(key)
+    with open(KEY, "w", newline="", encoding="utf-8") as fo:
+        w = csv.DictWriter(fo, fieldnames=["unit", "kind", "prompt", "cond", "seed", "repeat"]); w.writeheader(); w.writerows(key)
     build(os.path.join(root, "occhio_C103.html"), "C103 · lo stesso cambiamento?", units,
-          [("same", "Nelle tre coppie l'immagine cambia nello stesso modo?", OPTS)], OPTS, "c103_labels_v1", "te_depth_control2_labels.csv")
-    print("units", len(units), "->", os.path.join(root, "occhio_C103.html"))
+          [("same", "Nelle tre coppie l'immagine cambia nello stesso modo?", OPTS)], OPTS, "c103_labels_v2", "te_depth_control2_labels.csv")
+    print("units", len(units), "(A", len(A), "B", len(B), "+ 6 repeats) ->", os.path.join(root, "occhio_C103.html"))
 
 
 # ---------------------------------------------------------------- rules (numpy)
 def rules(V, labels=None, key=None):
     out = []
     cos = T._cos
+    dl = lambda p, s, c: V[(p, s, c)] - V[(p, s, "C0")]
     dist = lambda p, s, c: 1 - cos(V[(p, s, c)], V[(p, s, "C0")])
     matched = {}
-    for lv, tg in TARGETS.items():
-        for n in NAMES:
-            c = f"{n}_{lv}"; ds = [dist(p, s, c) for p in PROMPTS for s in SEEDS if (p, s, c) in V]
-            md = statistics.median(ds) if ds else 0.0
-            matched[c] = bool(ds) and md >= 0.5 * tg
-            out.append({"test": f"Rule 0 realized median D, {c} (target {tg})", "value": f"{md:.3f} over {len(ds)}", "verdict": "matched" if matched[c] else "not matched"})
-    testable = any(matched[f"L26_{lv}"] and matched[f"R26_{lv}"] for lv in TARGETS)
-    K = {(p, c): T.kappa_seeds(V, p, c, SEEDS) for p in PROMPTS for c in conds()[1:]}
-    cells = [(p, lv) for p in PROMPTS for lv in TARGETS]
-    def dk(e, r):
-        return {c: K[(c[0], f"{e}_{c[1]}")] - K[(c[0], f"{r}_{c[1]}")] for c in cells
-                if K[(c[0], f"{e}_{c[1]}")] is not None and K[(c[0], f"{r}_{c[1]}")] is not None}
-    d26, d09 = dk("L26", "R26"), dk("L09", "R09")
-    if not testable or not d26 or not d09:
-        v1 = "not testable"
-    else:
-        q = lambda d, f: sum(f(x) for x in d.values()) / len(d)
-        a26, l09 = q(d26, lambda x: x >= 0.10), q(d09, lambda x: x < 0.10)
-        if a26 >= 0.75 and l09 >= 0.75: v1 = "depth gives the edit a direction in the picture"
-        elif a26 >= 0.75 and q(d09, lambda x: x >= 0.10) >= 0.75: v1 = "both have a direction"
-        elif q(d26, lambda x: x < 0.10) >= 0.75 and l09 >= 0.75: v1 = "neither"
-        else: v1 = "mixed"
-    out.append({"test": "Rule 1 dkappa L26-R26 and L09-R09",
-                "value": f"L26 {' '.join(f'{x:+.2f}' for x in d26.values())}; L09 {' '.join(f'{x:+.2f}' for x in d09.values())}", "verdict": v1})
-    for e, r in (("L04", "R09"), ("L30", "R26")):
-        d = dk(e, r)
-        if d:
-            out.append({"test": f"Rule 3 dkappa {e} against {r} (reported)", "value": f"median {statistics.median(d.values()):+.3f}; >= 0.10 in {sum(x >= 0.10 for x in d.values())}/{len(d)}", "verdict": ""})
+    for n in NAMES:
+        c = f"{n}_t"; ds = [dist(p, s, c) for p in PROMPTS for s in SEEDS if (p, s, c) in V]
+        md = statistics.median(ds) if ds else 0.0; matched[n] = bool(ds) and md >= 0.15
+        out.append({"test": f"Rule 0 realized median D, {n} (target 0.30)", "value": f"{md:.3f} over {len(ds)}", "verdict": "matched" if matched[n] else "not matched"})
+    kap = lambda p, c: T.kappa_seeds(V, p, c, SEEDS)
+    blind = {}
     if labels and key:
-        seen, S, NS, reps = {}, {}, {}, []
+        seen, reps = {}, []
         for r in labels:
             a = (r.get("same") or "").strip()
             if not a:
                 continue
-            k = key[r["unit"]]; tag = (k["prompt"], k["cond"]); n = k["cond"].rsplit("_", 1)[0]
+            k = key[r["unit"]]; tag = (k["kind"], k["prompt"], k["cond"], k["seed"])
             if tag in seen:
                 reps.append((seen[tag], a)); continue
-            seen[tag] = a; NS[n] = NS.get(n, 0) + (a == "nonsivede")
-            if a in ("stesso", "diversi"):
-                S.setdefault(n, []).append(1.0 if a == "stesso" else 0.0)
-        out.append({"test": "Rule 3 'non si vede' per condition (reported)", "value": " ".join(f"{n} {NS.get(n, 0)}" for n in NAMES), "verdict": ""})
-        if all(len(S.get(n, [])) >= 4 for n in ("L09", "R09", "L26", "R26")):
-            s = {n: statistics.mean(v) for n, v in S.items()}
-            diff = (s["L26"] - s["R26"]) - (s["L09"] - s["R09"])
-            v2 = "the eye agrees" if diff >= 0.25 else "the eye does not separate them"
-            val = f"{diff:+.2f}; " + " ".join(f"{n} {s[n]:.2f} (n {len(S[n])})" for n in NAMES if n in s)
-        else:
-            v2, val = "not testable", " ".join(f"{n} n {len(S.get(n, []))}" for n in NAMES)
-        out.append({"test": "Rule 2 blind (s(L26) - s(R26)) - (s(L09) - s(R09))", "value": val, "verdict": v2})
+            seen[tag] = a
+        blind = seen
+        ns = {}
+        for (kind, p, c, s), a in seen.items():
+            ns[c if kind == "A" else f"B:{c}"] = ns.get(c if kind == "A" else f"B:{c}", 0) + (a == "nonsivede")
+        out.append({"test": "Rule 4 'non si vede' per condition (reported)", "value": " ".join(f"{k} {v}" for k, v in sorted(ns.items())), "verdict": ""})
         if reps:
-            out.append({"test": "Rule 3 blind test-retest (reported)", "value": f"{sum(a == b for a, b in reps)} of {len(reps)} identical", "verdict": ""})
-        if "not testable" in (v1, v2):
-            comb = "not testable"
-        else:
-            y1, y2 = v1.startswith("depth"), v2 == "the eye agrees"
-            comb = "supported" if y1 and y2 else ("disagreement" if y1 != y2 else "not supported")
-        out.append({"test": "Combined verdict (rules 1 and 2)", "value": "", "verdict": comb})
+            out.append({"test": "Rule 4 blind test-retest (reported)", "value": f"{sum(a == b for a, b in reps)} of {len(reps)} identical", "verdict": ""})
+    def share(items):
+        vis = [a for a in items if a in ("stesso", "diversi")]
+        return (sum(a == "stesso" for a in vis) / len(vis) if vis else None), len(vis)
+    def combine(c, b):
+        if c is None or b is None:
+            return "not testable"
+        return "supported" if c and b else ("not supported" if not c and not b else "disagreement")
+    res = {}
+    for L in ("09", "26"):
+        rnd = [f"R{L}{x}" for x in "abc"]
+        if not any(matched[n] for n in rnd):
+            out.append({"test": f"Rules 1-2 layer {L}", "value": "no random push matched", "verdict": "not testable"}); continue
+        K = [kap(p, f"{n}_t") for p in PROMPTS for n in rnd if matched[n]]; K = [k for k in K if k is not None]
+        c1 = (sum(k >= 0.30 for k in K) / len(K) >= 0.75) if K else None
+        bA = [a for (kind, p, c, s), a in blind.items() if kind == "A" and c[:-2] in rnd]
+        sh, nv = share(bA); b1 = None if (not blind or nv < 6) else sh >= 0.60
+        v1 = combine(c1, b1) if blind else ("computed only: " + ("yes" if c1 else "no"))
+        out.append({"test": f"Rule 1 layer {L}: any fixed random push changes the seeds the same way",
+                    "value": f"kappa >= 0.30 in {sum(k >= 0.30 for k in K)}/{len(K)} (median {statistics.median(K):.2f}); blind stesso {('%.2f' % sh) if sh is not None else '-'} (n {nv})", "verdict": v1})
+        rho = []
+        for p in PROMPTS:
+            for s in SEEDS:
+                D = [dl(p, s, f"{n}_t") for n in rnd if matched[n] and (p, s, f"{n}_t") in V]
+                if len(D) >= 2:
+                    rho.append(statistics.mean(cos(a, b) for a, b in itertools.combinations(D, 2)))
+        r = statistics.median(rho) / statistics.median(K) if rho and K and statistics.median(K) > 0 else None
+        c2 = None if r is None else ("network" if r >= 0.50 else ("own" if r <= 0.25 else "partly"))
+        bB = [a for (kind, p, c, s), a in blind.items() if kind == "B" and c == f"R{L}"]
+        sb, nb = share(bB); b2 = None if (not blind or nb < 4) else ("network" if sb >= 0.60 else ("own" if sb <= 0.30 else "partly"))
+        if c2 is None: v2 = "not testable"
+        elif not blind: v2 = "computed only: " + c2
+        elif b2 is None: v2 = f"computed {c2}; blind not testable"
+        else: v2 = f"agree: {c2}" if c2 == b2 else f"disagreement: computed {c2}, blind {b2}"
+        lab = {"network": "the network imposes the direction", "own": "each perturbation has its own direction", "partly": "partly"}
+        out.append({"test": f"Rule 2 layer {L}: own direction or the network's",
+                    "value": f"median rho {statistics.median(rho):.2f} / median kappa {statistics.median(K):.2f} = r {r:.2f}; blind B stesso {('%.2f' % sb) if sb is not None else '-'} (n {nb})" if r is not None else "",
+                    "verdict": v2 + (f" ({lab[c2]})" if c2 else "")})
+        e = f"L{L}"
+        if matched[e]:
+            ke = [kap(p, f"{e}_t") for p in PROMPTS]; ke = [k for k in ke if k is not None]
+            eps = [statistics.mean(cos(dl(p, s, f"{e}_t"), dl(p, s, f"{n}_t")) for n in rnd if matched[n] and (p, s, f"{n}_t") in V)
+                   for p in PROMPTS for s in SEEDS if (p, s, f"{e}_t") in V]
+            out.append({"test": f"Rule 4 edit {e}: kappa and epsilon (edit like its layer's random pushes) (reported)",
+                        "value": f"kappa median {statistics.median(ke):.2f} (random {statistics.median(K):.2f}); epsilon median {statistics.median(eps):.2f} (rho {statistics.median(rho):.2f})", "verdict": ""})
+        res[L] = (v1, v2)
+    if len(res) == 2:
+        out.append({"test": "Rule 3 depth: answers at L09 and L26 (reported)", "value": f"L09 {res['09']} | L26 {res['26']}", "verdict": "differ" if res["09"] != res["26"] else "same"})
     return out
 
 
@@ -343,31 +370,36 @@ def load_vecs():
 
 
 def selftest():
-    assert len(conds()) == 13
-    assert abs(interp([1, 2, 4], [0.05, 0.2, 0.5], 0.12) - math.exp(math.log(1) + (0.07 / 0.15) * math.log(2))) < 1e-9
+    assert len(conds()) == 9 and conds()[1] == "L09_t" and LAYER["R26c"] == 26
     assert abs(interp([1, 2], [0.24, 0.5], 0.12) - 0.5) < 1e-9 and interp([1, 2], [0.1, 0.2], 0.3) is None
     rng = np.random.default_rng(0)
-    def synth(directed, deep_scale=1.0):
+    def synth(shared09, shared26):
         V = {}
         for p in PROMPTS:
-            dirs = {c: rng.standard_normal(64) for c in conds()}
+            net = {L: rng.standard_normal(64) for L in ("09", "26")}
+            own = {c: rng.standard_normal(64) for c in conds()}
             for s in SEEDS:
                 b = rng.standard_normal(64); V[(p, s, "C0")] = b
                 for c in conds()[1:]:
-                    sc = deep_scale if c[:3] in ("L26", "L30", "R26") else 1.0
-                    V[(p, s, c)] = b + sc * ((2.0 * dirs[c] if c.split("_")[0] in directed else 0) + rng.standard_normal(64))
+                    L = c[1:3]; shared = shared09 if L == "09" else shared26
+                    d = (net[L] if shared else own[c]) * 1.5 + 0.4 * rng.standard_normal(64)
+                    V[(p, s, c)] = b + d
         return V
-    v = [o for o in rules(synth({"L26", "L30"})) if o["test"].startswith("Rule 1")][0]["verdict"]
-    assert v == "depth gives the edit a direction in the picture", v
-    v = [o for o in rules(synth(set())) if o["test"].startswith("Rule 1")][0]["verdict"]; assert v == "neither", v
-    v = [o for o in rules(synth({"L26"}, deep_scale=0.001)) if o["test"].startswith("Rule 1")][0]["verdict"]; assert v == "not testable", v
-    key = {}; lab = []; i = 0
-    for n, a in (("L26", "stesso"), ("R26", "diversi"), ("L09", "stesso"), ("R09", "stesso")):
-        for p in PROMPTS:
-            key[f"V{i}"] = {"prompt": p, "cond": f"{n}_t1"}; lab.append({"unit": f"V{i}", "same": a}); i += 1
-    o = rules(synth({"L26", "L30"}), lab, key)
-    assert [x for x in o if x["test"].startswith("Rule 2")][0]["verdict"] == "the eye agrees", o
-    assert [x for x in o if x["test"].startswith("Combined")][0]["verdict"] == "supported"
+    o = {x["test"].split(":")[0]: x["verdict"] for x in rules(synth(True, False))}
+    assert o["Rule 2 layer 09"].startswith("computed only: network"), o
+    assert o["Rule 2 layer 26"].startswith("computed only: own"), o
+    assert o["Rule 1 layer 09"] == "computed only: yes", o
+    V = synth(True, False)
+    have = {k for k in V}
+    A, B = units_spec(have); assert len(A) == 32 and len(B) == 24
+    key, lab = {}, []
+    for i, (kind, p, c, s) in enumerate(A + B):
+        key[f"V{i}"] = {"kind": kind, "prompt": p, "cond": c, "seed": s}
+        a = "stesso" if (kind == "A" or c == "R09") else "diversi"
+        lab.append({"unit": f"V{i}", "same": a})
+    o = {x["test"].split(":")[0]: x["verdict"] for x in rules(V, lab, key)}
+    assert o["Rule 1 layer 09"] == "supported" and o["Rule 2 layer 09"].startswith("agree: network"), o
+    assert o["Rule 2 layer 26"].startswith("agree: own"), o
     print("selftest ok")
 
 
