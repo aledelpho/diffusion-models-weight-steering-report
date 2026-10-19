@@ -50,6 +50,7 @@ td.hl img{outline:3px solid var(--acc);outline-offset:-3px}
 .q{margin:8px 0 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .q span{flex:1 1 280px}
 .q button.on{color:#fff}.q button.on[data-v=si]{background:var(--y)}.q button.on[data-v=inparte]{background:var(--p)}.q button.on[data-v=no]{background:var(--n)}.q button.on[data-v=debole]{background:var(--w)}
+.q button.on[data-v=stesso]{background:var(--y)}.q button.on[data-v=diversi]{background:var(--n)}.q button.on[data-v=nonsivede]{background:var(--w)}
 .q button.on[data-v=testo]{background:var(--n)}.q button.on[data-v=blk23]{background:var(--y)}.q button.on[data-v=pari]{background:var(--p)}
 textarea{width:100%;min-height:44px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;font:inherit;box-sizing:border-box}
 #ov{position:fixed;inset:0;background:#0b0b0b;display:none;flex-direction:column;z-index:5;color:#eee}
