@@ -35,6 +35,12 @@ doses**: 14 on the still life. Two places: between −0.8 and −0.9 for L06 MLP
 its three matrices are scaled by 0.2 and 0.1, and the push length jumps tenfold in one step), and between −1.5 and −2 for
 the whole layer 6.
 
+**Correction (2026-10-19, from C101).** Past −1 the attention half of "whole layer 6" is an algebraic mirror: at d = −2
+the scaled q, k, v, o leave attention unchanged, and d = −3 equals d = +1 (`docs/te_shapes_layers_result.md`). The
+whole-layer-6 negative turn-back and its tap-level clips between −1.5 and −2 are therefore partly this symmetry, not a
+behaviour of the encoder. The L06 MLP clips (between −0.8 and −0.9) and the L14 MLP turn are not affected: the MLP has no
+such symmetry.
+
 ## Reading
 
 One curve per edit: with prompts as different as a comic portrait, a rally car photo, a dreamlike scene, a four-panel
