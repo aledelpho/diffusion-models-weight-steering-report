@@ -94,6 +94,7 @@
 <li><a href="#p-28-portrait-preset"><span class="dot" style="background:#0ca30c"></span>A preset made by eye, tested blind on characters it never saw</a></li>
 <li><a href="#p-29-inside-the-block"><span class="dot" style="background:#0ca30c"></span>Inside a block — attention, MLP, and what an edit costs</a></li>
 <li><a href="#p-30-the-text-encoder"><span class="dot" style="background:#0ca30c"></span>The text encoder — how hard it pushes, and where the picture goes</a></li>
+<li><a href="#p-31-what-an-edit-leaves"><span class="dot" style="background:#0ca30c"></span>What a text-encoder edit leaves — a curve, a signature, a family resemblance</a></li>
   </ul>
   <h2>Start here</h2>
   <ul>
@@ -174,7 +175,9 @@ character fell back to a style of its own. And when I walked the dose up step by
 style: it was the character. Tusks, braids, armour, the elf's androgynous look, all gone while the picture is still a
 comic, and dark skin turning lighter on the way. Random pushes of the same strength don't do it, and someone who knew
 nothing about the study saw the same thing I did: it's where the edit points, not how hard it pushes
-(<a href="#p-30-the-text-encoder">page 30</a>).</p>
+(<a href="#p-30-the-text-encoder">page 30</a>). And an edit has a look of its own: shown five pictures, two pairs made by two edits
+at the same seeds and one by a third, I found the groups in 20 of 28 trials and never grouped them by seed; across
+different subjects the look carries as a family resemblance rather than the same change (<a href="#p-31-what-an-edit-leaves">page 31</a>).</p>
 <p>I started with hand-calibrated presets over the whole stack (<a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/blob/main/notebook/01-mark-style.md">notebook page 01</a>)
 and a notebook full of tests on permutations, rotations and block groups (<a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/tree/main/notebook">notebook</a>).
 Single blocks turned out to be the more useful unit: they're finer than the tuner's macro-blocks, and some
@@ -192,6 +195,8 @@ of them behave the same way on every prompt I tried. The pages below report what
   (<a href="#p-29-inside-the-block">29</a>);</li>
 <li>the text encoder: how hard an edit pushes the conditioning, where the picture goes, and what it costs the
   character (<a href="#p-30-the-text-encoder">30</a>);</li>
+<li>what a text-encoder edit leaves: the shape of its push, its signature across seeds and its family resemblance across
+  subjects (<a href="#p-31-what-an-edit-leaves">31</a>);</li>
 <li>what did not work, and the limits (<a href="#p-26-what-did-not-work">26</a>); other kinds of edit
   (<a href="#p-27-other-edits">27</a>).</li>
 </ul>
@@ -326,6 +331,11 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--punctuation-break-and-labels">On prompts complex enough to produce errors, the separators between the parts of the prompt make no measurable difference: commas, periods, semicolons, no punctuation at all, or no &quot;Character N&quot; labels.</a></td><td class="ev">Pre-registered (C78), blind labels, two four-character prompts at eight seeds, twelve questions per prompt: every version lands within 0.25 errors of the original (1.50 errors per picture). Repeats kappa 0.954. On the encoder side, the separator changes how alike the tokens of one part are by less than 0.001.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--punctuation-break-and-labels">Splitting the prompt with BREAK, so that each part is encoded on its own, makes the picture much worse: the scene falls apart.</a></td><td class="ev">Pre-registered (C78): +5.50 errors per picture against the original, worse in 16 of 16 pairs. All four characters are present in none of the 16 BREAK pictures, and the catfolk is never humanoid.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-30-the-text-encoder--which-taps-carry-the-damage">The damage of the L06 and L14 edits does not travel through the readings taken right after the edited layer: restricted to them, the edit costs the character almost nothing.</a></td><td class="ev">Pre-registered (C79 rule 2), blind labels with C75&#x27;s questions: trait loss with the push kept only on the next taps is 0.014 against 0.296 on all early and middle taps for L06 (ratio 0.05; rule at most 0.30), 0.000 against 0.128 for L14 (one tap). Repeats kappa 1.00.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--one-bend-sized-by-the-edit">Along the dose, the push of a text-encoder edit on the conditioning turns once and then runs straight. The bend belongs to the network, since random pushes have it too; its size belongs to the edit, and it is the same on very different prompts.</a></td><td class="ev">Pre-registered twice. C93 rule 1: one bend (&quot;other&quot;, none of the four shapes asked) in 9 of 9 edits and 9 of 9 random controls. C100 rule 1, six prompts from a comic portrait to a macro leaf, doses up to 10: 18 of 18 edits and 18 of 18 controls. C100 rule 2: the total turn of each edit varies by 2-7 degrees over the six prompts, at most 15 in 10 of 10 (bar 10 of 10). Heavy positive doses (4 to 10) add nothing new.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--deeper-layers-bend-less">The deeper the edited layer of the text encoder, the less its push turns along the dose.</a></td><td class="ev">Pre-registered (C101 rule 1), MLP doubled and beyond at all 35 layers, d 0.05 to 10: Spearman -0.655 between layer and total turn, permutation p 0.0002. From 82 degrees (layer 11) to 35 (layer 30).</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--not-the-massive-activations">The damage of L06 MLP doubled does not travel through the massive activations of the text encoder: restoring them leaves the damage in place, and changing only them leaves the picture almost as it was.</a></td><td class="ev">Pre-registered (TEP2, amendment 1: gate as a 5 % tolerance). With the 36 massive entries restored to their original value, the picture keeps at least 0.80 of the edit&#x27;s DINOv2 distance in 5 of 6 character-seed cells (rule 2 bar 5 of 6); with only the massive change kept, median 0.04 of it. A random control of 36 entries restored keeps at least 0.80 in 5 of 6. Three characters, two seeds.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--two-pairs-and-an-odd-one">A fixed perturbation of the model, a text-encoder edit, a random push of the text encoder or an image-model preset, leaves a signature the eye recognises across seeds without being told which pictures belong together.</a></td><td class="ev">Pre-registered (C106): five pictures of one prompt, two pairs made by perturbations A and B at the same two seeds and one by C. Exact grouping 20 of 28 (0.71) against chance 1/15, binomial p 5.5e-18 (bar 0.50 and p &lt; 0.001); text-encoder set 11 of 16, image-model presets 9 of 12 (bars 0.40 and p &lt; 0.01); grouped by seed 0 of 28. Test-retest 4 of 4. C104, reported before it: one fixed random push changes the content the same way across three seeds in 1.00 (layer 9, n 5) and 0.92 (layer 26, n 12) of the units.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--a-family-resemblance-across-subjects">A fixed text-encoder perturbation gives a family resemblance across different subjects, and it does so across style domains as much as within one: something similar, not the same change.</a></td><td class="ev">Pre-registered (C105, amendment 1 on the match before the blind pass, amendment 2 during it adding the answer &quot;something similar&quot;, scored 0.5). Content, share of &quot;same&quot; with &quot;similar&quot; as half: control of different perturbations 0.06 (n 8); real edits 0.38 within a domain, 0.50 across; random pushes 0.56 and 0.58: &quot;transfers across domains&quot; for both (bar: a gap of 0.30 over the control). 23 of 36 content answers are &quot;similar&quot;, 3 &quot;same&quot;. The domain specificity of image-model presets (2026-09-25) is not reproduced here.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-21-block-map--what-the-weights-show">How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.</a></td><td class="ev">Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-24-wording--the-registered-rule">Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block&#x27;s effect no more than changing the seed does, while changing the subject changes it a great deal.</a></td><td class="ev">Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-27-other-edits--a-curiosity-attributes-that-appear">A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.</a></td><td class="ev">Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run.</td></tr>
@@ -334,6 +344,8 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-30-the-text-encoder--random-pushes-of-the-same-size">A random push of the conditioning as large as an edit&#x27;s changes the genre of the picture as often as the edit does.</a></td><td class="ev">Pre-registered (C72 C1-C3, amendment 2: read together). Per-token random pushes switch the genre about as often as the real edits (permuted 11/27, token 10/27, against 14/27; R 0.79 and 0.71, bar 0.5), mostly to anime (15 of 21 switches); the same random vector added to every token switches none (0/27). By the rule fixed before the labels the joint reading is &quot;depends on the form of the push&quot;.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-30-the-text-encoder--a-dose-ladder">L28 MLP doubled, which never changes the style, still costs the character&#x27;s traits.</a></td><td class="ev">Pre-registered (C75 T3): mean retention at d = 1.00 minus at 0.10 = -0.07 (bar -0.15: inconclusive). The half-orc loses her orc features from 0.60-0.70; other traits mostly stay; the elf&#x27;s face turns green. Under random pushes of its size the character fares worse (B1).</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-30-the-text-encoder--which-taps-carry-the-damage">The traits lost under L06 and L14 travel mostly through the early and middle readings of the text encoder (layers 2-26) rather than the late ones (29-35).</a></td><td class="ev">Pre-registered (C79 rule 1): trait loss 0.212 with the push only on the early and middle taps, 0.066 only on the late ones; the difference, +0.146, misses the bar of +0.15, although the early taps cost more in 5 of 6 character-edit pairs (bar 5). Inconclusive. Neither half alone reproduces the full edit, and together they fall short of it: on the same two seeds 0.37 against 0.46 (L06) and 0.16 against 0.38 (L14).</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-31-what-an-edit-leaves--equal-push-unequal-pictures">A deep text-encoder edit changes the pictures in a direction of its own, while an early edit only follows the direction the network imposes on any push.</a></td><td class="ev">Pre-registered (C102), not supported by its rules: computed rule mixed (L26 ahead of its random control in 4 of 8 cells, bar 6), blind rule -0.04 (bar +0.25). But the deep conditions moved the pictures too little for a direction to be judged (median DINOv2 distance 0.04-0.06), and the matching quantity was the wrong one (pitfall 93), so the question was not put fairly. Left ambiguous rather than overturned.</td></tr>
+<tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-31-what-an-edit-leaves--each-perturbation-leaves-its-own-change">Different random pushes at the same layer of the text encoder change the content of a picture in different ways: each has its own direction, rather than a direction imposed by the network.</a></td><td class="ev">Pre-registered twice (C103, C104), both ending in disagreement between the eye and the computed measure. Blind: three random pushes at one layer change the content the same way in 0.00 (layer 9, n 9) and 0.25 (layer 26, n 12) of the units. Computed (DINOv2 cosines): r 1.61 and 0.87, the &quot;network&quot; reading. The computed measure was later found not to track the eye (pitfall 94), and C106 found random pushes at layer 26 the hardest to tell apart (exploratory).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-21-block-map--what-each-block-writes-into-the-stream">The middle blocks rewrite the picture more than the late blocks because they write a larger fraction of the residual stream, and blocks 8 or 9 write the largest MLP fraction in the middle of the stack.</a></td><td class="ev">Pre-registered (C48 P1, P2), both refuted. P1: Spearman between relative write ratio and layout stability +0.49 (rule &lt;= -0.50; with depth removed, -0.056) — late blocks 21-27 write the largest fraction of the stream (0.46 to 0.99) yet keep the layout (0.88). P2: among blocks 02-20 the largest MLP relative write sits at block 10 (0.612,jumping the stream from 1,775 to 2,844), not block 8 (0.156) or 9 (0.178).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-25-standard-metrics--a-content-embedding-does-not-see-it">The family-coherent change the eye saw on the middle blocks is a change of content that a content embedding, DINOv2, would record.</a></td><td class="ev">Pre-registered (H5): supported if the median within-family coherence of the five middle arms on DINOv2 changes reached the style-feature value plus 0.10 (0.26). It is 0.007, below the style-feature value 0.159: refuted. In DINOv2 space no arm is family-coherent (all W at most 0.06).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-25-standard-metrics--calibrating-metrics-on-text-encoder-edits">A dedicated style descriptor (CSD-ViT-L) and zero-shot CLIP genre classification reproduce cross-character style direction coherence, separate style from content changes better than DINOv2, and classify visual genre above 60% accuracy.</a></td><td class="ev">Pre-registered (C66, docs/prereg_metric_validation.md): 4 of 7 calibration rules failed. Cross-character CSD change-vector coherence correlates negatively with eye labels (T1 rho = -0.482, p = 0.0039, AUC = 0.056 vs threshold &gt;= 0.75; T2 leave-one-out AUC = 0.383 vs &gt;= 0.70); style-changed AUC on CSD (0.796) does not exceed DINOv2 (0.815, T4); zero-shot CLIP ViT-L/14 genre accuracy is 0.593 (86/145), 1 image below the 0.600 threshold (T6).</td></tr>
@@ -346,6 +358,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-30-the-text-encoder--not-less-attention-on-the-style-words">Pictures that leave the Western-comic style are the ones whose image model pays less attention to the words that name the style.</a></td><td class="ev">Pre-registered three times, never supported. C69 P5 (between edits): L06 lowers the style share 0.095 to 0.054, L12 raises it to 0.121. C70 G1 (20 pictures, switched or not): AUC 0.46 (bar 0.70). C70 G1d (intensity 0-3): Spearman +0.05 (bar -0.40).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-30-the-text-encoder--not-a-text-like-push">The edits that end in anime push the conditioning in the direction that writing &quot;anime style&quot; instead of &quot;western comics style&quot; would.</a></td><td class="ev">Pre-registered (C71), 16 encodes, gate bit-identical. H1: cosine with the comics-to-anime direction against the number of anime pictures, Spearman -0.01 (bar 0.50). H2: with the anime-minus-painting direction, -0.00 (bar 0.40). Every cosine lies between -0.12 and +0.07.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-30-the-text-encoder--every-character-has-its-own-fallback">A strong text-encoder edit sends each character to the genre that character falls back to without style words.</a></td><td class="ev">Pre-registered (C73 H2), not supported: of 43 switched pictures of the four characters with a clear fallback, 0.28 land on that fallback, against 0.27 expected if destinations ignored the character (bar: +0.20).</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--deeper-layers-bend-less">At every layer of the text encoder, an edit&#x27;s push bends less than a random push of the same size injected at the same place.</a></td><td class="ev">Pre-registered (C101 rule 2): the edit bends less in 24 of 35 layers, not at layers 2, 3, 4, 8, 9, 10, 11, 14, 15, 17 and 34, so the verdict is &quot;depends on the layer&quot;. Median edit minus control: +1 degree in layers 0-11, -5.5 in 12-23, -15.9 in 24-34. C93 had suggested it from three layers; C100 already found L14 bending more than its control (80.5 against 77.3).</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--where-the-layout-holds">Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.</a></td><td class="ev">Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--blocks-that-push-together">Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.</a></td><td class="ev">Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--what-the-ends-change-and-what-the-middle-changes">The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.</a></td><td class="ev">At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so &quot;fewer things&quot; holds for kinds of property, not for statistics.</td></tr>
@@ -365,6 +378,8 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--what-each-phrase-draws-alone">Single phrases of the prompt carry strong priors of their own, and they match what surfaces under edits: a female dwarf with a beard, a uniform drawn as anime.</a></td><td class="ev">Described (C72 block B, four seeds, one labeller): &quot;female dwarf&quot; and the full dwarf prompt give a bearded woman in 4 of 4; &quot;uniform&quot; an anime girl in 4 of 4; &quot;realistic western comics style&quot; a bearded cowboy comic in 4 of 4; &quot;female antlered elf brawler&quot; anime in 3 of 4; phrases without a person are mostly realistic (78 of 165).</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--layer-0-switched-off">With half of the first layer of the text encoder switched off, the image model writes fragments of the prompt as text instead of drawing it; with the whole layer off it draws coloured noise.</a></td><td class="ev">C77, rule fixed before the renders: text in 4 of 6 new pictures (holds at 5), so open. Counting the C64 elf, attention off writes text in 4 of 4 prompts, MLP off in 2 of 4, the whole layer off in 0 of 4 (exploratory). One seed, my readings, not blind. Encoder side: with half the layer off the conditioning keeps its scale (0.98x and 0.84x) and the identity of the tokens; with the whole layer off its norm is 21.7x on average (62x at L05) and no token is recognisable.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--inside-the-text-encoder">Inside the text encoder, one layer writes almost all of the internal signal: the MLP of layer 6 takes its size from about 400 to about 13,100, and every later layer up to 33 adds only 1 to 8 % of it.</a></td><td class="ev">Described, no pre-registration: a read-only probe of all 36 layers on 16 prompts. Layer 6&#x27;s MLP writes 33.8 times the size of the signal it receives; layers 7-33 write 0.012-0.080 times; the last two reshape it (the norm falls to 12,768 and 6,606). L06 doubled is also the edit that turned seven portraits into realistic renders in 11 of 14 pictures (C73).</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--equal-push-unequal-pictures">The same change of the conditioning moves the picture far less when it comes from a deep layer of the text encoder than from an early one.</a></td><td class="ev">Reported, no threshold (C102 rule 3): every edit and random push matched to the same relative change of the whole conditioning within 1 %. Deep (mean of L26, L30) moves the picture less than early (L04, L09) in 23 of 24 prompt-seed-level cells; at the push of L06 doubled, median DINOv2 distance L04 0.53, L09 0.34, random at L09 0.46, against L26 0.06, L30 0.04, random at L26 0.05.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--what-the-embeddings-missed">The cosine between DINOv2 or CSD change vectors does not tell whether two pictures changed the same way, as the eye sees it.</a></td><td class="ev">Exploratory, after C104&#x27;s rules: per unit, the mean cosine against Alessandro&#x27;s same / different answers, DINOv2 for content AUC 0.64 (n 28 and 19), CSD for style AUC 0.36, below chance. The computed halves of C102 and C103 rested on that measure and are withdrawn as evidence of a shared direction.</td></tr>
       </tbody>
     </table>
   </section>
@@ -3863,6 +3878,384 @@ analysis:
   only, checked pixel-identical on all 25 renders), <code>tools/comfyui_krea2_condpush</code> (random pushes; gate
   pixel-identical; its <code>taps</code> variant, used in C79, reproduces the full edit pixel for pixel when all twelve taps are
   kept).</li>
+</ul>
+</section>
+<section id="p-31-what-an-edit-leaves">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">825 renders · 15 prompts · 9 seeds · pre-registered · 2026-10-20</span></p>
+<h1 id="p-31-what-an-edit-leaves--what-a-text-encoder-edit-leaves-a-curve-a-signature-a-family-resemblance">What a text-encoder edit leaves — a curve, a signature, a family resemblance</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Page 30 showed that an edit of the text encoder changes <em>what</em> the picture is, not
+its surface. If that's going to be a tool, an edit has to be a knob: something with a shape I can calibrate, that
+does the same thing every time I turn it, and that I could recognise by its look. I also suspected that <em>any</em> fixed
+change of the weights, even a random one, would behave like that.</p>
+<p><strong>What would kill it.</strong> An edit whose push changes shape from prompt to prompt; pictures that the eye cannot sort by
+the edit that made them better than chance; a change that stays with one subject and does not carry to another.</p>
+<p><strong>Where we are.</strong> An edit is a knob with a recognisable look: I sorted pictures by the edit that made them in 20 of 28
+trials, where chance gives about 2. Across subjects the look carries as a family resemblance, not the same change,
+and that verdict leans on an answer, "something similar", that I asked for in the middle of the blind pass. And the
+embeddings that were meant to measure "the same change" for me turned out not to see it.</p>
+</blockquote>
+<h2 id="p-31-what-an-edit-leaves--in-two-minutes">In two minutes</h2>
+<p>I started from the conditioning, the list of numbers the text encoder hands to the image model. When I turn up an
+edit, the conditioning moves. I followed that movement step by step, from a tiny dose to ten times the full one, and
+asked what shape it draws. A spiral? A wave? A straight line? None of them: one bend near the start, then a straight
+run. A random push of the same size at the same place bends too, so the bend belongs to the network. But how <em>much</em>
+it bends belongs to the edit: on six very different prompts, a comic portrait, a rally car, a dreamlike canoe, a comic
+page, a cartoon still life and a macro leaf, each edit's curve changes by at most 7 degrees. One curve per edit, any
+prompt.</p>
+<p>Then I drew that curve for all 35 layers. The deeper the layer, the less it bends. In the first third of the encoder an
+edit bends exactly like a random push: there it carries no direction of its own beyond the network's. From the middle
+on it is straighter than chance, and more so with depth.</p>
+<p><img alt="For each of the 35 layers, how much the push of an MLP edit turns along the dose, against a random push of the same size at the same place: the edit turns less the deeper the layer (Spearman -0.655); in the first third it turns like the random push, in the last third it is straighter by about 16 degrees." src="../assets/31-what-an-edit-leaves/F31.1_te_bend_by_layer.webp" /></p>
+<p>Next, a suspicion about L06, the edit that turns my comic portraits into photographs. Inside the encoder a few entries
+of the signal are enormous, the so-called massive activations, and layer 6 is where they appear. Is the damage carried
+by them? I put those 36 entries back to their original value and left the rest of the edit in place: the damage stays.
+Change only those entries and the picture comes back. It's not them.</p>
+<p><img alt="Three portraits under L06 MLP doubled: restoring the 36 massive entries leaves the damage in place (f 0.96-1.41), the massive change alone gives back the original (f 0.02-0.12), and restoring 36 random entries does nothing (f 0.96-1.09)." src="../assets/31-what-an-edit-leaves/F31.2_te_massive_sheet.webp" /></p>
+<p>Then I tried to use the curves to compare layers fairly: every edit pushed to the same change of the conditioning. It
+backfired in an instructive way. At the same push, early layers break or redraw the picture, and deep layers leave it
+almost untouched. The image model listens to some parts of the conditioning much more than to others, so a push on the
+conditioning is not a common currency. From then on I calibrated on the picture.</p>
+<p><img alt="Four prompts with every column moving the conditioning by the same amount: the L04 edit breaks the pictures, the L09 edit and the random push at L09 change their content, while the L26 and L30 edits and the random push at L26 leave them almost as they were (median DINOv2 distance at this push 0.04-0.06, against 0.34-0.53 for the early edits)." src="../assets/31-what-an-edit-leaves/F31.3_te_equal_push_sheet.webp" /></p>
+<p>With the picture as the yardstick, I came back to my suspicion: any fixed change of the weights, even a random one,
+should change the pictures of a prompt the same way, seed after seed. Claude read the first pictures the other way:
+three different random pushes at layer 26 seemed to age the paladin and turn the teapot into a kettle all alike, so
+the network would be choosing the direction. I labelled it blind, with content and style asked apart. One fixed random
+push changes the content the same way across seeds almost every time; three different ones mostly don't. Each
+perturbation leaves its own change.</p>
+<p><img alt="Three prompts under the L09 and L26 edits and three different random pushes per layer: each perturbation leaves its own change, and at layer 26 the three random pushes look alike (an older, more realistic paladin, a kettle instead of a teapot) while the L26 edit goes elsewhere (an elf-eared chibi, a figurine on the teapot)." src="../assets/31-what-an-edit-leaves/F31.4_te_random_signature_sheet.webp" /></p>
+<p>Does it carry to another subject? I calibrated four perturbations on eight subjects, four comic portraits and four
+pictures in other styles, so that each moved its picture by about the same amount, and asked whether groups of four
+changed the same way. Rarely the same. But "something similar" came up again and again, and I asked for that answer
+in the middle of the pass because the two I had didn't fit what I saw: more exaggerated features, more flatness,
+textures picked out, "more comics". The resemblance crosses style domains: groups mixing portraits with a rally car or
+a leaf scored as high as groups of portraits.</p>
+<p><img alt="Eight subjects in two style domains under one fixed L26 edit and one fixed random push at L26, each calibrated per subject: the edit gives a family resemblance across subjects and domains (sharper, more exaggerated, more graphic) rather than the same change, with some subjects out of the group." src="../assets/31-what-an-edit-leaves/F31.5_te_transfer_sheet.webp" /></p>
+<p>The last test was my own proposal, and the one I like best. Five pictures of one prompt: two made with one edit, two
+with another at the <em>same</em> two seeds, one with a third edit. Nobody tells you which is which, and the tempting answer
+is to pair the pictures that share a seed, because they share the composition. I found the right groups in 20 of 28
+trials, where guessing gets one in 15, and I never once grouped by seed. It worked for text-encoder edits, for random
+pushes and for my old image-model presets alike. An edit leaves a signature you can see.</p>
+<p><img alt="Three odd-one-out trials as shown, with the hidden groups: two pairs made by two perturbations at the same two seeds and one picture by a third; the groups are found in a text-encoder trial and an image-model trial, and missed in a trial of three random pushes at layer 26." src="../assets/31-what-an-edit-leaves/F31.6_odd_one_out_examples.webp" /></p>
+<h2 id="p-31-what-an-edit-leaves--the-verdict">The verdict</h2>
+<p><strong>Holds</strong> (C93, C100): an edit's push bends once; the bend is the network's, its size the edit's, the same on six
+prompts within 7 degrees. <strong>Holds</strong> (C101): deeper layers bend less (Spearman -0.655). <strong>Overturned</strong> (C101): the
+edit straighter than a random push at every layer; only from the middle on (24 of 35). <strong>Holds</strong> (TEP2): L06's damage
+does not travel through the massive activations. <strong>Open</strong> (C102): at equal push on the conditioning, deep edits barely
+move the picture (23 of 24). <strong>Ambiguous</strong> (C102): deep edits carry a direction of their own; the test was not fair.
+<strong>Holds</strong> (C106): the eye sorts pictures by the perturbation that made them, 20 of 28 against chance 1/15, never by
+seed. <strong>Ambiguous</strong> (C103, C104): different random pushes at one layer change content differently; the eye says yes,
+the embeddings disagree. <strong>Holds</strong> (C105): across subjects a fixed perturbation gives a family resemblance, across
+style domains too, by a "something similar" added during the pass. <strong>Open</strong>: embedding cosines do not track "the same
+change".</p>
+<h2 id="p-31-what-an-edit-leaves--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>One observer, who knows the material.</strong> Every blind label on this page is mine. Conditions were hidden and orders
+random, but I had seen many of these pictures before, and the image-model presets of C106 are my own. I also knew the
+hypothesis I was testing: I proposed two of these tests. Test-retest was perfect or nearly (4 of 4 in C106, 6 of 6 in
+C104, 6 of 6 and 5 of 6 in C105), which says I was consistent, not that I was uninfluenced.</p>
+<p><strong>The transfer verdict leans on an answer added mid-way.</strong> In C105 I asked for "something similar" during the blind
+pass, and the rule then scored it as half. Without it, too few units are left to decide. What the page claims is
+therefore a family resemblance, and nothing stronger. The edits passed by a small margin.</p>
+<p><strong>The curves are of the conditioning, not of the picture.</strong> C93, C100 and C101 are encodes without images, averaged
+over tokens. C102 showed that the picture does not respond equally to every part of the conditioning, so a curve says
+how the push moves, not how the picture will.</p>
+<p><strong>A mirror I didn't see coming.</strong> Scaling the four attention matrices by (1 + d) gives back the original attention at
+d = -2 and the same attention at d = -3 as at d = +1. Every negative attention curve past -1 is that symmetry, not a
+behaviour, and part of C100's "whole layer 6, negative" was too. It is reported and corrected, not removed.</p>
+<p><strong>Small groups.</strong> C105 has six to eight units per cell and two test seeds; C106 has 28 trials; TEP2 is one edit, three
+characters, two seeds. One direction per random push.</p>
+<p><strong>The measure that failed.</strong> C102 and C103 first measured "the same change" with the cosine between embedding change
+vectors. Checked against my labels, it barely tells "same" from "different" (pitfall 94). The computed halves of those
+tests are withdrawn; the blind halves stand.</p>
+<h2 id="p-31-what-an-edit-leaves--the-data">The data</h2>
+<h3 id="p-31-what-an-edit-leaves--one-bend-sized-by-the-edit">One bend, sized by the edit</h3>
+<p>C93 followed the push of five edits on three characters along the dose, against random pushes injected at the same
+place (3,744 trajectories over tokens and taps). At the level of the whole conditioning, every MLP edit turns 45-77
+degrees from the smallest to the largest dose, in one direction, almost in a plane, with nearly all the turning at small
+push length; the random pushes turn 66-88 degrees, less cleanly. None of the four shapes asked (straight, spiral, wave,
+clip, plus accelerating) fits: "other", one bend, in 9 of 9 edits and 9 of 9 controls.</p>
+<p>C100 (60 trajectories, six prompts, doses up to 10) asked whether the shape is the prompt's or the edit's. Rule 1: one
+bend in 18 of 18 edits and 18 of 18 controls. Rule 2: the total turn of each edit and sign varies by 2-7 degrees over
+the six prompts, at most 15 in 10 of 10. Median total turn at positive doses: L28 MLP 50.1, L06 MLP 72.6, L14 MLP 80.5,
+whole layer 6 82.1, the three MLPs together 84.8 degrees. Positive doses from 4 to 10 add nothing new at the whole
+level; the whole layer 6 leaves the fp16 range at d = 10 for the dwarf (amendment 1).</p>
+<p>Past the sign flip the push turns sharply: 22 single-tap clips, all at negative doses. For L06 MLP between -0.8 and
+-0.9, where its matrices are scaled by 0.2 and 0.1 and the push length jumps tenfold in one step. For the whole layer 6
+between -1.5 and -2, which is in part the attention mirror described above. Details in <code>docs/te_shapes2_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--deeper-layers-bend-less">Deeper layers bend less</h3>
+<p>C101 drew the curve of the MLP and of the attention at every layer, with a random control for the MLP (140
+trajectories, gates against C93 at relative error 0). Rule 1: Spearman -0.655 between layer and total turn,
+permutation p 0.0002. Rule 2: the edit bends less than its control in 24 of 35 layers. Layer 34's control is straight
+(6 degrees): a push added at the last edited layer reaches the only tap left with no layer in between, so it cannot
+bend, which is what the controls are for. Attention bends a little less than the MLP (median 60 against 65 degrees).
+The attention curves past -1 are the algebraic mirror: push length at d = -2 below 1e-5 at every attention layer, and
+the push at -3 equal to the push at +1. Details in <code>docs/te_shapes_layers_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--not-the-massive-activations">Not the massive activations</h3>
+<p>TEP2 rendered L06 MLP doubled from saved conditionings (the <code>file</code> route of the conditioning-push node) in five
+versions: the original (C0), the full edit (C1), the edit with the 36 massive entries at the output of layer 6 put back
+(C2), only the massive change kept (C3), and 36 random entries put back as a control (C4). Per cell, f = DINOv2
+distance of X to the original, divided by that of C1.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>character</th>
+<th>seed</th>
+<th>C2</th>
+<th>C3</th>
+<th>C4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dwarf</td>
+<td>2645751</td>
+<td>1.00</td>
+<td>0.03</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>dwarf</td>
+<td>3316624</td>
+<td>0.96</td>
+<td>0.02</td>
+<td>0.97</td>
+</tr>
+<tr>
+<td>elf rogue</td>
+<td>2645751</td>
+<td>0.69</td>
+<td>0.05</td>
+<td>0.61</td>
+</tr>
+<tr>
+<td>elf rogue</td>
+<td>3316624</td>
+<td>1.41</td>
+<td>0.12</td>
+<td>0.96</td>
+</tr>
+<tr>
+<td>half-orc</td>
+<td>2645751</td>
+<td>0.98</td>
+<td>0.08</td>
+<td>0.98</td>
+</tr>
+<tr>
+<td>half-orc</td>
+<td>3316624</td>
+<td>1.00</td>
+<td>0.04</td>
+<td>1.09</td>
+</tr>
+</tbody>
+</table></div>
+<p>The one cell under 0.80 also drops for the control: it moves whenever anything is restored. On the encoder side the 36
+massive entries sit on one token; putting them back keeps about all of the push (cosine 0.97 with the full push). The
+damage is in the ordinary entries, spread over the tokens. The file route is not bit-identical to the in-graph render
+(amendment 1, a 5 % tolerance; a ComfyUI update is the likely cause, not verified). Details in
+<code>docs/te_massive_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--equal-push-unequal-pictures">Equal push, unequal pictures</h3>
+<p>C102 matched four MLP edits (L04, L09, L26, L30) and random pushes at L09 and L26 to the same relative change of the
+whole conditioning, at two levels anchored on L06 (its push at d = 0.5 and d = 1), on four prompts and three seeds (156
+renders). Every target was reached within 1 %. The deep layers needed smaller doses than L06 (L26 about 0.40 and 0.80,
+L30 about 0.35 and 0.70). Deep moved the picture less than early in 23 of 24 cells.</p>
+<p>The question it was built for, whether deep edits change the three seeds in a direction of their own while early edits
+follow the network, could not be answered: the computed rule came out mixed and the blind one at -0.04, but the deep
+pictures had barely moved. My notes say so for most deep units: too little change to tell. The random push at L09
+changed the seeds as consistently as the L09 edit (blind 0.71 against 0.62). Details in
+<code>docs/te_depth_control_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--each-perturbation-leaves-its-own-change">Each perturbation leaves its own change</h3>
+<p>C103 recalibrated on the picture: every perturbation pushed to a DINOv2 distance of 0.30 on a calibration seed (132
+calibration and 96 test renders), with three different random pushes per layer (seeds 9393, 9394, 9395) next to the L09
+and L26 edits. The comic page never reached the target at layer 9. R09a was under-matched (0.13). The blind and the
+computed rules disagreed at both layers.</p>
+<p>C104 split the blind question in two, content and style, on the same pictures (55 units):</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>question</th>
+<th>layer 9</th>
+<th>layer 26</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>one fixed random push, three seeds, content the same</td>
+<td>1.00 (n 5)</td>
+<td>0.92 (n 12)</td>
+</tr>
+<tr>
+<td>one fixed random push, three seeds, style the same</td>
+<td>0.67 (n 6)</td>
+<td>0.50 (n 12)</td>
+</tr>
+<tr>
+<td>three random pushes, one seed, content the same</td>
+<td>0.00 (n 9)</td>
+<td>0.25 (n 12)</td>
+</tr>
+<tr>
+<td>three random pushes, one seed, style the same</td>
+<td>0.56</td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table></div>
+<p>The two real edits: content the same across seeds in all their units at both layers. Claude's reading of C103,
+content from the network and rendering from the perturbation, was not supported at either layer. Details in
+<code>docs/te_depth_control2_result.md</code> and <code>docs/te_content_style_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--a-family-resemblance-across-subjects">A family resemblance across subjects</h3>
+<p>C105 took two real edits (L14, L26) and two random pushes (at L09, L26) and calibrated each on eight subjects, so that
+it moved each picture by a DINOv2 distance of about 0.25 on two calibration seeds (342 calibration renders, 74 test
+renders at two other seeds). 29 of 32 pairs were reachable; 28 of 29 landed in the matched window (amendment 1). Each
+blind unit showed four subjects, before and after, with two questions: is the change of content of the same kind in
+the four pairs, and the change of style?</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>content</th>
+<th>within a domain</th>
+<th>across domains</th>
+<th>control, different perturbations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>real edits</td>
+<td>0.38 (n 8)</td>
+<td>0.50 (n 6)</td>
+<td>0.06 (n 8)</td>
+</tr>
+<tr>
+<td>random pushes</td>
+<td>0.56 (n 8)</td>
+<td>0.58 (n 6)</td>
+<td>0.06 (n 8)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Style travels less: real edits 0.19 and 0.25, random pushes 0.44 and 0.25, control 0.00. Of 36 content answers, 3 were
+"the same", 23 "something similar", 10 "different". My notes name the resemblance: features exaggerated, more flatness,
+textures picked out, more comics, a sharper division between elements, often with one subject out of the group.</p>
+<p>On image-model presets, an earlier test found that a structured preset keeps its direction inside a style domain and
+loses it across (<a href="../docs/prereg_domain_specificity.md">pre-registration</a>, 2026-09-25, replication pending). Text-encoder
+perturbations don't show that boundary. Details in <code>docs/te_domain_transfer_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--two-pairs-and-an-odd-one">Two pairs and an odd one</h3>
+<p>C106 needed no new renders: 16 trials from C103's text-encoder pictures and 12 from the stage-5 image-model presets of
+September (seeds 42, 777, 1337, 9999, 4242145; prompts G1-G6), plus 4 repeats. In each trial the seeds were chosen so
+that grouping by seed was the wrong answer.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>exact grouping</th>
+<th>chance</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>all trials</td>
+<td>20 of 28 (0.71)</td>
+<td>1/15</td>
+<td>5.5e-18</td>
+</tr>
+<tr>
+<td>text encoder</td>
+<td>11 of 16 (0.69)</td>
+<td>1/15</td>
+<td>3.7e-10</td>
+</tr>
+<tr>
+<td>image-model presets</td>
+<td>9 of 12 (0.75)</td>
+<td>1/15</td>
+<td>4.8e-09</td>
+</tr>
+</tbody>
+</table></div>
+<p>Grouped by seed: 0 of 28. Single picture found: 20 of 28 (chance 1/5); pairs correct: 45 of 56. By kind of pair: presets
+of different families 6 of 9, the same preset at another sign or strength 3 of 3, a text-encoder edit against a random
+push 2 of 2, two random pushes of the same layer 4 of 7. Exploratory: the failures cluster on random pushes at layer 26
+(two trials made only of them, both failed), and every trial containing the L26 edit succeeded. Details in
+<code>docs/odd_one_out_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--what-the-embeddings-missed">What the embeddings missed</h3>
+<p>For every C104 unit I had an answer, same or different, and a computed number: the mean cosine between the DINOv2 (or
+CSD, for style) change vectors of the pictures in it. If the cosine tracked what I see, it would separate the two
+answers well. It does not: AUC 0.64 for DINOv2 on content, 0.36 for CSD on style, below chance. A cosine between change
+vectors likely carries a part shared by any change, more realistic, more detailed, which makes different perturbations
+look alike. This was computed after the rules (pitfall 94). For questions of "the same change", the measure here is the
+eye.</p>
+<h3 id="p-31-what-an-edit-leaves--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: Krea2ConditioningPush (tools/comfyui_krea2_condpush), variant file; conditionings encoded in the ComfyUI venv by the experiment scripts
+  version: not recorded — the node is in this repository
+  mode: one MLP or attention half of a text-encoder layer, weight x (1 + d); random pushes as per-token random unit directions (seeds 9393, 9394, 9395) x alpha x the per-token norm of the unedited MLP output
+prompts:
+  files: [data/te_massive_plan.csv, data/te_depth_control_plan.csv, data/te_depth_control2_plan.csv, data/te_domain_transfer_plan.csv, data/odd_one_out_key.csv]
+  ids: [D1_dwarf_paladin, E2_elf_rogue, O4_halforc_fighter, G5_gnome_wizard, S1_rally, C4_stilllife, P2_lotuscanoe, P5_comic_panels, LN, &quot;G1-G6 (stage 5, C106 only)&quot;]
+seeds: [2645751, 3316624, 2718281, 1618033, 42, 777, 1337, 9999, 4242145]
+conditions:
+  - name: C93, C100, C101 dose curves of the conditioning (no renders), d 0.05 to 10 and -0.05 to -3
+    dose: 0.05-10
+    measured_D: not applicable; trajectories in data/te_shapes_trajectories.csv, data/te_shapes2_trajectories.csv, data/te_shapes_layers_trajectories.csv
+  - name: TEP2, L06 MLP doubled with the 36 massive entries restored (C2), alone (C3), 36 random entries restored (C4)
+    dose: 1.000
+    measured_D: data/te_massive_metrics.csv
+  - name: C102, L04, L09, L26, L30 MLP and random pushes at L09, L26, matched on the relative change of the conditioning
+    dose: per prompt, data/te_depth_control_encoder.csv
+    measured_D: data/te_depth_control_metrics.csv
+  - name: C103, L09 and L26 MLP and three random pushes per layer, matched on DINOv2 distance 0.30
+    dose: per prompt, data/te_depth_control2_strengths.csv
+    measured_D: data/te_depth_control2_metrics.csv
+  - name: C105, L14 and L26 MLP and random pushes at L09 and L26, matched per subject on DINOv2 distance 0.25
+    dose: per subject, data/te_domain_transfer_strengths.csv
+    measured_D: data/te_domain_transfer_metrics.csv
+outputs:
+  folders: [benchmark_te_massive, benchmark_te_depth_control, benchmark_te_depth_control2, benchmark_te_domain_transfer, &quot;benchmark_stage5/renders (reused in C106)&quot;]
+  manifests: [data/te_massive_plan.csv, data/te_depth_control_plan.csv, data/te_depth_control2_cal_plan.csv, data/te_depth_control2_plan.csv, data/te_domain_transfer_cal_plan.csv, data/te_domain_transfer_plan.csv]
+  encodes_without_images: [benchmark_te_shapes (C93), benchmark_te_shapes2 (C100), benchmark_te_shapes_layers (C101)]
+analysis:
+  scripts: [experiments/te_shapes.py, experiments/te_shapes2.py, experiments/te_shapes_layers.py, experiments/plot_te_shapes.py, experiments/plot_te_shapes_layers.py, experiments/te_massive.py, experiments/te_massive_channels.py, experiments/te_depth_control.py, experiments/te_depth_control_page.py, experiments/te_depth_control2.py, experiments/te_content_style.py, experiments/te_domain_transfer.py, experiments/odd_one_out.py, experiments/eye_grid_page.py]
+  produces: data/te_shapes_tests.csv, data/te_shapes2_tests.csv, data/te_shapes_layers_tests.csv, data/te_massive_tests.csv, data/te_depth_control_tests.csv, data/te_depth_control2_tests.csv, data/te_content_style_tests.csv, data/te_domain_transfer_tests.csv, data/odd_one_out_tests.csv
+</code></pre>
+<h2 id="p-31-what-an-edit-leaves--provenance">Provenance</h2>
+<ul>
+<li>Renders: TEP2 (25, gate included), C102 (156), C103 (228, of which 132 calibration), C105 (416, of which 342 calibration).
+  C104 and C106 made no renders: C104 relabelled C103's pictures, C106 reused C103's and the stage-5 renders.</li>
+<li>Encodes without images: C93 (3,744 trajectory rows), C100 (60 trajectories), C101 (140 trajectories).</li>
+<li><strong>Pre-registrations:</strong> <code>docs/prereg_te_shapes.md</code>, <code>docs/prereg_te_shapes2.md</code> (+ amendment 1),
+  <code>docs/prereg_te_shapes_layers.md</code> (+ amendment 1), <code>docs/prereg_te_massive.md</code> (+ amendment 1),
+  <code>docs/prereg_te_depth_control.md</code>, <code>docs/prereg_te_depth_control2.md</code>, <code>docs/prereg_te_content_style.md</code>,
+  <code>docs/prereg_te_domain_transfer.md</code> (+ amendments 1-2), <code>docs/prereg_odd_one_out.md</code>.</li>
+<li><strong>Result documents:</strong> <code>docs/te_shapes_result.md</code>, <code>docs/te_shapes2_result.md</code>, <code>docs/te_shapes_layers_result.md</code>,
+  <code>docs/te_massive_result.md</code>, <code>docs/te_depth_control_result.md</code>, <code>docs/te_depth_control2_result.md</code>,
+  <code>docs/te_content_style_result.md</code>, <code>docs/te_domain_transfer_result.md</code>, <code>docs/odd_one_out_result.md</code>.</li>
+<li><strong>Data:</strong> <code>data/te_shapes_trajectories.csv</code>, <code>data/te_shapes2_trajectories.csv</code>,
+  <code>data/te_shapes_layers_trajectories.csv</code>, <code>data/te_massive_metrics.csv</code>, <code>data/te_massive_encoder.csv</code>,
+  <code>data/te_massive_channels.csv</code>, <code>data/te_depth_control_encoder.csv</code>, <code>data/te_depth_control_metrics.csv</code>,
+  <code>data/te_depth_control_key.csv</code>, <code>data/te_depth_control_labels.csv</code>, <code>data/te_depth_control2_calibration.csv</code>,
+  <code>data/te_depth_control2_strengths.csv</code>, <code>data/te_depth_control2_metrics.csv</code>, <code>data/te_depth_control2_key.csv</code>,
+  <code>data/te_depth_control2_labels.csv</code>, <code>data/te_content_style_key.csv</code>, <code>data/te_content_style_labels.csv</code>,
+  <code>data/te_domain_transfer_strengths.csv</code>, <code>data/te_domain_transfer_metrics.csv</code>, <code>data/te_domain_transfer_key.csv</code>,
+  <code>data/te_domain_transfer_labels.csv</code>, <code>data/odd_one_out_key.csv</code>, <code>data/odd_one_out_labels.csv</code>.</li>
+<li><strong>Labels and keys</strong> were committed in the order the protocols require: key before labels, labels as downloaded before
+  any count. All blind labels are Alessandro's.</li>
+<li><strong>Pitfalls:</strong> 93 (matching layers on the push to the conditioning), 94 (embedding cosines read as "the same change").</li>
 </ul>
 </section>
 </main>

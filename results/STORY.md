@@ -380,7 +380,52 @@ decides **open** · along the dose the style moves before the picture breaks, wh
 
 ---
 
-## 11 · What fooled us
+## 11 · Is an edit a knob you could recognise?
+
+If an edit of the text encoder is going to be a tool, it has to behave like a knob: a shape I can calibrate, the same
+effect every time I turn it, a look of its own. So I followed what happens to the conditioning as I turn an edit up,
+from a tiny dose to ten times the full one. It doesn't spiral or wave: it bends once near the start and then runs
+straight. A random push of the same size bends too, so the bend is the network's; but how much it bends is the edit's,
+and on six prompts as different as a comic portrait and a macro leaf it changes by at most 7 degrees. One curve per
+edit, whatever the prompt. Drawn for all 35 layers, the deeper ones bend less, and in the first third an edit bends
+exactly like a random push: there it has no direction of its own.
+
+![For each of the 35 layers, how much the push of an MLP edit turns along the dose, against a random push of the same size at the same place: the edit turns less the deeper the layer (Spearman -0.655); in the first third it turns like the random push, in the last third it is straighter by about 16 degrees.](../assets/31-what-an-edit-leaves/F31.1_te_bend_by_layer.webp)
+
+On the way I checked a suspicion about L06, the edit that turns portraits into photographs: layer 6 is where a few
+entries of the encoder's signal become enormous. Put those entries back and the damage stays; change only them and the
+picture comes back. It's not them.
+
+Then a lesson. I pushed edits of different layers to the *same* change of the conditioning, to compare them fairly.
+Early layers broke or redrew the picture; deep ones barely touched it. The image model doesn't listen to every part of
+the conditioning equally, so from then on I calibrated every edit on the picture itself.
+
+![Four prompts with every column moving the conditioning by the same amount: the L04 edit breaks the pictures, the L09 edit and the random push at L09 change their content, while the L26 and L30 edits and the random push at L26 leave them almost as they were (median DINOv2 distance at this push 0.04-0.06, against 0.34-0.53 for the early edits).](../assets/31-what-an-edit-leaves/F31.3_te_equal_push_sheet.webp)
+
+I was convinced that any fixed change of the weights, even a random one, changes a prompt's pictures the same way at
+every seed. Claude read the first pictures the other way: three different random pushes seemed to age the paladin all
+alike, as if the network chose the direction. Labelled blind, content and style asked apart: one fixed random push
+changes the content the same way across seeds almost every time, three different ones mostly don't. Across *different*
+subjects the change carries too, but as a family resemblance, "something similar" rather than the same change, and it
+crosses from comic portraits to a rally car or a leaf. I asked for that "something similar" answer in the middle of the
+pass, and the verdict leans on it.
+
+![Eight subjects in two style domains under one fixed L26 edit and one fixed random push at L26, each calibrated per subject: the edit gives a family resemblance across subjects and domains (sharper, more exaggerated, more graphic) rather than the same change, with some subjects out of the group.](../assets/31-what-an-edit-leaves/F31.5_te_transfer_sheet.webp)
+
+And then the test I like best, because I proposed it. Five pictures of one prompt: two made with one edit, two with
+another at the *same* two seeds, one with a third. The tempting mistake is to pair the pictures that share a seed,
+because they share a composition. I found the right groups in 20 of 28 trials, where guessing gets one in 15, and never
+grouped by seed: for text-encoder edits, random pushes and my old image-model presets alike. An edit leaves a
+signature you can see. One thing I learned on the side: the embeddings we used to measure "the same change" don't see
+it; for that, the measure is the eye.
+
+![Three odd-one-out trials as shown, with the hidden groups: two pairs made by two perturbations at the same two seeds and one picture by a third; the groups are found in a text-encoder trial and an image-model trial, and missed in a trial of three random pushes at layer 26.](../assets/31-what-an-edit-leaves/F31.6_odd_one_out_examples.webp)
+
+→ [page 31](31-what-an-edit-leaves.md) · an edit's push bends once, the bend the network's and its size the edit's, on any prompt **holds** · deeper layers bend less **holds** · the edit straighter than a random push at every layer **overturned** (only from the middle on) · L06's damage doesn't go through the massive activations **holds** · at equal push on the conditioning, deep edits barely move the picture **open** · deep edits carry a direction of their own **ambiguous** · different random pushes change content differently **ambiguous** (the eye says yes, the embeddings disagree) · across subjects a family resemblance, across style domains too **holds** · the eye sorts pictures by the edit that made them, never by seed **holds** · embedding cosines don't track "the same change" **open**
+
+---
+
+## 12 · What fooled us
 
 ![The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.](../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp)
 
@@ -394,7 +439,7 @@ and undone by simply looking. That's why every test in this report puts the eye 
 
 ---
 
-## 12 · Where to start, and what is not known
+## 13 · Where to start, and what is not known
 
 If you want to try the tuner, start from the map: the end blocks for colour, grain and softness, safe at
 small doses; the middle blocks for deeper changes, with care. If the end blocks bring noise, try their
@@ -410,8 +455,8 @@ is more than the sum of its halves) (milder doses don't help much: the style hol
 character starts going well before); whether a preset can keep a character's expression as well as its identity (the portrait preset
 kept who they were, not always how they looked at you); whether a blind observer would still say "same
 character" when some sheets show two different ones; whether the noise of a preset can be cleaned
-afterwards without losing its look; how much each block writes into the model's internal signal; and
-whether any of this carries over to another model. Keep in mind that all of this is one model, mostly one
+afterwards without losing its look; how much each block writes into the model's internal signal; whether someone who has never seen these pictures would sort them by the edit as I did; and whether any of
+this carries over to another model. Keep in mind that all of this is one model, mostly one
 observer who knew the conditions (one blind observer for the portraits, and one for the text-encoder control), and samples of 16 to 56 cases
 per test.
 
