@@ -1,0 +1,20 @@
+rule,value,verdict
+0_plain_EN,4/4 fumetto,kept
+0_plain_EF,4/4 fumetto,kept
+0_plain_HN,4/4 fumetto,kept
+0_plain_HF,4/4 fumetto,kept
+0_plain_RF,4/4 fumetto,kept
+1_species,anime elf 0.38 (n 8) - human 0.38 (n 8) = +0.00,not the species alone
+2_gender,anime non-binary 0.75 (n 8) - female 0.00 (n 8) = +0.75,the gender word decides
+3_realism_species (reported),realistic human 0.12 - elf 0.00 = +0.12,-
+4_L06_EN (reported),"{""anime"": 3, ""cartoon"": 1}",-
+4_L06_EF (reported),"{""pittura"": 4}",-
+4_L06_HN (reported),"{""anime"": 3, ""pittura"": 1}",-
+4_L06_HF (reported),"{""pittura"": 3, ""realist"": 1}",-
+4_L06_RF (reported),"{""pittura"": 3, ""realist"": 1}",-
+5_ranger_prediction (reported),realistic 1/4,Claude's prediction (>= 3 of 4 realistic) not met
+6_ears_elf_si (reported),"anime 2/7, realistic 0/7",-
+6_ears_elf_no (reported),"anime 1/1, realistic 0/1",-
+6_ears_human_si (reported),"anime 0/0, realistic 0/0",-
+6_ears_human_no (reported),"anime 3/8, realistic 1/8",-
+7_retest (reported),5/6 identical,-
