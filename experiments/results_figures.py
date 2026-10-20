@@ -26,6 +26,8 @@ ROOT = HERE.parent
 DATA = ROOT / "data"
 ASSETS = ROOT / "assets"
 IMG = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img")
+if not IMG.exists():   # on the Linux VM the D: folder is mounted under this name
+    IMG = Path(os.path.expanduser("~/mnt")) / "D:--StabilityMatrix-win-x64--Data--Images--Text2Img"
 if not IMG.exists():
     IMG = Path(os.path.expanduser("~/mnt"))
 
@@ -756,7 +758,7 @@ LEVEL_EN = {1: "slight", 2: "medium", 3: "strong"}
 def _img(rel: str) -> Path:
     """Render path on Windows, or on the VM mount where newer benches sit under Text2Img/."""
     p = IMG / rel
-    return p if p.exists() or IMG.name == "Text2Img" else IMG / "Text2Img" / rel
+    return p if p.exists() or IMG.name.endswith("Text2Img") else IMG / "Text2Img" / rel
 
 
 def split_atlas_eye_sheet(out: Path) -> Path:
@@ -1443,6 +1445,114 @@ def te_taps_L14_halforc(out: Path) -> Path:
     return _te_tap_sheet("L14_mlp_p1.00", "O4", out)
 
 
+# ---------------------------------------------------------------- page 31 (C93-C106)
+def te_bend_by_layer(out: Path) -> Path:
+    """F31.1 - C101: total turn of the push along the dose, per edited layer, MLP edit against a random push of the same size."""
+    rows = [r for r in csv.DictReader(open(DATA / "te_shapes_layers_trajectories.csv", encoding="utf-8"))
+            if r["level"] == "whole" and r["range"] == "full" and r["sign"] == "p"]
+    def series(half, kind):
+        d = {int(r["layer"]): float(r["theta"]) for r in rows if r["half"] == half and r["kind"] == kind}
+        ks = sorted(d); return ks, [d[k] for k in ks]
+    fig, ax = _canvas(6.4, 3.4)
+    for (half, kind, col, lab, lw) in (("mlp", "control", DIM, "random push at the MLP, same size", 1.4),
+                                       ("mlp", "edit", CAT[0], "MLP edit", 2.0)):
+        x, y = series(half, kind)
+        ax.plot(x, y, color=col, lw=lw, label=lab, zorder=3 if kind == "edit" else 2)
+        ax.scatter(x, y, s=12, color=col, zorder=4)
+    for x0, x1 in ((-0.5, 11.5), (23.5, 34.5)):
+        ax.axvspan(x0, x1, color=GRID, alpha=0.35, lw=0)
+    ax.text(5.5, 172, "first third: edit ≈ random", color=DIM, fontsize=6.5, ha="center")
+    ax.text(29, 172, "last third: edit straighter", color=DIM, fontsize=6.5, ha="center")
+    ax.set_ylim(0, 180); ax.set_xlim(-0.8, 34.8); ax.set_yticks([0, 45, 90, 135, 180])
+    ax.set_xlabel("edited layer of the text encoder (MLP doubled and beyond, d 0.05 to 10)", color=DIM, fontsize=7.5)
+    ax.set_ylabel("total turn of the push (degrees)", color=DIM, fontsize=7.5)
+    ax.legend(frameon=False, fontsize=6.5, labelcolor=INK, loc="lower left")
+    fig.text(0.1, 0.94, "Deeper layers bend less; only the deeper edits are straighter than a random push", color=INK, fontsize=8.5)
+    fig.subplots_adjust(left=0.1, right=0.98, top=0.88, bottom=0.17)
+    return _save(fig, out, "C101 · dwarf prompt · 35 layers · whole conditioning, mean over tokens · source data/te_shapes_layers_trajectories.csv")
+
+
+def te_massive_sheet(out: Path) -> Path:
+    """F31.2 - TEP2: L06 doubled, with its massive entries restored, alone, or a random control restored."""
+    D = {(r["char"], r["seed"], r["cond"]): float(r["dinov2_dist_to_base"]) for r in csv.DictReader(open(DATA / "te_massive_metrics.csv", encoding="utf-8"))}
+    chars = [("D1_dwarf_paladin", "dwarf"), ("E2_elf_rogue", "elf rogue"), ("O4_halforc_fighter", "half-orc")]
+    seed = "3316624"
+    cols = [("C0", "original"), ("C1", "L06 doubled"), ("C2", "massive restored"), ("C3", "massive only"), ("C4", "random restored")]
+    def path(ch, c):
+        return _img(f"benchmark_portraits/phase_c/{ch}_baseline_krea2_seed{seed}_00001_.png") if c == "C0" else _img(f"benchmark_te_massive/{ch}_{c}_krea2_seed{seed}_00001_.png")
+    def cap(ch, c):
+        if c in ("C0", "C1"):
+            return None
+        f = D[(ch, seed, c)] / D[(ch, seed, "C1")]
+        return (f"f = {f:.2f}", NEG if f >= 0.8 else DIM_RGB)
+    return _sheet([(c, l) for c, l in chars], cols, path, cap, out,
+                  f"TEP2 · seed {seed} · f = DINOv2 distance to the original / that of the full edit · source data/te_massive_metrics.csv", W=170, H=212, LAB=90)
+
+
+def te_equal_push_sheet(out: Path) -> Path:
+    """F31.3 - C102: early and deep edits, and random pushes, at the same change of the conditioning (that of L06 at d = 1)."""
+    D = {(r["prompt"], r["seed"], r["cond"]): float(r["dinov2_dist_to_base"]) for r in csv.DictReader(open(DATA / "te_depth_control_metrics.csv", encoding="utf-8"))}
+    rows = [("D1_dwarf_paladin", "2645751", "dwarf"), ("C4_stilllife", "2718281", "still life"), ("S1_rally", "3316624", "rally"), ("P5_comic_panels", "2645751", "comic page")]
+    cols = [("C0", "original"), ("L04_t2", "L04 edit"), ("L09_t2", "L09 edit"), ("R09_t2", "random at L09"), ("L26_t2", "L26 edit"), ("L30_t2", "L30 edit"), ("R26_t2", "random at L26")]
+    key = {(p, s): lab for p, s, lab in rows}
+    def path(rk, c):
+        p, s = rk; return _img(f"benchmark_te_depth_control/{p}_{c}_krea2_seed{s}_00001_.png")
+    def cap(rk, c):
+        if c == "C0":
+            return None
+        d = D[(rk[0], rk[1], c)]; return (f"D {d:.2f}", NEG if d >= 0.2 else DIM_RGB)
+    return _sheet([((p, s), lab) for p, s, lab in rows], cols, path, cap, out,
+                  "C102 · same push on the conditioning for every column · D = DINOv2 distance to the original · source data/te_depth_control_metrics.csv", W=150, H=188, LAB=90)
+
+
+def te_random_signature_sheet(out: Path) -> Path:
+    """F31.4 - C103: edits and three different random pushes per layer, matched on the change in the picture."""
+    D = {(r["prompt"], r["seed"], r["cond"]): float(r["dinov2_dist_to_base"]) for r in csv.DictReader(open(DATA / "te_depth_control2_metrics.csv", encoding="utf-8"))}
+    rows = [("D1_dwarf_paladin", "2645751", "dwarf"), ("C4_stilllife", "2645751", "still life"), ("S1_rally", "2718281", "rally")]
+    cols = [("C0", "original"), ("L09_t", "L09 edit"), ("R09a_t", "random a, L09"), ("R09b_t", "random b, L09"), ("R09c_t", "random c, L09"),
+            ("L26_t", "L26 edit"), ("R26a_t", "random a, L26"), ("R26b_t", "random b, L26"), ("R26c_t", "random c, L26")]
+    def path(rk, c):
+        p, s = rk; return _img(f"benchmark_te_depth_control2/{p}_{c}_krea2_seed{s}_00001_.png")
+    def cap(rk, c):
+        return None if c == "C0" else (f"D {D[(rk[0], rk[1], c)]:.2f}", DIM_RGB)
+    return _sheet([((p, s), lab) for p, s, lab in rows], cols, path, cap, out,
+                  "C103 · target D = 0.30 calibrated on another seed · D = DINOv2 distance to the original · source data/te_depth_control2_metrics.csv", W=130, H=163, LAB=80)
+
+
+def te_transfer_sheet(out: Path) -> Path:
+    """F31.5 - C105: one fixed edit (L26) and one fixed random push (at L26) on eight subjects, two style domains."""
+    S = {(r["prompt"], r["pert"]): r for r in csv.DictReader(open(DATA / "te_domain_transfer_strengths.csv", encoding="utf-8"))}
+    D = {(r["prompt"], r["seed"], r["pert"]): float(r["dinov2_dist_to_base"]) for r in csv.DictReader(open(DATA / "te_domain_transfer_metrics.csv", encoding="utf-8"))}
+    seed = "2645751"
+    subj = [("D1_dwarf_paladin", "dwarf"), ("E2_elf_rogue", "elf"), ("O4_halforc_fighter", "half-orc"), ("G5_gnome_wizard", "gnome"),
+            ("S1_rally", "rally"), ("C4_stilllife", "still life"), ("P2_lotuscanoe", "canoe"), ("LN", "leaf")]
+    def tag(p, n):
+        return f"{n}_{float(S[(p, n)]['strength']):g}".replace(".", "p")
+    def path(rk, p):
+        c = "C0" if rk == "C0" else tag(p, rk)
+        return _img(f"benchmark_te_domain_transfer/{p}_{c}_krea2_seed{seed}_00001_.png")
+    def cap(rk, p):
+        return None if rk == "C0" else (f"D {D[(p, seed, rk)]:.2f}", DIM_RGB)
+    return _sheet([("C0", "original"), ("E26", "L26 edit"), ("R26", "random at L26")], subj, path, cap, out,
+                  f"C105 · seed {seed} · strength calibrated per subject to D = 0.25 · source data/te_domain_transfer_metrics.csv", W=130, H=163, LAB=112)
+
+
+def odd_one_out_examples(out: Path) -> Path:
+    """F31.6 - C106: three trials as shown, with the hidden groups and Alessandro's answer."""
+    key = {r["trial"]: r for r in csv.DictReader(open(DATA / "odd_one_out_key.csv", encoding="utf-8"))}
+    lab = {r["trial"]: [r[f"a{j}"] for j in range(1, 6)] for r in csv.DictReader(open(DATA / "odd_one_out_labels.csv", encoding="utf-8"))}
+    trials = [("T03", "TE: correct"), ("T07", "presets: correct"), ("T06", "TE: wrong")]
+    def path(t, j):
+        k = key[t]; g, c, s = k["images"].split()[j].split(":")
+        return _img(f"benchmark_te_depth_control2/{k['prompt']}_{c}_krea2_seed{s}_00001_.png" if k["set"] == "TE" else f"benchmark_stage5/renders/{k['prompt']}_{c}_seed{s}_00001_.png")
+    def cap(t, j):
+        k = key[t]; g, c, s = k["images"].split()[j].split(":")
+        ans = lab[t][j]
+        return (f"{g} · seed …{s[-3:]} · said {ans}", INK_RGB if g != "C" else ACC)
+    return _sheet([(t, l) for t, l in trials], [(j, f"picture {j + 1}") for j in range(5)], path, cap, out,
+                  "C106 · A and B share the same two seeds, C has a third · 'said' = Alessandro's grouping · source data/odd_one_out_key.csv, data/odd_one_out_labels.csv", W=160, H=200, LAB=110)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1503,6 +1613,12 @@ BUILDERS = {
     "F30.21": ("30-the-text-encoder", "te_layer0_text", te_layer0_sheet),
     "F30.22": ("30-the-text-encoder", "te_taps_L06_halforc", te_taps_L06_halforc),
     "F30.23": ("30-the-text-encoder", "te_taps_L14_halforc", te_taps_L14_halforc),
+    "F31.1": ("31-what-an-edit-leaves", "te_bend_by_layer", te_bend_by_layer),
+    "F31.2": ("31-what-an-edit-leaves", "te_massive_sheet", te_massive_sheet),
+    "F31.3": ("31-what-an-edit-leaves", "te_equal_push_sheet", te_equal_push_sheet),
+    "F31.4": ("31-what-an-edit-leaves", "te_random_signature_sheet", te_random_signature_sheet),
+    "F31.5": ("31-what-an-edit-leaves", "te_transfer_sheet", te_transfer_sheet),
+    "F31.6": ("31-what-an-edit-leaves", "odd_one_out_examples", odd_one_out_examples),
 }
 
 
