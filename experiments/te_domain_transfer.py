@@ -35,6 +35,7 @@ LADDER = {"E14": [0.4, 0.8, 1.6, 3.2], "E26": [0.75, 1.5, 3.0, 6.0], "R09": [1.5
 CAL_SEEDS = ["1618033", "2718281"]
 TEST_SEEDS = ["2645751", "3316624"]
 TARGET, LO, HI, ACC_LO, ACC_HI, ROUNDS = 0.25, 0.20, 0.32, 0.15, 0.40, 2
+MATCH_LO, MATCH_HI, MIN_CELLS = 0.10, 0.45, 3        # amendment 1 (2026-10-20, before the blind pass)
 SET = T.SET
 SETS = {"WC": COMICS, "WO": OTHER, "X1": ["D1_dwarf_paladin", "E2_elf_rogue", "S1_rally", "C4_stilllife"],
         "X2": ["O4_halforc_fighter", "G5_gnome_wizard", "P2_lotuscanoe", "LN"]}
@@ -334,22 +335,26 @@ def matched_cells():
     M = {}
     for r in rd(METRICS):
         M.setdefault((r["prompt"], r["pert"]), []).append(float(r["dinov2_dist_to_base"]))
-    return {k for k, v in M.items() if ACC_LO <= statistics.median(v) <= ACC_HI}, M
+    return {k for k, v in M.items() if MATCH_LO <= statistics.median(v) <= MATCH_HI}, M
 
 
 def unit_specs(ok):
+    """Amendment 1: a unit keeps the subjects whose cell is matched, if at least MIN_CELLS remain; a control unit takes the
+    first rotation (by seed) that leaves at least MIN_CELLS matched cells."""
     U = []
     for n in PERTS:
         for s in TEST_SEEDS:
             for k, subj in SETS.items():
-                if all((p, n) in ok for p in subj):
-                    U.append({"kind": k, "pert": n, "seed": s, "cells": [(p, n) for p in subj]})
+                cells = [(p, n) for p in subj if (p, n) in ok]
+                if len(cells) >= MIN_CELLS:
+                    U.append({"kind": k, "pert": n, "seed": s, "cells": cells})
     names = list(PERTS)
     for i, s in enumerate(TEST_SEEDS):
         for k, subj in SETS.items():
-            cells = [(p, names[(j + i) % 4]) for j, p in enumerate(subj)]
-            if all(c in ok for c in cells):
-                U.append({"kind": "N" + k, "pert": "mixed", "seed": s, "cells": cells})
+            for r in range(4):
+                cells = [c for c in ((p, names[(j + i + r) % 4]) for j, p in enumerate(subj)) if c in ok]
+                if len(cells) >= MIN_CELLS:
+                    U.append({"kind": "N" + k, "pert": "mixed", "seed": s, "cells": cells}); break
     return U
 
 
@@ -373,9 +378,9 @@ def page():
         units.append({"id": uid, "title": f"Scheda {n_:02d}", "groups": [{"id": "g", "name": "", "cols": ["prima", "dopo"], "rows": rows}]})
     with open(KEY, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(key[0])); w.writeheader(); w.writerows(key)
-    qs = [("content", "Il tipo di cambiamento del contenuto (soggetti, forme, oggetti, età, materiali) è lo stesso nelle quattro coppie?", OPTS),
-          ("style", "Il tipo di cambiamento dello stile (resa, tecnica, colori, tratto) è lo stesso nelle quattro coppie?", OPTS)]
-    build(os.path.join(root, "occhio_C105.html"), "C105 · lo stesso cambiamento su soggetti diversi?", units, qs, OPTS, "c105_labels_v1", "te_domain_transfer_labels.csv")
+    qs = [("content", "Il tipo di cambiamento del contenuto (soggetti, forme, oggetti, età, materiali) è lo stesso in tutte le coppie?", OPTS),
+          ("style", "Il tipo di cambiamento dello stile (resa, tecnica, colori, tratto) è lo stesso in tutte le coppie?", OPTS)]
+    build(os.path.join(root, "occhio_C105.html"), "C105 · lo stesso cambiamento su soggetti diversi?", units, qs, OPTS, "c105_labels_v2", "te_domain_transfer_labels.csv")
     print("units", len(units), "->", os.path.join(root, "occhio_C105.html"))
 
 
@@ -446,6 +451,7 @@ def selftest():
     # units and rules
     ok = {(p, n) for p in SUBJECTS for n in PERTS}
     U = unit_specs(ok); assert sum(u["kind"] in SETS for u in U) == 32 and sum(u["kind"].startswith("N") for u in U) == 8
+    U3 = unit_specs(ok - {("G5_gnome_wizard", "E14")}); assert sum(u["kind"] in SETS for u in U3) == 32 and min(len(u["cells"]) for u in U3) == 3
     key, lab = {}, []
     for i, u in enumerate(U):
         uid = f"Z{i}"; key[uid] = {"kind": u["kind"], "pert": u["pert"], "seed": u["seed"], "cells": " ".join(f"{p}:{n}" for p, n in u["cells"])}

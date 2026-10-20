@@ -61,6 +61,22 @@ s = share of *stesso modo* among answers *stesso* or *diversi*, first showings. 
 **Tool rule.** Transfers: a fixed edit is a portable style knob, like a word. Domain-specific: an edit has to be chosen
 per family of subjects. No transfer: an edit is a knob for one subject (C104), not a style.
 
+### Amendment 1 (2026-10-20, after the renders, before the blind pass and before any label)
+
+Calibration reached 29 of 32 pairs (22 in the window); unreachable: O4 × R09, G5 × E14, P2 × E14. On the test seeds the
+realized picture change ran lower than on the calibration seeds (several cells at 0.15–0.17, LN × R09 at 0.08), and with
+the pre-registered rule (every cell within 0.15–0.40, four subjects per unit) the page had only 11 distinct units: no WO
+unit, no R09 unit, two controls. The rule was too strict for two calibration seeds. Changed, before any label:
+
+* a cell is matched if its realized median D over the two test seeds lies in **0.10–0.45**;
+* a unit keeps the subjects whose cell is matched if **at least three** remain; a control unit takes the first rotation
+  that leaves at least three;
+* the questions say "in tutte le coppie" instead of "nelle quattro coppie".
+
+Result: 36 units (within: 8 edit, 8 random; mixed: 6 edit, 6 random; controls 8) + 6 repeats. The page built under the
+original rule is replaced (new storage key); no label had been given on it. The non-blocking gates (E2, O4, G5 against
+`phase_c`) were re-run after the main renders: max abs diff 0 for all six.
+
 ## 4. Limits
 
 Two seeds per subject; one direction per perturbation; small blind groups (8 units per type and group); the 2026-09-25
