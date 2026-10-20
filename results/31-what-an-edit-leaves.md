@@ -342,7 +342,7 @@ Style travels less: real edits 0.19 and 0.25, random pushes 0.44 and 0.25, contr
 textures picked out, more comics, a sharper division between elements, often with one subject out of the group.
 
 On image-model presets, an earlier test found that a structured preset keeps its direction inside a style domain and
-loses it across ([pre-registration](../docs/prereg_domain_specificity.md), 2026-09-25, replication pending). Text-encoder
+loses it across (`docs/prereg_domain_specificity.md`, 2026-09-25, replication pending). Text-encoder
 perturbations don't show that boundary. Details in `docs/te_domain_transfer_result.md`.
 
 ### Two pairs and an odd one
