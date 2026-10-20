@@ -17,7 +17,7 @@ FLIP = 32       # flip threshold, 0-255
 
 def img_root():
     import blk23_colorful as c47
-    return c47.IMG_ROOT if c47.IMG_ROOT.exists() else Path.home() / "mnt" / "Text2Img"
+    return c47.IMG_ROOT if c47.IMG_ROOT.exists() else Path.home() / "mnt" / "D:--StabilityMatrix-win-x64--Data--Images--Text2Img"
 
 
 def load(p):

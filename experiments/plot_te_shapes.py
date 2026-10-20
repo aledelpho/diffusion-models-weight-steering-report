@@ -15,7 +15,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = Path.home() / "mnt" / "Text2Img" / "benchmark_te_shapes"
+ROOT = Path.home() / "mnt" / "D:--StabilityMatrix-win-x64--Data--Images--Text2Img" / "benchmark_te_shapes"
 CHARS = ["D1_dwarf_paladin", "E2_elf_rogue", "O4_halforc_fighter"]
 EDITS = [("L06_mlp", "Layer 6 MLP"), ("L14_mlp", "Layer 14 MLP"), ("L28_mlp", "Layer 28 MLP")]
 # the report's dark figure style (notebook_charts.py): categorical slot 1 for the edits, a neutral for the controls

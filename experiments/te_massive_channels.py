@@ -11,7 +11,7 @@ import te_conditioning as T
 import te_regions as RG
 DATA = HERE.parent / "data"
 if not c47.IMG_ROOT.exists():
-    c47.IMG_ROOT = Path.home() / "mnt" / "Text2Img"
+    c47.IMG_ROOT = Path.home() / "mnt" / "D:--StabilityMatrix-win-x64--Data--Images--Text2Img"
 v = "V1_Original"
 b = np.load(T.out_path("order", v, "baseline"))["cond"].astype(np.float32)
 mag = np.abs(b).mean(0)                                   # (12, 2560)

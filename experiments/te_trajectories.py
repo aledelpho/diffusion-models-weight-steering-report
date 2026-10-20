@@ -58,7 +58,7 @@ def verdict(rows):
 
 def run():
     import blk23_colorful as c47
-    root = (c47.IMG_ROOT if c47.IMG_ROOT.exists() else Path.home() / "mnt" / "Text2Img") / "benchmark_te_conditioning" / "elf"
+    root = (c47.IMG_ROOT if c47.IMG_ROOT.exists() else Path.home() / "mnt" / "D:--StabilityMatrix-win-x64--Data--Images--Text2Img") / "benchmark_te_conditioning" / "elf"
     base = np.load(root / "P1_elfbrawler_baseline.npz")["cond"].astype(np.float32)
     scale = np.linalg.norm(base, axis=-1).mean(0)            # mean token norm per tap, (12,)
     def vec(f):

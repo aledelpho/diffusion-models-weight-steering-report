@@ -176,7 +176,7 @@ if __name__ == "__main__":
         import blk23_colorful as c47
         root = c47.IMG_ROOT / "benchmark_te_shapes_layers"
         if not root.exists():
-            root = Path.home() / "mnt" / "Text2Img" / "benchmark_te_shapes_layers"
+            root = Path.home() / "mnt" / "D:--StabilityMatrix-win-x64--Data--Images--Text2Img" / "benchmark_te_shapes_layers"
     outdir = Path(sys.argv[2]) if len(sys.argv) > 2 else root.parent / "_te_shapes"
     outdir.mkdir(parents=True, exist_ok=True)
     overview(root, outdir / "C101_overview.png")
