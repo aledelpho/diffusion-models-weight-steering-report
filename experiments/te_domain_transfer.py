@@ -328,7 +328,7 @@ def analyze():
 
 
 # ---------------------------------------------------------------- blind
-OPTS = [("stesso", "stesso modo"), ("diversi", "in modi diversi"), ("nonsivede", "non si vede")]
+OPTS = [("stesso", "stesso modo"), ("simile", "qualcosa di simile"), ("diversi", "in modi diversi"), ("nonsivede", "non si vede")]  # "simile": amendment 2
 
 
 def matched_cells():
@@ -397,9 +397,11 @@ def rules(labels, key, match_report=None):
         if tagk in first:
             reps.append((first[tagk], a)); continue
         first[tagk] = a
-    def share(sel, q):
-        v = [a[q] for t, a in first.items() if sel(t) and a[q] in ("stesso", "diversi")]
-        return (sum(x == "stesso" for x in v) / len(v) if v else None), len(v)
+    SC = {"stesso": 1.0, "simile": 0.5, "diversi": 0.0}               # amendment 2: s = mean score
+    def share(sel, q, binary=False):
+        keep = ("stesso", "diversi") if binary else tuple(SC)
+        v = [SC[a[q]] for t, a in first.items() if sel(t) and a[q] in keep]
+        return (sum(v) / len(v) if v else None), len(v)
     for q in ("content", "style"):
         sn, nn = share(lambda t: t[0].startswith("N"), q)
         null_ok = sn is not None and sn <= 0.35
@@ -427,6 +429,14 @@ def rules(labels, key, match_report=None):
             sw, nw = share(lambda t: t[1] == n and t[0] in ("WC", "WO"), q); sm, nm = share(lambda t: t[1] == n and t[0] in ("X1", "X2"), q)
             per.append(f"{n} within {sw if sw is None else round(sw, 2)} (n {nw}) mixed {sm if sm is None else round(sm, 2)} (n {nm})")
         out.append({"test": f"Rule 3 [{q}] per perturbation (reported)", "value": "; ".join(per), "verdict": ""})
+    for q in ("content", "style"):                                   # amendment 2: sensitivity without "simile"
+        vals = []
+        for lab_, sel in (("null", lambda t: t[0].startswith("N")), ("edits within", lambda t: t[1] in ("E14", "E26") and t[0] in ("WC", "WO")),
+                          ("edits mixed", lambda t: t[1] in ("E14", "E26") and t[0] in ("X1", "X2")), ("random within", lambda t: t[1] in ("R09", "R26") and t[0] in ("WC", "WO")),
+                          ("random mixed", lambda t: t[1] in ("R09", "R26") and t[0] in ("X1", "X2"))):
+            v, n_ = share(sel, q, binary=True); vals.append(f"{lab_} {v if v is None else round(v, 2)} (n {n_})")
+        out.append({"test": f"Rule 3 [{q}] binary, 'simile' left out (reported)", "value": "; ".join(vals), "verdict": ""})
+        out.append({"test": f"Rule 3 [{q}] 'simile' answers (reported)", "value": str(sum(a[q] == "simile" for a in first.values())), "verdict": ""})
     ns = {q: sum(a[q] == "nonsivede" for a in first.values()) for q in ("content", "style")}
     out.append({"test": "Rule 3 'non si vede' (reported)", "value": f"content {ns['content']}, style {ns['style']}", "verdict": ""})
     if reps:

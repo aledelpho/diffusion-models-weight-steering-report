@@ -77,6 +77,14 @@ Result: 36 units (within: 8 edit, 8 random; mixed: 6 edit, 6 random; controls 8)
 original rule is replaced (new storage key); no label had been given on it. The non-blocking gates (E2, O4, G5 against
 `phase_c`) were re-run after the main renders: max abs diff 0 for all six.
 
+### Amendment 2 (2026-10-20, during the blind pass, at Alessandro's request)
+
+Alessandro found the style question hard to answer with "same" or "different" only, as style varies a lot between
+subjects. A fourth answer is added to both questions: **qualcosa di simile** (something similar). s becomes the mean
+score with *stesso* = 1, *simile* = 0.5, *diversi* = 0 (*non si vede* excluded); thresholds unchanged. Reported next to
+it: the pre-registered binary share with *simile* left out, and the number of *simile* answers. The page keeps its
+units, order and storage, so answers already given are kept; no count had been made.
+
 ## 4. Limits
 
 Two seeds per subject; one direction per perturbation; small blind groups (8 units per type and group); the 2026-09-25
