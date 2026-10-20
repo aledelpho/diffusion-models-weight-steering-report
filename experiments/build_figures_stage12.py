@@ -68,13 +68,13 @@ manifest12 = pd.read_csv(os.path.join(DATA_DIR, "stage12_images.csv"))
 
 def resolve_path_stage9(src_rel):
     for root in ["benchmark_stage9", "benchmark_stage9_affidabilita"]:
-        p = os.path.join(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output", root, "renders", src_rel)
+        p = os.path.join(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output", root, "renders", src_rel)
         if os.path.exists(p):
             return p
     return None
 
 def resolve_path_stage12(src_rel):
-    p = os.path.join(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage12\renders", os.path.basename(src_rel))
+    p = os.path.join(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage12\renders", os.path.basename(src_rel))
     if os.path.exists(p):
         return p
     alt = os.path.join(REPORT_ROOT, src_rel)

@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 PLAN_CSV = DATA_DIR / "colour_object_sweep_plan.csv"
 LOG_FILE = DATA_DIR / "colour_sweep_progress.log"
-RENDERS_DIR = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_colour_binding\renders")
+RENDERS_DIR = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_colour_binding\renders")
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
 
 

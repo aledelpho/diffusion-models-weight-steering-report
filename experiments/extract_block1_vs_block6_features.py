@@ -13,7 +13,7 @@ from style_features import extract_all_features
 from analyze_palette import palette_features
 
 MANIFEST_CSV = os.path.join(data_report, "rotations_block1_vs_block6_manifest.csv")
-RENDERS_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
+RENDERS_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
 
 def process_single(row):
     fn = row["expected_file"]

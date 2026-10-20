@@ -25,7 +25,7 @@ from blk23_colorful import workflow, COMFY
 
 REPO = Path(__file__).resolve().parent.parent
 PLAN = REPO / "data" / "portraits_atlas_plan.csv"
-IMG_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img")
+IMG_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img")
 if not IMG_ROOT.exists():
     IMG_ROOT = Path(os.path.expanduser("~/mnt"))
 FOLDER = "benchmark_portraits/renders"

@@ -30,7 +30,7 @@ DATA_DIR = ROOT / "data"
 LOG_FILE = DATA_DIR / "watchdog_shutdown.log"
 
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 
 MASKS_DIR = COMFY_OUTPUT_ROOT / "benchmark_rectified_masks" / "renders"
 COLOUR_DIR = COMFY_OUTPUT_ROOT / "benchmark_colour_binding" / "renders"

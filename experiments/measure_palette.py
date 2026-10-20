@@ -35,8 +35,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
 ROOTS = [
-    Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"),
     Path(r"c:\Users\aless\Desktop\comfyui-pilot"),
 ]
 

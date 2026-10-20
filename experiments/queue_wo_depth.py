@@ -46,13 +46,13 @@ DATA_DIR = ROOT / "data"
 PLAN_CSV = DATA_DIR / "wo_depth_plan.csv"
 
 COMFY_HOST = "http://127.0.0.1:8188"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 OUTPUT_FOLDER_NAME = "benchmark_wo_depth/renders"
 TARGET_DIR = COMFY_OUTPUT_ROOT / OUTPUT_FOLDER_NAME
 
 COMFY_LOG_FILES = [
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui_8188.log"),
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui.log")
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui_8188.log"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui.log")
 ]
 
 EXPECTED_LAYER_COUNTS = {

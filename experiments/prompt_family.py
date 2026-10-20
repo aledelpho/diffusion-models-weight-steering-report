@@ -15,7 +15,7 @@ from blk23_colorful import workflow, COMFY
 
 REPO = Path(__file__).resolve().parent.parent
 PLAN = REPO / "data" / "prompt_family_plan.csv"
-IMG_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img")
+IMG_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img")
 FOLDER = "benchmark_prompt_family"
 
 FAMILIES = {"F1cartoon": "Cartoon style illustration.", "F2oil": "Oil painting.", "F3photo": "Photograph."}

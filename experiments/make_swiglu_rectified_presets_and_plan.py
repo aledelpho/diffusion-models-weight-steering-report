@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PRESETS_DIR = ROOT / "presets"
-COMFY_PRESETS_DIR = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\Arthemy_Krea2_Tuner\presets")
+COMFY_PRESETS_DIR = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\Arthemy_Krea2_Tuner\presets")
 OUT_CSV = ROOT / "data" / "swiglu_rectified_atlas_plan.csv"
 
 SEED = "2718281"

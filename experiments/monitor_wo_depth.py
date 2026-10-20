@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 RENDERS_DIR = COMFY_OUTPUT_ROOT / "benchmark_wo_depth" / "renders"
 TOTAL_EXPECTED = 254
 POLL_INTERVAL_SEC = 20

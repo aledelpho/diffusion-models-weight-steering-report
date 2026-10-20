@@ -30,7 +30,7 @@ from style_features import extract_all_features
 from analyze_palette import palette_features
 
 MANIFEST_CSV = os.path.join(data_pilot, "rotations_triangolo_all330_manifest.csv")
-RENDERS_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
+RENDERS_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
 
 EXISTING_STYLE_CSV = os.path.join(data_pilot, "rotations_block1_vs_block6_style_features.csv")
 EXISTING_PALETTE_CSV = os.path.join(data_pilot, "rotations_block1_vs_block6_palette_features.csv")

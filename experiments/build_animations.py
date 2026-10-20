@@ -28,7 +28,7 @@ Builders:
 Usage:
     python experiments/build_animations.py --list
     python experiments/build_animations.py --only headlights_switch \
-        --renders "C:/StabilityMatrix-win-x64/Data/Images/Text2Img"
+        --renders "D:/StabilityMatrix-win-x64/Data/Images/Text2Img"
 """
 
 from __future__ import annotations
@@ -46,8 +46,8 @@ DATA = ROOT / "data"
 ASSETS = ROOT / "assets"
 
 RENDER_ROOTS = [
-    Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"),
 ]
 
 # The palette of experiments/notebook_charts.py, as AUTHORING section 4.4 declares it.

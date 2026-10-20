@@ -26,7 +26,7 @@ from stage5_config import CORE_SEEDS, suite_fingerprint
 
 COMFY_URL = "http://127.0.0.1:8188"
 SLUG = "benchmark_stage7a"
-ROOT_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output" + rf"\{SLUG}"
+ROOT_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output" + rf"\{SLUG}"
 ROOT_IMG = os.path.join(ROOT_DIR, "renders")
 CSV_PATH = r"c:\Users\aless\Desktop\comfyui-pilot\stage7a_images.csv"
 

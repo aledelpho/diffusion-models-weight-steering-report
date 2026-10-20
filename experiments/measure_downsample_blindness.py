@@ -34,7 +34,7 @@ Nothing is rendered. Writes data/downsample_blindness.csv.
 
 Usage:
     python experiments/measure_downsample_blindness.py \
-        --renders "C:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_stage7/renders" \
+        --renders "D:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_stage7/renders" \
         --manifest data/stage7b_images.csv --seed 1337 \
         --out data/downsample_blindness.csv
 """

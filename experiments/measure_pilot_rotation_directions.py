@@ -30,7 +30,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
 DATA_DIR = os.path.join(REPORT_ROOT, "data")
 EXPERIMENTS_DIR = os.path.join(REPORT_ROOT, "experiments")
-COMFY_OUTPUT = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
+COMFY_OUTPUT = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
 
 sys.path.insert(0, EXPERIMENTS_DIR)
 from style_features import extract_all_features

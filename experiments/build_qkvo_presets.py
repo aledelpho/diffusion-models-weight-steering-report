@@ -7,7 +7,7 @@ Builds the 18 presets for the QKVO Atlas (RUNBOOK_qkvo_atlas_plan_1.md §7.1):
   - 2 controls: normscales over all blocks (0-27) x {pos, neg}
 
 Saves to both:
-  - C:\\StabilityMatrix-win-x64\\Data\\Packages\\ComfyUI\\custom_nodes\\Arthemy_Krea2_Tuner\\presets\\
+  - D:\\StabilityMatrix-win-x64\\Data\\Packages\\ComfyUI\\custom_nodes\\Arthemy_Krea2_Tuner\\presets\\
   - presets/ in the report repository
 
 Then verifies each preset via ArthemyKrea2PresetLoader, writes
@@ -25,12 +25,12 @@ from pathlib import Path
 from typing import Dict, List, Set, Any
 
 ROOT = Path(__file__).resolve().parent.parent
-COMFY_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
+COMFY_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
 SUITE_DIR = COMFY_ROOT / "custom_nodes" / "Arthemy_Krea2_Tuner"
 PRESET_DIR_NODE = SUITE_DIR / "presets"
 PRESET_DIR_REPO = ROOT / "presets"
 DATA_DIR = ROOT / "data"
-MODELS_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Models")
+MODELS_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Models")
 
 sys.path.insert(0, str(COMFY_ROOT))
 sys.path.append(str(SUITE_DIR))

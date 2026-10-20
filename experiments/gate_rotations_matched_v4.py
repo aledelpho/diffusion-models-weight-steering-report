@@ -17,7 +17,7 @@ import os, sys, json, hashlib, itertools
 import numpy as np, pandas as pd
 from PIL import Image
 
-OUT = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
+OUT = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
 REPORT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 DATA = os.path.join(REPORT, "data")
 CAL = json.load(open(os.path.join(DATA, "matched_rotation_calibration_v4.json"), encoding="utf-8"))

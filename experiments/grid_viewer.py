@@ -31,7 +31,7 @@ from PIL import Image, ImageFilter
 
 REPO = Path(__file__).resolve().parents[1]
 DATA = REPO / "data"
-IMG_ROOT = Path(os.environ.get("TEXT2IMG", r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"))
+IMG_ROOT = Path(os.environ.get("TEXT2IMG", r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"))
 OUT_NAME = "_grid_viewer"
 PREVIEW_W = 512
 GAIN_ABS = 4.0      # heat map: |delta| * 4 / 255, so a mean channel change of 64 is already white

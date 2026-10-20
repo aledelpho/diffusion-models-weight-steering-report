@@ -70,7 +70,7 @@ from skimage import color
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from stage5_config import ATTRS, SHARED_VOCAB
 
-COMFY_OUT = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
+COMFY_OUT = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
 DIRS = [os.path.join(COMFY_OUT, d, "renders") for d in
         ("benchmark_stage5", "benchmark_stage4_preset", "benchmark_stage2_family")]
 ROOT = r"c:\Users\aless\Desktop\comfyui-pilot"

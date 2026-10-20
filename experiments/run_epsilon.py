@@ -28,9 +28,9 @@ from stage5_config import ORIGINAL_FOUR, CORE_SEEDS, make_condition_id, suite_fi
 
 COMFY_URL = "http://127.0.0.1:8188"
 SLUG = "benchmark_stage4_preset"
-ROOT_IMG = (r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
+ROOT_IMG = (r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"
             rf"\{SLUG}\renders")
-PRESET_DIR = (r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
+PRESET_DIR = (r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
               r"\custom_nodes\Arthemy_Krea2_Tuner\presets")
 CSV_PATH = r"c:\Users\aless\Desktop\comfyui-pilot\epsilon_images.csv"
 

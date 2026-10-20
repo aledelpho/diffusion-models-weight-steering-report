@@ -17,7 +17,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 PLAN = DATA / "blk23_colorful_plan.csv"
-IMG_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img")
+IMG_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img")
 FOLDER = "benchmark_blk23_colorful"
 COMFY = "http://127.0.0.1:8188"
 

@@ -19,7 +19,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 
 
 def verify_leaf_collapse(first_n: int = 3) -> bool:

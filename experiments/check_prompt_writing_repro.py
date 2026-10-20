@@ -4,11 +4,11 @@ from PIL import Image
 from pathlib import Path
 
 def main():
-    target_dir = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_writing")
+    target_dir = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_writing")
     repro_path = target_dir / "REPRO_V1_Original_baseline_krea2_seed3141592_00001_.png"
     
     # benchmark_prompt_order keeps its images in the folder root; renders/ is empty (fixed by Claude 2026-10-04)
-    ref_dir = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_order")
+    ref_dir = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_order")
     ref_path = ref_dir / "V1_Original_baseline_krea2_seed3141592_00001_.png"
     
     if not repro_path.exists():

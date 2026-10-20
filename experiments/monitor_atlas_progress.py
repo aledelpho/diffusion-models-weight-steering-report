@@ -14,7 +14,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-RENDERS_DIR = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_atlas_phase1\renders")
+RENDERS_DIR = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_atlas_phase1\renders")
 LOG_FILE = ROOT / "data" / "render_progress.log"
 COMFY_QUEUE_URL = "http://127.0.0.1:8188/queue"
 

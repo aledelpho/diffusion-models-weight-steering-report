@@ -6,11 +6,11 @@ import csv
 import torch
 import safetensors
 
-COMFY_ROOT = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
+COMFY_ROOT = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
 SUITE_DIR = os.path.join(COMFY_ROOT, "custom_nodes", "Arthemy_Krea2_Tuner")
 REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
 PRESET_DIR = os.path.join(REPORT_ROOT, "presets")
-MODELS_ROOT = r"C:\StabilityMatrix-win-x64\Data\Models"
+MODELS_ROOT = r"D:\StabilityMatrix-win-x64\Data\Models"
 
 sys.path.insert(0, COMFY_ROOT)
 sys.path.append(SUITE_DIR)

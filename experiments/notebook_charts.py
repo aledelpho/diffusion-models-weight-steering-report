@@ -1036,9 +1036,9 @@ def inverted_knob_toggle(out: Path) -> Path:
     lab0 = f"Block 0 (+0.200) · swing {float(r0['swing']):.3f} · amp {float(r0['amp_pos']):.2f}"
     lab27 = f"Block 27 (+0.200) · swing {float(r27['swing']):.3f} · amp {float(r27['amp_pos']):.2f}"
 
-    p_base = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_mappa\renders\P01_baseline_krea2_seed42_00001_.png")
-    p_b00 = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_profondita\renders\P01_blk00pos_0.200_krea2_seed42_00001_.png")
-    p_b27 = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_profondita\renders\P01_blk27pos_0.200_krea2_seed42_00001_.png")
+    p_base = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_mappa\renders\P01_baseline_krea2_seed42_00001_.png")
+    p_b00 = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_profondita\renders\P01_blk00pos_0.200_krea2_seed42_00001_.png")
+    p_b27 = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_profondita\renders\P01_blk27pos_0.200_krea2_seed42_00001_.png")
 
     panels = [
         ("Baseline · P01, seed 42", p_base),
@@ -1057,9 +1057,9 @@ def roundtrip_sentinel(out: Path) -> Path:
     lab_z = f"Gain zero · max diff {rz['value']} ({rz['verdict']})"
     lab_r = f"Round-trip (D=0) · mean diff {rr['value']} ({rr['verdict']})"
 
-    p_base = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_baseline_seed42_00001_.png")
-    p_zero = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_sentinel_zero_seed42_00001_.png")
-    p_round = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_sentinel_roundtrip_seed42_00001_.png")
+    p_base = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_baseline_seed42_00001_.png")
+    p_zero = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_sentinel_zero_seed42_00001_.png")
+    p_round = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage1_gate\renders\P1_sentinel_roundtrip_seed42_00001_.png")
 
     panels = [
         ("Baseline · P1, seed 42", p_base),
@@ -1330,8 +1330,8 @@ def arm_coherence_bars(out: Path) -> Path:
 def scale_comparison(out: Path) -> Path:
     """F01.1: Baseline and preset at full resolution vs 224x224 (as CLIP sees it)."""
     src = DATA / "stage7b_images.csv"
-    p_base = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders\I01_baseline_seed42_00001_.png")
-    p_preset = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7\renders\I01_preset_pos_seed42_00001_.png")
+    p_base = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders\I01_baseline_seed42_00001_.png")
+    p_preset = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7\renders\I01_preset_pos_seed42_00001_.png")
 
     im_b = Image.open(p_base).convert("RGB")
     im_p = Image.open(p_preset).convert("RGB")

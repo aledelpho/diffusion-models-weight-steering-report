@@ -15,7 +15,7 @@ import csv, glob, os, re
 import numpy as np
 from block_effect_overlap import lab
 
-ROOT = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+ROOT = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
 if not os.path.isdir(ROOT):
     ROOT = os.path.expanduser("~/mnt")
 D = os.path.join(ROOT, "benchmark_blk23_colorful")

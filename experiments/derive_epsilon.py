@@ -35,7 +35,7 @@ import json
 import math
 import argparse
 
-PRESET_DIR = (r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
+PRESET_DIR = (r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
               r"\custom_nodes\Arthemy_Krea2_Tuner\presets")
 BASE = "Arthemy_Bench_Base"
 

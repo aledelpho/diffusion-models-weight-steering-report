@@ -11,7 +11,7 @@ from pathlib import Path
 COMFY_HOST = "http://127.0.0.1:8188"
 PLAN_CSV = Path(r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report\data\prompt_order_experiment_plan.csv")
 OUTPUT_FOLDER_NAME = "benchmark_prompt_order"
-TARGET_DIR = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_order\renders")
+TARGET_DIR = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_prompt_order\renders")
 
 def get_queue_counts() -> Tuple[int, int]:
     try:

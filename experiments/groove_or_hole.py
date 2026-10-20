@@ -39,7 +39,7 @@ PREREG = DOCS / "prereg_groove_or_hole.md"
 RENDER_ROOTS = [
     Path(os.environ.get("GROOVE_RENDER_ROOT", os.path.expanduser("~/mnt"))),
     Path(os.path.expanduser("~/mnt/comfyui-pilot/output")),
-    Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
     Path(r"C:\Users\aless\Desktop\comfyui-pilot\output"),
 ]
 

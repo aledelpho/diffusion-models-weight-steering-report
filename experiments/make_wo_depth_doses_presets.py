@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LISTING = ROOT / "docs" / "model_structures" / "krea2_turbo_bf16_details.json"
 PRESETS_DIR = ROOT / "presets"
-COMFY_PRESETS_DIR = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\Arthemy_Krea2_Tuner\presets")
+COMFY_PRESETS_DIR = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\Arthemy_Krea2_Tuner\presets")
 PLAN_CSV = ROOT / "data" / "wo_depth_plan.csv"
 CP_PLAN = ROOT / "data" / "centre_push_plan.csv"
 

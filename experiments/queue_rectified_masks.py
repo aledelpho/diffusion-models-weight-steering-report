@@ -24,7 +24,7 @@ DATA_DIR = ROOT / "data"
 PLAN_CSV = DATA_DIR / "rectified_mask_plan.csv"
 
 COMFY_HOST = "http://127.0.0.1:8188"
-OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 
 
 def check_comfy_online() -> bool:

@@ -34,7 +34,7 @@ DATA_DIR = ROOT / "data"
 PLAN_CSV = DATA_DIR / "single_blocks_atlas_plan.csv"
 
 COMFY_HOST = "http://127.0.0.1:8188"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 OUTPUT_FOLDER_NAME = "benchmark_single_blocks_atlas/renders"
 TARGET_DIR = COMFY_OUTPUT_ROOT / OUTPUT_FOLDER_NAME
 

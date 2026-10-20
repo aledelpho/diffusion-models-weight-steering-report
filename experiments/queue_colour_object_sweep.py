@@ -195,7 +195,7 @@ def main():
     with open(PLAN_CSV, encoding="utf-8") as f:
         plan_rows = list(csv.DictReader(f))
 
-    COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+    COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
     queued_count = 0
     skipped_count = 0
     current_block_sign = None

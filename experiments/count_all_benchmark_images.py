@@ -4,7 +4,7 @@ import re
 
 def main():
     html_file = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report\index.html"
-    base_dir = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+    base_dir = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
     
     with open(html_file, "r", encoding="utf-8") as f:
         content = f.read()

@@ -27,8 +27,8 @@ LENS = DATA / "te_conditioning_logitlens.csv"
 RESULT = DATA / "te_conditioning_tests.csv"
 FOLDER = "benchmark_te_conditioning"
 TAPS = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]
-VOCAB = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\comfy\text_encoders\qwen25_tokenizer")  # overridable
-TE_WEIGHTS = Path(r"C:\StabilityMatrix-win-x64\Data\Models\TextEncoders\qwen3vl_4b_bf16.safetensors")   # overridable
+VOCAB = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\comfy\text_encoders\qwen25_tokenizer")  # overridable
+TE_WEIGHTS = Path(r"D:\StabilityMatrix-win-x64\Data\Models\TextEncoders\qwen3vl_4b_bf16.safetensors")   # overridable
 
 
 def rd(p):

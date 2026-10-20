@@ -26,7 +26,7 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 DATA = os.path.join(HERE, "..", "data")
-IMG = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+IMG = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
 DEV = "cuda" if torch.cuda.is_available() else "cpu"
 
 

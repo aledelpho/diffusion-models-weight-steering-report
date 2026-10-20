@@ -51,7 +51,7 @@ REPO_DIR = Path(r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report
 # e lo script sostituira' automaticamente il prefisso vecchio con questo.
 # Lascia None per usare i path del CSV cosi' come sono.
 IMAGE_ROOT_OVERRIDE = None  # es: Path(r"D:\comfy_output\rotations_block1_vs_block6")
-OLD_IMAGE_ROOT_PREFIX = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
+OLD_IMAGE_ROOT_PREFIX = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
 
 STYLE_FEATURES_CSV = REPO_DIR / "data" / "rotations_block1_vs_block6_style_features.csv"
 PROMPT_SCORES_CSV = REPO_DIR / "data" / "rotations_block1_vs_block6_prompt_scores.csv"

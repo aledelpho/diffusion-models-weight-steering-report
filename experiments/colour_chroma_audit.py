@@ -41,7 +41,7 @@ from scipy import ndimage
 REN = os.environ.get("REN", os.path.expanduser(
     "~/mnt/benchmark_colour_binding--renders"))
 # On the rendering machine this directory is
-# C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_colour_binding\renders
+# D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_colour_binding\renders
 OUT = "data/colour_chroma_audit.csv"
 OUT_S = "data/colour_chroma_audit_summary.csv"
 OUT_T = "data/colour_chroma_audit_tests.csv"

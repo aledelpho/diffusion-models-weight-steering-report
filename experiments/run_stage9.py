@@ -31,10 +31,10 @@ REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
 
 COMFY_URL = "http://127.0.0.1:8188"
 SLUG = "benchmark_stage9"
-ROOT_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output" + rf"\{SLUG}"
+ROOT_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output" + rf"\{SLUG}"
 ROOT_IMG = os.path.join(ROOT_DIR, "renders")
 
-STAGE7A_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders"
+STAGE7A_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders"
 
 CSV_PATH_PILOT = os.path.join(PILOT_ROOT, "stage9_images.csv")
 CSV_PATH_REPORT = os.path.join(REPORT_ROOT, "data", "stage9_images.csv")
@@ -92,7 +92,7 @@ FIELDS = [
 
 
 def suite_fingerprint():
-    suite_dir = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\Arthemy_Krea2_Tuner"
+    suite_dir = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\custom_nodes\Arthemy_Krea2_Tuner"
     suite_files = ["Arthemy_Krea2_Tuner.py", "arthemy_geometry_engine.py"]
     h = hashlib.sha256()
     for name in suite_files:

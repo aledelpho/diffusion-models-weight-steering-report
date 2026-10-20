@@ -34,11 +34,11 @@ import safetensors
 import torch
 
 ROOT = Path(__file__).resolve().parent.parent
-COMFY_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
+COMFY_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
 SUITE_DIR = COMFY_ROOT / "custom_nodes" / "Arthemy_Krea2_Tuner"
 PRESET_DIR_NODE = SUITE_DIR / "presets"
 PRESET_DIR_REPO = ROOT / "presets"
-MODELS_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Models")
+MODELS_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Models")
 DATA_DIR = ROOT / "data"
 
 sys.path.insert(0, str(COMFY_ROOT))

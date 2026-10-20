@@ -11,7 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from prompt_family import FAMILIES, SUBJECTS, SEEDS, ARMS, FOLDER
 
 DATA = os.path.join(HERE, "..", "data")
-ROOT = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+ROOT = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
 if not os.path.isdir(ROOT):
     ROOT = os.path.expanduser("~/mnt")
 D = os.path.join(ROOT, FOLDER)

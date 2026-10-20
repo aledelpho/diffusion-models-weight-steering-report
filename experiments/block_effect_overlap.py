@@ -26,7 +26,7 @@ import csv, glob, os, re
 import numpy as np
 from PIL import Image
 
-ROOT = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+ROOT = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
 if not os.path.isdir(ROOT):  # Cowork mount
     ROOT = os.path.expanduser("~/mnt")
     BENCH = {"styles": os.path.join(ROOT, "benchmark_single_blocks_styles", "renders"),

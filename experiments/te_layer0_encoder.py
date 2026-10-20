@@ -14,7 +14,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-COMFY_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
+COMFY_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
 sys.path.insert(0, str(COMFY_ROOT))
 sys.path.insert(0, str(COMFY_ROOT / "custom_nodes" / "Arthemy_Krea2_Tuner"))
 

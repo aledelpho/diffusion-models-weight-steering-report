@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 DATA = ROOT / "data"
 ASSETS = ROOT / "assets"
-IMG = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img")
+IMG = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img")
 if not IMG.exists():
     IMG = Path(os.path.expanduser("~/mnt"))
 

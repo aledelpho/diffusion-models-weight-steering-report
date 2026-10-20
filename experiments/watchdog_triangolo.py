@@ -22,7 +22,7 @@ import urllib.request
 
 PILOT_ROOT = r"c:\Users\aless\Desktop\comfyui-pilot"
 REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
-RENDERS_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
+RENDERS_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
 
 LOG_PILOT = os.path.join(PILOT_ROOT, "triangolo_progress.log")
 LOG_REPORT = os.path.join(REPORT_ROOT, "data", "triangolo_progress.log")

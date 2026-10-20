@@ -20,15 +20,15 @@ import shutil
 import urllib.request
 import subprocess
 
-PYTHON_EXE = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
+PYTHON_EXE = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 PILOT_ROOT = r"c:\Users\aless\Desktop\comfyui-pilot"
 REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
 
 SLUG = "benchmark_stage9"
-BASE_DIR_9 = rf"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\{SLUG}"
+BASE_DIR_9 = rf"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\{SLUG}"
 RENDERS_DIR_9 = os.path.join(BASE_DIR_9, "renders")
 
-STAGE7A_RENDERS = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders"
+STAGE7A_RENDERS = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7a\renders"
 STAGE7A_MANIFEST = os.path.join(PILOT_ROOT, "stage7a_images.csv")
 
 MANIFEST_9 = os.path.join(PILOT_ROOT, "stage9_images.csv")

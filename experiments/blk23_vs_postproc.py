@@ -19,7 +19,7 @@ from PIL import Image, ImageEnhance
 
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 DATA = os.path.join(HERE, "..", "data")
-ROOT = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+ROOT = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
 if not os.path.isdir(ROOT):
     ROOT = os.path.expanduser("~/mnt")
 SRC = os.path.join(ROOT, "benchmark_blk23_colorful")

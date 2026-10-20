@@ -31,8 +31,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 ROOTS = [Path("/sessions/rcw-01fzmivsryy2r8cd26detdrb/mnt"),
-         Path("C:/StabilityMatrix-win-x64/Data/Images/Text2Img"),
-         Path("C:/StabilityMatrix-win-x64/Data/Packages/ComfyUI/output")]
+         Path("D:/StabilityMatrix-win-x64/Data/Images/Text2Img"),
+         Path("D:/StabilityMatrix-win-x64/Data/Packages/ComfyUI/output")]
 
 
 def bench_dir(name: str) -> Path:

@@ -2,7 +2,7 @@
 
   python noise_metric.py --dev    # candidates on C59 labels -> data/noise_metric_dev_scores.csv, data/noise_metric_dev.csv (choice)
   python noise_metric.py --test   # only after the choice is committed -> data/noise_metric_test_scores.csv, verdicts
-  --img-root PATH                 # render root (default C:\\StabilityMatrix-win-x64\\Data\\Images\\Text2Img)
+  --img-root PATH                 # render root (default D:\\StabilityMatrix-win-x64\\Data\\Images\\Text2Img)
 """
 import argparse, csv, json, sys
 from pathlib import Path
@@ -10,7 +10,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parent / "data"
-IMG = Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img")
+IMG = Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img")
 IDS = ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"]
 NOISE = ["chiazze", "grana", "collasso", "retino"]
 

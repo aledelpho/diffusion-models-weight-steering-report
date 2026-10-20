@@ -20,11 +20,11 @@ import torch
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-COMFY_ROOT = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
+COMFY_ROOT = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
 SUITE_DIR = os.path.join(COMFY_ROOT, "custom_nodes", "Arthemy_Krea2_Tuner")
 REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
 DATA_DIR = os.path.join(REPORT_ROOT, "data")
-MODEL_PATH = r"C:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors"
+MODEL_PATH = r"D:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors"
 
 sys.path.insert(0, COMFY_ROOT)
 sys.path.append(SUITE_DIR)

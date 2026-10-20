@@ -22,11 +22,11 @@ def collect_paths():
     ]
     files = set()
     candidate_dirs = [
-        r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7\renders",
-        r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage6\renders",
-        r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage5\renders",
-        r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage4_preset\renders",
-        r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage2_family\renders",
+        r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage7\renders",
+        r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage6\renders",
+        r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage5\renders",
+        r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage4_preset\renders",
+        r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage2_family\renders",
     ]
     for c in csvs:
         if os.path.exists(c):

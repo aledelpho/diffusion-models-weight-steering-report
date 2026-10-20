@@ -8,7 +8,7 @@ Genera i 480 render (16 prompt x 6 condizioni x 5 seed):
 - parametri: euler_ancestral, 9 steps, cfg 1.0, 1024x1280
 - seed: 42, 777, 1337, 9999, 4242145
 - naming: renders/{pid}_{cond}_seed{seed}_00001_.png
-- output folder: C:\\StabilityMatrix-win-x64\\Data\\Packages\\ComfyUI\\output\\benchmark_stage7\\renders
+- output folder: D:\\StabilityMatrix-win-x64\\Data\\Packages\\ComfyUI\\output\\benchmark_stage7\\renders
 - manifesto: stage7b_images.csv
 """
 
@@ -29,7 +29,7 @@ from stage5_config import CORE_SEEDS, make_condition_id, suite_fingerprint
 
 COMFY_URL = "http://127.0.0.1:8188"
 SLUG = "benchmark_stage7"
-ROOT_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output" + rf"\{SLUG}"
+ROOT_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output" + rf"\{SLUG}"
 ROOT_IMG = os.path.join(ROOT_DIR, "renders")
 PILOT_ROOT = r"c:\Users\aless\Desktop\comfyui-pilot"
 CSV_PATH = os.path.join(PILOT_ROOT, "stage7b_images.csv")

@@ -12,7 +12,7 @@ import csv, glob, os, re
 import numpy as np
 from PIL import Image
 
-ROOT = r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"
+ROOT = r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"
 if not os.path.isdir(ROOT):
     ROOT = os.path.expanduser("~/mnt")
 BENCH = {

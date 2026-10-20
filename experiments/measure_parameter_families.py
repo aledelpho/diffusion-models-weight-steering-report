@@ -33,7 +33,7 @@ import groove_or_hole as G  # noqa: E402
 import retro_texture_axes as T  # noqa: E402
 
 BENCH = Path("/sessions/rcw-01fzmivsryy2r8cd26detdrb/mnt/benchmark_parameter_families")
-for c in (BENCH, Path("C:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_parameter_families")):
+for c in (BENCH, Path("D:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_parameter_families")):
     if c.is_dir():
         BENCH = c
         break

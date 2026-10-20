@@ -38,9 +38,9 @@ PROGRESS_LOG = DATA_DIR / "qkvo_atlas_progress.log"
 COMFY_HOST = "http://127.0.0.1:8188"
 OUTPUT_DIR_NAME = "benchmark_qkvo_atlas/renders"
 
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 TARGET_DIR = COMFY_OUTPUT_ROOT / OUTPUT_DIR_NAME
-REF_BASELINE_FILE = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_atlas_phase1\renders\S1_photo_baseline_seed42_00001_.png")
+REF_BASELINE_FILE = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_atlas_phase1\renders\S1_photo_baseline_seed42_00001_.png")
 
 
 def check_comfy_online() -> bool:

@@ -45,9 +45,9 @@ ROOT = _first(r"c:\Users\aless\Desktop\comfyui-pilot",
               os.path.join(_H, "mnt", "comfyui-pilot"))
 OUT = os.path.join(ROOT, "color_freedom.csv")
 # Le render stanno sotto Data\Images\Text2Img, non sotto Packages\ComfyUI\output.
-COMFY = _first(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img",
+COMFY = _first(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img",
                os.path.join(_H, "mnt", "StabilityMatrix-win-x64", "Data", "Images", "Text2Img"),
-               r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+               r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 DIRS = [os.path.join(COMFY, d, "renders") for d in
         ("benchmark_stage7", "benchmark_stage6", "benchmark_stage5",
          "benchmark_stage4_preset", "benchmark_stage2_family")]

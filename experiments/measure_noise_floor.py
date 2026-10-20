@@ -37,8 +37,8 @@ Nothing is rendered. Nothing is deleted. The script reads images and writes two 
 
 Usage:
     python experiments/measure_noise_floor.py \
-        --renders "C:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_latenti_b6/renders" \
-        --renders "C:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_pavimento_rumore/renders" \
+        --renders "D:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_latenti_b6/renders" \
+        --renders "D:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_pavimento_rumore/renders" \
         --out-renders data/noise_floor_hf_by_render.csv \
         --out-summary data/noise_floor_measured.csv
 """

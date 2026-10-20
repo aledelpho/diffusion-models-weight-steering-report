@@ -12,8 +12,8 @@ from pathlib import Path
 import numpy as np
 
 REPO = Path(__file__).resolve().parent.parent
-COMFY = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
-CLIP_PATH = Path(r"C:\StabilityMatrix-win-x64\Data\Models\TextEncoders\qwen3vl_4b_bf16.safetensors")
+COMFY = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")
+CLIP_PATH = Path(r"D:\StabilityMatrix-win-x64\Data\Models\TextEncoders\qwen3vl_4b_bf16.safetensors")
 TAPS = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]
 
 OUT_BY_PROMPT = REPO / "data" / "te_residual_probe_by_prompt.csv"

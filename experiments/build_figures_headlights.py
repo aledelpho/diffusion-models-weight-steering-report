@@ -74,8 +74,8 @@ SW = [f"sw{i}" for i in range(1, 7)]
 
 # cartelle candidate per i render originali di stage 9
 RENDER_CANDIDATES = [
-    r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders",
-    r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9_affidabilita\renders",
+    r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders",
+    r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9_affidabilita\renders",
 ]
 
 # palette scura del notebook

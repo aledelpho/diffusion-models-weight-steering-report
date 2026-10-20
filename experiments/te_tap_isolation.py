@@ -221,7 +221,7 @@ def encoder_audit():
     from safetensors import safe_open
 
     # 1. Inspect txtfusion weights in krea2_turbo_bf16.safetensors
-    krea_path = Path(r"C:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors")
+    krea_path = Path(r"D:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors")
     tf_rows = []
     if krea_path.exists():
         import torch

@@ -19,9 +19,9 @@ Output: data/matched_rotation_calibration_v4.json
 import os, sys, re, json, math
 import torch
 
-COMFY = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
+COMFY = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
 SUITE = os.path.join(COMFY, "custom_nodes", "Arthemy_Krea2_Tuner")
-MODEL = r"C:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors"
+MODEL = r"D:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors"
 REPORT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 sys.path.insert(0, COMFY)
 sys.path.append(SUITE)

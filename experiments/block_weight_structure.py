@@ -12,7 +12,7 @@ Outputs: data/block_weight_structure.csv, data/block_weight_structure_test.csv
 import argparse, csv, json, os, struct
 import numpy as np
 
-CKPT = r"C:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors"
+CKPT = r"D:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors"
 if not os.path.exists(CKPT):
     CKPT = os.path.expanduser("~/mnt/DiffusionModels/krea2_turbo_bf16.safetensors")
 HERE = os.path.dirname(os.path.abspath(__file__))

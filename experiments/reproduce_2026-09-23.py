@@ -33,8 +33,8 @@ WHERE THE RENDERS ARE
 
 StabilityMatrix keeps one copy of the outputs and shows it at two paths:
 
-    C:\\StabilityMatrix-win-x64\\Data\\Images\\Text2Img\\<bench>
-    C:\\StabilityMatrix-win-x64\\Data\\Packages\\ComfyUI\\output\\<bench>
+    D:\\StabilityMatrix-win-x64\\Data\\Images\\Text2Img\\<bench>
+    D:\\StabilityMatrix-win-x64\\Data\\Packages\\ComfyUI\\output\\<bench>
 
 --images-root takes either; both are tried in that order, and a bench that is under neither is
 reported by name instead of failing the whole run.
@@ -64,10 +64,10 @@ REPRO = DATA / "_repro"
 ASSETS = ROOT / "assets"
 
 ROOTS = [
-    Path(r"C:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Images\Text2Img"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output"),
 ]
-CHECKPOINT = Path(r"C:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors")
+CHECKPOINT = Path(r"D:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\krea2_turbo_bf16.safetensors")
 
 # How close two numbers have to be to count as the same measurement. Not zero: these pass
 # through CSV rounding and, on the image side, through whatever BLAS the machine happens to

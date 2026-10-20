@@ -20,7 +20,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 PILOT_ROOT = Path(r"c:\Users\aless\Desktop\comfyui-pilot")
 REPORT_ROOT = Path(r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report")
-RENDERS_DIR = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6")
+RENDERS_DIR = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6")
 MANIFEST_CSV = PILOT_ROOT / "data" / "rotations_triangolo_all330_manifest.csv"
 OUT_DIR = REPORT_ROOT / "qc_output" / "rotations_triangolo"
 

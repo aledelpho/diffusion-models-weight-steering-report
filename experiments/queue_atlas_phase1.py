@@ -40,7 +40,7 @@ COMFY_HOST = "http://127.0.0.1:8188"
 OUTPUT_DIR_NAME = "benchmark_atlas_phase1/renders"
 
 REFERENCE_HASH = "08d0193a58aee459c41905029ef04fa795af9ff71cd20ff14fc2ba278e404637"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 
 
 def check_comfy_online() -> bool:
@@ -203,7 +203,7 @@ def verify_determinism() -> bool:
     if not check_file.exists():
         check_file = COMFY_OUTPUT_ROOT / OUTPUT_DIR_NAME / "S1_photo_baseline_seed42_00001_.png"
 
-    ref_file = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders\S1_photo_baseline_seed42_00001_.png")
+    ref_file = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders\S1_photo_baseline_seed42_00001_.png")
 
     if not check_file.exists():
         print(f"[FAIL] Rendered file not found yet at {check_file}")

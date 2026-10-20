@@ -31,7 +31,7 @@ say so.
 
 Usage (from the repository root, with ComfyUI on the path):
     python experiments/measure_clip_distance.py \
-        --renders "C:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_stage7/renders" \
+        --renders "D:/StabilityMatrix-win-x64/Data/Images/Text2Img/benchmark_stage7/renders" \
         --manifest data/stage7b_images.csv --seed 1337 \
         --out data/clip_distance_mark_style.csv
 """
@@ -48,8 +48,8 @@ import sys
 import numpy as np
 import torch
 
-COMFY = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
-CLIP_VISION = r"C:\StabilityMatrix-win-x64\Data\Models\ClipVision\clip_vision_h.safetensors"
+COMFY = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"
+CLIP_VISION = r"D:\StabilityMatrix-win-x64\Data\Models\ClipVision\clip_vision_h.safetensors"
 sys.path.insert(0, COMFY)
 
 import comfy.clip_vision            # noqa: E402

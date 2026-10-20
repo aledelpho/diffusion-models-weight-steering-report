@@ -18,7 +18,7 @@ from PIL import Image
 REPORT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 PILOT = r"C:\Users\aless\Desktop\comfyui-pilot"
 RENDERS = os.path.join(PILOT, "benchmark_rotations_matched_v3", "renders")
-COMFY = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_rotations_matched_v3\renders"
+COMFY = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_rotations_matched_v3\renders"
 DATA = os.path.join(REPORT, "data")
 sys.path.insert(0, os.path.join(PILOT, "experiments"))
 from style_features import extract_all_features

@@ -44,13 +44,13 @@ DATA_DIR = ROOT / "data"
 PLAN_CSV = DATA_DIR / "family_bench_plan.csv"
 
 COMFY_HOST = "http://127.0.0.1:8188"
-COMFY_OUTPUT_ROOT = Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
+COMFY_OUTPUT_ROOT = Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output")
 OUTPUT_FOLDER_NAME = "benchmark_parameter_families/renders"
 TARGET_DIR = COMFY_OUTPUT_ROOT / OUTPUT_FOLDER_NAME
 MAPPA_DIR = COMFY_OUTPUT_ROOT / "benchmark_mappa" / "renders"
 COMFY_LOG_FILES = [
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui_8188.log"),
-    Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui.log")
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui_8188.log"),
+    Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\user\comfyui.log")
 ]
 
 PROMPTS = {

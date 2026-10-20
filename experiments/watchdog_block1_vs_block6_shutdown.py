@@ -23,11 +23,11 @@ import shutil
 import urllib.request
 import subprocess
 
-PYTHON_EXE = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
+PYTHON_EXE = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 PILOT_ROOT = r"c:\Users\aless\Desktop\comfyui-pilot"
 REPORT_ROOT = r"C:\Users\aless\Desktop\diffusion-models-weight-steering-report"
 
-RENDERS_DIR = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
+RENDERS_DIR = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\rotations_block1_vs_block6"
 EXPECTED_TOTAL = 210
 
 LOG_FILE_PILOT = os.path.join(PILOT_ROOT, "block1_vs_block6_progress.log")

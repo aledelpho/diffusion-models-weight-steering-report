@@ -30,7 +30,7 @@ PROMPT_JSON = DATA_DIR / "stage9_prompts.json"
 CALIB_CSV = DATA_DIR / "perturbation_atlas_calibration.csv"
 OUT_PLAN_CSV = DATA_DIR / "perturbation_atlas_phase1_plan.csv"
 
-REFERENCE_BASELINE_FILE = r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders\S1_photo_baseline_seed42_00001_.png"
+REFERENCE_BASELINE_FILE = r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\output\benchmark_stage9\renders\S1_photo_baseline_seed42_00001_.png"
 REFERENCE_BASELINE_SHA256 = "08d0193a58aee459c41905029ef04fa795af9ff71cd20ff14fc2ba278e404637"
 
 SEEDS = [42, 777, 1337]

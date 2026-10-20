@@ -21,7 +21,7 @@ Images go in at NATIVE resolution. No resize, no centre crop.
 
 Usage (on the machine that runs Ollama):
     python experiments/judge_style_gate.py ^
-        --renders "C:\\StabilityMatrix-win-x64\\Data\\Images\\Text2Img\\benchmark_atlas_phase1\\renders" ^
+        --renders "D:\\StabilityMatrix-win-x64\\Data\\Images\\Text2Img\\benchmark_atlas_phase1\\renders" ^
         --model qwen3.8:27b
 Then hand data/capability_judge_gate.csv back. Run it once per judge; the file is appended to.
 """
