@@ -1,0 +1,9 @@
+test,value,verdict
+Rule 1 all: exact sorting,20/28 = 0.71; binomial p 5.5e-18 vs 1/15,the eye sorts by perturbation
+Rule 1 TE set: exact sorting,11/16 = 0.69; binomial p 3.7e-10 vs 1/15,the eye sorts by perturbation
+Rule 1 DiT set: exact sorting,9/12 = 0.75; binomial p 4.8e-09 vs 1/15,the eye sorts by perturbation
+Rule 2 answers equal to the seed partition (reported),0/28 (chance 1/15),
+Rule 3 single picture found (reported),20/28 (chance 1/5),
+Rule 3 pairs correct (reported),45/56,
+Rule 3 exact by kind of A-B pair (reported),"DiT different families 6/9; DiT same family 3/3; TE edit against random 2/2; TE other 5/7; TE two random pushes, same layer 4/7",
+"Rule 3 test-retest, exact (reported)",4/4 same outcome,
