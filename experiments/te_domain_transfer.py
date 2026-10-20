@@ -491,7 +491,7 @@ if __name__ == "__main__":
     if a.page: page()
     if a.rules:
         ok, M = matched_cells()
-        rep = f"{len(ok)} of {len(M)} within {ACC_LO}-{ACC_HI}; not matched: " + ", ".join(f"{p}:{n} {statistics.median(v):.2f}" for (p, n), v in sorted(M.items()) if (p, n) not in ok)
+        rep = f"{len(ok)} of {len(M)} within {MATCH_LO}-{MATCH_HI}; not matched: " + ", ".join(f"{p}:{n} {statistics.median(v):.2f}" for (p, n), v in sorted(M.items()) if (p, n) not in ok)
         out = rules(rd(LABELS), {r["unit"]: r for r in rd(KEY)}, rep)
         with open(TESTS, "w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=["test", "value", "verdict"]); w.writeheader(); w.writerows(out)

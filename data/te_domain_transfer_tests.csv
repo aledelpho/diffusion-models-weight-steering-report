@@ -1,0 +1,16 @@
+test,value,verdict
+Rule 0 matched subject x perturbation (reported),28 of 29 within 0.1-0.45; not matched: LN:R09 0.08,
+Rule 1 [content] null: different perturbations called the same,s(N) 0.06 (n 8),ok
+Rule 2 [content] edits,within 0.38 (n 8); mixed 0.5 (n 6); null 0.06,transfers across domains
+Rule 2 [content] random,within 0.56 (n 8); mixed 0.58 (n 6); null 0.06,transfers across domains
+Rule 3 [content] per perturbation (reported),E14 within 0.25 (n 4) mixed 0.5 (n 2); E26 within 0.5 (n 4) mixed 0.5 (n 4); R09 within 0.62 (n 4) mixed 0.75 (n 2); R26 within 0.5 (n 4) mixed 0.5 (n 4),
+Rule 1 [style] null: different perturbations called the same,s(N) 0.0 (n 8),
+Rule 2 [style] edits,within 0.19 (n 8); mixed 0.25 (n 6); null 0.0,(reported) no transfer
+Rule 2 [style] random,within 0.44 (n 8); mixed 0.25 (n 6); null 0.0,(reported) partly
+Rule 3 [style] per perturbation (reported),E14 within 0.12 (n 4) mixed 0.25 (n 2); E26 within 0.25 (n 4) mixed 0.25 (n 4); R09 within 0.62 (n 4) mixed 0.5 (n 2); R26 within 0.25 (n 4) mixed 0.12 (n 4),
+"Rule 3 [content] binary, 'simile' left out (reported)",null 0.0 (n 7); edits within 0.0 (n 2); edits mixed None (n 0); random within 0.67 (n 3); random mixed 1.0 (n 1),
+Rule 3 [content] 'simile' answers (reported),23,
+"Rule 3 [style] binary, 'simile' left out (reported)",null 0.0 (n 8); edits within 0.0 (n 5); edits mixed 0.0 (n 3); random within 0.4 (n 5); random mixed 0.0 (n 3),
+Rule 3 [style] 'simile' answers (reported),12,
+Rule 3 'non si vede' (reported),"content 0, style 0",
+Rule 3 test-retest (reported),"content 6/6, style 5/6",
