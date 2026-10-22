@@ -391,7 +391,8 @@ def check_language(body: str, path: Path, rep: Report) -> None:
     prose = re.sub(r"```.*?```", " ", body, flags=re.S)        # drop code fences
     prose = re.sub(r"`[^`]*`", " ", prose)                     # drop inline code
     prose = re.sub(r"\]\([^)]*\)", " ", prose)                 # drop link targets
-    words = re.findall(r"[a-zA-ZàèéìòùÀÈÉÌÒÙ]+", prose.lower())
+    # hyphenated compounds count as one word ("non-binary" is English, not the Italian "non")
+    words = re.findall(r"[a-zA-ZàèéìòùÀÈÉÌÒÙ]+(?:-[a-zA-ZàèéìòùÀÈÉÌÒÙ]+)*", prose.lower())
     hits = sorted({w for w in words if w in ITALIAN_MARKERS})
     if hits:
         rep.error(path.name, f"the notebook is written in English; Italian words found: "
