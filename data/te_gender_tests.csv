@@ -1,0 +1,29 @@
+rule,value,verdict
+0_plain_D1_orig,4/4 fumetto,kept
+0_plain_D1_nb,4/4 fumetto,kept
+0_plain_O4_orig,4/4 fumetto,kept
+0_plain_O4_nb,4/4 fumetto,kept
+0_plain_T7_orig,4/4 fumetto,kept
+0_plain_T7_nb,4/4 fumetto,kept
+0_plain_SEN_-,4/4 fumetto,kept
+0_plain_SEF_-,4/4 fumetto,kept
+0_plain_SHN_-,4/4 fumetto,kept
+0_plain_SHF_-,4/4 fumetto,kept
+A_D1 (reported),anime non-binary 0.00 - original 0.00 = +0.00,-
+A_O4 (reported),anime non-binary 0.00 - original 0.00 = +0.00,-
+A_T7 (reported),anime non-binary 1.00 - original 0.00 = +1.00,-
+A_other_characters,pooled 0.33 - 0.00 = +0.33; positive in 1 of 3,not shown on other characters
+B_species,anime elf 0.12 (n 8) - human 0.00 (n 8) = +0.12,not the species alone
+B_gender,anime nb 0.12 (n 8) - female 0.00 (n 8) = +0.12,not the gender word alone
+B_L06_SEN (reported),"{""anime"": 1, ""pittura"": 3}",-
+B_L06_SEF (reported),"{""altro"": 1, ""pittura"": 3}",-
+B_L06_SHN (reported),"{""pittura"": 4}",-
+B_L06_SHF (reported),"{""pittura"": 4}",-
+C0_four_panels,16 of 16 pages with four panels,-
+C0_plain_panels,32/32 fumetto,-
+C_gender_in_one_picture,anime non-binary panels 0.00 (n 16) - female 0.00 (n 16) = +0.00,no split inside one picture
+C_species (reported),anime elf 0.00 - human 0.00 = +0.00,-
+C_one_genre_per_page (reported),8/8 L06 pages with one genre in all panels,-
+C_pairs_same_change (reported),no answers,-
+retest_single (reported),6/6 identical,-
+retest_panels (reported),2/2 identical,-
