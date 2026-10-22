@@ -1273,3 +1273,36 @@ figures:
       Three odd-one-out trials as shown, with the hidden groups: two pairs made by two perturbations at the same two
       seeds and one picture by a third; the groups are found in a text-encoder trial and an image-model trial, and
       missed in a trial of three random pushes at layer 26.
+  - id: F31.7
+    page: 31-what-an-edit-leaves
+    kind: contact_sheet
+    builder: results_figures.te_species_sheet
+    source: data/te_species_labels.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The elf rogue with only the subject phrase changed: the originals are all Western comic; under L06 the non-binary
+      elf and the non-binary human mostly become anime, the female elf, the female human and the female ranger mostly
+      become paintings, and every variant turns into the same younger, lighter-skinned person in the green hood.
+  - id: F31.8
+    page: 31-what-an-edit-leaves
+    kind: contact_sheet
+    builder: results_figures.te_gender_sheet
+    source: data/te_gender_labels_single.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Three portraits with their own gender word and with "non-binary": under L06 the dwarf and the half-orc become
+      photographs with either word, the non-binary ones as men; the tiefling is mixed with "male" and anime in 4 of 4
+      with "non-binary".
+  - id: F31.9
+    page: 31-what-an-edit-leaves
+    kind: contact_sheet
+    builder: results_figures.te_panels_sheet
+    source: data/te_gender_labels_panels.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      Two comic pages with the four elf-rogue descriptions in their panels, two orders: under L06 every panel stays
+      Western comic while the characters lose their hoods and become young, lighter-skinned women against a grey-blue
+      background.

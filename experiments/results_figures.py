@@ -1553,6 +1553,61 @@ def odd_one_out_examples(out: Path) -> Path:
                   "C106 · A and B share the same two seeds, C has a third · 'said' = Alessandro's grouping · source data/odd_one_out_key.csv, data/odd_one_out_labels.csv", W=160, H=200, LAB=110)
 
 
+_GEN = {"fumetto": "comic", "anime": "anime", "realist": "realistic", "pittura": "painting", "cartoon": "cartoon", "altro": "other"}
+
+
+def _labels(key, lab, fields):
+    L = {r["id"]: r for r in csv.DictReader(open(DATA / lab, encoding="utf-8"))}
+    out = {}
+    for k in csv.DictReader(open(DATA / key, encoding="utf-8")):
+        if k["repeat"] == "0" and k["id"] in L:
+            out[tuple(k[f] for f in fields)] = L[k["id"]]
+    return out
+
+
+def te_species_sheet(out: Path) -> Path:
+    """F31.7 - C107: the elf rogue with only the subject phrase changed, plain and under L06 MLP doubled, Alessandro's blind genre."""
+    G = _labels("te_species_key.csv", "te_species_labels.csv", ("variant", "cond", "seed"))
+    S = ["2645751", "3316624", "3605551", "4123105"]
+    rows = [("EN", "non-binary elf"), ("EF", "female elf"), ("HN", "non-binary human"), ("HF", "female human"), ("RF", "female ranger")]
+    cols = [("plain|2645751", "original")] + [(f"L06|{s}", f"L06 · seed …{s[-3:]}") for s in S]
+    def path(v, c):
+        cond, s = c.split("|"); return _img(f"benchmark_te_species/{v}_{cond}_krea2_seed{s}_00001_.png")
+    def cap(v, c):
+        cond, s = c.split("|"); g = G[(v, cond, s)]["genre"]
+        return (_GEN[g], NEG if g == "anime" else DIM_RGB)
+    return _sheet(rows, cols, path, cap, out, "C107 · elf rogue, subject phrase only changed · labels: Alessandro, blind · source data/te_species_labels.csv", W=140, H=175, LAB=118)
+
+
+def te_gender_sheet(out: Path) -> Path:
+    """F31.8 - C108 block A: three characters with their gender word and with 'non-binary', under L06 MLP doubled."""
+    G = _labels("te_gender_key_single.csv", "te_gender_labels_single.csv", ("item", "word", "cond", "seed"))
+    S = ["2645751", "3316624", "3605551", "4123105"]
+    rows = [(("D1", "orig"), "dwarf, female"), (("D1", "nb"), "dwarf, non-binary"), (("O4", "orig"), "half-orc, female"),
+            (("O4", "nb"), "half-orc, non-binary"), (("T7", "orig"), "tiefling, male"), (("T7", "nb"), "tiefling, non-binary")]
+    cols = [("plain|2645751", "original")] + [(f"L06|{s}", f"L06 · seed …{s[-3:]}") for s in S]
+    def path(rk, c):
+        cond, s = c.split("|"); return _img(f"benchmark_te_gender/A_{rk[0]}_{rk[1]}_{cond}_krea2_seed{s}_00001_.png")
+    def cap(rk, c):
+        cond, s = c.split("|"); g = G[(rk[0], rk[1], cond, s)]["genre"]
+        return (_GEN[g], NEG if g == "anime" else DIM_RGB)
+    return _sheet(rows, cols, path, cap, out, "C108 · only the gender word changed · labels: Alessandro, blind · source data/te_gender_labels_single.csv", W=140, H=175, LAB=140)
+
+
+def te_panels_sheet(out: Path) -> Path:
+    """F31.9 - C108 block C: the four C107 descriptions in one comic page, plain and under L06, two orders."""
+    G = _labels("te_gender_key_panels.csv", "te_gender_labels_panels.csv", ("item", "cond", "seed"))
+    rows = [("O1", "order 1"), ("O2", "order 2")]
+    cols = [("plain|2645751", "original · …751"), ("L06|2645751", "L06 · …751"), ("plain|3316624", "original · …624"), ("L06|3316624", "L06 · …624")]
+    def path(o, c):
+        cond, s = c.split("|"); return _img(f"benchmark_te_gender/C_{o}_-_{cond}_krea2_seed{s}_00001_.png")
+    def cap(o, c):
+        cond, s = c.split("|"); r = G[(o, cond, s)]
+        gs = {_GEN[r[f"g{i}"]] for i in range(1, 5)}
+        return ("panels: " + ", ".join(sorted(gs)), DIM_RGB)
+    return _sheet(rows, cols, path, cap, out, "C108 · four descriptions, one page · panel genres: Alessandro, blind · source data/te_gender_labels_panels.csv", W=230, H=288, LAB=70)
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1619,6 +1674,9 @@ BUILDERS = {
     "F31.4": ("31-what-an-edit-leaves", "te_random_signature_sheet", te_random_signature_sheet),
     "F31.5": ("31-what-an-edit-leaves", "te_transfer_sheet", te_transfer_sheet),
     "F31.6": ("31-what-an-edit-leaves", "odd_one_out_examples", odd_one_out_examples),
+    "F31.7": ("31-what-an-edit-leaves", "te_species_sheet", te_species_sheet),
+    "F31.8": ("31-what-an-edit-leaves", "te_gender_sheet", te_gender_sheet),
+    "F31.9": ("31-what-an-edit-leaves", "te_panels_sheet", te_panels_sheet),
 }
 
 
