@@ -31,7 +31,7 @@ painting 4 each.
   pointed ears, the humans become ordinary men and women.
 * **C.** Under L06 the comic pages stay comic pages: four panels, ink and flat colour. The change is in the content,
   and it looks the same in all four panels: hoods and cloaks gone, a grey-blue background, a lighter-skinned young woman
-  with long hair and the feather earring, pointed ears mostly gone. The four panels become much the same person.
+  with long hair and the feather earring, pointed ears mostly gone. The four panels become alike, mostly dark-haired young women (a blonde in some O2 panels).
   This is Claude's reading with the conditions known, not a blind answer.
 
 ## Reading

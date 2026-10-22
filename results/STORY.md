@@ -421,7 +421,17 @@ it; for that, the measure is the eye.
 
 ![Three odd-one-out trials as shown, with the hidden groups: two pairs made by two perturbations at the same two seeds and one picture by a third; the groups are found in a text-encoder trial and an image-model trial, and missed in a trial of three random pushes at layer 26.](../assets/31-what-an-edit-leaves/F31.6_odd_one_out_examples.webp)
 
-→ [page 31](31-what-an-edit-leaves.md) · an edit's push bends once, the bend the network's and its size the edit's, on any prompt **holds** · deeper layers bend less **holds** · the edit straighter than a random push at every layer **overturned** (only from the middle on) · L06's damage doesn't go through the massive activations **holds** · at equal push on the conditioning, deep edits barely move the picture **open** · deep edits carry a direction of their own **ambiguous** · different random pushes change content differently **ambiguous** (the eye says yes, the embeddings disagree) · across subjects a family resemblance, across style domains too **holds** · the eye sorts pictures by the edit that made them, never by seed **holds** · embedding cosines don't track "the same change" **open**
+Then where the style *goes*. Under the same edit the dwarf becomes a photograph and the elf rogue anime, so I asked
+whether the subject decides. I changed one phrase of the elf's prompt at a time. Elf or human: no difference. Non-binary
+or female: all the difference, anime against painting. My own explanation, that she goes anime because her pointed ears
+survive, fell at once: the female elf keeps her ears and is painted. And the gender word doesn't do it elsewhere: on the
+dwarf and the half-orc "non-binary" turns them into men, still photographs; in six-word prompts everything becomes a
+painting; and with four descriptions in the panels of one comic page, no panel leaves the comic at all. Where the style
+goes depends on the whole description.
+
+![Three portraits with their own gender word and with "non-binary": under L06 the dwarf and the half-orc become photographs with either word, the non-binary ones as men; the tiefling is mixed with "male" and anime in 4 of 4 with "non-binary".](../assets/31-what-an-edit-leaves/F31.8_te_gender_sheet.webp)
+
+→ [page 31](31-what-an-edit-leaves.md) · an edit's push bends once, the bend the network's and its size the edit's, on any prompt **holds** · deeper layers bend less **holds** · the edit straighter than a random push at every layer **overturned** (only from the middle on) · L06's damage doesn't go through the massive activations **holds** · at equal push on the conditioning, deep edits barely move the picture **open** · deep edits carry a direction of their own **ambiguous** · different random pushes change content differently **ambiguous** (the eye says yes, the embeddings disagree) · across subjects a family resemblance, across style domains too **holds** · the eye sorts pictures by the edit that made them, never by seed **holds** · embedding cosines don't track "the same change" **open** · on the elf rogue the gender word decides where the style goes **holds** · the species does **overturned** · "non-binary" does it on other characters and short prompts **overturned** · a four-panel page keeps its genre under the edit **open**
 
 ---
 

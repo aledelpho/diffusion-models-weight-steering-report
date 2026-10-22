@@ -336,6 +336,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--not-the-massive-activations">The damage of L06 MLP doubled does not travel through the massive activations of the text encoder: restoring them leaves the damage in place, and changing only them leaves the picture almost as it was.</a></td><td class="ev">Pre-registered (TEP2, amendment 1: gate as a 5 % tolerance). With the 36 massive entries restored to their original value, the picture keeps at least 0.80 of the edit&#x27;s DINOv2 distance in 5 of 6 character-seed cells (rule 2 bar 5 of 6); with only the massive change kept, median 0.04 of it. A random control of 36 entries restored keeps at least 0.80 in 5 of 6. Three characters, two seeds.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--two-pairs-and-an-odd-one">A fixed perturbation of the model, a text-encoder edit, a random push of the text encoder or an image-model preset, leaves a signature the eye recognises across seeds without being told which pictures belong together.</a></td><td class="ev">Pre-registered (C106): five pictures of one prompt, two pairs made by perturbations A and B at the same two seeds and one by C. Exact grouping 20 of 28 (0.71) against chance 1/15, binomial p 5.5e-18 (bar 0.50 and p &lt; 0.001); text-encoder set 11 of 16, image-model presets 9 of 12 (bars 0.40 and p &lt; 0.01); grouped by seed 0 of 28. Test-retest 4 of 4. C104, reported before it: one fixed random push changes the content the same way across three seeds in 1.00 (layer 9, n 5) and 0.92 (layer 26, n 12) of the units.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--a-family-resemblance-across-subjects">A fixed text-encoder perturbation gives a family resemblance across different subjects, and it does so across style domains as much as within one: something similar, not the same change.</a></td><td class="ev">Pre-registered (C105, amendment 1 on the match before the blind pass, amendment 2 during it adding the answer &quot;something similar&quot;, scored 0.5). Content, share of &quot;same&quot; with &quot;similar&quot; as half: control of different perturbations 0.06 (n 8); real edits 0.38 within a domain, 0.50 across; random pushes 0.56 and 0.58: &quot;transfers across domains&quot; for both (bar: a gap of 0.30 over the control). 23 of 36 content answers are &quot;similar&quot;, 3 &quot;same&quot;. The domain specificity of image-model presets (2026-09-25) is not reproduced here.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">On the elf rogue&#x27;s description, the gender word decides where L06 MLP doubled sends the style: &quot;non-binary&quot; to anime, &quot;female&quot; to painting.</a></td><td class="ev">Pre-registered (C107 rule 2): only the subject phrase changed, four seeds, blind labels. Anime under L06 with &quot;non-binary&quot; 0.75 (n 8) against &quot;female&quot; 0.00 (n 8), +0.75 (bar +0.50). With &quot;female&quot; the pictures are painted in 7 of 8 and realistic in 1. Exploratory Fisher test on the 2 x 2, p 0.007. C108 found it does not generalise (see the next claims).</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-21-block-map--what-the-weights-show">How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.</a></td><td class="ev">Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-24-wording--the-registered-rule">Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block&#x27;s effect no more than changing the seed does, while changing the subject changes it a great deal.</a></td><td class="ev">Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-27-other-edits--a-curiosity-attributes-that-appear">A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.</a></td><td class="ev">Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run.</td></tr>
@@ -359,6 +360,8 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-30-the-text-encoder--not-a-text-like-push">The edits that end in anime push the conditioning in the direction that writing &quot;anime style&quot; instead of &quot;western comics style&quot; would.</a></td><td class="ev">Pre-registered (C71), 16 encodes, gate bit-identical. H1: cosine with the comics-to-anime direction against the number of anime pictures, Spearman -0.01 (bar 0.50). H2: with the anime-minus-painting direction, -0.00 (bar 0.40). Every cosine lies between -0.12 and +0.07.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-30-the-text-encoder--every-character-has-its-own-fallback">A strong text-encoder edit sends each character to the genre that character falls back to without style words.</a></td><td class="ev">Pre-registered (C73 H2), not supported: of 43 switched pictures of the four characters with a clear fallback, 0.28 land on that fallback, against 0.27 expected if destinations ignored the character (bar: +0.20).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--deeper-layers-bend-less">At every layer of the text encoder, an edit&#x27;s push bends less than a random push of the same size injected at the same place.</a></td><td class="ev">Pre-registered (C101 rule 2): the edit bends less in 24 of 35 layers, not at layers 2, 3, 4, 8, 9, 10, 11, 14, 15, 17 and 34, so the verdict is &quot;depends on the layer&quot;. Median edit minus control: +1 degree in layers 0-11, -5.5 in 12-23, -15.9 in 24-34. C93 had suggested it from three layers; C100 already found L14 bending more than its control (80.5 against 77.3).</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">On the elf rogue&#x27;s description, the species word (elf or human) decides where L06 MLP doubled sends the style.</a></td><td class="ev">Pre-registered (C107 rule 1): anime under L06 with &quot;elf&quot; 0.38 (n 8), with &quot;human&quot; 0.38 (n 8), +0.00 (bar +0.50). The reading it came from, &quot;the picture goes anime when the pointed ears survive&quot;, is not supported either (C107, reported): the female elf keeps her ears in 4 of 4 and is painted; the non-binary human has none and is anime in 3 of 4.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">Under L06 MLP doubled, the word &quot;non-binary&quot; pulls a portrait toward anime on other characters and in short prompts, as it does on the elf rogue.</a></td><td class="ev">Pre-registered (C108). Other characters, only the gender word changed: anime with &quot;non-binary&quot; minus with the original word +0.33 pooled (bar +0.40), positive in 1 of 3 (dwarf +0.00, half-orc +0.00, tiefling +1.00). Short prompts (&quot;portrait of a non-binary / female elf / human&quot;): +0.12 for the gender word and +0.12 for the species (bars +0.50); 14 of 16 edited pictures are painting.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--where-the-layout-holds">Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.</a></td><td class="ev">Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--blocks-that-push-together">Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.</a></td><td class="ev">Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--what-the-ends-change-and-what-the-middle-changes">The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.</a></td><td class="ev">At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so &quot;fewer things&quot; holds for kinds of property, not for statistics.</td></tr>
@@ -380,6 +383,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-30-the-text-encoder--inside-the-text-encoder">Inside the text encoder, one layer writes almost all of the internal signal: the MLP of layer 6 takes its size from about 400 to about 13,100, and every later layer up to 33 adds only 1 to 8 % of it.</a></td><td class="ev">Described, no pre-registration: a read-only probe of all 36 layers on 16 prompts. Layer 6&#x27;s MLP writes 33.8 times the size of the signal it receives; layers 7-33 write 0.012-0.080 times; the last two reshape it (the norm falls to 12,768 and 6,606). L06 doubled is also the edit that turned seven portraits into realistic renders in 11 of 14 pictures (C73).</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--equal-push-unequal-pictures">The same change of the conditioning moves the picture far less when it comes from a deep layer of the text encoder than from an early one.</a></td><td class="ev">Reported, no threshold (C102 rule 3): every edit and random push matched to the same relative change of the whole conditioning within 1 %. Deep (mean of L26, L30) moves the picture less than early (L04, L09) in 23 of 24 prompt-seed-level cells; at the push of L06 doubled, median DINOv2 distance L04 0.53, L09 0.34, random at L09 0.46, against L26 0.06, L30 0.04, random at L26 0.05.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--what-the-embeddings-missed">The cosine between DINOv2 or CSD change vectors does not tell whether two pictures changed the same way, as the eye sees it.</a></td><td class="ev">Exploratory, after C104&#x27;s rules: per unit, the mean cosine against Alessandro&#x27;s same / different answers, DINOv2 for content AUC 0.64 (n 28 and 19), CSD for style AUC 0.36, below chance. The computed halves of C102 and C103 rested on that measure and are withdrawn as evidence of a shared direction.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">Put four portrait descriptions into the panels of one comic page and L06 MLP doubled changes who is drawn in every panel, but no panel changes genre.</a></td><td class="ev">C108 block C, two panel orders, four seeds, blind panel labels: 16 of 16 pages keep four panels, and the 32 edited panels are all Western comic (reported). Pre-registered rule C, a gender split between panels: +0.00, not supported. The content change, hoods gone and lighter-skinned young women, is my reading with the conditions known; Alessandro could not answer the paired &quot;same change&quot; question with confidence, so that measure is missing.</td></tr>
       </tbody>
     </table>
   </section>
@@ -3881,7 +3885,7 @@ analysis:
 </ul>
 </section>
 <section id="p-31-what-an-edit-leaves">
-<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">825 renders · 15 prompts · 9 seeds · pre-registered · 2026-10-20</span></p>
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">961 renders · 29 prompts · 11 seeds · pre-registered · 2026-10-20</span></p>
 <h1 id="p-31-what-an-edit-leaves--what-a-text-encoder-edit-leaves-a-curve-a-signature-a-family-resemblance">What a text-encoder edit leaves — a curve, a signature, a family resemblance</h1>
 <blockquote>
 <p><strong>The direction I'm chasing.</strong> Page 30 showed that an edit of the text encoder changes <em>what</em> the picture is, not
@@ -3891,9 +3895,11 @@ change of the weights, even a random one, would behave like that.</p>
 <p><strong>What would kill it.</strong> An edit whose push changes shape from prompt to prompt; pictures that the eye cannot sort by
 the edit that made them better than chance; a change that stays with one subject and does not carry to another.</p>
 <p><strong>Where we are.</strong> An edit is a knob with a recognisable look: I sorted pictures by the edit that made them in 20 of 28
-trials, where chance gives about 2. Across subjects the look carries as a family resemblance, not the same change,
+trials, where chance gives one in 15. Across subjects the look carries as a family resemblance, not the same change,
 and that verdict leans on an answer, "something similar", that I asked for in the middle of the blind pass. And the
-embeddings that were meant to measure "the same change" for me turned out not to see it.</p>
+embeddings that were meant to measure "the same change" for me turned out not to see it. <em>Where</em> the style goes is
+less tidy: on one description a single gender word decided it, and on other characters and in short prompts it
+didn't.</p>
 </blockquote>
 <h2 id="p-31-what-an-edit-leaves--in-two-minutes">In two minutes</h2>
 <p>I started from the conditioning, the list of numbers the text encoder hands to the image model. When I turn up an
@@ -3907,9 +3913,9 @@ prompt.</p>
 edit bends exactly like a random push: there it carries no direction of its own beyond the network's. From the middle
 on it is straighter than chance, and more so with depth.</p>
 <p><img alt="For each of the 35 layers, how much the push of an MLP edit turns along the dose, against a random push of the same size at the same place: the edit turns less the deeper the layer (Spearman -0.655); in the first third it turns like the random push, in the last third it is straighter by about 16 degrees." src="../assets/31-what-an-edit-leaves/F31.1_te_bend_by_layer.webp" /></p>
-<p>Next, a suspicion about L06, the edit that turns my comic portraits into photographs. Inside the encoder a few entries
-of the signal are enormous, the so-called massive activations, and layer 6 is where they appear. Is the damage carried
-by them? I put those 36 entries back to their original value and left the rest of the edit in place: the damage stays.
+<p>Next, a suspicion about L06, the edit that turns my comic portraits into photographs. Layer 6 is where the encoder's
+internal signal jumps in size, the signature of a few enormous entries, the so-called massive activations. Is the
+damage carried by them? I put those 36 entries back to their original value and left the rest of the edit in place: the damage stays.
 Change only those entries and the picture comes back. It's not them.</p>
 <p><img alt="Three portraits under L06 MLP doubled: restoring the 36 massive entries leaves the damage in place (f 0.96-1.41), the massive change alone gives back the original (f 0.02-0.12), and restoring 36 random entries does nothing (f 0.96-1.09)." src="../assets/31-what-an-edit-leaves/F31.2_te_massive_sheet.webp" /></p>
 <p>Then I tried to use the curves to compare layers fairly: every edit pushed to the same change of the conditioning. It
@@ -3937,6 +3943,21 @@ is to pair the pictures that share a seed, because they share the composition. I
 trials, where guessing gets one in 15, and I never once grouped by seed. It worked for text-encoder edits, for random
 pushes and for my old image-model presets alike. An edit leaves a signature you can see.</p>
 <p><img alt="Three odd-one-out trials as shown, with the hidden groups: two pairs made by two perturbations at the same two seeds and one picture by a third; the groups are found in a text-encoder trial and an image-model trial, and missed in a trial of three random pushes at layer 26." src="../assets/31-what-an-edit-leaves/F31.6_odd_one_out_examples.webp" /></p>
+<p>Then the question of <em>where</em> the style goes. Under L06 the dwarf and the half-orc become photographs, the elf rogue
+anime. Is it the subject? I changed only the subject phrase of the elf rogue: elf or human, non-binary or female, plus a
+female human ranger. The species made no difference at all. The gender word made all of it: "non-binary" went anime
+in 6 of 8 pictures, "female" in none; she was painted instead. And a reading I had built on the first sheet, that the
+picture goes anime when the pointed ears survive, fell too: the female elf keeps her ears every time and is painted.</p>
+<p><img alt="The elf rogue with only the subject phrase changed: the originals are all Western comic; under L06 the non-binary elf and the non-binary human mostly become anime, the female elf, the female human and the female ranger mostly become paintings, and every variant turns into the same younger, lighter-skinned person in the green hood." src="../assets/31-what-an-edit-leaves/F31.7_te_species_sheet.webp" /></p>
+<p>So I asked whether "non-binary" does that everywhere. It doesn't. On the dwarf and the half-orc it changes <em>who</em> is
+drawn, a bearded man and a young man where the original words give women, but both stay photographs. Only the tiefling
+goes anime, every time. In short prompts of six words every edited picture becomes a painting, whatever the words. Where
+the style goes depends on the whole description, not on one word.</p>
+<p><img alt="Three portraits with their own gender word and with &quot;non-binary&quot;: under L06 the dwarf and the half-orc become photographs with either word, the non-binary ones as men; the tiefling is mixed with &quot;male&quot; and anime in 4 of 4 with &quot;non-binary&quot;." src="../assets/31-what-an-edit-leaves/F31.8_te_gender_sheet.webp" /></p>
+<p>Last, I put the four elf-rogue descriptions into the four panels of one comic page. Under L06 not a single panel left
+the comic, 32 of 32. The content still changed, hoods gone, younger women with lighter skin, in every panel; I couldn't
+say with confidence whether it was the same change in all four, so that question has no answer here.</p>
+<p><img alt="Two comic pages with the four elf-rogue descriptions in their panels, two orders: under L06 every panel stays Western comic while the characters lose their hoods and become young, lighter-skinned women against a grey-blue background." src="../assets/31-what-an-edit-leaves/F31.9_te_panels_sheet.webp" /></p>
 <h2 id="p-31-what-an-edit-leaves--the-verdict">The verdict</h2>
 <p><strong>Holds</strong> (C93, C100): an edit's push bends once; the bend is the network's, its size the edit's, the same on six
 prompts within 7 degrees. <strong>Holds</strong> (C101): deeper layers bend less (Spearman -0.655). <strong>Overturned</strong> (C101): the
@@ -3947,7 +3968,9 @@ move the picture (23 of 24). <strong>Ambiguous</strong> (C102): deep edits carry
 seed. <strong>Ambiguous</strong> (C103, C104): different random pushes at one layer change content differently; the eye says yes,
 the embeddings disagree. <strong>Holds</strong> (C105): across subjects a fixed perturbation gives a family resemblance, across
 style domains too, by a "something similar" added during the pass. <strong>Open</strong>: embedding cosines do not track "the same
-change".</p>
+change". <strong>Holds</strong> (C107): on the elf rogue, the gender word decides where L06 sends the style (+0.75). <strong>Overturned</strong>
+(C107): the species word decides it (+0.00). <strong>Overturned</strong> (C108): "non-binary" does it on other characters and in short
+prompts (+0.33, 1 of 3; +0.12). <strong>Open</strong> (C108): in a four-panel page no panel changes genre under L06, 0 of 32.</p>
 <h2 id="p-31-what-an-edit-leaves--why-i-might-be-wrong">Why I might be wrong</h2>
 <p><strong>One observer, who knows the material.</strong> Every blind label on this page is mine. Conditions were hidden and orders
 random, but I had seen many of these pictures before, and the image-model presets of C106 are my own. I also knew the
@@ -3967,6 +3990,10 @@ characters, two seeds. One direction per random push.</p>
 <p><strong>The measure that failed.</strong> C102 and C103 first measured "the same change" with the cosine between embedding change
 vectors. Checked against my labels, it barely tells "same" from "different" (pitfall 94). The computed halves of those
 tests are withdrawn; the blind halves stand.</p>
+<p><strong>My reading was wrong once more, and the eye knew the hypotheses.</strong> C107 was built on my observation that the elf goes
+anime because her ears survive; it did not hold, and Alessandro had suspected a survival bias. In C107 and C108 he
+labelled blind but knew both hypotheses, and an identical picture was labelled anime in C73 and cartoon in C107. The
+boundary between painting and realistic is soft by his own note.</p>
 <h2 id="p-31-what-an-edit-leaves--the-data">The data</h2>
 <h3 id="p-31-what-an-edit-leaves--one-bend-sized-by-the-edit">One bend, sized by the edit</h3>
 <p>C93 followed the push of five edits on three characters along the dose, against random pushes injected at the same
@@ -4180,6 +4207,67 @@ of different families 6 of 9, the same preset at another sign or strength 3 of 3
 push 2 of 2, two random pushes of the same layer 4 of 7. Exploratory: the failures cluster on random pushes at layer 26
 (two trials made only of them, both failed), and every trial containing the L26 edit succeeded. Details in
 <code>docs/odd_one_out_result.md</code>.</p>
+<h3 id="p-31-what-an-edit-leaves--where-the-style-goes">Where the style goes</h3>
+<p>C107 changed only the subject phrase of the elf rogue ("non-binary rogue wood elf") into four variants, plus a female
+human ranger, plain and under L06 MLP doubled at the four C52 seeds (40 renders, gates pixel-identical). Blind labels,
+40 pictures and 6 repeats, genre and pointed ears. Every plain picture is Western comic.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>under L06</th>
+<th>anime</th>
+<th>painting</th>
+<th>realistic</th>
+<th>other</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>non-binary elf</td>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>cartoon 1</td>
+</tr>
+<tr>
+<td>female elf</td>
+<td>0</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>non-binary human</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>female human</td>
+<td>0</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>female ranger</td>
+<td>0</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rule 1, species: +0.00. Rule 2, gender word: +0.75. My prediction for the ranger (realistic in at least 3 of 4) failed.
+Test-retest 5 of 6. Details in <code>docs/te_species_result.md</code>.</p>
+<p>C108 (96 renders, gates pixel-identical) asked whether it generalises. Block A changed only the gender word of three
+other portraits; under L06 the dwarf and the half-orc are realistic in 4 of 4 with either word, the tiefling is anime in
+4 of 4 with "non-binary" and mixed with "male" (comic, cartoon, realistic 2). Block B, "Western comics style, portrait of
+a {non-binary | female} {elf | human}.": under L06 painting in 14 of 16, anime 1, other 1. Block C put the four C107
+descriptions into one comic page, in two orders: 16 of 16 pages keep four panels, and 0 of 32 edited panels change
+genre. Test-retest 6 of 6 and 2 of 2. The paired question ("is the change of the same kind in the four panels?") was not
+labelled. Details in <code>docs/te_gender_result.md</code>.</p>
 <h3 id="p-31-what-an-edit-leaves--what-the-embeddings-missed">What the embeddings missed</h3>
 <p>For every C104 unit I had an answer, same or different, and a computed number: the mean cosine between the DINOv2 (or
 CSD, for style) change vectors of the pictures in it. If the cosine tracked what I see, it would separate the two
@@ -4206,9 +4294,9 @@ tuner:
   version: not recorded — the node is in this repository
   mode: one MLP or attention half of a text-encoder layer, weight x (1 + d); random pushes as per-token random unit directions (seeds 9393, 9394, 9395) x alpha x the per-token norm of the unedited MLP output
 prompts:
-  files: [data/te_massive_plan.csv, data/te_depth_control_plan.csv, data/te_depth_control2_plan.csv, data/te_domain_transfer_plan.csv, data/odd_one_out_key.csv]
-  ids: [D1_dwarf_paladin, E2_elf_rogue, O4_halforc_fighter, G5_gnome_wizard, S1_rally, C4_stilllife, P2_lotuscanoe, P5_comic_panels, LN, &quot;G1-G6 (stage 5, C106 only)&quot;]
-seeds: [2645751, 3316624, 2718281, 1618033, 42, 777, 1337, 9999, 4242145]
+  files: [data/te_massive_plan.csv, data/te_depth_control_plan.csv, data/te_depth_control2_plan.csv, data/te_domain_transfer_plan.csv, data/odd_one_out_key.csv, data/te_species_plan.csv, data/te_gender_plan.csv]
+  ids: [D1_dwarf_paladin, E2_elf_rogue, O4_halforc_fighter, G5_gnome_wizard, S1_rally, C4_stilllife, P2_lotuscanoe, P5_comic_panels, LN, T7_tiefling_bard, &quot;G1-G6 (stage 5, C106 only)&quot;, &quot;C107 variants EN EF HN HF RF&quot;, &quot;C108 A_D1/O4/T7 orig and nb, B_SEN/SEF/SHN/SHF, C_O1/O2&quot;]
+seeds: [2645751, 3316624, 2718281, 1618033, 3605551, 4123105, 42, 777, 1337, 9999, 4242145]
 conditions:
   - name: C93, C100, C101 dose curves of the conditioning (no renders), d 0.05 to 10 and -0.05 to -3
     dose: 0.05-10
@@ -4225,26 +4313,29 @@ conditions:
   - name: C105, L14 and L26 MLP and random pushes at L09 and L26, matched per subject on DINOv2 distance 0.25
     dose: per subject, data/te_domain_transfer_strengths.csv
     measured_D: data/te_domain_transfer_metrics.csv
+  - name: C107, C108, L06 MLP doubled in-graph (ArthemyKrea2CLIPTuner, Real Value, granular_json)
+    dose: 1.000
+    measured_D: not measured; blind genre labels
 outputs:
-  folders: [benchmark_te_massive, benchmark_te_depth_control, benchmark_te_depth_control2, benchmark_te_domain_transfer, &quot;benchmark_stage5/renders (reused in C106)&quot;]
-  manifests: [data/te_massive_plan.csv, data/te_depth_control_plan.csv, data/te_depth_control2_cal_plan.csv, data/te_depth_control2_plan.csv, data/te_domain_transfer_cal_plan.csv, data/te_domain_transfer_plan.csv]
+  folders: [benchmark_te_massive, benchmark_te_depth_control, benchmark_te_depth_control2, benchmark_te_domain_transfer, &quot;benchmark_stage5/renders (reused in C106)&quot;, benchmark_te_species, benchmark_te_gender]
+  manifests: [data/te_massive_plan.csv, data/te_depth_control_plan.csv, data/te_depth_control2_cal_plan.csv, data/te_depth_control2_plan.csv, data/te_domain_transfer_cal_plan.csv, data/te_domain_transfer_plan.csv, data/te_species_plan.csv, data/te_gender_plan.csv]
   encodes_without_images: [benchmark_te_shapes (C93), benchmark_te_shapes2 (C100), benchmark_te_shapes_layers (C101)]
 analysis:
-  scripts: [experiments/te_shapes.py, experiments/te_shapes2.py, experiments/te_shapes_layers.py, experiments/plot_te_shapes.py, experiments/plot_te_shapes_layers.py, experiments/te_massive.py, experiments/te_massive_channels.py, experiments/te_depth_control.py, experiments/te_depth_control_page.py, experiments/te_depth_control2.py, experiments/te_content_style.py, experiments/te_domain_transfer.py, experiments/odd_one_out.py, experiments/eye_grid_page.py]
-  produces: data/te_shapes_tests.csv, data/te_shapes2_tests.csv, data/te_shapes_layers_tests.csv, data/te_massive_tests.csv, data/te_depth_control_tests.csv, data/te_depth_control2_tests.csv, data/te_content_style_tests.csv, data/te_domain_transfer_tests.csv, data/odd_one_out_tests.csv
+  scripts: [experiments/te_shapes.py, experiments/te_shapes2.py, experiments/te_shapes_layers.py, experiments/plot_te_shapes.py, experiments/plot_te_shapes_layers.py, experiments/te_massive.py, experiments/te_massive_channels.py, experiments/te_depth_control.py, experiments/te_depth_control_page.py, experiments/te_depth_control2.py, experiments/te_content_style.py, experiments/te_domain_transfer.py, experiments/odd_one_out.py, experiments/eye_grid_page.py, experiments/te_species.py, experiments/te_species_page.py, experiments/te_gender.py, experiments/te_gender_page.py]
+  produces: data/te_shapes_tests.csv, data/te_shapes2_tests.csv, data/te_shapes_layers_tests.csv, data/te_massive_tests.csv, data/te_depth_control_tests.csv, data/te_depth_control2_tests.csv, data/te_content_style_tests.csv, data/te_domain_transfer_tests.csv, data/odd_one_out_tests.csv, data/te_species_tests.csv, data/te_gender_tests.csv
 </code></pre>
 <h2 id="p-31-what-an-edit-leaves--provenance">Provenance</h2>
 <ul>
-<li>Renders: TEP2 (25, gate included), C102 (156), C103 (228, of which 132 calibration), C105 (416, of which 342 calibration).
+<li>Renders: TEP2 (25, gate included), C102 (156), C103 (228, of which 132 calibration), C105 (416, of which 342 calibration), C107 (40, gates included), C108 (96, gates included).
   C104 and C106 made no renders: C104 relabelled C103's pictures, C106 reused C103's and the stage-5 renders.</li>
 <li>Encodes without images: C93 (3,744 trajectory rows), C100 (60 trajectories), C101 (140 trajectories).</li>
 <li><strong>Pre-registrations:</strong> <code>docs/prereg_te_shapes.md</code>, <code>docs/prereg_te_shapes2.md</code> (+ amendment 1),
   <code>docs/prereg_te_shapes_layers.md</code> (+ amendment 1), <code>docs/prereg_te_massive.md</code> (+ amendment 1),
   <code>docs/prereg_te_depth_control.md</code>, <code>docs/prereg_te_depth_control2.md</code>, <code>docs/prereg_te_content_style.md</code>,
-  <code>docs/prereg_te_domain_transfer.md</code> (+ amendments 1-2), <code>docs/prereg_odd_one_out.md</code>.</li>
+  <code>docs/prereg_te_domain_transfer.md</code> (+ amendments 1-2), <code>docs/prereg_odd_one_out.md</code>, <code>docs/prereg_te_species.md</code>, <code>docs/prereg_te_gender.md</code>.</li>
 <li><strong>Result documents:</strong> <code>docs/te_shapes_result.md</code>, <code>docs/te_shapes2_result.md</code>, <code>docs/te_shapes_layers_result.md</code>,
   <code>docs/te_massive_result.md</code>, <code>docs/te_depth_control_result.md</code>, <code>docs/te_depth_control2_result.md</code>,
-  <code>docs/te_content_style_result.md</code>, <code>docs/te_domain_transfer_result.md</code>, <code>docs/odd_one_out_result.md</code>.</li>
+  <code>docs/te_content_style_result.md</code>, <code>docs/te_domain_transfer_result.md</code>, <code>docs/odd_one_out_result.md</code>, <code>docs/te_species_result.md</code>, <code>docs/te_gender_result.md</code>.</li>
 <li><strong>Data:</strong> <code>data/te_shapes_trajectories.csv</code>, <code>data/te_shapes2_trajectories.csv</code>,
   <code>data/te_shapes_layers_trajectories.csv</code>, <code>data/te_massive_metrics.csv</code>, <code>data/te_massive_encoder.csv</code>,
   <code>data/te_massive_channels.csv</code>, <code>data/te_depth_control_encoder.csv</code>, <code>data/te_depth_control_metrics.csv</code>,
@@ -4252,7 +4343,10 @@ analysis:
   <code>data/te_depth_control2_strengths.csv</code>, <code>data/te_depth_control2_metrics.csv</code>, <code>data/te_depth_control2_key.csv</code>,
   <code>data/te_depth_control2_labels.csv</code>, <code>data/te_content_style_key.csv</code>, <code>data/te_content_style_labels.csv</code>,
   <code>data/te_domain_transfer_strengths.csv</code>, <code>data/te_domain_transfer_metrics.csv</code>, <code>data/te_domain_transfer_key.csv</code>,
-  <code>data/te_domain_transfer_labels.csv</code>, <code>data/odd_one_out_key.csv</code>, <code>data/odd_one_out_labels.csv</code>.</li>
+  <code>data/te_domain_transfer_labels.csv</code>, <code>data/odd_one_out_key.csv</code>, <code>data/odd_one_out_labels.csv</code>,
+  <code>data/te_species_key.csv</code>, <code>data/te_species_labels.csv</code>, <code>data/te_gender_key_single.csv</code>,
+  <code>data/te_gender_labels_single.csv</code>, <code>data/te_gender_key_panels.csv</code>, <code>data/te_gender_labels_panels.csv</code>,
+  <code>data/te_gender_key_pairs.csv</code> (pairs not labelled).</li>
 <li><strong>Labels and keys</strong> were committed in the order the protocols require: key before labels, labels as downloaded before
   any count. All blind labels are Alessandro's.</li>
 <li><strong>Pitfalls:</strong> 93 (matching layers on the push to the conditioning), 94 (embedding cosines read as "the same change").</li>
