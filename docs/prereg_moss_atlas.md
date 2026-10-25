@@ -29,3 +29,11 @@ model e text encoder"). Working setting T10 (MOSS2), with confirmation cells at 
 
 One seed; DINOv2 distance says how much, not what; doses not calibrated per layer; turbo results are provisional until
 confirmed (MOSS2: 4 of 6 edits confirmed).
+
+## Amendment 1 (2026-10-25, before any render)
+
+At Alessandro's request, for direct comparison with the Krea-2 atlases (`data/single_blocks_atlas_plan.csv`,
+`data/split_atlas_plan.csv`): the prompts become **the blacksmith (P01_blacksmith), the rally (S1_rally) and the close-up
+(F4_closeup)**, with the same texts, at **seed 2718281**, 1024 × 1280 (as on Krea). The confirmation cells (same 12 unit ×
+sign, same draw) are rendered on the **blacksmith** instead of the dwarf. Rules unchanged ("median over the four prompts"
+becomes "over the three prompts"). 904 renders: 891 at T10 (about 5 h 30 min) and 13 at R50 (about 37 min).

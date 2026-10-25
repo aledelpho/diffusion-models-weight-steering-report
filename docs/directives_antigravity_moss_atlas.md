@@ -1,7 +1,7 @@
-# Directive for Antigravity — MOSS3, the MOSS atlas (1,201 renders, about 8 hours)
+# Directive for Antigravity — MOSS3, the MOSS atlas (904 renders, about 6 hours; amendment 1)
 
 Written by Claude, 2026-10-25. Pre-registration: `docs/prereg_moss_atlas.md`. Script: `experiments/moss_atlas.py`.
-Plan frozen: `data/moss_atlas_plan.csv` (do **not** run `--plan`). Settings as MOSS2 (T10 with the DMD2 LoRA; 13
+Amendment 1: the Krea-2 atlas prompts (blacksmith, rally, close-up) at seed 2718281. Plan frozen: `data/moss_atlas_plan.csv` (do **not** run `--plan`). Settings as MOSS2 (T10 with the DMD2 LoRA; 13
 confirmation renders at R50, last in the queue). Tuner v4, no restart needed.
 
 ## Hard rules
@@ -22,8 +22,8 @@ cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 & $PY moss_atlas.py --queue
 ```
 
-`queued 1201`. Wait for the queue to empty (a background wait is fine). Then
-`& $PY moss_atlas.py --count` → `expected 1201 missing 0 []`.
+`queued 904`. Wait for the queue to empty (a background wait is fine). Then
+`& $PY moss_atlas.py --count` → `expected 904 missing 0 []`.
 
 ## Step 2 — analyze and sheets
 
@@ -32,7 +32,7 @@ cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 & $PY moss_atlas.py --sheets
 ```
 
-Paste every line of `--analyze`. The sheets go to `D:\StabilityMatrix-win-x64\Data\Images\Text2Img\_moss_atlas\` (eight
+Paste every line of `--analyze`. The sheets go to `D:\StabilityMatrix-win-x64\Data\Images\Text2Img\_moss_atlas\` (six
 files; for Alessandro, do not describe them).
 
 ## Step 3 — paste back and commit
@@ -41,5 +41,5 @@ Write `docs/RENDERS_2026-10-25_moss_atlas.md` (outputs, render times T10 and R50
 `data/moss_atlas_metrics.csv` and `data/moss_atlas_tests.csv`, message in Italian:
 
 ```
-MOSS3: atlante MOSS (1201 render, 148 unità x 2 segni x 4 prompt in turbo, 13 conferme a 50 step), resoconto di Antigravity
+MOSS3: atlante MOSS (904 render, 148 unità x 2 segni x 3 prompt degli atlanti Krea in turbo, 13 conferme a 50 step sulla fabbra), resoconto di Antigravity
 ```

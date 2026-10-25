@@ -4,14 +4,14 @@ Facciamo un atlante del model e text encoder?").
 
   python moss_atlas.py --plan      # data/moss_atlas_plan.csv (committed; do not re-run)
   python moss_atlas.py --queue     # ComfyUI running, MOSS tuner v4, DMD2 LoRA
-  python moss_atlas.py --count     # expected 1201 missing 0 []
+  python moss_atlas.py --count     # expected 904 missing 0 []
   python moss_atlas.py --analyze   # DINOv2 -> data/moss_atlas_metrics.csv, data/moss_atlas_tests.csv
   python moss_atlas.py --sheets    # Text2Img/_moss_atlas/<prompt>_<dit|te>.jpg
 
 Units (148): DiT layers 0-41 x {attention = proj.o, MLP = proj.ffn_down}; TE layers 0-31 x {MLP = mlp.down_proj,
 attention = self_attn.o_proj on the 8 full-attention layers (3, 7, ..., 31), linear_attn.out_proj on the other 24}.
 Scaling the output projection scales the whole sublayer's contribution. Doses d = +1 (doubled) and d = -1 (removed).
-Four prompts at seed 2645751, T10 (MOSS2 bench settings). Confirmation cells at R50 named in the plan (block "confirm").
+Three prompts at seed 2718281 (those of the Krea-2 atlases: blacksmith, rally, close-up; amendment 1), T10 (MOSS2 bench settings). Confirmation cells at R50 named in the plan (block "confirm").
 """
 import argparse, csv, json, random, statistics, sys, urllib.request
 from pathlib import Path
@@ -24,8 +24,8 @@ DATA = HERE.parent / "data"
 PLAN, METRICS, TESTS = DATA / "moss_atlas_plan.csv", DATA / "moss_atlas_metrics.csv", DATA / "moss_atlas_tests.csv"
 FOLDER = "benchmark_moss_atlas"
 B.FOLDER = FOLDER
-PROMPTS = ["D1_dwarf_paladin", "S1_rally", "C4_stilllife", "P5_comic_panels"]
-SEED = "2645751"
+PROMPTS = ["P01_blacksmith", "S1_rally", "F4_closeup"]   # amendment 1: the prompts and seed of the Krea-2 atlases
+SEED = "2718281"
 DOSES = {"p": 1.0, "m": -1.0}
 FULL_ATTN = set(range(3, 32, 4))
 
@@ -46,8 +46,10 @@ def rd(p):
 
 
 def make_plan():
-    import te_shapes2 as TS2
-    tx = TS2.texts(); U = units(); rows = []
+    tx = {}
+    for r in rd(DATA / "single_blocks_atlas_plan.csv"):
+        tx.setdefault(r["prompt_id"], r["prompt_text"])
+    U = units(); rows = []
     def add(block, setting, p, cond, te, dit):
         name = f"{setting}_{p}_{cond}_seed{SEED}"
         rows.append({"block": block, "prompt": p, "seed": SEED, "cond": cond, "setting": setting, "te_json": te or "{}",
@@ -60,10 +62,10 @@ def make_plan():
                 add("atlas", "T10", p, f"{un}_{sg}", j if half == "te" else "", j if half == "dit" else "")
     rng = random.Random(31337)                                  # confirmation cells, named before any render
     picks = rng.sample([(un, sg) for un in U for sg in DOSES], 12)
-    add("confirm", "R50", "D1_dwarf_paladin", "plain", "", "")
+    add("confirm", "R50", "P01_blacksmith", "plain", "", "")
     for un, sg in picks:
         half, key = U[un]; j = json.dumps({key: DOSES[sg]})
-        add("confirm", "R50", "D1_dwarf_paladin", f"{un}_{sg}", j if half == "te" else "", j if half == "dit" else "")
+        add("confirm", "R50", "P01_blacksmith", f"{un}_{sg}", j if half == "te" else "", j if half == "dit" else "")
     with open(PLAN, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
     print("plan rows:", len(rows), "confirm:", [f"{a}_{b}" for a, b in picks])
