@@ -106,7 +106,7 @@ def renders():
     im = {n: np.asarray(Image.open(IMG / FOLDER / f"{n}_00001_.png").convert("RGB"), dtype=np.int16) for n in RENDERS}
     d = lambda a, b: (int(np.abs(im[a] - im[b]).max()), float(np.abs(im[a] - im[b]).mean()))
     a1, a2, a3 = d("plain_a", "plain_b"), d("plain_a", "plain_c"), d("plain_a", "empty_json")
-    c1, c2 = d("plain_a", "te_L06_mlp_down_x2"), d("plain_a", "dit_L20_ffn_down_x2")
+    c1, c2 = d("empty_json", "te_L06_mlp_down_x2"), d("empty_json", "dit_L20_ffn_down_x2")   # against the same route (fix 2026-10-25)
     print("A plain twice: max", a1[0], "| plain again later: max", a2[0], "| tuners with '{}': max", a3[0])
     print(f"C text-encoder edit: mean {c1[1]:.1f} | DiT edit: mean {c2[1]:.1f}")
     print("GATE A", "PASS" if a1[0] == 0 and a2[0] == 0 and a3[0] == 0 else "FAIL - stop")

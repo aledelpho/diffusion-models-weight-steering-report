@@ -12,7 +12,8 @@ Two nodes, both taking `granular_json`, a JSON object {key: d}; every matrix nam
 The edit is an object patch on a clone (the loaded model is never modified). Version 2 (2026-10-25, after gate C
 failed): ComfyUI loads MOSS with dynamic VRAM (ModelPatcherDynamic), which streams weights from its own storage and
 ignores object patches; the tuners therefore always work on a NON-dynamic clone (clone(disable_dynamic=True)), even
-with an empty JSON, so that "{}" checks that this route alone changes nothing (gate A). A bf16 weight is replaced by
+with an empty JSON, so that "{}" checks that this route alone changes nothing (gate A). Version 3: the CLIP clone
+encodes with the patcher's own model (CLIP.clone keeps the old cond_stage_model otherwise). A bf16 weight is replaced by
 (weight in float32 x (1 + d)) cast back to its dtype. A W4A8 quantised weight (comfy_kitchen QuantizedTensor) keeps its
 packed codes, codebook and group scales; only its per-output-channel scale `s_channel` is multiplied by (1 + d), which is
 the same as scaling the dequantised weight (dequantisation is codes x s_rel x s_channel, no correction term in this
@@ -107,6 +108,9 @@ class ArthemyMossCLIPTuner:
     def tune(self, clip, granular_json):
         edits = _parse(granular_json)
         c = clip.clone(disable_dynamic=True)
+        # Version 3: CLIP.clone() keeps the old cond_stage_model while the patcher gets a new, non-dynamic model;
+        # encoding must run on the model the patcher loads and patches.
+        c.cond_stage_model = c.patcher.model
         apply_edits(c.patcher, c.patcher.model, edits, ["language_model.", "model."])
         return (c,)
 

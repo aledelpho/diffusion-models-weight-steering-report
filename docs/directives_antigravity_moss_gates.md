@@ -13,6 +13,13 @@ $PY = "D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 ```
 
+**Third resume note (2026-10-25).** Your diagnosis is right: `CLIP.clone()` kept the old `cond_stage_model`, so the
+text-encoder edit was never used and the mismatch moved the picture (mean 5.2). Node version 3 encodes with the patcher's
+own model. Gate C now compares each edit with `empty_json` (same route). To do: copy the node again, **ask Alessandro to
+restart ComfyUI**, rename `benchmark_moss_gate` to `benchmark_moss_gate_v2`, re-run Step 2 and Step 3. If gate A still
+fails only on `empty_json`, report the pairwise table as you did: it would mean the non-dynamic text-encoder route
+itself changes the conditioning.
+
 **Second resume note (2026-10-25).** Gate A passed; gate C failed (mean 0.0): with dynamic VRAM,
 ComfyUI ignored the object patches (your diagnosis, confirmed). Node version 2 always works on a non-dynamic clone.
 To do: (1) copy the new `tools/comfyui_moss_tuner/__init__.py` over the installed one (Step 1, copy only) and **ask
