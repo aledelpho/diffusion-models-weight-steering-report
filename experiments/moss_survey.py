@@ -3,7 +3,7 @@ Written 2026-10-25. Reads only safetensors headers (no weights loaded, no GPU) a
 
   python moss_survey.py     # data/moss_structure_*.csv, docs/moss_survey.md, docs/moss_source/*.py
 
-For every checkpoint found (MOSS DiT base/sft, Qwen3.5-9B text encoder, FLUX.2 small VAE, and Krea-2's DiT and text
+For every checkpoint found (MOSS DiT SFT, the target, and Base if present, Qwen3.5-9B text encoder, FLUX.2 small VAE, and Krea-2's DiT and text
 encoder for comparison): every tensor name with digits collapsed to '#', how many times the pattern repeats, shape and
 dtype of the first instance; the number of blocks per prefix. Then every ComfyUI source file that mentions MOSS.
 """
@@ -14,7 +14,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_DIRS = [Path(r"D:\StabilityMatrix-win-x64\Data\Models"), Path(r"C:\StabilityMatrix-win-x64\Data\Models")]
 COMFY = [Path(r"D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI"), Path(r"C:\StabilityMatrix-win-x64\Data\Packages\ComfyUI")]
-WANT = {"moss_dit": "moss_image_*.safetensors", "moss_te": "qwen3.5_9b*.safetensors", "moss_vae": "flux2-vae*.safetensors",
+WANT = {"moss_dit": "moss_image_sft*.safetensors",          # the SFT checkpoint is the one we will edit (2026-10-25)
+        "moss_dit_base": "moss_image_base*.safetensors",     # reported if present, for comparison only
+        "moss_te": "qwen3.5_9b*.safetensors", "moss_vae": "flux2-vae*.safetensors",
         "krea2_dit": "krea2_turbo*.safetensors", "krea2_te": "qwen3vl_4b*.safetensors"}
 
 

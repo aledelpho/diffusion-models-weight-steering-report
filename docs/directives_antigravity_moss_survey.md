@@ -3,6 +3,10 @@
 Written by Claude, 2026-10-25. Script: `experiments/moss_survey.py`. It reads only the headers of the checkpoints (no
 weight is loaded, no GPU) and copies ComfyUI's source files that mention MOSS into `docs/moss_source/`.
 
+**Target checkpoint (Alessandro, 2026-10-25): the SFT build in bf16,**
+`D:\StabilityMatrix-win-x64\Data\Models\DiffusionModels\moss_image_sft_bf16.safetensors`. The Base build, if present,
+is surveyed only for comparison; a `NOT FOUND` for it is fine. A `NOT FOUND` for the SFT build is not: stop and report.
+
 * **Do not close anything.** Do not use `monitor_and_shutdown.py`, do not shut the PC down, do not change power or
   system settings. Do not restart ComfyUI. **No renders.**
 * **If a step fails,** stop and paste the output. Do not change the script.
