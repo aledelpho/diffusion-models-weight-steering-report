@@ -1,0 +1,8 @@
+test,value,verdict
+seed floor R50,median D between the two seeds 0.137,-
+seed floor E25,median D between the two seeds 0.180,-
+seed floor T8,median D between the two seeds 0.105,-
+S1 E25 plain close to R50,median D 0.031 vs half the R50 floor 0.069,PASS
+S2 E25 edits proportional to R50,"Spearman 0.47 (bar 0.80), median ratio 0.90 (0.5-2)",FAIL
+S1 T8 plain close to R50,median D 0.142 vs half the R50 floor 0.069,FAIL
+S2 T8 edits proportional to R50,"Spearman 0.48 (bar 0.80), median ratio 1.57 (0.5-2)",FAIL
