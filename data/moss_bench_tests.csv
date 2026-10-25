@@ -1,0 +1,24 @@
+test,value,verdict
+V1 the dwarf rendered twice in one session,max 0,PASS
+V2 DiT layer 41 x 1.0001 (D1_dwarf_paladin),max 0,PASS
+"V2r TE layer 31 MLP down x 1.0001 (D1_dwarf_paladin), reported","max 255, changed pixels 0.760",-
+V2 DiT layer 41 x 1.0001 (S1_rally),max 0,PASS
+"V2r TE layer 31 MLP down x 1.0001 (S1_rally), reported","max 241, changed pixels 0.965",-
+floor D1_dwarf_paladin,"median D between seeds 0.098 (min 0.073, n 6)",-
+floor S1_rally,"median D between seeds 0.335 (min 0.306, n 6)",-
+floor C4_stilllife,"median D between seeds 0.249 (min 0.105, n 6)",-
+floor P5_comic_panels,"median D between seeds 0.075 (min 0.063, n 6)",-
+floor P2_lotuscanoe,"median D between seeds 0.056 (min 0.054, n 6)",-
+floor LN,"median D between seeds 0.155 (min 0.081, n 6)",-
+"ladder D1_dwarf_paladin dit06, reported",0.1:0.006 0.3:0.011 1:0.027 2:0.031,-
+"ladder D1_dwarf_paladin dit20, reported",0.1:0.004 0.3:0.013 1:0.029 2:0.062,-
+"ladder D1_dwarf_paladin dit35, reported",0.1:0.002 0.3:0.015 1:0.056 2:0.383,-
+"ladder D1_dwarf_paladin te06, reported",0.1:0.002 0.3:0.005 1:0.022 2:0.040,-
+"ladder D1_dwarf_paladin te15, reported",0.1:0.004 0.3:0.009 1:0.032 2:0.034,-
+"ladder D1_dwarf_paladin te27, reported",0.1:0.006 0.3:0.003 1:0.038 2:0.115,-
+"ladder S1_rally dit06, reported",0.1:0.011 0.3:0.039 1:0.039 2:0.058,-
+"ladder S1_rally dit20, reported",0.1:0.010 0.3:0.039 1:0.226 2:0.171,-
+"ladder S1_rally dit35, reported",0.1:0.013 0.3:0.028 1:0.089 2:0.204,-
+"ladder S1_rally te06, reported",0.1:0.011 0.3:0.033 1:0.044 2:0.056,-
+"ladder S1_rally te15, reported",0.1:0.013 0.3:0.028 1:0.030 2:0.035,-
+"ladder S1_rally te27, reported",0.1:0.011 0.3:0.043 1:0.070 2:0.156,-
