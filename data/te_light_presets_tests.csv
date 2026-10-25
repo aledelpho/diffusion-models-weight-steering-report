@@ -1,0 +1,8 @@
+rule,value,verdict
+0_null_content,0.00 (n 4),valid
+1_presets_vs_single_layer_content,presets 0.417 (n 24) - E14/E26 0.500 (n 4) = -0.083,no difference
+2_domains_presets_vs_null,presets 0.500 (n 24) - null 0.125 (n 4) = +0.375,the preset's change carries across domains
+3_style (reported),presets 0.333 - E14/E26 0.125 - null 0.000,-
+3_middle_vs_full (reported),content 0.500 vs 0.333; domains 0.542 vs 0.458,-
+3_strength (reported),median x 2.0 (about +-0.60 per layer); 84 of 96 pairs reached,-
+3_retest (reported),3 of 4 identical on all three questions,-
