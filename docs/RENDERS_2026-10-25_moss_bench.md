@@ -139,3 +139,53 @@ Confronto tra la risposta ad $d = 1.0$ su T10 (working setting a 10 step turbo) 
 ## Vincoli di Riservatezza Visiva
 
 In conformità al protocollo del banco MOSS2 e alle regole operative di progetto, **nessuna immagine generata è stata aperta o descritta visivamente**. La pagina di conferma visiva e valutazione qualitativa in cieco è riservata a Claude e ad Alessandro.
+
+---
+
+## Emendamento 3: Conferma a $d = 2.0$ a 50 step (6 Render R50) e Pagina Cieca `occhio_MOSS2b`
+
+Esecuzione condotta seguendo le direttive prescritte in [docs/directives_antigravity_moss_confirm2.md](directives_antigravity_moss_confirm2.md) e la pre-registrazione [docs/prereg_moss_bench.md](prereg_moss_bench.md) (Emendamento 3).  
+Poiché a dose $d = 1.0$ i cambiamenti risultavano appena percettibili a occhio nudo, sono stati generati 6 render di conferma a 50 step (R50) per il prompt `D1_dwarf_paladin` a dose $d = 2.0$ (`p2`), corrispondenti ai 6 layer testati (`dit06`, `dit20`, `dit35`, `te06`, `te15`, `te27`).
+
+### 1. Accodamento e Conteggio File
+
+```powershell
+& $PY moss_bench.py --queue
+```
+*Output:*
+```text
+queued 6
+```
+*(Gli 84 render già esistenti sono stati ignorati; accodati esclusivamente i 6 render del blocco `confirm2`).*
+
+Verifica del conteggio complessivo:
+```powershell
+& $PY moss_bench.py --count
+```
+*Output Verbatim:*
+```text
+expected 90 missing 0 []
+```
+
+### 2. Tempi di Rendering Misurati (R50 a $d = 2.0$)
+
+* **`R50 confirm2`** (6 render a 50 step, euler, CFG 3.0, 1024×1280):
+  * **165.9 s** di media (mediana **167.0 s**, min **161.9 s**, max **170.6 s**).
+  * Durata complessiva del blocco: circa 16 minuti e 38 secondi.
+
+### 3. Generazione della Pagina Cieca e Chiave Sperimentale
+
+Esecuzione del generatore del test in cieco:
+```powershell
+& $PY moss_confirm_page.py
+```
+*Output Verbatim:*
+```text
+cards 15 -> D:\StabilityMatrix-win-x64\Data\Images\Text2Img\occhio_MOSS2b.html
+```
+
+* File generati:
+  * Foglio cieco per la valutazione visiva: `D:\StabilityMatrix-win-x64\Data\Images\Text2Img\occhio_MOSS2b.html` (15 schede: 6 matched, 6 control, 3 ripetute).
+  * Chiave di decodifica sperimentale pre-registrata: [data/moss_confirm2_key.csv](../data/moss_confirm2_key.csv).
+
+In conformità al protocollo sperimentale, nessuna immagine o scheda di confronto è stata aperta o descritta dall'agente.

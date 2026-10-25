@@ -1,0 +1,16 @@
+unit,kind,t10_edit,r50_edit,t10_first,repeat
+M01,matched,dit06,dit06,0,0
+M02,control,te15,dit20,1,0
+M03,control,dit20,te15,1,0
+M04,matched,dit20,dit20,1,0
+M05,matched,dit35,dit35,0,0
+M06,control,te27,dit35,0,0
+M07,matched,dit06,dit06,1,1
+M08,control,dit35,te27,0,0
+M09,matched,dit20,dit20,1,1
+M10,matched,te06,te06,1,0
+M11,matched,te27,te27,0,0
+M12,control,dit06,te06,1,0
+M13,control,te06,dit06,1,0
+M14,matched,te15,te15,0,0
+M15,matched,dit35,dit35,0,1
