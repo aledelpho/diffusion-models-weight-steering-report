@@ -3,11 +3,13 @@
 
   python moss_bench.py --plan       # data/moss_bench_plan.csv (committed; do not re-run)
   python moss_bench.py --queue      # ComfyUI running, MOSS tuner v3 installed
-  python moss_bench.py --count      # expected 77 missing 0 []
+  python moss_bench.py --count      # expected 89 missing 0 []
   python moss_bench.py --analyze    # V1, V2 pixel checks; DINOv2 -> data/moss_bench_metrics.csv; data/moss_bench_tests.csv
 
-Sampling and graph as experiments/moss_gate.py (MOSS-Image SFT bf16, er_sde, simple, 25 steps, CFG 2.5, 1024 x 1280,
-no SLG, no prompt enhancer). Every render goes through both MOSS tuners (non-dynamic route), "{}" when unedited, so
+Amendment 1 (2026-10-25, before any render was kept): sampling euler, simple, 50 steps, CFG 3 (the official setting and
+Alessandro's best pictures), 1024 x 1280, no SLG, no prompt enhancer; plus euler_ancestral (Krea-2's sampler) on the
+floor prompts at two seeds, to see whether one sampler can serve both models. V1 is now two identical renders in one
+session (plain_repro against the floor render). Every render goes through both MOSS tuners (non-dynamic route), "{}" when unedited, so
 plain and edited pictures share one route.
 """
 import argparse, csv, json, statistics, sys, urllib.request
@@ -40,14 +42,19 @@ def texts():
 
 def make_plan():
     tx = texts(); rows = []
-    def add(block, p, s, cond, te, dit):
+    def add(block, p, s, cond, te, dit, sampler="euler"):
         name = f"{p}_{cond}_seed{s}"
-        rows.append({"block": block, "prompt": p, "seed": s, "cond": cond, "te_json": te or "{}", "dit_json": dit or "{}",
+        rows.append({"block": block, "prompt": p, "seed": s, "cond": cond, "sampler": sampler, "te_json": te or "{}", "dit_json": dit or "{}",
                      "name": name, "expected_filename": f"{name}_00001_.png", "prompt_text": tx[p]})
-    add("V1", "D1_dwarf_paladin", "2645751", "plain_repro", "", "")          # = MOSS1 empty_json, another session
+    # = the floor render of the dwarf at 2645751; a zero-dose JSON (parsed to no edit) makes the graph differ, so ComfyUI
+    # cannot serve it from its cache and the picture is really computed twice
+    add("V1", "D1_dwarf_paladin", "2645751", "plain_repro", "", json.dumps({"layers.0.proj.o.weight": 0.0}))
     for p in PROMPTS:
         for s in SEEDS:
             add("floor", p, s, "plain", "", "")
+    for p in PROMPTS:
+        for s in SEEDS[:2]:
+            add("sampler", p, s, "plain_eulera", "", "", "euler_ancestral")
     for p in ("D1_dwarf_paladin", "S1_rally"):
         add("V2", p, "2645751", "null_dit41_x1.0001", "", json.dumps(NULL_DIT))
         add("V2r", p, "2645751", "te31_x1.0001", json.dumps({"layers.31.mlp.down_proj.weight": 0.0001}), "")
@@ -63,6 +70,7 @@ def make_plan():
 
 def workflow(r):
     G.PROMPT = r["prompt_text"]; G.SEED = int(r["seed"]); G.FOLDER = FOLDER
+    G.SAMPLER, G.STEPS, G.CFG = r["sampler"], 50, 3.0
     return G.workflow(r["name"], r["te_json"], r["dit_json"])
 
 
@@ -88,8 +96,8 @@ def analyze():
     R = G.IMG / FOLDER; rows = rd(PLAN)
     px = lambda f: np.asarray(Image.open(f).convert("RGB"), dtype=np.int16)
     out = []
-    a = px(R / "D1_dwarf_paladin_plain_repro_seed2645751_00001_.png"); b = px(G.IMG / "benchmark_moss_gate" / "empty_json_00001_.png")
-    v1 = int(np.abs(a - b).max()); out.append({"test": "V1 re-render of MOSS1 empty_json in a new session", "value": f"max {v1}", "verdict": "PASS" if v1 == 0 else "FAIL"})
+    a = px(R / "D1_dwarf_paladin_plain_repro_seed2645751_00001_.png"); b = px(R / "D1_dwarf_paladin_plain_seed2645751_00001_.png")
+    v1 = int(np.abs(a - b).max()); out.append({"test": "V1 the dwarf rendered twice in one session", "value": f"max {v1}", "verdict": "PASS" if v1 == 0 else "FAIL"})
     for p in ("D1_dwarf_paladin", "S1_rally"):
         base = px(R / f"{p}_plain_seed2645751_00001_.png")
         n = int(np.abs(px(R / f"{p}_null_dit41_x1.0001_seed2645751_00001_.png") - base).max())
@@ -109,6 +117,12 @@ def analyze():
                 d = 1 - cos(V[f"{p}_plain_seed{s}"], V[f"{p}_plain_seed{t}"]); ds.append(d)
                 met.append({"block": "floor", "prompt": p, "cond": f"seed{s}_vs_seed{t}", "D": round(d, 5)})
         out.append({"test": f"floor {p}", "value": f"median D between seeds {statistics.median(ds):.3f} (min {min(ds):.3f}, n {len(ds)})", "verdict": "-"})
+    for p in PROMPTS:
+        for s in SEEDS[:2]:
+            d = 1 - cos(V[f"{p}_plain_eulera_seed{s}"], V[f"{p}_plain_seed{s}"])
+            met.append({"block": "sampler", "prompt": p, "cond": f"eulera_vs_euler_seed{s}", "D": round(d, 5)})
+    sd = [x["D"] for x in met if x["block"] == "sampler"]
+    out.append({"test": "euler_ancestral against euler, same prompt and seed, reported", "value": f"median D {statistics.median(sd):.3f} (n {len(sd)})", "verdict": "-"})
     for r in rows:
         if r["block"] in ("ladder", "V2", "V2r"):
             d = 1 - cos(V[r["name"]], V[f"{r['prompt']}_plain_seed2645751"])

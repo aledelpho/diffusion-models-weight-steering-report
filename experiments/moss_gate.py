@@ -24,6 +24,7 @@ TE = MODELS / "TextEncoders" / "qwen3.5_9b_w4a8_gptq.safetensors"
 FOLDER = "benchmark_moss_gate"
 URL = "http://127.0.0.1:8188"
 SEED = 2645751
+SAMPLER, STEPS, CFG = "er_sde", 25, 2.5      # MOSS1 settings; MOSS2 sets euler, 50, 3.0 (amendment 1)
 PROMPT = ("Western comics style, close-up portrait, frontal view.\nfemale paladin mountain dwarf, middle-aged, resolute "
           "stern expression, thick braided copper hair pinned back, dark brown eyes, a battle-scarred wide nose, polished "
           "steel gorget over a navy blue gambeson, high brass collar, a vertical scar running through one eyebrow. white "
@@ -77,7 +78,7 @@ def workflow(name, te_json, dit_json):
         "4": {"class_type": "CLIPTextEncode", "inputs": {"text": PROMPT, "clip": ["2", 0]}},
         "5": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": ["2", 0]}},
         "6": {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": 1024, "height": 1280, "batch_size": 1}},
-        "7": {"class_type": "KSampler", "inputs": {"seed": SEED, "steps": 25, "cfg": 2.5, "sampler_name": "er_sde",
+        "7": {"class_type": "KSampler", "inputs": {"seed": SEED, "steps": STEPS, "cfg": CFG, "sampler_name": SAMPLER,
                                                    "scheduler": "simple", "denoise": 1.0, "model": ["1", 0],
                                                    "positive": ["4", 0], "negative": ["5", 0], "latent_image": ["6", 0]}},
         "8": {"class_type": "VAEDecode", "inputs": {"samples": ["7", 0], "vae": ["3", 0]}},

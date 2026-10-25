@@ -31,3 +31,17 @@ goes through both MOSS tuners ("{}" when unedited): plain and edited pictures sh
 
 One seed for the ladder; DINOv2 is content-oriented (pitfall 94: its cosines do not track "the same change", but its
 distance to the plain render was used for calibration throughout C103–C109).
+
+## Amendment 1 (2026-10-25, before any MOSS2 result was looked at or kept)
+
+Alessandro stopped the first run: the template settings (er_sde, 25 steps, CFG 2.5) give pictures far from what MOSS
+can do, and his best MOSS pictures used euler, 50 steps, CFG 3 (also the official recommendation). Changes:
+
+* **Sampling for MOSS2 and every later MOSS test:** euler, simple, **50 steps, CFG 3**, 1024 × 1280 (kept for direct
+  comparison with Krea-2), no SLG, no prompt enhancer. About 170 s per picture.
+* **Sampler check (12 renders, added at Alessandro's request):** the six floor prompts at seeds 2645751 and 3316624 with
+  **euler_ancestral** (Krea-2's sampler), same settings otherwise. Reported: DINOv2 distance to the euler render of the
+  same prompt and seed, and a sheet for Alessandro's eye. Decision on the sampler is his, after looking.
+* **V1** is now two renders of the dwarf at 2645751 in one session, with a zero-dose JSON on the second so that ComfyUI's
+  cache cannot return the first (MOSS1's `plain_b` was served from the cache in 0.15 s, so it did not test determinism).
+* Total 89 renders, about 4 h 10 min. The pictures of the stopped run are moved aside and not used.
