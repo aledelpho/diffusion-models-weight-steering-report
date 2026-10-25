@@ -73,12 +73,16 @@ def scaled_weight(w, d):
 
 
 def apply_edits(patcher, root, edits, anchors):
+    """Version 4 (2026-10-25): when the weight already carries patches (a LoRA loaded before the tuner), the edit is
+    added as one more patch with strength 0 and strength_model (1 + d); ComfyUI applies patches in order and multiplies
+    the running weight by strength_model, so the result is (W + LoRA) x (1 + d). Without patches, the exact object
+    patch of versions 1-3 is kept."""
     for key, d in edits.items():
         name = _resolve(root, key, anchors)
-        prefix = "" if root is patcher.model else None
-        if prefix is None:
-            raise RuntimeError("edits must resolve against patcher.model")
-        patcher.add_object_patch(name, scaled_weight(_get(root, name), d))
+        if name in getattr(patcher, "patches", {}) and patcher.patches[name]:
+            patcher.add_patches({name: ("diff", (torch.zeros(1),))}, strength_patch=0.0, strength_model=1.0 + d)
+        else:
+            patcher.add_object_patch(name, scaled_weight(_get(root, name), d))
     return patcher
 
 
