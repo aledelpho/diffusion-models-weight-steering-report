@@ -13,12 +13,12 @@ $PY = "D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 ```
 
-**Second resume note (2026-10-25).** Gate B passed; gate A passed; gate C failed (mean 0.0): with dynamic VRAM,
+**Second resume note (2026-10-25).** Gate A passed; gate C failed (mean 0.0): with dynamic VRAM,
 ComfyUI ignored the object patches (your diagnosis, confirmed). Node version 2 always works on a non-dynamic clone.
 To do: (1) copy the new `tools/comfyui_moss_tuner/__init__.py` over the installed one (Step 1, copy only) and **ask
 Alessandro to restart ComfyUI**; (2) move the six old gate renders aside, so that the queue renders them again:
 `Rename-Item D:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_moss_gate benchmark_moss_gate_v1`;
-(3) re-run Step 2 (gate B) and Step 3 (gates A and C). Gate A's "tuners with '{}'" now checks that the non-dynamic route
+(3) re-run Step 2 (gate B; its output was missing from the last report, paste it this time) and Step 3 (gates A and C). Gate A's "tuners with '{}'" now checks that the non-dynamic route
 alone changes nothing. If RAM or VRAM runs out (the non-dynamic clone reloads the weights), stop and report.
 
 **Resume note (2026-10-25).** Steps 1 is done (both nodes registered, no import error). Gate B failed on a bug in the
