@@ -1,0 +1,37 @@
+unit,src,kind,pert,seed,cells,repeat
+F01,C109,NULL,mixed,2645751,D1_dwarf_paladin:P06 E2_elf_rogue:P07 O4_halforc_fighter:P08 G5_gnome_wizard:P09 S1_rally:P10 C4_stilllife:P11 P2_lotuscanoe:P01 LN:P02,0
+F02,C109,NULL,mixed,3316624,D1_dwarf_paladin:P01 E2_elf_rogue:P02 O4_halforc_fighter:P03 G5_gnome_wizard:P04 S1_rally:P05 C4_stilllife:P06 P2_lotuscanoe:P10 LN:P08,0
+F03,C109,FULL,P08,2645751,D1_dwarf_paladin:P08 E2_elf_rogue:P08 O4_halforc_fighter:P08 G5_gnome_wizard:P08 S1_rally:P08 C4_stilllife:P08 LN:P08,0
+F04,C109,FULL,P10,2645751,E2_elf_rogue:P10 O4_halforc_fighter:P10 G5_gnome_wizard:P10 S1_rally:P10 C4_stilllife:P10 P2_lotuscanoe:P10 LN:P10,0
+F05,C105,FULL,E26,3316624,D1_dwarf_paladin:E26 E2_elf_rogue:E26 O4_halforc_fighter:E26 G5_gnome_wizard:E26 S1_rally:E26 C4_stilllife:E26 P2_lotuscanoe:E26 LN:E26,0
+F06,C109,FULL,P09,3316624,D1_dwarf_paladin:P09 E2_elf_rogue:P09 O4_halforc_fighter:P09 G5_gnome_wizard:P09 S1_rally:P09 C4_stilllife:P09 LN:P09,0
+F07,C109,FULL,P04,3316624,D1_dwarf_paladin:P04 O4_halforc_fighter:P04 G5_gnome_wizard:P04 S1_rally:P04,0
+F08,C109,FULL,P07,2645751,D1_dwarf_paladin:P07 E2_elf_rogue:P07 O4_halforc_fighter:P07 G5_gnome_wizard:P07 S1_rally:P07 C4_stilllife:P07 LN:P07,0
+F09,C109,FULL,P02,3316624,D1_dwarf_paladin:P02 E2_elf_rogue:P02 O4_halforc_fighter:P02 G5_gnome_wizard:P02 S1_rally:P02 C4_stilllife:P02 P2_lotuscanoe:P02 LN:P02,0
+F10,C109,NULL,mixed,3316624,D1_dwarf_paladin:P06 E2_elf_rogue:P07 O4_halforc_fighter:P08 G5_gnome_wizard:P09 S1_rally:P10 C4_stilllife:P11 P2_lotuscanoe:P01 LN:P02,0
+F11,C109,FULL,P02,2645751,D1_dwarf_paladin:P02 E2_elf_rogue:P02 O4_halforc_fighter:P02 G5_gnome_wizard:P02 S1_rally:P02 C4_stilllife:P02 P2_lotuscanoe:P02 LN:P02,0
+F12,C109,FULL,P06,3316624,D1_dwarf_paladin:P06 E2_elf_rogue:P06 O4_halforc_fighter:P06 G5_gnome_wizard:P06 S1_rally:P06 C4_stilllife:P06 P2_lotuscanoe:P06 LN:P06,0
+F13,C109,FULL,P08,3316624,D1_dwarf_paladin:P08 E2_elf_rogue:P08 O4_halforc_fighter:P08 G5_gnome_wizard:P08 S1_rally:P08 C4_stilllife:P08 LN:P08,0
+F14,C109,FULL,P03,2645751,D1_dwarf_paladin:P03 E2_elf_rogue:P03 O4_halforc_fighter:P03 G5_gnome_wizard:P03 S1_rally:P03 C4_stilllife:P03 P2_lotuscanoe:P03 LN:P03,0
+F15,C109,FULL,P10,3316624,E2_elf_rogue:P10 O4_halforc_fighter:P10 G5_gnome_wizard:P10 S1_rally:P10 C4_stilllife:P10 P2_lotuscanoe:P10 LN:P10,0
+F16,C109,FULL,P01,3316624,D1_dwarf_paladin:P01 E2_elf_rogue:P01 O4_halforc_fighter:P01 G5_gnome_wizard:P01 S1_rally:P01 C4_stilllife:P01 P2_lotuscanoe:P01 LN:P01,0
+F17,C105,FULL,E26,2645751,D1_dwarf_paladin:E26 E2_elf_rogue:E26 O4_halforc_fighter:E26 G5_gnome_wizard:E26 S1_rally:E26 C4_stilllife:E26 P2_lotuscanoe:E26 LN:E26,0
+F18,C109,FULL,P11,3316624,D1_dwarf_paladin:P11 E2_elf_rogue:P11 O4_halforc_fighter:P11 G5_gnome_wizard:P11 S1_rally:P11 C4_stilllife:P11 P2_lotuscanoe:P11 LN:P11,0
+F19,C109,FULL,P05,3316624,D1_dwarf_paladin:P05 E2_elf_rogue:P05 O4_halforc_fighter:P05 G5_gnome_wizard:P05 S1_rally:P05 C4_stilllife:P05 P2_lotuscanoe:P05 LN:P05,0
+F20,C109,FULL,P03,3316624,D1_dwarf_paladin:P03 E2_elf_rogue:P03 O4_halforc_fighter:P03 G5_gnome_wizard:P03 S1_rally:P03 C4_stilllife:P03 P2_lotuscanoe:P03 LN:P03,0
+F21,C109,FULL,P06,2645751,D1_dwarf_paladin:P06 E2_elf_rogue:P06 O4_halforc_fighter:P06 G5_gnome_wizard:P06 S1_rally:P06 C4_stilllife:P06 P2_lotuscanoe:P06 LN:P06,0
+F22,C109,FULL,P12,2645751,D1_dwarf_paladin:P12 O4_halforc_fighter:P12 G5_gnome_wizard:P12 S1_rally:P12,0
+F23,C109,FULL,P01,2645751,D1_dwarf_paladin:P01 E2_elf_rogue:P01 O4_halforc_fighter:P01 G5_gnome_wizard:P01 S1_rally:P01 C4_stilllife:P01 P2_lotuscanoe:P01 LN:P01,0
+F24,C105,FULL,E14,3316624,D1_dwarf_paladin:E14 E2_elf_rogue:E14 O4_halforc_fighter:E14 S1_rally:E14 C4_stilllife:E14 LN:E14,0
+F25,C109,FULL,P04,2645751,D1_dwarf_paladin:P04 O4_halforc_fighter:P04 G5_gnome_wizard:P04 S1_rally:P04,0
+F26,C105,FULL,E14,2645751,D1_dwarf_paladin:E14 E2_elf_rogue:E14 O4_halforc_fighter:E14 S1_rally:E14 C4_stilllife:E14 LN:E14,0
+F27,C109,FULL,P02,3316624,D1_dwarf_paladin:P02 E2_elf_rogue:P02 O4_halforc_fighter:P02 G5_gnome_wizard:P02 S1_rally:P02 C4_stilllife:P02 P2_lotuscanoe:P02 LN:P02,1
+F28,C109,FULL,P05,2645751,D1_dwarf_paladin:P05 E2_elf_rogue:P05 O4_halforc_fighter:P05 G5_gnome_wizard:P05 S1_rally:P05 C4_stilllife:P05 P2_lotuscanoe:P05 LN:P05,0
+F29,C109,FULL,P08,2645751,D1_dwarf_paladin:P08 E2_elf_rogue:P08 O4_halforc_fighter:P08 G5_gnome_wizard:P08 S1_rally:P08 C4_stilllife:P08 LN:P08,1
+F30,C109,FULL,P09,2645751,D1_dwarf_paladin:P09 E2_elf_rogue:P09 O4_halforc_fighter:P09 G5_gnome_wizard:P09 S1_rally:P09 C4_stilllife:P09 LN:P09,0
+F31,C109,FULL,P11,2645751,D1_dwarf_paladin:P11 E2_elf_rogue:P11 O4_halforc_fighter:P11 G5_gnome_wizard:P11 S1_rally:P11 C4_stilllife:P11 P2_lotuscanoe:P11 LN:P11,0
+F32,C109,FULL,P12,3316624,D1_dwarf_paladin:P12 O4_halforc_fighter:P12 G5_gnome_wizard:P12 S1_rally:P12,0
+F33,C109,FULL,P07,3316624,D1_dwarf_paladin:P07 E2_elf_rogue:P07 O4_halforc_fighter:P07 G5_gnome_wizard:P07 S1_rally:P07 C4_stilllife:P07 LN:P07,0
+F34,C109,NULL,mixed,2645751,D1_dwarf_paladin:P01 E2_elf_rogue:P02 O4_halforc_fighter:P03 G5_gnome_wizard:P04 S1_rally:P05 C4_stilllife:P06 P2_lotuscanoe:P10 LN:P08,0
+F35,C109,NULL,mixed,2645751,D1_dwarf_paladin:P01 E2_elf_rogue:P02 O4_halforc_fighter:P03 G5_gnome_wizard:P04 S1_rally:P05 C4_stilllife:P06 P2_lotuscanoe:P10 LN:P08,1
+F36,C109,FULL,P07,3316624,D1_dwarf_paladin:P07 E2_elf_rogue:P07 O4_halforc_fighter:P07 G5_gnome_wizard:P07 S1_rally:P07 C4_stilllife:P07 LN:P07,1

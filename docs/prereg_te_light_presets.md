@@ -49,3 +49,24 @@ subject with a different preset), 8 repeats; order random, conditions hidden.
 Random presets, not chosen by eye; one observer who knows the hypothesis; two test seeds; the comparison edits come from
 another render session (same pipeline, gated pixel-identical). A preset that reaches the target only at x ≈ 3 is not
 "light" any more; rule 3 reports it.
+
+## Amendment 1 (2026-10-25, before any label was exported or counted)
+
+Asked by Alessandro during the blind pass: in the four-subject cards of the rally car and the leaf, a photographic
+"style" change is hard to tell from a change of content (another car model), and he wants every card to show all the
+prompts, for a wider basis of comparison. The four-subject page (`occhio_C109.html`, key `te_light_presets_key.csv`) is
+**superseded**; nothing from it is used.
+
+* **Cards:** one per perturbation × test seed, with every subject that has a test render (all reached pairs, not only
+  those inside the match window), portraits first in a fixed order: 12 presets × 2 seeds, E14 and E26 from C105 × 2 seeds,
+  4 null cards (each subject with a different preset, no preset twice in a card), 4 repeats: 36 cards
+  (`occhio_C109b.html`, key `data/te_light_presets_key_full.csv`, seed 10910).
+* **Questions:** content and style across all pairs, as before; a third, *"Il cambiamento del contenuto è dello stesso
+  tipo nei ritratti a fumetto e nelle altre immagini?"* sì / in parte / no / non si vede (1 / 0.5 / 0; excluded).
+* **Answering rule for partial alignment:** a change of the same kind in most pairs with some pairs out, or visible only
+  in some pairs while the others show nothing, is *qualcosa di simile*; *non si vede* only when no pair shows a change of
+  that kind. A different car model or object is content, not style. The note field can name the pairs that differ.
+* **Rules, replacing section 4:** 0. null cards' content score ≤ 0.20, otherwise the pass is not valid. 1. content
+  score of the preset cards minus the E14/E26 cards **≥ 0.20** → *spread presets more coherent* (≤ −0.20 → *less*;
+  otherwise *no difference*). 2. third question, preset cards minus null cards **≥ 0.30** → *the preset's change carries
+  across domains*. 3. Reported as before, plus the notes.
