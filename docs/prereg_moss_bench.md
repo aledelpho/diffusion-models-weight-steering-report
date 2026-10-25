@@ -45,3 +45,12 @@ can do, and his best MOSS pictures used euler, 50 steps, CFG 3 (also the officia
 * **V1** is now two renders of the dwarf at 2645751 in one session, with a zero-dose JSON on the second so that ComfyUI's
   cache cannot return the first (MOSS1's `plain_b` was served from the cache in 0.15 s, so it did not test determinism).
 * Total 89 renders, about 4 h 10 min. The pictures of the stopped run are moved aside and not used.
+
+## Amendment 2 (2026-10-25, before any MOSS2 render)
+
+After MOSS-S2 (`docs/moss_settings2_result.md`): **working setting T10** (lodestones DMD2 LoRA at 1.0, euler, 10 steps, CFG
+1, simple, shift 5, 1024 × 1280); the euler_ancestral block is dropped (tested in MOSS-S2); ladder doses **0.10, 0.30,
+1.00, 2.00** (d ≤ 0.30 barely moves MOSS); **confirmation cells named now:** the dwarf at 2645751, plain and the six
+ladder edits at d = 1.00, rendered at R50 (euler, 50, CFG 3). A confirmation counts when Alessandro, blind, sees the same
+kind of change at T10 and at R50 (page written after the renders); DINOv2 distances reported. 84 renders: 77 at T10
+(about 30 min) and 7 at R50 (about 20 min).
