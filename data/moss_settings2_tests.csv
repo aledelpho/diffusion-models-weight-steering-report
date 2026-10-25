@@ -1,0 +1,5 @@
+test,value,verdict
+power (reported),R50 median edit D 0.046; informative if >= 0.03,-
+S2 E25 edits proportional to R50,"Spearman 0.57 (bar 0.80), median ratio 1.20 (0.5-2)",FAIL
+S2 T10 edits proportional to R50,"Spearman 0.86 (bar 0.80), median ratio 1.18 (0.5-2)",PASS
+S2 T10A edits proportional to R50,"Spearman 0.67 (bar 0.80), median ratio 1.02 (0.5-2)",FAIL
