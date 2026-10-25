@@ -13,6 +13,11 @@ $PY = "D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 ```
 
+**Resume note (2026-10-25).** Steps 1 is done (both nodes registered, no import error). Gate B failed on a bug in the
+gate script, not in the node: the script looked for `language_model.` only, while ComfyUI names the encoder's
+parameters `qwen35_9b.transformer.model.layers...`. Fixed in `experiments/moss_gate.py` (same anchors as the node). The
+node is unchanged, so **no restart is needed: resume from Step 2.**
+
 ## Step 1 — install the node
 
 ```powershell

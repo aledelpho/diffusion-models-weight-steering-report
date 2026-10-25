@@ -50,7 +50,7 @@ def quant():
     root = clip.patcher.model
     ok = True
     for key in TE_KEYS:
-        name = T._resolve(root, key, ["language_model."])
+        name = T._resolve(root, key, ["language_model.", "model."])   # same anchors as the node (fix 2026-10-25: ComfyUI maps the TE under qwen35_9b.transformer.model.)
         w = T._get(root, name).data
         p32 = dataclasses.replace(w._params, orig_dtype=torch.float32)
         base = type(w)(w._qdata, w._layout_cls, p32).dequantize().float().cpu()
