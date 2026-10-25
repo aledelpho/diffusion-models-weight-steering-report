@@ -4,7 +4,7 @@ Facciamo un atlante del model e text encoder?").
 
   python moss_atlas.py --plan      # data/moss_atlas_plan.csv (committed; do not re-run)
   python moss_atlas.py --queue     # ComfyUI running, MOSS tuner v4, DMD2 LoRA
-  python moss_atlas.py --count     # expected 904 missing 0 []
+  python moss_atlas.py --count     # expected 891 missing 0 []
   python moss_atlas.py --analyze   # DINOv2 -> data/moss_atlas_metrics.csv, data/moss_atlas_tests.csv
   python moss_atlas.py --sheets    # Text2Img/_moss_atlas/<prompt>_<dit|te>.jpg
 
@@ -28,6 +28,7 @@ PROMPTS = ["P01_blacksmith", "S1_rally", "F4_closeup"]   # amendment 1: the prom
 SEED = "2718281"
 DOSES = {"p": 1.0, "m": -1.0}
 FULL_ATTN = set(range(3, 32, 4))
+WITH_CONFIRM = False   # amendment 2 (2026-10-25): the 13 R50 confirmation renders are deferred; the 12 cells stay as drawn
 
 
 def units():
@@ -60,15 +61,21 @@ def make_plan():
             for sg, d in DOSES.items():
                 j = json.dumps({key: d})
                 add("atlas", "T10", p, f"{un}_{sg}", j if half == "te" else "", j if half == "dit" else "")
+    if not WITH_CONFIRM:                                        # amendment 2: confirmation renders deferred
+        rows_out(rows); return
     rng = random.Random(31337)                                  # confirmation cells, named before any render
     picks = rng.sample([(un, sg) for un in U for sg in DOSES], 12)
     add("confirm", "R50", "P01_blacksmith", "plain", "", "")
     for un, sg in picks:
         half, key = U[un]; j = json.dumps({key: DOSES[sg]})
         add("confirm", "R50", "P01_blacksmith", f"{un}_{sg}", j if half == "te" else "", j if half == "dit" else "")
+    rows_out(rows); print("confirm:", [f"{a}_{b}" for a, b in picks])
+
+
+def rows_out(rows):
     with open(PLAN, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
-    print("plan rows:", len(rows), "confirm:", [f"{a}_{b}" for a, b in picks])
+    print("plan rows:", len(rows))
 
 
 def queue():

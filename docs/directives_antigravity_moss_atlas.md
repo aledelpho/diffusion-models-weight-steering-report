@@ -1,8 +1,7 @@
-# Directive for Antigravity — MOSS3, the MOSS atlas (904 renders, about 6 hours; amendment 1)
+# Directive for Antigravity — MOSS3, the MOSS atlas (891 renders, about 5 h 30 min; amendments 1-2)
 
 Written by Claude, 2026-10-25. Pre-registration: `docs/prereg_moss_atlas.md`. Script: `experiments/moss_atlas.py`.
-Amendment 1: the Krea-2 atlas prompts (blacksmith, rally, close-up) at seed 2718281. Plan frozen: `data/moss_atlas_plan.csv` (do **not** run `--plan`). Settings as MOSS2 (T10 with the DMD2 LoRA; 13
-confirmation renders at R50, last in the queue). Tuner v4, no restart needed.
+Amendment 1: the Krea-2 atlas prompts (blacksmith, rally, close-up) at seed 2718281. Plan frozen: `data/moss_atlas_plan.csv` (do **not** run `--plan`). Settings as MOSS2 (T10 with the DMD2 LoRA). Amendment 2: no 50-step renders in this run. Tuner v4, no restart needed.
 
 ## Hard rules
 
@@ -22,8 +21,8 @@ cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 & $PY moss_atlas.py --queue
 ```
 
-`queued 904`. Wait for the queue to empty (a background wait is fine). Then
-`& $PY moss_atlas.py --count` → `expected 904 missing 0 []`.
+`queued 891`. Wait for the queue to empty (a background wait is fine). Then
+`& $PY moss_atlas.py --count` → `expected 891 missing 0 []`.
 
 ## Step 2 — analyze and sheets
 
@@ -37,9 +36,9 @@ files; for Alessandro, do not describe them).
 
 ## Step 3 — paste back and commit
 
-Write `docs/RENDERS_2026-10-25_moss_atlas.md` (outputs, render times T10 and R50, any interruption). Commit it with
+Write `docs/RENDERS_2026-10-25_moss_atlas.md` (outputs, render time, any interruption). Commit it with
 `data/moss_atlas_metrics.csv` and `data/moss_atlas_tests.csv`, message in Italian:
 
 ```
-MOSS3: atlante MOSS (904 render, 148 unità x 2 segni x 3 prompt degli atlanti Krea in turbo, 13 conferme a 50 step sulla fabbra), resoconto di Antigravity
+MOSS3: atlante MOSS in turbo (891 render, 148 unità x 2 segni x 3 prompt degli atlanti Krea), resoconto di Antigravity
 ```

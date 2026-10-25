@@ -37,3 +37,9 @@ At Alessandro's request, for direct comparison with the Krea-2 atlases (`data/si
 (F4_closeup)**, with the same texts, at **seed 2718281**, 1024 × 1280 (as on Krea). The confirmation cells (same 12 unit ×
 sign, same draw) are rendered on the **blacksmith** instead of the dwarf. Rules unchanged ("median over the four prompts"
 becomes "over the three prompts"). 904 renders: 891 at T10 (about 5 h 30 min) and 13 at R50 (about 37 min).
+
+## Amendment 2 (2026-10-25, before any render)
+
+At Alessandro's request ("una cosa più rapida"), the 13 R50 confirmation renders are **deferred**: the atlas runs at T10
+only (891 renders, about 5 h 30 min). The 12 confirmation cells stay as drawn (seed 31337) and will be the ones rendered
+at R50 when the confirmation is run; until then every atlas result is labelled "turbo, not confirmed".
