@@ -1,0 +1,135 @@
+"""MOSS2 - the MOSS bench: reproducibility, a clean active tuner, the seed floor and a first sensitivity ladder
+(docs/prereg_moss_bench.md). Written 2026-10-25 before any MOSS2 render. Renders authorised by Alessandro ("Procediamo").
+
+  python moss_bench.py --plan       # data/moss_bench_plan.csv (committed; do not re-run)
+  python moss_bench.py --queue      # ComfyUI running, MOSS tuner v3 installed
+  python moss_bench.py --count      # expected 77 missing 0 []
+  python moss_bench.py --analyze    # V1, V2 pixel checks; DINOv2 -> data/moss_bench_metrics.csv; data/moss_bench_tests.csv
+
+Sampling and graph as experiments/moss_gate.py (MOSS-Image SFT bf16, er_sde, simple, 25 steps, CFG 2.5, 1024 x 1280,
+no SLG, no prompt enhancer). Every render goes through both MOSS tuners (non-dynamic route), "{}" when unedited, so
+plain and edited pictures share one route.
+"""
+import argparse, csv, json, statistics, sys, urllib.request
+from pathlib import Path
+import numpy as np
+HERE = Path(__file__).resolve().parent; sys.path.insert(0, str(HERE))
+import moss_gate as G
+
+DATA = HERE.parent / "data"
+PLAN, METRICS, TESTS = DATA / "moss_bench_plan.csv", DATA / "moss_bench_metrics.csv", DATA / "moss_bench_tests.csv"
+FOLDER = "benchmark_moss_bench"
+PROMPTS = ["D1_dwarf_paladin", "S1_rally", "C4_stilllife", "P5_comic_panels", "P2_lotuscanoe", "LN"]
+SEEDS = ["2645751", "3316624", "2718281", "1618033"]
+LADDER_PROMPTS = ["D1_dwarf_paladin", "S1_rally"]
+DOSES = [0.01, 0.03, 0.10, 0.30]
+EDITS = {"dit06": ("dit", "layers.6.proj.ffn_down.weight"), "dit20": ("dit", "layers.20.proj.ffn_down.weight"),
+         "dit35": ("dit", "layers.35.proj.ffn_down.weight"), "te06": ("te", "layers.6.mlp.down_proj.weight"),
+         "te15": ("te", "layers.15.mlp.down_proj.weight"), "te27": ("te", "layers.27.mlp.down_proj.weight")}
+NULL_DIT = {f"layers.41.proj.{m}.weight": 0.0001 for m in ("qkv", "o", "ffn_up_gate", "ffn_down")}
+
+
+def rd(p):
+    return list(csv.DictReader(open(p, encoding="utf-8")))
+
+
+def texts():
+    import te_shapes2 as TS2
+    return TS2.texts()
+
+
+def make_plan():
+    tx = texts(); rows = []
+    def add(block, p, s, cond, te, dit):
+        name = f"{p}_{cond}_seed{s}"
+        rows.append({"block": block, "prompt": p, "seed": s, "cond": cond, "te_json": te or "{}", "dit_json": dit or "{}",
+                     "name": name, "expected_filename": f"{name}_00001_.png", "prompt_text": tx[p]})
+    add("V1", "D1_dwarf_paladin", "2645751", "plain_repro", "", "")          # = MOSS1 empty_json, another session
+    for p in PROMPTS:
+        for s in SEEDS:
+            add("floor", p, s, "plain", "", "")
+    for p in ("D1_dwarf_paladin", "S1_rally"):
+        add("V2", p, "2645751", "null_dit41_x1.0001", "", json.dumps(NULL_DIT))
+        add("V2r", p, "2645751", "te31_x1.0001", json.dumps({"layers.31.mlp.down_proj.weight": 0.0001}), "")
+    for p in LADDER_PROMPTS:
+        for e, (half, key) in EDITS.items():
+            for d in DOSES:
+                j = json.dumps({key: d})
+                add("ladder", p, "2645751", f"{e}_p{d:g}".replace(".", "p"), j if half == "te" else "", j if half == "dit" else "")
+    with open(PLAN, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+    print("plan rows:", len(rows))
+
+
+def workflow(r):
+    G.PROMPT = r["prompt_text"]; G.SEED = int(r["seed"]); G.FOLDER = FOLDER
+    return G.workflow(r["name"], r["te_json"], r["dit_json"])
+
+
+def queue():
+    n = 0
+    for r in rd(PLAN):
+        if (G.IMG / FOLDER / r["expected_filename"]).exists():
+            continue
+        req = urllib.request.Request(f"{G.URL}/prompt", data=json.dumps({"prompt": workflow(r)}).encode(),
+                                     headers={"Content-Type": "application/json"})
+        urllib.request.urlopen(req, timeout=10).read(); n += 1
+    print("queued", n)
+
+
+def count():
+    rows = rd(PLAN); miss = [r["expected_filename"] for r in rows if not (G.IMG / FOLDER / r["expected_filename"]).exists()]
+    print("expected", len(rows), "missing", len(miss), miss[:3])
+
+
+def analyze():
+    from PIL import Image
+    import metric_validation as MV
+    R = G.IMG / FOLDER; rows = rd(PLAN)
+    px = lambda f: np.asarray(Image.open(f).convert("RGB"), dtype=np.int16)
+    out = []
+    a = px(R / "D1_dwarf_paladin_plain_repro_seed2645751_00001_.png"); b = px(G.IMG / "benchmark_moss_gate" / "empty_json_00001_.png")
+    v1 = int(np.abs(a - b).max()); out.append({"test": "V1 re-render of MOSS1 empty_json in a new session", "value": f"max {v1}", "verdict": "PASS" if v1 == 0 else "FAIL"})
+    for p in ("D1_dwarf_paladin", "S1_rally"):
+        base = px(R / f"{p}_plain_seed2645751_00001_.png")
+        n = int(np.abs(px(R / f"{p}_null_dit41_x1.0001_seed2645751_00001_.png") - base).max())
+        t = np.abs(px(R / f"{p}_te31_x1.0001_seed2645751_00001_.png") - base)
+        out.append({"test": f"V2 DiT layer 41 x 1.0001 ({p})", "value": f"max {n}", "verdict": "PASS" if n == 0 else "reported: bf16 rounding moved"})
+        out.append({"test": f"V2r TE layer 31 MLP down x 1.0001 ({p}), reported", "value": f"max {int(t.max())}, changed pixels {float((t.max(-1) > 0).mean()):.3f}", "verdict": "-"})
+    m = MV.Models(vqa=False); V = {}
+    vec = lambda f: np.asarray(m.dino_vec(Image.open(f).convert("RGB")), dtype=np.float64)
+    cos = lambda u, v: float(u @ v / (np.linalg.norm(u) * np.linalg.norm(v)))
+    for r in rows:
+        V[r["name"]] = vec(R / r["expected_filename"])
+    met = []
+    for p in PROMPTS:
+        ds = []
+        for i, s in enumerate(SEEDS):
+            for t in SEEDS[i + 1:]:
+                d = 1 - cos(V[f"{p}_plain_seed{s}"], V[f"{p}_plain_seed{t}"]); ds.append(d)
+                met.append({"block": "floor", "prompt": p, "cond": f"seed{s}_vs_seed{t}", "D": round(d, 5)})
+        out.append({"test": f"floor {p}", "value": f"median D between seeds {statistics.median(ds):.3f} (min {min(ds):.3f}, n {len(ds)})", "verdict": "-"})
+    for r in rows:
+        if r["block"] in ("ladder", "V2", "V2r"):
+            d = 1 - cos(V[r["name"]], V[f"{r['prompt']}_plain_seed2645751"])
+            met.append({"block": r["block"], "prompt": r["prompt"], "cond": r["cond"], "D": round(d, 5)})
+    for p in LADDER_PROMPTS:
+        for e in EDITS:
+            ds = [next(x["D"] for x in met if x["prompt"] == p and x["cond"] == f"{e}_p{d:g}".replace(".", "p")) for d in DOSES]
+            out.append({"test": f"ladder {p} {e}, reported", "value": " ".join(f"{d:g}:{v:.3f}" for d, v in zip(DOSES, ds)), "verdict": "-"})
+    for path, rws in ((METRICS, met), (TESTS, out)):
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(rws[0])); w.writeheader(); w.writerows(rws)
+    for o in out:
+        print(o["test"], "|", o["value"], "|", o["verdict"])
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    for x in ("plan", "queue", "count", "analyze"):
+        ap.add_argument(f"--{x}", action="store_true")
+    a = ap.parse_args()
+    if a.plan: make_plan()
+    if a.queue: queue()
+    if a.count: count()
+    if a.analyze: analyze()
