@@ -43,3 +43,10 @@ becomes "over the three prompts"). 904 renders: 891 at T10 (about 5 h 30 min) an
 At Alessandro's request ("una cosa più rapida"), the 13 R50 confirmation renders are **deferred**: the atlas runs at T10
 only (891 renders, about 5 h 30 min). The 12 confirmation cells stay as drawn (seed 31337) and will be the ones rendered
 at R50 when the confirmation is run; until then every atlas result is labelled "turbo, not confirmed".
+
+## Amendment 3 (2026-10-25, during the run, before any measure; pictures not yet looked at by Claude)
+
+Alessandro, watching the first renders: at d = ±1 the changes are hard to see; push about twice as far. Added **d = +2**
+(contribution tripled) for every unit and prompt: 444 more renders, about 2 h 45 min; the d = +1 and −1 renders are kept.
+The negative side is not doubled: d = −1 already removes the sublayer, and d = −2 would invert its sign, a different
+operation. H1 and H2 are computed for each dose, d = +2 included; the sheets get two more columns. 1,335 renders in all.

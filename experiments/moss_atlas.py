@@ -4,7 +4,7 @@ Facciamo un atlante del model e text encoder?").
 
   python moss_atlas.py --plan      # data/moss_atlas_plan.csv (committed; do not re-run)
   python moss_atlas.py --queue     # ComfyUI running, MOSS tuner v4, DMD2 LoRA
-  python moss_atlas.py --count     # expected 891 missing 0 []
+  python moss_atlas.py --count     # expected 1335 missing 0 []
   python moss_atlas.py --analyze   # DINOv2 -> data/moss_atlas_metrics.csv, data/moss_atlas_tests.csv
   python moss_atlas.py --sheets    # Text2Img/_moss_atlas/<prompt>_<dit|te>.jpg
 
@@ -26,7 +26,7 @@ FOLDER = "benchmark_moss_atlas"
 B.FOLDER = FOLDER
 PROMPTS = ["P01_blacksmith", "S1_rally", "F4_closeup"]   # amendment 1: the prompts and seed of the Krea-2 atlases
 SEED = "2718281"
-DOSES = {"p": 1.0, "m": -1.0}
+DOSES = {"p": 1.0, "m": -1.0, "pp": 2.0}   # amendment 3: d = +2 added (Alessandro: +1 / -1 barely visible); -1 already removes the sublayer
 FULL_ATTN = set(range(3, 32, 4))
 WITH_CONFIRM = False   # amendment 2 (2026-10-25): the 13 R50 confirmation renders are deferred; the 12 cells stay as drawn
 
@@ -134,10 +134,10 @@ def analyze():
 def sheets():
     from PIL import Image, ImageDraw
     R = G.IMG / FOLDER; out = G.IMG / "_moss_atlas"; out.mkdir(exist_ok=True); W, H, LAB = 128, 160, 70
-    cols = [("attn", "p"), ("attn", "m"), ("mlp", "p"), ("mlp", "m")]
+    cols = [("attn", "p"), ("attn", "pp"), ("attn", "m"), ("mlp", "p"), ("mlp", "pp"), ("mlp", "m")]
     for p in PROMPTS:
         for part, n in (("dit", 42), ("te", 32)):
-            S = Image.new("RGB", (LAB + W * 5, H * n), (26, 26, 25)); d = ImageDraw.Draw(S)
+            S = Image.new("RGB", (LAB + W * 7, H * n), (26, 26, 25)); d = ImageDraw.Draw(S)
             plain = Image.open(R / f"T10_{p}_plain_seed{SEED}_00001_.png").convert("RGB").resize((W, H))
             for L in range(n):
                 d.text((4, L * H + H // 2), f"{part} {L}", fill=(230, 230, 230))
@@ -145,7 +145,7 @@ def sheets():
                 for k, (h, sg) in enumerate(cols, 1):
                     S.paste(Image.open(R / f"T10_{p}_{part}{L:02d}_{h}_{sg}_seed{SEED}_00001_.png").convert("RGB").resize((W, H)), (LAB + k * W, L * H))
             S.save(out / f"{p}_{part}.jpg", quality=84)
-    print("sheets in", out, "- columns: plain, attention x2, attention removed, MLP x2, MLP removed")
+    print("sheets in", out, "- columns: plain, attention x2, attention x3, attention removed, MLP x2, MLP x3, MLP removed")
 
 
 if __name__ == "__main__":

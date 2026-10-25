@@ -1,4 +1,8 @@
-# Directive for Antigravity — MOSS3, the MOSS atlas (891 renders, about 5 h 30 min; amendments 1-2)
+# Directive for Antigravity — MOSS3, the MOSS atlas (1,335 renders; amendment 3 adds d = +2)
+
+**Amendment 3 (2026-10-25).** The plan now has 1,335 rows: the 891 of the running batch plus 444 at d = +2 (rows
+`..._pp`). Let the current queue finish, then run `--queue` again: it queues only the missing pictures (`queued 444`
+if the first batch is complete). Then continue from `--count` (`expected 1335 missing 0 []`).
 
 Written by Claude, 2026-10-25. Pre-registration: `docs/prereg_moss_atlas.md`. Script: `experiments/moss_atlas.py`.
 Amendment 1: the Krea-2 atlas prompts (blacksmith, rally, close-up) at seed 2718281. Plan frozen: `data/moss_atlas_plan.csv` (do **not** run `--plan`). Settings as MOSS2 (T10 with the DMD2 LoRA). Amendment 2: no 50-step renders in this run. Tuner v4, no restart needed.
@@ -22,7 +26,7 @@ cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
 ```
 
 `queued 891`. Wait for the queue to empty (a background wait is fine). Then
-`& $PY moss_atlas.py --count` → `expected 891 missing 0 []`.
+`& $PY moss_atlas.py --count` → `expected 1335 missing 0 []`.
 
 ## Step 2 — analyze and sheets
 
@@ -40,5 +44,5 @@ Write `docs/RENDERS_2026-10-25_moss_atlas.md` (outputs, render time, any interru
 `data/moss_atlas_metrics.csv` and `data/moss_atlas_tests.csv`, message in Italian:
 
 ```
-MOSS3: atlante MOSS in turbo (891 render, 148 unità x 2 segni x 3 prompt degli atlanti Krea), resoconto di Antigravity
+MOSS3: atlante MOSS in turbo (1335 render, 148 unità x 3 dosi x 3 prompt degli atlanti Krea), resoconto di Antigravity
 ```
