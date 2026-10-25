@@ -9,11 +9,14 @@ Two nodes, both taking `granular_json`, a JSON object {key: d}; every matrix nam
   ArthemyMossCLIPTuner   CLIP  -> CLIP    keys of Qwen3.5-9B, e.g. "layers.6.mlp.down_proj.weight",
                                           "layers.7.self_attn.o_proj.weight", "layers.0.linear_attn.out_proj.weight"
 
-The edit is an object patch on a clone (the loaded model is never modified). A bf16 weight is replaced by
+The edit is an object patch on a clone (the loaded model is never modified). Version 2 (2026-10-25, after gate C
+failed): ComfyUI loads MOSS with dynamic VRAM (ModelPatcherDynamic), which streams weights from its own storage and
+ignores object patches; the tuners therefore always work on a NON-dynamic clone (clone(disable_dynamic=True)), even
+with an empty JSON, so that "{}" checks that this route alone changes nothing (gate A). A bf16 weight is replaced by
 (weight in float32 x (1 + d)) cast back to its dtype. A W4A8 quantised weight (comfy_kitchen QuantizedTensor) keeps its
 packed codes, codebook and group scales; only its per-output-channel scale `s_channel` is multiplied by (1 + d), which is
 the same as scaling the dequantised weight (dequantisation is codes x s_rel x s_channel, no correction term in this
-checkpoint). An empty JSON, or d = 0 everywhere, returns the input unchanged.
+checkpoint). An empty JSON applies no edit but still takes the non-dynamic route.
 """
 import dataclasses, json
 import torch
@@ -88,9 +91,7 @@ class ArthemyMossModelTuner:
 
     def tune(self, model, granular_json):
         edits = _parse(granular_json)
-        if not edits:
-            return (model,)
-        m = model.clone()
+        m = model.clone(disable_dynamic=True)
         apply_edits(m, m.model, edits, ["diffusion_model."])
         return (m,)
 
@@ -105,9 +106,7 @@ class ArthemyMossCLIPTuner:
 
     def tune(self, clip, granular_json):
         edits = _parse(granular_json)
-        if not edits:
-            return (clip,)
-        c = clip.clone()
+        c = clip.clone(disable_dynamic=True)
         apply_edits(c.patcher, c.patcher.model, edits, ["language_model.", "model."])
         return (c,)
 
