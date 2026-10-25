@@ -54,3 +54,10 @@ After MOSS-S2 (`docs/moss_settings2_result.md`): **working setting T10** (lodest
 ladder edits at d = 1.00, rendered at R50 (euler, 50, CFG 3). A confirmation counts when Alessandro, blind, sees the same
 kind of change at T10 and at R50 (page written after the renders); DINOv2 distances reported. 84 renders: 77 at T10
 (about 30 min) and 7 at R50 (about 20 min).
+
+## Amendment 3 (2026-10-25, before any confirmation label was exported)
+
+Alessandro opened the confirmation page: at d = 1.0 the change is too small to judge. The confirmation cells move to
+**d = 2.0** (the T10 ladder already has them): 6 more R50 renders of the dwarf at 2645751 (block `confirm2`, about 17
+min). New page `occhio_MOSS2b.html`, key `data/moss_confirm2_key.csv`, labels `data/moss_confirm2_labels.csv`; same
+cards, question and rule. The d = 1.0 page (`occhio_MOSS2.html`, key `data/moss_confirm_key.csv`) is superseded.

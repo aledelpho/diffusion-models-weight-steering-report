@@ -3,7 +3,7 @@
 
   python moss_bench.py --plan       # data/moss_bench_plan.csv (committed; do not re-run)
   python moss_bench.py --queue      # ComfyUI running, MOSS tuner v3 installed
-  python moss_bench.py --count      # expected 84 missing 0 []
+  python moss_bench.py --count      # expected 90 missing 0 []
   python moss_bench.py --analyze    # V1, V2 pixel checks; DINOv2 -> data/moss_bench_metrics.csv; data/moss_bench_tests.csv
 
 Amendment 2 (2026-10-25, before any render): working setting T10 (DMD2 LoRA, euler, 10 steps, CFG 1), chosen by
