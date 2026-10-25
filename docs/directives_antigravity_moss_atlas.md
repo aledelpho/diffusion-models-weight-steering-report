@@ -1,0 +1,45 @@
+# Directive for Antigravity — MOSS3, the MOSS atlas (1,201 renders, about 8 hours)
+
+Written by Claude, 2026-10-25. Pre-registration: `docs/prereg_moss_atlas.md`. Script: `experiments/moss_atlas.py`.
+Plan frozen: `data/moss_atlas_plan.csv` (do **not** run `--plan`). Settings as MOSS2 (T10 with the DMD2 LoRA; 13
+confirmation renders at R50, last in the queue). Tuner v4, no restart needed.
+
+## Hard rules
+
+* **Do not close anything.** Do not use `monitor_and_shutdown.py`, do not shut the PC down, do not change power or
+  system settings. **Do not restart ComfyUI yourself**; if it needs a restart, ask Alessandro.
+* **If a step fails,** stop and paste the output. Do not change the node, the script or the plan.
+* The run is long: if ComfyUI stops, re-run `--queue` after Alessandro restarts it; existing pictures are skipped.
+
+```powershell
+$PY = "D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
+cd C:\Users\aless\Desktop\diffusion-models-weight-steering-report\experiments
+```
+
+## Step 1 — queue and wait
+
+```powershell
+& $PY moss_atlas.py --queue
+```
+
+`queued 1201`. Wait for the queue to empty (a background wait is fine). Then
+`& $PY moss_atlas.py --count` → `expected 1201 missing 0 []`.
+
+## Step 2 — analyze and sheets
+
+```powershell
+& $PY moss_atlas.py --analyze
+& $PY moss_atlas.py --sheets
+```
+
+Paste every line of `--analyze`. The sheets go to `D:\StabilityMatrix-win-x64\Data\Images\Text2Img\_moss_atlas\` (eight
+files; for Alessandro, do not describe them).
+
+## Step 3 — paste back and commit
+
+Write `docs/RENDERS_2026-10-25_moss_atlas.md` (outputs, render times T10 and R50, any interruption). Commit it with
+`data/moss_atlas_metrics.csv` and `data/moss_atlas_tests.csv`, message in Italian:
+
+```
+MOSS3: atlante MOSS (1201 render, 148 unità x 2 segni x 4 prompt in turbo, 13 conferme a 50 step), resoconto di Antigravity
+```
