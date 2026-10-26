@@ -1,0 +1,21 @@
+test,value,verdict
+H1 DiT mlp p: depth orders the change (reported if |rho| < 0.5),Spearman layer vs median D +0.74,ordered
+H1 TE mlp p,Spearman layer vs median D +0.19,not ordered
+H1 DiT mlp m: depth orders the change (reported if |rho| < 0.5),Spearman layer vs median D +0.56,ordered
+H1 TE mlp m,Spearman layer vs median D -0.21,not ordered
+H1 DiT mlp pp: depth orders the change (reported if |rho| < 0.5),Spearman layer vs median D +0.76,ordered
+H1 TE mlp pp,Spearman layer vs median D +0.12,not ordered
+H1 DiT attn p: depth orders the change (reported if |rho| < 0.5),Spearman layer vs median D +0.43,not ordered
+H1 TE attn p,Spearman layer vs median D -0.18,not ordered
+H1 DiT attn m: depth orders the change (reported if |rho| < 0.5),Spearman layer vs median D +0.66,ordered
+H1 TE attn m,Spearman layer vs median D -0.54,ordered
+H1 DiT attn pp: depth orders the change (reported if |rho| < 0.5),Spearman layer vs median D +0.40,not ordered
+H1 TE attn pp,Spearman layer vs median D -0.06,not ordered
+H2 dit p: MLP moves the picture more than attention,19 of 42 layers (bar 2/3),does not hold
+H2 dit m: MLP moves the picture more than attention,16 of 42 layers (bar 2/3),does not hold
+H2 dit pp: MLP moves the picture more than attention,23 of 42 layers (bar 2/3),does not hold
+H2 te p: MLP moves the picture more than attention,21 of 32 layers (bar 2/3),does not hold
+H2 te m: MLP moves the picture more than attention,25 of 32 layers (bar 2/3),holds
+H2 te pp: MLP moves the picture more than attention,19 of 32 layers (bar 2/3),does not hold
+H3 TE full-attention vs linear-attention layers (reported),median D 0.030 vs 0.026,-
+strongest ten units x sign (reported),dit32_attn_m 0.986; dit00_attn_m 0.967; dit33_attn_m 0.860; dit33_mlp_m 0.853; te00_attn_m 0.806; dit31_mlp_pp 0.805; dit34_mlp_m 0.753; te00_attn_pp 0.708; dit41_attn_m 0.541; dit32_mlp_pp 0.538,-
