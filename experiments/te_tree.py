@@ -1,6 +1,5 @@
 """C111 - "Photo of a tree" (amendment 1, 2026-10-27, before any render: random pushes removed, seed cards and an
-"amount" question added)
-: does the plain model draw nearly the same tree at every seed, and does a text-encoder edit
+"amount" question added). Does the plain model draw nearly the same tree at every seed, and does a text-encoder edit
 change the light or the setting in the same way at every seed? (docs/prereg_te_tree.md). Written 2026-10-27 with the
 pre-registration, before any encode or render. Proposed by Alessandro; renders to be authorised by him with the directive.
 Encoder, calibration (target DINOv2 D 0.25), queue and count are C109's code (te_light_presets.py) unchanged; plan, gate,
