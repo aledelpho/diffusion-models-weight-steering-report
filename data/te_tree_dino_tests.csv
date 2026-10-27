@@ -1,0 +1,14 @@
+test,value,verdict
+Rule 1 plain seeds: median pairwise D of the 8 plain trees,0.475 (bar 0.15); median D of the real edits from the plain tree 0.257,the seeds already vary
+"Rule 1 reference: D1_dwarf_paladin plain, pairwise D over its 4 C109 seeds (reported)",median 0.134,-
+"Rule 1 reference: E2_elf_rogue plain, pairwise D over its 4 C109 seeds (reported)",median 0.083,-
+"Rule 1 reference: O4_halforc_fighter plain, pairwise D over its 4 C109 seeds (reported)",median 0.115,-
+"Rule 1 reference: G5_gnome_wizard plain, pairwise D over its 4 C109 seeds (reported)",median 0.068,-
+"Rule 1 reference: S1_rally plain, pairwise D over its 4 C109 seeds (reported)",median 0.178,-
+"Rule 1 reference: C4_stilllife plain, pairwise D over its 4 C109 seeds (reported)",median 0.090,-
+"Rule 1 reference: P2_lotuscanoe plain, pairwise D over its 4 C109 seeds (reported)",median 0.057,-
+"Rule 1 reference: LN plain, pairwise D over its 4 C109 seeds (reported)",median 0.140,-
+Reported: direction of the change shared across seeds (mean cosine of the DINOv2 displacements),edits 0.057; different perturbations at different seeds 0.009; seed changes of the plain tree -0.052,-
+"Reported: per perturbation, mean cosine across seeds",E05 0.02; E06 0.08; E14 0.04; E26 0.01; E28 0.09; P01 -0.01; P06 0.09; P10 0.14,-
+Reported: median pairwise D across seeds after each perturbation (plain above),E05 0.706; E06 0.632; E14 0.549; E26 0.498; E28 0.601; P01 0.476; P06 0.632; P10 0.746,-
+Reported: perturbations that did not reach the calibration window,none,-
