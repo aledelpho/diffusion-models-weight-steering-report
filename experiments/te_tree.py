@@ -1,4 +1,6 @@
-"""C111 - "Photo of a tree": does the plain model draw nearly the same tree at every seed, and does a text-encoder edit
+"""C111 - "Photo of a tree" (amendment 1, 2026-10-27, before any render: random pushes removed, seed cards and an
+"amount" question added)
+: does the plain model draw nearly the same tree at every seed, and does a text-encoder edit
 change the light or the setting in the same way at every seed? (docs/prereg_te_tree.md). Written 2026-10-27 with the
 pre-registration, before any encode or render. Proposed by Alessandro; renders to be authorised by him with the directive.
 Encoder, calibration (target DINOv2 D 0.25), queue and count are C109's code (te_light_presets.py) unchanged; plan, gate,
@@ -39,10 +41,10 @@ PRESETS = {"P01": {"7": 0.3, "9": -0.3, "11": 0.3, "17": 0.3}, "P06": {"9": 0.3,
            "P10": {"14": 0.3, "15": 0.3, "29": 0.3, "30": -0.3}}
 EDITS = ["E05", "E06", "E14", "E26", "E28"]          # MLP of one encoder layer (pages 30-31: L05, L06, L14, L26, L28)
 REAL = EDITS + list(PRESETS)
-RANDOM = ["R09", "R26"]                               # one fixed random direction added to that layer's MLP output (C105)
-PERTS = {**{e: ("edit", int(e[1:])) for e in EDITS}, **{n: ("preset", None) for n in PRESETS}, "R09": ("rand", 9), "R26": ("rand", 26)}
+RANDOM = []                                           # amendment 1: no random pushes (not part of the claim)
+PERTS = {**{e: ("edit", int(e[1:])) for e in EDITS}, **{n: ("preset", None) for n in PRESETS}}
 LADDER = {**{e: [0.4, 0.8, 1.6, 3.2] for e in ("E05", "E06", "E14")}, **{e: [0.75, 1.5, 3.0, 6.0] for e in ("E26", "E28")},
-          **{n: [0.5, 1.0, 2.0, 3.3] for n in PRESETS}, "R09": [1.5, 2.5, 4.0, 6.0], "R26": [4.0, 7.0, 12.0, 20.0]}
+          **{n: [0.5, 1.0, 2.0, 3.3] for n in PRESETS}}
 CAL_SEEDS = ["1618033", "2718281"]
 TEST_SEEDS = ["2645751", "3316624", "1414213", "1732050", "2236067", "3141592", "1234567", "5772156"]
 GROUPS = [TEST_SEEDS[:4], TEST_SEEDS[4:]]
@@ -344,10 +346,11 @@ def dino_tests(V, ref):
     within = {n: statistics.mean(cos(U[n][a], U[n][b]) for a, b in itertools.combinations(TEST_SEEDS, 2)) for n in U}
     null = [cos(U[m][a], U[n][b]) for m, n in itertools.permutations(U, 2) for a, b in itertools.permutations(TEST_SEEDS, 2)]
     nm = statistics.mean(null) if null else float("nan")
-    for grp, ns in (("real edits", REAL), ("random pushes", RANDOM)):
-        w = [within[n] for n in ns if n in within]
-        out.append({"test": f"Reported: direction of the change shared across seeds, {grp} (mean cosine of the DINOv2 displacements)",
-                    "value": f"{statistics.mean(w):.3f} against {nm:.3f} for different perturbations at different seeds" if w else "none reached", "verdict": "-"})
+    w = [within[n] for n in REAL if n in within]
+    sd = [cos(V[(a2, "C0")] - V[(a, "C0")], V[(b2, "C0")] - V[(b, "C0")]) for (a, a2), (b, b2) in itertools.combinations(list(zip(GROUPS[0], GROUPS[1])), 2)]
+    out.append({"test": "Reported: direction of the change shared across seeds (mean cosine of the DINOv2 displacements)",
+                "value": (f"edits {statistics.mean(w):.3f}; different perturbations at different seeds {nm:.3f}; "
+                          f"seed changes of the plain tree {statistics.mean(sd):.3f}") if w else "none reached", "verdict": "-"})
     out.append({"test": "Reported: per perturbation, mean cosine across seeds", "value": "; ".join(f"{n} {within[n]:.2f}" for n in PERTS if n in within), "verdict": "-"})
     disp = {n: statistics.median(cosd(V[(a, t)], V[(b, t)]) for a, b in itertools.combinations(TEST_SEEDS, 2)) for n, t in C.items()}
     out.append({"test": "Reported: median pairwise D across seeds after each perturbation (plain above)", "value": "; ".join(f"{n} {disp[n]:.3f}" for n in PERTS if n in disp), "verdict": "-"})
@@ -382,21 +385,30 @@ def analyze():
 
 # ---------------------------------------------------------------- blind
 OPTS = [("stesso", "stesso tipo"), ("simile", "qualcosa di simile"), ("diversi", "in modi diversi"), ("nonsivede", "non si vede")]
-QS = [("light", "Il cambiamento di luce, cielo o ora del giorno è dello stesso tipo in tutte le coppie?", OPTS),
+MAG = [("molto", "cambia molto"), ("qualcosa", "cambia qualcosa"), ("poco", "quasi niente"), ("niente", "niente")]
+MSC = {"molto": 1.0, "qualcosa": 2 / 3, "poco": 1 / 3, "niente": 0.0}
+QS = [("amount", "Quanto cambia il contenuto (albero, ambiente, luce) da prima a dopo, nell'insieme delle coppie?", MAG),
+      ("light", "Il cambiamento di luce, cielo o ora del giorno è dello stesso tipo in tutte le coppie?", OPTS),
       ("scene", "Il cambiamento dell'albero o dell'ambiente (specie, forma, stagione, paesaggio) è dello stesso tipo in tutte le coppie?", OPTS)]
 SC = {"stesso": 1.0, "simile": 0.5, "diversi": 0.0}
 
 
 def unit_specs(C, rng):
-    """Matched: one perturbation, four seeds of a group. Null: four different perturbations, one per seed of a group."""
+    """Pairs are (seed before, cond before, seed after, cond after); cond "C0" is the plain tree.
+    Matched: one perturbation, four seeds of a group. Null: four different perturbations, one per seed of a group.
+    Seed (amendment 1): plain tree at one seed -> plain tree at a seed of the other group (no perturbation)."""
     U, names = [], [n for n in PERTS if n in C]
     for n in names:
         for g, seeds in enumerate(GROUPS):
-            U.append({"kind": "real" if n in REAL else "random", "pert": n, "group": g, "pairs": [(s, n) for s in seeds]})
+            U.append({"kind": "real", "pert": n, "group": g, "pairs": [(s, "C0", s, n) for s in seeds]})
     for g, seeds in enumerate(GROUPS):
         for _ in range(4):
             ps = rng.sample(names, 4)
-            U.append({"kind": "null", "pert": "mixed", "group": g, "pairs": list(zip(seeds, ps))})
+            U.append({"kind": "null", "pert": "mixed", "group": g, "pairs": [(s, "C0", s, n) for s, n in zip(seeds, ps)]})
+    for g, seeds in enumerate(GROUPS):
+        other = GROUPS[1 - g]
+        for sh in (0, 1):
+            U.append({"kind": "seed", "pert": "seed", "group": g, "pairs": [(s, "C0", other[(i + sh) % 4], "C0") for i, s in enumerate(seeds)]})
     return U
 
 
@@ -404,17 +416,18 @@ def page():
     from eye_grid_page import thumb, build
     R = T.img_root(); root = str(R); rng = random.Random(11010); C = conds_by_pert()
     U = unit_specs(C, rng); rng.shuffle(U)
-    reps = rng.sample([i for i, u in enumerate(U) if u["kind"] != "null"], 4); order = list(range(len(U)))
+    reps = rng.sample([i for i, u in enumerate(U) if u["kind"] == "real"], 4); order = list(range(len(U)))
     for i in reps:
         j = order.index(i); order.insert(rng.randint(min(j + 8, len(order)), len(order)), i)
     key, units, seen = [], [], set()
     for k_, i in enumerate(order, 1):
         u = U[i]; uid = f"T{k_:02d}"
         key.append({"unit": uid, "kind": u["kind"], "pert": u["pert"], "group": u["group"],
-                    "pairs": " ".join(f"{s}:{n}" for s, n in u["pairs"]), "repeat": int(i in seen)}); seen.add(i)
+                    "pairs": " ".join(":".join(x) for x in u["pairs"]), "repeat": int(i in seen)}); seen.add(i)
         rows = []
-        for k, (s, n) in enumerate(u["pairs"], 1):
-            a = thumb(str(R / FOLDER / fname(SUBJECTS[0], "C0", s)), root); b = thumb(str(R / FOLDER / fname(SUBJECTS[0], C[n], s)), root)
+        cc = lambda n: "C0" if n == "C0" else C[n]
+        for k, (s, n0, s2, n) in enumerate(u["pairs"], 1):
+            a = thumb(str(R / FOLDER / fname(SUBJECTS[0], cc(n0), s)), root); b = thumb(str(R / FOLDER / fname(SUBJECTS[0], cc(n), s2)), root)
             rows.append({"label": f"coppia {k}", "cells": [{"t": a[0], "f": a[1]}, {"t": b[0], "f": b[1]}]})
         units.append({"id": uid, "title": f"Scheda {k_:02d}", "groups": [{"id": "g", "name": "", "cols": ["prima", "dopo"], "rows": rows}]})
     with open(KEY, "w", newline="", encoding="utf-8") as f:
@@ -434,7 +447,7 @@ def rules(labels, key):
         k = key.get(r["unit"])
         if not k:
             continue
-        a = {q: (r.get(q) or "").strip() for q in ("light", "scene")}
+        a = {q: (r.get(q) or "").strip() for q in ("amount", "light", "scene")}
         if not any(a.values()):
             continue
         t = (k["kind"], k["pert"], k["group"], k["pairs"])
@@ -445,7 +458,18 @@ def rules(labels, key):
         v = [f(a) for t, a in first.items() if sel(t) and f(a) is not None]
         return (sum(v) / len(v) if v else None), len(v)
     rnd = lambda x: "-" if x is None else f"{x:.2f}"
-    sn, nn = mean(lambda t: t[0] == "null"); sr, nr = mean(lambda t: t[0] == "real"); sx, nx = mean(lambda t: t[0] == "random")
+    sn, nn = mean(lambda t: t[0] == "null"); sr, nr = mean(lambda t: t[0] == "real"); ss, ns_ = mean(lambda t: t[0] == "seed")
+    amt = lambda a: MSC.get(a.get("amount"))
+    ar, nar = mean(lambda t: t[0] == "real", amt); asd, nas = mean(lambda t: t[0] == "seed", amt)
+    if ar is None or asd is None or nar < 6 or nas < 2:
+        v1 = "not testable"
+    elif ar - asd >= 0.30:
+        v1 = "the edits change the content more than a change of seed"
+    elif ar - asd <= 0.10:
+        v1 = "no more than a change of seed"
+    else:
+        v1 = "partly"
+    out.append({"test": "Rule 1b how much the content changes: edit cards against seed cards", "value": f"edits {rnd(ar)} (n {nar}); seed {rnd(asd)} (n {nas})", "verdict": v1})
     ok = sn is not None and sn <= 0.35
     out.append({"test": "Rule 0 null cards (different perturbations) called the same", "value": f"{rnd(sn)} (n {nn})", "verdict": "ok" if ok else "too high: pass not valid"})
     if not ok or sr is None or nr < 6:
@@ -457,18 +481,14 @@ def rules(labels, key):
     else:
         v = "partly"
     out.append({"test": "Rule 2 real edits and presets against null", "value": f"real {rnd(sr)} (n {nr}); null {rnd(sn)}", "verdict": v})
-    if not ok or sr is None or sx is None or nx < 2:
-        v3 = "not testable"
-    else:
-        v3 = "real edits repeat more than fixed random pushes" if sr - sx >= 0.20 else "no difference from fixed random pushes"
-    out.append({"test": "Rule 3 real edits against fixed random pushes", "value": f"real {rnd(sr)}; random {rnd(sx)} (n {nx})", "verdict": v3})
+    out.append({"test": "Reported: seed cards, the same kind of change in every pair", "value": f"{rnd(ss)} (n {ns_})", "verdict": "-"})
     for q in ("light", "scene"):
         f = lambda a, q=q: SC.get(a.get(q))
-        out.append({"test": f"Reported [{q}] alone", "value": "; ".join(f"{k} {rnd(mean(lambda t, k=k: t[0] == k, f)[0])} (n {mean(lambda t, k=k: t[0] == k, f)[1]})" for k in ("real", "random", "null")), "verdict": "-"})
+        out.append({"test": f"Reported [{q}] alone", "value": "; ".join(f"{k} {rnd(mean(lambda t, k=k: t[0] == k, f)[0])} (n {mean(lambda t, k=k: t[0] == k, f)[1]})" for k in ("real", "null", "seed")), "verdict": "-"})
         out.append({"test": f"Reported [{q}] 'non si vede'", "value": str(sum(a[q] == "nonsivede" for a in first.values())), "verdict": "-"})
-    out.append({"test": "Reported per perturbation", "value": "; ".join(f"{n} {rnd(mean(lambda t, n=n: t[1] == n)[0])}" for n in PERTS), "verdict": "-"})
+    out.append({"test": "Reported per perturbation (same kind; amount)", "value": "; ".join(f"{n} {rnd(mean(lambda t, n=n: t[1] == n)[0])}; {rnd(mean(lambda t, n=n: t[1] == n, amt)[0])}" for n in PERTS), "verdict": "-"})
     rr = [(a, b) for a, b in reps if a]
-    out.append({"test": "Reported test-retest", "value": f"light {sum(a['light'] == b['light'] for a, b in rr)}/{len(rr)}, scene {sum(a['scene'] == b['scene'] for a, b in rr)}/{len(rr)}", "verdict": "-"})
+    out.append({"test": "Reported test-retest", "value": f"amount {sum(a['amount'] == b['amount'] for a, b in rr)}/{len(rr)}, light {sum(a['light'] == b['light'] for a, b in rr)}/{len(rr)}, scene {sum(a['scene'] == b['scene'] for a, b in rr)}/{len(rr)}", "verdict": "-"})
     return out
 
 
@@ -483,22 +503,23 @@ def selftest():
     if nx2:
         st["D"][f"P|{tag('E14', nx2[0])}"] = [curve(nx2[0])] * 2; next_strengths(st, "P", "E14")
     x, m = choose(st, "P", "E14"); assert x is not None and abs(m - TARGET) < 0.08, (x, m)
-    assert set(PERTS) == set(LADDER) and len(PERTS) == 10 and len(set(TEST_SEEDS + CAL_SEEDS)) == 10
+    assert set(PERTS) == set(LADDER) and len(PERTS) == 8 and len(set(TEST_SEEDS + CAL_SEEDS)) == 10
     assert all(x * 0.3 <= 1.0 for x in LADDER["P01"])
     g = {}
     for Ls, d in PRESETS["P06"].items():
         g.update(T.gj(int(Ls), d))
     assert len(g) == 12
-    # rules on synthetic labels: real cards always "stesso", null "diversi", random "simile"
+    # rules on synthetic labels: real cards "stesso" and "molto", null "diversi", seed "diversi" and "poco"
     rng = random.Random(1); C = {n: f"{n}_1" for n in PERTS}; U = unit_specs(C, rng)
     key, lab = {}, []
     for i, u in enumerate(U):
-        uid = f"T{i:02d}"; key[uid] = {"kind": u["kind"], "pert": u["pert"], "group": str(u["group"]), "pairs": " ".join(f"{s}:{n}" for s, n in u["pairs"]), "repeat": "0"}
-        a = {"real": "stesso", "random": "simile", "null": "diversi"}[u["kind"]]
-        lab.append({"unit": uid, "light": a, "scene": "nonsivede"})
+        uid = f"T{i:02d}"; key[uid] = {"kind": u["kind"], "pert": u["pert"], "group": str(u["group"]), "pairs": " ".join(":".join(x) for x in u["pairs"]), "repeat": "0"}
+        a = {"real": "stesso", "seed": "diversi", "null": "diversi"}[u["kind"]]
+        lab.append({"unit": uid, "amount": "poco" if u["kind"] == "seed" else "molto", "light": a, "scene": "nonsivede"})
     o = {r["test"]: r["verdict"] for r in rules(lab, key)}
     assert o["Rule 2 real edits and presets against null"] == "the change repeats across seeds", o
-    assert o["Rule 3 real edits against fixed random pushes"] == "real edits repeat more than fixed random pushes", o
+    assert o["Rule 1b how much the content changes: edit cards against seed cards"] == "the edits change the content more than a change of seed", o
+    assert sum(u["kind"] == "seed" for u in U) == 4 and sum(u["kind"] == "null" for u in U) == 8
     # dino tests on synthetic vectors: identical plain trees, a fixed shift per perturbation
     rs = np.random.default_rng(0); base = rs.normal(size=16) + 5; V = {}
     for s in TEST_SEEDS:

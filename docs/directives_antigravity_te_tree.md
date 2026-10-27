@@ -1,4 +1,4 @@
-# Directive for Antigravity — C111, "Photo of a tree" (calibration + test)
+# Directive for Antigravity — C111, "Photo of a tree" (calibration + test; amendment 1)
 
 Pre-registration: `docs/prereg_te_tree.md`. Script: `experiments/te_tree.py` (C109's encoder and calibration, new plan,
 gate and analysis). Outputs in `D:\StabilityMatrix-win-x64\Data\Images\Text2Img\benchmark_te_tree` and `data/te_tree_*`.
@@ -20,13 +20,13 @@ $PY = "D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 
 `& $PY te_tree.py --selftest` → `selftest ok; 28 cards ...`.
 
-## Step 1 — automatic calibration (ComfyUI running, queue empty; up to about 120 renders)
+## Step 1 — automatic calibration (ComfyUI running, queue empty; up to about 100 renders)
 
 ```powershell
 & $PY te_tree.py --calibrate
 ```
 
-Ends with `calibration done: <a> of 10 pairs reached; <b> in the window`. Report every `UNREACHABLE` / `NONFINITE` line.
+Ends with `calibration done: <a> of 8 pairs reached; <b> in the window`. Report every `UNREACHABLE` / `NONFINITE` line.
 If it stops (error or `TIMEOUT`), paste the output; it can be **re-run as is** and resumes from
 `data/te_tree_cal_state.json`.
 

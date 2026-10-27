@@ -83,3 +83,24 @@ the change, not its kind. If rule 1 holds, rule 2 is easier to satisfy (nearly i
 the same edit tend to end alike): the two halves are linked, and the reported spread per perturbation shows whether an
 edit adds or removes variation between seeds. Krea-2 turbo is distilled; low seed variety may be a property of
 distilled models and is not tested on another model here.
+
+## Amendment 1 (2026-10-27, before any encode or render)
+
+Asked by Alessandro before the directive was run: the claim is not that real edits beat random pushes (a fixed random
+push may well repeat too); it is that **the same prompt can give versions of the tree that differ in content more than
+a change of seed does, and that the changed properties stay when the seed changes.** Changes:
+
+* **Random pushes R09 and R26 removed**, and rule 3 with them. Eight perturbations: E05, E06, E14, E26, E28, P01, P06,
+  P10. Calibration up to about 100 renders; test 73 (1 gate + 8 seeds × 9).
+* **Seed cards (4) added** as the control for the first half of the claim: four pairs *plain tree at one seed → plain
+  tree at a seed of the other group*, no edit (two pairings per group). No extra render.
+* **A third question, asked first on every card:** *"Quanto cambia il contenuto (albero, ambiente, luce) da prima a
+  dopo, nell'insieme delle coppie?"* — *cambia molto / cambia qualcosa / quasi niente / niente* (1 / 0.67 / 0.33 / 0).
+* **Rule 1b (blind, new):** mean "amount" of the edit cards minus that of the seed cards **≥ 0.30** → *the edits change
+  the content more than a change of seed*; **≤ 0.10** → *no more than a change of seed*; otherwise *partly*.
+* **Rule 1 (DINOv2) stays, with a caveat:** the edits are calibrated to move the picture by about 0.25, so "below the
+  edits' distance" is partly set by the calibration. The informative part is the absolute bar (0.15) and the comparison
+  with the C109 subjects. Rule 1b, by eye and on content, is the primary test of the first half.
+* **Rules 0 and 2 unchanged** (null ≤ 0.35; edit cards minus null ≥ 0.30 on "same kind", the higher of light and
+  setting). The seed cards' "same kind" score is reported: a change of seed is expected not to repeat.
+* Cards: 16 edit, 8 null, 4 seed, 4 repeats of edit cards = 32.
