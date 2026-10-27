@@ -23,7 +23,7 @@ lora = node(2, "LoraLoaderModelOnly", [0, 130], [330, 82], ["Moss\\lodestones-8-
 shift = node(3, "ModelSamplingAuraFlow", [0, 260], [330, 58], [5.0], inputs=[("model", "MODEL")], outputs=[M],
              title="Shift (MOSS: 5)")
 slg = node(4, "SkipLayerGuidanceDiTSimple", [0, 360], [330, 130], ["", "22", 0.0, 0.5], inputs=[("model", "MODEL")],
-           outputs=[M], mode=4, title="SLG layer 22 (ufficiale; solo con CFG > 1)")
+           outputs=[M], mode=0, title="SLG layer 22 (ufficiale; solo con CFG > 1)")
 mtune = node(5, "ArthemyMossModelTuner", [0, 530], [330, 120], ["{}"], inputs=[("model", "MODEL")], outputs=[M], mode=4,
              title="MOSS Model Tuner (bypass)")
 clip = node(6, "CLIPLoader", [380, 0], [330, 106], ["qwen3.5_9b_w4a8_gptq.safetensors", "moss_image", "default"], outputs=[C])
