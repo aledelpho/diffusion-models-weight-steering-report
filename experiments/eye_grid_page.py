@@ -79,18 +79,18 @@ D.forEach((a,k)=>{const o=document.createElement("option");o.value=k;sel.appendC
 const done=u=>u.groups.every(g=>{const m=(M[u.id]||{})[g.id]||{};return Q.every(([q])=>m[q])});
 function prog(){document.getElementById("prog").textContent=D.filter(done).length+" / "+D.length+" completati";
  [...sel.options].forEach((o,k)=>o.textContent=(done(D[k])?"✓ ":"")+D[k].title)}
-function show(k){i=(k+D.length)%D.length;sel.value=i;const u=D[i];
+function show(k,keep){const y=window.scrollY;i=(k+D.length)%D.length;sel.value=i;const u=D[i];
  let h=`<h2>${u.title}</h2><div class="groups">`;
  u.groups.forEach((g,gi)=>{const m=mk(u.id,g.id);h+=`<div class="g"><table><tr><th>${g.name}</th>`+g.cols.map(c=>`<th>${c}</th>`).join("")+`</tr>`;
   g.rows.forEach((r,ri)=>{h+=`<tr><td class="l">${r.label}</td>`+r.cells.map((c,ci)=>`<td class="${c.hl?'hl':''}"><img loading="lazy" src="${c.t}" data-g="${gi}" data-r="${ri}" data-c="${ci}"></td>`).join("")+`</tr>`});
   h+=`</table>`;Q.forEach(([q,t],k)=>{h+=`<div class="q"><span>${t}</span>`+OP(k).map(([v,l])=>`<button data-g="${g.id}" data-q="${q}" data-v="${v}" class="${m[q]===v?'on':''}">${l}</button>`).join("")+`</div>`});
   h+=`<textarea data-g="${g.id}" placeholder="appunti…">${m.note||""}</textarea></div>`});
  h+=`</div>`;document.getElementById("m").innerHTML=h;
- document.querySelectorAll(".q button").forEach(b=>b.onclick=()=>{mk(u.id,b.dataset.g)[b.dataset.q]=b.dataset.v;save();show(i)});
+ document.querySelectorAll(".q button").forEach(b=>b.onclick=e=>{e.preventDefault();mk(u.id,b.dataset.g)[b.dataset.q]=b.dataset.v;save();b.parentNode.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b))});
  document.querySelectorAll("textarea").forEach(t=>t.oninput=()=>{mk(u.id,t.dataset.g).note=t.value;save()});
  document.querySelectorAll("td img").forEach(im=>im.onclick=()=>openOv(+im.dataset.g,+im.dataset.r,+im.dataset.c));
  u.groups.forEach(g=>g.rows.forEach(r=>r.cells.forEach(c=>{const p=new Image();p.src=c.f})));
- prog();if(!ov)window.scrollTo(0,0)}
+ prog();if(!ov)window.scrollTo(0,keep?y:0)}
 let ov=null,held=false;const OV=document.getElementById("ov");
 function openOv(g,r,c){if(document.activeElement)document.activeElement.blur();ov={g,r,c};OV.style.display="flex";paint()}
 function paint(){ov.c=Math.min(ov.c,D[i].groups[ov.g].cols.length-1);const u=D[i],g=u.groups[ov.g],row=g.rows[ov.r],c=held?(row.cells[ov.c].b||0):ov.c,cell=row.cells[c];
