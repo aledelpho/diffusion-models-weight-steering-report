@@ -64,3 +64,17 @@ pictures broke. Question 3 is replaced:
 * Reported in addition: the drift curve over the four levels per cell (the calibration the tool needs).
 
 Same cards, same order (key regenerated identical); storage key `c113_labels_v2`.
+
+## Amendment 2 (2026-10-28, before any label was exported)
+
+Alessandro, on the first cards (one was a null card mixing edits and levels, several of them broken): the blind pass
+does not serve a calibration; he asked for a non-blind sheet of every picture to mark, per edit, which doses can go
+higher and which must come down. **The blind pass is abandoned; no label from it exists or is used.** Rules 0–2 are
+not applied. C113 becomes a descriptive calibration:
+
+* sheets `Text2Img/_claude_scratch/C113_<prompt>.jpg` (plain + 4 edits × 4 levels × 8 seeds, labelled);
+* Alessandro's marks per edit and level (usable / too strong / broken), committed as given;
+* DINOv2 (`data/te_dose2_dino.csv`) reported next to the marks, with the caveat that consistency across seeds can rise
+  because the picture leaves the prompt the same way at every seed (seen on the sheets before the marks).
+
+The blind confirmation of the chosen doses moves to C114, on prompts Alessandro has not seen.
