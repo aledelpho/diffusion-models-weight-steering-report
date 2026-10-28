@@ -49,7 +49,7 @@ td img{width:100%;max-width:150px;display:block;margin:auto;border-radius:3px;cu
 td.hl img{outline:3px solid var(--acc);outline-offset:-3px}
 .q{margin:8px 0 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .q span{flex:1 1 280px}
-.q button.on{color:#fff}.q button.on[data-v=si]{background:var(--y)}.q button.on[data-v=inparte]{background:var(--p)}.q button.on[data-v=no]{background:var(--n)}.q button.on[data-v=debole]{background:var(--w)}
+.q button.on{color:#fff;background:#555}.q button.on[data-v=molto]{background:var(--y)}.q button.on[data-v=qualcosa]{background:var(--p)}.q button.on[data-v=poco]{background:var(--w)}.q button.on[data-v=niente]{background:var(--n)}.q button.on[data-v=si]{background:var(--y)}.q button.on[data-v=inparte]{background:var(--p)}.q button.on[data-v=no]{background:var(--n)}.q button.on[data-v=debole]{background:var(--w)}
 .q button.on[data-v=simile]{background:var(--p)}.q button.on[data-v=stesso]{background:var(--y)}.q button.on[data-v=diversi]{background:var(--n)}.q button.on[data-v=nonsivede]{background:var(--w)}
 .q button.on[data-v=testo]{background:var(--n)}.q button.on[data-v=blk23]{background:var(--y)}.q button.on[data-v=pari]{background:var(--p)}
 textarea{width:100%;min-height:44px;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;font:inherit;box-sizing:border-box}
