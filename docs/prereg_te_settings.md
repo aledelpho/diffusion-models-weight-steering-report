@@ -62,3 +62,16 @@ for E28); per prompt and edit; test–retest; notes. After the labels, a non-bli
 One observer, who proposed the hypothesis and wrote the prompts; doses chosen on one exploratory tree, not calibrated
 per prompt (an edit may barely move some prompts or break them); the "Cartoon" prompt names a style; 8 seeds; Krea-2
 turbo only.
+
+## Amendment 1 (2026-10-28, before any label)
+
+Alessandro, on opening the page: the questions named a tree, while the four prompts are a tree, an axe, a helmet and a
+car. The questions are reworded for any subject; meaning, answers, scores and rules are unchanged:
+
+* *amount:* "Quanto cambia il contenuto (soggetto, sfondo, luce) da prima a dopo, nell'insieme delle coppie?"
+* *light:* "Il cambiamento di luce, colori o atmosfera è dello stesso tipo in tutte le coppie?"
+* *setting:* "Il cambiamento del soggetto o dello sfondo (forma, materiali, ambientazione) è dello stesso tipo in tutte
+  le coppie?"
+
+Same cards, same order (the key regenerated identical); browser storage key `c112_labels_v2`, so no answer given to the
+first wording is carried over.

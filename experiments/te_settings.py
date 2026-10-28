@@ -134,7 +134,11 @@ def analyze():
 
 
 # ---------------------------------------------------------------- blind
-QS, SC, MSC = TT.QS, TT.SC, TT.MSC
+SC, MSC = TT.SC, TT.MSC
+# amendment 1 (2026-10-28, before any label): C111's questions named a tree; these fit any subject
+QS = [("amount", "Quanto cambia il contenuto (soggetto, sfondo, luce) da prima a dopo, nell'insieme delle coppie?", TT.MAG),
+      ("light", "Il cambiamento di luce, colori o atmosfera è dello stesso tipo in tutte le coppie?", TT.OPTS),
+      ("scene", "Il cambiamento del soggetto o dello sfondo (forma, materiali, ambientazione) è dello stesso tipo in tutte le coppie?", TT.OPTS)]
 
 
 def unit_specs(names, rng):
@@ -173,7 +177,7 @@ def page():
         units.append({"id": uid, "title": f"Scheda {k_:02d}", "groups": [{"id": "g", "name": "", "cols": ["prima", "dopo"], "rows": rows}]})
     with open(KEY, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(key[0])); w.writeheader(); w.writerows(key)
-    build(os.path.join(root, "occhio_C112.html"), "C112 · lo stesso cambiamento a ogni seed?", units, QS, TT.OPTS, "c112_labels_v1", "te_settings_labels.csv")
+    build(os.path.join(root, "occhio_C112.html"), "C112 · lo stesso cambiamento a ogni seed?", units, QS, TT.OPTS, "c112_labels_v2", "te_settings_labels.csv")
     print("cards", len(units), "->", os.path.join(root, "occhio_C112.html"))
 
 
