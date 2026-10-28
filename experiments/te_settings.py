@@ -136,9 +136,12 @@ def analyze():
 # ---------------------------------------------------------------- blind
 SC, MSC = TT.SC, TT.MSC
 # amendment 1 (2026-10-28, before any label): C111's questions named a tree; these fit any subject
-QS = [("amount", "Quanto cambia il contenuto (soggetto, sfondo, luce) da prima a dopo, nell'insieme delle coppie?", TT.MAG),
-      ("light", "Il cambiamento di luce, colori o atmosfera è dello stesso tipo in tutte le coppie?", TT.OPTS),
-      ("scene", "Il cambiamento del soggetto o dello sfondo (forma, materiali, ambientazione) è dello stesso tipo in tutte le coppie?", TT.OPTS)]
+# amendment 2 (2026-10-28, before any label): two rows (prima above, dopo below, the same column = the same seed) and
+# two plain questions; "same" replaces the higher of light and setting
+QS = [("amount", "1. Confronta la riga DOPO con la riga PRIMA: quanto sono cambiate le immagini?",
+       [("molto", "molto"), ("qualcosa", "un po'"), ("poco", "quasi niente"), ("niente", "niente")]),
+      ("same", "2. Le immagini della riga DOPO sono cambiate tutte nello stesso modo? (negli appunti: che cosa è cambiato)",
+       [("stesso", "sì, tutte"), ("simile", "la maggior parte"), ("diversi", "no, ognuna a modo suo"), ("nonsivede", "non è cambiato nulla")])]
 
 
 def unit_specs(names, rng):
@@ -170,14 +173,15 @@ def page():
         key.append({"unit": uid, "kind": u["kind"], "prompt": u["prompt"], "pert": u["pert"],
                     "pairs": " ".join(":".join(x) for x in u["pairs"]), "repeat": int(i in seen)}); seen.add(i)
         cc = lambda n: "C0" if n == "C0" else C[(u["prompt"], n)]
-        rows = []
-        for k, (s, n0, s2, n) in enumerate(u["pairs"], 1):
+        top, bot = [], []
+        for s, n0, s2, n in u["pairs"]:
             a = thumb(str(R / FOLDER / TT.fname(u["prompt"], cc(n0), s)), root); b = thumb(str(R / FOLDER / TT.fname(u["prompt"], cc(n), s2)), root)
-            rows.append({"label": f"coppia {k}", "cells": [{"t": a[0], "f": a[1]}, {"t": b[0], "f": b[1]}]})
-        units.append({"id": uid, "title": f"Scheda {k_:02d}", "groups": [{"id": "g", "name": "", "cols": ["prima", "dopo"], "rows": rows}]})
+            top.append({"t": a[0], "f": a[1]}); bot.append({"t": b[0], "f": b[1]})
+        rows = [{"label": "PRIMA", "cells": top}, {"label": "DOPO", "cells": bot}]
+        units.append({"id": uid, "title": f"Scheda {k_:02d}", "groups": [{"id": "g", "name": "", "cols": [str(c) for c in range(1, 9)], "rows": rows}]})
     with open(KEY, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(key[0])); w.writeheader(); w.writerows(key)
-    build(os.path.join(root, "occhio_C112.html"), "C112 · lo stesso cambiamento a ogni seed?", units, QS, TT.OPTS, "c112_labels_v2", "te_settings_labels.csv")
+    build(os.path.join(root, "occhio_C112.html"), "C112 · lo stesso cambiamento a ogni seed?", units, QS, TT.OPTS, "c112_labels_v3", "te_settings_labels.csv")
     print("cards", len(units), "->", os.path.join(root, "occhio_C112.html"))
 
 
@@ -187,14 +191,14 @@ def rules(labels, key):
         k = key.get(r["unit"])
         if not k:
             continue
-        a = {q: (r.get(q) or "").strip() for q in ("amount", "light", "scene")}
+        a = {q: (r.get(q) or "").strip() for q in ("amount", "same")}
         if not any(a.values()):
             continue
         t = (k["kind"], k["prompt"], k["pert"], k["pairs"])
         if k["repeat"] == "1" or t in first:
             reps.append((first.get(t), a)); continue
         first[t] = a
-    same = TT.card_score; amt = lambda a: MSC.get(a.get("amount"))
+    same = lambda a: SC.get(a.get("same")); amt = lambda a: MSC.get(a.get("amount"))
     def mean(sel, f=same):
         v = [f(a) for t, a in first.items() if sel(t) and f(a) is not None]
         return (sum(v) / len(v) if v else None), len(v)
@@ -216,13 +220,10 @@ def rules(labels, key):
     out.append({"test": "Rule 2 E28 and P01 cards against null (same kind)", "value": f"edits {rnd(sp)} (n {nsp}); null {rnd(sn)}", "verdict": v})
     sa, nsa = mean(lambda t: t[0] == "edit"); ss, nss = mean(lambda t: t[0] == "seed")
     out.append({"test": "Reported: all eight edits against null; seed cards", "value": f"all edits {rnd(sa)} (n {nsa}); seed {rnd(ss)} (n {nss})", "verdict": "-"})
-    for q in ("light", "scene"):
-        f = lambda a, q=q: SC.get(a.get(q))
-        out.append({"test": f"Reported [{q}] alone: E28+P01 / null / seed", "value": " / ".join(rnd(mean(sel, f)[0]) for sel in (prim, lambda t: t[0] == "null", lambda t: t[0] == "seed")), "verdict": "-"})
     for p in SUBJECTS:
         out.append({"test": f"Reported {p}: same kind (amount) per edit", "value": "; ".join(f"{n} {rnd(mean(lambda t, n=n, p=p: t[0] == 'edit' and t[1] == p and t[2] == n)[0])} ({rnd(mean(lambda t, n=n, p=p: t[0] == 'edit' and t[1] == p and t[2] == n, amt)[0])})" for n in DOSES), "verdict": "-"})
     rr = [(a, b) for a, b in reps if a]
-    out.append({"test": "Reported test-retest", "value": ", ".join(f"{q} {sum(a[q] == b[q] for a, b in rr)}/{len(rr)}" for q in ("amount", "light", "scene")), "verdict": "-"})
+    out.append({"test": "Reported test-retest", "value": ", ".join(f"{q} {sum(a[q] == b[q] for a, b in rr)}/{len(rr)}" for q in ("amount", "same")), "verdict": "-"})
     return out
 
 
@@ -234,7 +235,7 @@ def selftest():
     for i, u in enumerate(U):
         uid = f"U{i:02d}"; key[uid] = {"kind": u["kind"], "prompt": u["prompt"], "pert": u["pert"], "pairs": " ".join(":".join(x) for x in u["pairs"]), "repeat": "0"}
         hit = u["kind"] == "edit" and u["pert"] in PRIMARY
-        lab.append({"unit": uid, "amount": "molto" if hit else "poco", "light": "nonsivede", "scene": "stesso" if hit else "diversi"})
+        lab.append({"unit": uid, "amount": "molto" if hit else "poco", "same": "stesso" if hit else "diversi"})
     o = {r["test"]: r["verdict"] for r in rules(lab, key)}
     assert o["Rule 2 E28 and P01 cards against null (same kind)"] == "the change repeats across seeds", o
     assert o["Rule 1b amount: E28 and P01 cards against seed cards"] == "the edits change the content more than a change of seed", o

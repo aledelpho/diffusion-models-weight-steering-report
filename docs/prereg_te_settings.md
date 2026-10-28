@@ -75,3 +75,19 @@ car. The questions are reworded for any subject; meaning, answers, scores and ru
 
 Same cards, same order (the key regenerated identical); browser storage key `c112_labels_v2`, so no answer given to the
 first wording is carried over.
+
+## Amendment 2 (2026-10-28, before any label)
+
+Alessandro, on starting the pass: the questions were hard to follow and eight pairs at once were confusing. Changes to
+the page only; cards, their order and the key are unchanged (regenerated identical); storage key `c112_labels_v3`.
+
+* **Layout:** each card is two rows of 8, *PRIMA* above and *DOPO* below; the same column is the same seed (for seed
+  cards, *DOPO* is the plain picture at another seed).
+* **Two questions instead of three:**
+  1. *amount* — "Confronta la riga DOPO con la riga PRIMA: quanto sono cambiate le immagini?" molto / un po' / quasi
+     niente / niente (1 / 0.67 / 0.33 / 0, as before);
+  2. *same* — "Le immagini della riga DOPO sono cambiate tutte nello stesso modo?" sì, tutte / la maggior parte / no,
+     ognuna a modo suo / non è cambiato nulla (1 / 0.5 / 0 / excluded, as *stesso / simile / diversi / non si vede*).
+     What changed goes in the notes.
+* **Rules 0, 1b and 2 unchanged in bars;** the card's "same kind" score is now the answer to *same* (it was the higher
+  of *light* and *setting*). The light/setting split is no longer reported; the notes take its place.
