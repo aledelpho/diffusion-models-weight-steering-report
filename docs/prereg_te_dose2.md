@@ -51,3 +51,16 @@ plain and its ratio to the plain seed spread, test–retest, notes.
 
 One observer who proposed the hypothesis and has seen C112's level-1 pictures (in the non-blind sheets); one card per
 level per cell (single answers, coarse scale); two prompts; doses beyond C74's range; Krea-2 turbo only.
+
+## Amendment 1 (2026-10-28, before any label)
+
+Alessandro, before starting: since this is a calibration, what matters most is *how far* each edit went, not how many
+pictures broke. Question 3 is replaced:
+
+* *drift* — "Quanto si sono allontanate dal prompt le immagini DOPO, nell'insieme?" per niente (è ancora ciò che il
+  prompt chiede) / poco (qualche dettaglio fuori posto) / molto (si riconosce a fatica) / del tutto (non è più ciò che il
+  prompt chiede, o è rotta).
+* A level is **unbroken** when *drift* is *per niente* or *poco*. Rules 0–3 and their bars are otherwise unchanged.
+* Reported in addition: the drift curve over the four levels per cell (the calibration the tool needs).
+
+Same cards, same order (key regenerated identical); storage key `c113_labels_v2`.

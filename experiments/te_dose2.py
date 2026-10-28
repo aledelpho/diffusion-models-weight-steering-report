@@ -125,14 +125,16 @@ def analyze():
 
 
 # ---------------------------------------------------------------- blind
-BROKEN = [("nessuna", "nessuna"), ("poche", "una o due"), ("meta", "circa metà"), ("tutte", "quasi tutte")]
+# amendment 1 (2026-10-28, before any label): how far the pictures went, instead of how many are broken
+DRIFT = [("niente", "per niente: è ancora ciò che il prompt chiede"), ("poco", "poco: qualche dettaglio fuori posto"),
+         ("tanto", "molto: si riconosce a fatica"), ("tutto", "del tutto: non è più ciò che il prompt chiede, o è rotta")]
 QS = [("amount", "1. Confronta la riga DOPO con la riga PRIMA: quanto sono cambiate le immagini?",
        [("molto", "molto"), ("qualcosa", "un po'"), ("poco", "quasi niente"), ("niente", "niente")]),
       ("same", "2. Le immagini della riga DOPO sono cambiate tutte nello stesso modo? (negli appunti: che cosa è cambiato)",
        [("stesso", "sì, tutte"), ("simile", "la maggior parte"), ("diversi", "no, ognuna a modo suo"), ("nonsivede", "non è cambiato nulla")]),
-      ("broken", "3. In quante immagini DOPO c'è qualcosa di rotto, deformato o estraneo al prompt?", BROKEN)]
+      ("drift", "3. Quanto si sono allontanate dal prompt le immagini DOPO, nell'insieme?", DRIFT)]
 SC, MSC = TT.SC, TT.MSC
-OKB = ("nessuna", "poche")
+OKB = ("niente", "poco")
 
 
 def unit_specs(rng):
@@ -168,7 +170,7 @@ def page():
                       "rows": [{"label": "PRIMA", "cells": top}, {"label": "DOPO", "cells": bot}]}]})
     with open(KEY, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(key[0])); w.writeheader(); w.writerows(key)
-    build(os.path.join(root, "occhio_C113.html"), "C113 · più dose, più coerenza?", units, QS, QS[1][2], "c113_labels_v1", "te_dose2_labels.csv")
+    build(os.path.join(root, "occhio_C113.html"), "C113 · più dose, più coerenza?", units, QS, QS[1][2], "c113_labels_v2", "te_dose2_labels.csv")
     print("cards", len(units), "->", os.path.join(root, "occhio_C113.html"))
 
 
@@ -178,7 +180,7 @@ def rules(labels, key, dino=None):
         k = key.get(r["unit"])
         if not k:
             continue
-        a = {q: (r.get(q) or "").strip() for q in ("amount", "same", "broken")}
+        a = {q: (r.get(q) or "").strip() for q in ("amount", "same", "drift")}
         if not any(a.values()):
             continue
         t = (k["kind"], k["prompt"], k["edit"], str(k["level"]), k["pairs"])
@@ -197,7 +199,7 @@ def rules(labels, key, dino=None):
     for p in SUBJECTS:
         for n in LADDERS:
             labs = [get(p, n, l) for l in range(1, 5)]
-            okl = [l for l in range(2, 5) if labs[l - 1] and labs[l - 1]["broken"] in OKB]
+            okl = [l for l in range(2, 5) if labs[l - 1] and labs[l - 1]["drift"] in OKB]
             top = max(okl) if okl else None
             cells += 1
             s1 = SC.get((labs[0] or {}).get("same"), 0.0) if labs[0] else None
@@ -207,15 +209,15 @@ def rules(labels, key, dino=None):
             r2 = top is not None and at is not None and seed_amt[p] is not None and at >= seed_amt[p]
             r3 = top is not None and (p, n, top) in D and D[(p, n, top)] - D[(p, n, 1)] >= 0.10
             rise += r1; dom += r2; drise += r3
-            brk = next((l for l in range(1, 5) if labs[l - 1] and labs[l - 1]["broken"] not in OKB), None)
-            detail.append(f"{p} {n}: top unbroken level {top or '-'}, same {rnd(s1)} -> {rnd(st)}, amount {rnd(at)} vs seed {rnd(seed_amt[p])}, first broken level {brk or '-'}")
+            brk = next((l for l in range(1, 5) if labs[l - 1] and labs[l - 1]["drift"] not in OKB), None)
+            detail.append(f"{p} {n}: top unbroken level {top or '-'}, same {rnd(s1)} -> {rnd(st)}, amount {rnd(at)} vs seed {rnd(seed_amt[p])}, first drifted level {brk or '-'}, drift by level " + "/".join((l or {}).get("drift", "-") or "-" for l in labs))
     ver = lambda k: "supported" if k >= 5 else "not supported"
     out.append({"test": "Rule 1 same way rises from level 1 to the highest unbroken level (>= 0.5), cells", "value": f"{rise} of {cells}", "verdict": ver(rise) if ok else "not testable"})
     out.append({"test": "Rule 2 at the highest unbroken level the edit changes as much as a change of seed, cells", "value": f"{dom} of {cells}", "verdict": ver(dom)})
     out.append({"test": "Rule 3 DINOv2 consistency rises by >= 0.10 to the highest unbroken level, cells", "value": f"{drise} of {cells}", "verdict": ver(drise) if dino else "not computed"})
     out.append({"test": "Reported per cell", "value": "; ".join(detail), "verdict": "-"})
     rr = [(a, b) for a, b in reps if a]
-    out.append({"test": "Reported test-retest", "value": ", ".join(f"{q} {sum(a[q] == b[q] for a, b in rr)}/{len(rr)}" for q in ("amount", "same", "broken")), "verdict": "-"})
+    out.append({"test": "Reported test-retest", "value": ", ".join(f"{q} {sum(a[q] == b[q] for a, b in rr)}/{len(rr)}" for q in ("amount", "same", "drift")), "verdict": "-"})
     return out
 
 
@@ -229,9 +231,9 @@ def selftest():
         uid = f"V{i:02d}"; key[uid] = {"kind": u["kind"], "prompt": u["prompt"], "edit": u["edit"], "level": u["level"], "pairs": " ".join(":".join(x) for x in u["pairs"]), "repeat": "0"}
         if u["kind"] == "edit":
             l = u["level"]
-            lab.append({"unit": uid, "amount": ["poco", "qualcosa", "molto", "molto"][l - 1], "same": ["diversi", "simile", "stesso", "stesso"][l - 1], "broken": "tutte" if l == 4 else "nessuna"})
+            lab.append({"unit": uid, "amount": ["poco", "qualcosa", "molto", "molto"][l - 1], "same": ["diversi", "simile", "stesso", "stesso"][l - 1], "drift": "tutto" if l == 4 else "niente"})
         else:
-            lab.append({"unit": uid, "amount": "molto" if u["kind"] == "seed" else "qualcosa", "same": "diversi", "broken": "nessuna"})
+            lab.append({"unit": uid, "amount": "molto" if u["kind"] == "seed" else "qualcosa", "same": "diversi", "drift": "niente"})
     for p in SUBJECTS:
         for n in LADDERS:
             for l in range(1, 5):
