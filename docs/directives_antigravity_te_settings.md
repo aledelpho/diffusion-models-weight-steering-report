@@ -19,8 +19,16 @@ $PY = "D:\StabilityMatrix-win-x64\Data\Packages\ComfyUI\venv\Scripts\python.exe"
 & $PY te_settings.py --queue --block gate
 ```
 
-`selftest ok; 44 cards (+4 repeats)`; `plan rows: 292 (292 expected)` (report any `NONFINITE` line); `queued 4`. When
-the queue is empty:
+`selftest ok; 44 cards (+4 repeats)`; `plan rows: 292 (292 expected)` (report any `NONFINITE` line); `queued 4`.
+
+**Correction 2026-10-28** (the first version ran `--gate` before the plain renders it compares against existed): also
+queue the four plain renders at seed 2645751, which are in the `main` block:
+
+```powershell
+& $PY -c "import te_settings as S; rows=[r for r in S.rd(S.PLAN) if r['block']=='main' and r['cond']=='C0' and r['seed']=='2645751']; [S.TT.post(r) for r in rows]; print('queued', len(rows))"
+```
+
+`queued 4`. When the queue is empty:
 
 ```powershell
 & $PY te_settings.py --gate
