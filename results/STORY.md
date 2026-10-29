@@ -435,7 +435,41 @@ goes depends on the whole description.
 
 ---
 
-## 12 · What fooled us
+## 12 · Does an edit do the same thing at every seed?
+
+I had an idea for a tool. If I write "a photo of a tree", I thought, the model always gives me more or less the same
+tree; an edit could give me *another* tree, and give it to me at every seed. On the rally car it looked like that: the
+plain car the same at every seed, some presets changing it the same way at every seed.
+
+The first half was wrong. "Photo of a tree" gave me eight different trees, the most seed-dependent prompt of the whole
+project. The less a prompt says, the more the seed decides. Only prompts that describe their subject, a helmet with a
+red gem, an alien axe, come out almost the same at every seed.
+
+![The plain picture at eight seeds for five prompts: "Photo of a tree" changes most with the seed (median DINOv2 distance 0.475), mostly in framing; the blue tree and the flying car vary too, while the alien axe and the evil helmet are nearly the same object at every seed (0.094 and 0.056), with only the background changing colour.](../assets/32-an-edit-as-a-switch/F32.1_seed_variety_sheet.webp)
+
+The second half held, once I pushed hard enough. My doses were half of what they needed to be. I walked four edits up
+four doses and marked every row by eye: the right dose is narrow, about 0.8 for two of them and about 1.06 for the
+third, the same on a tree and on a helmet. One step past it the helmet becomes a black figurine or a cartoon devil, the
+same at every seed, and not a helmet any more.
+
+![The evil helmet under E06 and E28 at four doses: E06 at 0.8 and E28 at 1.06 keep the helmet and change it the same way at every seed; one step further E06 turns it into a black figurine and E28 into a cartoon devil, the same at every seed but no longer the prompt; E06 at 1.6 breaks into noise.](../assets/32-an-edit-as-a-switch/F32.3_dose_ladder_sheet.webp)
+
+Then Claude wrote three prompts I had never seen, a red watercolour tree, an art-deco dagger, a clay robot with copper
+eyes, and I judged them blind. At those doses the change repeated at every seed in 10 of 12 cases. And it is not a vague
+change: it switches precise things. Labelled one picture at a time without knowing the edit, the robot's copper eyes go
+from 8 seeds out of 8 to none under two edits; "clay" leaves the robot and becomes a second little figure; a pond appears
+under the tree; the art-deco gold leaves the dagger for a panel behind it. An edit adds, replaces, or moves.
+
+![An unseen prompt, a clay robot with copper eyes, at eight seeds under four edits at C113's doses, captioned with what was seen blind: E14 replaces the copper eyes with black ones at every seed, P01 turns the robot to metal and adds a separate small figure at every seed, E06 and E28 keep copper and clay and add big black pupils.](../assets/32-an-edit-as-a-switch/F32.5_unseen_robot_sheet.webp)
+
+Two things I got wrong on the way: four light layers are not cleaner than one layer pushed hard, and my first "everything
+the prompt asks is still there" answers missed the copper eyes. One question per detail found them.
+
+→ [page 32](32-an-edit-as-a-switch.md) · four light layers more coherent than one **overturned** · a light preset's change carries across style domains **holds** · a vague prompt gives the same picture at every seed **overturned** · an edit changes a prompt's pictures the same way at every seed, on prompts never seen **holds** · at half the right dose an edit beats a change of seed **overturned** · a narrow dose window, the same on two subjects **open** (found by eye) · at the window dose an edit moves the picture further than a seed change **holds** · at the window dose an edit keeps every stated attribute **overturned** · an edit switches nameable attributes on and off at almost every seed **holds**
+
+---
+
+## 13 · What fooled us
 
 ![The two doses a statistic ranked best, Block_4 and Block_1 positive at 0.500, are a crumpled-stroke texture and colour confetti with no subject left.](../assets/26-what-did-not-work/F26.1_destroyed_by_the_statistic.webp)
 
@@ -449,7 +483,7 @@ and undone by simply looking. That's why every test in this report puts the eye 
 
 ---
 
-## 13 · Where to start, and what is not known
+## 14 · Where to start, and what is not known
 
 If you want to try the tuner, start from the map: the end blocks for colour, grain and softness, safe at
 small doses; the middle blocks for deeper changes, with care. If the end blocks bring noise, try their
@@ -465,7 +499,7 @@ is more than the sum of its halves) (milder doses don't help much: the style hol
 character starts going well before); whether a preset can keep a character's expression as well as its identity (the portrait preset
 kept who they were, not always how they looked at you); whether a blind observer would still say "same
 character" when some sheets show two different ones; whether the noise of a preset can be cleaned
-afterwards without losing its look; how much each block writes into the model's internal signal; whether someone who has never seen these pictures would sort them by the edit as I did; and whether any of
+afterwards without losing its look; how much each block writes into the model's internal signal; whether someone who has never seen these pictures would sort them by the edit as I did; which attributes an edit will switch before I see it, and whether its dose window holds beyond the few subjects I tried; and whether any of
 this carries over to another model. Keep in mind that all of this is one model, mostly one
 observer who knew the conditions (one blind observer for the portraits, and one for the text-encoder control), and samples of 16 to 56 cases
 per test.

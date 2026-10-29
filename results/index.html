@@ -95,6 +95,7 @@
 <li><a href="#p-29-inside-the-block"><span class="dot" style="background:#0ca30c"></span>Inside a block — attention, MLP, and what an edit costs</a></li>
 <li><a href="#p-30-the-text-encoder"><span class="dot" style="background:#0ca30c"></span>The text encoder — how hard it pushes, and where the picture goes</a></li>
 <li><a href="#p-31-what-an-edit-leaves"><span class="dot" style="background:#0ca30c"></span>What a text-encoder edit leaves — a curve, a signature, a family resemblance</a></li>
+<li><a href="#p-32-an-edit-as-a-switch"><span class="dot" style="background:#0ca30c"></span>An edit as a switch — the right dose, the same change at every seed, and what it turns on and off</a></li>
   </ul>
   <h2>Start here</h2>
   <ul>
@@ -148,7 +149,7 @@ pictures:</strong> calibrated on four character portraits and frozen, it gave th
 never seen the look its author had described, about as coherently as on the four (0.51 against
 0.61), and an observer blind to the condition chose it as the closer match in 56 of 56
 comparisons; each character stays recognisable, though the face moves slightly more than under a
-change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. <strong>Editing the text encoder instead</strong> (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. A dose ladder shows that these edits do not break the picture up to full dose and that the style holds up to about two thirds of it; what goes first is the character. In blind yes/no labels on every trait the prompt names, two edits cost the character far more than random pushes of the same size, labelled by a second labeller who knew nothing of the study (traits kept at full dose 0.48 and 0.63 against 0.87-0.95), while a third costs less; and when those two edits change the skin, it becomes lighter (52 of 53 changes; 14 of 14 for the second labeller), which random pushes almost never do (pre-registered). Rewriting a prompt changes what a block does about as much as
+change of seed (ArcFace 0.74 against 0.80) and a prompted expression can go flat. <strong>Inside a block, the two halves differ:</strong> labelled blind, the MLP is the noisier half in 13 of 19 cells and the attention only at the end of the stack; on new comic and cartoon prompts, edits to blocks 1-19 change the picture more than edits to blocks 20-27 and damage its surface in 19% of pairs against 79%, not in none. The fine-texture cost of a push measured earlier replicates on its own comic prompts and was not shown on photographs. <strong>Editing the text encoder instead</strong> (Qwen3-VL-4B, one layer half zeroed or doubled) changes the genre of a picture, and usually who is drawn, rather than its surface; how much the picture changes is predicted by how far the edit moves the conditioning (Spearman 0.71 and 0.80, pre-registered), though mostly by telling kinds of edit apart, but where it goes — anime in 39 of 50 genre switches — is explained neither by less attention on the style words nor by a push resembling the words "anime style"; removing the style words shows the fallback directly — the elf is then drawn as anime in 9 of 9 cases (pre-registered), while seven other characters fall back to painting or realistic renders, so there is no single default — and random pushes of the same size reach it only when they vary from token to token, while each real edit follows its own direction. A dose ladder shows that these edits do not break the picture up to full dose and that the style holds up to about two thirds of it; what goes first is the character. In blind yes/no labels on every trait the prompt names, two edits cost the character far more than random pushes of the same size, labelled by a second labeller who knew nothing of the study (traits kept at full dose 0.48 and 0.63 against 0.87-0.95), while a third costs less; and when those two edits change the skin, it becomes lighter (52 of 53 changes; 14 of 14 for the second labeller), which random pushes almost never do (pre-registered). At a narrow dose, found by eye and the same on different subjects, an encoder edit changes a prompt's pictures the same way at every seed, on prompts nobody had seen (blind, 0.75 against 0.00 for mixed controls), and moves them further than a change of seed does (DINOv2, 11 of 12); what it does is switch nameable attributes on or off, adding, replacing or moving them to another place in the picture (15 of 16 predicted switches confirmed blind) — while a vague prompt such as "Photo of a tree" is the one that varies most with the seed. Rewriting a prompt changes what a block does about as much as
 changing the seed, and far less than changing the subject; the pre-registered test of this is
 inconclusive by its own rule. I also report four claims that were made from statistics and
 withdrawn after the images were opened, and the limits of a study whose eye passes were made by a
@@ -177,7 +178,10 @@ comic, and dark skin turning lighter on the way. Random pushes of the same stren
 nothing about the study saw the same thing I did: it's where the edit points, not how hard it pushes
 (<a href="#p-30-the-text-encoder">page 30</a>). And an edit has a look of its own: shown five pictures, two pairs made by two edits
 at the same seeds and one by a third, I found the groups in 20 of 28 trials and never grouped them by seed; across
-different subjects the look carries as a family resemblance rather than the same change (<a href="#p-31-what-an-edit-leaves">page 31</a>).</p>
+different subjects the look carries as a family resemblance rather than the same change (<a href="#p-31-what-an-edit-leaves">page 31</a>).
+Pushed to the right dose, which is narrow, an edit behaves like a switch: on prompts I had never seen it took the copper
+eyes off a clay robot at every seed, or moved the art-deco gold from a dagger onto the panel behind it
+(<a href="#p-32-an-edit-as-a-switch">page 32</a>).</p>
 <p>I started with hand-calibrated presets over the whole stack (<a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/blob/main/notebook/01-mark-style.md">notebook page 01</a>)
 and a notebook full of tests on permutations, rotations and block groups (<a href="https://github.com/aledelpho/diffusion-models-weight-steering-report/tree/main/notebook">notebook</a>).
 Single blocks turned out to be the more useful unit: they're finer than the tuner's macro-blocks, and some
@@ -197,6 +201,8 @@ of them behave the same way on every prompt I tried. The pages below report what
   character (<a href="#p-30-the-text-encoder">30</a>);</li>
 <li>what a text-encoder edit leaves: the shape of its push, its signature across seeds and its family resemblance across
   subjects (<a href="#p-31-what-an-edit-leaves">31</a>);</li>
+<li>an edit as a switch: the right dose, the same change at every seed, and the attributes it adds, replaces or moves
+  (<a href="#p-32-an-edit-as-a-switch">32</a>);</li>
 <li>what did not work, and the limits (<a href="#p-26-what-did-not-work">26</a>); other kinds of edit
   (<a href="#p-27-other-edits">27</a>).</li>
 </ul>
@@ -337,6 +343,10 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--two-pairs-and-an-odd-one">A fixed perturbation of the model, a text-encoder edit, a random push of the text encoder or an image-model preset, leaves a signature the eye recognises across seeds without being told which pictures belong together.</a></td><td class="ev">Pre-registered (C106): five pictures of one prompt, two pairs made by perturbations A and B at the same two seeds and one by C. Exact grouping 20 of 28 (0.71) against chance 1/15, binomial p 5.5e-18 (bar 0.50 and p &lt; 0.001); text-encoder set 11 of 16, image-model presets 9 of 12 (bars 0.40 and p &lt; 0.01); grouped by seed 0 of 28. Test-retest 4 of 4. C104, reported before it: one fixed random push changes the content the same way across three seeds in 1.00 (layer 9, n 5) and 0.92 (layer 26, n 12) of the units.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--a-family-resemblance-across-subjects">A fixed text-encoder perturbation gives a family resemblance across different subjects, and it does so across style domains as much as within one: something similar, not the same change.</a></td><td class="ev">Pre-registered (C105, amendment 1 on the match before the blind pass, amendment 2 during it adding the answer &quot;something similar&quot;, scored 0.5). Content, share of &quot;same&quot; with &quot;similar&quot; as half: control of different perturbations 0.06 (n 8); real edits 0.38 within a domain, 0.50 across; random pushes 0.56 and 0.58: &quot;transfers across domains&quot; for both (bar: a gap of 0.30 over the control). 23 of 36 content answers are &quot;similar&quot;, 3 &quot;same&quot;. The domain specificity of image-model presets (2026-09-25) is not reproduced here.</td></tr>
 <tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">On the elf rogue&#x27;s description, the gender word decides where L06 MLP doubled sends the style: &quot;non-binary&quot; to anime, &quot;female&quot; to painting.</a></td><td class="ev">Pre-registered (C107 rule 2): only the subject phrase changed, four seeds, blind labels. Anime under L06 with &quot;non-binary&quot; 0.75 (n 8) against &quot;female&quot; 0.00 (n 8), +0.75 (bar +0.50). With &quot;female&quot; the pictures are painted in 7 of 8 and realistic in 1. Exploratory Fisher test on the 2 x 2, p 0.007. C108 found it does not generalise (see the next claims).</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-32-an-edit-as-a-switch--four-light-layers-instead-of-one">The change of a four-layer light preset of the text encoder carries from comic portraits to pictures in other styles better than chance.</a></td><td class="ev">Pre-registered (C109 rule 2): &quot;is the change of the same kind in the comic portraits and in the other pictures?&quot; 0.50 for the presets against 0.13 for null cards, +0.38 (bar +0.30). One observer, 36 cards, test-retest 3 of 4.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-32-an-edit-as-a-switch--the-same-change-at-every-seed">Under a fixed text-encoder edit, the pictures of one prompt change in the same way at every seed, on prompts the edit was never chosen on.</a></td><td class="ev">Pre-registered twice, blind, 8 seeds per card. C112 rule 2: &quot;did all 8 change the same way&quot; for E28 and P01 0.56 (n 8) against 0.00 for null cards (bar +0.30). C114 rule 1, three prompts nobody had seen, edits at C113&#x27;s doses: 0.75 (n 12) against 0.00 (n 6); 10 of 12 prompt-edit cells &quot;all&quot; or &quot;most&quot;; not E14 and E28 on the dagger. Test-retest 3 of 3.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-32-an-edit-as-a-switch--new-prompts">At its window dose a text-encoder edit moves the picture further than a change of seed does, by DINOv2, on prompts it was not chosen on.</a></td><td class="ev">Pre-registered (C114 rule 3): median DINOv2 distance from the plain picture at least the plain seed spread in 11 of 12 prompt-edit cells (bar 9; ratios 0.69-2.69; the exception is E14 on the dagger). By eye the amount was not ruled: edits 0.89, seed cards 1.00, as in C112.</td></tr>
+<tr><td><span class="pill" style="--c:#0ca30c">Holds</span></td><td><a href="#p-32-an-edit-as-a-switch--what-it-turns-on-and-off">A text-encoder edit at its window dose switches nameable attributes of the picture on or off at almost every seed: it adds some, replaces some, and moves others to another place in the picture.</a></td><td class="ev">Pre-registered (C115): one question per attribute, each picture alone, conditions hidden. 15 of 16 predicted changes confirmed (at least 5 of 8 seeds in the predicted direction; bar 70 %), no unpredicted change, controls (red leaves, watercolour) 8 of 8 under every edit, test-retest 48 of 48. The predictions came from Claude&#x27;s reading of the same pictures, so this checks that reading blind; it does not replicate it.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-21-block-map--what-the-weights-show">How much a block rewrites the picture can be read, in part, from the spectra of its own MLP weights, beyond what its depth explains.</a></td><td class="ev">Pre-registered (C46). Best Spearman rho 0.615 with depth removed, above the Bonferroni threshold 0.57, so the rule says supported; leaving one block out moves it between 0.50 and 0.70, so a single block can undo it. Correlational, 28 blocks, one checkpoint.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-24-wording--the-registered-rule">Rewriting a prompt — reordering it, turning it into tags, using synonyms — changes the direction of a block&#x27;s effect no more than changing the seed does, while changing the subject changes it a great deal.</a></td><td class="ev">Pre-registered (C45), verdict inconclusive by its own rule. Writing against seed, median -0.04 (threshold -0.10): met. Writing more alike than subject on 12 of 12 scored arms (threshold 75 percent): met. Writing more alike than a one-object content change on 0 of 12 (threshold 60 percent): not met. By eye, the same change under every writing on all 24 arms.</td></tr>
 <tr><td><span class="pill" style="--c:#fab219">Ambiguous</span></td><td><a href="#p-27-other-edits--a-curiosity-attributes-that-appear">A block permutation makes an attribute the prompt asks for, and the model usually drops, appear in almost every render, while a sign scramble moving the weights exactly as far does nothing.</a></td><td class="ev">Exploratory, scored by me with the condition visible: 19 of 20 seeds against 1 of 20 for the stock model and 1 of 20 for the scramble. One prompt family; the test of generality was designed and never run.</td></tr>
@@ -362,6 +372,10 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--deeper-layers-bend-less">At every layer of the text encoder, an edit&#x27;s push bends less than a random push of the same size injected at the same place.</a></td><td class="ev">Pre-registered (C101 rule 2): the edit bends less in 24 of 35 layers, not at layers 2, 3, 4, 8, 9, 10, 11, 14, 15, 17 and 34, so the verdict is &quot;depends on the layer&quot;. Median edit minus control: +1 degree in layers 0-11, -5.5 in 12-23, -15.9 in 24-34. C93 had suggested it from three layers; C100 already found L14 bending more than its control (80.5 against 77.3).</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">On the elf rogue&#x27;s description, the species word (elf or human) decides where L06 MLP doubled sends the style.</a></td><td class="ev">Pre-registered (C107 rule 1): anime under L06 with &quot;elf&quot; 0.38 (n 8), with &quot;human&quot; 0.38 (n 8), +0.00 (bar +0.50). The reading it came from, &quot;the picture goes anime when the pointed ears survive&quot;, is not supported either (C107, reported): the female elf keeps her ears in 4 of 4 and is painted; the non-binary human has none and is anime in 3 of 4.</td></tr>
 <tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">Under L06 MLP doubled, the word &quot;non-binary&quot; pulls a portrait toward anime on other characters and in short prompts, as it does on the elf rogue.</a></td><td class="ev">Pre-registered (C108). Other characters, only the gender word changed: anime with &quot;non-binary&quot; minus with the original word +0.33 pooled (bar +0.40), positive in 1 of 3 (dwarf +0.00, half-orc +0.00, tiefling +1.00). Short prompts (&quot;portrait of a non-binary / female elf / human&quot;): +0.12 for the gender word and +0.12 for the species (bars +0.50); 14 of 16 edited pictures are painting.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-32-an-edit-as-a-switch--four-light-layers-instead-of-one">Spreading a text-encoder edit over four layers at a light dose makes its change more coherent across subjects than pushing one layer hard, at the same change of the picture.</a></td><td class="ev">Pre-registered (C109 rule 1, amendment 1 before any label): twelve random four-layer presets calibrated per subject to DINOv2 0.25, against the single-layer edits E14 and E26; content score 0.42 (n 24) against 0.50 (n 4), -0.08 (bar +0.20): no difference. Coherence depends on the preset (P05, P06, P12 coherent at both seeds; P03, P07, P10 at neither). The nominal +-0.30 per layer was too light: the median strength reached was about +-0.60.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-32-an-edit-as-a-switch--the-same-picture-at-every-seed">A prompt that names a subject without describing it makes Krea-2 draw nearly the same picture at every seed.</a></td><td class="ev">Pre-registered twice. C111, &quot;Photo of a tree&quot;: median pairwise DINOv2 distance of the 8 plain trees 0.475 (bar 0.15), the largest of every prompt measured (C109 subjects 0.057-0.178). C112, four prompts by Alessandro: at most 0.15 for 2 of 4 (helmet 0.056, axe 0.094; car 0.277, blue tree 0.383; bar 3 of 4). The less the prompt says, the more the seed decides.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-32-an-edit-as-a-switch--the-same-change-at-every-seed">At C112&#x27;s doses (E05 0.28, E06 0.4, E14 0.4, E26 0.53, E28 1.06, P01 0.71), a text-encoder edit changes the picture more than a change of seed does.</a></td><td class="ev">Pre-registered (C112 rule 1b): &quot;how much did it change&quot;, E28 and P01 cards 0.79 (n 8) against seed cards 1.00 (n 4), bar +0.30: &quot;no more than a change of seed&quot;. By eye a change of seed always looked large: the background changes even where the object does not.</td></tr>
+<tr><td><span class="pill" style="--c:#d03b3b">Overturned</span></td><td><a href="#p-32-an-edit-as-a-switch--what-it-turns-on-and-off">At its window dose a text-encoder edit keeps every attribute the prompt states.</a></td><td class="ev">C114 rule 2 passed on its wording (subject, colour and style kept in 12 of 12 cards, 10 of 12 after two corrections by the labeller) but the question was answered the same on control cards (pitfall 96). Asked one attribute at a time (C115, blind, per picture): copper eyes 8 of 8 seeds in the plain robot, 0 of 8 under E14 and under P01; &quot;clay&quot; 8 to 0 under P01.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--where-the-layout-holds">Blocks near the output keep the composition of the picture and change its surface; the middle of the stack, worst at blocks 8 to 10 pushed positive, rewrites the picture itself.</a></td><td class="ev">Exploratory, 23 prompts on three benches, doses calibrated by eye. Layout r with the baseline 0.88 for blocks 21-27, 0.65 for blocks 05-14; blk09 positive 0.46. Agrees with the pre-registered result of notebook page 05 that the cost of a push grows toward the output.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--blocks-that-push-together">Once the change shared by every edit is removed, blocks 08-10, 15-16 and 23-26 pushed positive change the picture in the same direction, and blocks 22-27 pushed negative do too.</a></td><td class="ev">Groups formed on the 12 styles prompts and found again on 11 prompts of two other benches, with other seeds and other doses (residual correlation +0.15 to +0.37); the group 02-05 did not come back (+0.01 to +0.14). Not pre-registered.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-21-block-map--what-the-ends-change-and-what-the-middle-changes">The blocks at the two ends of the stack change properties of the picture — colour, grain, sharpness — in the same way on every picture; the middle blocks change what is depicted, and differently on each picture.</a></td><td class="ev">At one dose for all blocks, a block is recognisable as itself on another picture only at the ends (positive: blocks 0, 1, 25, 26, 27; criteria fixed before measuring, p = 0.0015). The ends keep the layout (0.88 for 21-27) and the middle rewrites it (0.65 for 05-14); middle blocks change the content most by DINOv2 (page 25). Counted in rendering statistics, however, the ends move more of them at once (effective number 9.6 for 21-27 against 7.5 for 05-14), so &quot;fewer things&quot; holds for kinds of property, not for statistics.</td></tr>
@@ -384,6 +398,7 @@ SSIM [15] and DINOv2 [16] (page 25).</p>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--equal-push-unequal-pictures">The same change of the conditioning moves the picture far less when it comes from a deep layer of the text encoder than from an early one.</a></td><td class="ev">Reported, no threshold (C102 rule 3): every edit and random push matched to the same relative change of the whole conditioning within 1 %. Deep (mean of L26, L30) moves the picture less than early (L04, L09) in 23 of 24 prompt-seed-level cells; at the push of L06 doubled, median DINOv2 distance L04 0.53, L09 0.34, random at L09 0.46, against L26 0.06, L30 0.04, random at L26 0.05.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--what-the-embeddings-missed">The cosine between DINOv2 or CSD change vectors does not tell whether two pictures changed the same way, as the eye sees it.</a></td><td class="ev">Exploratory, after C104&#x27;s rules: per unit, the mean cosine against Alessandro&#x27;s same / different answers, DINOv2 for content AUC 0.64 (n 28 and 19), CSD for style AUC 0.36, below chance. The computed halves of C102 and C103 rested on that measure and are withdrawn as evidence of a shared direction.</td></tr>
 <tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-31-what-an-edit-leaves--where-the-style-goes">Put four portrait descriptions into the panels of one comic page and L06 MLP doubled changes who is drawn in every panel, but no panel changes genre.</a></td><td class="ev">C108 block C, two panel orders, four seeds, blind panel labels: 16 of 16 pages keep four panels, and the 32 edited panels are all Western comic (reported). Pre-registered rule C, a gender split between panels: +0.00, not supported. The content change, hoods gone and lighter-skinned young women, is my reading with the conditions known; Alessandro could not answer the paired &quot;same change&quot; question with confidence, so that measure is missing.</td></tr>
+<tr><td><span class="pill" style="--c:#898781">Open</span></td><td><a href="#p-32-an-edit-as-a-switch--a-narrow-window">Each text-encoder edit has a narrow usable dose, the same on different subjects: E06 and E14 about 0.8, E28 about 1.06, P01 between 1.41 and 2.12; one step past it the picture leaves the prompt or breaks.</a></td><td class="ev">C113, four doses per edit on two prompts, 8 seeds, Alessandro&#x27;s marks per row on the full sheets, not blind (the blind pass was abandoned before any label, amendment 2): the marks are identical on the two prompts in 16 of 16 rows. E14 goes from right (0.8) to broken (1.2) in one step.</td></tr>
       </tbody>
     </table>
   </section>
@@ -4350,6 +4365,465 @@ analysis:
 <li><strong>Labels and keys</strong> were committed in the order the protocols require: key before labels, labels as downloaded before
   any count. All blind labels are Alessandro's.</li>
 <li><strong>Pitfalls:</strong> 93 (matching layers on the push to the conditioning), 94 (embedding cosines read as "the same change").</li>
+</ul>
+</section>
+<section id="p-32-an-edit-as-a-switch">
+<p class="status"><span class="pill" style="--c:#0ca30c">Holds</span><span class="corpus">2567 renders · 17 prompts · 10 seeds · pre-registered · 2026-10-29</span></p>
+<h1 id="p-32-an-edit-as-a-switch--an-edit-as-a-switch-the-right-dose-the-same-change-at-every-seed-and-what-it-turns-on-and-off">An edit as a switch — the right dose, the same change at every seed, and what it turns on and off</h1>
+<blockquote>
+<p><strong>The direction I'm chasing.</strong> Page 31 left me with an edit that has a look of its own. For a tool I need more: if I
+write "a photo of a tree" and the model always gives me the same tree, an edit should give me <em>another</em> tree, and
+give it to me at every seed. My suspicion was that the edits I had were simply not pushed hard enough to show it.</p>
+<p><strong>What would kill it.</strong> A plain prompt that already varies a lot with the seed; an edit whose change goes a different
+way at every seed; a dose that breaks the picture before the change shows; a change that holds only on the prompts I
+tuned it on.</p>
+<p><strong>Where we are.</strong> Half of my idea was wrong: the model does <em>not</em> always draw the same thing, and the less the prompt
+says, the more the seed decides. The other half holds, blind and on prompts I had never seen: at the right dose an
+edit changes the picture the same way at every seed, more than a change of seed moves it. And that change is not a
+blur: it switches precise things on and off. Copper eyes go, a pond appears, the art-deco gold leaves the blade for
+the background. The right dose is narrow, and I found it by eye.</p>
+</blockquote>
+<h2 id="p-32-an-edit-as-a-switch--in-two-minutes">In two minutes</h2>
+<p>First I tried something gentler than one layer pushed hard: four layers nudged a little. I expected the change to be
+cleaner and more coherent across subjects. It wasn't, and the nudge itself was too small: to change the picture as
+much as one layer does, the presets needed twice the dose I had planned. What I did see: the change of a preset carries
+from my comic portraits to a rally car or a leaf.</p>
+<p>Then my idea about seeds. On the rally car, the plain picture looked the same at every seed, while some presets
+changed the car the same way at every seed. So I asked Krea-2 for "Photo of a tree", the vaguest prompt I could think
+of. It gave me eight different trees: the most seed-dependent prompt of the whole project. Then I wrote four prompts
+that describe a subject and leave the setting free. The helmet and the axe came out almost identical at every seed;
+the blue tree and the flying car didn't.</p>
+<p><img alt="The plain picture at eight seeds for five prompts: &quot;Photo of a tree&quot; changes most with the seed (median DINOv2 distance 0.475), mostly in framing; the blue tree and the flying car vary too, while the alien axe and the evil helmet are nearly the same object at every seed (0.094 and 0.056), with only the background changing colour." src="../assets/32-an-edit-as-a-switch/F32.1_seed_variety_sheet.webp" /></p>
+<p>On those four prompts, judged blind with all eight seeds side by side, the change of an edit repeated: E28 made the
+alien axe more organic and red-eyed at every seed. But changing the seed alone still looked as big a change to me as
+the edits did. Most of the doses were small, half of what I would later find right.</p>
+<p><img alt="The alien axe at eight seeds under three encoder edits at C112's doses: E28 at 1.06 makes the head more organic, red-eyed and creature-like at every seed (blind: the same change in all eight), while E06 at 0.4 and P01 at 0.71 stay close to the original and change in different ways." src="../assets/32-an-edit-as-a-switch/F32.2_c112_axe_sheet.webp" /></p>
+<p>So I pushed. Four doses for four edits on two prompts. The blind cards made no sense for this: what I needed was to see
+every row and say "higher", "right", "too much", "broken". I marked them by eye. The window is narrow and it was the
+same on both prompts: E06 and E14 at about 0.8, E28 at 1.06, P01 somewhere between 1.4 and 2.1. One step past it, the
+helmet becomes a black figurine or a cartoon devil, the same at every seed, and no longer a helmet.</p>
+<p><img alt="The evil helmet under E06 and E28 at four doses: E06 at 0.8 and E28 at 1.06 keep the helmet and change it the same way at every seed; one step further E06 turns it into a black figurine and E28 into a cartoon devil, the same at every seed but no longer the prompt; E06 at 1.6 breaks into noise." src="../assets/32-an-edit-as-a-switch/F32.3_dose_ladder_sheet.webp" /></p>
+<p>The numbers agree with the marks and warn about themselves: at the dose I marked right, E06, E14 and E28 already move
+the picture 1.3 to 5 times as far as a change of seed. Past it they keep "agreeing across seeds" more and more, because
+every seed leaves the prompt in the same way. Consistency alone would have picked the wrong dose.</p>
+<p><img alt="For four edits on two prompts, how far the picture moves from the original relative to a change of seed, along four doses, coloured by Alessandro's mark: at the dose marked right E06, E14 and E28 already move it 1.3 to 5 times as far as a seed change; past it the distance jumps, up to 17 times on the helmet, where the pictures leave the prompt or break." src="../assets/32-an-edit-as-a-switch/F32.4_dose_window_chart.webp" /></p>
+<p>Then the real test. Claude wrote three prompts in the style of my examples, a subject with a colour and a style, and
+didn't tell me what they were: I saw them for the first time on the blind cards. At the doses I had chosen, the
+change repeated at every seed in 10 of 12 cases, against none for the mixed cards, and by DINOv2 it moved the picture
+further than a change of seed in 11 of 12.</p>
+<p><img alt="An unseen prompt, a clay robot with copper eyes, at eight seeds under four edits at C113's doses, captioned with what was seen blind: E14 replaces the copper eyes with black ones at every seed, P01 turns the robot to metal and adds a separate small figure at every seed, E06 and E28 keep copper and clay and add big black pupils." src="../assets/32-an-edit-as-a-switch/F32.5_unseen_robot_sheet.webp" /></p>
+<p>Then I looked again and saw what my "everything kept" answers had missed. The robot's copper eyes were gone under two
+edits, at every seed. So I labelled every picture again, one at a time, with one question per detail, without knowing
+which edit made it. Claude had written down 16 predictions from the sheets; 15 held. An edit switches things: it
+<strong>adds</strong> (E28 puts a pond under the tree and big pupils in the robot's eyes), it <strong>replaces</strong> (E14 swaps the copper
+eyes for black ones), it <strong>moves</strong> (P01 takes "clay" off the robot and makes it a second little figure; E06 and P01 take
+the art-deco gold off the dagger and put it on a panel behind it).</p>
+<p><img alt="An unseen prompt, an art-deco dagger, at eight seeds: E06 and P01 stand the dagger upright on a black-and-gold art-deco panel at every seed, moving the style of the prompt from the blade to the background; E14 stays mostly like the original and E28 darkens it with varying compositions." src="../assets/32-an-edit-as-a-switch/F32.6_unseen_dagger_sheet.webp" /></p>
+<p><img alt="For twelve attributes of three unseen prompts, how many of eight seeds show it, per edit, judged one picture at a time without knowing the edit: attributes switch from 8 to 0 or from 0 to 8 (copper eyes, clay, a second figure, black pupils, an art-deco panel) while the control attributes, red leaves and watercolour, stay at 8 everywhere." src="../assets/32-an-edit-as-a-switch/F32.8_attributes_matrix.webp" /></p>
+<h2 id="p-32-an-edit-as-a-switch--the-verdict">The verdict</h2>
+<p><strong>Overturned</strong> (C109): four light layers are more coherent than one pushed hard (-0.08). <strong>Holds</strong> (C109): a light
+preset's change carries across style domains (+0.38). <strong>Overturned</strong> (C111, C112): a vague prompt gives the same
+picture at every seed ("Photo of a tree" 0.475, the largest spread measured; 2 of 4 prompts). <strong>Holds</strong> (C112, C114):
+an edit changes a prompt's pictures the same way at every seed, on prompts never seen (0.75 against 0.00).
+<strong>Overturned</strong> (C112): at half the right dose an edit changes the picture more than a change of seed (0.79 against
+1.00). <strong>Open</strong> (C113): each edit has a narrow window, the same on two subjects, found by eye. <strong>Holds</strong> (C114): at the
+window dose an edit moves the picture further than a change of seed, by DINOv2 (11 of 12). <strong>Overturned</strong> (C114,
+C115): at the window dose an edit keeps every stated attribute. <strong>Holds</strong> (C115): an edit switches nameable attributes
+on or off at almost every seed, adding, replacing or moving them (15 of 16 predictions).</p>
+<h2 id="p-32-an-edit-as-a-switch--why-i-might-be-wrong">Why I might be wrong</h2>
+<p><strong>One observer, who proposed every hypothesis.</strong> All the blind labels are mine. I wrote the four prompts of C112. I knew
+the C113 sheets. I recognised the control cards in C112 and C114 ("the same pictures, reshuffled"), and said so in my
+notes.</p>
+<p><strong>The window was found without a blind test.</strong> C113 started blind and I stopped it: shown mixed cards of broken pictures
+I couldn't answer anything useful. The marks that set the doses are mine, with the conditions in front of me. C114 is
+the blind check of those doses, on three prompts, one card per edit and prompt.</p>
+<p><strong>The attribute test checks a reading, it doesn't replicate it.</strong> Claude's 16 predictions came from the same 120
+pictures I then labelled. What C115 shows is that the reading doesn't depend on knowing which edit made a picture; it
+says nothing about new pictures. And I had seen the sheets before. One question was also clarified during the pass (on
+the robot, the eyes are the robot's, not the small figure's); some early robot answers may have counted the figure.</p>
+<p><strong>My first "kept" answers were wrong.</strong> In C114 I answered "subject, colour and style are all there" for every card,
+including the controls. The copper eyes were gone under two edits. I corrected three labels afterwards; the
+correction is in a separate file and the original stands (pitfall 96).</p>
+<p><strong>The eye and DINOv2 disagree about the seed.</strong> By eye a change of seed is always "a lot", because the background
+changes even where the object doesn't (the helmet: 0.056 by DINOv2). By DINOv2 the edits move the object further.
+Both are reported; neither is the truth about "how much".</p>
+<p><strong>Doses chosen on two subjects, one exploratory tree.</strong> The C112 doses came from an unregistered run on one odd tree,
+and P01's dose in C114 (1.75) was interpolated, never rendered before. Three to four prompts per test, 8 seeds, one
+model.</p>
+<h2 id="p-32-an-edit-as-a-switch--the-data">The data</h2>
+<h3 id="p-32-an-edit-as-a-switch--four-light-layers-instead-of-one">Four light layers instead of one</h3>
+<p>C109 drew twelve presets of four MLP layers each, sign random, nominal +-0.30 per layer (P01-P06 from layers 7-24,
+P07-P12 from 1-34), and calibrated each on eight subjects to a DINOv2 distance of 0.25, like C105. 84 of 96 pairs
+reached it; the median strength was about twice the nominal (+-0.60 per layer). Cards showed every subject of one
+preset at one seed, before and after, with three questions (content, style, and whether the change was the same kind
+on the comic portraits and on the other pictures).</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>rule</th>
+<th>value</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0, null cards, content</td>
+<td>0.00 (n 4)</td>
+<td>valid</td>
+</tr>
+<tr>
+<td>1, presets minus single layers (E14, E26), content</td>
+<td>0.42 (n 24) - 0.50 (n 4) = -0.08</td>
+<td>no difference</td>
+</tr>
+<tr>
+<td>2, across domains, presets minus null</td>
+<td>0.50 - 0.13 = +0.38</td>
+<td>carries across domains</td>
+</tr>
+</tbody>
+</table></div>
+<p>Coherent at both seeds: P05, P06, P12; at neither: P03, P07, P10. My notes: P06 "highlighted expressions" at both seeds,
+P01 "a synthesis of the subject", P09 "more realism". Details in <code>docs/te_light_presets_result.md</code>.</p>
+<h3 id="p-32-an-edit-as-a-switch--the-same-picture-at-every-seed">The same picture at every seed</h3>
+<p>C111 ("Photo of a tree", 8 test seeds, eight edits calibrated to DINOv2 0.25 on two other seeds; 8 of 8 reached, gate
+pixel-identical). Rule 1: median pairwise DINOv2 distance of the plain trees 0.475, bar 0.15, "the seeds already vary".
+For reference, the C109 subjects at four seeds: 0.057 (lotus canoe) to 0.178 (rally). The displacements of an edit
+barely shared a direction across seeds (mean cosine 0.057 against 0.009 for different edits at different seeds). The
+blind pass of C111 was not run: I had seen the pictures with their file names.</p>
+<p>An exploratory run outside the pre-registration, which I asked for after seeing C111 (<code>Benchmark_te_tree_2</code>, "a photo of
+a tall torted tree with large leaves", six of the eight doses halved), gave the opposite picture: the plain tree the same
+at 8 seeds, E28 at 1.06 moving it onto a park lawn at 8 of 8. That run is where the next hypothesis came from, and it
+counts for nothing else.</p>
+<p>C112 (four prompts I wrote, 8 seeds, eight edits at the exploratory doses, 292 renders, four gates pixel-identical):</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>prompt</th>
+<th>plain spread (DINOv2)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cartoon evil helmet with black metal and a big red gemstone</td>
+<td>0.056</td>
+</tr>
+<tr>
+<td>A short alien axe with a weird shaped blade</td>
+<td>0.094</td>
+</tr>
+<tr>
+<td>A concept yellow flying car</td>
+<td>0.277</td>
+</tr>
+<tr>
+<td>A curved tree with large blue leaves</td>
+<td>0.383</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rule 1, at most 0.15 in at least 3 of 4: 2 of 4, not supported. Details in <code>docs/te_tree_dino_tests.csv</code> and
+<code>docs/te_settings_result.md</code>.</p>
+<h3 id="p-32-an-edit-as-a-switch--the-same-change-at-every-seed">The same change at every seed</h3>
+<p>C112's blind page (amendment 2: two rows of eight, before above and after below, same column same seed; two plain
+questions) had 32 edit cards, 8 null cards (a different edit at each seed), 4 seed cards (the plain picture at another
+seed) and 4 repeats.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>rule</th>
+<th>value</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0, null cards "the same way"</td>
+<td>0.00 (n 8)</td>
+<td>valid</td>
+</tr>
+<tr>
+<td>1b, "how much", E28 and P01 against seed cards</td>
+<td>0.79 (n 8) against 1.00 (n 4)</td>
+<td>no more than a change of seed</td>
+</tr>
+<tr>
+<td>2, "the same way", E28 and P01 against null</td>
+<td>0.56 (n 8) against 0.00</td>
+<td>repeats across seeds</td>
+</tr>
+</tbody>
+</table></div>
+<p>E28 carried it: the same way at all 8 seeds on the blue tree and the axe, at most on the helmet and the car, and the
+most shared DINOv2 direction on all four prompts (0.31, 0.23, 0.36, 0.14 against nulls of -0.02 to 0.04). All eight
+edits together: 0.38 (n 32). Test-retest: amount 4 of 4, same way 2 of 4.</p>
+<h3 id="p-32-an-edit-as-a-switch--a-narrow-window">A narrow window</h3>
+<p>C113 took E06, E14, E28 and P01 to three doses above C112's on the blue tree and the helmet (192 new renders, 80 reused,
+gates pixel-identical). After the first cards I asked to drop the blind pass and mark the full sheets instead (amendment
+2, before any label was exported). My marks, identical on both prompts:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>edit</th>
+<th>level 1</th>
+<th>level 2</th>
+<th>level 3</th>
+<th>level 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E06</td>
+<td>0.4 higher</td>
+<td><strong>0.8 right</strong></td>
+<td>1.2 too strong ("not much lower")</td>
+<td>1.6 broken</td>
+</tr>
+<tr>
+<td>E14</td>
+<td>0.4 higher</td>
+<td><strong>0.8 right</strong></td>
+<td>1.2 broken</td>
+<td>1.6 broken</td>
+</tr>
+<tr>
+<td>E28</td>
+<td><strong>1.06 right</strong></td>
+<td>1.59 too strong ("a touch")</td>
+<td>2.12 too strong</td>
+<td>2.65 too strong</td>
+</tr>
+<tr>
+<td>P01</td>
+<td>0.71 higher</td>
+<td>1.41 higher</td>
+<td>2.12 broken</td>
+<td>2.83 broken</td>
+</tr>
+</tbody>
+</table></div>
+<p>DINOv2 at the doses marked right, distance from plain over the plain seed spread and the mean cosine across seeds:
+E06 1.33 and 0.32 on the tree, 4.96 and 0.58 on the helmet; E14 1.37 and 0.41, 3.20 and 0.52; E28 1.85 and 0.31, 1.93 and
+0.36; P01 at 1.41 0.50 and 0.02, 1.21 and 0.21. Past the window the cosine keeps rising (E06 on the helmet: 0.10, 0.58,
+0.68, 0.76) while the pictures stop being helmets (pitfall 95). Details in <code>docs/te_dose2_result.md</code>.</p>
+<h3 id="p-32-an-edit-as-a-switch--new-prompts">New prompts</h3>
+<p>C114 (123 renders, three gates pixel-identical): three prompts written by Claude and kept from me until the blind page,
+E06 0.8, E14 0.8, E28 1.06 and P01 1.75, 8 seeds; 12 edit cards, 6 null, 3 seed, 3 repeats.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>rule</th>
+<th>value</th>
+<th>verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0, null "the same way"</td>
+<td>0.00 (n 6)</td>
+<td>valid</td>
+</tr>
+<tr>
+<td>1, edit cards against null</td>
+<td>0.75 (n 12) against 0.00</td>
+<td>repeats across seeds on unseen prompts</td>
+</tr>
+<tr>
+<td>2, subject, colour and style kept, all or most</td>
+<td>12 of 12 (10 of 12 after corrections)</td>
+<td>passes on its wording</td>
+</tr>
+<tr>
+<td>3, DINOv2 distance at least the plain seed spread</td>
+<td>11 of 12</td>
+<td>supported</td>
+</tr>
+</tbody>
+</table></div>
+<p>Per cell, "the same way": "all" in 8, "most" in 2 (tree P01, robot E06), "each its own" in 2 (dagger E14, dagger E28).
+Amount by eye: edits 0.89, nulls 0.94, seed cards 1.00. The three plain prompts barely vary with the seed (0.046, 0.137,
+0.078). Details in <code>docs/te_unseen_result.md</code>.</p>
+<p><img alt="An unseen prompt, a red watercolour tree, at eight seeds: every edit keeps the red leaves and the watercolour; E28 adds water at the base in six of eight seeds, the other edits make the canopy denser or more domed." src="../assets/32-an-edit-as-a-switch/F32.7_unseen_tree_sheet.webp" /></p>
+<h3 id="p-32-an-edit-as-a-switch--what-it-turns-on-and-off">What it turns on and off</h3>
+<p>C115 relabelled C114's 120 pictures, one per card at full size, in random order with the edit hidden, plus 4 repeats per
+prompt: four yes / no / not sure questions per prompt. Count of "yes" over 8 seeds:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>prompt, attribute</th>
+<th>plain</th>
+<th>E06 0.8</th>
+<th>E14 0.8</th>
+<th>E28 1.06</th>
+<th>P01 1.75</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>robot, copper eyes</td>
+<td>8</td>
+<td>8</td>
+<td>0</td>
+<td>8</td>
+<td>0</td>
+</tr>
+<tr>
+<td>robot, clay</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>0</td>
+</tr>
+<tr>
+<td>robot, a second figure</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+</tr>
+<tr>
+<td>robot, big black pupils</td>
+<td>0</td>
+<td>7</td>
+<td>8</td>
+<td>8</td>
+<td>3</td>
+</tr>
+<tr>
+<td>tree, water at the base</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>6</td>
+<td>0</td>
+</tr>
+<tr>
+<td>tree, a spiral in the trunk</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>tree, red leaves (control)</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>tree, watercolour (control)</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>dagger, golden decorations on the dagger</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>dagger, an art-deco panel behind</td>
+<td>0</td>
+<td>8</td>
+<td>1</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>dagger, dark background</td>
+<td>0</td>
+<td>8</td>
+<td>0</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr>
+<td>dagger, upright and centred</td>
+<td>2</td>
+<td>8</td>
+<td>3</td>
+<td>3</td>
+<td>7</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rule 1: 15 of 16 predictions confirmed (the spiral under E28, 3 of 8, is the miss). Rule 2: no change of 5 or more that
+was not predicted. Test-retest 48 of 48. The same edit does different things on different subjects: E06 gives the
+robot pupils and the dagger a panel, and on the tree changes nothing that was asked. Details in
+<code>docs/te_attributes_result.md</code>.</p>
+<h3 id="p-32-an-edit-as-a-switch--reproducing-this">Reproducing this</h3>
+<pre><code class="language-yaml">model:
+  checkpoint: krea2_turbo_bf16.safetensors
+  weight_dtype: default
+  sha256: not recorded — the file is outside the repository
+sampling:
+  sampler: euler_ancestral
+  steps: 9
+  cfg: 1.0
+  denoise: 1.0
+  scheduler: simple
+  resolution: 1024x1280
+  vae: qwen_image_vae.safetensors
+  text_encoder: qwen3vl_4b_bf16.safetensors (CLIPLoader type krea2)
+tuner:
+  node: Krea2ConditioningPush (tools/comfyui_krea2_condpush), variant file; conditionings encoded with the edit applied through the Arthemy Krea-2 CLIP tuner in Real Value mode
+  version: not recorded — the node is in this repository
+  mode: one layer's MLP (gate, up, down) of the text encoder, weight x (1 + d) (E05, E06, E14, E26, E28); C109 presets of four MLP layers at +-0.30 x strength (P01-P12)
+prompts:
+  files: [data/te_light_presets_plan.csv, data/te_tree_plan.csv, data/te_tree_2_plan.csv, data/te_settings_plan.csv, data/te_dose2_plan.csv, data/te_unseen_plan.csv]
+  ids: [C109 subjects D1 E2 O4 G5 S1 C4 P2 LN, T1_tree, S1_bluetree, S2_alienaxe, S3_evilhelmet, S4_flyingcar, U1_redtree, U2_dagger, U3_robot]
+seeds: [2645751, 3316624, 1414213, 1732050, 2236067, 3141592, 1234567, 5772156, 1618033, 2718281]
+conditions:
+  - name: C109, twelve four-layer presets, calibrated per subject on DINOv2 0.25
+    dose: per subject, data/te_light_presets_strengths.csv
+    measured_D: data/te_light_presets_metrics.csv
+  - name: C111, E05 E06 E14 E26 E28 P01 P06 P10, calibrated on DINOv2 0.25
+    dose: data/te_tree_strengths.csv
+    measured_D: data/te_tree_metrics.csv
+  - name: C112, the same eight at fixed doses (E05 0.28, E06 0.4, E14 0.4, E26 0.53, E28 1.06, P01 0.71, P06 0.84, P10 1.0)
+    dose: fixed, data/te_settings_plan.csv
+    measured_D: data/te_settings_metrics.csv
+  - name: C113, E06 E14 E28 P01 at four doses each
+    dose: data/te_dose2_dino.csv
+    measured_D: data/te_dose2_dino.csv
+  - name: C114, E06 0.8, E14 0.8, E28 1.06, P01 1.75
+    dose: fixed, data/te_unseen_plan.csv
+    measured_D: data/te_unseen_dino.csv
+outputs:
+  folders: [benchmark_te_light_presets, benchmark_te_tree, Benchmark_te_tree_2 (exploratory), benchmark_te_settings, benchmark_te_dose2, benchmark_te_unseen]
+  manifests: [data/te_light_presets_cal_plan.csv, data/te_light_presets_plan.csv, data/te_tree_cal_plan.csv, data/te_tree_plan.csv, data/te_tree_2_plan.csv, data/te_settings_plan.csv, data/te_dose2_plan.csv, data/te_unseen_plan.csv]
+analysis:
+  scripts: [experiments/te_light_presets.py, experiments/te_tree.py, experiments/te_tree_2.py, experiments/te_settings.py, experiments/te_dose2.py, experiments/te_dose2_marks_page.py, experiments/te_unseen.py, experiments/te_attributes.py, experiments/eye_grid_page.py]
+  produces: data/te_light_presets_tests.csv, data/te_tree_dino_tests.csv, data/te_settings_dino_tests.csv, data/te_settings_tests.csv, data/te_dose2_dino.csv, data/te_unseen_dino.csv, data/te_unseen_tests.csv, data/te_attributes_tests.csv
+</code></pre>
+<h2 id="p-32-an-edit-as-a-switch--provenance">Provenance</h2>
+<ul>
+<li>Renders: C109 (1732, of which 1450 calibration), C111 (153, of which 80 calibration), exploratory tree (73), C112 (292), C113 (194), C114 (123).
+  C113 reused 80 renders of C112; C115 made no renders and relabelled C114's.</li>
+<li><strong>Pre-registrations:</strong> <code>docs/prereg_te_light_presets.md</code> (+ amendment 1), <code>docs/prereg_te_tree.md</code> (+ amendment 1),
+  <code>docs/prereg_te_settings.md</code> (+ amendments 1-2), <code>docs/prereg_te_dose2.md</code> (+ amendments 1-2),
+  <code>docs/prereg_te_unseen.md</code>, <code>docs/prereg_te_attributes.md</code> (+ clarifications during labelling).</li>
+<li><strong>Result documents:</strong> <code>docs/te_light_presets_result.md</code>, <code>docs/te_settings_result.md</code>, <code>docs/te_dose2_result.md</code>,
+  <code>docs/te_unseen_result.md</code>, <code>docs/te_attributes_result.md</code>.</li>
+<li><strong>Data:</strong> <code>data/te_light_presets_tests.csv</code>, <code>data/te_light_presets_labels_full.csv</code>, <code>data/te_tree_dino_tests.csv</code>,
+  <code>data/te_settings_key.csv</code>, <code>data/te_settings_labels.csv</code>, <code>data/te_settings_tests.csv</code>, <code>data/te_dose2_dino.csv</code>,
+  <code>data/te_dose2_marks.csv</code>, <code>data/te_unseen_key.csv</code>, <code>data/te_unseen_labels.csv</code>,
+  <code>data/te_unseen_labels_corrections.csv</code>, <code>data/te_unseen_tests.csv</code>, <code>data/te_attributes_key.csv</code>,
+  <code>data/te_attributes_labels_U1_redtree.csv</code>, <code>data/te_attributes_labels_U2_dagger.csv</code>,
+  <code>data/te_attributes_labels_U3_robot.csv</code>, <code>data/te_attributes_tests.csv</code>.</li>
+<li><strong>Labels and keys</strong> were committed in the order the protocols require: key before labels, labels as downloaded before
+  any count; the three C114 corrections in a separate file after the rules. All labels and marks are Alessandro's.</li>
+<li><strong>Pitfalls:</strong> 95 (DINOv2 consistency rising past the window), 96 (one question for several attributes).</li>
 </ul>
 </section>
 </main>
