@@ -64,3 +64,29 @@ One observer, who proposed the hypothesis and recognised the control cards; prom
   spread).
 * So on this prompt the strength of the repeated change and the respect of the prompt pull in opposite directions:
   the two edits that change most uniformly (E14, P01) are the two that override stated attributes.
+
+## Correction of three labels (2026-10-29, after the rules; reported, the as-labelled file is unchanged)
+
+Alessandro, after the addendum: on the robot he had judged "kept" on the general description and missed the copper
+eyes; E14 and P01 lose them at every seed. Corrections in `data/te_unseen_labels_corrections.csv` (W23, W10 and its
+repeat W21: *in tutte* → *in nessuna*). With them, rule 2 is **10 of 12** (bar 9) — still above the bar on its wording,
+kept 0.83 for edit cards against 1.00 for null and seed. The bar was set for a question that turned out too coarse; the
+honest reading is that **two of the four edits override a stated attribute on one of three prompts**.
+
+## Claude's non-blind reading of the tree and the dagger (2026-10-29)
+
+* **Tree** (plain: the same weeping watercolour tree at every seed). E06: denser, darker red canopy filling the frame,
+  more stranded trunk — same tree, heavier. E14: barely different from plain (Alessandro's "si potrebbe alzare").
+  E28: the trunk's curl drawn literally as a spiral, a dome-shaped canopy and **a pond of blue water at the base** at
+  most seeds — every stated attribute kept, something added. P01: a compact, symmetric weeping dome on a clean white
+  ground at 6 of 8 seeds, seeds 1 and 8 close to plain ("la maggior parte"). No attribute lost on this prompt.
+* **Dagger** (plain: one dagger in product-photo light on grey, varying angle; the art-deco inlays are faint). E06 and
+  P01: at every seed the dagger stands upright and centred on **a black-and-gold art-deco panel** (sunbursts,
+  geometric frames) — "art deco golden geometric" moves from the inlays onto the background, as "clay" moved off the
+  robot; the blade itself is plainer. E14: mostly plain-like, one seed with an art-deco panel, one with two crossed
+  blades — "ognuna a modo suo" fits. E28: dark backgrounds, more engraving on the blade, close crops and partial deco
+  patterns, varying from seed to seed — the darkening repeats, the composition does not.
+* **Across the three prompts:** the edits that change most uniformly (E06, P01; E14 on the robot) tend to **move a
+  stated attribute to another place** in the picture (background, a second figure) or replace it; E28 adds something
+  (water, bigger eyes, engraving) while keeping what is written. This pattern is read after the data and is not
+  tested.
