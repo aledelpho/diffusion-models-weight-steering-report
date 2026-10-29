@@ -1608,6 +1608,177 @@ def te_panels_sheet(out: Path) -> Path:
     return _sheet(rows, cols, path, cap, out, "C108 · four descriptions, one page · panel genres: Alessandro, blind · source data/te_gender_labels_panels.csv", W=230, H=288, LAB=70)
 
 
+# ---------------------------------------------------------------- page 32 (C109-C115)
+_S8 = ["2645751", "3316624", "1414213", "1732050", "2236067", "3141592", "1234567", "5772156"]
+_S8COLS = [(s, f"seed …{s[-3:]}") for s in _S8]
+_SAME_EN = {"stesso": "same at all", "simile": "same at most", "diversi": "each its own", "nonsivede": "no change"}
+
+
+def _csvd(name):
+    return list(csv.DictReader(open(DATA / name, encoding="utf-8")))
+
+
+def seed_variety_sheet(out: Path) -> Path:
+    """F32.1 - C111/C112: the plain picture at 8 seeds for five prompts, with the median pairwise DINOv2 distance."""
+    t = {r["test"]: r["value"] for r in _csvd("te_tree_dino_tests.csv")}
+    u = {r["test"]: r["value"] for r in _csvd("te_settings_dino_tests.csv")}
+    spread = {"tree": t["Rule 1 plain seeds: median pairwise D of the 8 plain trees"].split(" ")[0]}
+    for p in ("S1_bluetree", "S2_alienaxe", "S3_evilhelmet", "S4_flyingcar"):
+        spread[p] = u[f"Rule 1 {p}: median pairwise D of the 8 plain pictures"].split(" ")[0]
+    rows = [("tree", "\"Photo of a tree\""), ("S1_bluetree", "blue tree"), ("S4_flyingcar", "flying car"),
+            ("S2_alienaxe", "alien axe"), ("S3_evilhelmet", "evil helmet")]
+    def path(r, s):
+        if r == "tree":
+            return _img(f"benchmark_te_tree/T1_tree_C0_krea2_seed{s}_00001_.png")
+        return _img(f"benchmark_te_settings/{r}_C0_krea2_seed{s}_00001_.png")
+    def cap(r, s):
+        return (f"spread {spread[r]}", DIM_RGB) if s == _S8[0] else None
+    return _sheet(rows, _S8COLS, path, cap, out, "C111, C112 · plain pictures, 8 seeds · spread = median pairwise DINOv2 distance · source data/te_tree_dino_tests.csv, data/te_settings_dino_tests.csv", W=120, H=150, LAB=128)
+
+
+def c112_axe_sheet(out: Path) -> Path:
+    """F32.2 - C112: the alien axe, plain and under E28 1.06, E06 0.4, P01 0.71 at 8 seeds, Alessandro's blind 'same way' answer."""
+    K = {(k["prompt"], k["pert"]): k["unit"] for k in _csvd("te_settings_key.csv") if k["kind"] == "edit" and k["repeat"] == "0"}
+    L = {r["unit"]: r for r in _csvd("te_settings_labels.csv")}
+    conds = {"C0": "C0", "E28": "E28_1p06066", "E06": "E06_0p4", "P01": "P01_0p7071"}
+    rows = [("C0", "original"), ("E28", "E28 d=1.06"), ("E06", "E06 d=0.4"), ("P01", "P01 x=0.71")]
+    def path(r, s):
+        return _img(f"benchmark_te_settings/S2_alienaxe_{conds[r]}_krea2_seed{s}_00001_.png")
+    def cap(r, s):
+        if r == "C0" or s != _S8[0]:
+            return None
+        a = L[K[("S2_alienaxe", r)]]["same"]
+        return (_SAME_EN[a], POS if a == "stesso" else DIM_RGB)
+    return _sheet(rows, _S8COLS, path, cap, out, "C112 · \"A short alien axe with a weird shaped blade\" · caption: did all 8 change the same way (Alessandro, blind) · source data/te_settings_labels.csv", W=120, H=150, LAB=110)
+
+
+_MARK_EN = {"alzare": "can go higher", "giusta": "right", "abbassare": "too strong", "rotta": "broken"}
+
+
+def dose_ladder_sheet(out: Path) -> Path:
+    """F32.3 - C113: the helmet under E06 and E28 at four doses each, 8 seeds, Alessandro's non-blind mark per row."""
+    M = {(r["prompt"], r["edit"], r["level"]): r for r in _csvd("te_dose2_marks.csv") if r["type"] == "row"}
+    lad = {"E06": ["0p4", "0p8", "1p2", "1p6"], "E28": ["1p06066", "1p59099", "2p12132", "2p65165"]}
+    rows = [("C0", "original")] + [((e, l), f"{e} d={lad[e][l - 1].replace('p', '.')[:4]}") for e in ("E06", "E28") for l in (1, 2, 3, 4)]
+    def path(r, s):
+        if r == "C0":
+            return _img(f"benchmark_te_settings/S3_evilhelmet_C0_krea2_seed{s}_00001_.png")
+        e, l = r
+        folder = "benchmark_te_settings" if l == 1 else "benchmark_te_dose2"
+        return _img(f"{folder}/S3_evilhelmet_{e}_{lad[e][l - 1]}_krea2_seed{s}_00001_.png")
+    def cap(r, s):
+        if r == "C0" or s != _S8[0]:
+            return None
+        v = M[("S3_evilhelmet", r[0], str(r[1]))]["verdict"]
+        return (_MARK_EN[v], POS if v == "giusta" else (NEG if v == "rotta" else DIM_RGB))
+    return _sheet(rows, _S8COLS, path, cap, out, "C113 · evil helmet · caption: Alessandro's mark, non-blind (blind pass abandoned, amendment 2) · source data/te_dose2_marks.csv", W=110, H=138, LAB=100)
+
+
+def dose_window_chart(out: Path) -> Path:
+    """F32.4 - C113: per edit and prompt, DINOv2 distance from plain over the plain seed spread along the doses, with Alessandro's marks."""
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+    D = _csvd("te_dose2_dino.csv")
+    M = {(r["prompt"], r["edit"], r["level"]): r["verdict"] for r in _csvd("te_dose2_marks.csv") if r["type"] == "row"}
+    col = {"alzare": DIM, "giusta": CAT[2], "abbassare": CAT[1], "rotta": "#a63d3d"}
+    fig = plt.figure(figsize=(7.2, 3.2), dpi=150)
+    fig.patch.set_facecolor(SURFACE)
+    for k, e in enumerate(("E06", "E14", "E28", "P01"), 1):
+        ax = _axes(fig, 4, k)
+        for p, ls, lab in (("S1_bluetree", "-", "blue tree"), ("S3_evilhelmet", "--", "helmet")):
+            rr = sorted((r for r in D if r["edit"] == e and r["prompt"] == p), key=lambda r: int(r["level"]))
+            xs = [float(r["dose"]) for r in rr]
+            ys = [float(r["ratio_to_seed"]) for r in rr]
+            ax.plot(xs, ys, ls, color=DIM, lw=1, label=lab)
+            for r, x, y in zip(rr, xs, ys):
+                ax.scatter([x], [y], s=26, color=col[M[(p, e, r["level"])]], zorder=3)
+        ax.axhline(1, color=GRID, lw=1)
+        ax.set_yscale("log")
+        ax.set_ylim(0.2, 25)
+        ax.set_title(e, color=INK, fontsize=8)
+        ax.set_xlabel("dose", color=DIM, fontsize=7)
+        if k == 1:
+            ax.set_ylabel("distance from plain / seed spread", color=DIM, fontsize=7)
+            ax.legend(frameon=False, fontsize=6, labelcolor=INK, loc="upper left")
+    fig.legend([Line2D([], [], marker="o", ls="", color=c) for c in col.values()], [f"marked: {_MARK_EN[v]}" for v in col], frameon=False,
+               fontsize=6.5, labelcolor=INK, loc="upper left", bbox_to_anchor=(0.07, 0.9), ncol=4)
+    fig.text(0.07, 0.94, "Past the dose marked right, the picture moves far more than a seed change, and leaves the prompt", color=INK, fontsize=8)
+    fig.subplots_adjust(left=0.08, right=0.99, top=0.74, bottom=0.17, wspace=0.35)
+    return _save(fig, out, "C113 · 2 prompts × 4 edits × 4 doses × 8 seeds · y = 1: as far as a seed change · source data/te_dose2_dino.csv, data/te_dose2_marks.csv")
+
+
+_ATTR_SHORT = {"copper": "copper", "clay": "clay", "second": "2nd fig", "pupils": "pupils", "panel": "panel",
+               "dark": "dark", "upright": "upright", "water": "water", "spiral": "spiral"}
+_ATTR_EN = {"copper": "copper eyes", "clay": "clay", "second": "2nd figure", "pupils": "black pupils",
+            "panel": "deco panel", "dark": "dark bg", "upright": "upright", "inlay": "inlays",
+            "water": "water", "spiral": "spiral", "red": "red leaves", "watercolor": "watercolour"}
+
+
+def _attr_sheet(prompt, attrs, out, footer):
+    K = {(k["edit"], k["seed"]): k["unit"] for k in _csvd("te_attributes_key.csv") if k["prompt"] == prompt and k["repeat"] == "0"}
+    L = {r["unit"]: r for r in _csvd(f"te_attributes_labels_{prompt}.csv")}
+    conds = {"C0": "C0", "E06": "E06_0p8", "E14": "E14_0p8", "E28": "E28_1p06066", "P01": "P01_1p75"}
+    labs = {"C0": "original", "E06": "E06 d=0.8", "E14": "E14 d=0.8", "E28": "E28 d=1.06", "P01": "P01 x=1.75"}
+    rows = [(c, labs[c]) for c in conds]
+    def path(c, s):
+        return _img(f"benchmark_te_unseen/{prompt}_{conds[c]}_krea2_seed{s}_00001_.png")
+    def cap(c, s):
+        r = L[K[(c, s)]]
+        on = [_ATTR_SHORT[a] for a in attrs if r.get(a) == "si"]
+        return (" · ".join(on) if on else "-", DIM_RGB)
+    return _sheet(rows, _S8COLS, path, cap, out, footer, W=136, H=170, LAB=100)
+
+
+def unseen_robot_sheet(out: Path) -> Path:
+    """F32.5 - C114/C115: the clay robot, plain and four edits at C113's doses, 8 seeds; caption: attributes seen blind, per picture."""
+    return _attr_sheet("U3_robot", ["copper", "clay", "second", "pupils"], out,
+                       "C114 · \"A small green robot with round copper eyes, clay figurine\" · caption: attributes seen one picture at a time, blind (C115): copper eyes, clay, second figure, big black pupils · source data/te_attributes_labels_U3_robot.csv")
+
+
+def unseen_dagger_sheet(out: Path) -> Path:
+    """F32.6 - C114/C115: the art-deco dagger, plain and four edits, 8 seeds; caption: attributes seen blind, per picture."""
+    return _attr_sheet("U2_dagger", ["panel", "dark", "upright"], out,
+                       "C114 · \"A ceremonial dagger in art deco style with golden geometric inlays\" · caption: attributes seen one picture at a time, blind (C115): art-deco panel behind, dark background, upright · source data/te_attributes_labels_U2_dagger.csv")
+
+
+def unseen_tree_sheet(out: Path) -> Path:
+    """F32.7 - C114/C115: the red watercolour tree, plain and four edits, 8 seeds; caption: attributes seen blind, per picture."""
+    return _attr_sheet("U1_redtree", ["water", "spiral"], out,
+                       "C114 · \"A twisted tree with long red leaves and a curled trunk, watercolor painting\" · caption: attributes seen, blind (C115) · source data/te_attributes_labels_U1_redtree.csv")
+
+
+def attributes_matrix(out: Path) -> Path:
+    """F32.8 - C115: how many of 8 seeds show each attribute, per prompt and condition (blind, per picture)."""
+    import numpy as np
+    key = {k["unit"]: k for k in _csvd("te_attributes_key.csv")}
+    order = [("U3_robot", ["copper", "clay", "second", "pupils"]), ("U1_redtree", ["water", "spiral", "red", "watercolor"]),
+             ("U2_dagger", ["inlay", "panel", "dark", "upright"])]
+    conds = ["C0", "E06", "E14", "E28", "P01"]
+    rows, mat = [], []
+    for p, attrs in order:
+        L = [r for r in _csvd(f"te_attributes_labels_{p}.csv") if key[r["unit"]]["repeat"] == "0"]
+        for a in attrs:
+            rows.append(f"{p.split('_')[1]} · {_ATTR_EN[a]}")
+            mat.append([sum(1 for r in L if key[r["unit"]]["edit"] == c and r[a] == "si") for c in conds])
+    A = np.array(mat, dtype=float)
+    fig, ax = _canvas(5.6, 5.0)
+    ax.imshow(A, cmap="Blues", vmin=0, vmax=8, aspect="auto")
+    for i in range(A.shape[0]):
+        for j in range(A.shape[1]):
+            big = j > 0 and abs(A[i, j] - A[i, 0]) >= 5
+            ax.text(j, i, f"{int(A[i, j])}", ha="center", va="center", fontsize=8,
+                    color=INK if A[i, j] > 4 else "#1a1a19", fontweight="bold" if big else "normal")
+    ax.set_xticks(range(5))
+    ax.set_xticklabels(["original", "E06 0.8", "E14 0.8", "E28 1.06", "P01 1.75"], color=DIM, fontsize=7)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels(rows, color=DIM, fontsize=7)
+    for y in (3.5, 7.5):
+        ax.axhline(y, color=SURFACE, lw=3)
+    fig.text(0.05, 0.95, "Attributes switch on or off at almost every seed (bold: 5 or more seeds away from the original)", color=INK, fontsize=8)
+    fig.subplots_adjust(left=0.26, right=0.98, top=0.9, bottom=0.08)
+    return _save(fig, out, "C115 · pictures seen one at a time, conditions hidden · count of 8 seeds · source data/te_attributes_labels_*.csv")
+
+
 BUILDERS = {
     "F20.1": ("20-method", "edit_schema", edit_schema),
     "F21.1": ("21-block-map", "layout_stability_by_block", layout_stability_by_block),
@@ -1677,6 +1848,14 @@ BUILDERS = {
     "F31.7": ("31-what-an-edit-leaves", "te_species_sheet", te_species_sheet),
     "F31.8": ("31-what-an-edit-leaves", "te_gender_sheet", te_gender_sheet),
     "F31.9": ("31-what-an-edit-leaves", "te_panels_sheet", te_panels_sheet),
+    "F32.1": ("32-an-edit-as-a-switch", "seed_variety_sheet", seed_variety_sheet),
+    "F32.2": ("32-an-edit-as-a-switch", "c112_axe_sheet", c112_axe_sheet),
+    "F32.3": ("32-an-edit-as-a-switch", "dose_ladder_sheet", dose_ladder_sheet),
+    "F32.4": ("32-an-edit-as-a-switch", "dose_window_chart", dose_window_chart),
+    "F32.5": ("32-an-edit-as-a-switch", "unseen_robot_sheet", unseen_robot_sheet),
+    "F32.6": ("32-an-edit-as-a-switch", "unseen_dagger_sheet", unseen_dagger_sheet),
+    "F32.7": ("32-an-edit-as-a-switch", "unseen_tree_sheet", unseen_tree_sheet),
+    "F32.8": ("32-an-edit-as-a-switch", "attributes_matrix", attributes_matrix),
 }
 
 

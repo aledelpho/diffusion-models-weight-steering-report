@@ -1306,3 +1306,94 @@ figures:
       Two comic pages with the four elf-rogue descriptions in their panels, two orders: under L06 every panel stays
       Western comic while the characters lose their hoods and become young, lighter-skinned women against a grey-blue
       background.
+
+  # ---------------------------------------------------------------- 32-an-edit-as-a-switch
+
+  - id: F32.1
+    page: 32-an-edit-as-a-switch
+    kind: contact_sheet
+    builder: results_figures.seed_variety_sheet
+    source: data/te_settings_dino_tests.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The plain picture at eight seeds for five prompts: "Photo of a tree" changes most with the seed (median DINOv2
+      distance 0.475), mostly in framing; the blue tree and the flying car vary too, while the alien axe and the evil
+      helmet are nearly the same object at every seed (0.094 and 0.056), with only the background changing colour.
+  - id: F32.2
+    page: 32-an-edit-as-a-switch
+    kind: contact_sheet
+    builder: results_figures.c112_axe_sheet
+    source: data/te_settings_labels.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The alien axe at eight seeds under three encoder edits at C112's doses: E28 at 1.06 makes the head more organic,
+      red-eyed and creature-like at every seed (blind: the same change in all eight), while E06 at 0.4 and P01 at 0.71
+      stay close to the original and change in different ways.
+  - id: F32.3
+    page: 32-an-edit-as-a-switch
+    kind: contact_sheet
+    builder: results_figures.dose_ladder_sheet
+    source: data/te_dose2_marks.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      The evil helmet under E06 and E28 at four doses: E06 at 0.8 and E28 at 1.06 keep the helmet and change it the same
+      way at every seed; one step further E06 turns it into a black figurine and E28 into a cartoon devil, the same at
+      every seed but no longer the prompt; E06 at 1.6 breaks into noise.
+  - id: F32.4
+    page: 32-an-edit-as-a-switch
+    kind: scatter
+    builder: results_figures.dose_window_chart
+    source: data/te_dose2_dino.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      For four edits on two prompts, how far the picture moves from the original relative to a change of seed, along
+      four doses, coloured by Alessandro's mark: at the dose marked right E06, E14 and E28 already move it 1.3 to 5
+      times as far as a seed change; past it the distance jumps, up to 17 times on the helmet, where the pictures leave
+      the prompt or break.
+  - id: F32.5
+    page: 32-an-edit-as-a-switch
+    kind: contact_sheet
+    builder: results_figures.unseen_robot_sheet
+    source: data/te_attributes_labels_U3_robot.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      An unseen prompt, a clay robot with copper eyes, at eight seeds under four edits at C113's doses, captioned with
+      what was seen blind: E14 replaces the copper eyes with black ones at every seed, P01 turns the robot to metal and
+      adds a separate small figure at every seed, E06 and E28 keep copper and clay and add big black pupils.
+  - id: F32.6
+    page: 32-an-edit-as-a-switch
+    kind: contact_sheet
+    builder: results_figures.unseen_dagger_sheet
+    source: data/te_attributes_labels_U2_dagger.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      An unseen prompt, an art-deco dagger, at eight seeds: E06 and P01 stand the dagger upright on a black-and-gold
+      art-deco panel at every seed, moving the style of the prompt from the blade to the background; E14 stays mostly
+      like the original and E28 darkens it with varying compositions.
+  - id: F32.7
+    page: 32-an-edit-as-a-switch
+    kind: contact_sheet
+    builder: results_figures.unseen_tree_sheet
+    source: data/te_attributes_labels_U1_redtree.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      An unseen prompt, a red watercolour tree, at eight seeds: every edit keeps the red leaves and the watercolour;
+      E28 adds water at the base in six of eight seeds, the other edits make the canopy denser or more domed.
+  - id: F32.8
+    page: 32-an-edit-as-a-switch
+    kind: strip
+    builder: results_figures.attributes_matrix
+    source: data/te_attributes_labels_U3_robot.csv
+    caption_from: source
+    crop: whole
+    alt: >
+      For twelve attributes of three unseen prompts, how many of eight seeds show it, per edit, judged one picture at a
+      time without knowing the edit: attributes switch from 8 to 0 or from 0 to 8 (copper eyes, clay, a second figure,
+      black pupils, an art-deco panel) while the control attributes, red leaves and watercolour, stay at 8 everywhere.
