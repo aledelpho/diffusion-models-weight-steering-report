@@ -1,0 +1,21 @@
+test,value,verdict
+Rule 1 predicted changes confirmed (|diff| >= 5 of 8 in the predicted direction),15 of 16,the reading holds blind
+Rule 2 changes >= 5 not predicted (reported),none,0
+Prediction U3_robot copper E14 -,0 vs plain 8 (diff -8),confirmed
+Prediction U3_robot copper P01 -,0 vs plain 8 (diff -8),confirmed
+Prediction U3_robot clay P01 -,0 vs plain 8 (diff -8),confirmed
+Prediction U3_robot second P01 +,8 vs plain 0 (diff +8),confirmed
+Prediction U3_robot pupils E06 +,7 vs plain 0 (diff +7),confirmed
+Prediction U3_robot pupils E14 +,8 vs plain 0 (diff +8),confirmed
+Prediction U3_robot pupils E28 +,8 vs plain 0 (diff +8),confirmed
+Prediction U1_redtree water E28 +,6 vs plain 0 (diff +6),confirmed
+Prediction U1_redtree spiral E28 +,3 vs plain 0 (diff +3),not confirmed
+Prediction U2_dagger panel E06 +,8 vs plain 0 (diff +8),confirmed
+Prediction U2_dagger panel P01 +,8 vs plain 0 (diff +8),confirmed
+Prediction U2_dagger dark E06 +,8 vs plain 0 (diff +8),confirmed
+Prediction U2_dagger dark P01 +,7 vs plain 0 (diff +7),confirmed
+Prediction U2_dagger dark E28 +,5 vs plain 0 (diff +5),confirmed
+Prediction U2_dagger upright E06 +,8 vs plain 2 (diff +6),confirmed
+Prediction U2_dagger upright P01 +,7 vs plain 2 (diff +5),confirmed
+"Reported 'sì' out of 8 per prompt, attribute and condition",U3_robot copper: C0 8 E06 8 E14 0 E28 8 P01 0; U3_robot clay: C0 8 E06 8 E14 8 E28 8 P01 0; U3_robot second: C0 0 E06 0 E14 0 E28 0 P01 8; U3_robot pupils: C0 0 E06 7 E14 8 E28 8 P01 3; U1_redtree water: C0 0 E06 0 E14 0 E28 6 P01 0; U1_redtree spiral: C0 0 E06 0 E14 0 E28 3 P01 1; U1_redtree red: C0 8 E06 8 E14 8 E28 8 P01 8; U1_redtree watercolor: C0 8 E06 8 E14 8 E28 8 P01 8; U2_dagger inlay: C0 8 E06 8 E14 8 E28 8 P01 4; U2_dagger panel: C0 0 E06 8 E14 1 E28 4 P01 8; U2_dagger dark: C0 0 E06 8 E14 0 E28 5 P01 7; U2_dagger upright: C0 2 E06 8 E14 3 E28 3 P01 7,-
+Reported test-retest (answers),48 of 48,-
