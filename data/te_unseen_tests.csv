@@ -1,0 +1,11 @@
+test,value,verdict
+Rule 0 null cards called the same,0.00,ok
+Rule 1 same way: edit cards against null,edits 0.75 (n 12); null 0.00,the change repeats across seeds on unseen prompts
+"Rule 2 subject, colour and style of the prompt kept (all or most) in edit cards",12 of 12,the window doses respect the prompt
+"Rule 3 DINOv2: edit moves the picture at least as much as a change of seed, cells",11 of 12,supported
+Reported amount: edit / null / seed,0.89 / 0.94 / 1.00,-
+Reported kept: edit / null / seed,1.00 / 1.00 / 1.00,-
+Reported seed cards same way,0.00,-
+Reported per cell (same; amount; kept),U1_redtree E06 stesso/qualcosa/tutte; U1_redtree E14 stesso/qualcosa/tutte; U1_redtree E28 stesso/molto/tutte; U1_redtree P01 simile/molto/tutte; U2_dagger E06 stesso/molto/tutte; U2_dagger E14 diversi/qualcosa/tutte; U2_dagger E28 diversi/molto/tutte; U2_dagger P01 stesso/molto/tutte; U3_robot E06 simile/qualcosa/tutte; U3_robot E14 stesso/molto/tutte; U3_robot E28 stesso/molto/tutte; U3_robot P01 stesso/molto/tutte,-
+Reported DINOv2 per cell (ratio to seed; consistency),U1_redtree E06 1.421; 0.3; U1_redtree E14 1.711; 0.4423; U1_redtree E28 1.824; 0.23; U1_redtree P01 2.249; 0.3653; U2_dagger E06 2.693; 0.6579; U2_dagger E14 0.687; 0.0329; U2_dagger E28 1.326; 0.2119; U2_dagger P01 1.604; 0.3737; U3_robot E06 1.506; 0.3083; U3_robot E14 2.466; 0.5983; U3_robot E28 1.002; 0.213; U3_robot P01 1.954; 0.4828,-
+Reported test-retest,"amount 3/3, same 3/3, kept 3/3",-
