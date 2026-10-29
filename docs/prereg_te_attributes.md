@@ -45,3 +45,11 @@ Count of *sì* over the 8 seeds, edit minus plain; a change is **confirmed** whe
 
 The predictions come from the same pictures (this checks the reading, it does not replicate it); Alessandro has seen
 the non-blind sheets and may recognise pictures; one observer; 8 seeds per cell.
+
+## Clarifications given to Alessandro during labelling (2026-10-29, wording of the questions unchanged)
+
+* Robot: eye and material questions refer to the robot only; a second figure counts only for the "second figure"
+  question.
+* Tree: red leaves and watercolour are control questions (expected *sì* everywhere). "Spiral or curl": a part of the
+  trunk or a root that rolls up into a closed loop or coil (snail-shell or pig-tail shape); a trunk that is merely
+  twisted or S-shaped, as in every tree of this prompt, does not count.
