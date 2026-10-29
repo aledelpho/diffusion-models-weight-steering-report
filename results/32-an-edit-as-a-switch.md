@@ -259,7 +259,7 @@ C112 (four prompts I wrote, 8 seeds, eight edits at the exploratory doses, 292 r
 | A concept yellow flying car | 0.277 |
 | A curved tree with large blue leaves | 0.383 |
 
-Rule 1, at most 0.15 in at least 3 of 4: 2 of 4, not supported. Details in `docs/te_tree_dino_tests.csv` and
+Rule 1, at most 0.15 in at least 3 of 4: 2 of 4, not supported. Details in `data/te_settings_dino_tests.csv` and
 `docs/te_settings_result.md`.
 
 ### The same change at every seed
