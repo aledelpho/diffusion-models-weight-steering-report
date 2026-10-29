@@ -47,3 +47,20 @@ key `data/te_unseen_key.csv`; tests `data/te_unseen_tests.csv`; DINOv2 `data/te_
 
 One observer, who proposed the hypothesis and recognised the control cards; prompts written by Claude; three prompts,
 8 seeds, one card per cell; the "kept" question at ceiling; Krea-2 turbo only.
+
+## Addendum (2026-10-29, Claude's non-blind reading of the robot sheet, after the rules)
+
+* **E14 0.8** gives the strongest and most uniform change: a lighter lime green, a rounded helmet-like head with a cream
+  face window and black eyes, green antennae; **the copper eyes are gone at all 8 seeds** — a stated attribute
+  overridden, which the "kept" answer ("in tutte") did not record. DINOv2: ratio 2.47, consistency 0.60, the highest
+  on this prompt.
+* **P01 1.75** turns the clay robot into a glossy, detailed metal robot with glowing yellow-green eyes in a
+  photographic indoor scene, and places a separate small clay figure beside it at most seeds: "clay" and "copper" are
+  reassigned, not kept.
+* **E06 0.8** simplifies the robot (smoother body, fewer panels, black pupils inside the copper rims): same robot, less
+  detail; the most variable of the four between seeds ("la maggior parte").
+* **E28 1.06** is the lightest: same robot, colour and material, larger glossy black pupils inside the copper rims, a
+  slightly rounder, "cuter" head — the only edit that keeps every stated attribute (DINOv2 ratio 1.00, at the seed
+  spread).
+* So on this prompt the strength of the repeated change and the respect of the prompt pull in opposite directions:
+  the two edits that change most uniformly (E14, P01) are the two that override stated attributes.
